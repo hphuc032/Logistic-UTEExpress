@@ -1,6 +1,7 @@
 # UTEExpress
 
-Foundation cho task **ARCH-01**, owner **Hoàng Phúc**, sprint **S0**, priority **P0**.
+Foundation từ **ARCH-01** và security foundation từ **SEC-01**, owner **Hoàng Phúc**,
+sprint **S0**, priority **P0**.
 Nguồn phạm vi: `UTEExpress_Master_Project_Plan.docx` (A7, M2–M4, MASTER TASK BOARD).
 
 ## Yêu cầu và chạy local
@@ -32,7 +33,7 @@ Dừng ứng dụng bằng Ctrl+C. Đổi cổng bằng biến `SERVER_PORT` ho�
 - `GET http://localhost:8080/actuator/health` → HTTP 200, trường `status` là `UP`.
 - `GET http://localhost:8080/api/v1/foundation` → `{"application":"UTEExpress","status":"FOUNDATION_READY"}`.
 - `/` chưa có giao diện; trang chủ và shared layout thuộc UI-01/PROD-01.
-- Đây là foundation chưa có authentication. Security contract và bảo vệ endpoint thuộc SEC-01.
+- Security policy đã hoạt động; chưa có login/JWT thật cho tới AUTH-02.
 
 ## Cấu trúc và tài liệu
 
@@ -40,12 +41,13 @@ Dừng ứng dụng bằng Ctrl+C. Đổi cổng bằng biến `SERVER_PORT` ho�
 - `src/main/resources/application.yml`: cấu hình chung, không secret.
 - `src/test/java/com/uteexpress`: HTTP contract và architecture tests.
 - [Quy ước kiến trúc, DTO, exception và version](docs/architecture.md).
+- [Security foundation](docs/security.md).
 - [Task Completion Report](docs/ARCH-01-completion-report.md).
 - `docs/dependencies.txt`: dependency tree đã resolve để review baseline.
 
 Không có JPA entity, migration hay repository giả trong ARCH-01. DB-01 sẽ thêm JPA,
 PostgreSQL, Flyway và cấu hình môi trường; không thay PostgreSQL bằng H2.
-Authentication/JWT/OTP, Cart, Order, Admin, WebSocket và CI thuộc các task riêng.
+Registration, JWT login/logout, OTP, Cart, Order, Admin business, WebSocket và CI thuộc các task riêng.
 
 ## Kiểm tra trước khi bàn giao
 
@@ -56,4 +58,4 @@ Authentication/JWT/OTP, Cart, Order, Admin, WebSocket và CI thuộc các task r
 
 Surefire reports ở `target/surefire-reports`; executable JAR ở `target/`.
 Không commit `target`, `.work`, `.env`, credentials hoặc thư mục upload.
-Branch của task: `feature/arch-01-foundation`. Review/merge develop thực hiện riêng.
+Branch hiện tại: `feature/sec-01-security-base`. Review/merge develop thực hiện riêng.

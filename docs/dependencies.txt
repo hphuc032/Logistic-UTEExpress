@@ -22,14 +22,10 @@ com.uteexpress:uteexpress:jar:0.1.0-SNAPSHOT
 |  |  \- org.springframework.boot:spring-boot-tomcat:jar:4.1.1:compile
 |  +- org.springframework.boot:spring-boot-http-converter:jar:4.1.1:compile
 |  |  +- org.springframework.boot:spring-boot:jar:4.1.1:compile
-|  |  |  \- org.springframework:spring-context:jar:7.0.9:compile
 |  |  \- org.springframework:spring-web:jar:7.0.9:compile
-|  |     \- org.springframework:spring-beans:jar:7.0.9:compile
 |  \- org.springframework.boot:spring-boot-webmvc:jar:4.1.1:compile
 |     +- org.springframework.boot:spring-boot-servlet:jar:4.1.1:compile
 |     \- org.springframework:spring-webmvc:jar:7.0.9:compile
-|        +- org.springframework:spring-aop:jar:7.0.9:compile
-|        \- org.springframework:spring-expression:jar:7.0.9:compile
 +- org.springframework.boot:spring-boot-starter-validation:jar:4.1.1:compile
 |  \- org.springframework.boot:spring-boot-validation:jar:4.1.1:compile
 |     +- org.apache.tomcat.embed:tomcat-embed-el:jar:11.0.24:compile
@@ -56,6 +52,11 @@ com.uteexpress:uteexpress:jar:0.1.0-SNAPSHOT
 |  \- io.micrometer:micrometer-jakarta9:jar:1.17.1:compile
 |     \- io.micrometer:micrometer-core:jar:1.17.1:compile
 |        \- org.hdrhistogram:HdrHistogram:jar:2.2.2:runtime
++- org.springframework.boot:spring-boot-starter-security:jar:4.1.1:compile
+|  +- org.springframework.boot:spring-boot-security:jar:4.1.1:compile
+|  |  \- org.springframework.security:spring-security-config:jar:7.1.1:compile
+|  \- org.springframework:spring-aop:jar:7.0.9:compile
+|     \- org.springframework:spring-beans:jar:7.0.9:compile
 +- org.springframework.boot:spring-boot-starter-test:jar:4.1.1:test
 |  +- org.springframework.boot:spring-boot-test:jar:4.1.1:test
 |  +- org.springframework.boot:spring-boot-test-autoconfigure:jar:4.1.1:test
@@ -93,6 +94,12 @@ com.uteexpress:uteexpress:jar:0.1.0-SNAPSHOT
 |  +- org.springframework.boot:spring-boot-webmvc-test:jar:4.1.1:test
 |  |  \- org.springframework.boot:spring-boot-web-server:jar:4.1.1:compile
 |  \- org.springframework.boot:spring-boot-resttestclient:jar:4.1.1:test
++- org.springframework.security:spring-security-test:jar:7.1.1:test
+|  +- org.springframework.security:spring-security-core:jar:7.1.1:compile
+|  |  +- org.springframework.security:spring-security-crypto:jar:7.1.1:compile
+|  |  +- org.springframework:spring-context:jar:7.0.9:compile
+|  |  \- org.springframework:spring-expression:jar:7.0.9:compile
+|  \- org.springframework.security:spring-security-web:jar:7.1.1:compile
 \- com.tngtech.archunit:archunit-junit5:jar:1.4.1:test
    +- com.tngtech.archunit:archunit-junit5-api:jar:1.4.1:test
    |  \- com.tngtech.archunit:archunit:jar:1.4.1:test
