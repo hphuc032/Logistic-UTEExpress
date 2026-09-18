@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: uteexpress
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: true
+  thymeleaf:
+    check-template-location: false # UI-01 will introduce shared templates.
+  web:
+    error:
+      include-message: never
+      include-binding-errors: never
+      include-stacktrace: never
+      include-exception: false
+server:
+  port: ${SERVER_PORT:8080}
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never

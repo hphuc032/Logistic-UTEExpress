@@ -1,0 +1,17 @@
+/target/
+/.work/
+/.tools/
+/.idea/
+/.vscode/
+*.iml
+.classpath
+.project
+.settings/
+.env
+.env.*
+!.env.example
+application-*.private.yml
+*.log
+/uploads/
+Thumbs.db
+.DS_Store

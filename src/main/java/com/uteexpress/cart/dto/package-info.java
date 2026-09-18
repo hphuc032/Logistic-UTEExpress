@@ -1,0 +1,2 @@
+/** Reserved cart.dto boundary; see docs/architecture.md for conventions. */
+package com.uteexpress.cart.dto;
