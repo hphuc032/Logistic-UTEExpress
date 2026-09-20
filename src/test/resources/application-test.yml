@@ -1,0 +1,7 @@
+# Only foundation HTTP tests use this profile; it does not prove persistence works.
+spring:
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
+      - org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration
+      - org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration

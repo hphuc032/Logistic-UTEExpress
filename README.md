@@ -1,59 +1,87 @@
 # UTEExpress
 
-Foundation cho task **ARCH-01**, owner **Hoàng Phúc**, sprint **S0**, priority **P0**.
-Nguồn phạm vi: `UTEExpress_Master_Project_Plan.docx` (A7, M2–M4, MASTER TASK BOARD).
+Spring Boot modular monolith for UTEExpress. Current branch implements **DB-01**,
+owner **Quốc Đạt**, reviewer **Tiến Đạt**, on top of ARCH-01. Security and CI
+changes on other branches are not merged by this task.
 
-## Yêu cầu và chạy local
+## Requirements
 
-- JDK **21**; đặt `JAVA_HOME` tới JDK 21.
-- Dùng Maven Wrapper để luôn chạy Maven **3.9.11**. Lần đầu cần Internet để tải Maven và dependencies.
-- Spring Boot **4.1.1** được khóa trong `pom.xml`.
-- Foundation không yêu cầu PostgreSQL, Docker, SMTP hay secrets.
+- JDK **21**; set `JAVA_HOME` to that JDK (the project rejects other major versions).
+- Maven Wrapper pins Maven **3.9.11**; first run needs Internet access.
+- Spring Boot **4.1.1**; dependencies managed by its BOM.
+- PostgreSQL for application startup; integration tests use Docker and PostgreSQL 17.6.
 
-Windows PowerShell:
+## Run locally
+
+Create a dedicated empty PostgreSQL database and login. Set `DB_URL`,
+`DB_USERNAME`, `DB_PASSWORD` in your shell or IDE. See `.env.example` for variable
+names and placeholder values; Spring Boot does not automatically load `.env`.
+Do not commit actual credentials. With a preprovisioned database, in PowerShell:
+
+```powershell
+$env:DB_URL = 'jdbc:postgresql://localhost:5432/uteexpress'
+$env:DB_USERNAME = Read-Host 'Database username'
+$dbCredential = Read-Host 'Database password' -AsSecureString
+$env:DB_PASSWORD = [System.Net.NetworkCredential]::new('', $dbCredential).Password
+.\mvnw.cmd package
+java -Duser.timezone=UTC -jar target/uteexpress-0.1.0-SNAPSHOT.jar --spring.profiles.active=local
+```
+
+Stop the app with Ctrl+C. Clear the password afterward with
+`Remove-Item Env:DB_PASSWORD`. Profiles local/prod use the same required ENV
+credentials. Missing credentials or unavailable PostgreSQL cause startup failure.
+No production database is needed for the automated test below.
+
+Use `-Duser.timezone=UTC` for every application launch (also set this VM argument
+in Eclipse/STS). PostgreSQL connections can reject legacy JVM zone aliases such
+as `Asia/Saigon` before Hibernate's JDBC timezone setting takes effect. Maven
+Surefire/Failsafe explicitly use UTC; this does not change the Windows timezone.
+
+Flyway creates schema `uteexpress` and applies its schema-only baseline before
+Hibernate validates mappings. Business tables are added by their module owners.
+Do not set `ddl-auto=update/create` or enable Flyway clean/baseline-on-migrate.
+
+- `GET http://localhost:8080/actuator/health` returns HTTP 200 and `UP` when healthy.
+- `GET http://localhost:8080/api/v1/foundation` returns `FOUNDATION_READY`.
+- Change port with `SERVER_PORT` or `--server.port=8081`.
+- `/` has no UI yet. Authentication remains a separate SEC-01/AUTH task.
+
+## Checks
 
 ```powershell
 .\mvnw.cmd test
 .\mvnw.cmd package
-java -jar target/uteexpress-0.1.0-SNAPSHOT.jar
+.\mvnw.cmd -Ppostgres-it verify
 ```
 
-Linux/macOS (script giữ LF; có thể chạy qua `sh` ngay sau checkout):
+The first two commands run 20 foundation HTTP/architecture tests without a database.
+Their test-only profile explicitly excludes persistence. The final command also
+packages the app and runs `DatabaseBaselineIT` against a disposable PostgreSQL
+container: application boot, clean migration, validation, schema history, and
+idempotent second migrate. Docker must be running; missing Docker fails the test.
+Do not treat `test` or `package` alone as PostgreSQL acceptance evidence.
 
-```sh
-sh ./mvnw test
-sh ./mvnw package
-java -jar target/uteexpress-0.1.0-SNAPSHOT.jar
-```
+Linux/macOS: use `sh ./mvnw` in place of `.\mvnw.cmd` and set ENV using your shell.
+Surefire reports are in `target/surefire-reports`; integration reports in
+`target/failsafe-reports`; executable JAR in `target/`.
 
-Nếu Maven đã cài đúng **3.9.11**, có thể dùng `mvn test` và `mvn package`.
-Dừng ứng dụng bằng Ctrl+C. Đổi cổng bằng biến `SERVER_PORT` hoặc `--server.port=8081`.
-
-- `GET http://localhost:8080/actuator/health` → HTTP 200, trường `status` là `UP`.
-- `GET http://localhost:8080/api/v1/foundation` → `{"application":"UTEExpress","status":"FOUNDATION_READY"}`.
-- `/` chưa có giao diện; trang chủ và shared layout thuộc UI-01/PROD-01.
-- Đây là foundation chưa có authentication. Security contract và bảo vệ endpoint thuộc SEC-01.
-
-## Cấu trúc và tài liệu
-
-- `src/main/java/com/uteexpress`: bootstrap, các module nghiệp vụ và `common`.
-- `src/main/resources/application.yml`: cấu hình chung, không secret.
-- `src/test/java/com/uteexpress`: HTTP contract và architecture tests.
-- [Quy ước kiến trúc, DTO, exception và version](docs/architecture.md).
-- [Task Completion Report](docs/ARCH-01-completion-report.md).
-- `docs/dependencies.txt`: dependency tree đã resolve để review baseline.
-
-Không có JPA entity, migration hay repository giả trong ARCH-01. DB-01 sẽ thêm JPA,
-PostgreSQL, Flyway và cấu hình môi trường; không thay PostgreSQL bằng H2.
-Authentication/JWT/OTP, Cart, Order, Admin, WebSocket và CI thuộc các task riêng.
-
-## Kiểm tra trước khi bàn giao
+For the documented table dependency graph, run:
 
 ```powershell
-.\mvnw.cmd clean test
-.\mvnw.cmd package
+powershell -NoProfile -File scripts/Test-DatabasePlan.ps1
 ```
 
-Surefire reports ở `target/surefire-reports`; executable JAR ở `target/`.
-Không commit `target`, `.work`, `.env`, credentials hoặc thư mục upload.
-Branch của task: `feature/arch-01-foundation`. Review/merge develop thực hiện riêng.
+## Documentation and team handoff
+
+- [Architecture](docs/architecture.md) records the original ARCH-01 decisions.
+- [Database conventions](docs/DATABASE_CONVENTIONS.md) defines types, constraints,
+  profiles, Flyway naming and review rules.
+- [Schema and migration ordering](docs/DATABASE_SCHEMA.md) records the 30-table ERD.
+- [Seed manifest](docs/SEED_MANIFEST.md) defines future demo fixture ownership and order.
+- [DB-01 report](docs/DB-01-completion-report.md) records actual verification and limits.
+- [ARCH-01 report](docs/ARCH-01-completion-report.md) remains historical evidence.
+
+`docs/dependencies.txt` is a resolved dependency snapshot, not a Maven lockfile.
+Regenerate it deliberately when changing dependencies. Never commit credentials,
+`.env`, `target/`, `.work/`, or uploads. Work on task branches, review diffs and open
+PRs into develop; do not push directly to main/develop or merge without review.

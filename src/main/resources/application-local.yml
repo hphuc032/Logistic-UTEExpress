@@ -1,0 +1,4 @@
+# Credentials remain mandatory environment variables, inherited from application.yml.
+spring:
+  jpa:
+    show-sql: false
