@@ -134,9 +134,10 @@ trong khai báo dependency, không bật snapshot repositories. Version của �
 là `0.1.0-SNAPSHOT`; đó không phải một dependency động.
 
 Dependency đang dùng: `spring-boot-starter-webmvc`, `spring-boot-starter-validation`,
-`spring-boot-starter-thymeleaf`, `spring-boot-starter-actuator`; test dùng
-`spring-boot-starter-test`, `spring-boot-starter-webmvc-test`, `archunit-junit5`.
-Không thêm Security/JWT/Mail/WebSocket trước task tương ứng.
+`spring-boot-starter-thymeleaf`, `spring-boot-starter-actuator` và, từ SEC-01,
+`spring-boot-starter-security`; test dùng `spring-boot-starter-test`,
+`spring-boot-starter-webmvc-test`, `spring-security-test`, `archunit-junit5`.
+JWT/Mail/WebSocket chỉ được thêm trong task tương ứng.
 
 DB-01 sẽ thêm `spring-boot-starter-data-jpa`, `postgresql`, Flyway core/PostgreSQL
 bằng version do cùng BOM quản lý, cùng profiles dùng ENV và `ddl-auto=validate`.
@@ -158,8 +159,9 @@ Nguồn kiểm tra:
 `application.yml` là cấu hình chung, không secret; chỉ expose Actuator health không có
 chi tiết nội bộ. Cổng mặc định 8080 và có thể override bằng `SERVER_PORT`.
 Chưa cần profile local/test/prod hoặc `.env.example` chứa các biến chưa được sử dụng.
-Khi DB-01/SEC-01/AUTH triển khai, thêm ENV và profiles đúng phần M4 của kế hoạch;
+Khi DB-01/AUTH triển khai, thêm ENV và profiles đúng phần M4 của kế hoạch;
 Spring Boot không tự đọc `.env` nếu không có cơ chế nạp tương ứng.
 
-Security, Bootstrap/shared UI, schema/Flyway, Order contracts và CI đều để task riêng.
+Security foundation được bổ sung trong SEC-01 và mô tả tại `docs/security.md`.
+Bootstrap/shared UI, schema/Flyway, Order contracts và CI vẫn thuộc task riêng.
 ARCH-01 không chứng minh các tiêu chí acceptance của authentication hoặc persistence.

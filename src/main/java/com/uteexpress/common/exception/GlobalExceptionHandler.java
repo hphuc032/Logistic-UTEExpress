@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -24,6 +25,12 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<Object> handleApplication(ApplicationException exception, HttpServletRequest request) {
         ErrorCode code = exception.errorCode();
+        return response(code.status(), code.name(), code.message(), request.getRequestURI(), List.of(), new HttpHeaders());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<Object> handleAccessDenied(AccessDeniedException exception, HttpServletRequest request) {
+        ErrorCode code = ErrorCode.ACCESS_DENIED;
         return response(code.status(), code.name(), code.message(), request.getRequestURI(), List.of(), new HttpHeaders());
     }
 
