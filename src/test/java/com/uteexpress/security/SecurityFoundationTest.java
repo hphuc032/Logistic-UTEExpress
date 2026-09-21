@@ -1,5 +1,7 @@
 package com.uteexpress.security;
 
+import com.uteexpress.identity.service.RegistrationService;
+import com.uteexpress.identity.repository.UserRoleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +39,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(SecurityFoundationTest.SecurityTestConfiguration.class)
 class SecurityFoundationTest {
+    @MockitoBean
+    private RegistrationService registrationService;
+
+    @MockitoBean
+    private UserRoleRepository userRoleRepository;
+
     @Autowired
     private MockMvc mvc;
 

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Đăng ký | UTEExpress</title>
+</head>
+<body>
+<main>
+    <section class="app-auth-section" aria-labelledby="register-title">
+        <div class="app-auth-card">
+            <div class="app-auth-heading">
+                <span class="app-eyebrow">Tài khoản UTEExpress</span>
+                <h1 id="register-title">Tạo tài khoản</h1>
+                <p>Đăng ký để chuẩn bị cho hành trình mua sắm và giao nhận trên UTEExpress.</p>
+            </div>
+
+            <form method="post" th:action="@{/register}" th:object="${registerForm}" novalidate>
+                <div class="mb-3">
+                    <label class="form-label" for="email">
+                        Email <span class="app-required" aria-hidden="true">*</span>
+                    </label>
+                    <input class="form-control" th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'"
+                           type="email" id="email" th:field="*{email}" autocomplete="email"
+                           maxlength="254" required aria-describedby="email-help email-error">
+                    <div id="email-help" class="form-text">Email sẽ được dùng cho bước xác minh tài khoản.</div>
+                    <div id="email-error" class="invalid-feedback" th:if="${#fields.hasErrors('email')}"
+                         th:errors="*{email}" role="alert">Email không hợp lệ.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="username">
+                        Tên đăng nhập <span class="app-required" aria-hidden="true">*</span>
+                    </label>
+                    <input class="form-control" th:classappend="${#fields.hasErrors('username')} ? 'is-invalid'"
+                           type="text" id="username" th:field="*{username}" autocomplete="username"
+                           minlength="3" maxlength="30" pattern="[A-Za-z0-9._-]+" required
+                           aria-describedby="username-help username-error">
+                    <div id="username-help" class="form-text">
+                        Dùng 3–30 chữ cái, chữ số, dấu chấm, gạch dưới hoặc gạch ngang.
+                    </div>
+                    <div id="username-error" class="invalid-feedback" th:if="${#fields.hasErrors('username')}"
+                         th:errors="*{username}" role="alert">Tên đăng nhập không hợp lệ.</div>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label" for="password">
+                        Mật khẩu <span class="app-required" aria-hidden="true">*</span>
+                    </label>
+                    <input class="form-control" th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
+                           type="password" id="password" name="password" autocomplete="new-password"
+                           minlength="8" maxlength="64" required aria-describedby="password-help password-error">
+                    <div id="password-help" class="form-text">Dùng từ 8 đến 64 ký tự.</div>
+                    <div id="password-error" class="invalid-feedback" th:if="${#fields.hasErrors('password')}"
+                         th:errors="*{password}" role="alert">Mật khẩu không hợp lệ.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="confirmPassword">
+                        Xác nhận mật khẩu <span class="app-required" aria-hidden="true">*</span>
+                    </label>
+                    <input class="form-control"
+                           th:classappend="${#fields.hasErrors('confirmPassword')} ? 'is-invalid'"
+                           type="password" id="confirmPassword" name="confirmPassword"
+                           autocomplete="new-password" required aria-describedby="confirm-password-error">
+                    <div id="confirm-password-error" class="invalid-feedback"
+                         th:if="${#fields.hasErrors('confirmPassword')}"
+                         th:errors="*{confirmPassword}" role="alert">Mật khẩu xác nhận không khớp.</div>
+                </div>
+
+                <button class="btn btn-app-primary btn-lg w-100" type="submit">Tạo tài khoản</button>
+            </form>
+
+            <p class="app-auth-switch">Đã có tài khoản? <a th:href="@{/login}" href="/login">Đăng nhập</a></p>
+        </div>
+    </section>
+</main>
+</body>
+</html>

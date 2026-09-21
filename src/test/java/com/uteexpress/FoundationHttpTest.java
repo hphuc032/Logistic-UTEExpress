@@ -2,6 +2,8 @@ package com.uteexpress;
 
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
+import com.uteexpress.identity.service.RegistrationService;
+import com.uteexpress.identity.repository.UserRoleRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.junit.jupiter.api.Test;
@@ -10,6 +12,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,6 +33,12 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @AutoConfigureMockMvc
 @Import(FoundationHttpTest.ErrorFixtureController.class)
 class FoundationHttpTest {
+    @MockitoBean
+    private RegistrationService registrationService;
+
+    @MockitoBean
+    private UserRoleRepository userRoleRepository;
+
     @Autowired
     private MockMvc mvc;
 
