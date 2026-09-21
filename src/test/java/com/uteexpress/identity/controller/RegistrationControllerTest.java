@@ -40,6 +40,8 @@ class RegistrationControllerTest {
 
     @MockitoBean UserRoleRepository userRoleRepository;
 
+    @MockitoBean com.uteexpress.identity.service.IdentityAuthenticationService identityAuthenticationService;
+
     @Test
     void getRegisterRendersPublicFormWithCsrfAndEmptyPasswordInputs() throws Exception {
         mvc.perform(get("/register"))

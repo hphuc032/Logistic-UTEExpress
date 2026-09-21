@@ -38,6 +38,9 @@ class UiLayoutTest {
     @MockitoBean
     private UserRoleRepository userRoleRepository;
 
+    @MockitoBean
+    private com.uteexpress.identity.service.IdentityAuthenticationService identityAuthenticationService;
+
     @Autowired
     private MockMvc mvc;
 
