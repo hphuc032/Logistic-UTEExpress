@@ -4,21 +4,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
 import java.time.Instant;
-import java.util.Collections;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "users", schema = "uteexpress")
@@ -62,14 +55,6 @@ public class UserEntity {
     @Column(name = "version", nullable = false)
     private Long version;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_roles",
-            schema = "uteexpress",
-            joinColumns = @JoinColumn(name = "user_id"),
-            inverseJoinColumns = @JoinColumn(name = "role_id"))
-    private Set<RoleEntity> roles = new LinkedHashSet<>();
-
     protected UserEntity() {
     }
 
@@ -86,12 +71,7 @@ public class UserEntity {
         user.tokenVersion = 0;
         user.createdAt = now;
         user.updatedAt = now;
-        user.version = 0L;
         return user;
-    }
-
-    public void assignRole(RoleEntity role) {
-        roles.add(role);
     }
 
     @PreUpdate
@@ -111,5 +91,4 @@ public class UserEntity {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public Long getVersion() { return version; }
-    public Set<RoleEntity> getRoles() { return Collections.unmodifiableSet(roles); }
 }

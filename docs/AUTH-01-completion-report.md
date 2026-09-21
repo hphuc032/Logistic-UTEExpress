@@ -39,11 +39,11 @@ was sent.
 ## Verification
 
 - `mvnw.cmd clean test`: PASS (64 tests at implementation checkpoint).
-- `mvnw.cmd -Ppostgres-it verify`: BLOCKED because no Docker daemon was available; both the
-  existing DB-01 test and `AuthRegistrationIT` stopped before a PostgreSQL container started.
-- PostgreSQL verification must pass in a Docker-enabled environment before merge.
+- `mvnw.cmd -Ppostgres-it verify`: PASS with PostgreSQL 17.6 on Docker Desktop.
+- DB-01 baseline integration: PASS (1 test).
+- AUTH-01 registration integration: PASS (3 tests).
 
-`AuthRegistrationIT` is prepared to verify Flyway, Hibernate schema validation, all three
+`AuthRegistrationIT` verifies Flyway, Hibernate schema validation, all three
 tables, exact role seed compatibility with `RoleCode`, BCrypt persistence, initial account
 state, normalized duplicates, the database unique constraint, and a second no-op migration.
 

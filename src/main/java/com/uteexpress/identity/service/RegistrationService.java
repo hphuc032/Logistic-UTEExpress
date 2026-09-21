@@ -6,6 +6,7 @@ import com.uteexpress.identity.entity.RoleEntity;
 import com.uteexpress.identity.entity.UserEntity;
 import com.uteexpress.identity.repository.RoleRepository;
 import com.uteexpress.identity.repository.UserRepository;
+import com.uteexpress.identity.repository.UserRoleRepository;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -20,12 +21,14 @@ public class RegistrationService {
 
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
+    private final UserRoleRepository userRoleRepository;
     private final PasswordEncoder passwordEncoder;
 
     public RegistrationService(UserRepository userRepository, RoleRepository roleRepository,
-            PasswordEncoder passwordEncoder) {
+            UserRoleRepository userRoleRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
+        this.userRoleRepository = userRoleRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
@@ -46,14 +49,16 @@ public class RegistrationService {
         String passwordHash = passwordEncoder.encode(command.password());
         UserEntity user = UserEntity.pendingRegistration(
                 email, normalizedEmail, username, normalizedUsername, passwordHash, Instant.now());
-        user.assignRole(userRole);
 
+        UserEntity savedUser;
         try {
-            userRepository.saveAndFlush(user);
+            savedUser = userRepository.saveAndFlush(user);
         } catch (DataIntegrityViolationException exception) {
-            throw new RegistrationConflictException();
+            throw new RegistrationConflictException(exception);
         }
-        return new RegistrationOutcome(user.getUsername());
+
+        userRoleRepository.assign(savedUser.getId(), userRole.getId());
+        return new RegistrationOutcome(savedUser.getUsername());
     }
 
     static String normalize(String value) {

@@ -6,6 +6,7 @@ import com.uteexpress.identity.entity.UserEntity;
 import com.uteexpress.identity.entity.UserStatus;
 import com.uteexpress.identity.repository.RoleRepository;
 import com.uteexpress.identity.repository.UserRepository;
+import com.uteexpress.identity.repository.UserRoleRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,20 +29,26 @@ import static org.mockito.Mockito.verify;
 class RegistrationServiceTest {
     @Mock UserRepository userRepository;
     @Mock RoleRepository roleRepository;
+    @Mock UserRoleRepository userRoleRepository;
     @Mock PasswordEncoder passwordEncoder;
     @Mock RoleEntity userRole;
+    @Mock UserEntity savedUser;
 
     private RegistrationService service;
 
     @BeforeEach
     void setUp() {
-        service = new RegistrationService(userRepository, roleRepository, passwordEncoder);
+        service = new RegistrationService(userRepository, roleRepository, userRoleRepository, passwordEncoder);
     }
 
     @Test
     void normalizesIdentityHashesPasswordAndCreatesPendingUserRoleOnly() {
         given(roleRepository.findByCode("USER")).willReturn(Optional.of(userRole));
         given(passwordEncoder.encode("RawSecret1")).willReturn("bcrypt-hash");
+        given(userRepository.saveAndFlush(any(UserEntity.class))).willReturn(savedUser);
+        given(savedUser.getId()).willReturn(42L);
+        given(savedUser.getUsername()).willReturn("Phuc03");
+        given(userRole.getId()).willReturn(7L);
 
         service.register(new RegistrationCommand("  Test@Example.com ", "Phuc03", "RawSecret1"));
 
@@ -60,8 +67,7 @@ class RegistrationServiceTest {
         assertThat(user.getStatus()).isEqualTo(UserStatus.PENDING_VERIFICATION);
         assertThat(user.getEmailVerifiedAt()).isNull();
         assertThat(user.getTokenVersion()).isZero();
-        assertThat(user.getVersion()).isZero();
-        assertThat(user.getRoles()).containsExactly(userRole);
+        verify(userRoleRepository).assign(42L, 7L);
     }
 
     @Test
@@ -74,6 +80,7 @@ class RegistrationServiceTest {
 
         verify(passwordEncoder, never()).encode(any());
         verify(userRepository, never()).saveAndFlush(any());
+        verify(userRoleRepository, never()).assign(any(), any());
     }
 
     @Test
@@ -86,6 +93,7 @@ class RegistrationServiceTest {
 
         verify(passwordEncoder, never()).encode(any());
         verify(userRepository, never()).saveAndFlush(any());
+        verify(userRoleRepository, never()).assign(any(), any());
     }
 
     @Test

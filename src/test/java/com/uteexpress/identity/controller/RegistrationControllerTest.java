@@ -4,6 +4,7 @@ import com.uteexpress.identity.dto.RegistrationCommand;
 import com.uteexpress.identity.dto.RegistrationOutcome;
 import com.uteexpress.identity.service.RegistrationConflictException;
 import com.uteexpress.identity.service.RegistrationService;
+import com.uteexpress.identity.repository.UserRoleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -33,6 +34,8 @@ class RegistrationControllerTest {
     @Autowired MockMvc mvc;
 
     @MockitoBean RegistrationService registrationService;
+
+    @MockitoBean UserRoleRepository userRoleRepository;
 
     @Test
     void getRegisterRendersPublicFormWithCsrfAndEmptyPasswordInputs() throws Exception {
