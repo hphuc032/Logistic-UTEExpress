@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::opsContent})}">
+<head><title th:text="${dashboard.title + ' | UTEExpress'}">UTEExpress</title></head>
+<body>
+<th:block th:fragment="opsContent">
+    <div th:replace="~{layout/dashboard :: dashboard(~{::nav}, ~{::section})}">
+        <nav aria-label="Menu quản trị">
+            <p class="fw-bold mb-3">UTEExpress</p>
+            <ul class="nav flex-column gap-2">
+                <li class="nav-item"><a class="nav-link link-light active text-decoration-underline" aria-current="page"
+                    th:href="@{${dashboard.dashboardPath}}">Tổng quan</a></li>
+                <li class="nav-item"><a class="nav-link link-light" th:href="@{/}">Về trang chủ</a></li>
+            </ul>
+        </nav>
+        <section aria-label="Tổng quan khu vực làm việc">
+            <div th:replace="~{fragments/components :: pageHeader(${dashboard.title}, ${dashboard.description})}"></div>
+            <div class="row g-3">
+                <div class="col-12 col-xl-6" th:each="capability : ${dashboard.capabilities}">
+                    <article class="card h-100">
+                        <div class="card-body">
+                            <h2 class="h5" th:text="${capability.title}">Chức năng</h2>
+                            <p th:text="${capability.description}">Mô tả</p>
+                            <span class="app-status-badge status-warning">Sắp có</span>
+                        </div>
+                    </article>
+                </div>
+            </div>
+            <div class="mt-4" th:replace="~{fragments/components :: emptyState(
+                'Chưa có dữ liệu tổng quan',
+                'Số liệu sẽ xuất hiện khi các chức năng vận hành được đưa vào sử dụng.')}"></div>
+        </section>
+    </div>
+</th:block>
+</body>
+</html>
