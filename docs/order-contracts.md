@@ -150,12 +150,54 @@ Calculation contract for the future checkout implementation:
 8. Create payment attempts only for exactly grandTotal. Recompute/validate all facts at
    submit; CheckoutQuote is informational, not a trusted resubmission or price reservation.
 
-Commission calculation base (before/after discounts and shipping inclusion) and rate
-precision are not specified by the supplied task/DB-01. TD/QD must confirm before implementing
-commissionAmount calculation. Once the base is agreed, multiply at full precision and round
-the resulting amount once with Money.round. Refund entitlement (shipping/discount inclusion,
+## Commission
+
+The commission base is fixed: `commissionBase = subtotal - discountTotal`.
+`shippingFee` is excluded. Calculate at full BigDecimal precision, then round once:
+
+```text
+commissionAmount = Money.round(commissionBase * ratePercent / 100)
+```
+
+Require `0 <= ratePercent <= 100`. Resolve the effective policy at server `checkoutAt`
+through CommissionQueryService; never invent a fallback policy or accept a commission
+rate/amount from the browser. Snapshot `commissionPolicyId`, `commissionRateSnapshot`
+and `commissionAmount` at checkout. Later policy changes must not alter existing orders.
+Commission does not add to the buyer's total:
+`grandTotal = subtotal - discountTotal + shippingFee`.
+Rate storage precision remains a TD/QD review point; the calculation base is not open.
+No commission calculation implementation is introduced in ORD-00.
+
+Refund entitlement (shipping/discount inclusion,
 full/partial policy) also needs confirmation; the lifecycle must compare trusted authorized
 refund amount with successful refund evidence, never invent or accept a browser amount.
+
+## Checkout idempotency
+
+`CheckoutRequest.checkoutKey` is always scoped to the authenticated buyer, resolved
+server-side through CurrentUserProvider and the identity boundary. The key is not proof
+of ownership. Future persistence must enforce `UNIQUE (buyer_id, checkout_key)`.
+
+The server must build a deterministic canonical request representation and `requestHash`
+from the business-significant checkout fields: product IDs/quantities, address selection,
+shipping provider/service, payment method and optional voucher code. Hash the
+server-normalized payload, with deterministic item ordering and consistent normalization
+of optional values; never trust a client/browser-supplied requestHash. The same normalized
+business request must produce the same hash.
+
+- Same buyer + checkoutKey + requestHash: return the previously created Order / checkout
+  result. Do not create a second Order, decrease stock again, consume a voucher again or
+  create a duplicate Payment. This also applies to concurrent duplicate submissions.
+- Same buyer + checkoutKey with a different normalized payload/requestHash: reject with
+  `CONFLICT`; do not overwrite the original result.
+- Transaction failure/rollback must not leave a falsely completed idempotency result.
+  Persist completion atomically with the checkout effects in the future implementation.
+- Retrying the same request after a network timeout is safe: return the committed result,
+  or allow checkout to proceed if the original transaction rolled back, without duplicate
+  effects. Reauthorize access using the authenticated buyer on every retry.
+
+ORD-00 freezes this contract only; no idempotency entity, table, repository, migration
+or checkout persistence implementation is introduced.
 
 ## DTOs, boundaries and ownership
 
@@ -187,7 +229,8 @@ trusted ReturnRequest.restockable rule. No inventory business logic is supplied 
 is an immutable internal fact produced by a successful lifecycle transaction. UUID eventId
 is a correlation/deduplication key, not a replacement for BIGINT business primary keys.
 actorId is resolved from SEC-01 identity and null only for the verified system-expiry path.
-The event includes no CurrentUser/authorities, address, price list or mutable JPA entity.
+The event includes no CurrentUser/authorities, address, payment data, price list or mutable
+JPA entity. Its reason must not embed full address or payment data either.
 
 Write history in the transaction; dispatch externally only after commit. A rolled-back
 transition emits nothing. Consumers deduplicate by eventId; delivery guarantees/outbox
@@ -226,7 +269,7 @@ The shipping service snapshot format and provider method validation need QD impl
 
 - HP/TD: trusted mapping from CurrentUser.subject to users.id; SEC-01 does not provide it yet.
 - HP/TD/QD: Ops role/scope mapping; do not invent OPS or SYSTEM RoleCode.
-- TD/QD: commission base and rate precision; refund entitlement amount policy.
+- TD/QD: commission rate storage precision; refund entitlement amount policy.
 - QD: accept ShipmentStatus and quote interface; coordinate commission_policies migration
   before orders (already flagged by DB-01, a scheduling dependency, not a schema conflict).
 - HP: accept Inventory/Catalog provider boundaries; implementation remains HP-owned.
