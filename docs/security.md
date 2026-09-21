@@ -35,9 +35,9 @@ still returns 404. The route list does not create endpoints or grant business ow
 
 Business services obtain the current subject through `CurrentUserProvider`, which reads
 the Spring `SecurityContext` and returns an immutable `CurrentUser` snapshot containing
-the subject, roles, and authorities. SEC-01 uses the authenticated subject because no
-User entity exists yet. AUTH-02 may supply a custom principal and stable account subject
-without changing callers of this interface.
+the subject, roles, and authorities. AUTH-02 supplies `UteExpressPrincipal` with the
+stable subject `uteexpress:user:<id>`. Services that require the persistent account ID
+use `CurrentAccountIdProvider`; they must not parse the JWT or authentication name.
 
 Role checks do not replace ownership checks. Future services must scope repository
 queries or validate ownership, such as buyer, shop owner, or assigned shipper, using the
@@ -49,11 +49,11 @@ never decide ownership.
 `@EnableMethodSecurity` enables service-level `@PreAuthorize` rules. URL authorization
 is the first gate; business services remain responsible for role, ownership, and state.
 
-CSRF remains enabled with Spring Security defaults. Unsafe browser requests require a
-valid CSRF token, including public form endpoints such as login and registration when
-they are implemented. Thymeleaf forms will carry the token; AJAX clients must send the
-corresponding header. Provider callbacks may only receive a narrow exception in their
-own task after signature and replay validation are defined.
+CSRF remains enabled with `CookieCsrfTokenRepository`. The readable `XSRF-TOKEN` cookie
+is separate from the HttpOnly authentication cookie. Unsafe browser requests require a
+matching CSRF token, including login, registration, and logout. Thymeleaf forms carry a
+hidden token; browser clients may send the corresponding header. The security context
+is stateless and is never persisted as authenticated session state.
 
 ## Passwords and errors
 
@@ -74,11 +74,28 @@ pages can be added by UI-01 without weakening the API contract.
 
 ## Authentication boundary
 
-Spring Boot's generated development user is disabled. There is no production login,
-in-memory user, fake token, or hardcoded credential in SEC-01. AUTH-02 must provide the
-JWT authentication filter and current principal, token issue/signature/claims,
-HttpOnly cookie, expiration, token-version validation, and logout invalidation. The
-filter is added to the existing `SecurityFilterChain`; it must not disable CSRF globally.
+Spring Boot's generated development user remains disabled. The application-owned
+`UteExpressUserDetailsService` loads an internal `AuthAccountSnapshot` through
+`IdentityAuthenticationService`; the security module does not access identity entities
+or repositories. Login accepts normalized username or email, uses the shared BCrypt
+encoder through `DaoAuthenticationProvider`, and permits only `ACTIVE` accounts. Public
+authentication failure messages do not reveal whether an account exists or its status.
+
+JWT access tokens use Spring Security JOSE with HS256. The signing key comes only from
+`JWT_SECRET_BASE64`, must decode to at least 32 bytes, and is never logged. Tokens expire
+after 30 minutes and contain only `sub`, `iat`, `exp`, `iss`, `aud`, and `tokenVersion`.
+Issuer, audience, timestamps, subject format, token version, and signature are validated.
+Roles are deliberately absent from the token.
+
+The `UTEEXPRESS_AUTH` cookie is HttpOnly, `SameSite=Lax`, scoped to `/`, and Secure by
+default. The local profile may disable Secure for localhost HTTP. Each authenticated
+request reloads the account and roles from PostgreSQL, requires `ACTIVE`, compares the
+database token version, maps roles through `RoleCode`, and fails closed for unknown roles.
+
+`POST /logout` is CSRF protected. It atomically increments `users.token_version`, clears
+the authentication cookie and security context, and therefore invalidates all JWTs
+issued with an older version. There is no refresh token, token table, blacklist, session,
+OAuth login, or production seed account.
 
 AUTH-01 does not activate accounts or send email. AUTH-03 owns OTP creation, delivery,
 verification, and the transition from `PENDING_VERIFICATION` to `ACTIVE`.
