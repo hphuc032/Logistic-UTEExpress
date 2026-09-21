@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>UTEExpress | Giao nhận hiện đại</title>
+</head>
+<body>
+<main>
+    <section class="app-hero" aria-labelledby="hero-title">
+        <div class="row align-items-center g-5">
+            <div class="col-12 col-lg-7">
+                <span class="app-eyebrow">Mua sắm &amp; giao nhận trong một nền tảng</span>
+                <h1 id="hero-title">Kết nối đơn hàng.<br><span>Vận chuyển tin cậy.</span></h1>
+                <p class="app-hero-lead">
+                    UTEExpress giúp người mua, cửa hàng và đội ngũ giao nhận phối hợp trên một hành trình rõ ràng,
+                    từ lúc khám phá sản phẩm đến khi nhận hàng.
+                </p>
+                <div class="app-hero-actions">
+                    <a class="btn btn-app-primary btn-lg" th:href="@{/products}" href="/products">
+                        Khám phá sản phẩm
+                    </a>
+                    <a class="btn btn-app-secondary btn-lg" th:href="@{/register}" href="/register">
+                        Bắt đầu với UTEExpress
+                    </a>
+                </div>
+                <p class="app-hero-login">
+                    Đã có tài khoản? <a th:href="@{/login}" href="/login">Đăng nhập</a>
+                </p>
+            </div>
+            <div class="col-12 col-lg-5" aria-hidden="true">
+                <div class="app-route-visual">
+                    <div class="app-route-orbit app-route-orbit-one"></div>
+                    <div class="app-route-orbit app-route-orbit-two"></div>
+                    <div class="app-route-card app-route-card-shop">
+                        <span class="app-route-icon">01</span>
+                        <strong>Cửa hàng</strong>
+                        <small>Chuẩn bị đơn</small>
+                    </div>
+                    <div class="app-route-line"></div>
+                    <div class="app-route-card app-route-card-delivery">
+                        <span class="app-route-icon">02</span>
+                        <strong>Giao nhận</strong>
+                        <small>Theo dõi hành trình</small>
+                    </div>
+                    <div class="app-route-card app-route-card-customer">
+                        <span class="app-route-icon">03</span>
+                        <strong>Người nhận</strong>
+                        <small>Nhận hàng thuận tiện</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="app-section" aria-labelledby="benefits-title">
+        <div class="app-section-heading">
+            <span class="app-eyebrow">Nền tảng dùng chung</span>
+            <h2 id="benefits-title">Một trải nghiệm nhất quán cho mọi vai trò</h2>
+            <p>Thiết kế tập trung vào thông tin cần thiết, thao tác rõ ràng và khả năng sử dụng trên mọi thiết bị.</p>
+        </div>
+        <div class="row g-4">
+            <div class="col-12 col-md-4">
+                <article class="app-feature-card h-100">
+                    <span class="app-feature-number" aria-hidden="true">01</span>
+                    <h3>Luồng công việc rõ ràng</h3>
+                    <p>Các bước mua sắm và giao nhận được trình bày mạch lạc để người dùng dễ theo dõi.</p>
+                </article>
+            </div>
+            <div class="col-12 col-md-4">
+                <article class="app-feature-card h-100">
+                    <span class="app-feature-number" aria-hidden="true">02</span>
+                    <h3>Ưu tiên an toàn</h3>
+                    <p>Nền tảng tuân theo chính sách bảo mật chung và không hiển thị dữ liệu nội bộ ngoài ý muốn.</p>
+                </article>
+            </div>
+            <div class="col-12 col-md-4">
+                <article class="app-feature-card h-100">
+                    <span class="app-feature-number" aria-hidden="true">03</span>
+                    <h3>Sẵn sàng trên mọi màn hình</h3>
+                    <p>Giao diện thích ứng từ điện thoại đến máy tính, với vùng thao tác và nội dung dễ đọc.</p>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <section class="app-cta" aria-labelledby="cta-title">
+        <div>
+            <span class="app-eyebrow app-eyebrow-light">Sẵn sàng bắt đầu?</span>
+            <h2 id="cta-title">Khám phá UTEExpress theo cách của bạn.</h2>
+        </div>
+        <div class="d-flex flex-column flex-sm-row gap-3">
+            <a class="btn btn-light btn-lg" th:href="@{/products}" href="/products">Xem sản phẩm</a>
+            <a class="btn btn-app-outline-light btn-lg" th:href="@{/shops}" href="/shops">Xem cửa hàng</a>
+        </div>
+    </section>
+</main>
+</body>
+</html>
