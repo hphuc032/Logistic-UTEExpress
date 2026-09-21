@@ -40,6 +40,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(SecurityFoundationTest.SecurityTestConfiguration.class)
 class SecurityFoundationTest {
     @MockitoBean
+    private com.uteexpress.governance.service.AuditLogService auditLogService;
+
+    @MockitoBean
     private RegistrationService registrationService;
 
     @MockitoBean

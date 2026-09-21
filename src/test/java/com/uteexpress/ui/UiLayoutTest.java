@@ -30,6 +30,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @Import(UiLayoutTest.UiFixtureController.class)
 class UiLayoutTest {
     @MockitoBean
+    private com.uteexpress.governance.service.AuditLogService auditLogService;
+
+    @MockitoBean
     private RegistrationService registrationService;
 
     @MockitoBean

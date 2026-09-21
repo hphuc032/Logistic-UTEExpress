@@ -31,6 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class RegistrationControllerTest {
+    @MockitoBean
+    private com.uteexpress.governance.service.AuditLogService auditLogService;
+
     @Autowired MockMvc mvc;
 
     @MockitoBean RegistrationService registrationService;
