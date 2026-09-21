@@ -1,4 +1,30 @@
 spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: uteexpress
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    default-schema: uteexpress
+    schemas: uteexpress
+    locations: classpath:db/migration
+    validate-migration-naming: true
+    validate-on-migrate: true
+    baseline-on-migrate: false
+    out-of-order: false
+    clean-disabled: true
+  sql:
+    init:
+      mode: never
   application:
     name: uteexpress
   jackson:

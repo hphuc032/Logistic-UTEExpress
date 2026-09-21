@@ -1,0 +1,9 @@
+# Shared environments always validate; Flyway is the only schema writer.
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+  flyway:
+    clean-disabled: true
+    baseline-on-migrate: false
