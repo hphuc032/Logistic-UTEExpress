@@ -22,6 +22,8 @@ import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -49,19 +51,21 @@ class FoundationHttpTest {
 
     @Test
     void actuatorEnvironmentIsNotExposed() throws Exception {
-        mvc.perform(get("/actuator/env")).andExpect(status().isNotFound());
+        mvc.perform(get("/actuator/env").with(user("foundation-test"))).andExpect(status().isNotFound());
     }
 
     @Test
     void validRequestBindsToDto() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Foundation\"}"))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.name").value("Foundation"));
     }
 
     @Test
     void beanValidationUsesErrorContractWithoutRejectedValues() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
@@ -73,7 +77,8 @@ class FoundationHttpTest {
 
     @Test
     void unknownFieldsAreRejectedInsteadOfMassAssigned() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Foundation\",\"role\":\"ADMIN\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
@@ -81,7 +86,8 @@ class FoundationHttpTest {
 
     @Test
     void malformedJsonDoesNotLeakBody() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("secret-not-json"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_REQUEST"))
@@ -90,38 +96,40 @@ class FoundationHttpTest {
 
     @Test
     void missingBodyIsBadRequest() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.status").value(400));
     }
 
     @Test
     void unsupportedContentTypePreserves415() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.TEXT_PLAIN).content("name=test"))
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.TEXT_PLAIN).content("name=test"))
                 .andExpect(status().isUnsupportedMediaType()).andExpect(jsonPath("$.status").value(415));
     }
 
     @Test
     void missingResourceUses404Contract() throws Exception {
-        mvc.perform(get("/test-fixtures/missing"))
+        mvc.perform(get("/test-fixtures/missing").with(user("foundation-test")))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("RESOURCE_NOT_FOUND"));
     }
 
     @Test
     void businessConflictUses409Contract() throws Exception {
-        mvc.perform(get("/test-fixtures/conflict"))
+        mvc.perform(get("/test-fixtures/conflict").with(user("foundation-test")))
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("CONFLICT"));
     }
 
     @Test
     void unknownRouteUses404Contract() throws Exception {
-        mvc.perform(get("/does-not-exist"))
+        mvc.perform(get("/does-not-exist").with(user("foundation-test")))
                 .andExpect(status().isNotFound()).andExpect(jsonPath("$.code").value("RESOURCE_NOT_FOUND"));
     }
 
     @Test
     void wrongHttpMethodPreserves405AndAllowHeader() throws Exception {
-        mvc.perform(post("/api/v1/foundation"))
+        mvc.perform(post("/api/v1/foundation").with(csrf()))
                 .andExpect(status().isMethodNotAllowed())
                 .andExpect(header().string("Allow", containsString("GET")))
                 .andExpect(jsonPath("$.status").value(405));
@@ -129,7 +137,7 @@ class FoundationHttpTest {
 
     @Test
     void unexpectedFailureDoesNotExposeInternalMessageOrQueryString() throws Exception {
-        mvc.perform(get("/test-fixtures/unexpected?token=private-token"))
+        mvc.perform(get("/test-fixtures/unexpected?token=private-token").with(user("foundation-test")))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.code").value("INTERNAL_ERROR"))
                 .andExpect(jsonPath("$.path").value("/test-fixtures/unexpected"))

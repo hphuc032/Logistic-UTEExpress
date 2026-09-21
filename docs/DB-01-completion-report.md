@@ -6,7 +6,8 @@ Owner: Quốc Đạt. Reviewer: Tiến Đạt.
 
 Branch: `feature/db-01-schema-plan`
 
-Base: `origin/develop` at `4c2dc14` (ARCH-01).
+Original base: `4c2dc14` (ARCH-01). Updated with `origin/develop` at
+`45fab51`, including merged SEC-01 and QA-00.
 
 Status: Implementation and local verification complete; ready for human review.
 Team acceptance requires PR approval and merge; delivery status is tracked in GitHub.
@@ -29,6 +30,10 @@ Team acceptance requires PR approval and merge; delivery status is tracked in Gi
 - Updated run instructions and resolved dependency snapshot.
 - Configured Maven test JVMs for UTC and documented `-Duser.timezone=UTC` for
   application/IDE launches. PostgreSQL integration asserts session timezone UTC.
+- Integrated SEC-01/QA-00 from develop: reconciled README, regenerated the
+  dependency snapshot, retained security dependencies and authenticated/CSRF
+  HTTP test requests. SecurityFoundationTest now uses the persistence-free
+  test profile; all security filters and assertions remain enabled.
 
 ## Files created
 
@@ -49,8 +54,10 @@ Team acceptance requires PR approval and merge; delivery status is tracked in Gi
 
 - `pom.xml`: persistence/Flyway dependencies, opt-in Failsafe profile and UTC test JVMs.
 - `src/main/resources/application.yml`: database settings only; existing web,
-  validation/error and Actuator settings retained. HP review needed in the future PR.
+  validation/error and Actuator settings retained. HP review needed in PR #3.
 - `src/test/java/com/uteexpress/FoundationHttpTest.java`: explicit test profile.
+- `src/test/java/com/uteexpress/security/SecurityFoundationTest.java`: explicit
+  test profile for compatibility with DB-01; no security behavior changed.
 - `README.md`: actual database requirement and separate test commands.
 - `docs/dependencies.txt`: current Maven dependency graph.
 
@@ -59,13 +66,13 @@ Team acceptance requires PR approval and merge; delivery status is tracked in Gi
 Environment: Windows, JDK 21.0.2 selected for the commands, Maven Wrapper 3.9.11.
 The machine's default `java` is JDK 24; no global Java settings were changed.
 Docker Engine 29.4.1; disposable PostgreSQL 17.6. Final verification completed
-at 21:22:07 Asia/Ho_Chi_Minh on 2026-09-20.
+at 23:02:08 Asia/Ho_Chi_Minh on 2026-09-20 after integrating SEC-01/QA-00.
 
 | Check | Actual result on 2026-09-20 |
 | --- | --- |
-| `mvnw.cmd test` | PASS: 20 tests, zero failures/errors/skips |
+| Test phase of `mvnw.cmd -B -ntp -Ppostgres-it verify` | PASS: 33 tests (14 HTTP + 6 architecture + 13 security), zero failures/errors/skips |
 | Package phase of `mvnw.cmd -B -ntp -Ppostgres-it verify` | PASS: executable `target/uteexpress-0.1.0-SNAPSHOT.jar` created |
-| Full `-Ppostgres-it verify` | PASS: 20 HTTP/architecture tests + 1 PostgreSQL integration test, zero failures/errors/skips |
+| Full `-Ppostgres-it verify` | PASS: 34 tests including PostgreSQL integration, zero failures/errors/skips |
 | `powershell -NoProfile -File scripts/Test-DatabasePlan.ps1` | PASS: 30 distinct tables, known owners/references, no FK dependency cycle |
 | `git diff --check` | PASS |
 
@@ -76,6 +83,7 @@ the second migrate. The database session timezone assertion passed.
 
 Evidence: `target/surefire-reports/com.uteexpress.FoundationHttpTest.txt`,
 `target/surefire-reports/com.uteexpress.ArchitectureTest.txt`, and
+`target/surefire-reports/com.uteexpress.security.SecurityFoundationTest.txt`, and
 `target/failsafe-reports/com.uteexpress.DatabaseBaselineIT.txt`.
 These generated reports are local build evidence and are not committed.
 
@@ -90,7 +98,7 @@ VM option for normal startup. No Windows timezone change or Docker reset was use
 - Credentials required through ENV; test container credentials are isolated fixtures.
 - Flyway clean disabled, baseline-on-migrate disabled, out-of-order disabled;
   startup must surface database/migration errors.
-- HTTP error/validation checks and architecture checks still pass.
+- HTTP error/validation, architecture and all 13 SEC-01 security checks pass.
 - No new route/controller, role, principal or authorization rule. Business
   authorization/ownership and entity validation are N/A for schema-only DB-01.
 - No changes to other members' entities or to the Security branch.

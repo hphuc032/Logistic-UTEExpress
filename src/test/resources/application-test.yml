@@ -1,4 +1,4 @@
-# Only foundation HTTP tests use this profile; it does not prove persistence works.
+# HTTP/security tests use this profile; security stays enabled, persistence is tested separately.
 spring:
   autoconfigure:
     exclude:

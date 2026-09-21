@@ -1,8 +1,8 @@
 # UTEExpress
 
 Spring Boot modular monolith for UTEExpress. Current branch implements **DB-01**,
-owner **Quốc Đạt**, reviewer **Tiến Đạt**, on top of ARCH-01. Security and CI
-changes on other branches are not merged by this task.
+owner **Quốc Đạt**, reviewer **Tiến Đạt**, integrated with ARCH-01, SEC-01
+(Hoàng Phúc) and QA-00 (Tiến Đạt) from develop.
 
 ## Requirements
 
@@ -44,7 +44,7 @@ Do not set `ddl-auto=update/create` or enable Flyway clean/baseline-on-migrate.
 - `GET http://localhost:8080/actuator/health` returns HTTP 200 and `UP` when healthy.
 - `GET http://localhost:8080/api/v1/foundation` returns `FOUNDATION_READY`.
 - Change port with `SERVER_PORT` or `--server.port=8081`.
-- `/` has no UI yet. Authentication remains a separate SEC-01/AUTH task.
+- `/` has no UI yet. SEC-01 security policies are active; real login/JWT belongs to AUTH-02.
 
 ## Checks
 
@@ -54,8 +54,8 @@ Do not set `ddl-auto=update/create` or enable Flyway clean/baseline-on-migrate.
 .\mvnw.cmd -Ppostgres-it verify
 ```
 
-The first two commands run 20 foundation HTTP/architecture tests without a database.
-Their test-only profile explicitly excludes persistence. The final command also
+The first two commands run foundation HTTP, security and architecture tests without a database.
+The HTTP/security test-only profile excludes persistence while retaining Spring Security. The final command also
 packages the app and runs `DatabaseBaselineIT` against a disposable PostgreSQL
 container: application boot, clean migration, validation, schema history, and
 idempotent second migrate. Docker must be running; missing Docker fails the test.
@@ -73,7 +73,9 @@ powershell -NoProfile -File scripts/Test-DatabasePlan.ps1
 
 ## Documentation and team handoff
 
-- [Architecture](docs/architecture.md) records the original ARCH-01 decisions.
+- [Architecture](docs/architecture.md) records architecture and SEC-01 integration.
+- [Security foundation](docs/security.md) defines public/protected routes, principals and CSRF.
+- [Contribution workflow](CONTRIBUTING.md) explains CI, commits and PR review.
 - [Database conventions](docs/DATABASE_CONVENTIONS.md) defines types, constraints,
   profiles, Flyway naming and review rules.
 - [Schema and migration ordering](docs/DATABASE_SCHEMA.md) records the 30-table ERD.
