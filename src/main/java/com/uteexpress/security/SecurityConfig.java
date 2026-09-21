@@ -21,6 +21,10 @@ public class SecurityConfig {
             "/verify-otp",
             "/forgot-password",
             "/reset-password",
+            "/css/**",
+            "/js/**",
+            "/images/**",
+            "/favicon.ico",
             "/api/v1/foundation",
             "/actuator/health"
     };

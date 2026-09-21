@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Không thể xử lý yêu cầu | UTEExpress</title></head>
+<body>
+<main>
+    <section class="app-error-page" aria-labelledby="error-title">
+        <span class="app-error-code" aria-hidden="true">500</span>
+        <p class="app-eyebrow">UTEExpress đang gián đoạn</p>
+        <h1 id="error-title">Không thể xử lý yêu cầu lúc này.</h1>
+        <p>Vui lòng thử lại sau. Nếu sự cố tiếp diễn, hãy quay lại trang chủ.</p>
+        <a class="btn btn-app-primary" th:href="@{/}" href="/">Về trang chủ</a>
+    </section>
+</main>
+</body>
+</html>
