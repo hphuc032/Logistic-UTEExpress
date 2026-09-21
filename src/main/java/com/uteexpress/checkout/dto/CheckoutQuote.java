@@ -9,6 +9,11 @@ public record CheckoutQuote(Long shopId, List<ItemSnapshot> items, AddressSnapsh
         Long commissionPolicyId, BigDecimal commissionRateSnapshot, BigDecimal commissionAmount) {
     public CheckoutQuote { items = List.copyOf(items); }
 
+    /**
+     * unitPrice is the original unit-price snapshot; discountSnapshot is per-unit product promotion.
+     * finalUnitPrice = unitPrice - discountSnapshot; lineTotal = finalUnitPrice * quantity.
+     * Order subtotal sums these post-promotion line totals; vouchers apply at order level.
+     */
     public record ItemSnapshot(Long productId, String productNameSnapshot, BigDecimal unitPrice,
             BigDecimal discountSnapshot, BigDecimal finalUnitPrice, int quantity, BigDecimal lineTotal) { }
 

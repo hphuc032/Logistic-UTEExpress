@@ -2,8 +2,9 @@
 
 Owner: Tiến Đạt. Reviewer: Quốc Đạt. Sprint S0, P0. Dependencies: ARCH-01, SEC-01.
 DB-01 is the compatibility baseline. This is a contract handoff, not ORD-01 implementation.
-The task specification supplied for ORD-00 is the state-machine authority; the original
-Master Plan DOCX is not present in this checkout. DB-01 transcribes its E2/E3/E4 inventory.
+The Master Plan is the source of truth; its I7 subtotal semantics are recorded below
+from the finalized team decision. The original Master Plan DOCX is not present in this
+checkout. DB-01 transcribes its E2/E3/E4 inventory.
 
 ## Authority and security
 
@@ -136,10 +137,18 @@ Calculation contract for the future checkout implementation:
    promotion discount at full precision, then `Money.round` once to discountSnapshot.
    Require `0 <= discountSnapshot <= unitPrice`; finalUnitPrice = unitPrice - discountSnapshot;
    lineTotal = finalUnitPrice * quantity. Reject overflow. Do not round again per quantity.
-4. subtotal = sum(unitPrice * quantity). Item discount = sum(discountSnapshot * quantity).
-   Round any authorized order-level voucher discount once to whole VND; discountTotal is
-   item discount plus voucher discount. Enforce discountTotal <= subtotal. Voucher stacking,
-   eligibility and allocation belong to promotion contracts, not browser calculations.
+4. Master Plan I7: `originalLineAmount = unitPriceSnapshot * quantity` (the snapshot DTO
+   names unitPriceSnapshot `unitPrice`); `productPromotionDiscount = originalLineAmount - lineTotal`.
+   `subtotal = SUM(lineTotal)`: merchandise AFTER product-level promotion, never the
+   original catalog-price total. `discountTotal` contains only order-level discounts applied
+   AFTER subtotal; in the current required scope this is the voucher discount. Product
+   promotion discount must NOT be included in discountTotal.
+   Voucher eligibility, including `min_subtotal`, uses this canonical subtotal. A percentage
+   order-level voucher uses subtotal as its merchandise calculation base, after product
+   promotion and before the voucher, excluding shipping. Round the authorized voucher
+   discount once with `Money.round`; enforce `0 <= discountTotal <= subtotal`.
+   Voucher stacking, other eligibility rules and allocation remain deferred to later
+   promotion/voucher contracts; no voucher engine is defined or implemented here.
 5. Obtain shippingFee from ShippingQuoteService for the server-resolved destination,
    shop and selected active provider/service. No zero-fee fallback on quote failure.
 6. `OrderTotals.calculate`: subtotal - discountTotal + shippingFee = grandTotal.
@@ -150,9 +159,17 @@ Calculation contract for the future checkout implementation:
 8. Create payment attempts only for exactly grandTotal. Recompute/validate all facts at
    submit; CheckoutQuote is informational, not a trusted resubmission or price reservation.
 
+For example, original merchandise of 100,000 VND minus a 20,000 VND product promotion
+gives lineTotal and subtotal of 80,000 VND. A 10,000 VND voucher gives discountTotal of
+10,000 VND; with shippingFee of 5,000 VND, grandTotal is 75,000 VND. Subtotal of 100,000
+and discountTotal of 30,000 are incorrect even though they produce the same grandTotal.
+Line promotion calculation belongs to future checkout logic; OrderTotals validates supplied
+amounts and arithmetic, not their provenance or aggregation from CheckoutQuote items.
+
 ## Commission
 
 The commission base is fixed: `commissionBase = subtotal - discountTotal`.
+This is the final merchandise amount after product promotion and order-level discount.
 `shippingFee` is excluded. Calculate at full BigDecimal precision, then round once:
 
 ```text
