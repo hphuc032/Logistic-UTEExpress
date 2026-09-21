@@ -9,7 +9,7 @@ import java.util.List;
 
 @Service
 public class OpsDashboardService {
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority())")
     public OpsDashboardView adminDashboard() {
         return new OpsDashboardView("Quản trị hệ thống",
                 "Không gian quản lý tài khoản, quyền truy cập và chính sách của UTEExpress.",
@@ -20,7 +20,7 @@ public class OpsDashboardService {
                 new Capability("Nhật ký quản trị", "Theo dõi các thay đổi quản trị trên hệ thống.")));
     }
 
-    @PreAuthorize("hasAuthority('ROLE_MANAGER')")
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).MANAGER.authority())")
     public OpsDashboardView managerDashboard() {
         return new OpsDashboardView("Điều hành vận hành",
                 "Không gian hỗ trợ khách hàng và phối hợp vận hành hằng ngày.",
