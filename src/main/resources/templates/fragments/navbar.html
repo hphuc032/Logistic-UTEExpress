@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="navbar" id="main-navigation" class="navbar navbar-expand-lg app-navbar" aria-label="Điều hướng chính">
+    <div class="container app-container">
+        <a class="navbar-brand app-brand" th:href="@{/}" href="/" aria-label="UTEExpress - Trang chủ">
+            <span class="app-brand-mark" aria-hidden="true">UE</span>
+            <span>UTE<span>Express</span></span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primaryNavbar"
+                aria-controls="primaryNavbar" aria-expanded="false" aria-label="Mở menu điều hướng">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="primaryNavbar">
+            <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}" href="/">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/products}" href="/products">Sản phẩm</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/shops}" href="/shops">Cửa hàng</a>
+                </li>
+            </ul>
+
+            <div class="d-flex flex-column flex-lg-row gap-2 app-navbar-actions">
+                <a class="btn btn-app-ghost" th:href="@{/login}" href="/login">Đăng nhập</a>
+                <a class="btn btn-app-primary" th:href="@{/register}" href="/register">Đăng ký</a>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

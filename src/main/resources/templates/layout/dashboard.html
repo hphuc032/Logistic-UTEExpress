@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="dashboard(sidebar, content)" class="app-dashboard">
+    <aside class="app-dashboard-sidebar" aria-label="Điều hướng khu vực làm việc">
+        <th:block th:replace="${sidebar}"></th:block>
+    </aside>
+    <section class="app-dashboard-content">
+        <th:block th:replace="${content}"></th:block>
+    </section>
+</div>
+</body>
+</html>
