@@ -75,6 +75,8 @@ powershell -NoProfile -File scripts/Test-DatabasePlan.ps1
 
 - [Architecture](docs/architecture.md) records architecture and SEC-01 integration.
 - [Security foundation](docs/security.md) defines public/protected routes, principals and CSRF.
+- [ORD-00 contracts](docs/order-contracts.md) defines Order lifecycle, checkout money,
+  Shipping integration, service boundaries and pending owner decisions.
 - [Contribution workflow](CONTRIBUTING.md) explains CI, commits and PR review.
 - [Database conventions](docs/DATABASE_CONVENTIONS.md) defines types, constraints,
   profiles, Flyway naming and review rules.
