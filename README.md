@@ -1,8 +1,8 @@
 # UTEExpress
 
-Spring Boot modular monolith for UTEExpress. Current branch implements **DB-01**,
-owner **Quốc Đạt**, reviewer **Tiến Đạt**, integrated with ARCH-01, SEC-01
-(Hoàng Phúc) and QA-00 (Tiến Đạt) from develop.
+Spring Boot modular monolith for UTEExpress. The shared foundation integrates
+ARCH-01, QA-00, SEC-01 and DB-01. UI-01 adds the first reusable Thymeleaf and
+Bootstrap layout without implementing feature-specific business screens.
 
 ## Requirements
 
@@ -44,7 +44,10 @@ Do not set `ddl-auto=update/create` or enable Flyway clean/baseline-on-migrate.
 - `GET http://localhost:8080/actuator/health` returns HTTP 200 and `UP` when healthy.
 - `GET http://localhost:8080/api/v1/foundation` returns `FOUNDATION_READY`.
 - Change port with `SERVER_PORT` or `--server.port=8081`.
-- `/` has no UI yet. SEC-01 security policies are active; real login/JWT belongs to AUTH-02.
+- `GET http://localhost:8080/` renders the shared responsive landing page.
+- CSS and JavaScript under `/css/**` and `/js/**` are public so anonymous visitors
+  can render public pages. SEC-01 security policies remain active; real login/JWT
+  belongs to AUTH-02.
 
 ## Checks
 
@@ -75,6 +78,8 @@ powershell -NoProfile -File scripts/Test-DatabasePlan.ps1
 
 - [Architecture](docs/architecture.md) records architecture and SEC-01 integration.
 - [Security foundation](docs/security.md) defines public/protected routes, principals and CSRF.
+- [Shared UI conventions](docs/ui-conventions.md) defines template composition,
+  Bootstrap components, responsive behavior, accessibility and output escaping.
 - [Contribution workflow](CONTRIBUTING.md) explains CI, commits and PR review.
 - [Database conventions](docs/DATABASE_CONVENTIONS.md) defines types, constraints,
   profiles, Flyway naming and review rules.
