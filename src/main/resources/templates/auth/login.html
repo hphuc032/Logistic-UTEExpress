@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Đăng nhập | UTEExpress</title>
+</head>
+<body>
+<main>
+    <section class="app-auth-section" aria-labelledby="login-title">
+        <div class="app-auth-card">
+            <div class="app-auth-heading">
+                <span class="app-eyebrow">Tài khoản UTEExpress</span>
+                <h1 id="login-title">Đăng nhập</h1>
+                <p>Tiếp tục sử dụng các chức năng dành cho tài khoản của bạn.</p>
+            </div>
+
+            <form method="post" th:action="@{/login}" th:object="${loginForm}" novalidate>
+                <div class="mb-3">
+                    <label class="form-label" for="identifier">
+                        Email hoặc tên đăng nhập <span class="app-required" aria-hidden="true">*</span>
+                    </label>
+                    <input class="form-control"
+                           th:classappend="${#fields.hasErrors('identifier')} ? 'is-invalid'"
+                           type="text" id="identifier" th:field="*{identifier}"
+                           autocomplete="username" maxlength="254" required
+                           aria-describedby="identifier-error">
+                    <div id="identifier-error" class="invalid-feedback"
+                         th:if="${#fields.hasErrors('identifier')}"
+                         th:errors="*{identifier}" role="alert">Thông tin đăng nhập không hợp lệ.</div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="form-label" for="password">
+                        Mật khẩu <span class="app-required" aria-hidden="true">*</span>
+                    </label>
+                    <input class="form-control"
+                           th:classappend="${#fields.hasErrors('password')} ? 'is-invalid'"
+                           type="password" id="password" name="password"
+                           autocomplete="current-password" maxlength="64" required
+                           aria-describedby="password-error">
+                    <div id="password-error" class="invalid-feedback"
+                         th:if="${#fields.hasErrors('password')}"
+                         th:errors="*{password}" role="alert">Mật khẩu không hợp lệ.</div>
+                </div>
+
+                <button class="btn btn-app-primary btn-lg w-100" type="submit">Đăng nhập</button>
+            </form>
+
+            <p class="app-auth-switch">Chưa có tài khoản? <a th:href="@{/register}" href="/register">Đăng ký</a></p>
+        </div>
+    </section>
+</main>
+</body>
+</html>

@@ -7,3 +7,7 @@ spring:
   flyway:
     clean-disabled: true
     baseline-on-migrate: false
+uteexpress:
+  security:
+    jwt:
+      cookie-secure: true
