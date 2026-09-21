@@ -60,6 +60,12 @@ own task after signature and replay validation are defined.
 The shared `PasswordEncoder` is `BCryptPasswordEncoder`. AUTH-01 will use the bean;
 SEC-01 does not store passwords or create accounts.
 
+AUTH-01 now persists identities in `users`, `roles`, and `user_roles`. Public
+registration normalizes email and username, hashes the password with the shared BCrypt
+encoder, assigns only the seeded `USER` role, and creates the account as
+`PENDING_VERIFICATION` with `email_verified_at` unset and `token_version` equal to zero.
+Database unique constraints remain the final authority for normalized identity conflicts.
+
 Unauthenticated protected requests return HTTP 401 with `UNAUTHENTICATED`. Authenticated
 requests without permission and rejected CSRF requests return HTTP 403 with
 `ACCESS_DENIED`. Filter-chain handlers and MVC method-security handling use the ARCH-01
@@ -73,3 +79,6 @@ in-memory user, fake token, or hardcoded credential in SEC-01. AUTH-02 must prov
 JWT authentication filter and current principal, token issue/signature/claims,
 HttpOnly cookie, expiration, token-version validation, and logout invalidation. The
 filter is added to the existing `SecurityFilterChain`; it must not disable CSRF globally.
+
+AUTH-01 does not activate accounts or send email. AUTH-03 owns OTP creation, delivery,
+verification, and the transition from `PENDING_VERIFICATION` to `ACTIVE`.

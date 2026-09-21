@@ -627,6 +627,45 @@ textarea.form-control {
     font-weight: 600;
 }
 
+.app-auth-section {
+    display: grid;
+    min-height: 68vh;
+    padding-block: clamp(2.5rem, 7vw, 5rem);
+    place-items: center;
+}
+
+.app-auth-card {
+    width: min(100%, 36rem);
+    padding: clamp(1.5rem, 4vw, 2.5rem);
+    background: var(--ute-white);
+    border: 1px solid var(--ute-slate-200);
+    border-radius: var(--ute-radius-lg);
+    box-shadow: var(--ute-shadow-md);
+}
+
+.app-auth-heading {
+    margin-bottom: 2rem;
+}
+
+.app-auth-heading h1 {
+    margin: 0.45rem 0 0.65rem;
+    color: var(--ute-navy-900);
+}
+
+.app-auth-heading p,
+.app-auth-switch {
+    color: var(--ute-slate-600);
+}
+
+.app-required {
+    color: var(--ute-danger);
+}
+
+.app-auth-switch {
+    margin: 1.5rem 0 0;
+    text-align: center;
+}
+
 .app-table-shell {
     overflow: hidden;
     background: var(--ute-white);
