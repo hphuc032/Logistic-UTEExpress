@@ -34,6 +34,8 @@ class CsrfCookieWebTest {
     private static final Pattern CSRF_VALUE = Pattern.compile(
             "name=\"_csrf\" value=\"([^\"]+)\"");
 
+    @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
+    @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
     @MockitoBean IdentityAuthenticationService identities;
     @MockitoBean RegistrationService registrationService;
     @MockitoBean UserRoleRepository userRoleRepository;
