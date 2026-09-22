@@ -36,6 +36,7 @@ class CsrfCookieWebTest {
 
     @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
     @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
+    @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
     @MockitoBean IdentityAuthenticationService identities;
     @MockitoBean RegistrationService registrationService;
     @MockitoBean UserRoleRepository userRoleRepository;
