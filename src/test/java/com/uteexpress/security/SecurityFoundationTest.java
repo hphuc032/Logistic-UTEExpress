@@ -1,5 +1,7 @@
 package com.uteexpress.security;
 
+import com.uteexpress.identity.service.RegistrationService;
+import com.uteexpress.identity.repository.UserRoleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -10,9 +12,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import com.uteexpress.security.authentication.UteExpressUserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -36,6 +40,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(SecurityFoundationTest.SecurityTestConfiguration.class)
 class SecurityFoundationTest {
+    @MockitoBean
+    private com.uteexpress.governance.service.AuditLogService auditLogService;
+
+    @MockitoBean
+    private RegistrationService registrationService;
+
+    @MockitoBean
+    private UserRoleRepository userRoleRepository;
+
+    @MockitoBean
+    private com.uteexpress.identity.service.IdentityAuthenticationService identityAuthenticationService;
+
     @Autowired
     private MockMvc mvc;
 
@@ -145,8 +161,10 @@ class SecurityFoundationTest {
     }
 
     @Test
-    void applicationDoesNotCreateGeneratedDevelopmentUser() {
-        assertTrue(applicationContext.getBeansOfType(UserDetailsService.class).isEmpty());
+    void applicationUsesOnlyItsDatabaseBackedUserDetailsService() {
+        var services = applicationContext.getBeansOfType(UserDetailsService.class);
+        assertTrue(services.size() == 1);
+        assertTrue(services.values().iterator().next() instanceof UteExpressUserDetailsService);
     }
 
     @TestConfiguration(proxyBeanMethods = false)

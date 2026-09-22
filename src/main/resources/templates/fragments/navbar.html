@@ -26,9 +26,17 @@
                 </li>
             </ul>
 
-            <div class="d-flex flex-column flex-lg-row gap-2 app-navbar-actions">
+            <div class="d-flex flex-column flex-lg-row gap-2 app-navbar-actions"
+                 th:if="${navbarUser == null}">
                 <a class="btn btn-app-ghost" th:href="@{/login}" href="/login">Đăng nhập</a>
                 <a class="btn btn-app-primary" th:href="@{/register}" href="/register">Đăng ký</a>
+            </div>
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 app-navbar-actions"
+                 th:if="${navbarUser != null}">
+                <span class="navbar-text" th:text="${navbarUser.displayUsername}">Tài khoản</span>
+                <form method="post" th:action="@{/logout}">
+                    <button class="btn btn-app-ghost w-100" type="submit">Đăng xuất</button>
+                </form>
             </div>
         </div>
     </div>

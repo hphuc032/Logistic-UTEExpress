@@ -2,3 +2,7 @@
 spring:
   jpa:
     show-sql: false
+uteexpress:
+  security:
+    jwt:
+      cookie-secure: false

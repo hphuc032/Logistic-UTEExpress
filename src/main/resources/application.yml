@@ -48,3 +48,13 @@ management:
   endpoint:
     health:
       show-details: never
+uteexpress:
+  security:
+    jwt:
+      issuer: uteexpress
+      audience: uteexpress-web
+      ttl: PT30M
+      clock-skew: PT60S
+      cookie-name: UTEEXPRESS_AUTH
+      cookie-secure: ${JWT_COOKIE_SECURE:true}
+      secret-base64: ${JWT_SECRET_BASE64}
