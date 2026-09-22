@@ -5,3 +5,13 @@ spring:
       - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
       - org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration
       - org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration
+uteexpress:
+  security:
+    jwt:
+      issuer: uteexpress
+      audience: uteexpress-web
+      ttl: PT30M
+      clock-skew: PT60S
+      cookie-name: UTEEXPRESS_AUTH
+      cookie-secure: false
+      secret-base64: VVRFRXhwcmVzcy10ZXN0LW9ubHktc2VjcmV0LWtleS0zMi1ieXRlcyE=

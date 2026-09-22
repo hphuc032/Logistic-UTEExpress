@@ -76,6 +76,10 @@
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.springframework.security</groupId>
+      <artifactId>spring-security-oauth2-jose</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
@@ -114,6 +118,7 @@
         <configuration>
           <systemPropertyVariables>
             <user.timezone>UTC</user.timezone>
+            <JWT_SECRET_BASE64>VVRFRXhwcmVzcy10ZXN0LW9ubHktc2VjcmV0LWtleS0zMi1ieXRlcyE=</JWT_SECRET_BASE64>
           </systemPropertyVariables>
         </configuration>
       </plugin>
@@ -158,6 +163,7 @@
             <configuration>
               <systemPropertyVariables>
                 <user.timezone>UTC</user.timezone>
+                <JWT_SECRET_BASE64>VVRFRXhwcmVzcy10ZXN0LW9ubHktc2VjcmV0LWtleS0zMi1ieXRlcyE=</JWT_SECRET_BASE64>
               </systemPropertyVariables>
             </configuration>
             <executions>

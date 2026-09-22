@@ -28,6 +28,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class OpsDashboardTest {
     @MockitoBean RegistrationService registrationService;
     @MockitoBean com.uteexpress.identity.repository.UserRoleRepository userRoleRepository;
+    @MockitoBean com.uteexpress.identity.service.IdentityAuthenticationService identityAuthenticationService;
     @MockitoBean AuditLogService auditLogService;
     @Autowired MockMvc mvc;
     @Autowired OpsDashboardService dashboards;

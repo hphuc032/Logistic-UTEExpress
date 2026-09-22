@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import com.uteexpress.security.authentication.UteExpressUserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.ActiveProfiles;
@@ -47,6 +48,9 @@ class SecurityFoundationTest {
 
     @MockitoBean
     private UserRoleRepository userRoleRepository;
+
+    @MockitoBean
+    private com.uteexpress.identity.service.IdentityAuthenticationService identityAuthenticationService;
 
     @Autowired
     private MockMvc mvc;
@@ -157,8 +161,10 @@ class SecurityFoundationTest {
     }
 
     @Test
-    void applicationDoesNotCreateGeneratedDevelopmentUser() {
-        assertTrue(applicationContext.getBeansOfType(UserDetailsService.class).isEmpty());
+    void applicationUsesOnlyItsDatabaseBackedUserDetailsService() {
+        var services = applicationContext.getBeansOfType(UserDetailsService.class);
+        assertTrue(services.size() == 1);
+        assertTrue(services.values().iterator().next() instanceof UteExpressUserDetailsService);
     }
 
     @TestConfiguration(proxyBeanMethods = false)
