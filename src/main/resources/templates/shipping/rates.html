@@ -12,7 +12,7 @@
 <a class="btn btn-primary" th:href="@{${basePath + '/rates/new'}}">Thêm bảng phí</a></div>
 <p class="alert alert-info">Phí cố định theo đơn vị, phương thức và mã tỉnh/vùng. Chỉ báo giá khi cả đơn vị lẫn bảng phí đang bật.</p>
 <p th:if="${items.empty}">Chưa có bảng phí trên trang này.</p>
-<div class="table-responsive" th:unless="${items.empty}"><table class="table align-middle">
+<div class="table-responsive" th:unless="${items.empty}"><table class="table align-middle" style="min-width: 760px">
 <caption>Phí giao hàng tính bằng VND</caption>
 <thead><tr><th scope="col">Đơn vị</th><th scope="col">Phương thức</th><th scope="col">Mã tỉnh/vùng</th><th scope="col">Phí (VND)</th><th scope="col">Cấu hình</th><th scope="col">Thao tác</th></tr></thead>
 <tbody><tr th:each="item : ${items.content}">

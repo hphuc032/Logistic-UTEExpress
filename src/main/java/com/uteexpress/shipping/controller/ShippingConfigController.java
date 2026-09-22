@@ -71,7 +71,7 @@ public class ShippingConfigController {
         model.addAttribute("itemId",id);
         model.addAttribute("providerName",r.providerName());
         model.addAttribute("shippingRateRequest",new ShippingRateRequest(r.providerId(),r.serviceCode(),
-                r.destinationRegion(),r.fee().stripTrailingZeros(),r.active(),r.version()));
+                r.destinationRegion(),r.fee().setScale(0),r.active(),r.version()));
         return "shipping/rate-form";
     }
     @PostMapping("/rates")
