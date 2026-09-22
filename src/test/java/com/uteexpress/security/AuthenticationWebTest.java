@@ -43,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class AuthenticationWebTest {
+    @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
     @MockitoBean IdentityAuthenticationService identities;
     @MockitoBean RegistrationService registrationService;
     @MockitoBean UserRoleRepository userRoleRepository;

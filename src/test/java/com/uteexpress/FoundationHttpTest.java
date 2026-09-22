@@ -33,6 +33,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @AutoConfigureMockMvc
 @Import(FoundationHttpTest.ErrorFixtureController.class)
 class FoundationHttpTest {
+    @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
     @MockitoBean
     private com.uteexpress.governance.service.AuditLogService auditLogService;
 
