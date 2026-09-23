@@ -102,7 +102,9 @@ class OrderDatabaseIT {
                  'uteexpress.payments'::regclass,'uteexpress.order_status_history'::regclass)
                 """, String.class)).containsExactlyInAnyOrder("fk_orders_buyer_id", "fk_order_items_order_id",
                 "fk_payments_order_id", "fk_order_status_history_order_id", "fk_order_status_history_actor_id");
-        for (String parent : List.of("shops", "products", "commission_policies")) {
+        assertThat(jdbc.queryForObject("SELECT to_regclass(?)::text", String.class, "uteexpress.shops"))
+                .isEqualTo("uteexpress.shops");
+        for (String parent : List.of("products", "commission_policies")) {
             assertThat(jdbc.queryForObject("SELECT to_regclass(?)::text", String.class, "uteexpress." + parent)).isNull();
         }
     }
