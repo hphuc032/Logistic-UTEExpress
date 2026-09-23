@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Thông tin danh mục | UTEExpress</title></head>
+<body><section th:fragment="content" aria-label="Thông tin danh mục">
+    <a class="btn btn-link px-0 mb-3" th:href="@{${basePath}}">← Danh sách danh mục</a>
+    <h1 class="h2 mb-4" th:text="${categoryId == null ? 'Tạo danh mục' : 'Sửa danh mục'}"></h1>
+    <form class="card p-4" method="post" th:object="${categoryRequest}"
+          th:action="@{${basePath + (categoryId == null ? '' : '/' + categoryId + '/update')}}">
+        <input th:if="${categoryId != null}" type="hidden" th:field="*{version}">
+        <div class="mb-3">
+            <label for="name" class="form-label">Tên danh mục</label>
+            <input class="form-control" id="name" th:field="*{name}" maxlength="120" required aria-describedby="nameHelp">
+            <div id="nameHelp" class="form-text">Tối đa 120 ký tự.</div>
+            <p class="text-danger mt-1" th:if="${#fields.hasErrors('name')}" role="alert">Vui lòng nhập tên danh mục từ 1 đến 120 ký tự.</p>
+        </div>
+        <div class="mb-4">
+            <label for="slug" class="form-label">Slug</label>
+            <input class="form-control" id="slug" th:field="*{slug}" maxlength="120" pattern="[a-z0-9]+(-[a-z0-9]+)*" required aria-describedby="slugHelp">
+            <div id="slugHelp" class="form-text">Chữ thường không dấu, số, dấu gạch nối. Ví dụ: thoi-trang. Slug phải duy nhất.</div>
+            <p class="text-danger mt-1" th:if="${#fields.hasErrors('slug')}" role="alert" th:errors="*{slug}"></p>
+        </div>
+        <div class="d-flex flex-wrap gap-2">
+            <button type="submit" class="btn btn-primary">Lưu danh mục</button>
+            <a class="btn btn-outline-secondary" th:href="@{${basePath}}">Hủy</a>
+            <a th:if="${categoryId != null}" class="btn btn-link" th:href="@{${basePath + '/' + categoryId + '/edit'}}">Tải lại dữ liệu mới nhất</a>
+        </div>
+    </form>
+</section></body></html>
