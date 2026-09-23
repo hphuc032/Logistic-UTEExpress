@@ -23,7 +23,6 @@ com.uteexpress:uteexpress:jar:0.1.0-SNAPSHOT
 |  |  |  |  +- org.hibernate.models:hibernate-models:jar:1.1.1:runtime
 |  |  |  |  +- org.glassfish.jaxb:jaxb-runtime:jar:4.0.9:runtime
 |  |  |  |  |  \- org.glassfish.jaxb:jaxb-core:jar:4.0.9:runtime
-|  |  |  |  |     +- org.eclipse.angus:angus-activation:jar:2.0.3:runtime
 |  |  |  |  |     +- org.glassfish.jaxb:txw2:jar:4.0.9:runtime
 |  |  |  |  |     \- com.sun.istack:istack-commons-runtime:jar:4.1.2:runtime
 |  |  |  |  \- jakarta.inject:jakarta.inject-api:jar:2.0.1:runtime
@@ -109,6 +108,12 @@ com.uteexpress:uteexpress:jar:0.1.0-SNAPSHOT
 |  |  \- org.springframework.security:spring-security-config:jar:7.1.1:compile
 |  \- org.springframework:spring-aop:jar:7.0.9:compile
 |     \- org.springframework:spring-beans:jar:7.0.9:compile
++- org.springframework.boot:spring-boot-starter-mail:jar:4.1.1:compile
+|  \- org.springframework.boot:spring-boot-mail:jar:4.1.1:compile
+|     +- org.springframework:spring-context-support:jar:7.0.9:compile
+|     +- jakarta.mail:jakarta.mail-api:jar:2.1.5:compile
+|     \- org.eclipse.angus:angus-mail:jar:2.0.5:runtime
+|        \- org.eclipse.angus:angus-activation:jar:2.0.3:runtime
 +- org.springframework.security:spring-security-oauth2-jose:jar:7.1.1:compile
 |  +- org.springframework.security:spring-security-core:jar:7.1.1:compile
 |  |  +- org.springframework.security:spring-security-crypto:jar:7.1.1:compile
@@ -123,7 +128,7 @@ com.uteexpress:uteexpress:jar:0.1.0-SNAPSHOT
 |  +- org.springframework.boot:spring-boot-test-autoconfigure:jar:4.1.1:test
 |  +- com.jayway.jsonpath:json-path:jar:2.10.0:test
 |  +- jakarta.xml.bind:jakarta.xml.bind-api:jar:4.0.5:runtime
-|  |  \- jakarta.activation:jakarta.activation-api:jar:2.1.4:runtime
+|  |  \- jakarta.activation:jakarta.activation-api:jar:2.1.4:compile
 |  +- net.minidev:json-smart:jar:2.6.0:test
 |  |  \- net.minidev:accessors-smart:jar:2.6.0:test
 |  |     \- org.ow2.asm:asm:jar:9.7.1:test
