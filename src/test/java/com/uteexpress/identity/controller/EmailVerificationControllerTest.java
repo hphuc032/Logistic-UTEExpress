@@ -37,6 +37,8 @@ class EmailVerificationControllerTest {
     @MockitoBean UserRoleRepository userRoles;
     @MockitoBean com.uteexpress.governance.service.AuditLogService audit;
     @MockitoBean com.uteexpress.governance.service.CategoryService categories;
+    @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
+    @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
 
     @Autowired MockMvc mvc;
 

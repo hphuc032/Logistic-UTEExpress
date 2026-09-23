@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Đơn vị vận chuyển | UTEExpress</title></head>
+<body><section th:fragment="content">
+<nav aria-label="Cấu hình vận chuyển" class="d-flex flex-wrap gap-3 mb-4">
+<a th:href="@{${#strings.replace(basePath,'/shipping','/dashboard')}}">← Tổng quan</a>
+<a th:href="@{${basePath + '/providers'}}">Đơn vị vận chuyển</a>
+<a th:href="@{${basePath + '/rates'}}">Bảng phí</a>
+</nav>
+
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-4"><h1 class="h2">Đơn vị vận chuyển</h1>
+<a class="btn btn-primary" th:href="@{${basePath + '/providers/new'}}">Thêm đơn vị</a></div>
+<p class="text-secondary">Tạm dừng đơn vị sẽ ngừng báo giá cho toàn bộ dịch vụ của đơn vị đó.</p>
+<p th:if="${items.empty}" class="alert alert-info">Chưa có đơn vị trên trang này.</p>
+<div class="table-responsive" th:unless="${items.empty}"><table class="table align-middle">
+<caption>Danh sách đơn vị vận chuyển</caption>
+<thead><tr><th scope="col">Mã</th><th scope="col">Tên</th><th scope="col">Trạng thái</th><th scope="col">Thao tác</th></tr></thead>
+<tbody><tr th:each="item : ${items.content}">
+<td th:text="${item.code}" class="text-break"></td><th scope="row" th:text="${item.name}" class="text-break"></th>
+<td th:text="${item.active ? 'Đang bật' : 'Tạm dừng'}"></td>
+<td><div class="d-flex flex-wrap gap-2"><a class="btn btn-sm btn-outline-primary" th:href="@{${basePath + '/providers/' + item.id + '/edit'}}" th:aria-label="${'Sửa ' + item.name}">Sửa</a>
+<form th:if="${item.active}" method="post" th:action="@{${basePath + '/providers/' + item.id + '/disable'}}">
+<input type="hidden" name="version" th:value="${item.version}"><button class="btn btn-sm btn-outline-secondary" th:aria-label="${'Tạm dừng ' + item.name}">Tạm dừng</button></form>
+</div></td></tr></tbody></table></div><nav aria-label="Phân trang" class="d-flex gap-3 my-3">
+<a class="btn btn-outline-secondary" th:if="${items.hasPrevious()}" th:href="@{''(page=${items.number - 1})}">Trang trước</a>
+<span th:text="${'Trang ' + (items.number + 1) + ' · Tổng ' + items.totalElements}"></span>
+<a class="btn btn-outline-secondary" th:if="${items.hasNext()}" th:href="@{''(page=${items.number + 1})}">Trang sau</a></nav>
+</section></body></html>

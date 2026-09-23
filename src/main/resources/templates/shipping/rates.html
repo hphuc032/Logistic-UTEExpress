@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Bảng phí vận chuyển | UTEExpress</title></head>
+<body><section th:fragment="content">
+<nav aria-label="Cấu hình vận chuyển" class="d-flex flex-wrap gap-3 mb-4">
+<a th:href="@{${#strings.replace(basePath,'/shipping','/dashboard')}}">← Tổng quan</a>
+<a th:href="@{${basePath + '/providers'}}">Đơn vị vận chuyển</a>
+<a th:href="@{${basePath + '/rates'}}">Bảng phí</a>
+</nav>
+
+<div class="d-flex flex-wrap justify-content-between gap-3 mb-4"><h1 class="h2">Bảng phí vận chuyển</h1>
+<a class="btn btn-primary" th:href="@{${basePath + '/rates/new'}}">Thêm bảng phí</a></div>
+<p class="alert alert-info">Phí cố định theo đơn vị, phương thức và mã tỉnh/vùng. Chỉ báo giá khi cả đơn vị lẫn bảng phí đang bật.</p>
+<p th:if="${items.empty}">Chưa có bảng phí trên trang này.</p>
+<div class="table-responsive" th:unless="${items.empty}"><table class="table align-middle" style="min-width: 760px">
+<caption>Phí giao hàng tính bằng VND</caption>
+<thead><tr><th scope="col">Đơn vị</th><th scope="col">Phương thức</th><th scope="col">Mã tỉnh/vùng</th><th scope="col">Phí (VND)</th><th scope="col">Cấu hình</th><th scope="col">Thao tác</th></tr></thead>
+<tbody><tr th:each="item : ${items.content}">
+<th scope="row" th:text="${item.providerName}" class="text-break"></th><td th:text="${item.serviceCode}"></td>
+<td th:text="${item.destinationRegion}"></td><td th:text="${#numbers.formatDecimal(item.fee,1,'POINT',0,'COMMA')}"></td>
+<td th:text="${item.active ? 'Đã bật' : 'Đã tắt'}"></td>
+<td><div class="d-flex flex-wrap gap-2"><a class="btn btn-sm btn-outline-primary" th:href="@{${basePath + '/rates/' + item.id + '/edit'}}">Sửa</a>
+<form th:if="${item.active}" method="post" th:action="@{${basePath + '/rates/' + item.id + '/disable'}}">
+<input type="hidden" name="version" th:value="${item.version}"><button class="btn btn-sm btn-outline-secondary">Tắt</button></form>
+</div></td></tr></tbody></table></div><nav aria-label="Phân trang" class="d-flex gap-3 my-3">
+<a class="btn btn-outline-secondary" th:if="${items.hasPrevious()}" th:href="@{''(page=${items.number - 1})}">Trang trước</a>
+<span th:text="${'Trang ' + (items.number + 1) + ' · Tổng ' + items.totalElements}"></span>
+<a class="btn btn-outline-secondary" th:if="${items.hasNext()}" th:href="@{''(page=${items.number + 1})}">Trang sau</a></nav>
+</section></body></html>
