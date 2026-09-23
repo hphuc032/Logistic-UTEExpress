@@ -78,36 +78,68 @@ now permits exactly CurrentUserProvider and CurrentUser as public SEC-01
 contracts at the security package root; other security implementation types remain
 private. This narrow accommodation needs architecture/HP review.
 
-## Migration dependency — integration dependency for a later task
+## Database migration: approved phased FKs
 
-No Flyway migration was added or modified. DB-01 has only a schema-comment baseline
-and no agreed deferred-FK mechanism. The following planned constraints remain required:
+The team explicitly approved creating the four TD-owned tables now, with every
+currently valid FK and exactly three deferred FKs. Migration
+`V20260923090000__td_ord01_domain_core.sql` creates `uteexpress.orders`,
+`order_items`, `payments` and `order_status_history`. All current-branch and visible
+origin-branch migration filenames were inspected after fetching: the highest was
+SHIP-00's `20260922133000`; the chosen version is later and does not collide.
+The fetched develop base remained `f6c9da8`; no additional merge/rebase was performed.
 
-| Planned constraint | Missing parent | Owner |
+Created FKs: orders.buyer_id -> users.id; order_items.order_id -> orders.id;
+payments.order_id -> orders.id; order_status_history.order_id -> orders.id;
+order_status_history.actor_id -> users.id (nullable for system actions).
+
+Exactly these three FKs are deferred:
+
+| Required later constraint | Parent owner | Prerequisite |
 | --- | --- | --- |
-| fk_orders_buyer_id | users | HP |
-| fk_orders_shop_id | shops | HP |
-| fk_orders_commission_policy_id | commission_policies | QD |
-| fk_order_items_product_id | products | HP |
-| fk_order_status_history_actor_id | users | HP |
+| fk_orders_shop_id: orders.shop_id -> shops.id | HP | Real shops migration, dependent on users |
+| fk_orders_commission_policy_id: orders.commission_policy_id -> commission_policies.id | QD | Real commission_policies migration, dependent on users |
+| fk_order_items_product_id: order_items.product_id -> products.id | HP | Real products migration, dependent on shops and QD categories (categories now merged) |
 
-When those migrations exist, TD must add the four owned tables in dependency order,
-including internal order FKs, all named CHECKs, uniqueness/indexes, money constraints,
-timestamps and version DEFAULT 0. Preserve the PAID-only partial unique payment/order
-index; ordinary JPA uniqueness cannot represent it. JPA annotations describe mapping
-intent and do not create constraints under ddl-auto=validate.
+TD must add these named FKs in later, newly versioned migrations after the parent
+migrations merge. Existing scalar IDs must be reconciled against real parent rows
+before adding validated constraints. This approval defers FK creation only; it does
+not remove the final schema requirements or authorize fake parent tables.
 
-Production startup and the PostgreSQL Spring integration profile cannot currently
-validate these entities against the schema-only baseline: the four tables are absent.
-This is an explicit deployment/integration dependency, not a passing database claim.
-No validation configuration, existing integration test or baseline was weakened.
+The migration preserves identity BIGINT keys, NUMERIC(19,2) money, unbounded NUMERIC
+commission rate, VARCHAR(255) snapshots/enums, TEXT reasons, TIMESTAMPTZ instants,
+and BIGINT version DEFAULT 0 compatible with Hibernate's nullable-before-persist
+@Version. Named checks enforce approved enum vocabularies, valid money/arithmetic,
+commission bounds, positive quantities and IDs, nonblank snapshots and nonnegative
+version. PostgreSQL NaN money is rejected. Money scale remains two decimal places;
+the Java Money boundary requires whole VND amounts before persistence.
 
-Snapshot column names receiver_name, phone, province_code, district and detail follow
-the existing AddressSnapshot vocabulary; DB-01 lists a receiver/address snapshot
-without exact columns. Strings currently use JPA's default length except TEXT reasons.
-Commission rate uses an unbounded numeric declaration pending TD/QD precision review.
-Confirm these details when authoring the actual migration. Item snapshots and history
-are append-only in the domain API; no mutable-record update timestamp is added to them.
+Unique order code, buyer/checkout key, payment attempt key and nullable provider
+reference are retained. The unique payment/order index applies only to PAID;
+multiple UNPAID attempts remain valid. Buyer/time, shop/status, child order IDs and
+history/order/time indexes support lookups. Cross-row subtotal reconciliation and
+trusted payment amount remain domain responsibilities. No owner migrations, entities,
+Hibernate validation settings or fake parent tables were added or changed.
+
+## PostgreSQL verification state
+
+`OrderDatabaseIT` adds six real PostgreSQL 17.6 Testcontainers tests through the
+existing `postgres-it` profile. Coverage includes Flyway validation/repeat migration,
+Hibernate validate, the exact FK set and absent deferred parents, all four entity
+round trips, snapshots, version initialization/increments, stale independent sessions,
+history-failure and outer-transaction rollback, after-commit events, FK/CHECK enforcement,
+checkout uniqueness and the PAID-only partial payment index.
+
+Verification on 2026-09-23 used Temurin Java 21.0.12.1 and Maven 3.9.11.
+`clean test`: PASS, 148 tests, zero failures/errors/skips. `package -DskipTests`:
+PASS. `Test-DatabasePlan.ps1`: PASS. `git diff --check`: PASS.
+The full `-Ppostgres-it verify` run: PASS, 30 integration tests, zero failures,
+errors or skips, including all six `OrderDatabaseIT` tests. PostgreSQL 17.6 started,
+Flyway applied the ORD-01 migration, and Hibernate initialized successfully with
+ddl-auto=validate unchanged. Docker named-pipe access required an authorized run
+outside the sandbox. The integration fixture commission amount was corrected from
+1.72 to 2.00 to satisfy the existing whole-VND Money contract; production validation
+and database constraints were not weakened. There are no remaining verification
+blockers.
 
 ## Validation boundary
 
@@ -118,8 +150,7 @@ history writes/failure, fail-closed identity/authorization, and Spring after-com
 outer-rollback event behavior. Existing ORD-00 tests retain the exhaustive graph and
 Money regressions.
 
-Repositories are mocked; the transaction fixture exercises real Spring synchronization
-and participation, not PostgreSQL durability. Real database FK/CHECK/unique enforcement,
-version increments, concurrent sessions and durable history rollback need the approved
-migration and PostgreSQL integration tests. Missing future workflow/UI modules are not
-blockers for this domain skeleton. There are no remaining Java domain-core blockers.
+The unit-test repositories are mocked; that fixture exercises real Spring synchronization
+and participation, not PostgreSQL durability. OrderDatabaseIT now supplies the real
+database coverage described above; its execution status must be reported separately.
+Missing future workflow/UI modules are not blockers for this domain skeleton.
