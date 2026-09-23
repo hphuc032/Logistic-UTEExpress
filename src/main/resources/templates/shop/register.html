@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Đăng ký cửa hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-auth-section" aria-labelledby="shop-register-title">
+    <div class="app-auth-card">
+        <div class="app-auth-heading">
+            <span class="app-eyebrow">Bán hàng trên UTEExpress</span>
+            <h1 id="shop-register-title">Đăng ký cửa hàng</h1>
+            <p>Thông tin của bạn sẽ được gửi để Admin hoặc Manager xét duyệt. Tài khoản chưa được cấp quyền Vendor ở bước này.</p>
+        </div>
+
+        <form method="post" th:action="@{/user/shop/register}" th:object="${shopRegistrationForm}" novalidate>
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasGlobalErrors()}"
+                 th:each="error : ${#fields.globalErrors()}" th:text="${error}">Không thể gửi đơn.</div>
+
+            <div class="mb-3">
+                <label class="form-label" for="name">Tên cửa hàng <span class="app-required" aria-hidden="true">*</span></label>
+                <input class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                       id="name" type="text" th:field="*{name}" maxlength="120" autocomplete="organization"
+                       required aria-describedby="shop-name-help shop-name-error">
+                <div id="shop-name-help" class="form-text">Tên hiển thị công khai, tối đa 120 ký tự.</div>
+                <div id="shop-name-error" class="invalid-feedback" th:if="${#fields.hasErrors('name')}"
+                     th:errors="*{name}" role="alert">Tên cửa hàng không hợp lệ.</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="slug">Slug <span class="app-required" aria-hidden="true">*</span></label>
+                <input class="form-control" th:classappend="${#fields.hasErrors('slug')} ? 'is-invalid'"
+                       id="slug" type="text" th:field="*{slug}" maxlength="120"
+                       pattern="[A-Za-z0-9]+(-[A-Za-z0-9]+)*" required
+                       aria-describedby="shop-slug-help shop-slug-error">
+                <div id="shop-slug-help" class="form-text">Chữ cái không dấu, số và dấu gạch nối; hệ thống sẽ lưu dạng chữ thường.</div>
+                <div id="shop-slug-error" class="invalid-feedback" th:if="${#fields.hasErrors('slug')}"
+                     th:errors="*{slug}" role="alert">Slug không hợp lệ.</div>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label" for="description">Mô tả</label>
+                <textarea class="form-control" th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"
+                          id="description" th:field="*{description}" maxlength="2000"
+                          aria-describedby="shop-description-help shop-description-error"></textarea>
+                <div id="shop-description-help" class="form-text">Giới thiệu ngắn về cửa hàng, tối đa 2000 ký tự.</div>
+                <div id="shop-description-error" class="invalid-feedback" th:if="${#fields.hasErrors('description')}"
+                     th:errors="*{description}" role="alert">Mô tả không hợp lệ.</div>
+            </div>
+
+            <div class="mb-4">
+                <label class="form-label" for="pickupAddress">Địa chỉ lấy hàng <span class="app-required" aria-hidden="true">*</span></label>
+                <textarea class="form-control" th:classappend="${#fields.hasErrors('pickupAddress')} ? 'is-invalid'"
+                          id="pickupAddress" th:field="*{pickupAddress}" maxlength="500"
+                          autocomplete="street-address" required
+                          aria-describedby="pickup-help pickup-error"></textarea>
+                <div id="pickup-help" class="form-text">Địa chỉ vận hành để đối tác vận chuyển nhận hàng.</div>
+                <div id="pickup-error" class="invalid-feedback" th:if="${#fields.hasErrors('pickupAddress')}"
+                     th:errors="*{pickupAddress}" role="alert">Địa chỉ lấy hàng không hợp lệ.</div>
+            </div>
+
+            <div class="d-flex flex-column flex-sm-row gap-2">
+                <button class="btn btn-app-primary flex-grow-1" type="submit">Gửi đơn đăng ký</button>
+                <a class="btn btn-app-secondary" th:href="@{/user/shop}" href="/user/shop">Hủy</a>
+            </div>
+        </form>
+    </div>
+</section></body>
+</html>
