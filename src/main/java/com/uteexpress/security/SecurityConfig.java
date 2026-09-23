@@ -34,6 +34,7 @@ public class SecurityConfig {
             "/login",
             "/register",
             "/verify-otp",
+            "/verify-otp/resend",
             "/forgot-password",
             "/reset-password",
             "/css/**",

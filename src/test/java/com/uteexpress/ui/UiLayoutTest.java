@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(UiLayoutTest.UiFixtureController.class)
 class UiLayoutTest {
+    @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
     @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
     @MockitoBean
     private com.uteexpress.governance.service.AuditLogService auditLogService;

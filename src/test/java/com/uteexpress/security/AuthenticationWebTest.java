@@ -43,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class AuthenticationWebTest {
+    @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
     @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
     @MockitoBean IdentityAuthenticationService identities;
     @MockitoBean RegistrationService registrationService;
@@ -62,6 +63,14 @@ class AuthenticationWebTest {
                 .andExpect(content().string(containsString("type=\"password\"")))
                 .andExpect(content().string(containsString("name=\"_csrf\"")))
                 .andExpect(content().string(not(containsString("value=\"RawSecret1\""))));
+    }
+
+    @Test
+    void verifiedLoginPageShowsSafeSuccessMessage() throws Exception {
+        mvc.perform(get("/login?verified=true"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(
+                        "Xác minh email thành công. Bạn có thể đăng nhập.")));
     }
 
     @Test
