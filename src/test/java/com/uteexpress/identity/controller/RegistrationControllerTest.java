@@ -34,6 +34,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 class RegistrationControllerTest {
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
+    @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
+    @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
     @MockitoBean EmailVerificationService emailVerificationService;
     @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
     @MockitoBean

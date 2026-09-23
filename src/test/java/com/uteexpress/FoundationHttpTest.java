@@ -34,6 +34,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @Import(FoundationHttpTest.ErrorFixtureController.class)
 class FoundationHttpTest {
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
+    @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
+    @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
     @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
     @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
     @MockitoBean

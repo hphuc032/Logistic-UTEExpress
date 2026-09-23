@@ -47,11 +47,11 @@ to users has no delete cascade. `Shop` uses `Instant` timestamps and a nullable 
 
 ## Verification
 
-The non-database suite passes 179 tests, including VENDOR-01 entity, service, MVC,
+The non-database suite passes 184 tests, including VENDOR-01 entity, service, MVC,
 CSRF, role matrix, mass-assignment, XSS, and architecture coverage. PostgreSQL 17.6
 Testcontainers verifies Flyway, Hibernate `ddl-auto=validate`, named constraints,
 foreign keys, canonical slug and unique rules, initial version, authenticated JWT
 ownership, unchanged USER role, and concurrent duplicate submissions. The final
-command results and CI link are recorded in the pull request and task completion
-report.
+PostgreSQL profile passes 49 integration tests. Command results and the CI link are
+recorded in the pull request and task completion report.
 

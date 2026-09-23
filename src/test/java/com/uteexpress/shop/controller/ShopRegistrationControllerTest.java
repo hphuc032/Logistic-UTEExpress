@@ -44,6 +44,8 @@ class ShopRegistrationControllerTest {
     @MockitoBean com.uteexpress.identity.service.IdentityAuthenticationService identities;
     @MockitoBean com.uteexpress.identity.repository.UserRoleRepository userRoles;
     @MockitoBean com.uteexpress.governance.service.AuditLogService audit;
+    @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
+    @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
 
     @Test
     void anonymousCannotReachShopApplication() throws Exception {
