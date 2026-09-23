@@ -1,10 +1,18 @@
 # HTTP/security tests use this profile; security stays enabled, persistence is tested separately.
 spring:
+  mail:
+    host: localhost
+    port: 2525
+    test-connection: false
   autoconfigure:
     exclude:
       - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
       - org.springframework.boot.hibernate.autoconfigure.HibernateJpaAutoConfiguration
       - org.springframework.boot.flyway.autoconfigure.FlywayAutoConfiguration
+management:
+  health:
+    mail:
+      enabled: false
 uteexpress:
   security:
     jwt:
@@ -15,3 +23,10 @@ uteexpress:
       cookie-name: UTEEXPRESS_AUTH
       cookie-secure: false
       secret-base64: VVRFRXhwcmVzcy10ZXN0LW9ubHktc2VjcmV0LWtleS0zMi1ieXRlcyE=
+    otp:
+      ttl: PT10M
+      resend-cooldown: PT1M
+      max-attempts: 5
+      pepper-base64: VVRFRXhwcmVzcy1BVVRILTAzLXRlc3Qtb25seS1wZXBwZXIta2V5IQ==
+  mail:
+    from: no-reply@test.invalid

@@ -31,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_CLASS)
 class CsrfCookieWebTest {
+    @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
     private static final Pattern CSRF_VALUE = Pattern.compile(
             "name=\"_csrf\" value=\"([^\"]+)\"");
 
