@@ -40,12 +40,16 @@ public class LoginController {
 
     @GetMapping("/login")
     String showLogin(@RequestParam(name = "logout", defaultValue = "false") boolean logout,
+            @RequestParam(name = "verified", defaultValue = "false") boolean verified,
             Model model) {
         if (!model.containsAttribute("loginForm")) {
             model.addAttribute("loginForm", new LoginForm());
         }
         if (logout) {
             model.addAttribute("successMessage", "Bạn đã đăng xuất an toàn.");
+        } else if (verified) {
+            model.addAttribute("successMessage",
+                    "Xác minh email thành công. Bạn có thể đăng nhập.");
         }
         return LOGIN_VIEW;
     }

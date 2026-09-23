@@ -15,7 +15,7 @@ not concatenate the `ROLE_` prefix. Guest is an unauthenticated request, not a r
 Anonymous access is limited to:
 
 - `/`, `/products/**`, `/categories/**`, `/shops/**`
-- `/login`, `/register`, `/verify-otp`, `/forgot-password`, `/reset-password`
+- `/login`, `/register`, `/verify-otp`, `/verify-otp/resend`, `/forgot-password`, `/reset-password`
 - `/api/v1/foundation`, `/actuator/health`
 
 Future route conventions are:
@@ -97,5 +97,27 @@ the authentication cookie and security context, and therefore invalidates all JW
 issued with an older version. There is no refresh token, token table, blacklist, session,
 OAuth login, or production seed account.
 
-AUTH-01 does not activate accounts or send email. AUTH-03 owns OTP creation, delivery,
-verification, and the transition from `PENDING_VERIFICATION` to `ACTIVE`.
+## Email verification
+
+AUTH-03 persists `EMAIL_VERIFICATION` tokens in `otp_tokens`. Production generates a
+six-digit code with `SecureRandom`, stores only HMAC-SHA256 over
+`userId:purpose:code`, and reads the HMAC key from `OTP_PEPPER_BASE64`. The decoded key
+must contain at least 32 bytes. Defaults are a 10-minute lifetime, five failed attempts,
+and a 60-second resend cooldown; all three values are configuration-driven.
+
+Registration commits the `PENDING_VERIFICATION` user before OTP issuance or SMTP
+delivery. A mail failure therefore leaves the account intact and eligible for resend.
+Mail settings come from `MAIL_HOST`, `MAIL_PORT`, `MAIL_USERNAME`, `MAIL_PASSWORD`,
+`MAIL_FROM`, `MAIL_SMTP_AUTH`, and `MAIL_STARTTLS`. Local development can point these
+variables at Mailpit/MailHog without committing credentials.
+
+`GET /verify-otp`, `POST /verify-otp`, and `POST /verify-otp/resend` are public; both
+POST operations remain CSRF protected. Resend and verification failures return generic
+messages for unknown, active, locked, disabled, expired, consumed, throttled, and
+incorrect cases. The service locks the user and latest token. A successful transaction
+consumes the token and performs only `PENDING_VERIFICATION -> ACTIVE`, setting
+`email_verified_at`. It does not change `token_version` or log/return the raw code.
+
+AUTH-04 owns forgot/reset-password behavior. AUTH-03 defines no reset-password purpose
+or behavior. Broader abuse protection and global rate limiting remain deferred to
+SEC-02.

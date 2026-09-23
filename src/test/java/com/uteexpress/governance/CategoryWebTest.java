@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CategoryWebTest {
     @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
     @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
+    @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
     @MockitoBean CategoryService categories;
     @MockitoBean AuditLogService audit;
     @MockitoBean com.uteexpress.identity.service.RegistrationService registration;

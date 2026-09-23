@@ -2,6 +2,8 @@ package com.uteexpress.identity.controller;
 
 import com.uteexpress.identity.dto.RegisterForm;
 import com.uteexpress.identity.dto.RegistrationCommand;
+import com.uteexpress.identity.service.EmailDispatchResult;
+import com.uteexpress.identity.service.EmailVerificationService;
 import com.uteexpress.identity.service.RegistrationConflictException;
 import com.uteexpress.identity.service.RegistrationService;
 import jakarta.validation.Valid;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 public class RegistrationController {
@@ -22,9 +25,12 @@ public class RegistrationController {
             "Không thể tạo tài khoản với thông tin đã cung cấp.";
 
     private final RegistrationService registrationService;
+    private final EmailVerificationService emailVerificationService;
 
-    public RegistrationController(RegistrationService registrationService) {
+    public RegistrationController(RegistrationService registrationService,
+            EmailVerificationService emailVerificationService) {
         this.registrationService = registrationService;
+        this.emailVerificationService = emailVerificationService;
     }
 
     @InitBinder("registerForm")
@@ -47,18 +53,24 @@ public class RegistrationController {
 
     @PostMapping("/register")
     String register(@Valid @ModelAttribute("registerForm") RegisterForm form,
-            BindingResult bindingResult, Model model) {
+            BindingResult bindingResult, Model model, RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             return REGISTER_VIEW;
         }
 
         try {
-            registrationService.register(new RegistrationCommand(
+            var outcome = registrationService.register(new RegistrationCommand(
                     form.getEmail(), form.getUsername(), form.getPassword()));
+            EmailDispatchResult dispatch = emailVerificationService
+                    .sendVerificationCode(outcome.username());
+            redirectAttributes.addAttribute("identifier", outcome.username());
+            if (dispatch == EmailDispatchResult.DELIVERY_FAILED) {
+                redirectAttributes.addAttribute("deliveryFailed", true);
+            }
         } catch (RegistrationConflictException exception) {
             model.addAttribute("errorMessage", GENERIC_CONFLICT_MESSAGE);
             return REGISTER_VIEW;
         }
-        return "redirect:/register?registered=true";
+        return "redirect:/verify-otp";
     }
 }

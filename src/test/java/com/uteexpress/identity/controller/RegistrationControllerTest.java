@@ -4,6 +4,8 @@ import com.uteexpress.identity.dto.RegistrationCommand;
 import com.uteexpress.identity.dto.RegistrationOutcome;
 import com.uteexpress.identity.service.RegistrationConflictException;
 import com.uteexpress.identity.service.RegistrationService;
+import com.uteexpress.identity.service.EmailDispatchResult;
+import com.uteexpress.identity.service.EmailVerificationService;
 import com.uteexpress.identity.repository.UserRoleRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +35,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class RegistrationControllerTest {
     @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
     @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
+    @MockitoBean EmailVerificationService emailVerificationService;
     @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
     @MockitoBean
     private com.uteexpress.governance.service.AuditLogService auditLogService;
@@ -89,6 +92,8 @@ class RegistrationControllerTest {
     void validPostRegistersAndRedirectsUsingPostRedirectGet() throws Exception {
         given(registrationService.register(any(RegistrationCommand.class)))
                 .willReturn(new RegistrationOutcome("Phuc03"));
+        given(emailVerificationService.sendVerificationCode("Phuc03"))
+                .willReturn(EmailDispatchResult.SENT);
 
         mvc.perform(post("/register").with(csrf())
                         .param("email", "user@example.com")
@@ -97,10 +102,11 @@ class RegistrationControllerTest {
                         .param("confirmPassword", "RawSecret1")
                         .param("role", "ADMIN"))
                 .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/register?registered=true"));
+                .andExpect(redirectedUrl("/verify-otp?identifier=Phuc03"));
 
         verify(registrationService).register(new RegistrationCommand(
                 "user@example.com", "Phuc03", "RawSecret1"));
+        verify(emailVerificationService).sendVerificationCode("Phuc03");
     }
 
     @Test

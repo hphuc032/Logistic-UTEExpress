@@ -22,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ShippingConfigWebTest {
     @MockitoBean ShippingConfigService config;
     @MockitoBean ShippingQuoteService quotes;
+    @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
     @MockitoBean com.uteexpress.governance.service.CategoryService categories;
     @MockitoBean com.uteexpress.governance.service.AuditLogService audit;
     @MockitoBean com.uteexpress.identity.service.RegistrationService registration;

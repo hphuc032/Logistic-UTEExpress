@@ -76,6 +76,10 @@
       <artifactId>spring-boot-starter-security</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-mail</artifactId>
+    </dependency>
+    <dependency>
       <groupId>org.springframework.security</groupId>
       <artifactId>spring-security-oauth2-jose</artifactId>
     </dependency>
@@ -119,6 +123,9 @@
           <systemPropertyVariables>
             <user.timezone>UTC</user.timezone>
             <JWT_SECRET_BASE64>VVRFRXhwcmVzcy10ZXN0LW9ubHktc2VjcmV0LWtleS0zMi1ieXRlcyE=</JWT_SECRET_BASE64>
+            <OTP_PEPPER_BASE64>VVRFRXhwcmVzcy1BVVRILTAzLXRlc3Qtb25seS1wZXBwZXIta2V5IQ==</OTP_PEPPER_BASE64>
+            <MAIL_HOST>localhost</MAIL_HOST>
+            <MAIL_FROM>no-reply@test.invalid</MAIL_FROM>
           </systemPropertyVariables>
         </configuration>
       </plugin>
@@ -164,6 +171,9 @@
               <systemPropertyVariables>
                 <user.timezone>UTC</user.timezone>
                 <JWT_SECRET_BASE64>VVRFRXhwcmVzcy10ZXN0LW9ubHktc2VjcmV0LWtleS0zMi1ieXRlcyE=</JWT_SECRET_BASE64>
+                <OTP_PEPPER_BASE64>VVRFRXhwcmVzcy1BVVRILTAzLXRlc3Qtb25seS1wZXBwZXIta2V5IQ==</OTP_PEPPER_BASE64>
+                <MAIL_HOST>localhost</MAIL_HOST>
+                <MAIL_FROM>no-reply@test.invalid</MAIL_FROM>
               </systemPropertyVariables>
             </configuration>
             <executions>

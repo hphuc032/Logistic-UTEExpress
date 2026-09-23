@@ -79,6 +79,15 @@ public class UserEntity {
         updatedAt = Instant.now();
     }
 
+    public void activateEmail(Instant now) {
+        if (status != UserStatus.PENDING_VERIFICATION) {
+            throw new IllegalStateException("Only a pending account can be activated");
+        }
+        status = UserStatus.ACTIVE;
+        emailVerifiedAt = now;
+        updatedAt = now;
+    }
+
     public Long getId() { return id; }
     public String getEmail() { return email; }
     public String getNormalizedEmail() { return normalizedEmail; }
