@@ -32,6 +32,17 @@ spring:
       fail-on-unknown-properties: true
   thymeleaf:
     check-template-location: true
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:true}
+          starttls:
+            enable: ${MAIL_STARTTLS:true}
   web:
     error:
       include-message: never
@@ -58,3 +69,10 @@ uteexpress:
       cookie-name: UTEEXPRESS_AUTH
       cookie-secure: ${JWT_COOKIE_SECURE:true}
       secret-base64: ${JWT_SECRET_BASE64}
+    otp:
+      ttl: PT10M
+      resend-cooldown: PT1M
+      max-attempts: 5
+      pepper-base64: ${OTP_PEPPER_BASE64}
+  mail:
+    from: ${MAIL_FROM}

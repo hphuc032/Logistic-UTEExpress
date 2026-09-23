@@ -1,7 +1,9 @@
 package com.uteexpress.identity.repository;
 
 import com.uteexpress.identity.entity.UserEntity;
+import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,6 +17,16 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByNormalizedEmailOrNormalizedUsername(
             String normalizedEmail, String normalizedUsername);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select u from UserEntity u where u.normalizedEmail = :normalizedEmail")
+    Optional<UserEntity> findByNormalizedEmailForUpdate(
+            @Param("normalizedEmail") String normalizedEmail);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select u from UserEntity u where u.normalizedUsername = :normalizedUsername")
+    Optional<UserEntity> findByNormalizedUsernameForUpdate(
+            @Param("normalizedUsername") String normalizedUsername);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
     @Query(value = """
