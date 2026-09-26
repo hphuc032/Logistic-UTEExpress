@@ -37,7 +37,7 @@ class EmailVerificationServiceTest {
 
     @Mock UserRepository users;
     @Mock OtpTokenRepository tokens;
-    @Mock VerificationMailService mail;
+    @Mock OtpMailService mail;
     @Mock PlatformTransactionManager transactionManager;
     @Mock TransactionStatus transactionStatus;
 
@@ -67,7 +67,8 @@ class EmailVerificationServiceTest {
                 .isNotEqualTo("004271")
                 .matches("[0-9a-f]{64}");
         verify(transactionManager).commit(transactionStatus);
-        verify(mail).send("persisted@example.com", "004271", Duration.ofMinutes(10));
+        verify(mail).sendEmailVerification(
+                "persisted@example.com", "004271", Duration.ofMinutes(10));
     }
 
     @Test
@@ -86,7 +87,7 @@ class EmailVerificationServiceTest {
         assertThat(service(() -> "222222").sendVerificationCode("missing"))
                 .isEqualTo(EmailDispatchResult.NO_ACTION);
         verify(tokens, never()).save(any());
-        verify(mail, never()).send(any(), any(), any());
+        verify(mail, never()).sendEmailVerification(any(), any(), any());
     }
 
     @Test
@@ -97,7 +98,7 @@ class EmailVerificationServiceTest {
         given(tokens.findFirstByUser_IdAndPurposeOrderBySentAtDescIdDesc(
                 42L, OtpPurpose.EMAIL_VERIFICATION)).willReturn(Optional.empty());
         org.mockito.Mockito.doThrow(new MailSendException("smtp unavailable"))
-                .when(mail).send(any(), any(), any());
+                .when(mail).sendEmailVerification(any(), any(), any());
 
         assertThat(service(() -> "123456").sendVerificationCode("Phuc03"))
                 .isEqualTo(EmailDispatchResult.DELIVERY_FAILED);

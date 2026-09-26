@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class CsrfCookieWebTest {
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
+    @MockitoBean com.uteexpress.identity.service.PasswordResetService passwordResetService;
     private static final Pattern CSRF_VALUE = Pattern.compile(
             "name=\"_csrf\" value=\"([^\"]+)\"");
 
