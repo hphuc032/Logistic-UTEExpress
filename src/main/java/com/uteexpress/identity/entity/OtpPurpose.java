@@ -1,5 +1,6 @@
 package com.uteexpress.identity.entity;
 
 public enum OtpPurpose {
-    EMAIL_VERIFICATION
+    EMAIL_VERIFICATION,
+    RESET_PASSWORD
 }
