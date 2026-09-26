@@ -19,6 +19,10 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             String normalizedEmail, String normalizedUsername);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select u from UserEntity u where u.id = :userId")
+    Optional<UserEntity> findByIdForUpdate(@Param("userId") Long userId);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select u from UserEntity u where u.normalizedEmail = :normalizedEmail")
     Optional<UserEntity> findByNormalizedEmailForUpdate(
             @Param("normalizedEmail") String normalizedEmail);

@@ -49,6 +49,10 @@ spring:
       include-binding-errors: never
       include-stacktrace: never
       include-exception: false
+  servlet:
+    multipart:
+      max-file-size: 6MB
+      max-request-size: 7MB
 server:
   port: ${SERVER_PORT:8080}
 management:
@@ -76,3 +80,5 @@ uteexpress:
       pepper-base64: ${OTP_PEPPER_BASE64}
   mail:
     from: ${MAIL_FROM}
+  storage:
+    root: ${UPLOAD_DIR:./var/uploads}
