@@ -40,6 +40,7 @@ class ShopRegistrationControllerTest {
 
     @MockitoBean ShopRegistrationService shops;
     @MockitoBean com.uteexpress.identity.service.EmailVerificationService verification;
+    @MockitoBean com.uteexpress.identity.service.PasswordResetService passwordResetService;
     @MockitoBean com.uteexpress.governance.service.CategoryService categories;
     @MockitoBean com.uteexpress.identity.service.RegistrationService registration;
     @MockitoBean com.uteexpress.identity.service.IdentityAuthenticationService identities;

@@ -6,10 +6,12 @@ import com.uteexpress.identity.entity.UserEntity;
 import com.uteexpress.identity.entity.UserStatus;
 import com.uteexpress.identity.repository.OtpTokenRepository;
 import com.uteexpress.identity.repository.UserRepository;
+import com.uteexpress.identity.validation.PasswordPolicy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataAccessException;
 import org.springframework.mail.MailException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +23,9 @@ import java.util.Locale;
 import java.util.Optional;
 
 @Service
-public class EmailVerificationService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmailVerificationService.class);
-    private static final OtpPurpose PURPOSE = OtpPurpose.EMAIL_VERIFICATION;
+public class PasswordResetService {
+    private static final Logger LOGGER = LoggerFactory.getLogger(PasswordResetService.class);
+    private static final OtpPurpose PURPOSE = OtpPurpose.RESET_PASSWORD;
 
     private final UserRepository users;
     private final OtpTokenRepository tokens;
@@ -31,12 +33,13 @@ public class EmailVerificationService {
     private final OtpHashService hashes;
     private final OtpMailService mail;
     private final OtpProperties properties;
+    private final PasswordEncoder passwordEncoder;
     private final Clock clock;
     private final TransactionTemplate issueTransaction;
 
-    public EmailVerificationService(UserRepository users, OtpTokenRepository tokens,
-            OtpCodeGenerator codeGenerator, OtpHashService hashes,
-            OtpMailService mail, OtpProperties properties, Clock clock,
+    public PasswordResetService(UserRepository users, OtpTokenRepository tokens,
+            OtpCodeGenerator codeGenerator, OtpHashService hashes, OtpMailService mail,
+            OtpProperties properties, PasswordEncoder passwordEncoder, Clock clock,
             PlatformTransactionManager transactionManager) {
         this.users = users;
         this.tokens = tokens;
@@ -44,70 +47,73 @@ public class EmailVerificationService {
         this.hashes = hashes;
         this.mail = mail;
         this.properties = properties;
+        this.passwordEncoder = passwordEncoder;
         this.clock = clock;
         this.issueTransaction = new TransactionTemplate(transactionManager);
     }
 
-    public EmailDispatchResult sendVerificationCode(String identifier) {
+    public EmailDispatchResult sendResetCode(String email) {
         final OtpDelivery delivery;
         try {
-            delivery = issueTransaction.execute(status -> issue(identifier));
+            delivery = issueTransaction.execute(status -> issue(email));
         } catch (DataAccessException exception) {
-            LOGGER.warn("OTP issuance failed because persistence was unavailable");
+            LOGGER.warn("Password reset OTP issuance failed because persistence was unavailable");
             return EmailDispatchResult.DELIVERY_FAILED;
         }
         if (delivery == null) {
             return EmailDispatchResult.NO_ACTION;
         }
         try {
-            mail.sendEmailVerification(delivery.email(), delivery.code(), properties.ttl());
+            mail.sendPasswordReset(delivery.email(), delivery.code(), properties.ttl());
             return EmailDispatchResult.SENT;
         } catch (MailException | IllegalArgumentException exception) {
-            LOGGER.warn("OTP email delivery failed for userId={}", delivery.userId());
+            LOGGER.warn("Password reset email delivery failed for userId={}", delivery.userId());
             return EmailDispatchResult.DELIVERY_FAILED;
         }
     }
 
     @Transactional
-    public EmailVerificationResult verify(String identifier, String code) {
-        if (identifier == null || identifier.isBlank()
-                || code == null || !code.matches("^[0-9]{6}$")) {
-            return EmailVerificationResult.INVALID;
+    public PasswordResetResult resetPassword(String email, String code, String newPassword) {
+        if (email == null || email.isBlank()
+                || code == null || !code.matches("^[0-9]{6}$")
+                || !PasswordPolicy.isValid(newPassword)) {
+            return PasswordResetResult.INVALID;
         }
-        Optional<UserEntity> resolved = findUserForUpdate(normalize(identifier));
-        if (resolved.isEmpty() || resolved.get().getStatus() != UserStatus.PENDING_VERIFICATION) {
-            return EmailVerificationResult.INVALID;
+
+        Optional<UserEntity> resolved = users.findByNormalizedEmailForUpdate(normalize(email));
+        if (resolved.isEmpty() || resolved.get().getStatus() != UserStatus.ACTIVE) {
+            return PasswordResetResult.INVALID;
         }
 
         UserEntity user = resolved.get();
         Optional<OtpTokenEntity> latest = tokens
                 .findFirstByUser_IdAndPurposeOrderBySentAtDescIdDesc(user.getId(), PURPOSE);
         if (latest.isEmpty()) {
-            return EmailVerificationResult.INVALID;
+            return PasswordResetResult.INVALID;
         }
 
         OtpTokenEntity token = latest.get();
         Instant now = clock.instant();
         if (token.isConsumed() || token.isExpired(now)
                 || token.hasReachedAttemptLimit(properties.maxAttempts())) {
-            return EmailVerificationResult.INVALID;
+            return PasswordResetResult.INVALID;
         }
         if (!hashes.matches(token.getCodeHash(), user.getId(), PURPOSE, code)) {
             token.recordFailedAttempt();
-            return EmailVerificationResult.INVALID;
+            return PasswordResetResult.INVALID;
         }
 
+        user.resetPassword(passwordEncoder.encode(newPassword), now);
         token.consume(now);
-        user.activateEmail(now);
-        return EmailVerificationResult.VERIFIED;
+        return PasswordResetResult.RESET;
     }
 
-    private OtpDelivery issue(String identifier) {
-        if (identifier == null || identifier.isBlank()) {
+    private OtpDelivery issue(String email) {
+        if (email == null || email.isBlank()) {
             return null;
         }
-        Optional<UserEntity> resolved = findUserForUpdate(normalize(identifier));
-        if (resolved.isEmpty() || resolved.get().getStatus() != UserStatus.PENDING_VERIFICATION) {
+        Optional<UserEntity> resolved = users.findByNormalizedEmailForUpdate(normalize(email));
+        if (resolved.isEmpty() || resolved.get().getStatus() != UserStatus.ACTIVE) {
             return null;
         }
 
@@ -125,13 +131,6 @@ public class EmailVerificationService {
         tokens.save(OtpTokenEntity.issue(
                 user, PURPOSE, codeHash, now, now.plus(properties.ttl())));
         return new OtpDelivery(user.getId(), user.getEmail(), code);
-    }
-
-    private Optional<UserEntity> findUserForUpdate(String normalizedIdentifier) {
-        if (normalizedIdentifier.indexOf('@') >= 0) {
-            return users.findByNormalizedEmailForUpdate(normalizedIdentifier);
-        }
-        return users.findByNormalizedUsernameForUpdate(normalizedIdentifier);
     }
 
     private static String normalize(String value) {

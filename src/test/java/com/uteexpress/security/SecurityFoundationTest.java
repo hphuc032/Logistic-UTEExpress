@@ -45,6 +45,7 @@ class SecurityFoundationTest {
     @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
     @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
     @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
+    @MockitoBean com.uteexpress.identity.service.PasswordResetService passwordResetService;
     @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
     @MockitoBean
     private com.uteexpress.governance.service.AuditLogService auditLogService;

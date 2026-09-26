@@ -88,6 +88,18 @@ public class UserEntity {
         updatedAt = now;
     }
 
+    public void resetPassword(String newPasswordHash, Instant now) {
+        if (status != UserStatus.ACTIVE) {
+            throw new IllegalStateException("Only an active account can reset its password");
+        }
+        if (newPasswordHash == null || newPasswordHash.isBlank()) {
+            throw new IllegalArgumentException("Password hash is required");
+        }
+        passwordHash = newPasswordHash;
+        tokenVersion++;
+        updatedAt = now;
+    }
+
     public Long getId() { return id; }
     public String getEmail() { return email; }
     public String getNormalizedEmail() { return normalizedEmail; }

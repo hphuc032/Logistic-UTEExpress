@@ -41,6 +41,7 @@ public class LoginController {
     @GetMapping("/login")
     String showLogin(@RequestParam(name = "logout", defaultValue = "false") boolean logout,
             @RequestParam(name = "verified", defaultValue = "false") boolean verified,
+            @RequestParam(name = "passwordReset", defaultValue = "false") boolean passwordReset,
             Model model) {
         if (!model.containsAttribute("loginForm")) {
             model.addAttribute("loginForm", new LoginForm());
@@ -50,6 +51,9 @@ public class LoginController {
         } else if (verified) {
             model.addAttribute("successMessage",
                     "Xác minh email thành công. Bạn có thể đăng nhập.");
+        } else if (passwordReset) {
+            model.addAttribute("successMessage",
+                    "Mật khẩu đã được đặt lại. Bạn có thể đăng nhập bằng mật khẩu mới.");
         }
         return LOGIN_VIEW;
     }
