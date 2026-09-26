@@ -10,6 +10,10 @@ hashing, configuration, persistence, attempt limits, cooldown, and mail infrastr
 The task does not add profile, address, refresh-token, MFA, OAuth, Redis, password
 history, CAPTCHA, or a second OTP table.
 
+The branch was recovered from base `e3de894` and synchronized with `develop` at
+`90a26e2` through merge commit `c42171d`. CART-01 source, tests, test-context mocks, and
+`V20260925022804__td_cart01_foundation.sql` remain present.
+
 ## Persistence and OTP isolation
 
 Migration `V20260926035526__hp_auth04_password_reset.sql` replaces only the existing
@@ -54,11 +58,15 @@ resend/latest semantics, cross-purpose rejection, and concurrent one-time use.
 
 Final local verification on Docker Desktop 29.4.3:
 
-- `.\mvnw.cmd clean test`: PASS (208 tests, 0 failures, 0 errors)
-- `.\mvnw.cmd package`: PASS (208 tests and executable JAR)
-- `.\mvnw.cmd -Ppostgres-it clean verify`: PASS (208 unit/MVC tests plus 61
-  PostgreSQL integration tests; 269 total, 0 failures, 0 errors)
+- `.\mvnw.cmd clean test`: PASS (216 tests, 0 failures, 0 errors)
+- `.\mvnw.cmd package`: PASS (216 tests and executable JAR)
+- `.\mvnw.cmd -Ppostgres-it clean verify`: PASS (216 unit/MVC tests plus 71
+  PostgreSQL integration tests; 287 total, 0 failures, 0 errors)
 - `git diff --check`: PASS
+
+The PostgreSQL gate applies CART-01 before AUTH-04 on a fresh database, validates the
+Hibernate schema and Flyway history, accepts both OTP purposes, rejects unsupported
+purposes, and confirms a second Flyway migrate has no pending work.
 
 ## Deferred
 
