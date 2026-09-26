@@ -33,6 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class RegistrationControllerTest {
+    @MockitoBean com.uteexpress.cart.service.CartService cartService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
     @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
