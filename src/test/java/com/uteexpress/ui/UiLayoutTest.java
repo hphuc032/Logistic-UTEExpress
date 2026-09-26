@@ -29,6 +29,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(UiLayoutTest.UiFixtureController.class)
 class UiLayoutTest {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
+    @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
     @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
@@ -110,6 +112,7 @@ class UiLayoutTest {
 
     @Controller
     static class UiFixtureController {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
         @GetMapping("/test-fixtures/ui/escaped-alert")
         String escapedAlert(Model model) {
             model.addAttribute("successMessage", "<script>alert('xss')</script>");

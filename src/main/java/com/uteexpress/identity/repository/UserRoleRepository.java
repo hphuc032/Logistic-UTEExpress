@@ -20,6 +20,14 @@ public class UserRoleRepository {
                 userId, roleId);
     }
 
+    public void assignVendorIfAbsent(Long userId) {
+        jdbcTemplate.update("""
+                insert into uteexpress.user_roles (user_id, role_id)
+                select ?, r.id from uteexpress.roles r where r.code = 'VENDOR'
+                on conflict (user_id, role_id) do nothing
+                """, userId);
+    }
+
     public Set<String> findRoleCodes(Long userId) {
         return new LinkedHashSet<>(jdbcTemplate.queryForList("""
                 select r.code

@@ -91,4 +91,19 @@ public class Shop {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public Long getVersion() { return version; }
+
+    public void approve(Instant now) {
+        if (status != ShopStatus.PENDING) throw new IllegalStateException("Shop is not pending");
+        status = ShopStatus.APPROVED;
+        rejectionReason = null;
+        updatedAt = Objects.requireNonNull(now, "now");
+    }
+
+    public void reject(String reason, Instant now) {
+        if (status != ShopStatus.PENDING) throw new IllegalStateException("Shop is not pending");
+        if (reason == null || reason.isBlank()) throw new IllegalArgumentException("Rejection reason is required");
+        status = ShopStatus.REJECTED;
+        rejectionReason = reason;
+        updatedAt = Objects.requireNonNull(now, "now");
+    }
 }

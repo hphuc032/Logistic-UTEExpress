@@ -12,6 +12,7 @@
                     th:href="@{${dashboard.dashboardPath}}">Tổng quan</a></li>
                 <li class="nav-item"><a class="nav-link link-light" th:href="@{${#strings.replace(dashboard.dashboardPath, '/dashboard', '/shipping/providers')}}">Cấu hình vận chuyển</a></li>
                 <li class="nav-item"><a class="nav-link link-light" th:href="@{${#strings.replace(dashboard.dashboardPath, '/dashboard', '/categories')}}">Quản lý danh mục</a></li>
+                <li class="nav-item" th:if="${dashboard.dashboardPath == '/admin/dashboard'}"><a class="nav-link link-light" th:href="@{/admin/shops}">Duyệt cửa hàng</a></li>
                 <li class="nav-item"><a class="nav-link link-light" th:href="@{/}">Về trang chủ</a></li>
             </ul>
         </nav>
