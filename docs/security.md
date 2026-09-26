@@ -118,6 +118,22 @@ incorrect cases. The service locks the user and latest token. A successful trans
 consumes the token and performs only `PENDING_VERIFICATION -> ACTIVE`, setting
 `email_verified_at`. It does not change `token_version` or log/return the raw code.
 
-AUTH-04 owns forgot/reset-password behavior. AUTH-03 defines no reset-password purpose
-or behavior. Broader abuse protection and global rate limiting remain deferred to
-SEC-02.
+## Password recovery
+
+AUTH-04 extends the existing `otp_tokens` infrastructure with the separate
+`RESET_PASSWORD` purpose. `POST /forgot-password` returns the same redirect and public
+message for existing, unknown, ineligible, and mail-failure cases. Only `ACTIVE`
+accounts receive a reset token. The latest token for one user and purpose is authoritative,
+and TTL, resend cooldown, failed-attempt limits, HMAC storage, and pessimistic locking
+use the AUTH-03 contracts.
+
+`POST /reset-password` remains CSRF protected. One transaction locks the user and latest
+reset token, validates and consumes the token, stores a BCrypt hash, and increments
+`users.token_version`. Every JWT issued before the reset is therefore rejected on its
+next request, including tokens held by other devices. Email-verification tokens cannot
+reset a password, and reset tokens cannot activate an email because repository lookups
+and HMAC inputs both include the server-owned purpose.
+
+SMTP delivery happens after OTP persistence. If delivery fails, the public response
+stays generic and the persisted token remains subject to the normal resend cooldown.
+Broader abuse protection and global rate limiting remain deferred to SEC-02.
