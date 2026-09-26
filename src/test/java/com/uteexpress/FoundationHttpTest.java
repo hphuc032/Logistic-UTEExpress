@@ -33,6 +33,8 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @AutoConfigureMockMvc
 @Import(FoundationHttpTest.ErrorFixtureController.class)
 class FoundationHttpTest {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
+    @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
     @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
@@ -169,6 +171,7 @@ class FoundationHttpTest {
     // Fixtures are test-only: no validation demo or error-trigger endpoints ship in the application.
     @RestController
     static class ErrorFixtureController {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
         record TestRequest(@NotBlank String name) { }
 
         @PostMapping("/test-fixtures/validation")

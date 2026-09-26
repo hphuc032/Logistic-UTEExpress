@@ -31,6 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class EmailVerificationControllerTest {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
+    @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean EmailVerificationService verification;
     @MockitoBean RegistrationService registration;
