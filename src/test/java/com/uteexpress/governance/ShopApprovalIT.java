@@ -43,6 +43,10 @@ class ShopApprovalIT {
         jdbc.update("delete from uteexpress.users");
         adminId = createUser("admin", "ACTIVE");
         ownerId = createUser("owner", "ACTIVE");
+        jdbc.update("""
+                insert into uteexpress.user_roles (user_id, role_id)
+                select ?, id from uteexpress.roles where code = 'USER'
+                """, ownerId);
         shopId = jdbc.queryForObject("""
                 insert into uteexpress.shops (owner_id, name, slug, pickup_address, status)
                 values (?, 'Test Shop', 'test-shop', 'Pickup', 'PENDING') returning id
@@ -61,6 +65,11 @@ class ShopApprovalIT {
                 join uteexpress.roles r on r.id = ur.role_id
                 where ur.user_id = ? and r.code = 'VENDOR'
                 """, Integer.class, ownerId)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("""
+                select count(*) from uteexpress.user_roles ur
+                join uteexpress.roles r on r.id = ur.role_id
+                where ur.user_id = ? and r.code = 'USER'
+                """, Integer.class, ownerId)).isEqualTo(1);
         assertThat(jdbc.queryForObject("select token_version from uteexpress.users where id = ?",
                 Long.class, ownerId)).isEqualTo(1L);
         assertThat(jdbc.queryForObject("select count(*) from uteexpress.audit_logs where action = 'SHOP_APPROVED' and actor_id = ? and target_id = ?",
@@ -74,8 +83,11 @@ class ShopApprovalIT {
         var rejected = approvals.reject(shopId, 0L, "  Thiếu địa chỉ hợp lệ  ");
         assertThat(rejected.status()).isEqualTo("REJECTED");
         assertThat(rejected.rejectionReason()).isEqualTo("Thiếu địa chỉ hợp lệ");
-        assertThat(jdbc.queryForObject("select count(*) from uteexpress.user_roles where user_id = ?",
-                Integer.class, ownerId)).isZero();
+        assertThat(jdbc.queryForObject("""
+                select count(*) from uteexpress.user_roles ur
+                join uteexpress.roles r on r.id = ur.role_id
+                where ur.user_id = ? and r.code = 'VENDOR'
+                """, Integer.class, ownerId)).isZero();
         assertThat(jdbc.queryForObject("select token_version from uteexpress.users where id = ?",
                 Long.class, ownerId)).isZero();
         assertThat(jdbc.queryForObject("select count(*) from uteexpress.audit_logs where action = 'SHOP_REJECTED'",
@@ -85,6 +97,9 @@ class ShopApprovalIT {
     @Test void staleVersionAndInvalidReasonLeaveDatabaseUntouched() {
         assertThatThrownBy(() -> approvals.approve(shopId, 99L)).isInstanceOf(ApplicationException.class);
         assertThatThrownBy(() -> approvals.reject(shopId, 0L, " ")).isInstanceOf(ApplicationException.class);
+        assertThatThrownBy(() -> approvals.reject(shopId, 0L, "x".repeat(1001)))
+                .isInstanceOfSatisfying(ApplicationException.class,
+                        e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.VALIDATION_FAILED));
         assertThat(jdbc.queryForObject("select status from uteexpress.shops where id = ?",
                 String.class, shopId)).isEqualTo("PENDING");
         assertThat(jdbc.queryForObject("select count(*) from uteexpress.audit_logs", Integer.class)).isZero();
@@ -108,10 +123,29 @@ class ShopApprovalIT {
         assertThatThrownBy(() -> approvals.approve(shopId, 0L)).isInstanceOf(RuntimeException.class);
         assertThat(jdbc.queryForObject("select status from uteexpress.shops where id = ?",
                 String.class, shopId)).isEqualTo("PENDING");
-        assertThat(jdbc.queryForObject("select count(*) from uteexpress.user_roles where user_id = ?",
-                Integer.class, ownerId)).isZero();
+        assertThat(jdbc.queryForObject("""
+                select count(*) from uteexpress.user_roles ur
+                join uteexpress.roles r on r.id = ur.role_id
+                where ur.user_id = ? and r.code = 'VENDOR'
+                """, Integer.class, ownerId)).isZero();
         assertThat(jdbc.queryForObject("select token_version from uteexpress.users where id = ?",
                 Long.class, ownerId)).isZero();
+    }
+
+    @Test void missingVendorRoleRollsBackApprovalAndTokenChange() {
+        jdbc.update("delete from uteexpress.roles where code = 'VENDOR'");
+        try {
+            assertThatThrownBy(() -> approvals.approve(shopId, 0L))
+                    .isInstanceOfSatisfying(ApplicationException.class,
+                            e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.CONFLICT));
+            assertThat(jdbc.queryForObject("select status from uteexpress.shops where id = ?",
+                    String.class, shopId)).isEqualTo("PENDING");
+            assertThat(jdbc.queryForObject("select token_version from uteexpress.users where id = ?",
+                    Long.class, ownerId)).isZero();
+            assertThat(jdbc.queryForObject("select count(*) from uteexpress.audit_logs", Integer.class)).isZero();
+        } finally {
+            jdbc.update("insert into uteexpress.roles (code) values ('VENDOR')");
+        }
     }
 
     private Long createUser(String prefix, String status) {

@@ -16,10 +16,11 @@ class VerificationMailServiceTest {
     @Test
     void sendsServerControlledPlainTextMessageToPersistedRecipient() {
         JavaMailSender sender = mock(JavaMailSender.class);
-        VerificationMailService service = new VerificationMailService(
+        OtpMailService service = new OtpMailService(
                 sender, new VerificationMailProperties("no-reply@uteexpress.test"));
 
-        service.send("persisted@example.com", "004271", Duration.ofMinutes(10));
+        service.sendEmailVerification(
+                "persisted@example.com", "004271", Duration.ofMinutes(10));
 
         var captor = org.mockito.ArgumentCaptor.forClass(SimpleMailMessage.class);
         verify(sender).send(captor.capture());
@@ -35,15 +36,31 @@ class VerificationMailServiceTest {
     @Test
     void rejectsRecipientOrSenderHeaderInjection() {
         JavaMailSender sender = mock(JavaMailSender.class);
-        VerificationMailService service = new VerificationMailService(
+        OtpMailService service = new OtpMailService(
                 sender, new VerificationMailProperties("no-reply@uteexpress.test"));
 
-        assertThatThrownBy(() -> service.send(
+        assertThatThrownBy(() -> service.sendEmailVerification(
                 "victim@example.com\r\nBcc: attacker@example.com", "123456", Duration.ofMinutes(10)))
                 .isInstanceOf(IllegalArgumentException.class);
         assertThatThrownBy(() -> new VerificationMailProperties(
                 "no-reply@example.com\nBcc: attacker@example.com"))
                 .isInstanceOf(IllegalStateException.class);
         verify(sender, org.mockito.Mockito.never()).send(any(SimpleMailMessage.class));
+    }
+
+    @Test
+    void passwordResetMailUsesDedicatedPurposeWithoutSendingPassword() {
+        JavaMailSender sender = mock(JavaMailSender.class);
+        OtpMailService service = new OtpMailService(
+                sender, new VerificationMailProperties("no-reply@uteexpress.test"));
+
+        service.sendPasswordReset("persisted@example.com", "654321", Duration.ofMinutes(10));
+
+        var captor = org.mockito.ArgumentCaptor.forClass(SimpleMailMessage.class);
+        verify(sender).send(captor.capture());
+        assertThat(captor.getValue().getSubject()).contains("đặt lại mật khẩu");
+        assertThat(captor.getValue().getText())
+                .contains("654321", "10 phút")
+                .doesNotContain("mật khẩu mới", "passwordHash", "JWT");
     }
 }

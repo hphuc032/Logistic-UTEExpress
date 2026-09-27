@@ -29,14 +29,14 @@ public class EmailVerificationService {
     private final OtpTokenRepository tokens;
     private final OtpCodeGenerator codeGenerator;
     private final OtpHashService hashes;
-    private final VerificationMailService mail;
+    private final OtpMailService mail;
     private final OtpProperties properties;
     private final Clock clock;
     private final TransactionTemplate issueTransaction;
 
     public EmailVerificationService(UserRepository users, OtpTokenRepository tokens,
             OtpCodeGenerator codeGenerator, OtpHashService hashes,
-            VerificationMailService mail, OtpProperties properties, Clock clock,
+            OtpMailService mail, OtpProperties properties, Clock clock,
             PlatformTransactionManager transactionManager) {
         this.users = users;
         this.tokens = tokens;
@@ -60,7 +60,7 @@ public class EmailVerificationService {
             return EmailDispatchResult.NO_ACTION;
         }
         try {
-            mail.send(delivery.email(), delivery.code(), properties.ttl());
+            mail.sendEmailVerification(delivery.email(), delivery.code(), properties.ttl());
             return EmailDispatchResult.SENT;
         } catch (MailException | IllegalArgumentException exception) {
             LOGGER.warn("OTP email delivery failed for userId={}", delivery.userId());

@@ -100,7 +100,9 @@ class Auth03EmailVerificationIT {
         assertThatThrownBy(() -> insertToken(9_999_999L, "EMAIL_VERIFICATION", hash,
                 BASE_TIME, BASE_TIME.plusSeconds(600), 0))
                 .isInstanceOf(DataIntegrityViolationException.class);
-        assertThatThrownBy(() -> insertToken(userId, "RESET_PASSWORD", hash,
+        insertToken(userId, "RESET_PASSWORD", hash,
+                BASE_TIME, BASE_TIME.plusSeconds(600), 0);
+        assertThatThrownBy(() -> insertToken(userId, "UNSUPPORTED_PURPOSE", hash,
                 BASE_TIME, BASE_TIME.plusSeconds(600), 0))
                 .isInstanceOf(DataIntegrityViolationException.class);
         assertThatThrownBy(() -> insertToken(userId, "EMAIL_VERIFICATION", hash,

@@ -1,14 +1,14 @@
 package com.uteexpress.identity.dto.validation;
 
-import com.uteexpress.identity.dto.RegisterForm;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 
 import java.util.Objects;
 
-public class PasswordMatchesValidator implements ConstraintValidator<PasswordMatches, RegisterForm> {
+public class PasswordMatchesValidator
+        implements ConstraintValidator<PasswordMatches, PasswordConfirmation> {
     @Override
-    public boolean isValid(RegisterForm form, ConstraintValidatorContext context) {
+    public boolean isValid(PasswordConfirmation form, ConstraintValidatorContext context) {
         if (form == null || Objects.equals(form.getPassword(), form.getConfirmPassword())) {
             return true;
         }

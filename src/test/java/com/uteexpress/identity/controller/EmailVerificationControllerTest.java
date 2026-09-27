@@ -33,8 +33,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class EmailVerificationControllerTest {
     @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
     @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
+    @MockitoBean com.uteexpress.identity.service.AccountIdentityService accountIdentityService;
+    @MockitoBean com.uteexpress.cart.service.CartService cartService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean EmailVerificationService verification;
+    @MockitoBean com.uteexpress.identity.service.PasswordResetService passwordResetService;
     @MockitoBean RegistrationService registration;
     @MockitoBean IdentityAuthenticationService identities;
     @MockitoBean UserRoleRepository userRoles;

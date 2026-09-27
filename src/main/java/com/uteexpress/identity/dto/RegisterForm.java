@@ -1,6 +1,7 @@
 package com.uteexpress.identity.dto;
 
 import com.uteexpress.identity.dto.validation.PasswordMatches;
+import com.uteexpress.identity.dto.validation.PasswordConfirmation;
 import com.uteexpress.identity.dto.validation.ValidBcryptPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -8,7 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @PasswordMatches
-public class RegisterForm {
+public class RegisterForm implements PasswordConfirmation {
     @NotBlank(message = "Email là bắt buộc.")
     @Email(message = "Email không đúng định dạng.")
     @Size(max = 254, message = "Email không được vượt quá 254 ký tự.")

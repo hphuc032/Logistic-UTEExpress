@@ -22,10 +22,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ShippingConfigWebTest {
     @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
     @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
+    @MockitoBean com.uteexpress.identity.service.AccountIdentityService accountIdentityService;
+    @MockitoBean com.uteexpress.cart.service.CartService cartService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean ShippingConfigService config;
     @MockitoBean ShippingQuoteService quotes;
     @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
+    @MockitoBean com.uteexpress.identity.service.PasswordResetService passwordResetService;
     @MockitoBean com.uteexpress.governance.service.CategoryService categories;
     @MockitoBean com.uteexpress.governance.service.AuditLogService audit;
     @MockitoBean com.uteexpress.identity.service.RegistrationService registration;

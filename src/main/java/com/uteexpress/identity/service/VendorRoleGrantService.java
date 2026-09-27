@@ -29,6 +29,8 @@ public class VendorRoleGrantService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.CONFLICT));
         if (owner.getStatus() != UserStatus.ACTIVE) throw new ApplicationException(ErrorCode.CONFLICT);
         roles.assignVendorIfAbsent(ownerId);
+        if (!roles.findRoleCodes(ownerId).contains("VENDOR"))
+            throw new ApplicationException(ErrorCode.CONFLICT);
         // The previous JWT is invalidated; the owner signs in again for VENDOR authority.
         if (users.incrementTokenVersion(ownerId) != 1) throw new ApplicationException(ErrorCode.CONFLICT);
     }

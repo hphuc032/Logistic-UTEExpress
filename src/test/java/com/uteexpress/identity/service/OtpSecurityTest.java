@@ -38,7 +38,7 @@ class OtpSecurityTest {
                 .isNotEqualTo(value);
         assertThat(hashes.hash(42L, OtpPurpose.EMAIL_VERIFICATION, "654321"))
                 .isNotEqualTo(value);
-        assertThat(hashes.hashCanonical(42L, "RESET_PASSWORD", "123456"))
+        assertThat(hashes.hash(42L, OtpPurpose.RESET_PASSWORD, "123456"))
                 .isNotEqualTo(value);
         assertThat(hashes.matches(value, 42L, OtpPurpose.EMAIL_VERIFICATION, "123456"))
                 .isTrue();
