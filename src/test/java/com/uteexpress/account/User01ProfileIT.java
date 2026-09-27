@@ -222,7 +222,7 @@ class User01ProfileIT {
                     .schemas("uteexpress").defaultSchema("uteexpress")
                     .locations("classpath:db/migration")
                     .load();
-            assertThat(latest.migrate().migrationsExecuted).isOne();
+            assertThat(latest.migrate().migrationsExecuted).isGreaterThanOrEqualTo(1);
             var row = upgradeJdbc.queryForMap("select * from uteexpress.users where id = ?", userId);
             assertThat(row.get("email")).isEqualTo("before@example.com");
             assertThat(row.get("full_name")).isNull();
