@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Chi tiết tài khoản | UTEExpress</title></head>
+<body><section th:fragment="content" aria-label="Chi tiết tài khoản">
+    <a th:href="@{${'/' + ops + '/accounts'}}" class="btn btn-link px-0 mb-3">← Tài khoản</a>
+    <h1 class="h2" th:text="${account.username}">Tài khoản</h1>
+    <dl class="row">
+        <dt class="col-sm-3">Họ tên</dt><dd class="col-sm-9" th:text="${account.fullName ?: 'Chưa cập nhật'}"></dd>
+        <dt class="col-sm-3">Email</dt><dd class="col-sm-9" th:text="${account.email}"></dd>
+        <dt class="col-sm-3">Điện thoại</dt><dd class="col-sm-9" th:text="${account.phone ?: 'Chưa cập nhật'}"></dd>
+        <dt class="col-sm-3">Trạng thái</dt><dd class="col-sm-9" th:text="${account.status}"></dd>
+    </dl>
+    <div th:if="${ops == 'admin' and (account.status == 'ACTIVE' or account.status == 'LOCKED')}">
+        <form method="post" th:action="@{${'/admin/accounts/' + account.id + (account.status == 'ACTIVE' ? '/lock' : '/unlock')}}">
+            <input type="hidden" name="version" th:value="${account.version}">
+            <button class="btn btn-outline-danger" type="submit" th:text="${account.status == 'ACTIVE' ? 'Khóa tài khoản' : 'Mở khóa tài khoản'}"></button>
+        </form>
+    </div>
+</section></body></html>

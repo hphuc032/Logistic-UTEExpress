@@ -40,6 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AddressControllerTest {
     @Autowired MockMvc mvc;
     @MockitoBean AddressService addresses;
+    @MockitoBean com.uteexpress.governance.service.AccountGovernanceService accountGovernanceService;
+    @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
     @MockitoBean com.uteexpress.account.service.ProfileService profiles;
     @MockitoBean com.uteexpress.cart.service.CartService cartService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
