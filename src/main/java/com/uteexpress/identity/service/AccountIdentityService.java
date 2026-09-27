@@ -58,6 +58,12 @@ public class AccountIdentityService {
         user.changePassword(passwordEncoder.encode(newPassword), Instant.now(clock));
     }
 
+    /** Serializes account-owned mutations without exposing the identity repository cross-module. */
+    @Transactional
+    public void requireActiveAccountForUpdate(Long userId) {
+        activeUserForUpdate(userId);
+    }
+
     private UserEntity activeUser(Long userId) {
         UserEntity user = users.findById(userId)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND));

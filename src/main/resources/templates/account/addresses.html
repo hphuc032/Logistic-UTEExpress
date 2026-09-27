@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head>
+    <title>Địa chỉ giao hàng | UTEExpress</title>
+</head>
+<body>
+<main>
+    <section class="app-page-section" aria-labelledby="addresses-title">
+        <div class="container app-container">
+            <div class="app-page-header">
+                <span class="app-eyebrow">Tài khoản UTEExpress</span>
+                <h1 id="addresses-title">Địa chỉ giao hàng</h1>
+                <p>Quản lý địa chỉ người nhận dùng cho quy trình thanh toán sau này.</p>
+            </div>
+
+            <div class="row g-4 align-items-start">
+                <div class="col-lg-5">
+                    <section class="app-panel app-address-form-panel" aria-labelledby="new-address-title">
+                        <h2 id="new-address-title" class="h4">Thêm địa chỉ</h2>
+                        <p class="text-secondary">Địa chỉ đầu tiên sẽ tự động trở thành địa chỉ mặc định.</p>
+                        <form method="post" th:action="@{/user/addresses}" th:object="${createForm}" novalidate>
+                            <div th:replace="~{account/addresses :: addressFields('create')}"></div>
+                            <button class="btn btn-app-primary" type="submit">Thêm địa chỉ</button>
+                        </form>
+                    </section>
+                </div>
+
+                <div class="col-lg-7">
+                    <div th:if="${#lists.isEmpty(addresses)}"
+                         th:replace="~{fragments/components :: emptyState('Chưa có địa chỉ', 'Thêm địa chỉ đầu tiên để chuẩn bị cho bước thanh toán.')}"></div>
+
+                    <div class="d-grid gap-3" th:unless="${#lists.isEmpty(addresses)}">
+                        <article class="app-address-card" th:each="address : ${addresses}">
+                            <div class="d-flex flex-wrap justify-content-between gap-3">
+                                <div>
+                                    <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+                                        <h2 class="h5 mb-0" th:text="${address.receiverName}">Người nhận</h2>
+                                        <span class="app-status-badge status-delivered"
+                                              th:if="${address.defaultAddress}">Mặc định</span>
+                                    </div>
+                                    <p class="mb-1" th:text="${address.phone}">0900000000</p>
+                                    <p class="text-secondary mb-0">
+                                        <span th:text="${address.detail}">Địa chỉ chi tiết</span>,
+                                        <span th:text="${address.district}">Quận/huyện</span>,
+                                        <span th:text="${address.provinceCode}">Tỉnh/thành</span>
+                                    </p>
+                                </div>
+                                <div class="app-address-actions">
+                                    <form method="post" th:if="${!address.defaultAddress}"
+                                          th:action="@{/user/addresses/{id}/default(id=${address.id})}">
+                                        <button class="btn btn-sm btn-app-secondary" type="submit">Đặt mặc định</button>
+                                    </form>
+                                    <form method="post" th:action="@{/user/addresses/{id}/delete(id=${address.id})}">
+                                        <button class="btn btn-sm btn-outline-danger" type="submit">Xóa</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <details class="app-address-editor mt-3"
+                                     th:attr="open=${editingAddressId != null && editingAddressId == address.id} ? 'open' : null">
+                                <summary>Chỉnh sửa địa chỉ</summary>
+
+                                <form class="mt-3" method="post"
+                                      th:if="${editingAddressId != null && editingAddressId == address.id}"
+                                      th:action="@{/user/addresses/{id}/update(id=${address.id})}"
+                                      th:object="${editForm}" novalidate>
+                                    <div th:replace="~{account/addresses :: addressFields('edit-error')}"></div>
+                                    <button class="btn btn-app-secondary" type="submit">Lưu thay đổi</button>
+                                </form>
+
+                                <form class="mt-3" method="post"
+                                      th:unless="${editingAddressId != null && editingAddressId == address.id}"
+                                      th:action="@{/user/addresses/{id}/update(id=${address.id})}">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label class="form-label" th:for="|receiver-${address.id}|">Tên người nhận</label>
+                                            <input class="form-control" type="text" name="receiverName"
+                                                   th:id="|receiver-${address.id}|" th:value="${address.receiverName}"
+                                                   maxlength="120" required autocomplete="name">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" th:for="|phone-${address.id}|">Số điện thoại</label>
+                                            <input class="form-control" type="tel" name="phone"
+                                                   th:id="|phone-${address.id}|" th:value="${address.phone}"
+                                                   maxlength="32" required autocomplete="tel">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" th:for="|province-${address.id}|">Mã tỉnh/thành</label>
+                                            <input class="form-control" type="text" name="provinceCode"
+                                                   th:id="|province-${address.id}|" th:value="${address.provinceCode}"
+                                                   maxlength="64" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label" th:for="|district-${address.id}|">Quận/huyện</label>
+                                            <input class="form-control" type="text" name="district"
+                                                   th:id="|district-${address.id}|" th:value="${address.district}"
+                                                   maxlength="120" required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label" th:for="|detail-${address.id}|">Địa chỉ chi tiết</label>
+                                            <textarea class="form-control" name="detail" rows="2"
+                                                      th:id="|detail-${address.id}|" maxlength="255" required
+                                                      th:text="${address.detail}">Địa chỉ chi tiết</textarea>
+                                        </div>
+                                    </div>
+                                    <button class="btn btn-app-secondary mt-3" type="submit">Lưu thay đổi</button>
+                                </form>
+                            </details>
+                        </article>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div th:fragment="addressFields(prefix)">
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <label class="form-label" th:for="|${prefix}-receiverName|">Tên người nhận</label>
+            <input class="form-control" type="text" th:id="|${prefix}-receiverName|" th:field="*{receiverName}"
+                   maxlength="120" required autocomplete="name"
+                   th:classappend="${#fields.hasErrors('receiverName')} ? 'is-invalid'">
+            <div class="invalid-feedback" role="alert" th:if="${#fields.hasErrors('receiverName')}"
+                 th:errors="*{receiverName}">Tên người nhận không hợp lệ.</div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" th:for="|${prefix}-phone|">Số điện thoại</label>
+            <input class="form-control" type="tel" th:id="|${prefix}-phone|" th:field="*{phone}"
+                   maxlength="32" required autocomplete="tel"
+                   th:classappend="${#fields.hasErrors('phone')} ? 'is-invalid'">
+            <div class="invalid-feedback" role="alert" th:if="${#fields.hasErrors('phone')}"
+                 th:errors="*{phone}">Số điện thoại không hợp lệ.</div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" th:for="|${prefix}-provinceCode|">Mã tỉnh/thành</label>
+            <input class="form-control" type="text" th:id="|${prefix}-provinceCode|" th:field="*{provinceCode}"
+                   maxlength="64" required
+                   th:classappend="${#fields.hasErrors('provinceCode')} ? 'is-invalid'">
+            <div class="invalid-feedback" role="alert" th:if="${#fields.hasErrors('provinceCode')}"
+                 th:errors="*{provinceCode}">Mã tỉnh/thành không hợp lệ.</div>
+        </div>
+        <div class="col-md-6">
+            <label class="form-label" th:for="|${prefix}-district|">Quận/huyện</label>
+            <input class="form-control" type="text" th:id="|${prefix}-district|" th:field="*{district}"
+                   maxlength="120" required
+                   th:classappend="${#fields.hasErrors('district')} ? 'is-invalid'">
+            <div class="invalid-feedback" role="alert" th:if="${#fields.hasErrors('district')}"
+                 th:errors="*{district}">Quận/huyện không hợp lệ.</div>
+        </div>
+        <div class="col-12">
+            <label class="form-label" th:for="|${prefix}-detail|">Địa chỉ chi tiết</label>
+            <textarea class="form-control" rows="2" th:id="|${prefix}-detail|" th:field="*{detail}"
+                      maxlength="255" required
+                      th:classappend="${#fields.hasErrors('detail')} ? 'is-invalid'"></textarea>
+            <div class="invalid-feedback" role="alert" th:if="${#fields.hasErrors('detail')}"
+                 th:errors="*{detail}">Địa chỉ chi tiết không hợp lệ.</div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
