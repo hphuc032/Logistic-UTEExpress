@@ -32,6 +32,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class PasswordResetControllerTest {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
+    @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
     @MockitoBean com.uteexpress.identity.service.AccountIdentityService accountIdentityService;
     @MockitoBean com.uteexpress.account.service.AddressService addressService;
     @MockitoBean com.uteexpress.cart.service.CartService cartService;

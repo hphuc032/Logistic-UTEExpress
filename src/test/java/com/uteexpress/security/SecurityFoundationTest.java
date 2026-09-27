@@ -40,6 +40,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Import(SecurityFoundationTest.SecurityTestConfiguration.class)
 class SecurityFoundationTest {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
+    @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
     @MockitoBean com.uteexpress.identity.service.AccountIdentityService accountIdentityService;
     @MockitoBean com.uteexpress.account.service.AddressService addressService;
     @MockitoBean com.uteexpress.cart.service.CartService cartService;
@@ -178,6 +180,7 @@ class SecurityFoundationTest {
 
     @TestConfiguration(proxyBeanMethods = false)
     static class SecurityTestConfiguration {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
         @Bean
         SecurityFixtureService securityFixtureService() {
             return new SecurityFixtureService();
@@ -191,6 +194,7 @@ class SecurityFoundationTest {
     }
 
     static class SecurityFixtureService {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
         @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority())")
         String adminOperation() {
             return "admin";
@@ -200,6 +204,7 @@ class SecurityFoundationTest {
     @RestController
     @RequestMapping("/test-fixtures/security")
     static class SecurityFixtureController {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
         private final SecurityFixtureService service;
         private final CurrentUserProvider currentUserProvider;
 
