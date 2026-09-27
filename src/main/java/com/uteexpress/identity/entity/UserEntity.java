@@ -35,6 +35,15 @@ public class UserEntity {
     @Column(name = "password_hash", nullable = false, length = 60)
     private String passwordHash;
 
+    @Column(name = "full_name", length = 120)
+    private String fullName;
+
+    @Column(name = "phone", length = 32)
+    private String phone;
+
+    @Column(name = "avatar_key", length = 512)
+    private String avatarKey;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false, length = 32)
     private UserStatus status;
@@ -100,12 +109,32 @@ public class UserEntity {
         updatedAt = now;
     }
 
+    public void updateProfile(String fullName, String phone, Instant now) {
+        this.fullName = fullName;
+        this.phone = phone;
+        this.updatedAt = now;
+    }
+
+    public String replaceAvatarKey(String newAvatarKey, Instant now) {
+        String previous = avatarKey;
+        avatarKey = newAvatarKey;
+        updatedAt = now;
+        return previous;
+    }
+
+    public void changePassword(String newPasswordHash, Instant now) {
+        resetPassword(newPasswordHash, now);
+    }
+
     public Long getId() { return id; }
     public String getEmail() { return email; }
     public String getNormalizedEmail() { return normalizedEmail; }
     public String getUsername() { return username; }
     public String getNormalizedUsername() { return normalizedUsername; }
     public String getPasswordHash() { return passwordHash; }
+    public String getFullName() { return fullName; }
+    public String getPhone() { return phone; }
+    public String getAvatarKey() { return avatarKey; }
     public UserStatus getStatus() { return status; }
     public Instant getEmailVerifiedAt() { return emailVerifiedAt; }
     public long getTokenVersion() { return tokenVersion; }
