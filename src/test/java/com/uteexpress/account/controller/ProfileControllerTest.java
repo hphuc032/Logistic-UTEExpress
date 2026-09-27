@@ -43,6 +43,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
 class ProfileControllerTest {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
+    @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
     @Autowired MockMvc mvc;
     @MockitoBean ProfileService profiles;
     @MockitoBean com.uteexpress.governance.service.AccountGovernanceService accountGovernanceService;

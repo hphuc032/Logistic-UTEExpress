@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Đơn đăng ký cửa hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="py-4">
+    <a th:href="@{/admin/dashboard}">← Quản trị</a>
+    <h1 class="h3 mt-3">Đơn đăng ký cửa hàng chờ duyệt</h1>
+    <div class="alert alert-info" th:if="${shops.empty}">Chưa có đơn chờ duyệt.</div>
+    <div class="table-responsive" th:unless="${shops.empty}">
+        <table class="table table-striped align-middle">
+            <thead><tr><th>Cửa hàng</th><th>Slug</th><th>Chủ tài khoản</th><th>Ngày gửi</th><th></th></tr></thead>
+            <tbody><tr th:each="shop : ${shops.content}">
+                <td th:text="${shop.name}"></td><td th:text="${shop.slug}"></td>
+                <td th:text="${shop.ownerId}"></td><td th:text="${shop.createdAt}"></td>
+                <td><a th:href="@{/admin/shops/{id}(id=${shop.id})}">Xem đơn</a></td>
+            </tr></tbody>
+        </table>
+    </div>
+    <nav aria-label="Trang đơn đăng ký" th:if="${shops.totalPages > 1}">
+        <a class="btn btn-outline-primary me-2" th:if="${shops.hasPrevious()}"
+           th:href="@{/admin/shops(page=${shops.number - 1})}">Trang trước</a>
+        <a class="btn btn-outline-primary" th:if="${shops.hasNext()}"
+           th:href="@{/admin/shops(page=${shops.number + 1})}">Trang sau</a>
+    </nav>
+</section></body></html>
