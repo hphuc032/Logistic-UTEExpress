@@ -52,6 +52,7 @@ class ProfileControllerTest {
     @MockitoBean com.uteexpress.identity.service.EmailVerificationService verification;
     @MockitoBean com.uteexpress.identity.service.PasswordResetService passwordReset;
     @MockitoBean com.uteexpress.identity.service.AccountIdentityService accountIdentityService;
+    @MockitoBean com.uteexpress.account.service.AddressService addressService;
     @MockitoBean com.uteexpress.identity.service.RegistrationService registration;
     @MockitoBean com.uteexpress.identity.service.IdentityAuthenticationService identities;
     @MockitoBean com.uteexpress.identity.repository.UserRoleRepository userRoles;
