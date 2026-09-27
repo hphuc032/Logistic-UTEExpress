@@ -33,6 +33,7 @@
             </div>
             <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 app-navbar-actions"
                  th:if="${navbarUser != null}">
+                <a class="btn btn-app-ghost" th:href="@{/user/addresses}" href="/user/addresses">Địa chỉ</a>
                 <a class="navbar-text app-account-link" th:href="@{/user/profile}" href="/user/profile"
                    th:text="${navbarUser.displayUsername}">Tài khoản</a>
                 <form method="post" th:action="@{/logout}">

@@ -1021,9 +1021,51 @@ textarea.form-control {
     border-color: #912018;
 }
 
+.app-address-form-panel {
+    position: sticky;
+    top: 6rem;
+}
+
+.app-address-card {
+    padding: 1.5rem;
+    border: 1px solid var(--ute-slate-200);
+    border-radius: var(--ute-radius-md);
+    background: #fff;
+    box-shadow: var(--ute-shadow-sm);
+}
+
+.app-address-actions {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.app-address-editor {
+    padding-top: 1rem;
+    border-top: 1px solid var(--ute-slate-200);
+}
+
+.app-address-editor summary {
+    width: max-content;
+    color: var(--ute-navy-800);
+    cursor: pointer;
+    font-weight: 700;
+}
+
 @media (max-width: 575.98px) {
     .app-profile-heading {
         align-items: flex-start;
         flex-direction: column-reverse;
+    }
+
+    .app-address-form-panel {
+        position: static;
+    }
+
+    .app-address-actions,
+    .app-address-actions form,
+    .app-address-actions .btn {
+        width: 100%;
     }
 }
