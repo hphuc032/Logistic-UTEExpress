@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
-@RequestMapping("/{ops:admin|manager}/moderation")
+@RequestMapping("/{ops:admin|manager}")
 public class ModerationController {
     private final ProductModerationService products;
     private final ShopModerationService shops;
@@ -20,10 +20,21 @@ public class ModerationController {
         this.shops = shops;
     }
 
-    @GetMapping("/{kind:products|shops}")
-    String list(@PathVariable String ops, @PathVariable String kind,
+    @GetMapping("/products")
+    String products(@PathVariable String ops,
             @RequestParam(defaultValue = "") String query,
             @RequestParam(defaultValue = "0") int page, Model model) {
+        return list(ops, "products", query, page, model);
+    }
+
+    @GetMapping("/shops/moderation")
+    String shops(@PathVariable String ops,
+            @RequestParam(defaultValue = "") String query,
+            @RequestParam(defaultValue = "0") int page, Model model) {
+        return list(ops, "shops", query, page, model);
+    }
+
+    private String list(String ops, String kind, String query, int page, Model model) {
         model.addAttribute("ops", ops);
         model.addAttribute("kind", kind);
         model.addAttribute("query", query);
@@ -41,7 +52,7 @@ public class ModerationController {
             if (exception.errorCode() != ErrorCode.CONFLICT) throw exception;
             redirect.addFlashAttribute("errorMessage", "Sản phẩm đã thay đổi hoặc không thể thực hiện thao tác. Hãy tải lại danh sách.");
         }
-        return "redirect:/" + ops + "/moderation/products";
+        return "redirect:/" + ops + "/products";
     }
 
     @PostMapping("/shops/{id}/{action:suspend|resume}")
@@ -54,6 +65,6 @@ public class ModerationController {
             if (exception.errorCode() != ErrorCode.CONFLICT) throw exception;
             redirect.addFlashAttribute("errorMessage", "Cửa hàng đã thay đổi hoặc không thể thực hiện thao tác. Hãy tải lại danh sách.");
         }
-        return "redirect:/" + ops + "/moderation/shops";
+        return "redirect:/" + ops + "/shops/moderation";
     }
 }

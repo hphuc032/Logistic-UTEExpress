@@ -3,7 +3,12 @@
 Owner: Quốc Đạt. Reviewer: Hoàng Phúc. Base: develop after VENDOR-02 (#22).
 
 Admin and Manager can search products and shops by name at
-`/{admin|manager}/moderation/products` and `/{admin|manager}/moderation/shops`.
+`/{admin|manager}/products` and `/{admin|manager}/shops/moderation`.
+Commands follow the Master Plan's `ops/products/*` and `ops/shops/*` contract:
+POST `/{admin|manager}/products/{id}/hide|restore` and
+POST `/{admin|manager}/shops/{id}/suspend|resume`.
+The shop moderation list uses `/shops/moderation` to preserve ADMIN-03's
+`/admin/shops` pending approval list and `/admin/shops/{id}` detail routes.
 All POST commands require CSRF, the current version, and a trimmed nonblank reason
 of at most 1000 characters. Actor identity comes from CurrentAccountIdProvider;
 the browser supplies no owner, actor, role, or arbitrary status.

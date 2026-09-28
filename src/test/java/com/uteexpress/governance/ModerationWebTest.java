@@ -53,26 +53,28 @@ class ModerationWebTest {
         when(shopModerationService.search("", 0)).thenReturn(new PageImpl<>(List.of(shop)));
         for (String role : List.of("ADMIN", "MANAGER")) {
             String ops = role.toLowerCase();
-            mvc.perform(get("/" + ops + "/moderation/products").with(user("ops").roles(role)))
-                .andExpect(status().isOk()).andExpect(content().string(containsString("Test product")));
-            mvc.perform(get("/" + ops + "/moderation/shops").with(user("ops").roles(role)))
-                .andExpect(status().isOk()).andExpect(content().string(containsString("Test shop")));
-            mvc.perform(post("/" + ops + "/moderation/products/7/hide").with(user("ops").roles(role)).with(csrf())
+            mvc.perform(get("/" + ops + "/products").with(user("ops").roles(role)))
+                .andExpect(status().isOk()).andExpect(content().string(containsString("Test product")))
+                .andExpect(content().string(containsString("action=\"/" + ops + "/products/7/hide\"")));
+            mvc.perform(get("/" + ops + "/shops/moderation").with(user("ops").roles(role)))
+                .andExpect(status().isOk()).andExpect(content().string(containsString("Test shop")))
+                .andExpect(content().string(containsString("action=\"/" + ops + "/shops/7/suspend\"")));
+            mvc.perform(post("/" + ops + "/products/7/hide").with(user("ops").roles(role)).with(csrf())
                 .param("version", "2").param("reason", "Violation").param("actorId", "999").param("status", "ACTIVE"))
-                .andExpect(status().is3xxRedirection());
+                .andExpect(redirectedUrl("/" + ops + "/products"));
         }
         verify(productModerationService, times(2)).change(7L, 2L, true, "Violation");
-        mvc.perform(post("/manager/moderation/shops/7/suspend").with(user("ops").roles("MANAGER")).with(csrf())
-            .param("version", "2").param("reason", "Violation")).andExpect(status().is3xxRedirection());
+        mvc.perform(post("/manager/shops/7/suspend").with(user("ops").roles("MANAGER")).with(csrf())
+            .param("version", "2").param("reason", "Violation")).andExpect(redirectedUrl("/manager/shops/moderation"));
         verify(shopModerationService).change(7L, 2L, true, "Violation");
     }
 
     @Test void csrfAndRoleBoundariesProtectBothTargets() throws Exception {
         for (String target : List.of("products/7/hide", "shops/7/suspend")) {
-            mvc.perform(post("/admin/moderation/" + target).with(user("ops").roles("ADMIN"))
+            mvc.perform(post("/admin/" + target).with(user("ops").roles("ADMIN"))
                 .param("version", "2").param("reason", "Violation")).andExpect(status().isForbidden());
             for (String role : List.of("USER", "VENDOR", "SHIPPER")) {
-                mvc.perform(post("/manager/moderation/" + target).with(user("other").roles(role)).with(csrf())
+                mvc.perform(post("/manager/" + target).with(user("other").roles(role)).with(csrf())
                     .param("version", "2").param("reason", "Violation")).andExpect(status().isForbidden());
             }
         }
