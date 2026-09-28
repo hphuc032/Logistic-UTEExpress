@@ -7,6 +7,8 @@ import com.uteexpress.security.dto.LoginOutcome;
 import com.uteexpress.security.service.LoginService;
 import com.uteexpress.security.web.JwtCookieService;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 import jakarta.validation.Valid;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Controller;
@@ -27,10 +29,12 @@ public class LoginController {
 
     private final LoginService loginService;
     private final JwtCookieService cookies;
+    private final CsrfTokenRepository csrfTokens;
 
-    public LoginController(LoginService loginService, JwtCookieService cookies) {
+    public LoginController(LoginService loginService, JwtCookieService cookies, CsrfTokenRepository csrfTokens) {
         this.loginService = loginService;
         this.cookies = cookies;
+        this.csrfTokens = csrfTokens;
     }
 
     @InitBinder("loginForm")
@@ -64,7 +68,7 @@ public class LoginController {
 
     @PostMapping("/login")
     String login(@Valid @ModelAttribute("loginForm") LoginForm form,
-            BindingResult bindingResult, Model model, HttpServletResponse response) {
+            BindingResult bindingResult, Model model, HttpServletRequest request, HttpServletResponse response) {
         if (bindingResult.hasErrors()) {
             return LOGIN_VIEW;
         }
@@ -78,6 +82,8 @@ public class LoginController {
         }
 
         cookies.addAuthenticationCookie(response, outcome.token());
+        // Rotate only at the authentication boundary; ordinary JWT requests must keep form tokens usable.
+        csrfTokens.saveToken(null, request, response);
         if (outcome.roles().contains(RoleCode.ADMIN)) {
             return "redirect:/admin/dashboard";
         }

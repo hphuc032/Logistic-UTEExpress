@@ -97,6 +97,8 @@ class CartDatabaseIT {
                     ErrorCode.VALIDATION_FAILED);
         }
         assertThat(carts.getCurrentUserCart()).isEmpty();
+        // CART-02 enforces stock on add; retain the overflow assertion with sufficient fixture stock.
+        jdbc.update("UPDATE uteexpress.products SET stock=? WHERE id=?", Integer.MAX_VALUE, product);
         carts.addProduct(new AddCartProductRequest(product, Integer.MAX_VALUE));
         assertError(() -> carts.addProduct(new AddCartProductRequest(product, 1)), ErrorCode.VALIDATION_FAILED);
         assertThat(carts.getCurrentUserCart().orElseThrow().items().getFirst().quantity())

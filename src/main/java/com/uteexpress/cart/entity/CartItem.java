@@ -49,6 +49,16 @@ public class CartItem {
     }
 
     public Long getId() { return id; }
+    public void updateQuantity(int quantity, Instant now) {
+        if (quantity <= 0) throw new IllegalArgumentException("Quantity must be positive");
+        this.quantity = quantity;
+        updatedAt = Objects.requireNonNull(now);
+    }
+
+    public void select(boolean selected, Instant now) {
+        this.selected = selected;
+        updatedAt = Objects.requireNonNull(now);
+    }
     public Long getProductId() { return productId; }
     public int getQuantity() { return quantity; }
     public boolean isSelected() { return selected; }
