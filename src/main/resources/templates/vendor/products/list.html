@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Sản phẩm cửa hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="vendor-products-title">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 app-page-header">
+        <div>
+            <span class="app-eyebrow">Kênh người bán</span>
+            <h1 id="vendor-products-title">Sản phẩm cửa hàng</h1>
+            <p>Quản lý thông tin, tồn kho, trạng thái và ảnh sản phẩm của cửa hàng đã duyệt.</p>
+        </div>
+        <a class="btn btn-app-primary" th:href="@{/vendor/products/new}" href="/vendor/products/new">Thêm sản phẩm</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(products)}"
+         th:replace="~{fragments/components :: emptyState('Chưa có sản phẩm', 'Tạo sản phẩm đầu tiên để bắt đầu quản lý danh mục bán hàng.')}"></div>
+
+    <div class="table-responsive app-table-wrap" th:unless="${#lists.isEmpty(products)}">
+        <table class="table app-table align-middle mb-0">
+            <thead><tr><th>Sản phẩm</th><th>Danh mục</th><th>Giá</th><th>Tồn kho</th><th>Trạng thái</th><th class="text-end">Thao tác</th></tr></thead>
+            <tbody>
+            <tr th:each="product : ${products}">
+                <td>
+                    <div class="d-flex align-items-center gap-3">
+                        <img class="app-product-thumb" th:if="${!#lists.isEmpty(product.images)}"
+                             th:src="@{/vendor/products/{id}/images/{imageId}/content(id=${product.id},imageId=${product.images[0].id})}"
+                             th:alt="${product.images[0].altText != null ? product.images[0].altText : product.name}">
+                        <div class="app-product-thumb app-product-thumb-empty" th:if="${#lists.isEmpty(product.images)}" aria-hidden="true">UE</div>
+                        <div><strong th:text="${product.name}">Tên sản phẩm</strong><div class="small text-secondary" th:text="|#${product.id}|">#1</div></div>
+                    </div>
+                </td>
+                <td th:text="${product.categoryName}">Danh mục</td>
+                <td th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">100.000 ₫</td>
+                <td th:text="${product.stock}">0</td>
+                <td><span class="app-status-badge" th:classappend="${product.status == 'ACTIVE'} ? ' status-delivered' : ' status-cancelled'"
+                          th:text="${product.status == 'ACTIVE'} ? 'Đang bán' : 'Đã ẩn'">Đang bán</span></td>
+                <td>
+                    <div class="d-flex justify-content-end flex-wrap gap-2">
+                        <a class="btn btn-sm btn-app-secondary" th:href="@{/vendor/products/{id}/edit(id=${product.id})}">Chỉnh sửa</a>
+                        <form method="post" th:if="${product.status == 'ACTIVE'}"
+                              th:action="@{/vendor/products/{id}/delete(id=${product.id})}">
+                            <input type="hidden" name="version" th:value="${product.version}">
+                            <button class="btn btn-sm btn-outline-danger" type="submit">Ẩn sản phẩm</button>
+                        </form>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section></body>
+</html>

@@ -7,6 +7,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "product_images", schema = "uteexpress")
 public class ProductImage {
@@ -27,6 +29,17 @@ public class ProductImage {
     private String altText;
 
     protected ProductImage() {
+    }
+
+    public static ProductImage create(Long productId, String storageKey, int position, String altText) {
+        if (productId == null || productId <= 0) throw new IllegalArgumentException("productId must be positive");
+        if (position < 0) throw new IllegalArgumentException("position must be nonnegative");
+        ProductImage image = new ProductImage();
+        image.productId = productId;
+        image.storageKey = Objects.requireNonNull(storageKey, "storageKey");
+        image.position = position;
+        image.altText = altText;
+        return image;
     }
 
     public Long getId() { return id; }

@@ -942,6 +942,57 @@ textarea.form-control {
     }
 }
 
+.app-product-thumb {
+    width: 3.5rem;
+    height: 3.5rem;
+    flex: 0 0 3.5rem;
+    border: 1px solid var(--ute-slate-200);
+    border-radius: 0.75rem;
+    object-fit: cover;
+}
+
+.app-product-thumb-empty {
+    display: grid;
+    place-items: center;
+    color: var(--ute-slate-500);
+    background: var(--ute-slate-100);
+    font-weight: 800;
+}
+
+.app-product-images {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.app-product-image-card {
+    padding: 0.75rem;
+    border: 1px solid var(--ute-slate-200);
+    border-radius: var(--ute-radius-md);
+}
+
+.app-product-image-card img {
+    width: 100%;
+    aspect-ratio: 1;
+    margin-bottom: 0.75rem;
+    border-radius: 0.625rem;
+    object-fit: cover;
+}
+
+.app-empty-compact {
+    padding: 1rem;
+    border: 1px dashed var(--ute-slate-300);
+    border-radius: var(--ute-radius-md);
+    color: var(--ute-slate-600);
+    text-align: center;
+}
+
+@media (max-width: 575.98px) {
+    .app-product-images {
+        grid-template-columns: 1fr;
+    }
+}
+
 @media (prefers-reduced-motion: reduce) {
     html {
         scroll-behavior: auto;
