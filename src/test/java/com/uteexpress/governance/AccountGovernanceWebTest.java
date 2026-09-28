@@ -36,6 +36,10 @@ class AccountGovernanceWebTest {
     @MockitoBean com.uteexpress.identity.service.RegistrationService registration;
     @MockitoBean com.uteexpress.identity.service.IdentityAuthenticationService identities;
     @MockitoBean com.uteexpress.identity.repository.UserRoleRepository userRoles;
+    @MockitoBean com.uteexpress.catalog.service.ProductService productService;
+    @MockitoBean com.uteexpress.catalog.service.InventoryService inventoryService;
+    @MockitoBean com.uteexpress.governance.service.CategoryQueryService categoryQueryService;
+    @MockitoBean com.uteexpress.shop.service.VendorShopQueryService vendorShopQueryService;
     @MockitoBean AccountGovernanceService accounts;
     @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
     @Autowired MockMvc mvc;

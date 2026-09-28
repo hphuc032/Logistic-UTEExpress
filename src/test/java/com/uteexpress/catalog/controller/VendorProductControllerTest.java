@@ -68,6 +68,8 @@ class VendorProductControllerTest {
     @MockitoBean com.uteexpress.identity.repository.UserRoleRepository userRoles;
     @MockitoBean com.uteexpress.governance.service.AuditLogService audit;
     @MockitoBean com.uteexpress.governance.service.CategoryService categoryCommands;
+    @MockitoBean com.uteexpress.governance.service.AccountGovernanceService accountGovernanceService;
+    @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
 
     @BeforeEach
     void fixture() {

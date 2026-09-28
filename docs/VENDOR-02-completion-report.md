@@ -58,11 +58,12 @@ The Thymeleaf pages reuse the shared Bootstrap layout, escaped output, responsiv
 - Image tests cover JPEG/PNG/WebP, spoofing, truncation, dimensions, size, SVG, traversal-style filenames, rollback compensation, and post-commit deletion.
 - Inventory tests cover the required caller transaction, exact batches, insufficient stock, rollback, restore rollback, overflow, and concurrent locking.
 - Real JWT role enforcement and CSRF behavior are verified against the MVC routes.
-- `mvnw.cmd clean test`: PASS, 261 tests.
-- `mvnw.cmd package`: PASS, 261 tests.
-- `mvnw.cmd -Ppostgres-it clean verify`: PASS, 261 unit/MVC plus 97 PostgreSQL integration tests.
-- Total distinct tests in the full PostgreSQL gate: 358; failures: 0; errors: 0; skipped: 0.
-- PostgreSQL 17.6, Flyway validation, Hibernate `ddl-auto=validate`, Catalog, Cart, Order, and Architecture regressions pass.
+- The branch was synchronized with `origin/develop` at `38f7f3f`, including ADMIN-01, before the final verification.
+- `mvnw.cmd clean test`: PASS, 263 tests.
+- `mvnw.cmd package`: PASS, 263 tests.
+- `mvnw.cmd -Ppostgres-it clean verify`: PASS, 263 unit/MVC plus 100 PostgreSQL integration tests.
+- Total distinct tests in the full PostgreSQL gate: 363; failures: 0; errors: 0; skipped: 0.
+- PostgreSQL 17.6, Flyway validation, Hibernate `ddl-auto=validate`, Catalog, Cart, Order, ADMIN-01, and Architecture regressions pass.
 
 ## Migration decision
 
