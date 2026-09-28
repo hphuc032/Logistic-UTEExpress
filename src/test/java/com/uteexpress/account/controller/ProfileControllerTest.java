@@ -51,6 +51,8 @@ class ProfileControllerTest {
     @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
     @Autowired MockMvc mvc;
     @MockitoBean ProfileService profiles;
+    @MockitoBean com.uteexpress.governance.service.AccountGovernanceService accountGovernanceService;
+    @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
     @MockitoBean com.uteexpress.cart.service.CartService cartService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;

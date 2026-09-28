@@ -9,8 +9,17 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
+    @Query("""
+            select u from UserEntity u
+             where :query = '' or lower(u.email) like concat('%', :query, '%')
+                or lower(u.username) like concat('%', :query, '%')
+                or lower(coalesce(u.fullName, '')) like concat('%', :query, '%')
+            """)
+    Page<UserEntity> search(@Param("query") String query, Pageable pageable);
     boolean existsByNormalizedEmail(String normalizedEmail);
 
     boolean existsByNormalizedUsername(String normalizedUsername);
