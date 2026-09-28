@@ -126,6 +126,15 @@ public class UserEntity {
         resetPassword(newPasswordHash, now);
     }
 
+    public void changeLock(boolean lock, Instant now) {
+        if (lock && status != UserStatus.ACTIVE || !lock && status != UserStatus.LOCKED) {
+            throw new IllegalStateException("Account status cannot be changed");
+        }
+        status = lock ? UserStatus.LOCKED : UserStatus.ACTIVE;
+        tokenVersion++;
+        updatedAt = now;
+    }
+
     public Long getId() { return id; }
     public String getEmail() { return email; }
     public String getNormalizedEmail() { return normalizedEmail; }
