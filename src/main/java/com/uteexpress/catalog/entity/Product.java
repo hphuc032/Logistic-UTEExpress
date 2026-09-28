@@ -12,6 +12,7 @@ import jakarta.persistence.Version;
 
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.Objects;
 
 @Entity
 @Table(name = "products", schema = "uteexpress")
@@ -55,6 +56,44 @@ public class Product {
     protected Product() {
     }
 
+    public static Product create(Long shopId, Long categoryId, String name, String description,
+            BigDecimal price, int stock, Instant now) {
+        Product product = new Product();
+        product.shopId = requirePositive(shopId, "shopId");
+        product.createdAt = Objects.requireNonNull(now, "now");
+        product.status = ProductStatus.ACTIVE;
+        product.updateDetails(categoryId, name, description, price, stock, now);
+        return product;
+    }
+
+    public void updateDetails(Long categoryId, String name, String description,
+            BigDecimal price, int stock, Instant now) {
+        this.categoryId = requirePositive(categoryId, "categoryId");
+        this.name = requireText(name, "name");
+        this.description = description;
+        this.price = requireWholePositivePrice(price);
+        if (stock < 0) throw new IllegalArgumentException("stock must be nonnegative");
+        this.stock = stock;
+        this.updatedAt = Objects.requireNonNull(now, "now");
+    }
+
+    public void hide(Instant now) {
+        status = ProductStatus.HIDDEN;
+        updatedAt = Objects.requireNonNull(now, "now");
+    }
+
+    public void decreaseStock(int quantity, Instant now) {
+        if (quantity <= 0 || stock < quantity) throw new IllegalArgumentException("insufficient stock");
+        stock -= quantity;
+        updatedAt = Objects.requireNonNull(now, "now");
+    }
+
+    public void restoreStock(int quantity, Instant now) {
+        if (quantity <= 0) throw new IllegalArgumentException("quantity must be positive");
+        stock = Math.addExact(stock, quantity);
+        updatedAt = Objects.requireNonNull(now, "now");
+    }
+
     public Long getId() { return id; }
     public Long getShopId() { return shopId; }
     public Long getCategoryId() { return categoryId; }
@@ -66,4 +105,21 @@ public class Product {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
     public Long getVersion() { return version; }
+
+    private static Long requirePositive(Long value, String field) {
+        if (value == null || value <= 0) throw new IllegalArgumentException(field + " must be positive");
+        return value;
+    }
+
+    private static String requireText(String value, String field) {
+        if (value == null || value.isBlank()) throw new IllegalArgumentException(field + " is required");
+        return value;
+    }
+
+    private static BigDecimal requireWholePositivePrice(BigDecimal value) {
+        if (value == null || value.signum() <= 0 || value.remainder(BigDecimal.ONE).signum() != 0) {
+            throw new IllegalArgumentException("price must be positive whole VND");
+        }
+        return value;
+    }
 }
