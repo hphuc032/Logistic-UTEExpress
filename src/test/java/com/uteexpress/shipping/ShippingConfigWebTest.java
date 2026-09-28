@@ -20,6 +20,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest @ActiveProfiles("test") @AutoConfigureMockMvc
 class ShippingConfigWebTest {
+    @MockitoBean com.uteexpress.governance.service.ProductModerationService productModerationService;
+    @MockitoBean com.uteexpress.governance.service.ShopModerationService shopModerationService;
     @MockitoBean com.uteexpress.catalog.service.ProductService productService;
     @MockitoBean com.uteexpress.catalog.service.InventoryService inventoryService;
     @MockitoBean com.uteexpress.governance.service.CategoryQueryService categoryQueryService;

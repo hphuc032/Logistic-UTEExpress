@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest @ActiveProfiles("test") @AutoConfigureMockMvc
-class AccountGovernanceWebTest {
+class ModerationWebTest {
     @MockitoBean com.uteexpress.governance.service.ProductModerationService productModerationService;
     @MockitoBean com.uteexpress.governance.service.ShopModerationService shopModerationService;
     @MockitoBean com.uteexpress.identity.service.AccountIdentityService accountIdentityService;
@@ -46,28 +46,36 @@ class AccountGovernanceWebTest {
     @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
     @Autowired MockMvc mvc;
 
-    @Test void managerCanReadButCannotMutateAndCsrfIsRequired() throws Exception {
-        var account = new AccountView(7L, "buyer", "buyer@example.test", "Buyer", "0123", "ACTIVE", 2L);
-        when(accounts.search("", 0)).thenReturn(new PageImpl<>(List.of(account)));
-        when(accounts.get(7L)).thenReturn(account);
-        mvc.perform(get("/manager/accounts").with(user("manager").roles("MANAGER")))
-                .andExpect(status().isOk()).andExpect(content().string(containsString("buyer@example.test")));
-        mvc.perform(get("/manager/accounts/7").with(user("manager").roles("MANAGER")))
-                .andExpect(status().isOk()).andExpect(content().string(containsString("0123")));
-        mvc.perform(post("/manager/accounts/7/lock").with(user("manager").roles("MANAGER")).with(csrf())
-                .param("version", "2")).andExpect(status().isForbidden());
-        mvc.perform(post("/admin/accounts/7/lock").with(user("admin").roles("ADMIN"))
-                .param("version", "2")).andExpect(status().isForbidden());
-        verify(accounts, never()).setLocked(any(), any(), anyBoolean());
+    @Test void opsCanSearchAndSubmitOnlyVersionAndReason() throws Exception {
+        var item = new com.uteexpress.governance.dto.ModerationView(7L, "Test product", "ACTIVE", 2L, null);
+        when(productModerationService.search("", 0)).thenReturn(new PageImpl<>(List.of(item)));
+        var shop = new com.uteexpress.governance.dto.ModerationView(7L, "Test shop", "APPROVED", 2L, null);
+        when(shopModerationService.search("", 0)).thenReturn(new PageImpl<>(List.of(shop)));
+        for (String role : List.of("ADMIN", "MANAGER")) {
+            String ops = role.toLowerCase();
+            mvc.perform(get("/" + ops + "/moderation/products").with(user("ops").roles(role)))
+                .andExpect(status().isOk()).andExpect(content().string(containsString("Test product")));
+            mvc.perform(get("/" + ops + "/moderation/shops").with(user("ops").roles(role)))
+                .andExpect(status().isOk()).andExpect(content().string(containsString("Test shop")));
+            mvc.perform(post("/" + ops + "/moderation/products/7/hide").with(user("ops").roles(role)).with(csrf())
+                .param("version", "2").param("reason", "Violation").param("actorId", "999").param("status", "ACTIVE"))
+                .andExpect(status().is3xxRedirection());
+        }
+        verify(productModerationService, times(2)).change(7L, 2L, true, "Violation");
+        mvc.perform(post("/manager/moderation/shops/7/suspend").with(user("ops").roles("MANAGER")).with(csrf())
+            .param("version", "2").param("reason", "Violation")).andExpect(status().is3xxRedirection());
+        verify(shopModerationService).change(7L, 2L, true, "Violation");
     }
 
-    @Test void adminCanSubmitVersionedLockAndUnauthorizedUsersCannotRead() throws Exception {
-        mvc.perform(get("/admin/accounts")).andExpect(status().isUnauthorized());
-        mvc.perform(get("/admin/accounts").with(user("buyer").roles("USER")))
-                .andExpect(status().isForbidden());
-        mvc.perform(post("/admin/accounts/7/lock").with(user("admin").roles("ADMIN")).with(csrf())
-                .param("version", "2").param("actorId", "999").param("status", "DISABLED"))
-                .andExpect(status().is3xxRedirection());
-        verify(accounts).setLocked(7L, 2L, true);
+    @Test void csrfAndRoleBoundariesProtectBothTargets() throws Exception {
+        for (String target : List.of("products/7/hide", "shops/7/suspend")) {
+            mvc.perform(post("/admin/moderation/" + target).with(user("ops").roles("ADMIN"))
+                .param("version", "2").param("reason", "Violation")).andExpect(status().isForbidden());
+            for (String role : List.of("USER", "VENDOR", "SHIPPER")) {
+                mvc.perform(post("/manager/moderation/" + target).with(user("other").roles(role)).with(csrf())
+                    .param("version", "2").param("reason", "Violation")).andExpect(status().isForbidden());
+            }
+        }
+        verifyNoInteractions(productModerationService, shopModerationService);
     }
 }

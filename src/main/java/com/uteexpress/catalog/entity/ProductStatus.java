@@ -1,7 +1,8 @@
 package com.uteexpress.catalog.entity;
 
-/** Minimal visibility vocabulary. Business transitions belong to VENDOR-02. */
+/** HIDDEN is Vendor-owned; MODERATED is an Ops restriction and cannot revive HIDDEN. */
 public enum ProductStatus {
     ACTIVE,
-    HIDDEN
+    HIDDEN,
+    MODERATED
 }

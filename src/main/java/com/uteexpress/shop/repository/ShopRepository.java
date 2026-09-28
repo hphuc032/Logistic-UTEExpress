@@ -13,6 +13,8 @@ import org.springframework.data.repository.Repository;
 import java.util.Optional;
 
 public interface ShopRepository extends Repository<Shop, Long> {
+    @Query("select p from Shop p where :query = '' or locate(lower(:query), lower(p.name)) > 0")
+    Page<Shop> searchForModeration(@Param("query") String query, Pageable pageable);
     Optional<Shop> findByOwnerId(Long ownerId);
 
     boolean existsByOwnerId(Long ownerId);
