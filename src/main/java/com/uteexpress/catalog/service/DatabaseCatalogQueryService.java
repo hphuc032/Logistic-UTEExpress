@@ -1,6 +1,7 @@
 package com.uteexpress.catalog.service;
 
 import com.uteexpress.catalog.dto.ProductSnapshot;
+import com.uteexpress.catalog.dto.CartProductSnapshot;
 import com.uteexpress.catalog.repository.CatalogReadRepository;
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
@@ -17,6 +18,15 @@ public class DatabaseCatalogQueryService implements CatalogQueryService {
 
     public DatabaseCatalogQueryService(CatalogReadRepository catalog) {
         this.catalog = catalog;
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<CartProductSnapshot> findCartProducts(Set<Long> productIds) {
+        if (productIds == null || productIds.stream().anyMatch(id -> id == null || id <= 0)) {
+            throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        }
+        return productIds.isEmpty() ? List.of() : List.copyOf(catalog.findCartProducts(new TreeSet<>(productIds)));
     }
 
     @Override
