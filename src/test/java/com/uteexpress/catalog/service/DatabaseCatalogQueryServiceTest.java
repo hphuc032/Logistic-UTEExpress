@@ -72,4 +72,23 @@ class DatabaseCatalogQueryServiceTest {
     private static ProductSnapshot snapshot(Long id) {
         return new ProductSnapshot(id, 10L, "Product " + id, new BigDecimal("125000.00"), 0L);
     }
+
+    @Test
+    void cartLookupRetainsUnavailableDataAndAllowsMissingIds() {
+        var hidden = new com.uteexpress.catalog.dto.CartProductSnapshot(1L, "Hidden", BigDecimal.TEN, 0, false);
+        when(repository.findCartProducts(Set.of(1L, 2L))).thenReturn(List.of(hidden));
+        var result = service.findCartProducts(Set.of(1L, 2L));
+        assertThat(result).containsExactly(hidden);
+        assertThatThrownBy(result::clear).isInstanceOf(UnsupportedOperationException.class);
+    }
+
+    @Test
+    void cartLookupValidatesIdsAndSkipsEmptyRead() {
+        assertThat(service.findCartProducts(Set.of())).isEmpty();
+        for (Set<Long> ids : List.of(Set.of(0L), Set.of(-1L), new LinkedHashSet<>(java.util.Arrays.asList(1L, null)))) {
+            assertThatThrownBy(() -> service.findCartProducts(ids)).isInstanceOf(ApplicationException.class);
+        }
+        assertThatThrownBy(() -> service.findCartProducts(null)).isInstanceOf(ApplicationException.class);
+        verifyNoInteractions(repository);
+    }
 }

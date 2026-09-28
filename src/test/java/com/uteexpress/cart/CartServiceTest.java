@@ -8,6 +8,10 @@ import com.uteexpress.cart.repository.CartItemRepository;
 import com.uteexpress.cart.service.CartService;
 import com.uteexpress.catalog.dto.ProductSnapshot;
 import com.uteexpress.catalog.service.CatalogQueryService;
+import com.uteexpress.catalog.service.InventoryService;
+import com.uteexpress.catalog.dto.CartProductSnapshot;
+import com.uteexpress.catalog.dto.StockQuantity;
+import com.uteexpress.cart.dto.*;
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
 import com.uteexpress.security.service.CurrentAccountIdProvider;
@@ -33,7 +37,8 @@ class CartServiceTest {
     CatalogQueryService catalog = mock(CatalogQueryService.class);
     Cart cart = mock(Cart.class);
     Instant now = Instant.parse("2026-09-25T00:00:00Z");
-    CartService service = new CartService(carts, items, account, catalog, Clock.fixed(now, ZoneOffset.UTC));
+    InventoryService inventory = mock(InventoryService.class);
+    CartService service = new CartService(carts, items, account, catalog, inventory, Clock.fixed(now, ZoneOffset.UTC));
 
     @BeforeEach
     void owner() {
@@ -42,6 +47,8 @@ class CartServiceTest {
         when(carts.lockByUserId(10L)).thenReturn(Optional.of(cart));
         when(catalog.requirePurchasableProducts(Set.of(30L))).thenReturn(List.of(
                 new ProductSnapshot(30L, 40L, "Current product", new BigDecimal("125000"), 0L)));
+        when(catalog.findCartProducts(Set.of(30L))).thenReturn(List.of(
+                new CartProductSnapshot(30L, "Current product", new BigDecimal("125000"), 10, true)));
     }
 
     @Test
@@ -59,7 +66,10 @@ class CartServiceTest {
         assertError(service::getOrCreateCart, ErrorCode.UNAUTHENTICATED);
         assertError(service::getCurrentUserCart, ErrorCode.UNAUTHENTICATED);
         assertError(() -> service.addProduct(new AddCartProductRequest(30L, 1)), ErrorCode.UNAUTHENTICATED);
-        verifyNoInteractions(carts, items, catalog);
+        assertError(() -> service.updateQuantity(1L, new UpdateCartQuantityRequest(1)), ErrorCode.UNAUTHENTICATED);
+        assertError(() -> service.removeItem(1L), ErrorCode.UNAUTHENTICATED);
+        assertError(() -> service.selectItem(1L, new SelectCartItemRequest(false)), ErrorCode.UNAUTHENTICATED);
+        verifyNoInteractions(carts, items, catalog, inventory);
     }
 
     @Test
@@ -106,7 +116,7 @@ class CartServiceTest {
         when(items.findAllByCartIdAndCartUserIdOrderById(20L, 10L))
                 .thenReturn(List.of(CartItem.create(cart, 30L, 3, now)));
         assertThat(service.getCurrentUserCart().orElseThrow().subtotal()).isEqualByComparingTo("375000");
-        verify(catalog).requirePurchasableProducts(Set.of(30L));
+        verify(catalog).findCartProducts(Set.of(30L));
     }
 
     @Test
@@ -120,5 +130,106 @@ class CartServiceTest {
     private static void assertError(org.assertj.core.api.ThrowableAssert.ThrowingCallable action, ErrorCode code) {
         assertThatThrownBy(action).isInstanceOfSatisfying(ApplicationException.class,
                 exception -> assertThat(exception.errorCode()).isEqualTo(code));
+    }
+
+    @Test
+    void updateValidatesStockBeforeChangingQuantity() {
+        CartItem item = ownedLine();
+        service.updateQuantity(1L, new UpdateCartQuantityRequest(4));
+        assertThat(item.getQuantity()).isEqualTo(4);
+        verify(inventory).lockAndCheck(List.of(new StockQuantity(30L, 4)));
+        verify(inventory, never()).decrease(any());
+    }
+
+    @Test
+    void invalidUpdateQuantitiesNeverAccessPersistence() {
+        for (Integer quantity : new Integer[]{null, 0, -1}) {
+            assertError(() -> service.updateQuantity(1L, new UpdateCartQuantityRequest(quantity)),
+                    ErrorCode.VALIDATION_FAILED);
+        }
+        verifyNoInteractions(carts, items, inventory);
+    }
+
+    @Test
+    void insufficientStockDoesNotChangeQuantity() {
+        CartItem item = ownedLine();
+        doThrow(new ApplicationException(ErrorCode.CONFLICT)).when(inventory).lockAndCheck(any());
+        assertError(() -> service.updateQuantity(1L, new UpdateCartQuantityRequest(11)), ErrorCode.CONFLICT);
+        assertThat(item.getQuantity()).isEqualTo(2);
+    }
+
+    @Test
+    void allActionsRejectForeignItemsBeforeInventoryOrMutation() {
+        assertError(() -> service.updateQuantity(99L, new UpdateCartQuantityRequest(2)), ErrorCode.RESOURCE_NOT_FOUND);
+        assertError(() -> service.removeItem(99L), ErrorCode.RESOURCE_NOT_FOUND);
+        assertError(() -> service.selectItem(99L, new SelectCartItemRequest(false)), ErrorCode.RESOURCE_NOT_FOUND);
+        verify(items, never()).delete(any());
+        verifyNoInteractions(inventory);
+    }
+
+    @Test
+    void removeKeepsCartAndNeedsNoCatalogValidation() {
+        CartItem item = ownedLine();
+        service.removeItem(1L);
+        verify(items).delete(item);
+        verify(carts, never()).delete(any());
+        verifyNoInteractions(inventory);
+    }
+
+    @Test
+    void selectionChangesSelectedSubtotalOnly() {
+        CartItem item = ownedLine();
+        when(items.findAllByCartIdAndCartUserIdOrderById(20L, 10L)).thenReturn(List.of(item));
+        CartView unselected = service.selectItem(1L, new SelectCartItemRequest(false));
+        assertThat(item.isSelected()).isFalse();
+        assertThat(unselected.subtotal()).isEqualByComparingTo("250000");
+        assertThat(unselected.selectedSubtotal()).isZero();
+        assertThat(service.selectItem(1L, new SelectCartItemRequest(true)).selectedSubtotal())
+                .isEqualByComparingTo("250000");
+        assertThat(item.isSelected()).isTrue();
+    }
+
+    @Test
+    void missingProductRemainsVisibleWithNoInventedPrice() {
+        CartItem line = ownedLine();
+        when(carts.findByUserId(10L)).thenReturn(Optional.of(cart));
+        when(items.findAllByCartIdAndCartUserIdOrderById(20L, 10L)).thenReturn(List.of(line));
+        when(catalog.findCartProducts(Set.of(30L))).thenReturn(List.of());
+        CartView result = service.getCurrentUserCart().orElseThrow();
+        assertThat(result.items()).hasSize(1);
+        assertThat(result.items().getFirst().status()).isEqualTo(CartItemStatus.UNAVAILABLE);
+        assertThat(result.items().getFirst().unitPrice()).isNull();
+        assertThat(result.subtotal()).isZero();
+    }
+
+    @Test
+    void unavailableAndInsufficientLinesAreNeverIncludedInTotals() {
+        CartItem line = ownedLine();
+        when(carts.findByUserId(10L)).thenReturn(Optional.of(cart));
+        when(items.findAllByCartIdAndCartUserIdOrderById(20L, 10L)).thenReturn(List.of(line));
+        for (CartProductSnapshot snapshot : List.of(
+                new CartProductSnapshot(30L, "Hidden", BigDecimal.TEN, 10, false),
+                new CartProductSnapshot(30L, "Empty", BigDecimal.TEN, 0, true),
+                new CartProductSnapshot(30L, "Low", BigDecimal.TEN, 1, true))) {
+            when(catalog.findCartProducts(Set.of(30L))).thenReturn(List.of(snapshot));
+            CartView result = service.getCurrentUserCart().orElseThrow();
+            assertThat(result.items().getFirst().available()).isFalse();
+            assertThat(result.subtotal()).isZero();
+            assertThat(result.selectedSubtotal()).isZero();
+        }
+    }
+
+    @Test
+    void repeatedAddChecksAccumulatedQuantity() {
+        CartItem item = ownedLine();
+        when(items.findByCartIdAndProductIdAndCartUserId(20L, 30L, 10L)).thenReturn(Optional.of(item));
+        service.addProduct(new AddCartProductRequest(30L, 3));
+        verify(inventory).lockAndCheck(List.of(new StockQuantity(30L, 5)));
+    }
+
+    private CartItem ownedLine() {
+        CartItem item = CartItem.create(cart, 30L, 2, now);
+        when(items.findByIdAndCartUserId(1L, 10L)).thenReturn(Optional.of(item));
+        return item;
     }
 }

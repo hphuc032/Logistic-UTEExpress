@@ -60,7 +60,10 @@ public class SecurityConfig {
                 .requestCache(cache -> cache.disable())
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
-                .csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository))
+                .csrf(csrf -> csrf.csrfTokenRepository(csrfTokenRepository)
+                        // JWT restoration happens on every request, including static assets.
+                        // Rotate at successful login instead of deleting the browser's token on every restore.
+                        .sessionAuthenticationStrategy(new org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy()))
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(PUBLIC_ROUTES).permitAll()
                         .requestMatchers("/user/**").hasAnyAuthority(
