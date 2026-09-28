@@ -31,6 +31,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class ShopApprovalWebTest {
+    @MockitoBean com.uteexpress.catalog.service.ProductService productService;
+    @MockitoBean com.uteexpress.catalog.service.InventoryService inventoryService;
+    @MockitoBean com.uteexpress.governance.service.CategoryQueryService categoryQueryService;
+    @MockitoBean com.uteexpress.shop.service.VendorShopQueryService vendorShopQueryService;
     @MockitoBean com.uteexpress.account.service.AddressService addressService;
     @MockitoBean com.uteexpress.identity.service.AccountIdentityService accountIdentityService;
     @MockitoBean com.uteexpress.cart.service.CartService cartService;
