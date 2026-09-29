@@ -3,7 +3,10 @@ package com.uteexpress.checkout.dto;
 import java.math.BigDecimal;
 import java.util.List;
 
-/** Server-produced immutable checkout facts; recompute/validate at submit, never trust a returned quote. */
+/**
+ * Server-produced immutable checkout facts for one shop; recompute/validate at submit.
+ * CHK-01 previews leave commission fields null (unresolved); this is not a persistable order command.
+ */
 public record CheckoutQuote(Long shopId, List<ItemSnapshot> items, AddressSnapshot address,
         OrderTotals totals, Long shippingProviderId, String shippingServiceSnapshot,
         Long commissionPolicyId, BigDecimal commissionRateSnapshot, BigDecimal commissionAmount) {
