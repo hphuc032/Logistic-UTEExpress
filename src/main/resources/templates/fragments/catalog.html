@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<article th:fragment="productCard(product)" class="app-catalog-card h-100">
+    <a class="app-catalog-card-media"
+       th:href="@{/products/{id}(id=${product.id})}"
+       th:aria-label="|Xem ${product.name}|">
+        <img th:if="${product.thumbnailImageId != null}"
+             th:src="@{/products/{productId}/images/{imageId}/content(productId=${product.id},imageId=${product.thumbnailImageId})}"
+             th:alt="${product.name}">
+        <span th:if="${product.thumbnailImageId == null}" class="app-catalog-placeholder" aria-hidden="true">UE</span>
+    </a>
+    <div class="app-catalog-card-body">
+        <div class="d-flex flex-wrap gap-2 mb-2">
+            <a class="app-catalog-chip" th:href="@{/categories/{slug}(slug=${product.categorySlug})}"
+               th:text="${product.categoryName}">Danh mục</a>
+            <span class="app-status-badge status-warning" th:if="${product.stock == 0}">Hết hàng</span>
+        </div>
+        <h3 class="app-catalog-card-title">
+            <a th:href="@{/products/{id}(id=${product.id})}" th:text="${product.name}">Tên sản phẩm</a>
+        </h3>
+        <a class="app-catalog-shop-link" th:href="@{/shops/{slug}(slug=${product.shopSlug})}"
+           th:text="${product.shopName}">Cửa hàng</a>
+        <p class="app-catalog-price"
+           th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">100.000 ₫</p>
+    </div>
+</article>
+</body>
+</html>

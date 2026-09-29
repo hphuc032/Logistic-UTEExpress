@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Cửa hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="shops-title">
+    <div class="app-page-header">
+        <span class="app-eyebrow">Đối tác đã duyệt</span>
+        <h1 id="shops-title">Cửa hàng trên UTEExpress</h1>
+        <p>Chỉ các cửa hàng đang ở trạng thái hoạt động mới xuất hiện công khai.</p>
+    </div>
+    <div th:if="${#lists.isEmpty(shops)}"
+         th:replace="~{fragments/components :: emptyState('Chưa có cửa hàng', 'Cửa hàng đã duyệt sẽ xuất hiện tại đây.')}"></div>
+    <div class="row g-4" th:unless="${#lists.isEmpty(shops)}">
+        <div class="col-12 col-md-6 col-lg-4" th:each="shop : ${shops}">
+            <article class="app-shop-card h-100">
+                <span class="app-feature-number" aria-hidden="true">SHOP</span>
+                <h2 class="h4"><a th:href="@{/shops/{slug}(slug=${shop.slug})}" th:text="${shop.name}">Cửa hàng</a></h2>
+                <p th:text="${shop.description != null && !#strings.isEmpty(shop.description) ? shop.description : 'Cửa hàng đối tác trên UTEExpress.'}">Mô tả</p>
+                <a class="app-card-link" th:href="@{/shops/{slug}(slug=${shop.slug})}">Xem sản phẩm →</a>
+            </article>
+        </div>
+    </div>
+</section></body>
+</html>

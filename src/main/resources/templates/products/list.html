@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Sản phẩm | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="products-title">
+    <div class="app-page-header">
+        <span class="app-eyebrow">Danh mục công khai</span>
+        <h1 id="products-title">Sản phẩm trên UTEExpress</h1>
+        <p>Danh sách cơ bản được sắp theo thời điểm tạo mới nhất. Tìm kiếm và bộ lọc sẽ được bổ sung ở PROD-02.</p>
+    </div>
+
+    <div th:if="${#lists.isEmpty(products)}"
+         th:replace="~{fragments/components :: emptyState('Chưa có sản phẩm', 'Sản phẩm phù hợp sẽ xuất hiện tại đây.')}"></div>
+    <div class="row g-4" th:unless="${#lists.isEmpty(products)}">
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" th:each="product : ${products}">
+            <article th:replace="~{fragments/catalog :: productCard(${product})}"></article>
+        </div>
+    </div>
+</section></body>
+</html>

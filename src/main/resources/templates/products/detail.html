@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title th:text="${product.name + ' | UTEExpress'}">Sản phẩm | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="product-title">
+    <nav class="app-breadcrumbs" aria-label="Điều hướng phân cấp">
+        <ol class="breadcrumb mb-0">
+            <li class="breadcrumb-item"><a th:href="@{/}">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a th:href="@{/products}">Sản phẩm</a></li>
+            <li class="breadcrumb-item active" aria-current="page" th:text="${product.name}">Chi tiết</li>
+        </ol>
+    </nav>
+
+    <div class="row g-5 align-items-start">
+        <div class="col-12 col-lg-7">
+            <div class="app-product-gallery" th:if="${!#lists.isEmpty(product.images)}">
+                <figure th:each="image : ${product.images}" class="app-product-gallery-item">
+                    <img th:src="@{/products/{productId}/images/{imageId}/content(productId=${product.id},imageId=${image.id})}"
+                         th:alt="${image.altText != null ? image.altText : product.name}">
+                </figure>
+            </div>
+            <div class="app-product-detail-placeholder" th:if="${#lists.isEmpty(product.images)}" aria-hidden="true">UE</div>
+        </div>
+        <div class="col-12 col-lg-5">
+            <span class="app-eyebrow" th:text="${product.categoryName}">Danh mục</span>
+            <h1 id="product-title" class="app-product-detail-title" th:text="${product.name}">Tên sản phẩm</h1>
+            <p class="app-product-detail-price"
+               th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">100.000 ₫</p>
+            <p class="app-stock-note" th:classappend="${product.stock == 0} ? ' is-empty'"
+               th:text="${product.stock == 0} ? 'Hết hàng' : |Còn ${product.stock} sản phẩm|">Còn hàng</p>
+            <div class="app-product-description">
+                <h2 class="h5">Mô tả</h2>
+                <p th:if="${product.description != null && !#strings.isEmpty(product.description)}"
+                   th:text="${product.description}">Mô tả sản phẩm</p>
+                <p th:unless="${product.description != null && !#strings.isEmpty(product.description)}"
+                   class="text-secondary">Sản phẩm chưa có mô tả.</p>
+            </div>
+            <dl class="app-product-meta">
+                <div><dt>Danh mục</dt><dd><a th:href="@{/categories/{slug}(slug=${product.categorySlug})}"
+                                             th:text="${product.categoryName}">Danh mục</a></dd></div>
+                <div><dt>Cửa hàng</dt><dd><a th:href="@{/shops/{slug}(slug=${product.shopSlug})}"
+                                              th:text="${product.shopName}">Cửa hàng</a></dd></div>
+            </dl>
+            <a class="btn btn-app-primary w-100" th:href="@{/login}" href="/login" th:if="${navbarUser == null}">
+                Đăng nhập để mua hàng
+            </a>
+        </div>
+    </div>
+</section></body>
+</html>
