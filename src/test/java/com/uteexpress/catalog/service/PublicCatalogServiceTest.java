@@ -2,6 +2,8 @@ package com.uteexpress.catalog.service;
 
 import com.uteexpress.catalog.dto.ProductDetailView;
 import com.uteexpress.catalog.dto.ProductImageView;
+import com.uteexpress.catalog.dto.ProductSearchCriteria;
+import com.uteexpress.catalog.dto.ProductSort;
 import com.uteexpress.catalog.dto.PublicCategorySummary;
 import com.uteexpress.catalog.dto.PublicShopSummary;
 import com.uteexpress.catalog.repository.CatalogReadRepository;
@@ -14,6 +16,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
+import org.mockito.ArgumentCaptor;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
@@ -101,8 +104,70 @@ class PublicCatalogServiceTest {
         assertNotFound(() -> service.image(4L, 6L));
     }
 
+    @Test
+    void discoveryNormalizesCriteriaAndWhitelistsUnknownSortToNewest() {
+        ProductSearchCriteria requested = new ProductSearchCriteria();
+        requested.setQ("  Laptop  ");
+        requested.setShop("  shop-a  ");
+        requested.setSort("price desc; drop table products");
+        requested.setPage(null);
+        requested.setSize(null);
+        when(repository.countPublicProducts(org.mockito.ArgumentMatchers.any())).thenReturn(0L);
+
+        var page = service.search(requested);
+
+        ArgumentCaptor<ProductSearchCriteria> criteria = ArgumentCaptor.forClass(ProductSearchCriteria.class);
+        verify(repository).countPublicProducts(criteria.capture());
+        assertThat(criteria.getValue().getQ()).isEqualTo("Laptop");
+        assertThat(criteria.getValue().getShop()).isEqualTo("shop-a");
+        assertThat(criteria.getValue().getSort()).isEqualTo("newest");
+        assertThat(page.page()).isZero();
+        assertThat(page.size()).isEqualTo(ProductSearchCriteria.DEFAULT_SIZE);
+        verify(repository, never()).findPublicProducts(org.mockito.ArgumentMatchers.any(),
+                org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.anyInt(),
+                org.mockito.ArgumentMatchers.anyLong());
+    }
+
+    @Test
+    void discoveryBuildsBoundedDeterministicPageMetadata() {
+        ProductSearchCriteria requested = new ProductSearchCriteria();
+        requested.setPage(1);
+        requested.setSize(12);
+        requested.setSort("priceAsc");
+        when(repository.countPublicProducts(org.mockito.ArgumentMatchers.any())).thenReturn(25L);
+        when(repository.findPublicProducts(org.mockito.ArgumentMatchers.any(),
+                org.mockito.ArgumentMatchers.eq(ProductSort.PRICE_ASC),
+                org.mockito.ArgumentMatchers.eq(12), org.mockito.ArgumentMatchers.eq(12L)))
+                .thenReturn(List.of());
+
+        var page = service.search(requested);
+
+        assertThat(page.totalItems()).isEqualTo(25);
+        assertThat(page.totalPages()).isEqualTo(3);
+        assertThat(page.hasPrevious()).isTrue();
+        assertThat(page.hasNext()).isTrue();
+        assertThat(page.criteria().getSort()).isEqualTo("priceAsc");
+    }
+
+    @Test
+    void discoveryRejectsInvalidPriceAndUnboundedPageSizeAtServiceBoundary() {
+        ProductSearchCriteria invalidPrice = new ProductSearchCriteria();
+        invalidPrice.setMinPrice(new BigDecimal("1.5"));
+        assertValidation(() -> service.search(invalidPrice));
+
+        ProductSearchCriteria unbounded = new ProductSearchCriteria();
+        unbounded.setSize(49);
+        assertValidation(() -> service.search(unbounded));
+        verify(repository, never()).countPublicProducts(org.mockito.ArgumentMatchers.any());
+    }
+
     private static void assertNotFound(org.assertj.core.api.ThrowableAssert.ThrowingCallable action) {
         assertThatThrownBy(action).isInstanceOfSatisfying(ApplicationException.class,
                 error -> assertThat(error.errorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND));
+    }
+
+    private static void assertValidation(org.assertj.core.api.ThrowableAssert.ThrowingCallable action) {
+        assertThatThrownBy(action).isInstanceOfSatisfying(ApplicationException.class,
+                error -> assertThat(error.errorCode()).isEqualTo(ErrorCode.VALIDATION_FAILED));
     }
 }
