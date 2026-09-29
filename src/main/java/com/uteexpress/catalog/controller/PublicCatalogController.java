@@ -1,14 +1,19 @@
 package com.uteexpress.catalog.controller;
 
 import com.uteexpress.catalog.dto.PublicHomeView;
+import com.uteexpress.catalog.dto.ProductSearchCriteria;
+import com.uteexpress.catalog.dto.ProductSearchPage;
 import com.uteexpress.catalog.service.PublicCatalogService;
 import com.uteexpress.common.storage.StoredContent;
+import jakarta.validation.Valid;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 
 @Controller
@@ -29,8 +34,19 @@ public class PublicCatalogController {
     }
 
     @GetMapping("/products")
-    String products(Model model) {
-        model.addAttribute("products", catalog.products());
+    String products(@Valid @ModelAttribute("criteria") ProductSearchCriteria criteria,
+            BindingResult bindingResult, Model model) {
+        ProductSearchPage page;
+        if (bindingResult.hasErrors()) {
+            page = ProductSearchPage.empty(criteria);
+        } else {
+            page = catalog.search(criteria);
+            model.addAttribute("criteria", page.criteria());
+        }
+        model.addAttribute("productPage", page);
+        model.addAttribute("products", page.products());
+        model.addAttribute("shops", catalog.shops());
+        model.addAttribute("categories", catalog.categories());
         return "products/list";
     }
 

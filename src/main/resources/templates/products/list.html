@@ -1,20 +1,116 @@
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org"
       th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
-<head><title>Sản phẩm | UTEExpress</title></head>
+<head><title>Khám phá sản phẩm | UTEExpress</title></head>
 <body><section th:fragment="content" class="app-page-section" aria-labelledby="products-title">
     <div class="app-page-header">
         <span class="app-eyebrow">Danh mục công khai</span>
-        <h1 id="products-title">Sản phẩm trên UTEExpress</h1>
-        <p>Danh sách cơ bản được sắp theo thời điểm tạo mới nhất. Tìm kiếm và bộ lọc sẽ được bổ sung ở PROD-02.</p>
+        <h1 id="products-title">Khám phá sản phẩm</h1>
+        <p>Tìm sản phẩm theo tên, cửa hàng, danh mục và khoảng giá.</p>
+    </div>
+
+    <form class="app-discovery-panel" method="get" th:action="@{/products}" th:object="${criteria}">
+        <div class="row g-3 align-items-end">
+            <div class="col-12 col-lg-5">
+                <label class="form-label" for="catalog-q">Tên sản phẩm</label>
+                <input id="catalog-q" class="form-control" th:classappend="${#fields.hasErrors('q')} ? 'is-invalid'"
+                       type="search" th:field="*{q}" maxlength="120" autocomplete="off"
+                       placeholder="Ví dụ: Laptop">
+                <div class="invalid-feedback" th:errors="*{q}">Từ khóa không hợp lệ.</div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label" for="catalog-shop">Cửa hàng</label>
+                <select id="catalog-shop" class="form-select"
+                        th:classappend="${#fields.hasErrors('shop')} ? 'is-invalid'" th:field="*{shop}">
+                    <option value="">Tất cả cửa hàng</option>
+                    <option th:each="shopOption : ${shops}" th:value="${shopOption.slug}"
+                            th:text="${shopOption.name}">Cửa hàng</option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{shop}">Cửa hàng không hợp lệ.</div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-4">
+                <label class="form-label" for="catalog-category">Danh mục</label>
+                <select id="catalog-category" class="form-select"
+                        th:classappend="${#fields.hasErrors('category')} ? 'is-invalid'" th:field="*{category}">
+                    <option value="">Tất cả danh mục</option>
+                    <option th:each="categoryOption : ${categories}" th:value="${categoryOption.slug}"
+                            th:text="${categoryOption.name}">Danh mục</option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{category}">Danh mục không hợp lệ.</div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label" for="catalog-min-price">Giá tối thiểu</label>
+                <input id="catalog-min-price" class="form-control"
+                       th:classappend="${#fields.hasErrors('minPrice')} ? 'is-invalid'"
+                       type="number" min="0" step="1" inputmode="numeric" th:field="*{minPrice}">
+                <div class="invalid-feedback" th:errors="*{minPrice}">Giá không hợp lệ.</div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label" for="catalog-max-price">Giá tối đa</label>
+                <input id="catalog-max-price" class="form-control"
+                       th:classappend="${#fields.hasErrors('maxPrice')} ? 'is-invalid'"
+                       type="number" min="0" step="1" inputmode="numeric" th:field="*{maxPrice}">
+                <div class="invalid-feedback" th:errors="*{maxPrice}">Giá không hợp lệ.</div>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label" for="catalog-sort">Sắp xếp</label>
+                <select id="catalog-sort" class="form-select" th:field="*{sort}">
+                    <option value="newest">Mới nhất</option>
+                    <option value="priceAsc">Giá thấp đến cao</option>
+                    <option value="priceDesc">Giá cao đến thấp</option>
+                    <option value="bestSelling">Bán chạy</option>
+                </select>
+            </div>
+            <div class="col-12 col-sm-6 col-lg-3">
+                <label class="form-label" for="catalog-size">Sản phẩm mỗi trang</label>
+                <select id="catalog-size" class="form-select"
+                        th:classappend="${#fields.hasErrors('size')} ? 'is-invalid'" th:field="*{size}">
+                    <option value="12">12</option>
+                    <option value="24">24</option>
+                    <option value="48">48</option>
+                </select>
+                <div class="invalid-feedback" th:errors="*{size}">Kích thước trang không hợp lệ.</div>
+            </div>
+        </div>
+        <div class="alert alert-danger mt-3 mb-0" role="alert" th:if="${#fields.hasErrors('priceRangeValid')}"
+             th:errors="*{priceRangeValid}">Khoảng giá không hợp lệ.</div>
+        <div class="app-discovery-actions">
+            <button class="btn btn-app-primary" type="submit">Áp dụng</button>
+            <a class="btn btn-app-secondary" th:href="@{/products}" href="/products">Xóa bộ lọc</a>
+        </div>
+    </form>
+
+    <div class="app-discovery-summary" aria-live="polite">
+        <h2 class="h4 mb-0">Kết quả</h2>
+        <span th:text="|${productPage.totalItems} sản phẩm|">0 sản phẩm</span>
     </div>
 
     <div th:if="${#lists.isEmpty(products)}"
-         th:replace="~{fragments/components :: emptyState('Chưa có sản phẩm', 'Sản phẩm phù hợp sẽ xuất hiện tại đây.')}"></div>
+         th:replace="~{fragments/components :: emptyState('Không tìm thấy sản phẩm', 'Hãy thử thay đổi từ khóa hoặc bộ lọc.')}"></div>
     <div class="row g-4" th:unless="${#lists.isEmpty(products)}">
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3" th:each="product : ${products}">
             <article th:replace="~{fragments/catalog :: productCard(${product})}"></article>
         </div>
     </div>
+
+    <nav class="app-catalog-pagination" aria-label="Phân trang sản phẩm"
+         th:if="${productPage.totalPages > 1}">
+        <a class="btn btn-app-secondary" rel="prev" th:if="${productPage.hasPrevious}"
+           th:href="@{/products(q=${criteria.q},shop=${criteria.shop},category=${criteria.category},minPrice=${criteria.minPrice},maxPrice=${criteria.maxPrice},sort=${criteria.sort},size=${criteria.size},page=${productPage.page - 1})}">
+            Trang trước
+        </a>
+        <span class="btn btn-app-secondary disabled" aria-disabled="true" th:unless="${productPage.hasPrevious}">
+            Trang trước
+        </span>
+        <span class="app-pagination-status"
+              th:text="|Trang ${productPage.page + 1} / ${productPage.totalPages}|">Trang 1 / 1</span>
+        <a class="btn btn-app-secondary" rel="next" th:if="${productPage.hasNext}"
+           th:href="@{/products(q=${criteria.q},shop=${criteria.shop},category=${criteria.category},minPrice=${criteria.minPrice},maxPrice=${criteria.maxPrice},sort=${criteria.sort},size=${criteria.size},page=${productPage.page + 1})}">
+            Trang sau
+        </a>
+        <span class="btn btn-app-secondary disabled" aria-disabled="true" th:unless="${productPage.hasNext}">
+            Trang sau
+        </span>
+    </nav>
 </section></body>
 </html>
