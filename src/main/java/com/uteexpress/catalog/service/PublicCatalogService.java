@@ -2,6 +2,9 @@ package com.uteexpress.catalog.service;
 
 import com.uteexpress.catalog.dto.ProductCard;
 import com.uteexpress.catalog.dto.ProductDetailView;
+import com.uteexpress.catalog.dto.ProductSearchCriteria;
+import com.uteexpress.catalog.dto.ProductSearchPage;
+import com.uteexpress.catalog.dto.ProductSort;
 import com.uteexpress.catalog.dto.PublicCategorySummary;
 import com.uteexpress.catalog.dto.PublicCategoryView;
 import com.uteexpress.catalog.dto.PublicHomeView;
@@ -43,6 +46,26 @@ public class PublicCatalogService {
     @Transactional(readOnly = true)
     public List<ProductCard> products() {
         return List.copyOf(catalog.findAllPublicProducts());
+    }
+
+    @Transactional(readOnly = true)
+    public ProductSearchPage search(ProductSearchCriteria requested) {
+        ProductSearchCriteria criteria = requested == null ? new ProductSearchCriteria() : requested.normalized();
+        validate(criteria);
+        ProductSort sort = ProductSort.fromParameter(criteria.getSort());
+        long totalItems = catalog.countPublicProducts(criteria);
+        long offset = (long) criteria.getPage() * criteria.getSize();
+        List<ProductCard> products = offset >= totalItems
+                ? List.of()
+                : catalog.findPublicProducts(criteria, sort, criteria.getSize(), offset);
+        long totalPages = totalItems == 0 ? 0 : 1 + (totalItems - 1) / criteria.getSize();
+        return new ProductSearchPage(products, criteria, totalItems, criteria.getPage(), criteria.getSize(),
+                totalPages, criteria.getPage() > 0, (long) criteria.getPage() + 1 < totalPages);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PublicCategorySummary> categories() {
+        return List.copyOf(catalog.findPublicCategories());
     }
 
     @Transactional(readOnly = true)
@@ -99,6 +122,32 @@ public class PublicCatalogService {
             throw notFound();
         }
         return slug;
+    }
+
+    private static void validate(ProductSearchCriteria criteria) {
+        boolean invalid = criteria.getPage() < 0
+                || criteria.getSize() < 1 || criteria.getSize() > ProductSearchCriteria.MAX_SIZE
+                || tooLong(criteria.getQ(), 120)
+                || invalidFilterSlug(criteria.getShop())
+                || invalidFilterSlug(criteria.getCategory())
+                || invalidPrice(criteria.getMinPrice())
+                || invalidPrice(criteria.getMaxPrice())
+                || !criteria.isPriceRangeValid();
+        if (invalid) {
+            throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
+        }
+    }
+
+    private static boolean tooLong(String value, int maximum) {
+        return value != null && value.length() > maximum;
+    }
+
+    private static boolean invalidFilterSlug(String value) {
+        return value != null && (value.length() > MAX_SLUG_LENGTH || !CANONICAL_SLUG.matcher(value).matches());
+    }
+
+    private static boolean invalidPrice(java.math.BigDecimal value) {
+        return value != null && (value.signum() < 0 || value.scale() > 0 || value.precision() > 17);
     }
 
     private static ApplicationException notFound() {

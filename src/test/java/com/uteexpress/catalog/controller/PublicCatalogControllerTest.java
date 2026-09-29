@@ -3,6 +3,8 @@ package com.uteexpress.catalog.controller;
 import com.uteexpress.catalog.dto.ProductCard;
 import com.uteexpress.catalog.dto.ProductDetailView;
 import com.uteexpress.catalog.dto.ProductImageView;
+import com.uteexpress.catalog.dto.ProductSearchCriteria;
+import com.uteexpress.catalog.dto.ProductSearchPage;
 import com.uteexpress.catalog.dto.PublicCategorySummary;
 import com.uteexpress.catalog.dto.PublicCategoryView;
 import com.uteexpress.catalog.dto.PublicHomeView;
@@ -28,6 +30,9 @@ import java.util.List;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
+import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
@@ -78,11 +83,13 @@ class PublicCatalogControllerTest {
         when(catalog.home()).thenReturn(new PublicHomeView(List.of(card),
                 List.of(new PublicCategorySummary("dong-goi", "Đóng gói")),
                 List.of(new PublicShopSummary("shop-a", "Shop A", "Cửa hàng mẫu"))));
-        when(catalog.products()).thenReturn(List.of(card));
+        when(catalog.search(any())).thenReturn(new ProductSearchPage(List.of(card),
+                new ProductSearchCriteria(), 1, 0, 12, 1, false, false));
         when(catalog.product(11L)).thenReturn(detail);
         when(catalog.category("dong-goi")).thenReturn(
                 new PublicCategoryView("dong-goi", "Đóng gói", List.of(card)));
         when(catalog.shops()).thenReturn(List.of(new PublicShopSummary("shop-a", "Shop A", "Cửa hàng mẫu")));
+        when(catalog.categories()).thenReturn(List.of(new PublicCategorySummary("dong-goi", "Đóng gói")));
         when(catalog.shop("shop-a")).thenReturn(new PublicShopView("shop-a", "Shop A", "Cửa hàng mẫu", List.of(card)));
     }
 
@@ -90,7 +97,8 @@ class PublicCatalogControllerTest {
     void anonymousGuestCanBrowseEveryPublicPage() throws Exception {
         mvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"))
                 .andExpect(content().string(containsString("Hộp giao hàng")));
-        mvc.perform(get("/products")).andExpect(status().isOk()).andExpect(view().name("products/list"));
+        mvc.perform(get("/products")).andExpect(status().isOk()).andExpect(view().name("products/list"))
+                .andExpect(content().string(not(containsString("Không tìm thấy sản phẩm"))));
         mvc.perform(get("/products/11")).andExpect(status().isOk()).andExpect(view().name("products/detail"));
         mvc.perform(get("/categories/dong-goi")).andExpect(status().isOk())
                 .andExpect(view().name("categories/detail"));
@@ -133,5 +141,70 @@ class PublicCatalogControllerTest {
                 .andExpect(content().string(not(containsString("MODERATED"))));
         mvc.perform(get("/products/99/images/1/content")).andExpect(status().isNotFound())
                 .andExpect(content().string(not(containsString("storage"))));
+    }
+
+    @Test
+    void paginationLinksPreserveDiscoveryParametersAndExcludeBlockedTopRatedSort() throws Exception {
+        ProductSearchCriteria criteria = new ProductSearchCriteria();
+        criteria.setQ("Laptop");
+        criteria.setShop("shop-a");
+        criteria.setCategory("dong-goi");
+        criteria.setMinPrice(new BigDecimal("100000"));
+        criteria.setMaxPrice(new BigDecimal("500000"));
+        criteria.setSort("priceAsc");
+        criteria.setSize(12);
+        when(catalog.search(any())).thenReturn(new ProductSearchPage(List.of(card), criteria,
+                25, 0, 12, 3, false, true));
+
+        mvc.perform(get("/products")
+                        .param("q", "Laptop")
+                        .param("shop", "shop-a")
+                        .param("category", "dong-goi")
+                        .param("minPrice", "100000")
+                        .param("maxPrice", "500000")
+                        .param("sort", "priceAsc")
+                        .param("size", "12"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("q=Laptop")))
+                .andExpect(content().string(containsString("shop=shop-a")))
+                .andExpect(content().string(containsString("category=dong-goi")))
+                .andExpect(content().string(containsString("minPrice=100000")))
+                .andExpect(content().string(containsString("maxPrice=500000")))
+                .andExpect(content().string(containsString("sort=priceAsc")))
+                .andExpect(content().string(containsString("size=12")))
+                .andExpect(content().string(containsString("page=1")))
+                .andExpect(content().string(not(containsString("value=\"topRated\""))));
+    }
+
+    @Test
+    void invalidPriceAndPaginationInputsRenderValidationWithoutQueryingDatabase() throws Exception {
+        for (String[] parameters : new String[][]{
+                {"minPrice", "-1"}, {"maxPrice", "-1"}, {"minPrice", "1.5"},
+                {"size", "0"}, {"size", "-100"}, {"size", "999999999"}}) {
+            mvc.perform(get("/products").param(parameters[0], parameters[1]))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(containsString("is-invalid")));
+        }
+        mvc.perform(get("/products").param("page", "-1"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("app-empty-state")));
+        mvc.perform(get("/products").param("minPrice", "300000").param("maxPrice", "200000"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Giá tối thiểu không được lớn hơn giá tối đa.")));
+        verify(catalog, never()).search(any());
+    }
+
+    @Test
+    void searchQueryIsEscapedWhenRedisplayed() throws Exception {
+        String attack = "<script>alert(1)</script>";
+        ProductSearchCriteria criteria = new ProductSearchCriteria();
+        criteria.setQ(attack);
+        when(catalog.search(any())).thenReturn(new ProductSearchPage(List.of(), criteria,
+                0, 0, 12, 0, false, false));
+
+        mvc.perform(get("/products").param("q", attack))
+                .andExpect(status().isOk())
+                .andExpect(content().string(not(containsString("value=\"" + attack + "\""))))
+                .andExpect(content().string(containsString("&lt;script&gt;alert(1)&lt;/script&gt;")));
     }
 }

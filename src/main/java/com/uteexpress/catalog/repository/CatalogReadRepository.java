@@ -4,6 +4,8 @@ import com.uteexpress.catalog.dto.CartProductSnapshot;
 import com.uteexpress.catalog.dto.ProductCard;
 import com.uteexpress.catalog.dto.ProductDetailView;
 import com.uteexpress.catalog.dto.ProductImageView;
+import com.uteexpress.catalog.dto.ProductSearchCriteria;
+import com.uteexpress.catalog.dto.ProductSort;
 import com.uteexpress.catalog.dto.ProductSnapshot;
 import com.uteexpress.catalog.dto.PublicCategorySummary;
 import com.uteexpress.catalog.dto.PublicShopSummary;
@@ -39,6 +41,15 @@ public class CatalogReadRepository {
               ) thumbnail ON TRUE
              WHERE (%s)
             """.formatted(PUBLIC_VISIBLE);
+    private static final String SALES_JOIN = """
+              LEFT JOIN (
+                    SELECT oi.product_id, SUM(oi.quantity) AS sold_quantity
+                      FROM uteexpress.order_items oi
+                      JOIN uteexpress.orders o ON o.id = oi.order_id
+                     WHERE o.status = 'DELIVERED'
+                     GROUP BY oi.product_id
+              ) sales ON sales.product_id = p.id
+            """;
     private final ObjectProvider<NamedParameterJdbcTemplate> jdbc;
 
     public CatalogReadRepository(ObjectProvider<NamedParameterJdbcTemplate> jdbc) {
@@ -85,6 +96,49 @@ public class CatalogReadRepository {
     public List<ProductCard> findAllPublicProducts() {
         return queryCards(PUBLIC_CARD_QUERY + " ORDER BY p.created_at DESC, p.id DESC",
                 new MapSqlParameterSource());
+    }
+
+    public long countPublicProducts(ProductSearchCriteria criteria) {
+        StringBuilder query = new StringBuilder("""
+                SELECT COUNT(*)
+                  FROM uteexpress.products p
+                  JOIN uteexpress.shops s ON s.id = p.shop_id
+                  JOIN uteexpress.categories c ON c.id = p.category_id
+                 WHERE (%s)
+                """.formatted(PUBLIC_VISIBLE));
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        appendDiscoveryFilters(query, parameters, criteria);
+        Long count = jdbc.getObject().queryForObject(query.toString(), parameters, Long.class);
+        return count == null ? 0 : count;
+    }
+
+    public List<ProductCard> findPublicProducts(ProductSearchCriteria criteria, ProductSort sort,
+            int limit, long offset) {
+        StringBuilder query = new StringBuilder("""
+                SELECT p.id, p.name, p.price, p.stock,
+                       s.slug AS shop_slug, s.name AS shop_name,
+                       c.slug AS category_slug, c.name AS category_name,
+                       thumbnail.id AS thumbnail_image_id
+                  FROM uteexpress.products p
+                  JOIN uteexpress.shops s ON s.id = p.shop_id
+                  JOIN uteexpress.categories c ON c.id = p.category_id
+                  LEFT JOIN LATERAL (
+                        SELECT pi.id
+                          FROM uteexpress.product_images pi
+                         WHERE pi.product_id = p.id
+                         ORDER BY pi.position, pi.id
+                         LIMIT 1
+                  ) thumbnail ON TRUE
+                """);
+        if (sort == ProductSort.BEST_SELLING) {
+            query.append(SALES_JOIN);
+        }
+        query.append(" WHERE (").append(PUBLIC_VISIBLE).append(')');
+        MapSqlParameterSource parameters = new MapSqlParameterSource();
+        appendDiscoveryFilters(query, parameters, criteria);
+        query.append(orderBy(sort)).append(" LIMIT :limit OFFSET :offset");
+        parameters.addValue("limit", limit).addValue("offset", offset);
+        return queryCards(query.toString(), parameters);
     }
 
     public List<ProductCard> findPublicProductsByCategorySlug(String slug) {
@@ -192,5 +246,43 @@ public class CatalogReadRepository {
                 row.getLong("id"), row.getString("name"), row.getBigDecimal("price"), row.getInt("stock"),
                 row.getString("shop_slug"), row.getString("shop_name"), row.getString("category_slug"),
                 row.getString("category_name"), row.getObject("thumbnail_image_id", Long.class)));
+    }
+
+    private static void appendDiscoveryFilters(StringBuilder query, MapSqlParameterSource parameters,
+            ProductSearchCriteria criteria) {
+        if (criteria.getQ() != null) {
+            query.append(" AND p.name ILIKE :namePattern ESCAPE '\\'");
+            parameters.addValue("namePattern", "%" + escapeLike(criteria.getQ()) + "%");
+        }
+        if (criteria.getShop() != null) {
+            query.append(" AND s.slug = :shopSlug");
+            parameters.addValue("shopSlug", criteria.getShop());
+        }
+        if (criteria.getCategory() != null) {
+            query.append(" AND c.slug = :categorySlug");
+            parameters.addValue("categorySlug", criteria.getCategory());
+        }
+        if (criteria.getMinPrice() != null) {
+            query.append(" AND p.price >= :minPrice");
+            parameters.addValue("minPrice", criteria.getMinPrice());
+        }
+        if (criteria.getMaxPrice() != null) {
+            query.append(" AND p.price <= :maxPrice");
+            parameters.addValue("maxPrice", criteria.getMaxPrice());
+        }
+    }
+
+    private static String orderBy(ProductSort sort) {
+        return switch (sort) {
+            case PRICE_ASC -> " ORDER BY p.price ASC, p.id ASC";
+            case PRICE_DESC -> " ORDER BY p.price DESC, p.id DESC";
+            case BEST_SELLING -> " ORDER BY COALESCE(sales.sold_quantity, 0) DESC,"
+                    + " p.created_at DESC, p.id DESC";
+            case NEWEST -> " ORDER BY p.created_at DESC, p.id DESC";
+        };
+    }
+
+    private static String escapeLike(String value) {
+        return value.replace("\\", "\\\\").replace("%", "\\%").replace("_", "\\_");
     }
 }
