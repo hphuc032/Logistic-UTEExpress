@@ -85,8 +85,9 @@
         <span th:text="|${productPage.totalItems} sản phẩm|">0 sản phẩm</span>
     </div>
 
-    <div th:if="${#lists.isEmpty(products)}"
-         th:replace="~{fragments/components :: emptyState('Không tìm thấy sản phẩm', 'Hãy thử thay đổi từ khóa hoặc bộ lọc.')}"></div>
+    <div th:if="${#lists.isEmpty(products)}">
+        <div th:replace="~{fragments/components :: emptyState('Không tìm thấy sản phẩm', 'Hãy thử thay đổi từ khóa hoặc bộ lọc.')}"></div>
+    </div>
     <div class="row g-4" th:unless="${#lists.isEmpty(products)}">
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3" th:each="product : ${products}">
             <article th:replace="~{fragments/catalog :: productCard(${product})}"></article>

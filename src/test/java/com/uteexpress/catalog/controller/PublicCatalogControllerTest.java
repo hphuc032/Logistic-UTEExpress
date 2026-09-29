@@ -97,7 +97,8 @@ class PublicCatalogControllerTest {
     void anonymousGuestCanBrowseEveryPublicPage() throws Exception {
         mvc.perform(get("/")).andExpect(status().isOk()).andExpect(view().name("index"))
                 .andExpect(content().string(containsString("Hộp giao hàng")));
-        mvc.perform(get("/products")).andExpect(status().isOk()).andExpect(view().name("products/list"));
+        mvc.perform(get("/products")).andExpect(status().isOk()).andExpect(view().name("products/list"))
+                .andExpect(content().string(not(containsString("Không tìm thấy sản phẩm"))));
         mvc.perform(get("/products/11")).andExpect(status().isOk()).andExpect(view().name("products/detail"));
         mvc.perform(get("/categories/dong-goi")).andExpect(status().isOk())
                 .andExpect(view().name("categories/detail"));
