@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title th:text="${shop.name + ' | UTEExpress'}">Cửa hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="shop-title">
+    <div class="app-shop-hero">
+        <span class="app-eyebrow">Cửa hàng đã duyệt</span>
+        <h1 id="shop-title" th:text="${shop.name}">Cửa hàng</h1>
+        <p th:if="${shop.description != null && !#strings.isEmpty(shop.description)}" th:text="${shop.description}">Mô tả</p>
+        <p th:unless="${shop.description != null && !#strings.isEmpty(shop.description)}">Đối tác bán hàng trên UTEExpress.</p>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-end gap-3 mb-4">
+        <div><span class="app-eyebrow mb-1">Sản phẩm</span><h2 class="h3 mb-0">Danh mục của cửa hàng</h2></div>
+        <a th:href="@{/products}">Xem tất cả</a>
+    </div>
+    <div th:if="${#lists.isEmpty(shop.products)}"
+         th:replace="~{fragments/components :: emptyState('Chưa có sản phẩm', 'Cửa hàng hiện chưa có sản phẩm công khai.')}"></div>
+    <div class="row g-4" th:unless="${#lists.isEmpty(shop.products)}">
+        <div class="col-12 col-sm-6 col-lg-4 col-xl-3" th:each="product : ${shop.products}">
+            <article th:replace="~{fragments/catalog :: productCard(${product})}"></article>
+        </div>
+    </div>
+</section></body>
+</html>

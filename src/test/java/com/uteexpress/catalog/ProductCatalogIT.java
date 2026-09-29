@@ -174,13 +174,27 @@ class ProductCatalogIT {
         seeder.run(null);
 
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.products WHERE shop_id = ?",
-                Integer.class, fixture.shopId())).isEqualTo(3);
+                Integer.class, fixture.shopId())).isEqualTo(8);
         assertThat(jdbc.queryForObject("SELECT price FROM uteexpress.products WHERE id = ?",
                 BigDecimal.class, activeId)).isEqualByComparingTo("777000");
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.products WHERE status = 'ACTIVE' AND stock = 0",
                 Integer.class)).isEqualTo(1);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.products WHERE status = 'HIDDEN' AND stock > 0",
                 Integer.class)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.products WHERE status = 'MODERATED'",
+                Integer.class)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("""
+                SELECT count(*) FROM uteexpress.products p
+                JOIN uteexpress.shops s ON s.id=p.shop_id
+                JOIN uteexpress.categories c ON c.id=p.category_id
+                WHERE p.status='ACTIVE' AND s.status='APPROVED' AND c.active=TRUE
+                """, Integer.class)).isEqualTo(12);
+        assertThat(jdbc.queryForObject("""
+                SELECT count(DISTINCT p.shop_id) FROM uteexpress.products p
+                JOIN uteexpress.shops s ON s.id=p.shop_id
+                JOIN uteexpress.categories c ON c.id=p.category_id
+                WHERE p.status='ACTIVE' AND s.status='APPROVED' AND c.active=TRUE
+                """, Integer.class)).isEqualTo(2);
         assertThatThrownBy(() -> new ProductDemoSeeder(jdbc, "missing-shop", fixture.categorySlug()).run(null))
                 .isInstanceOf(IllegalStateException.class)
                 .hasMessageContaining("approved Shop");
