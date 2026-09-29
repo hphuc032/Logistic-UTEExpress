@@ -1,7 +1,10 @@
 package com.uteexpress.ui;
 
+import com.uteexpress.catalog.dto.PublicHomeView;
+import com.uteexpress.catalog.service.PublicCatalogService;
 import com.uteexpress.identity.service.RegistrationService;
 import com.uteexpress.identity.repository.UserRoleRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,8 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -32,6 +38,7 @@ class UiLayoutTest {
     @MockitoBean com.uteexpress.governance.service.ProductModerationService productModerationService;
     @MockitoBean com.uteexpress.governance.service.ShopModerationService shopModerationService;
     @MockitoBean com.uteexpress.catalog.service.ProductService productService;
+    @MockitoBean PublicCatalogService publicCatalogService;
     @MockitoBean com.uteexpress.catalog.service.InventoryService inventoryService;
     @MockitoBean com.uteexpress.governance.service.CategoryQueryService categoryQueryService;
     @MockitoBean com.uteexpress.shop.service.VendorShopQueryService vendorShopQueryService;
@@ -62,6 +69,11 @@ class UiLayoutTest {
 
     @Autowired
     private MockMvc mvc;
+
+    @BeforeEach
+    void publicHome() {
+        when(publicCatalogService.home()).thenReturn(new PublicHomeView(List.of(), List.of(), List.of()));
+    }
 
     @Test
     void landingPageRendersSharedLayoutForAnonymousUser() throws Exception {
