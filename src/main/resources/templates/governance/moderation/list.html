@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Kiểm duyệt | UTEExpress</title></head>
+<body><section th:fragment="content" aria-label="Kiểm duyệt">
+    <a th:href="@{${'/' + ops + '/dashboard'}}">← Tổng quan</a>
+    <h1 class="h2 mt-3" th:text="${kind == 'products' ? 'Kiểm duyệt sản phẩm' : 'Kiểm duyệt cửa hàng'}"></h1>
+    <p class="text-secondary">Ghi rõ lý do khi thay đổi trạng thái. Sản phẩm do người bán tự ẩn không thể khôi phục tại đây.</p>
+    <div th:if="${successMessage}" class="alert alert-success" role="status" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-warning" role="alert" th:text="${errorMessage}"></div>
+    <form method="get" th:action="@{${'/' + ops + '/' + (kind == 'products' ? 'products' : 'shops/moderation')}}" class="d-flex gap-2 my-3">
+        <label for="moderation-query" class="visually-hidden">Tên</label>
+        <input id="moderation-query" name="query" maxlength="120" th:value="${query}" class="form-control" placeholder="Tìm theo tên">
+        <button class="btn btn-primary">Tìm</button>
+    </form>
+    <p th:if="${items.empty}">Không tìm thấy kết quả.</p>
+    <div class="table-responsive"><table class="table align-middle" th:unless="${items.empty}">
+        <thead><tr><th>Tên</th><th>Trạng thái</th><th>Lý do gần nhất</th><th>Thao tác</th></tr></thead>
+        <tbody><tr th:each="item : ${items.content}">
+            <th scope="row" th:text="${item.name}"></th><td th:text="${item.status}"></td><td th:text="${item.reason}"></td>
+            <td><form method="post"
+                th:if="${(kind == 'products' and (item.status == 'ACTIVE' or item.status == 'MODERATED')) or (kind == 'shops' and (item.status == 'APPROVED' or item.status == 'SUSPENDED'))}"
+                th:action="@{${'/' + ops + '/' + kind + '/' + item.id + '/' + (kind == 'products' ? (item.status == 'ACTIVE' ? 'hide' : 'restore') : (item.status == 'APPROVED' ? 'suspend' : 'resume'))}}">
+                <input type="hidden" name="version" th:value="${item.version}">
+                <label th:for="${'reason-' + item.id}" class="visually-hidden">Lý do</label>
+                <textarea th:id="${'reason-' + item.id}" name="reason" required maxlength="1000" rows="2" class="form-control mb-2" placeholder="Lý do"></textarea>
+                <button class="btn btn-outline-primary" th:text="${kind == 'products' ? (item.status == 'ACTIVE' ? 'Ẩn sản phẩm' : 'Khôi phục') : (item.status == 'APPROVED' ? 'Tạm ngưng' : 'Mở lại')}"></button>
+            </form></td>
+        </tr></tbody>
+    </table></div>
+    <nav aria-label="Phân trang" class="d-flex gap-3">
+        <a th:if="${items.hasPrevious()}" th:href="@{${'/' + ops + '/' + (kind == 'products' ? 'products' : 'shops/moderation')}(query=${query},page=${items.number - 1})}">Trang trước</a>
+        <span th:text="${'Tổng: ' + items.totalElements}"></span>
+        <a th:if="${items.hasNext()}" th:href="@{${'/' + ops + '/' + (kind == 'products' ? 'products' : 'shops/moderation')}(query=${query},page=${items.number + 1})}">Trang sau</a>
+    </nav>
+</section></body></html>

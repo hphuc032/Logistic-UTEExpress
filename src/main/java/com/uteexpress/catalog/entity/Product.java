@@ -49,6 +49,20 @@ public class Product {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
+    @Column(name = "moderation_reason", length = 1000)
+    private String moderationReason;
+
+    public String getModerationReason() { return moderationReason; }
+
+    /** Only the versioned Ops service may invoke this transition. */
+    public void moderate(boolean restrict, String reason, Instant now) {
+        if (status != (restrict ? ProductStatus.ACTIVE : ProductStatus.MODERATED))
+            throw new IllegalStateException("Invalid moderation transition");
+        status = restrict ? ProductStatus.MODERATED : ProductStatus.ACTIVE;
+        moderationReason = reason;
+        updatedAt = now;
+    }
+
     @Version
     @Column(nullable = false)
     private Long version;

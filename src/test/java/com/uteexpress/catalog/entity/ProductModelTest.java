@@ -19,7 +19,7 @@ class ProductModelTest {
         assertThat(Product.class.getDeclaredField("status").getType()).isEqualTo(ProductStatus.class);
         assertThat(Product.class.getDeclaredField("version").isAnnotationPresent(Version.class)).isTrue();
         assertThat(ProductImage.class.getDeclaredField("productId").getType()).isEqualTo(Long.class);
-        assertThat(ProductStatus.values()).containsExactly(ProductStatus.ACTIVE, ProductStatus.HIDDEN);
+        assertThat(ProductStatus.values()).containsExactly(ProductStatus.ACTIVE, ProductStatus.HIDDEN, ProductStatus.MODERATED);
     }
 
     @Test

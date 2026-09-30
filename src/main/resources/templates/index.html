@@ -52,6 +52,57 @@
         </div>
     </section>
 
+    <section class="app-section" aria-labelledby="featured-products-title">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+            <div>
+                <span class="app-eyebrow">Sản phẩm công khai</span>
+                <h2 id="featured-products-title" class="mb-1">Khám phá sản phẩm mới</h2>
+                <p class="text-secondary mb-0">Sản phẩm từ các cửa hàng đã duyệt trên UTEExpress.</p>
+            </div>
+            <a class="btn btn-app-secondary" th:href="@{/products}" href="/products">Xem tất cả sản phẩm</a>
+        </div>
+        <div th:if="${#lists.isEmpty(products)}"
+             th:replace="~{fragments/components :: emptyState('Chưa có sản phẩm', 'Sản phẩm công khai sẽ xuất hiện tại đây.')}"></div>
+        <div class="row g-4" th:unless="${#lists.isEmpty(products)}">
+            <div class="col-12 col-sm-6 col-lg-4 col-xl-3" th:each="product : ${products}">
+                <article th:replace="~{fragments/catalog :: productCard(${product})}"></article>
+            </div>
+        </div>
+    </section>
+
+    <section id="categories" class="app-catalog-links-section" aria-labelledby="home-categories-title">
+        <div>
+            <span class="app-eyebrow">Danh mục</span>
+            <h2 id="home-categories-title">Duyệt theo nhu cầu</h2>
+        </div>
+        <div class="app-catalog-link-list" th:if="${!#lists.isEmpty(categories)}">
+            <a th:each="category : ${categories}"
+               th:href="@{/categories/{slug}(slug=${category.slug})}"
+               th:text="${category.name}">Danh mục</a>
+        </div>
+        <p class="text-secondary mb-0" th:if="${#lists.isEmpty(categories)}">Chưa có danh mục công khai.</p>
+    </section>
+
+    <section id="shops" class="app-section" aria-labelledby="home-shops-title">
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+            <div>
+                <span class="app-eyebrow">Cửa hàng đã duyệt</span>
+                <h2 id="home-shops-title">Mua sắm từ nhiều đối tác</h2>
+            </div>
+            <a th:href="@{/shops}" href="/shops">Xem danh sách cửa hàng →</a>
+        </div>
+        <div class="row g-4" th:if="${!#lists.isEmpty(shops)}">
+            <div class="col-12 col-md-6 col-lg-4" th:each="shop : ${shops}">
+                <article class="app-shop-card h-100">
+                    <span class="app-feature-number" aria-hidden="true">SHOP</span>
+                    <h3><a th:href="@{/shops/{slug}(slug=${shop.slug})}" th:text="${shop.name}">Cửa hàng</a></h3>
+                    <p th:text="${shop.description != null && !#strings.isEmpty(shop.description) ? shop.description : 'Cửa hàng đối tác trên UTEExpress.'}">Mô tả cửa hàng</p>
+                    <a class="app-card-link" th:href="@{/shops/{slug}(slug=${shop.slug})}">Xem sản phẩm →</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
     <section class="app-section" aria-labelledby="benefits-title">
         <div class="app-section-heading">
             <span class="app-eyebrow">Nền tảng dùng chung</span>

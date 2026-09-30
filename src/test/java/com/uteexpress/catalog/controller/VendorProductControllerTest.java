@@ -48,6 +48,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class VendorProductControllerTest {
     @Autowired MockMvc mvc;
+    @MockitoBean com.uteexpress.governance.service.ProductModerationService productModerationService;
+    @MockitoBean com.uteexpress.governance.service.ShopModerationService shopModerationService;
     @MockitoBean ProductService products;
     @MockitoBean InventoryService inventory;
     @MockitoBean CategoryQueryService categories;

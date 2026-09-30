@@ -21,6 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest @ActiveProfiles("test") @AutoConfigureMockMvc
 class AccountGovernanceWebTest {
+    @MockitoBean com.uteexpress.governance.service.ProductModerationService productModerationService;
+    @MockitoBean com.uteexpress.governance.service.ShopModerationService shopModerationService;
     @MockitoBean com.uteexpress.identity.service.AccountIdentityService accountIdentityService;
     @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
     @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
