@@ -57,6 +57,10 @@ public class CheckoutPageController {
     @ExceptionHandler(ApplicationException.class)
     String error(ApplicationException exception, RedirectAttributes redirect) {
         if (exception.errorCode() == ErrorCode.UNAUTHENTICATED) throw exception;
+        if (exception.detail() == ErrorCode.Detail.SINGLE_SHOP_CHECKOUT) {
+            redirect.addFlashAttribute("errorMessage", exception.publicMessage());
+            return "redirect:/user/checkout/view";
+        }
         redirect.addFlashAttribute("errorMessage", switch (exception.errorCode()) {
             case INVALID_REQUEST -> "Giỏ hàng trống hoặc chưa chọn sản phẩm. Vui lòng kiểm tra giỏ hàng.";
             case CONFLICT -> "Có sản phẩm đã chọn không còn bán hoặc vượt tồn kho. Vui lòng kiểm tra giỏ hàng.";

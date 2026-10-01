@@ -117,10 +117,12 @@ not accept a caller-provided `failed=true` or `received=true` as proof.
 
 CHK-01 buyer previews use `QuoteRequest` (address and shipping selection only), read
 selected quantities from the authenticated user's CART-02 cart, and return a
-`CheckoutPreview` containing one `CheckoutQuote` per shop plus overall totals.
-ONE SHOP = ONE prospective order; mixed shops are explicitly displayed as separate
-groups, never persisted as one order. The single-shop submit contract below remains
-unchanged. `CheckoutRequest` is reserved for the later place-order flow, not bound by
+`CheckoutPreview` containing exactly one `CheckoutQuote` in its `quote` field.
+Master Plan / T21: ONE CHECKOUT = ONE SHOP = ONE prospective order. A cart may
+contain multiple shops, but selected items across shops are rejected with CONFLICT;
+the buyer must select one shop for each checkout. One subtotal, one SHIP-00 shipping
+quote and one total are calculated. `CheckoutRequest` is reserved for the later
+place-order flow, not bound by
 the preview endpoints. Preview commission fields are unresolved (`null`), discounts
 are zero, and no promotion/voucher/payment/commission engine is invoked. CHK-02 must
 revalidate every fact; a preview is neither a reservation nor an order command.

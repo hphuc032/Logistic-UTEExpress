@@ -77,32 +77,30 @@ public class CheckoutQuoteService {
         var products = catalog.requirePurchasableProducts(ids).stream()
                 .collect(Collectors.toMap(com.uteexpress.catalog.dto.ProductSnapshot::productId, Function.identity()));
         if (!products.keySet().equals(ids)) fail(ErrorCode.RESOURCE_NOT_FOUND);
-        Map<Long, List<CheckoutQuote.ItemSnapshot>> grouped = new TreeMap<>();
+        Set<Long> shopIds = new HashSet<>();
+        List<CheckoutQuote.ItemSnapshot> items = new ArrayList<>();
         for (var item : selected) {
             var product = products.get(item.productId());
             if (product.shopId() == null || product.shopId() <= 0) fail(ErrorCode.RESOURCE_NOT_FOUND);
             BigDecimal price = Money.requireAmount(product.unitPrice());
             if (price.signum() <= 0) fail(ErrorCode.VALIDATION_FAILED);
             BigDecimal lineTotal = Money.requireAmount(price.multiply(BigDecimal.valueOf(item.quantity())));
-            grouped.computeIfAbsent(product.shopId(), ignored -> new ArrayList<>()).add(new CheckoutQuote.ItemSnapshot(
+            shopIds.add(product.shopId());
+            items.add(new CheckoutQuote.ItemSnapshot(
                     product.productId(), product.productName(), price, Money.round(BigDecimal.ZERO), price, item.quantity(), lineTotal));
         }
+        if (shopIds.size() != 1) throw new ApplicationException(ErrorCode.Detail.SINGLE_SHOP_CHECKOUT);
+        Long shopId = shopIds.iterator().next();
         var snapshot = new CheckoutQuote.AddressSnapshot(address.receiverName(), address.phone(), address.provinceCode(),
                 address.district(), address.detail());
-        List<CheckoutQuote> groups = new ArrayList<>();
-        for (var group : grouped.entrySet()) {
-            var fee = shipping.quote(new ShippingQuoteCommand(group.getKey(), request.shippingProviderId(),
-                    request.shippingServiceCode(), address.provinceCode(), address.district(), address.detail()));
-            BigDecimal subtotal = group.getValue().stream().map(CheckoutQuote.ItemSnapshot::lineTotal)
-                    .reduce(BigDecimal.ZERO, BigDecimal::add);
-            var totals = OrderTotals.calculate(subtotal, BigDecimal.ZERO, fee.shippingFee());
-            // Commission is not part of buyer preview; unresolved fields remain null, never a fabricated policy.
-            groups.add(new CheckoutQuote(group.getKey(), group.getValue(), snapshot, totals,
-                    fee.providerId(), fee.serviceCode(), null, null, null));
-        }
-        BigDecimal subtotal = groups.stream().map(group -> group.totals().subtotal()).reduce(BigDecimal.ZERO, BigDecimal::add);
-        BigDecimal fees = groups.stream().map(group -> group.totals().shippingFee()).reduce(BigDecimal.ZERO, BigDecimal::add);
-        return new CheckoutPreview(groups, OrderTotals.calculate(subtotal, BigDecimal.ZERO, fees));
+        var fee = shipping.quote(new ShippingQuoteCommand(shopId, request.shippingProviderId(),
+                request.shippingServiceCode(), address.provinceCode(), address.district(), address.detail()));
+        BigDecimal subtotal = items.stream().map(CheckoutQuote.ItemSnapshot::lineTotal)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+        var totals = OrderTotals.calculate(subtotal, BigDecimal.ZERO, fee.shippingFee());
+        // One checkout = one shop = one prospective order. Commission remains unresolved.
+        return new CheckoutPreview(new CheckoutQuote(shopId, items, snapshot, totals,
+                fee.providerId(), fee.serviceCode(), null, null, null));
     }
 
     private AddressData ownedAddress(Long addressId) {

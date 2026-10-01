@@ -1,8 +1,8 @@
 package com.uteexpress.checkout.dto;
 
-import java.util.List;
+import java.util.Objects;
 
-/** One group per prospective order. Informational only: never accepted as place-order evidence. */
-public record CheckoutPreview(List<CheckoutQuote> groups, OrderTotals totals) {
-    public CheckoutPreview { groups = List.copyOf(groups); }
+/** Exactly one shop and one prospective order. Informational only, never place-order evidence. */
+public record CheckoutPreview(CheckoutQuote quote) {
+    public CheckoutPreview { Objects.requireNonNull(quote); }
 }

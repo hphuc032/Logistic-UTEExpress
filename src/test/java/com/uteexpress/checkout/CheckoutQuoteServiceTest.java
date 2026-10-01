@@ -41,10 +41,10 @@ class CheckoutQuoteServiceTest {
 
     @Test void currentCatalogPriceAndAuthoritativeAddressAndShippingAreUsed() {
         var preview = checkout.quote(request);
-        assertThat(preview.totals().subtotal()).isEqualByComparingTo("250");
-        assertThat(preview.totals().shippingFee()).isEqualByComparingTo("17");
-        assertThat(preview.totals().grandTotal()).isEqualByComparingTo("267");
-        assertThat(preview.groups().getFirst().items().getFirst().unitPrice()).isEqualByComparingTo("125");
+        assertThat(preview.quote().totals().subtotal()).isEqualByComparingTo("250");
+        assertThat(preview.quote().totals().shippingFee()).isEqualByComparingTo("17");
+        assertThat(preview.quote().totals().grandTotal()).isEqualByComparingTo("267");
+        assertThat(preview.quote().items().getFirst().unitPrice()).isEqualByComparingTo("125");
         verify(shipping).quote(new ShippingQuoteCommand(5L, 3L, "STANDARD", "VN", "District", "DB detail"));
         verify(inventory).lockAndCheck(List.of(new StockQuantity(10L, 2)));
         verifyNoMoreInteractions(inventory);
@@ -52,17 +52,31 @@ class CheckoutQuoteServiceTest {
         verifyNoMoreInteractions(carts);
     }
 
-    @Test void groupsSameShopTogetherAndDifferentShopsSeparately() {
+    @Test void multipleSelectedShopsAreRejected() {
         cart(line(10L, 2, true, CartItemStatus.AVAILABLE), line(11L, 3, true, CartItemStatus.AVAILABLE),
                 line(12L, 1, true, CartItemStatus.AVAILABLE), line(13L, 4, false, CartItemStatus.UNAVAILABLE));
         when(catalog.requirePurchasableProducts(Set.of(10L, 11L, 12L))).thenReturn(List.of(
                 product(10L, 5L, "100"), product(11L, 5L, "20"), product(12L, 6L, "40")));
-        var preview = checkout.quote(request);
-        assertThat(preview.groups()).extracting(CheckoutQuote::shopId).containsExactly(5L, 6L);
-        assertThat(preview.groups().getFirst().items()).hasSize(2);
-        assertThat(preview.groups().getLast().items()).hasSize(1);
-        assertThat(preview.totals().grandTotal()).isEqualByComparingTo("334");
-        verify(shipping, times(2)).quote(any());
+        rejects(ErrorCode.CONFLICT);
+        verifyNoInteractions(shipping);
+        verify(inventory).lockAndCheck(List.of(new StockQuantity(10L, 2), new StockQuantity(11L, 3), new StockQuantity(12L, 1)));
+        verifyNoMoreInteractions(inventory);
+        verify(carts).getCurrentUserCart();
+        verifyNoMoreInteractions(carts);
+    }
+
+    @Test void sameShopMultipleProductsUseOneShippingQuote() {
+        cart(line(10L, 2, true, CartItemStatus.AVAILABLE), line(11L, 3, true, CartItemStatus.AVAILABLE));
+        when(catalog.requirePurchasableProducts(Set.of(10L, 11L))).thenReturn(List.of(
+                product(10L, 5L, "100"), product(11L, 5L, "20")));
+        var quote = checkout.quote(request).quote();
+        assertThat(quote.shopId()).isEqualTo(5L);
+        assertThat(quote.items()).hasSize(2);
+        assertThat(quote.totals().subtotal()).isEqualByComparingTo("260");
+        assertThat(quote.totals().shippingFee()).isEqualByComparingTo("17");
+        assertThat(quote.totals().grandTotal()).isEqualByComparingTo("277");
+        verify(shipping).quote(new ShippingQuoteCommand(5L, 3L, "STANDARD", "VN", "District", "DB detail"));
+        verifyNoMoreInteractions(shipping);
     }
 
     @Test void missingCartRejected() {
