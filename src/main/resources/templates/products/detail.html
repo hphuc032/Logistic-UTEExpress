@@ -44,6 +44,14 @@
             <a class="btn btn-app-primary w-100" th:href="@{/login}" href="/login" th:if="${navbarUser == null}">
                 Đăng nhập để mua hàng
             </a>
+            <form th:if="${buyerFeaturesAvailable and isFavorite != true}" method="post"
+                  th:action="@{/user/favorites/{id}(id=${product.id})}">
+                <button type="submit" class="btn btn-outline-primary w-100">Thêm vào yêu thích</button>
+            </form>
+            <form th:if="${buyerFeaturesAvailable and isFavorite == true}" method="post"
+                  th:action="@{/user/favorites/{id}/remove(id=${product.id})}">
+                <button type="submit" class="btn btn-outline-secondary w-100">Bỏ yêu thích</button>
+            </form>
         </div>
     </div>
 </section></body>
