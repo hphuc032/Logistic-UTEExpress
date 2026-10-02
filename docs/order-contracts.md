@@ -115,6 +115,18 @@ not accept a caller-provided `failed=true` or `received=true` as proof.
 
 ## Money and checkout
 
+CHK-01 buyer previews use `QuoteRequest` (address and shipping selection only), read
+selected quantities from the authenticated user's CART-02 cart, and return a
+`CheckoutPreview` containing exactly one `CheckoutQuote` in its `quote` field.
+Master Plan / T21: ONE CHECKOUT = ONE SHOP = ONE prospective order. A cart may
+contain multiple shops, but selected items across shops are rejected with CONFLICT;
+the buyer must select one shop for each checkout. One subtotal, one SHIP-00 shipping
+quote and one total are calculated. `CheckoutRequest` is reserved for the later
+place-order flow, not bound by
+the preview endpoints. Preview commission fields are unresolved (`null`), discounts
+are zero, and no promotion/voucher/payment/commission engine is invoked. CHK-02 must
+revalidate every fact; a preview is neither a reservation nor an order command.
+
 Currency for this contract is VND. `Money` uses BigDecimal exclusively, rounds calculated
 money to whole dong using HALF_UP, then represents it with scale 2 for NUMERIC(19,2).
 For example 10.49 → 10.00 and 10.50 → 11.00. Reject null/negative values **before** rounding,

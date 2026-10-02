@@ -51,6 +51,7 @@
             </table>
         </div></div>
         <div class="app-surface p-3 mt-3" aria-label="Tổng tiền giỏ hàng">
+            <a class="btn btn-app-primary mb-3" th:href="@{/user/checkout/view}">Checkout — xem báo giá</a>
             <p>Tạm tính sản phẩm hợp lệ: <strong th:text="${#numbers.formatDecimal(cart.subtotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
             <p>Tạm tính đã chọn: <strong th:text="${#numbers.formatDecimal(cart.selectedSubtotal(), 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
             <p class="small text-secondary mb-0">Sản phẩm không còn bán, hết hàng hoặc vượt tồn kho không được tính tiền, kể cả khi đã chọn.</p>
