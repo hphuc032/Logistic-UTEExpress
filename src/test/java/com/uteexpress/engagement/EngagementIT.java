@@ -103,6 +103,24 @@ class EngagementIT {
         assertThatThrownBy(() -> engagement.addFavorite(product)).isInstanceOf(AccessDeniedException.class);
     }
 
+    @Test void favoriteActionsAndNavigationAreVisibleOnlyToBuyerRoles() throws Exception {
+        for (String role : List.of("USER", "VENDOR")) {
+            var html = mvc.perform(get("/products/{id}", product).with(user(principal(buyer, role))))
+                    .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+            assertThat(html).contains("Thêm vào yêu thích", "href=\"/user/favorites\"",
+                    "href=\"/user/recently-viewed\"");
+        }
+        for (String role : List.of("ADMIN", "MANAGER", "SHIPPER")) {
+            var html = mvc.perform(get("/products/{id}", product).with(user(principal(buyer, role))))
+                    .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+            assertThat(html).doesNotContain("Thêm vào yêu thích", "Bỏ yêu thích",
+                    "href=\"/user/favorites\"", "href=\"/user/recently-viewed\"");
+        }
+        var guestHtml = mvc.perform(get("/products/{id}", product))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        assertThat(guestHtml).doesNotContain("Thêm vào yêu thích", "href=\"/user/favorites\"");
+    }
+
     private Long account(String unique) {
         return jdbc.queryForObject("""
                 INSERT INTO uteexpress.users (email,normalized_email,username,normalized_username,password_hash,status)

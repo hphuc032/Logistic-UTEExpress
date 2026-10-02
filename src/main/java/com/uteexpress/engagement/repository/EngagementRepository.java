@@ -52,27 +52,27 @@ public class EngagementRepository {
                 SELECT id FROM uteexpress.users WHERE id = :userId FOR UPDATE
                 """, new MapSqlParameterSource("userId", userId), Long.class);
         Timestamp latest = jdbc.getObject().queryForObject("""
-                SELECT max(viewed_at) FROM uteexpress.product_views WHERE user_id = :userId
+                SELECT max(last_viewed_at) FROM uteexpress.product_views WHERE user_id = :userId
                 """, new MapSqlParameterSource("userId", userId), Timestamp.class);
         Instant viewedAt = latest == null ? now : now.isAfter(latest.toInstant())
                 ? now : latest.toInstant().plusNanos(1000);
         jdbc.getObject().update("""
-                INSERT INTO uteexpress.product_views (user_id, product_id, viewed_at)
+                INSERT INTO uteexpress.product_views (user_id, product_id, last_viewed_at)
                 VALUES (:userId, :productId, :now)
-                ON CONFLICT (user_id, product_id) DO UPDATE SET viewed_at = EXCLUDED.viewed_at
+                ON CONFLICT (user_id, product_id) DO UPDATE SET last_viewed_at = EXCLUDED.last_viewed_at
                 """, params(userId, productId).addValue("now", Timestamp.from(viewedAt)));
         jdbc.getObject().update("""
                 DELETE FROM uteexpress.product_views
                  WHERE user_id = :userId AND product_id IN (
                        SELECT product_id FROM uteexpress.product_views WHERE user_id = :userId
-                       ORDER BY viewed_at DESC, product_id DESC OFFSET 30)
+                       ORDER BY last_viewed_at DESC, product_id DESC OFFSET 30)
                 """, new MapSqlParameterSource("userId", userId));
     }
 
     public List<SavedRow> recent(Long userId) {
         return jdbc.getObject().query("""
-                SELECT product_id, viewed_at FROM uteexpress.product_views
-                WHERE user_id = :userId ORDER BY viewed_at DESC, product_id DESC LIMIT 30
+                SELECT product_id, last_viewed_at FROM uteexpress.product_views
+                WHERE user_id = :userId ORDER BY last_viewed_at DESC, product_id DESC LIMIT 30
                 """, new MapSqlParameterSource("userId", userId),
                 (row, ignored) -> new SavedRow(row.getLong(1), row.getTimestamp(2).toInstant()));
     }

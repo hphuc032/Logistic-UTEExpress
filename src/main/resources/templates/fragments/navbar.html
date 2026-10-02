@@ -37,8 +37,8 @@
                    th:href="@{/vendor/products}" href="/vendor/products">Sản phẩm bán</a>
                 <a class="btn btn-app-ghost" th:href="@{/user/cart/view}" href="/user/cart/view">Giỏ hàng</a>
                 <a class="btn btn-app-ghost" th:href="@{/user/addresses}" href="/user/addresses">Địa chỉ</a>
-                <a class="btn btn-app-ghost" th:href="@{/user/favorites}" href="/user/favorites">Yêu thích</a>
-                <a class="btn btn-app-ghost" th:href="@{/user/recently-viewed}" href="/user/recently-viewed">Đã xem</a>
+                <a class="btn btn-app-ghost" th:if="${buyerFeaturesAvailable}" th:href="@{/user/favorites}" href="/user/favorites">Yêu thích</a>
+                <a class="btn btn-app-ghost" th:if="${buyerFeaturesAvailable}" th:href="@{/user/recently-viewed}" href="/user/recently-viewed">Đã xem</a>
                 <a class="navbar-text app-account-link" th:href="@{/user/profile}" href="/user/profile"
                    th:text="${navbarUser.displayUsername}">Tài khoản</a>
                 <form method="post" th:action="@{/logout}">
