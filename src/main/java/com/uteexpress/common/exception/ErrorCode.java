@@ -26,4 +26,17 @@ public enum ErrorCode {
     public String message() {
         return message;
     }
+
+    /** Catalogued public details; callers cannot expose arbitrary exception text. */
+    public enum Detail {
+        SINGLE_SHOP_CHECKOUT(CONFLICT,
+                "Checkout chỉ hỗ trợ sản phẩm từ một shop. Vui lòng chọn sản phẩm của một shop cho mỗi lần thanh toán.");
+
+        private final ErrorCode code;
+        private final String message;
+
+        Detail(ErrorCode code, String message) { this.code = code; this.message = message; }
+        public ErrorCode code() { return code; }
+        public String message() { return message; }
+    }
 }

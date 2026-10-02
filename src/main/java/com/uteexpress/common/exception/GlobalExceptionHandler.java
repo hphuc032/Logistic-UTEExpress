@@ -25,7 +25,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<Object> handleApplication(ApplicationException exception, HttpServletRequest request) {
         ErrorCode code = exception.errorCode();
-        return response(code.status(), code.name(), code.message(), request.getRequestURI(), List.of(), new HttpHeaders());
+        return response(code.status(), code.name(), exception.publicMessage(), request.getRequestURI(), List.of(), new HttpHeaders());
     }
 
     @ExceptionHandler(AccessDeniedException.class)

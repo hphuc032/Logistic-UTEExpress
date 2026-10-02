@@ -13,6 +13,16 @@ public class DatabaseShippingQuoteService implements ShippingQuoteService {
     public DatabaseShippingQuoteService(ShippingRateRepository rates) { this.rates=rates; }
 
     @Override @Transactional(readOnly=true)
+    public java.util.List<ShippingRateView> availableServices(String provinceCode) {
+        if (!matches(provinceCode, "[A-Z0-9][A-Z0-9_-]{0,19}")) {
+            throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
+        }
+        return rates.findAvailable(provinceCode).stream().map(rate -> new ShippingRateView(
+                rate.getId(), rate.getProvider().getId(), rate.getProvider().getName(),
+                rate.getServiceCode(), rate.getDestinationRegion(), rate.getFee(), true, rate.getVersion())).toList();
+    }
+
+    @Override @Transactional(readOnly=true)
     public ShippingQuote quote(ShippingQuoteCommand command) {
         if (command == null || command.shopId() == null || command.shopId() <= 0
                 || command.providerId() == null || command.providerId() <= 0

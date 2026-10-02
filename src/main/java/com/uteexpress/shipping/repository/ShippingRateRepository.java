@@ -8,6 +8,10 @@ import org.springframework.data.repository.query.Param;
 import java.util.Optional;
 
 public interface ShippingRateRepository extends Repository<ShippingRate,Long> {
+    @Query("select r from ShippingRate r join fetch r.provider p where p.active=true "
+            + "and r.active=true and r.destinationRegion=:region order by p.id,r.serviceCode")
+    java.util.List<ShippingRate> findAvailable(@Param("region") String region);
+
     @EntityGraph(attributePaths="provider")
     Optional<ShippingRate> findById(Long id);
     @EntityGraph(attributePaths="provider")
