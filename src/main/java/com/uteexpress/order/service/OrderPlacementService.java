@@ -12,6 +12,7 @@ import com.uteexpress.identity.service.AccountIdentityService;
 import com.uteexpress.order.dto.PlaceOrderResult;
 import com.uteexpress.order.entity.Order;
 import com.uteexpress.order.repository.*;
+import com.uteexpress.payment.service.PaymentService;
 import com.uteexpress.security.CurrentUserProvider;
 import com.uteexpress.security.service.CurrentAccountIdProvider;
 import java.math.BigDecimal;
@@ -37,13 +38,15 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     private final CheckoutQuoteService quotes;
     private final InventoryService inventory;
     private final CommissionQueryService commissions;
+    private final PaymentService payments;
     private final Clock clock;
 
     public OrderPlacementService(OrderRepository orders, OrderItemRepository items,
             OrderStatusHistoryRepository history, CurrentUserProvider users,
             PlatformTransactionManager transactionManager, ApplicationEventPublisher events, Clock clock,
             CurrentAccountIdProvider accounts, AccountIdentityService identities, CartService carts,
-            CheckoutQuoteService quotes, InventoryService inventory, CommissionQueryService commissions) {
+            CheckoutQuoteService quotes, InventoryService inventory, CommissionQueryService commissions,
+            PaymentService payments) {
         super(orders, items, history, users, transactionManager, events, clock);
         this.orders = orders;
         this.accounts = accounts;
@@ -52,6 +55,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.quotes = quotes;
         this.inventory = inventory;
         this.commissions = commissions;
+        this.payments = payments;
         this.clock = clock;
     }
 
@@ -70,7 +74,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
             if (!existing.get().getRequestHash().equals(hash)) throw new ApplicationException(ErrorCode.CONFLICT);
             return result(existing.get(), true);
         }
-        // PAY-01 and voucher engines are outside CHK-02; do not silently ignore unsupported selections.
+        // ONLINE and voucher engines remain outside this placement contract.
         if (request.paymentMethod() != CheckoutRequest.PaymentMethod.COD
                 || (request.voucherCode() != null && !request.voucherCode().isBlank())) {
             throw new ApplicationException(ErrorCode.INVALID_REQUEST);
@@ -99,6 +103,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
                 policy.ratePercent(), commission);
         inventory.decrease(selected.stream().map(line -> new StockQuantity(line.productId(), line.quantity())).toList());
         Order order = persistNew(buyer, "ORD-" + UUID.randomUUID(), key, hash, snapshot, checkoutAt);
+        payments.initializeCodForNewOrder(order.getId());
         carts.removeCheckedOutItems(selected);
         return result(order, false);
     }

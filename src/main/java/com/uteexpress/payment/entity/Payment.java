@@ -2,6 +2,7 @@ package com.uteexpress.payment.entity;
 
 import com.uteexpress.checkout.dto.CheckoutRequest;
 import com.uteexpress.checkout.dto.OrderTotals;
+import com.uteexpress.checkout.dto.Money;
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
 import com.uteexpress.payment.dto.PaymentStatus;
@@ -50,7 +51,7 @@ public class Payment {
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
 
-    /** Amount comes from trusted order totals; payment workflows are deliberately deferred. */
+    /** Amount comes from trusted order totals; no client status or amount is accepted. */
     public Payment(Long orderId, CheckoutRequest.PaymentMethod method,
             OrderTotals totals, String attemptKey, Instant at) {
         if (orderId == null || orderId <= 0 || attemptKey == null || attemptKey.isBlank()) {
@@ -64,6 +65,22 @@ public class Payment {
         this.status = PaymentStatus.UNPAID;
         this.createdAt = Objects.requireNonNull(at);
         this.updatedAt = at;
+    }
+
+    /** Internal transition. The application boundary must lock and reload authoritative order totals. */
+    public void collectCod(BigDecimal authoritativeAmount, BigDecimal collectedAmount, Instant at) {
+        BigDecimal due = Money.requireAmount(authoritativeAmount);
+        BigDecimal collected = Money.requireAmount(collectedAmount);
+        if (at == null) throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
+        if (method != CheckoutRequest.PaymentMethod.COD || status != PaymentStatus.UNPAID
+                || paidAt != null || expiredAt != null
+                || Money.requireAmount(amount).compareTo(due) != 0 || collected.compareTo(due) != 0) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+        // Every validation precedes mutation, including for direct domain callers.
+        status = PaymentStatus.PAID;
+        paidAt = at;
+        updatedAt = at;
     }
 
 }

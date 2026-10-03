@@ -97,7 +97,11 @@ class PlaceOrderIT {
         assertThat(result.grandTotal()).isEqualByComparingTo("281300");
         assertThat(count("orders")).isEqualTo(1);
         assertThat(count("order_items")).isEqualTo(2);
-        assertThat(count("payments")).isZero();
+        assertThat(count("payments")).isEqualTo(1);
+        var payment = jdbc.queryForMap("SELECT * FROM uteexpress.payments WHERE order_id=?", result.orderId());
+        assertThat(payment).containsEntry("method", "COD").containsEntry("status", "UNPAID")
+                .containsEntry("paid_at", null).containsEntry("provider_reference", null);
+        assertThat((BigDecimal) payment.get("amount")).isEqualByComparingTo(result.grandTotal());
         var order = jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", result.orderId());
         assertThat(order).containsEntry("buyer_id", buyer).containsEntry("shop_id", shop)
                 .containsEntry("detail", "Updated address").containsEntry("commission_policy_id", policy)
@@ -146,6 +150,7 @@ class PlaceOrderIT {
         assertThat(replay.createdAt()).isEqualTo(first.createdAt());
         assertThat(replay.replayed()).isTrue();
         assertThat(databaseState()).isEqualTo(before);
+        assertThat(count("payments")).isEqualTo(1);
     }
 
     @Test void changedPayloadWithSameKeyConflictsBeforeCartAccess() {
@@ -153,6 +158,17 @@ class PlaceOrderIT {
         var before = databaseState();
         rejects(() -> placement.placeOrder(request(List.of(new CheckoutRequest.Item(product, 1)))), ErrorCode.CONFLICT);
         assertThat(databaseState()).isEqualTo(before);
+    }
+
+    @Test void historicalCheckoutReplayDoesNotInferCodOrBackfillMissingPayment() {
+        var command = request();
+        var first = placement.placeOrder(command);
+        // Simulate a pre-PAY-01 order whose placement never persisted payment method/status.
+        jdbc.update("DELETE FROM uteexpress.payments WHERE order_id=?", first.orderId());
+        var before = databaseState();
+        assertThat(placement.placeOrder(command).replayed()).isTrue();
+        assertThat(databaseState()).isEqualTo(before);
+        assertThat(count("payments")).isZero();
     }
 
     @Test void checkoutKeyIsScopedToAuthenticatedBuyer() {
@@ -239,6 +255,7 @@ class PlaceOrderIT {
             assertThat(count("orders")).isEqualTo(1);
             assertThat(count("order_items")).isEqualTo(2);
             assertThat(count("order_status_history")).isEqualTo(1);
+            assertThat(count("payments")).isEqualTo(1);
             assertThat(stock(product)).isEqualTo(8);
             assertThat(carts.getCurrentUserCart().orElseThrow().items()).isEmpty();
             throw new ApplicationException(ErrorCode.CONFLICT);
@@ -270,6 +287,7 @@ class PlaceOrderIT {
         assertThat(count("orders")).isEqualTo(1);
         assertThat(count("order_items")).isEqualTo(1);
         assertThat(count("order_status_history")).isEqualTo(1);
+        assertThat(count("payments")).isEqualTo(1);
         assertThat(stock(product)).isEqualTo(8);
     }
 
@@ -373,7 +391,7 @@ class PlaceOrderIT {
         assertThat(count("orders")).isEqualTo(1);
     }
 
-    @ParameterizedTest @ValueSource(strings = {"buyerId", "userId", "shopId", "price", "subtotal", "shippingFee", "grandTotal", "commissionPolicyId", "commissionRateSnapshot", "commissionAmount", "status", "requestHash"})
+    @ParameterizedTest @ValueSource(strings = {"buyerId", "userId", "shopId", "price", "subtotal", "shippingFee", "grandTotal", "commissionPolicyId", "commissionRateSnapshot", "commissionAmount", "status", "paymentStatus", "shipperId", "collectedAmount", "requestHash"})
     void jsonCannotInjectServerOwnedValues(String field) throws Exception {
         clear();
         var before = databaseState();
@@ -423,7 +441,8 @@ class PlaceOrderIT {
                 .param("checkoutKey", key).param("addressId", Long.toString(address))
                 .param("shippingProviderId", Long.toString(provider)).param("shippingServiceCode", "STANDARD")
                 .param("paymentMethod", "COD").param("items[0].productId", Long.toString(product)).param("items[0].quantity", "2")
-                .param("buyerId", Long.toString(other)).param("grandTotal", "1").param("commissionAmount", "0");
+                .param("buyerId", Long.toString(other)).param("grandTotal", "1").param("commissionAmount", "0")
+                .param("paymentStatus", "PAID").param("collectedAmount", "267000").param("shipperId", Long.toString(buyer));
         var response = mvc.perform(submit).andExpect(redirectedUrl("/user/checkout/view"))
                 .andExpect(flash().attributeExists("placedOrder")).andReturn();
         var receipt = (PlaceOrderResult) response.getFlashMap().get("placedOrder");
@@ -433,6 +452,9 @@ class PlaceOrderIT {
         mvc.perform(submit).andExpect(redirectedUrl("/user/checkout/view"))
                 .andExpect(flash().attributeExists("placedOrder"));
         assertThat(count("orders")).isEqualTo(1);
+        assertThat(count("payments")).isEqualTo(1);
+        assertThat(jdbc.queryForMap("SELECT method,status,amount FROM uteexpress.payments"))
+                .containsEntry("method", "COD").containsEntry("status", "UNPAID");
         assertThat(stock(product)).isEqualTo(8);
     }
 
