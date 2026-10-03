@@ -42,6 +42,7 @@ class OrderDatabaseIT {
     @Autowired OrderStatusHistoryRepository history;
     @Autowired PaymentRepository payments;
     Long buyer;
+    Long commissionPolicy;
     final List<Object> events = new ArrayList<>();
     static final Instant NOW = Instant.parse("2026-09-23T00:00:00Z");
 
@@ -56,6 +57,10 @@ class OrderDatabaseIT {
                 (email,normalized_email,username,normalized_username,password_hash,status)
                 VALUES (?,?,?,?, 'test-only-password', 'ACTIVE') RETURNING id
                 """, Long.class, key + "@example.test", key + "@example.test", key, key);
+        commissionPolicy = jdbc.queryForObject("""
+                INSERT INTO uteexpress.commission_policies (rate_percent,effective_from,created_by)
+                VALUES (10.1234, ?, ?) RETURNING id
+                """, Long.class, java.sql.Timestamp.from(NOW.minusSeconds(1).plusNanos(buyer * 1000)), buyer);
     }
 
     CheckoutQuote quote() {
@@ -64,7 +69,7 @@ class OrderDatabaseIT {
                 2, new BigDecimal("20.00"))),
                 new CheckoutQuote.AddressSnapshot("Receiver", "0900000000", "79", "District", "Detail"),
                 OrderTotals.calculate(new BigDecimal("20.00"), new BigDecimal("3.00"), new BigDecimal("5.00")),
-                903L, "Standard", 904L, new BigDecimal("10.123456"), new BigDecimal("2.00"));
+                903L, "Standard", commissionPolicy, new BigDecimal("10.1234"), new BigDecimal("2.00"));
     }
 
     // Controlled trusted guards exercise persistence, not production authorization.
@@ -91,7 +96,7 @@ class OrderDatabaseIT {
         return new OrderTransitionCommand(order.getId(), OrderStatus.NEW, order.getVersion(), OrderAction.CONFIRM, null);
     }
 
-    @Test void flywayAndHibernateValidateRealSchemaWithExactlyFiveForeignKeys() {
+    @Test void flywayAndHibernateValidateRealSchemaWithCommissionForeignKey() {
         assertThat(flyway.validateWithResult().validationSuccessful).isTrue();
         assertThat(flyway.info().pending()).isEmpty();
         assertThat(flyway.migrate().migrationsExecuted).isZero();
@@ -100,14 +105,14 @@ class OrderDatabaseIT {
                 SELECT conname FROM pg_constraint WHERE contype='f' AND conrelid IN
                 ('uteexpress.orders'::regclass,'uteexpress.order_items'::regclass,
                  'uteexpress.payments'::regclass,'uteexpress.order_status_history'::regclass)
-                """, String.class)).containsExactlyInAnyOrder("fk_orders_buyer_id", "fk_order_items_order_id",
+                """, String.class)).containsExactlyInAnyOrder("fk_orders_buyer_id", "fk_orders_commission_policy_id", "fk_order_items_order_id",
                 "fk_payments_order_id", "fk_order_status_history_order_id", "fk_order_status_history_actor_id");
         for (String availableParent : List.of("shops", "products")) {
             assertThat(jdbc.queryForObject("SELECT to_regclass(?)::text", String.class,
                     "uteexpress." + availableParent)).isEqualTo("uteexpress." + availableParent);
         }
         assertThat(jdbc.queryForObject("SELECT to_regclass(?)::text", String.class,
-                "uteexpress.commission_policies")).isNull();
+                "uteexpress.commission_policies")).isEqualTo("uteexpress.commission_policies");
     }
 
     @Test void persistsAllEntitiesSnapshotsAndVersionAndPublishesAfterCommit() {
@@ -125,7 +130,7 @@ class OrderDatabaseIT {
         Order stored = orders.findById(order.getId()).orElseThrow();
         assertThat(stored.getVersion()).isEqualTo(1L);
         assertThat(stored.getStatus()).isEqualTo(OrderStatus.CONFIRMED);
-        assertThat(stored.getCommissionRateSnapshot()).isEqualByComparingTo("10.123456");
+        assertThat(stored.getCommissionRateSnapshot()).isEqualByComparingTo("10.1234");
         assertThat(history.count()).isEqualTo(2);
         assertThat(events).hasSize(1);
         history.saveAndFlush(new OrderStatusHistory(order.getId(), OrderStatus.CONFIRMED,
