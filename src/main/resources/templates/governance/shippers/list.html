@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Shipper đang hoạt động | UTEExpress</title></head>
+<body><section th:fragment="content" aria-label="Shipper đang hoạt động">
+    <h1>Shipper đang hoạt động</h1>
+    <p th:if="${shippers.empty}">Chưa có shipper đang hoạt động.</p>
+    <table th:unless="${shippers.empty}" class="table">
+        <thead><tr><th>ID</th><th>Tên đăng nhập</th><th>Họ tên</th></tr></thead>
+        <tbody><tr th:each="shipper : ${shippers}">
+            <td th:text="${shipper.id}"></td>
+            <td><a th:href="@{${'/' + ops + '/accounts/' + shipper.id}}" th:text="${shipper.username}"></a></td>
+            <td th:text="${shipper.fullName ?: 'Chưa cập nhật'}"></td>
+        </tr></tbody>
+    </table>
+</section></body></html>

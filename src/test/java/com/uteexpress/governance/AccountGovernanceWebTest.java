@@ -44,6 +44,7 @@ class AccountGovernanceWebTest {
     @MockitoBean com.uteexpress.governance.service.CategoryQueryService categoryQueryService;
     @MockitoBean com.uteexpress.shop.service.VendorShopQueryService vendorShopQueryService;
     @MockitoBean AccountGovernanceService accounts;
+    @MockitoBean com.uteexpress.governance.service.RoleGovernanceService roleGovernance;
     @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
     @Autowired MockMvc mvc;
 
@@ -51,6 +52,7 @@ class AccountGovernanceWebTest {
         var account = new AccountView(7L, "buyer", "buyer@example.test", "Buyer", "0123", "ACTIVE", 2L);
         when(accounts.search("", 0)).thenReturn(new PageImpl<>(List.of(account)));
         when(accounts.get(7L)).thenReturn(account);
+        when(roleGovernance.rolesFor(7L)).thenReturn(java.util.Set.of("USER"));
         mvc.perform(get("/manager/accounts").with(user("manager").roles("MANAGER")))
                 .andExpect(status().isOk()).andExpect(content().string(containsString("buyer@example.test")));
         mvc.perform(get("/manager/accounts/7").with(user("manager").roles("MANAGER")))
