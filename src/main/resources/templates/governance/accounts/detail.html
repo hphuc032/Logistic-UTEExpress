@@ -10,6 +10,19 @@
         <dt class="col-sm-3">Điện thoại</dt><dd class="col-sm-9" th:text="${account.phone ?: 'Chưa cập nhật'}"></dd>
         <dt class="col-sm-3">Trạng thái</dt><dd class="col-sm-9" th:text="${account.status}"></dd>
     </dl>
+    <div class="mb-3">
+        <strong>Vai trò:</strong> <span th:text="${#strings.listJoin(roles, ', ')}">USER</span>
+    </div>
+    <div th:if="${ops == 'admin' and account.status == 'ACTIVE'}" class="mb-4">
+        <h2 class="h5">Quản lý vai trò</h2>
+        <div th:each="role : ${managedRoles}" class="mb-2">
+            <form method="post" th:action="@{${'/admin/accounts/' + account.id + '/roles/' + role.name() + (roles.contains(role.name()) ? '/revoke' : '/grant')}}">
+                <input type="hidden" name="version" th:value="${account.version}">
+                <button class="btn btn-outline-secondary" type="submit"
+                        th:text="${(roles.contains(role.name()) ? 'Thu hồi ' : 'Gán ') + role.name()}"></button>
+            </form>
+        </div>
+    </div>
     <div th:if="${ops == 'admin' and (account.status == 'ACTIVE' or account.status == 'LOCKED')}">
         <form method="post" th:action="@{${'/admin/accounts/' + account.id + (account.status == 'ACTIVE' ? '/lock' : '/unlock')}}">
             <input type="hidden" name="version" th:value="${account.version}">

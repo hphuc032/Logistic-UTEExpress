@@ -19,12 +19,14 @@ public class AccountGovernanceService {
     private final IdentityAccountGovernanceService identities;
     private final AuditLogService audit;
     private final CurrentAccountIdProvider currentAccount;
+    private final RoleGovernanceService roles;
 
     public AccountGovernanceService(IdentityAccountGovernanceService identities,
-            AuditLogService audit, CurrentAccountIdProvider currentAccount) {
+            AuditLogService audit, CurrentAccountIdProvider currentAccount, RoleGovernanceService roles) {
         this.identities = identities;
         this.audit = audit;
         this.currentAccount = currentAccount;
+        this.roles = roles;
     }
 
     @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority(), T(com.uteexpress.security.RoleCode).MANAGER.authority())")
@@ -43,6 +45,7 @@ public class AccountGovernanceService {
         Long actor = currentAccount.currentAccountId().filter(value -> value > 0)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));
         if (locked && actor.equals(id)) throw new ApplicationException(ErrorCode.CONFLICT);
+        if (locked) roles.guardLastAdminBeforeLock(id);
         AccountGovernanceData before = identities.get(id);
         AccountGovernanceData after = identities.setLocked(id, expectedVersion, locked);
         audit.append(new AuditEntry(actor, locked ? "ACCOUNT_LOCKED" : "ACCOUNT_UNLOCKED",
