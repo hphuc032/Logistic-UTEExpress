@@ -42,6 +42,7 @@ class ShopApprovalWebTest {
     @MockitoBean com.uteexpress.governance.service.AccountGovernanceService accountGovernanceService;
     @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
     @MockitoBean com.uteexpress.cart.service.CartService cartService;
+    @MockitoBean com.uteexpress.order.service.OrderPlacementService orderPlacementService;
     @MockitoBean com.uteexpress.identity.service.PasswordResetService passwordResetService;
     @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
     @MockitoBean ShopApprovalService approvals;

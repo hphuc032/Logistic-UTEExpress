@@ -53,6 +53,7 @@ class SecurityFoundationTest {
     @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
     @MockitoBean com.uteexpress.account.service.AddressService addressService;
     @MockitoBean com.uteexpress.cart.service.CartService cartService;
+    @MockitoBean com.uteexpress.order.service.OrderPlacementService orderPlacementService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
     @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;

@@ -74,7 +74,7 @@ public class CheckoutQuoteService {
         var ids = selected.stream().map(CartItemView::productId).collect(Collectors.toSet());
         if (ids.size() != selected.size()) fail(ErrorCode.VALIDATION_FAILED);
         inventory.lockAndCheck(selected.stream().map(item -> new StockQuantity(item.productId(), item.quantity())).toList());
-        var products = catalog.requirePurchasableProducts(ids).stream()
+        var products = catalog.requirePurchasableProductsForCheckout(ids).stream()
                 .collect(Collectors.toMap(com.uteexpress.catalog.dto.ProductSnapshot::productId, Function.identity()));
         if (!products.keySet().equals(ids)) fail(ErrorCode.RESOURCE_NOT_FOUND);
         Set<Long> shopIds = new HashSet<>();

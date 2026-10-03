@@ -57,6 +57,7 @@ class VendorProductControllerTest {
     @MockitoBean com.uteexpress.account.service.AddressService addressService;
     @MockitoBean com.uteexpress.account.service.ProfileService profiles;
     @MockitoBean com.uteexpress.cart.service.CartService cartService;
+    @MockitoBean com.uteexpress.order.service.OrderPlacementService orderPlacementService;
     @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
