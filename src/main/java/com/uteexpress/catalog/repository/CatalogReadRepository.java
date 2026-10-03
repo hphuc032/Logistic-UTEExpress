@@ -21,6 +21,7 @@ import java.util.Set;
 /** Catalog-owned read model over product availability; exposes no foreign entity. */
 @Repository
 public class CatalogReadRepository {
+    public record CheckoutAvailabilityKey(Long productId, Long shopId, Long categoryId) { }
     /** One authoritative predicate shared by commerce and every public read. */
     private static final String PUBLIC_VISIBLE =
             "p.status = 'ACTIVE' AND s.status = 'APPROVED' AND c.active = TRUE";
@@ -72,6 +73,17 @@ public class CatalogReadRepository {
                         row.getString("name"),
                         row.getBigDecimal("price"),
                         row.getLong("version")));
+    }
+
+    public List<CheckoutAvailabilityKey> findCheckoutAvailabilityKeys(Set<Long> productIds) {
+        return jdbc.getObject().query("""
+                SELECT p.id, p.shop_id, p.category_id
+                  FROM uteexpress.products p
+                 WHERE p.id IN (:productIds)
+                 ORDER BY p.id
+                """, new MapSqlParameterSource("productIds", productIds),
+                (row, ignored) -> new CheckoutAvailabilityKey(row.getLong("id"),
+                        row.getLong("shop_id"), row.getLong("category_id")));
     }
 
     public List<CartProductSnapshot> findCartProducts(Set<Long> productIds) {

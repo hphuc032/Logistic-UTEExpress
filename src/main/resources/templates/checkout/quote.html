@@ -9,6 +9,12 @@
         <p>Đây là báo giá tạm thời, chưa đặt hàng và chưa giữ hàng. Giá và tồn kho sẽ được kiểm tra lại khi đặt hàng.</p>
         <a class="btn btn-app-secondary" th:href="@{/user/cart/view}">Kiểm tra giỏ hàng</a>
     </div>
+    <div th:if="${placedOrder != null}" class="app-surface p-3 mb-3" role="status">
+        <h2 class="h4">Đặt hàng thành công</h2>
+        <p>Mã đơn: <strong th:text="${placedOrder.orderCode}"></strong></p>
+        <p>Trạng thái: <span th:text="${placedOrder.status}"></span></p>
+        <p>Tổng cộng: <strong th:text="${#numbers.formatDecimal(placedOrder.grandTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
+    </div>
     <div th:if="${#lists.isEmpty(addresses)}" class="app-surface p-3">
         <p>Bạn chưa có địa chỉ nhận hàng.</p><a th:href="@{/user/addresses}">Quản lý địa chỉ</a>
     </div>
@@ -51,6 +57,19 @@
             <p>Tiền sản phẩm: <strong th:text="${#numbers.formatDecimal(quote.totals.subtotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
             <p>Phí vận chuyển: <strong th:text="${#numbers.formatDecimal(quote.totals.shippingFee, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
             <p>Tổng cộng: <strong th:text="${#numbers.formatDecimal(quote.totals.grandTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
+            <form method="post" th:action="@{/user/checkout/view/place-order}">
+                <input type="hidden" name="checkoutKey" th:value="${placeOrderKey}">
+                <input type="hidden" name="addressId" th:value="${addressId}">
+                <input type="hidden" name="shippingProviderId" th:value="${quote.shippingProviderId}">
+                <input type="hidden" name="shippingServiceCode" th:value="${quote.shippingServiceSnapshot}">
+                <input type="hidden" name="paymentMethod" value="COD">
+                <th:block th:each="item, iteration : ${quote.items}">
+                    <input type="hidden" th:name="|items[${iteration.index}].productId|" th:value="${item.productId}">
+                    <input type="hidden" th:name="|items[${iteration.index}].quantity|" th:value="${item.quantity}">
+                </th:block>
+                <p>Thanh toán khi nhận hàng (COD). Giá, phí vận chuyển và tồn kho được kiểm tra lại khi đặt hàng.</p>
+                <button type="submit" class="btn btn-app-primary">Đặt hàng</button>
+            </form>
         </section>
     </div>
 </section></body></html>

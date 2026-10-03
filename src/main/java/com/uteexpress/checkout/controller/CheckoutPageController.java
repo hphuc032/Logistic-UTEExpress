@@ -51,6 +51,7 @@ public class CheckoutPageController {
             return "redirect:/user/checkout/view";
         }
         model.addAttribute("preview", checkout.quote(request));
+        model.addAttribute("placeOrderKey", java.util.UUID.randomUUID().toString());
         return view(request.addressId(), model);
     }
 

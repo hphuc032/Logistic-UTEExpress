@@ -66,7 +66,8 @@ public class CategoryService {
     @Transactional
     public void setActive(Long id, Long expectedVersion, boolean active) {
         Long actor = actor();
-        Category category = require(id);
+        Category category = categories.findByIdForUpdate(id)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND));
         checkVersion(category, expectedVersion);
         if (category.isActive() == active) return;
         Map<String, String> before = state(category);

@@ -12,4 +12,7 @@ public interface CatalogQueryService {
 
     /** All requested IDs must resolve and be purchasable; otherwise fail, never return partial prices. */
     List<ProductSnapshot> requirePurchasableProducts(Set<Long> productIds);
+
+    /** Lock the referenced shop/category availability rows, then re-read purchasable product snapshots. */
+    List<ProductSnapshot> requirePurchasableProductsForCheckout(Set<Long> productIds);
 }

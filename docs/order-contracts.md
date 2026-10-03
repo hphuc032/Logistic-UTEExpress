@@ -203,6 +203,43 @@ refund amount with successful refund evidence, never invent or accept a browser 
 
 ## Checkout idempotency
 
+CHK-02 implements this contract in `order.service.OrderPlacementService`, retaining
+the existing Order -> Checkout DTO dependency direction. Placement controllers own
+`POST /user/checkout/place-order` (JSON) and `/user/checkout/view/place-order` (form).
+They accept `CheckoutRequest` selections only. For a new checkout, its product/quantity
+set must exactly equal the authenticated buyer's locked, selected cart lines; stale or
+partial selections conflict. All prices, availability, address and shipping are checked
+again through CHK-01 in the placement transaction.
+
+The current increment supports COD selection without creating a Payment attempt.
+ONLINE and nonblank vouchers are rejected as INVALID_REQUEST because PAY-01 and
+promotion/voucher engines are outside CHK-02. Product and order discounts remain zero.
+No Shipment or later order-management workflow is created. The placement receipt has
+order ID/code, current status, grand total, creation time and a replay flag.
+
+Canonical hash v1 uses SHA-256 over UTF-8, length-prefixed fields: item count, ascending
+product-ID/quantity pairs, address ID, provider ID, exact validated service code, payment
+method enum name, and stripped voucher code (null/blank becomes empty). Duplicate product
+IDs are invalid. Key whitespace is stripped; the key itself is not a hash field. Key
+length is at most the existing VARCHAR(255). No client hash, totals or identity are accepted.
+
+The active buyer row is locked through AccountIdentityService before the buyer/key
+lookup. This serializes same-buyer placement across application instances using the
+existing database lock, including retries after cart cleanup. The existing database
+UNIQUE constraint remains unchanged. A matching committed hash returns immediately,
+without re-reading address/cart/catalog/shipping/policy or changing stock/cart. Access
+is reauthorized against the current active account on every call. A different valid
+business payload conflicts even if the current cart is empty.
+
+Creation locks the buyer, then cart, then products in ascending ID order through the
+existing InventoryService. Cart mutations use the same cart lock. A single REQUIRED
+transaction re-quotes, resolves commission, decreases the locked stock, persists NEW
+and immutable item snapshots plus initial history through lifecycle authority, and
+removes only the verified cart item IDs. Any failure rolls all effects back. One
+server checkoutAt (UTC, PostgreSQL microsecond precision) is shared by the effective
+commission lookup and Order/history timestamps. The calculation and snapshot fields
+below are unchanged. Later lifecycle operations retain their fail-closed guards.
+
 `CheckoutRequest.checkoutKey` is always scoped to the authenticated buyer, resolved
 server-side through CurrentUserProvider and the identity boundary. The key is not proof
 of ownership. Future persistence must enforce `UNIQUE (buyer_id, checkout_key)`.

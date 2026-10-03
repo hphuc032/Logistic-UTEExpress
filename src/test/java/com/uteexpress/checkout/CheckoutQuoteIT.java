@@ -249,16 +249,19 @@ class CheckoutQuoteIT {
         assertThat(shipping.availableServices("UNSUPPORTED")).isEmpty();
         assertThatThrownBy(() -> shipping.availableServices("bad region")).isInstanceOf(ApplicationException.class);
     }
-    @Test void htmlEscapesProductAndAddressAndHasOnlyPreviewActions() throws Exception {
+    @Test void htmlEscapesProductAndAddressAndOffersPlacementWithoutCreatingAnOrder() throws Exception {
         jdbc.update("UPDATE uteexpress.products SET name='<script>bad()</script>' WHERE id=?", product);
         jdbc.update("UPDATE uteexpress.addresses SET detail='<script>address()</script>' WHERE id=?", address);
+        var before = databaseState();
         clear();
         var result = mvc.perform(post("/user/checkout/view").with(user(principal(buyer))).with(csrf())
                         .param("addressId", Long.toString(address)).param("shippingProviderId", Long.toString(provider))
                         .param("shippingServiceCode", "STANDARD")).andExpect(status().isOk()).andReturn();
         assertThat(result.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8))
                 .contains("&lt;script&gt;", "table-responsive", "name=\"_csrf\"")
-                .doesNotContain("<script>bad()", "<script>address()", "place-order");
+                .contains("/user/checkout/view/place-order", "name=\"checkoutKey\"")
+                .doesNotContain("<script>bad()", "<script>address()");
+        assertThat(databaseState()).isEqualTo(before);
     }
     @Test void emptyAndBusinessErrorPagesRenderSafely() throws Exception {
         jdbc.update("DELETE FROM uteexpress.addresses WHERE user_id=?", other);

@@ -35,7 +35,7 @@ class CheckoutQuoteServiceTest {
         when(addresses.requireOwnedAddress(1L, 2L)).thenReturn(new AddressData(2L, "Receiver", "0900000000", "VN",
                 "District", "DB detail", true));
         cart(line(10L, 2, true, CartItemStatus.AVAILABLE));
-        when(catalog.requirePurchasableProducts(anySet())).thenReturn(List.of(product(10L, 5L, "125")));
+        when(catalog.requirePurchasableProductsForCheckout(anySet())).thenReturn(List.of(product(10L, 5L, "125")));
         when(shipping.quote(any())).thenReturn(new ShippingQuote(3L, "STANDARD", new BigDecimal("17"), 0L));
     }
 
@@ -55,7 +55,7 @@ class CheckoutQuoteServiceTest {
     @Test void multipleSelectedShopsAreRejected() {
         cart(line(10L, 2, true, CartItemStatus.AVAILABLE), line(11L, 3, true, CartItemStatus.AVAILABLE),
                 line(12L, 1, true, CartItemStatus.AVAILABLE), line(13L, 4, false, CartItemStatus.UNAVAILABLE));
-        when(catalog.requirePurchasableProducts(Set.of(10L, 11L, 12L))).thenReturn(List.of(
+        when(catalog.requirePurchasableProductsForCheckout(Set.of(10L, 11L, 12L))).thenReturn(List.of(
                 product(10L, 5L, "100"), product(11L, 5L, "20"), product(12L, 6L, "40")));
         rejects(ErrorCode.CONFLICT);
         verifyNoInteractions(shipping);
@@ -67,7 +67,7 @@ class CheckoutQuoteServiceTest {
 
     @Test void sameShopMultipleProductsUseOneShippingQuote() {
         cart(line(10L, 2, true, CartItemStatus.AVAILABLE), line(11L, 3, true, CartItemStatus.AVAILABLE));
-        when(catalog.requirePurchasableProducts(Set.of(10L, 11L))).thenReturn(List.of(
+        when(catalog.requirePurchasableProductsForCheckout(Set.of(10L, 11L))).thenReturn(List.of(
                 product(10L, 5L, "100"), product(11L, 5L, "20")));
         var quote = checkout.quote(request).quote();
         assertThat(quote.shopId()).isEqualTo(5L);
@@ -105,16 +105,16 @@ class CheckoutQuoteServiceTest {
         rejects(ErrorCode.CONFLICT); verifyNoInteractions(shipping);
     }
     @Test void missingProductDoesNotProducePartialQuote() {
-        when(catalog.requirePurchasableProducts(anySet())).thenReturn(List.of());
+        when(catalog.requirePurchasableProductsForCheckout(anySet())).thenReturn(List.of());
         rejects(ErrorCode.RESOURCE_NOT_FOUND);
     }
     @Test void unavailableCatalogBatchFails() {
-        when(catalog.requirePurchasableProducts(anySet())).thenThrow(new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND));
+        when(catalog.requirePurchasableProductsForCheckout(anySet())).thenThrow(new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND));
         rejects(ErrorCode.RESOURCE_NOT_FOUND);
     }
     @ParameterizedTest @ValueSource(strings = {"0", "-1", "0.5", "99999999999999999"})
     void invalidOrOverflowingMoneyFails(String price) {
-        when(catalog.requirePurchasableProducts(anySet())).thenReturn(List.of(product(10L, 5L, price)));
+        when(catalog.requirePurchasableProductsForCheckout(anySet())).thenReturn(List.of(product(10L, 5L, price)));
         rejects(ErrorCode.VALIDATION_FAILED);
     }
     @Test void noShippingFallback() {
