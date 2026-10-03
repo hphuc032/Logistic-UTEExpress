@@ -85,10 +85,19 @@ class RoleGovernanceIT {
         assertThat(accounts.get(admin).status()).isEqualTo("ACTIVE");
     }
 
-    @Test void restrictedRolesAndManagerWriteAreDenied() {
+    @Test void userRoleCanBeGrantedAndRevokedWhileVendorStaysRestricted() {
         long version = accounts.get(buyer).version();
-        assertThatThrownBy(() -> ManagedRole.valueOf("USER")).isInstanceOf(IllegalArgumentException.class);
+        roles.change(buyer, version, ManagedRole.USER, true);
+        assertThat(roles.rolesFor(buyer)).contains("USER");
+        assertThat(tokenVersion(buyer)).isEqualTo(1);
+        roles.change(buyer, accounts.get(buyer).version(), ManagedRole.USER, false);
+        assertThat(roles.rolesFor(buyer)).doesNotContain("USER");
+        assertThat(tokenVersion(buyer)).isEqualTo(2);
         assertThatThrownBy(() -> ManagedRole.valueOf("VENDOR")).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @Test void managerWriteIsDenied() {
+        long version = accounts.get(buyer).version();
         authenticate(admin, "MANAGER");
         assertThatThrownBy(() -> roles.change(buyer, version, ManagedRole.SHIPPER, true))
                 .isInstanceOf(AccessDeniedException.class);
@@ -114,7 +123,9 @@ class RoleGovernanceIT {
         mvc.perform(post(path).with(user(principal(admin, "ADMIN"))).with(csrf())
                         .param("version", version)).andExpect(status().is3xxRedirection());
         mvc.perform(get("/admin/accounts/" + buyer).with(user(principal(admin, "ADMIN"))))
-                .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("SHIPPER")));
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("Gán USER")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("SHIPPER")));
         mvc.perform(get("/manager/shippers").with(user(principal(admin, "MANAGER"))))
                 .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("Shipper đang hoạt động")));
     }

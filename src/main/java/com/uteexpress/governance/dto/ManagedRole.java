@@ -1,6 +1,6 @@
 package com.uteexpress.governance.dto;
 
-/** Ops-managed subset of the stable role codes; USER and VENDOR have separate owners. */
+/** Ops-managed subset of the stable role codes; VENDOR stays with shop approval. */
 public enum ManagedRole {
-    ADMIN, MANAGER, SHIPPER
+    USER, ADMIN, MANAGER, SHIPPER
 }
