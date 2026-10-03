@@ -15,6 +15,7 @@ import com.uteexpress.security.service.CurrentAccountIdProvider;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.annotation.Propagation;
 
 import java.math.BigDecimal;
 import java.time.Clock;
@@ -54,6 +55,32 @@ public class CartService {
     public Optional<CartView> getCurrentUserCart() {
         Long owner = ownerId();
         return carts.findByUserId(owner).map(cart -> view(cart, owner));
+    }
+
+    /** CHK-02: retain the same cart lock used by every cart mutation until checkout commits. */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public List<CartItemView> lockSelectedItemsForCheckout() {
+        Long owner = ownerId();
+        Cart cart = carts.lockByUserId(owner)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.INVALID_REQUEST));
+        return view(cart, owner).items().stream().filter(CartItemView::selected).toList();
+    }
+
+    /** Internal checkout boundary: remove only the exact locked lines represented by the order. */
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void removeCheckedOutItems(List<CartItemView> checkedOut) {
+        if (checkedOut == null || checkedOut.isEmpty()) throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        Long owner = ownerId();
+        Cart cart = lockExisting(owner);
+        List<CartItem> removed = checkedOut.stream().map(line -> {
+            CartItem item = ownedItem(line.id(), owner);
+            if (!item.isSelected() || !item.getProductId().equals(line.productId())
+                    || item.getQuantity() != line.quantity()) throw new ApplicationException(ErrorCode.CONFLICT);
+            return item;
+        }).toList();
+        items.deleteAll(removed);
+        cart.touch(clock.instant());
+        items.flush();
     }
 
     @Transactional

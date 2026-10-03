@@ -88,14 +88,23 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
             CheckoutQuote trustedQuote) {
         return transactions.execute(tx -> {
             Long actorId = requireHumanActor(authorizeCreation(currentUser(), trustedQuote));
-            Instant at = clock.instant();
-            Order order = new Order(actorId, orderCode, checkoutKey, requestHash, trustedQuote, at);
-            orders.saveAndFlush(order);
-            items.saveAllAndFlush(trustedQuote.items().stream()
-                    .map(snapshot -> new OrderItem(order.getId(), snapshot)).toList());
-            history.saveAndFlush(new OrderStatusHistory(order.getId(), null, order.getStatus(), actorId, at, null));
-            return order;
+            return persistNew(actorId, orderCode, checkoutKey, requestHash, trustedQuote, clock.instant());
         });
+    }
+
+    /** Lifecycle creation primitive for trusted placement, after identity and checkout validation. */
+    protected final Order persistNew(Long actorId, String orderCode, String checkoutKey, String requestHash,
+            CheckoutQuote trustedQuote, Instant at) {
+        if (!TransactionSynchronizationManager.isActualTransactionActive()) {
+            throw new IllegalStateException("Order creation requires the placement transaction");
+        }
+        requireHumanActor(actorId);
+        Order order = new Order(actorId, orderCode, checkoutKey, requestHash, trustedQuote, at);
+        orders.saveAndFlush(order);
+        items.saveAllAndFlush(trustedQuote.items().stream()
+                .map(snapshot -> new OrderItem(order.getId(), snapshot)).toList());
+        history.saveAndFlush(new OrderStatusHistory(order.getId(), null, order.getStatus(), actorId, at, null));
+        return order;
     }
 
     @Override

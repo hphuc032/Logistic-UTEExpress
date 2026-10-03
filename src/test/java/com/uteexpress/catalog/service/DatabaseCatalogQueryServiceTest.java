@@ -4,6 +4,8 @@ import com.uteexpress.catalog.dto.ProductSnapshot;
 import com.uteexpress.catalog.repository.CatalogReadRepository;
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
+import com.uteexpress.governance.service.CategoryQueryService;
+import com.uteexpress.shop.service.ShopAvailabilityService;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
@@ -20,7 +22,9 @@ import static org.mockito.Mockito.when;
 
 class DatabaseCatalogQueryServiceTest {
     private final CatalogReadRepository repository = mock(CatalogReadRepository.class);
-    private final DatabaseCatalogQueryService service = new DatabaseCatalogQueryService(repository);
+    private final ShopAvailabilityService shops = mock(ShopAvailabilityService.class);
+    private final CategoryQueryService categories = mock(CategoryQueryService.class);
+    private final DatabaseCatalogQueryService service = new DatabaseCatalogQueryService(repository, shops, categories);
 
     @Test
     void rejectsNullAndInvalidIdsBeforeReadingDatabase() {

@@ -48,6 +48,7 @@ class ShopRegistrationControllerTest {
     @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
     @MockitoBean com.uteexpress.account.service.AddressService addressService;
     @MockitoBean com.uteexpress.cart.service.CartService cartService;
+    @MockitoBean com.uteexpress.order.service.OrderPlacementService orderPlacementService;
     @Autowired MockMvc mvc;
 
     @MockitoBean ShopRegistrationService shops;

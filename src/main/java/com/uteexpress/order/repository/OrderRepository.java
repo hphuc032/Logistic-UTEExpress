@@ -3,4 +3,6 @@ package com.uteexpress.order.repository;
 import com.uteexpress.order.entity.Order;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface OrderRepository extends JpaRepository<Order, Long> { }
+public interface OrderRepository extends JpaRepository<Order, Long> {
+    java.util.Optional<Order> findByBuyerIdAndCheckoutKey(Long buyerId, String checkoutKey);
+}
