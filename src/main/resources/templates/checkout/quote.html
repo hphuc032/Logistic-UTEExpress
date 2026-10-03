@@ -13,6 +13,7 @@
         <h2 class="h4">Đặt hàng thành công</h2>
         <p>Mã đơn: <strong th:text="${placedOrder.orderCode}"></strong></p>
         <p>Trạng thái: <span th:text="${placedOrder.status}"></span></p>
+        <a class="btn btn-app-secondary" th:href="@{/orders/{id}(id=${placedOrder.orderId})}">Xem chi tiết đơn hàng</a>
         <p>Tổng cộng: <strong th:text="${#numbers.formatDecimal(placedOrder.grandTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
     </div>
     <div th:if="${#lists.isEmpty(addresses)}" class="app-surface p-3">

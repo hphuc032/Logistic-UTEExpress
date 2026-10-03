@@ -3,4 +3,6 @@ package com.uteexpress.payment.repository;
 import com.uteexpress.payment.entity.Payment;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface PaymentRepository extends JpaRepository<Payment, Long> { }
+public interface PaymentRepository extends JpaRepository<Payment, Long> {
+    java.util.List<Payment> findByOrderIdOrderByCreatedAtAscIdAsc(Long orderId);
+}
