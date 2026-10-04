@@ -10,9 +10,11 @@ checkout. DB-01 transcribes its E2/E3/E4 inventory.
 
 `OrderLifecycleService` is the only authority allowed to change an order status.
 Controllers, Shipping, Payment and Admin must call it; never expose `setStatus` to them.
-The initial creation of NEW and its initial history are deferred to ORD-01 and must remain
-under the lifecycle authority. `OrderTransitionPolicy` only checks graph edges: it neither
-authorizes an actor nor writes data. There is deliberately no lifecycle Spring bean yet.
+Initial NEW creation and its history use the ORD-01 lifecycle persistence primitive.
+`OrderTransitionPolicy` only checks graph edges: it neither authorizes an actor nor writes
+data. `OrderPlacementService` is the single production lifecycle bean. It reuses
+`OrderLifecycleServiceImpl` orchestration for CHK-02 creation and ORD-03 vendor operations;
+unintegrated Shipping, return, refund, Ops and system actions remain denied.
 
 The future implementation obtains `CurrentUser` from the existing SEC-01
 `CurrentUserProvider`, using the existing `RoleCode`. It must resolve `subject` to the
@@ -84,6 +86,58 @@ Actions with **no OrderStatus transition**:
 - Assign/reassign shipper: modify Shipment only.
 - Vendor approves return: ReturnRequest APPROVED; order stays RETURN_REQUESTED.
 - Delivery failure/retry: modify shipment/attempts; order stays SHIPPING.
+
+### ORD-03 vendor implementation
+
+GET `/vendor/orders` and `/vendor/orders/{id}` serve vendor JSON/HTML reads. POST
+`/vendor/orders/{id}/confirm`, `/ready`, `/cancel` accept JSON or form commands with
+`expectedVersion`. No arbitrary target status, actor, shop, inventory or payment fields
+are accepted as authority. JSON unknown fields reject; extra form fields cannot change
+the operation. Existing VENDOR route policy, method authorization and CSRF apply.
+
+The persisted principal account must be active. Shop ownership comes from
+`VendorShopQueryService`: `shops.owner_id = accountId`, with the existing unique one-shop
+per account and APPROVED-shop convention. Reads use shop-scoped database queries,
+bounded pagination and `createdAt DESC, id DESC`; detail children are queried only after
+ownership succeeds. Foreign and missing orders return RESOURCE_NOT_FOUND. Persisted
+timeline/payment facts are projected without inferred entries or payment status.
+
+Vendor CONFIRM allows NEW -> CONFIRMED only. COD requires exactly one matching,
+unexpired UNPAID Payment with no paid_at, preserving PAY-01's single COD record.
+ONLINE permits multiple ONLINE attempts with exactly one matching, unexpired PAID
+attempt with paid_at; earlier unpaid/expired attempts do not prevent confirmation.
+Missing facts or mixed COD/ONLINE attempts reject; no payment method is inferred and
+no historical payment backfill or gateway is added. Pre-PAY-01 orders with no Payment
+remain readable/cancellable, but cannot confirm without authoritative payment evidence.
+Ready requires CONFIRMED,
+matching version and absent ready_at; it updates ready_at/updated_at and version only.
+No READY enum, self-transition, status history row or status-change event is introduced.
+
+Vendor cancellation permits NEW/CONFIRMED -> CANCELLED only. It accepts the controlled
+reason codes OUT_OF_STOCK or UNABLE_TO_FULFILL and stores their server-defined public
+reason text. Unchecked free text does not enter history/events. Under the order lock,
+inventory_released_at must be null; restore uses persisted OrderItem quantities through
+InventoryService.restore, then sets inventory_released_at at the cancellation instant.
+Stock, status, timestamps and exactly one status-history event commit/rollback together.
+Duplicate/stale/late actions conflict with no stock or history change. Cart and Payment
+records are unchanged, including an existing PAID record; refund decisions remain deferred.
+
+Write lock order is active vendor account -> owned Order -> either ascending products
+(cancellation) or ascending Payment records (confirm) -> owned Shop. Order and Shop
+are refreshed under their locks; payment guards also refresh locked attempts. Shop is
+locked AFTER inventory to preserve checkout's products-before-shop ordering. Expected
+state/version and @Version remain enforced. History timestamps come from the server
+Clock at PostgreSQL microsecond precision; status-change events publish after commit.
+Optimistic conflicts, including earlier managed snapshots in joined transactions, map
+to CONFLICT. Ready never creates a status-change event.
+
+ORD-03 precedes assignment. No Shipment/assignment evidence is fabricated; current
+cancellation rejects PICKED_UP and every subsequent state. SHIP-01/SHIP-02 must lock
+Order before Shipment, revalidate current assignment/ready_at, and atomically perform
+pickup through this lifecycle authority before introducing public pickup operations.
+They must integrate action-specific guards and assignment cancellation in that same
+transaction; current vendor authorization intentionally denies all shipper actions.
+Physical pickup while leaving Order CONFIRMED is outside the present integration contract.
 
 ## Shipment integration (QD)
 

@@ -159,6 +159,21 @@ public class Order {
      * Applies a transition already authorized and validated by the lifecycle service.
      * Internal domain operation, not a controller API; the transition policy stays in service.
      */
+    public void markReady(Instant at) {
+        if (status != OrderStatus.CONFIRMED || readyAt != null) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+        readyAt = Objects.requireNonNull(at);
+        updatedAt = at;
+    }
+
+    public void releaseInventory(Instant at) {
+        if ((status != OrderStatus.NEW && status != OrderStatus.CONFIRMED) || inventoryReleasedAt != null) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+        inventoryReleasedAt = Objects.requireNonNull(at);
+    }
+
     public void applyValidatedTransition(OrderStatus target, Instant at, String reason) {
         Objects.requireNonNull(target);
         Objects.requireNonNull(at);
