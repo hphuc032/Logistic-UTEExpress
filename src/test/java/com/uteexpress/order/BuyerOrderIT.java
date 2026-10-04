@@ -403,7 +403,7 @@ class BuyerOrderIT {
         assertThat(databaseState()).isEqualTo(before);
     }
 
-    @Test void actualCheckoutOrderIsImmediatelyVisibleWithItsInitialHistoryAndNoPayment() throws Exception {
+    @Test void actualCheckoutOrderIsImmediatelyVisibleWithItsInitialHistoryAndUnpaidCodPayment() throws Exception {
         long shop = jdbc.queryForObject("INSERT INTO uteexpress.shops(owner_id,name,slug,pickup_address,status) VALUES (?,'Shop',?,'Pickup','APPROVED') RETURNING id",
                 Long.class, buyer, UUID.randomUUID().toString());
         long category = jdbc.queryForObject("INSERT INTO uteexpress.categories(name,slug,active) VALUES ('Category',?,true) RETURNING id",
@@ -429,7 +429,10 @@ class BuyerOrderIT {
                 .andExpect(jsonPath("$.address.detail").value("Placed address"))
                 .andExpect(jsonPath("$.timeline.length()").value(1))
                 .andExpect(jsonPath("$.timeline[0].toStatus").value("NEW"))
-                .andExpect(jsonPath("$.payments").isEmpty());
+                .andExpect(jsonPath("$.payments.length()").value(1))
+                .andExpect(jsonPath("$.payments[0].method").value("COD"))
+                .andExpect(jsonPath("$.payments[0].status").value("UNPAID"))
+                .andExpect(jsonPath("$.payments[0].amount").value(267000));
     }
 
     private Order createOrder(long owner, String code, Instant at) {

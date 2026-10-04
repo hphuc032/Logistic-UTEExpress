@@ -60,6 +60,7 @@ class PublicCatalogControllerTest {
     @MockitoBean com.uteexpress.order.service.OrderPlacementService orderPlacementService;
     @MockitoBean com.uteexpress.order.service.BuyerOrderService buyerOrderService;
     @MockitoBean com.uteexpress.payment.service.PaymentReadService paymentReadService;
+    @MockitoBean com.uteexpress.payment.service.PaymentService paymentService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
     @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
     @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;

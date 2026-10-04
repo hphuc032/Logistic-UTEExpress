@@ -211,9 +211,11 @@ set must exactly equal the authenticated buyer's locked, selected cart lines; st
 partial selections conflict. All prices, availability, address and shipping are checked
 again through CHK-01 in the placement transaction.
 
-The current increment supports COD selection without creating a Payment attempt.
-ONLINE and nonblank vouchers are rejected as INVALID_REQUEST because PAY-01 and
-promotion/voucher engines are outside CHK-02. Product and order discounts remain zero.
+PAY-01 extends new COD placement with one persisted UNPAID Payment attempt in the
+same transaction, using the persisted Order totals. Matching checkout replay returns
+before payment initialization; pre-PAY-01 orders without payment remain unchanged.
+ONLINE and nonblank vouchers are rejected as INVALID_REQUEST; their engines remain
+outside this increment. Product and order discounts remain zero.
 No Shipment or later order-management workflow is created. The placement receipt has
 order ID/code, current status, grand total, creation time and a replay flag.
 
@@ -234,8 +236,9 @@ business payload conflicts even if the current cart is empty.
 Creation locks the buyer, then cart, then products in ascending ID order through the
 existing InventoryService. Cart mutations use the same cart lock. A single REQUIRED
 transaction re-quotes, resolves commission, decreases the locked stock, persists NEW
-and immutable item snapshots plus initial history through lifecycle authority, and
-removes only the verified cart item IDs. Any failure rolls all effects back. One
+and immutable item snapshots plus initial history through lifecycle authority,
+initializes the COD Payment, and removes only the verified cart item IDs. Any failure
+rolls all effects back. One
 server checkoutAt (UTC, PostgreSQL microsecond precision) is shared by the effective
 commission lookup and Order/history timestamps. The calculation and snapshot fields
 below are unchanged. Later lifecycle operations retain their fail-closed guards.
@@ -356,5 +359,50 @@ pair, terminal states, money arithmetic/rounding/nonnegative/overflow/payment ma
 DTO validation/immutability and absence of float/double in the contract API. Existing
 architecture/security/foundation suites must continue passing. These are contract tests,
 not proof of ownership enforcement, transaction safety or PostgreSQL persistence.
+
+## PAY-01 COD boundary and Master Plan sequencing
+
+The authoritative Master Plan excerpt supplied with PAY-01 schedules COD after
+CHK-02 only. ORD-03 depends on ORD-01, ORD-02 and PAY-01; SHIP-01 depends on ORD-03,
+SHIP-00 and ADMIN-02; SHIP-02 depends on SHIP-01 and PAY-01. Shipment assignment is
+therefore a later integration, not a PAY-01 prerequisite. TD owns Payment and QD owns
+Shipment/assignment/fulfillment. No Shipment persistence or future lifecycle is
+introduced here. Earlier completion reports describe their pre-PAY-01 increments.
+
+`payment.service.PaymentService.initializeCodForNewOrder(orderId)` is an internal
+checkout boundary invoked only after explicit COD selection and flushed NEW creation.
+It requires the existing transaction, locks the persisted order, reads its authoritative
+totals, and creates a COD UNPAID record only when there are no attempts. There is no
+HTTP initialization, lazy read initialization or automatic historical backfill.
+
+`PaymentService.collectCod(CodCollectionCommand(orderId, collectedAmount))` is an
+internal trusted fulfillment boundary, with MANDATORY transaction propagation. There
+is no public shipper collection endpoint and no claim of assigned-shipper enforcement.
+The caller must verify current assignment under a Shipment row lock. PAY-01 locks the
+order before its payment rows, refreshes managed payment evidence under the lock, and
+requires SHIPPING plus exactly one unexpired, UNPAID COD record. Both
+the stored payment amount and the collected amount must equal persisted grand_total;
+whole-VND BigDecimal validation rejects fractions rather than rounding evidence.
+Success sets PAID, paid_at and updated_at from the server Clock; no actor/provider
+audit data is invented. Repeated collection returns CONFLICT without changing facts.
+The one-PAID-per-order partial unique index remains unchanged.
+
+SHIP-02 must use one outer write transaction: lock Order, then Shipment and revalidate
+current assignment, then collectCod locks Payment (Order -> Shipment -> Payment).
+Collect while Order is SHIPPING, then perform the fulfillment transition through
+lifecycle authority. DELIVERED is rejected: persisted delivery already requires full
+COD collection, so payment cannot repair unpaid delivery after the fact. Assignment or
+amount/state validation failure must roll back every fulfillment/payment effect;
+never swallow failure or use a separate transaction for COD. The payment return is
+provisional until the outer transaction commits. No production completion operation
+exists today, so PAY-01 does not claim a currently guarded DELIVER endpoint.
+
+Buyer `GET /orders/{orderId}/payments` returns existing PaymentRecordView records
+after server-side ownership and USER/VENDOR authorization. Strict HTML redirects to
+the existing ORD-02 payment table. Foreign/missing orders share the same 404 contract;
+no payment attempts, secrets or inferred historical state are created by reads.
+
+See [PAY-01 completion report](PAY-01-completion-report.md) for implementation,
+verification evidence and remaining SHIP-02 responsibilities.
 
 Required commands: `.\mvnw.cmd test`, `.\mvnw.cmd package`, `git diff --check`.
