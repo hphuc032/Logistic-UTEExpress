@@ -114,6 +114,9 @@ class NotificationIT {
                 Integer.class, order, owner)).isEqualTo(1);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id=? AND recipient_id=?",
                 Integer.class, order, stranger)).isZero();
+        jdbc.update("DELETE FROM uteexpress.orders WHERE id=?", order);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id IS NULL AND recipient_id IN (?, ?)",
+                Integer.class, buyer, owner)).isEqualTo(2);
     }
 
     private Long createUser() {
