@@ -44,6 +44,18 @@
             <a class="btn btn-app-primary w-100" th:href="@{/login}" href="/login" th:if="${navbarUser == null}">
                 Đăng nhập để mua hàng
             </a>
+            <form th:if="${buyerFeaturesAvailable}" method="post" th:action="@{/user/cart/view/items}"
+                  class="app-surface p-3 mb-3">
+                <input type="hidden" name="productId" th:value="${product.id}">
+                <label for="cart-quantity" class="form-label">Số lượng</label>
+                <div class="d-flex flex-column flex-sm-row gap-2">
+                    <input id="cart-quantity" class="form-control" type="number" name="quantity"
+                           value="1" min="1" step="1" th:max="${product.stock}" required
+                           th:disabled="${product.stock == 0}">
+                    <button type="submit" class="btn btn-app-primary text-nowrap"
+                            th:disabled="${product.stock == 0}">Thêm vào giỏ</button>
+                </div>
+            </form>
             <form th:if="${buyerFeaturesAvailable and isFavorite != true}" method="post"
                   th:action="@{/user/favorites/{id}(id=${product.id})}">
                 <button type="submit" class="btn btn-outline-primary w-100">Thêm vào yêu thích</button>
