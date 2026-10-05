@@ -26,6 +26,9 @@ public class CartPageController {
     @InitBinder("quantityForm")
     void quantityFields(WebDataBinder binder) { binder.setAllowedFields("quantity"); }
 
+    @InitBinder("addForm")
+    void addFields(WebDataBinder binder) { binder.setAllowedFields("productId", "quantity"); }
+
     @InitBinder("selectionForm")
     void selectionFields(WebDataBinder binder) { binder.setAllowedFields("selected"); }
 
@@ -34,6 +37,18 @@ public class CartPageController {
         model.addAttribute("cart", carts.getCurrentUserCart()
                 .orElseGet(() -> new CartView(null, List.of(), BigDecimal.ZERO)));
         return "cart/view";
+    }
+
+    @PostMapping("/items")
+    String add(@Valid @ModelAttribute("addForm") AddCartProductRequest request,
+            BindingResult binding, RedirectAttributes redirect) {
+        if (binding.hasErrors()) {
+            redirect.addFlashAttribute("errorMessage", "Sản phẩm hoặc số lượng không hợp lệ.");
+            return REDIRECT;
+        }
+        carts.addProduct(request);
+        redirect.addFlashAttribute("successMessage", "Đã thêm sản phẩm vào giỏ hàng.");
+        return REDIRECT;
     }
 
     @PostMapping("/items/{id}/quantity")
