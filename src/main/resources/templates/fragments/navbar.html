@@ -35,6 +35,8 @@
                  th:if="${navbarUser != null}">
                 <a class="btn btn-app-ghost" th:if="${navbarUser.vendor}"
                    th:href="@{/vendor/products}" href="/vendor/products">Sản phẩm bán</a>
+                <a class="btn btn-app-ghost" th:if="${navbarUser.vendor}"
+                   th:href="@{/vendor/orders}" href="/vendor/orders">Đơn hàng bán</a>
                 <a class="btn btn-app-ghost" th:href="@{/user/cart/view}" href="/user/cart/view">Giỏ hàng</a>
                 <a class="btn btn-app-ghost" th:if="${buyerFeaturesAvailable}" th:href="@{/orders}" href="/orders">Đơn hàng</a>
                 <a class="btn btn-app-ghost" th:href="@{/user/addresses}" href="/user/addresses">Địa chỉ</a>

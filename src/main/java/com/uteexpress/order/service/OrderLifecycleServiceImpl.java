@@ -29,8 +29,8 @@ import com.uteexpress.order.entity.OrderItem;
 import com.uteexpress.order.entity.OrderStatusHistory;
 
 /**
- * Application orchestration for ORD-01. Deliberately unannotated until HP identity
- * and QD guard integrations exist. All authorization hooks deny by default.
+ * Shared lifecycle orchestration. Production vendor guards are supplied by the
+ * placement/lifecycle bean; other workflow integrations continue to deny by default.
  */
 public class OrderLifecycleServiceImpl implements OrderLifecycleService {
     private final OrderRepository orders;
@@ -71,6 +71,38 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
 
     /** Trusted guard output, not an HTTP command or an identity resolver. */
     public record Authorization(Long actorId, String reason) { }
+
+    protected Order loadForMutation(Long id) {
+        return orders.findById(id).orElseThrow(() -> new ApplicationException(ErrorCode.ACCESS_DENIED));
+    }
+
+    protected void beforeValidatedTransition(Order order, OrderTransitionCommand command, Instant at) { }
+
+    protected void authorizeReady(CurrentUser user, Order order) {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    @Override
+    public void markReady(com.uteexpress.order.dto.OrderReadyCommand command) {
+        if (command == null || command.orderId() == null || command.orderId() <= 0
+                || command.expectedVersion() == null || command.expectedVersion() < 0) {
+            throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        }
+        try {
+            transactions.executeWithoutResult(tx -> {
+                var user = currentUser();
+                var order = loadForMutation(command.orderId());
+                authorizeReady(user, order);
+                if (!Objects.equals(order.getVersion(), command.expectedVersion())) {
+                    throw new ApplicationException(ErrorCode.CONFLICT);
+                }
+                order.markReady(clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS));
+                orders.saveAndFlush(order);
+            });
+        } catch (OptimisticLockingFailureException | OptimisticLockException ex) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+    }
 
     /** Resolve the persisted buyer ID from trusted identity and verify server-owned facts; deny until integrated. */
     protected Long authorizeCreation(CurrentUser user,
@@ -123,9 +155,7 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
                     throw new ApplicationException(
                             ErrorCode.ACCESS_DENIED);
                 }
-                Order order = orders.findById(command.orderId()).orElseThrow(() ->
-                        new ApplicationException(
-                                ErrorCode.ACCESS_DENIED));
+                Order order = loadForMutation(command.orderId());
                 // Authorize before revealing state/version of a potentially foreign order.
                 Authorization authorization = Objects.requireNonNull(authorize(user, order, command));
                 Long actorId = requireHumanActor(authorization.actorId());
@@ -136,7 +166,7 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
                 }
                 var from = order.getStatus();
                 var to = OrderTransitionPolicy.requireTarget(from, command.action());
-                Instant at = clock.instant();
+                Instant at = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
                 // Only the trusted guard's safe reason reaches history and external consumers.
                 String reason = authorization.reason();
                 if (reason != null) { reason = reason.trim(); }
@@ -146,6 +176,7 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
                         && (reason == null || reason.isBlank())) {
                     throw new ApplicationException(ErrorCode.CONFLICT);
                 }
+                beforeValidatedTransition(order, command, at);
                 order.applyValidatedTransition(to, at, reason);
                 orders.saveAndFlush(order);
                 history.saveAndFlush(new OrderStatusHistory(order.getId(), from, to, actorId, at, reason));

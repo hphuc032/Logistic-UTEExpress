@@ -10,8 +10,35 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class PaymentReadService {
     private final PaymentRepository payments;
+    private final jakarta.persistence.EntityManager entityManager;
 
-    public PaymentReadService(PaymentRepository payments) { this.payments = payments; }
+    public PaymentReadService(PaymentRepository payments, jakarta.persistence.EntityManager entityManager) {
+        this.payments = payments;
+        this.entityManager = entityManager;
+    }
+
+    /** ORD-03 guard only. Caller already holds the Order lock; payment facts are never mutated. */
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public void requireConfirmablePayment(Long authorizedOrderId, java.math.BigDecimal total) {
+        var records = payments.lockRecordsForOrder(authorizedOrderId);
+        records.forEach(payment -> entityManager.refresh(payment, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE));
+        boolean valid;
+        if (records.size() == 1
+                && records.getFirst().getMethod() == com.uteexpress.checkout.dto.CheckoutRequest.PaymentMethod.COD) {
+            var payment = records.getFirst();
+            valid = payment.getAmount().compareTo(total) == 0 && payment.getExpiredAt() == null
+                    && payment.getStatus() == com.uteexpress.payment.dto.PaymentStatus.UNPAID && payment.getPaidAt() == null;
+        } else {
+            // ONLINE permits failed/pending attempts alongside its one successful payment.
+            // Mixed COD/ONLINE evidence remains ambiguous; never infer the order's payment method.
+            var paid = records.stream().filter(payment -> payment.getStatus() == com.uteexpress.payment.dto.PaymentStatus.PAID).toList();
+            valid = records.stream().allMatch(payment -> payment.getMethod() == com.uteexpress.checkout.dto.CheckoutRequest.PaymentMethod.ONLINE)
+                    && paid.size() == 1 && paid.getFirst().getAmount().compareTo(total) == 0
+                    && paid.getFirst().getPaidAt() != null && paid.getFirst().getExpiredAt() == null;
+        }
+        if (!valid) throw new com.uteexpress.common.exception.ApplicationException(
+                com.uteexpress.common.exception.ErrorCode.CONFLICT);
+    }
 
     @Transactional(readOnly = true)
     public List<PaymentRecordView> recordsForOrder(Long authorizedOrderId) {
