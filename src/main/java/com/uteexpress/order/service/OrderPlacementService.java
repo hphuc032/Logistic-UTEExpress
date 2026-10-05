@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
-/** CHK-02 creation under lifecycle authority. Inherited later workflow guards still deny. */
+/** Single production lifecycle bean: CHK-02 creation and ORD-03 vendor mutations. */
 @Service
 @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).USER.authority(), "
         + "T(com.uteexpress.security.RoleCode).VENDOR.authority())")
@@ -40,13 +40,14 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     private final CommissionQueryService commissions;
     private final PaymentService payments;
     private final Clock clock;
+    private final VendorOrderAuthority vendorAuthority;
 
     public OrderPlacementService(OrderRepository orders, OrderItemRepository items,
             OrderStatusHistoryRepository history, CurrentUserProvider users,
             PlatformTransactionManager transactionManager, ApplicationEventPublisher events, Clock clock,
             CurrentAccountIdProvider accounts, AccountIdentityService identities, CartService carts,
             CheckoutQuoteService quotes, InventoryService inventory, CommissionQueryService commissions,
-            PaymentService payments) {
+            PaymentService payments, VendorOrderAuthority vendorAuthority) {
         super(orders, items, history, users, transactionManager, events, clock);
         this.orders = orders;
         this.accounts = accounts;
@@ -57,6 +58,23 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.commissions = commissions;
         this.payments = payments;
         this.clock = clock;
+        this.vendorAuthority = vendorAuthority;
+    }
+
+    @Override protected Order loadForMutation(Long id) { return vendorAuthority.lockOwnedOrder(id); }
+
+    @Override protected Authorization authorize(com.uteexpress.security.CurrentUser user, Order order,
+            com.uteexpress.order.dto.OrderTransitionCommand command) {
+        return vendorAuthority.authorize(order, command);
+    }
+
+    @Override protected void beforeValidatedTransition(Order order,
+            com.uteexpress.order.dto.OrderTransitionCommand command, java.time.Instant at) {
+        vendorAuthority.beforeTransition(order, command, at);
+    }
+
+    @Override protected void authorizeReady(com.uteexpress.security.CurrentUser user, Order order) {
+        vendorAuthority.authorizeReady(order);
     }
 
     /** One REQUIRED transaction includes locks, fresh quote, stock, order/items/history and cleanup. */

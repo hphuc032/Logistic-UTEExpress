@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Chi tiết đơn hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="order-title">
+    <a th:href="@{/vendor/orders}" class="btn btn-app-secondary mb-3">Đơn hàng của cửa hàng</a>
+    <div class="app-page-header">
+        <h1 id="order-title">Chi tiết đơn hàng</h1>
+        <p class="text-break">Mã đơn: <strong th:text="${order.orderCode}"></strong></p>
+        <p>Trạng thái hiện tại: <span class="app-status-badge" th:text="${order.status}"></span></p>
+        <p th:text="|Shop #${order.shopId}|"></p>
+        <p>Ngày tạo (UTC): <time th:datetime="${order.createdAt}"
+            th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm:ss', 'UTC')}"></time></p>
+        <p>Cập nhật lần cuối (UTC): <time th:datetime="${order.updatedAt}"
+            th:text="${#temporals.format(order.updatedAt, 'dd/MM/yyyy HH:mm:ss', 'UTC')}"></time></p>
+        <p th:if="${order.deliveredAt != null}">Ngày giao hàng (UTC): <time th:datetime="${order.deliveredAt}"
+            th:text="${#temporals.format(order.deliveredAt, 'dd/MM/yyyy HH:mm:ss', 'UTC')}"></time></p>
+        <p th:if="${order.cancelledAt != null}">Ngày hủy (UTC): <time th:datetime="${order.cancelledAt}"
+            th:text="${#temporals.format(order.cancelledAt, 'dd/MM/yyyy HH:mm:ss', 'UTC')}"></time></p>
+    </div>
+
+    <section class="app-surface p-3 mb-3" aria-label="Thao tác của cửa hàng">
+        <form th:if="${order.status.name() == 'NEW'}" method="post" th:action="@{/vendor/orders/{id}/confirm(id=${order.id})}" class="mb-3">
+            <input type="hidden" name="expectedVersion" th:value="${vendorOrder.version}">
+            <button type="submit" class="btn btn-app-primary">Xác nhận đơn hàng</button>
+        </form>
+        <form th:if="${order.status.name() == 'CONFIRMED' and vendorOrder.readyAt == null}" method="post" th:action="@{/vendor/orders/{id}/ready(id=${order.id})}" class="mb-3">
+            <input type="hidden" name="expectedVersion" th:value="${vendorOrder.version}">
+            <button type="submit" class="btn btn-app-primary">Đã chuẩn bị xong</button>
+        </form>
+        <p th:if="${vendorOrder.readyAt != null}">Đã chuẩn bị xong lúc (UTC):
+            <time th:datetime="${vendorOrder.readyAt}" th:text="${#temporals.format(vendorOrder.readyAt, 'dd/MM/yyyy HH:mm:ss', 'UTC')}"></time>
+        </p>
+        <form th:if="${order.status.name() == 'NEW' or order.status.name() == 'CONFIRMED'}" method="post" th:action="@{/vendor/orders/{id}/cancel(id=${order.id})}">
+            <input type="hidden" name="expectedVersion" th:value="${vendorOrder.version}">
+            <label for="cancel-reason">Lý do hủy</label>
+            <select id="cancel-reason" name="reason" required class="form-select mb-2">
+                <option value="">Chọn lý do</option>
+                <option value="OUT_OF_STOCK">Không đủ hàng</option>
+                <option value="UNABLE_TO_FULFILL">Không thể xử lý đơn hàng</option>
+            </select>
+            <button type="submit" class="btn btn-app-secondary">Hủy đơn hàng</button>
+        </form>
+    </section>
+    <section class="app-surface p-3 mb-3" aria-labelledby="address-title">
+        <h2 id="address-title" class="h4">Địa chỉ nhận hàng</h2>
+        <p th:text="${order.address.receiverName}" class="text-break"></p>
+        <p th:text="${order.address.phone}"></p>
+        <p th:text="|${order.address.detail}, ${order.address.district}, ${order.address.provinceCode}|" class="text-break"></p>
+    </section>
+    <section class="app-surface p-3 mb-3" aria-labelledby="items-title">
+        <h2 id="items-title" class="h4">Sản phẩm trong đơn</h2>
+        <div class="table-responsive"><table class="table align-middle">
+            <caption>Sản phẩm và giá đã lưu khi đặt hàng</caption>
+            <thead><tr><th scope="col">Sản phẩm</th><th scope="col">Đơn giá (₫)</th>
+                <th scope="col">Giảm giá mỗi sản phẩm (₫)</th><th scope="col">Giá sau giảm (₫)</th>
+                <th scope="col">Số lượng</th><th scope="col">Thành tiền (₫)</th></tr></thead>
+            <tbody><tr th:each="item : ${order.items}">
+                <th scope="row" th:text="${item.productNameSnapshot}" class="text-break"></th>
+                <td th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'POINT', 0, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(item.discountSnapshot, 0, 'POINT', 0, 'COMMA')}"></td>
+                <td th:text="${#numbers.formatDecimal(item.finalUnitPrice, 0, 'POINT', 0, 'COMMA')}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="${#numbers.formatDecimal(item.lineTotal, 0, 'POINT', 0, 'COMMA')}"></td>
+            </tr></tbody>
+        </table></div>
+        <p>Tiền sản phẩm sau giảm: <strong th:text="${#numbers.formatDecimal(order.subtotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
+        <p>Giảm giá đơn hàng: <strong th:text="${#numbers.formatDecimal(order.discountTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
+        <p>Phí vận chuyển: <strong th:text="${#numbers.formatDecimal(order.shippingFee, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
+        <p>Tổng cộng: <strong th:text="${#numbers.formatDecimal(order.grandTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
+    </section>
+    <section class="app-surface p-3 mb-3" aria-labelledby="payment-title">
+        <h2 id="payment-title" class="h4">Thông tin thanh toán đã ghi nhận</h2>
+        <p th:if="${#lists.isEmpty(order.payments)}">Chưa có thông tin phương thức hoặc trạng thái thanh toán được ghi nhận cho đơn này.</p>
+        <div th:unless="${#lists.isEmpty(order.payments)}" class="table-responsive"><table class="table">
+            <caption>Các lần thanh toán đã ghi nhận</caption>
+            <thead><tr><th scope="col">Thời gian (UTC)</th><th scope="col">Phương thức</th>
+                <th scope="col">Trạng thái</th><th scope="col">Số tiền</th></tr></thead>
+            <tbody><tr th:each="payment : ${order.payments}">
+                <td><time th:datetime="${payment.createdAt}" th:text="${#temporals.format(payment.createdAt, 'dd/MM/yyyy HH:mm:ss', 'UTC')}"></time></td>
+                <td th:text="${payment.method}"></td><td th:text="${payment.status}"></td>
+                <td th:text="${#numbers.formatDecimal(payment.amount, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></td>
+            </tr></tbody>
+        </table></div>
+    </section>
+    <section class="app-surface p-3" aria-labelledby="timeline-title">
+        <h2 id="timeline-title" class="h4">Lịch sử trạng thái</h2>
+        <p>Chỉ hiển thị các thay đổi trạng thái đã được ghi nhận, theo thời gian UTC.</p>
+        <p th:if="${#lists.isEmpty(order.timeline)}">Chưa có lịch sử trạng thái được ghi nhận.</p>
+        <ol th:unless="${#lists.isEmpty(order.timeline)}" class="mb-0">
+            <li th:each="entry : ${order.timeline}" class="mb-3">
+                <time th:datetime="${entry.createdAt}" th:text="${#temporals.format(entry.createdAt, 'dd/MM/yyyy HH:mm:ss', 'UTC')}"></time>
+                <span th:if="${entry.fromStatus != null}" th:text="| — ${entry.fromStatus} → |"></span>
+                <span th:if="${entry.fromStatus == null}"> — Khởi tạo: </span>
+                <strong th:text="${entry.toStatus}"></strong>
+            </li>
+        </ol>
+    </section>
+</section></body></html>

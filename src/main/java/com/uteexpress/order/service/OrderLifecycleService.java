@@ -14,6 +14,9 @@ public interface OrderLifecycleService {
     /** Authenticated callers only; EXPIRE_PAYMENT is rejected with ACCESS_DENIED. */
     OrderStatusChangedEvent transition(OrderTransitionCommand command);
 
+    /** Vendor preparation only: CONFIRMED stays CONFIRMED, with persisted ready_at. */
+    void markReady(com.uteexpress.order.dto.OrderReadyCommand command);
+
     /**
      * Internal scheduler only, never exposed through a controller. Lock/reload the order
      * and payment attempts; only expired unpaid online NEW orders qualify. actor_id is null.
