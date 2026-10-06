@@ -216,6 +216,67 @@ class VendorProductIT {
     }
 
     @Test
+    void sec02MalformedImageWithForgedOwnerFieldsLeavesDatabaseAndStorageUnchanged() throws Exception {
+        Fixture fixture = fixture("sec02-upload", "VENDOR");
+        ProductView product = as(fixture.userId(), RoleCode.VENDOR,
+                () -> productService.create(request(fixture.categoryId(), "Image target", "100", 2)));
+        Cookie jwt = login(fixture.username());
+        Set<Path> before = storedFiles();
+        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart(
+                        "/vendor/products/{id}/images", product.id())
+                        .file(new org.springframework.mock.web.MockMultipartFile("image", "../../evil.png",
+                                "image/png", "<script>alert(1)</script>".getBytes(java.nio.charset.StandardCharsets.UTF_8)))
+                        .cookie(jwt).with(csrf()).param("shopId", "999999").param("ownerId", "999999")
+                        .param("storageKey", "../../escape.png").param("moderationStatus", "ACTIVE"))
+                .andExpect(status().isBadRequest());
+        assertThat(jdbc.queryForObject("select count(*) from uteexpress.product_images where product_id=?",
+                Integer.class, product.id())).isZero();
+        assertThat(storedFiles()).isEqualTo(before);
+        assertThat(jdbc.queryForObject("select shop_id from uteexpress.products where id=?", Long.class, product.id()))
+                .isEqualTo(fixture.shopId());
+    }
+
+    @Test
+    void sec02RealTransactionRollbackCleansNewImageAndRetainsDeletedImage() throws Exception {
+        Fixture fixture = fixture("sec02-rollback", "VENDOR");
+        ProductView product = as(fixture.userId(), RoleCode.VENDOR,
+                () -> productService.create(request(fixture.categoryId(), "Rollback target", "100", 2)));
+        var image = as(fixture.userId(), RoleCode.VENDOR, () -> productService.addImage(product.id(),
+                new UploadContent(TestImages.png(), "safe.png", "image/png"), null));
+        Set<Path> before = storedFiles();
+        TransactionTemplate tx = new TransactionTemplate(transactions);
+        assertThatThrownBy(() -> as(fixture.userId(), RoleCode.VENDOR, () -> {
+            tx.executeWithoutResult(status -> {
+                productService.addImage(product.id(), new UploadContent(TestImages.png(), "new.png", "image/png"), null);
+                throw new ForcedRollback();
+            });
+            return null;
+        })).isInstanceOf(ForcedRollback.class);
+        assertThat(storedFiles()).isEqualTo(before);
+        assertThat(jdbc.queryForObject("select count(*) from uteexpress.product_images where product_id=?",
+                Integer.class, product.id())).isOne();
+        assertThatThrownBy(() -> as(fixture.userId(), RoleCode.VENDOR, () -> {
+            tx.executeWithoutResult(status -> {
+                productService.deleteImage(product.id(), image.id());
+                throw new ForcedRollback();
+            });
+            return null;
+        })).isInstanceOf(ForcedRollback.class);
+        assertThat(storedFiles()).isEqualTo(before);
+        assertThat(jdbc.queryForObject("select count(*) from uteexpress.product_images where id=?",
+                Integer.class, image.id())).isOne();
+        assertThat(as(fixture.userId(), RoleCode.VENDOR, () -> productService.readImage(product.id(), image.id())).bytes())
+                .isEqualTo(TestImages.png());
+    }
+
+    private Set<Path> storedFiles() throws IOException {
+        if (!Files.exists(STORAGE_ROOT)) return Set.of();
+        try (var files = Files.walk(STORAGE_ROOT)) {
+            return files.filter(Files::isRegularFile).collect(java.util.stream.Collectors.toSet());
+        }
+    }
+
+    @Test
     void vendorRoleRealJwtAndCsrfContractsAreEnforced() throws Exception {
         Fixture vendor = fixture("jwt-vendor", "VENDOR");
         Fixture user = fixture("jwt-user", "USER");
