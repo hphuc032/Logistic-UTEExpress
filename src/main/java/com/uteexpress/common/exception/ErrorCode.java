@@ -29,6 +29,15 @@ public enum ErrorCode {
 
     /** Catalogued public details; callers cannot expose arbitrary exception text. */
     public enum Detail {
+        VOUCHER_INVALID(VALIDATION_FAILED, "Mã voucher không hợp lệ. Chỉ dùng chữ, số, dấu gạch ngang hoặc gạch dưới (tối đa 64 ký tự)."),
+        VOUCHER_UNKNOWN(INVALID_REQUEST, "Không tìm thấy voucher này."),
+        VOUCHER_INACTIVE(INVALID_REQUEST, "Voucher đã ngừng hoạt động."),
+        VOUCHER_FUTURE(INVALID_REQUEST, "Voucher chưa đến thời gian sử dụng."),
+        VOUCHER_EXPIRED(INVALID_REQUEST, "Voucher đã hết hạn."),
+        VOUCHER_WRONG_SHOP(INVALID_REQUEST, "Voucher không áp dụng cho shop này."),
+        VOUCHER_MINIMUM(INVALID_REQUEST, "Tiền sản phẩm chưa đạt mức tối thiểu của voucher."),
+        VOUCHER_QUOTA(CONFLICT, "Voucher đã hết lượt sử dụng."),
+        VOUCHER_USER_LIMIT(CONFLICT, "Bạn đã dùng hết số lượt được phép của voucher này."),
         SINGLE_SHOP_CHECKOUT(CONFLICT,
                 "Checkout chỉ hỗ trợ sản phẩm từ một shop. Vui lòng chọn sản phẩm của một shop cho mỗi lần thanh toán.");
 
