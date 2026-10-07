@@ -148,7 +148,8 @@ class OrderDatabaseIT {
                     .dataSource(upgradeDb.getJdbcUrl(), upgradeDb.getUsername(), upgradeDb.getPassword())
                     .schemas("uteexpress").defaultSchema("uteexpress")
                     .locations("classpath:db/migration").load();
-            assertThat(latest.migrate().migrationsExecuted).isEqualTo(1);
+            // Later additive migrations may also run; the legacy row must still survive them.
+            assertThat(latest.migrate().migrationsExecuted).isGreaterThanOrEqualTo(1);
             var after = upgradeJdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", legacyId);
             assertThat(after).containsEntry("shipping_provider_id", null).containsEntry("shipping_service_code", null);
             after.remove("shipping_provider_id");
