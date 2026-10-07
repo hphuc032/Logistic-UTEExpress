@@ -180,6 +180,10 @@ class VendorOrderIT {
         assertThat(historyCount()).isEqualTo(2); // ready is explicitly not a status transition
         assertThat(paymentState()).isEqualTo(beforePayments);
         assertThat(stockState()).isEqualTo(beforeStock);
+        var stored = orders.findById(owned.getId()).orElseThrow();
+        assertThat(stored.getShippingProviderId()).isEqualTo(owned.getShippingProviderId());
+        assertThat(stored.getShippingServiceCode()).isEqualTo(owned.getShippingServiceCode());
+        assertThat(stored.getShippingFee()).isEqualByComparingTo(owned.getShippingFee());
         rejects(() -> lifecycle.markReady(new OrderReadyCommand(owned.getId(), 2L)), ErrorCode.CONFLICT);
         rejects(this::confirm, ErrorCode.CONFLICT);
         assertThat(historyCount()).isEqualTo(2);
@@ -211,6 +215,9 @@ class VendorOrderIT {
         var payment = paymentState(); var cartsBefore = cartState();
         cancel(OrderStatus.valueOf(status), version);
         assertThat(row()).containsEntry("status", "CANCELLED");
+        assertThat(row()).containsEntry("shipping_provider_id", owned.getShippingProviderId())
+                .containsEntry("shipping_service_code", owned.getShippingServiceCode());
+        assertThat((BigDecimal) row().get("shipping_fee")).isEqualByComparingTo(owned.getShippingFee());
         assertThat(row().get("inventory_released_at")).isNotNull().isEqualTo(row().get("cancelled_at"));
         assertThat(stock(product)).isEqualTo(10); assertThat(stock(secondProduct)).isEqualTo(10);
         assertThat(historyCount()).isEqualTo(status.equals("NEW") ? 2 : 3);

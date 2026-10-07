@@ -11,6 +11,10 @@ import com.uteexpress.security.*;
 import jakarta.persistence.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -98,6 +102,9 @@ class OrderDomainCoreTest {
         assertThat(snapshot.getLineTotal()).isEqualByComparingTo(order.getSubtotal());
         assertThat(order.getDiscountTotal()).isEqualByComparingTo("10000");
         assertThat(order.getGrandTotal()).isEqualByComparingTo("75000");
+        assertThat(order.getShippingProviderId()).isEqualTo(4L);
+        assertThat(order.getShippingServiceCode()).isEqualTo("STANDARD");
+        assertThat(order.getShippingFee()).isEqualByComparingTo("5000");
         assertThat(order.getSubtotal().subtract(order.getDiscountTotal())).isEqualByComparingTo("70000");
         assertThat(order.getCommissionAmount()).isEqualByComparingTo("7000");
         assertThat(order.getReceiverName()).isEqualTo("Receiver");
@@ -110,6 +117,32 @@ class OrderDomainCoreTest {
         assertThat(Arrays.stream(OrderItem.class.getMethods()).map(java.lang.reflect.Method::getName))
                 .noneMatch(name -> name.startsWith("set"));
         assertThat(snapshot.getProductNameSnapshot()).isEqualTo("Original product name");
+    }
+
+    @ParameterizedTest @NullSource @ValueSource(longs = {0, -1})
+    void rejectsMissingOrNonPositiveShippingProvider(Long providerId) {
+        failsWith(ErrorCode.VALIDATION_FAILED, () -> new Order(7L, "O2", "K2", "hash",
+                shippingQuote(providerId, "STANDARD"), NOW));
+    }
+
+    @ParameterizedTest @NullAndEmptySource
+    @ValueSource(strings = {" ", "standard", " STANDARD", "STANDARD ", "1EXPRESS", "EXPRESS-1",
+            "A12345678901234567890123456789012"})
+    void rejectsMissingOrNonCanonicalShippingService(String serviceCode) {
+        failsWith(ErrorCode.VALIDATION_FAILED, () -> new Order(7L, "O2", "K2", "hash",
+                shippingQuote(4L, serviceCode), NOW));
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"A", "STANDARD", "EXPRESS_24", "A1234567890123456789012345678901"})
+    void preservesCanonicalShippingServiceExactly(String serviceCode) {
+        var created = new Order(7L, "O2", "K2", "hash", shippingQuote(4L, serviceCode), NOW);
+        assertThat(created.getShippingServiceCode()).isEqualTo(serviceCode);
+    }
+
+    private static CheckoutQuote shippingQuote(Long providerId, String serviceCode) {
+        var q = quote();
+        return new CheckoutQuote(q.shopId(), q.items(), q.address(), q.totals(), providerId, serviceCode,
+                q.commissionPolicyId(), q.commissionRateSnapshot(), q.commissionAmount());
     }
 
     @Test void rejectsPrePromotionSubtotalEvenWhenGrandTotalWouldMatch() {
@@ -348,6 +381,11 @@ class OrderDomainCoreTest {
         }
         assertThat(Order.class.getDeclaredField("version").getAnnotation(Version.class)).isNotNull();
         assertThat(Order.class.getDeclaredField("version").getType()).isEqualTo(Long.class);
+        for (String field : List.of("shippingProviderId", "shippingServiceCode")) {
+            var column = Order.class.getDeclaredField(field).getAnnotation(Column.class);
+            assertThat(column.nullable()).isTrue();
+            assertThat(column.updatable()).isFalse();
+        }
         assertThat(Modifier.isPrivate(Order.class.getDeclaredField("status").getModifiers())).isTrue();
         assertThat(Arrays.stream(Order.class.getMethods()).map(java.lang.reflect.Method::getName))
                 .noneMatch(name -> name.startsWith("set"));

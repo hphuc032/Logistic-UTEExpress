@@ -44,7 +44,7 @@ class PlaceOrderIT {
     @Container @ServiceConnection
     static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17.6");
     @Autowired OrderPlacementService placement;
-    @Autowired CheckoutQuoteService quotes;
+    @MockitoSpyBean CheckoutQuoteService quotes;
     @MockitoSpyBean CartService carts;
     @MockitoSpyBean DatabaseInventoryService inventory;
     @Autowired ShopModerationService shopModeration;
@@ -105,7 +105,8 @@ class PlaceOrderIT {
         var order = jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", result.orderId());
         assertThat(order).containsEntry("buyer_id", buyer).containsEntry("shop_id", shop)
                 .containsEntry("detail", "Updated address").containsEntry("commission_policy_id", policy)
-                .containsEntry("checkout_key", key).containsEntry("status", "NEW");
+                .containsEntry("checkout_key", key).containsEntry("status", "NEW")
+                .containsEntry("shipping_provider_id", provider).containsEntry("shipping_service_code", "STANDARD");
         assertThat((BigDecimal) order.get("subtotal")).isEqualByComparingTo("260300");
         assertThat((BigDecimal) order.get("discount_total")).isEqualByComparingTo("0");
         assertThat((BigDecimal) order.get("shipping_fee")).isEqualByComparingTo("21000");
@@ -131,9 +132,29 @@ class PlaceOrderIT {
                 .containsExactly(unselected, foreignShopProduct);
         jdbc.update("UPDATE uteexpress.products SET price=999,name='Later name' WHERE id=?", product);
         jdbc.update("UPDATE uteexpress.addresses SET detail='Later address' WHERE id=?", address);
+        jdbc.update("UPDATE uteexpress.shipping_rates SET fee=99000,active=false WHERE provider_id=?", provider);
+        jdbc.update("UPDATE uteexpress.shipping_providers SET active=false WHERE id=?", provider);
         jdbc.update("INSERT INTO uteexpress.commission_policies(rate_percent,effective_from,created_by) VALUES (9,'2021-01-01',?)", buyer);
         assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", result.orderId())).isEqualTo(order);
         assertThat(jdbc.queryForList("SELECT * FROM uteexpress.order_items ORDER BY product_id")).isEqualTo(lines);
+    }
+
+    @Test void persistsShippingFactsFromFreshServerQuoteRatherThanRawRequestFields() {
+        long validatedProvider = jdbc.queryForObject(
+                "INSERT INTO uteexpress.shipping_providers(code,name,active) VALUES (?,'Other provider',true) RETURNING id",
+                Long.class, "Q" + key.replace("-", "").substring(0, 18).toUpperCase());
+        jdbc.update("INSERT INTO uteexpress.shipping_rates(provider_id,service_code,destination_region,fee,active) VALUES (?,'EXPRESS_24','VN',23000,true)",
+                validatedProvider);
+        // Test the consumer boundary with a different selection returned by a real server quote.
+        // The delegated quote still validates configuration and locks inventory inside placement.
+        doAnswer(invocation -> quotes.quote(new QuoteRequest(address, validatedProvider, "EXPRESS_24")))
+                .when(quotes).quote(new QuoteRequest(address, provider, "STANDARD"));
+        var result = placement.placeOrder(request());
+        var stored = jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", result.orderId());
+        assertThat(stored).containsEntry("shipping_provider_id", validatedProvider)
+                .containsEntry("shipping_service_code", "EXPRESS_24");
+        assertThat((BigDecimal) stored.get("shipping_fee")).isEqualByComparingTo("23000");
+        assertThat(result.grandTotal()).isEqualByComparingTo("273000");
     }
 
     @Test void replayDoesNotReadChangedCheckoutStateOrClearNewCartData() {
@@ -143,6 +164,8 @@ class PlaceOrderIT {
         jdbc.update("UPDATE uteexpress.products SET status='HIDDEN' WHERE id=?", product);
         jdbc.update("DELETE FROM uteexpress.addresses WHERE id=?", address);
         jdbc.update("UPDATE uteexpress.commission_policies SET active=false WHERE id=?", policy);
+        jdbc.update("DELETE FROM uteexpress.shipping_rates WHERE provider_id=?", provider);
+        jdbc.update("DELETE FROM uteexpress.shipping_providers WHERE id=?", provider);
         var before = databaseState();
         var replay = placement.placeOrder(new CheckoutRequest(" " + key + " ", command.items(), address, provider,
                 "STANDARD", CheckoutRequest.PaymentMethod.COD, " "));
@@ -151,24 +174,36 @@ class PlaceOrderIT {
         assertThat(replay.replayed()).isTrue();
         assertThat(databaseState()).isEqualTo(before);
         assertThat(count("payments")).isEqualTo(1);
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", first.orderId()))
+                .containsEntry("shipping_provider_id", provider).containsEntry("shipping_service_code", "STANDARD");
+        verify(quotes, times(1)).quote(any(QuoteRequest.class));
+        verify(inventory, times(1)).decrease(anyList());
+        verify(carts, times(1)).removeCheckedOutItems(anyList());
     }
 
     @Test void changedPayloadWithSameKeyConflictsBeforeCartAccess() {
         placement.placeOrder(request());
         var before = databaseState();
         rejects(() -> placement.placeOrder(request(List.of(new CheckoutRequest.Item(product, 1)))), ErrorCode.CONFLICT);
+        rejects(() -> placement.placeOrder(new CheckoutRequest(key, request().items(), address, provider,
+                "EXPRESS", CheckoutRequest.PaymentMethod.COD, null)), ErrorCode.CONFLICT);
+        rejects(() -> placement.placeOrder(new CheckoutRequest(key, request().items(), address, provider + 1,
+                "STANDARD", CheckoutRequest.PaymentMethod.COD, null)), ErrorCode.CONFLICT);
         assertThat(databaseState()).isEqualTo(before);
     }
 
-    @Test void historicalCheckoutReplayDoesNotInferCodOrBackfillMissingPayment() {
+    @Test void historicalCheckoutReplayDoesNotBackfillShippingSelectionOrMissingPayment() {
         var command = request();
         var first = placement.placeOrder(command);
-        // Simulate a pre-PAY-01 order whose placement never persisted payment method/status.
+        // Simulate a pre-PAY-01 / pre-ORD-04 order with absent historical facts.
         jdbc.update("DELETE FROM uteexpress.payments WHERE order_id=?", first.orderId());
+        jdbc.update("UPDATE uteexpress.orders SET shipping_provider_id=NULL,shipping_service_code=NULL WHERE id=?", first.orderId());
         var before = databaseState();
         assertThat(placement.placeOrder(command).replayed()).isTrue();
         assertThat(databaseState()).isEqualTo(before);
         assertThat(count("payments")).isZero();
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", first.orderId()))
+                .containsEntry("shipping_provider_id", null).containsEntry("shipping_service_code", null);
     }
 
     @Test void checkoutKeyIsScopedToAuthenticatedBuyer() {
