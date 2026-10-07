@@ -10,7 +10,8 @@ public record OpsOrderDetail(Long buyerId, Long version, Instant readyAt,
     public record Facts(Long id, String orderCode, Long shopId, String status,
             Instant createdAt, Instant updatedAt, Instant deliveredAt, Instant cancelledAt,
             Address address, BigDecimal subtotal, BigDecimal discountTotal,
-            BigDecimal shippingFee, BigDecimal grandTotal,
+            BigDecimal shippingFee, Long shippingProviderId, String shippingServiceCode,
+            BigDecimal grandTotal,
             List<Item> items, List<TimelineEntry> timeline, List<Payment> payments) {
         public Facts {
             items = List.copyOf(items);

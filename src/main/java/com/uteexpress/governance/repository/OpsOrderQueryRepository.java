@@ -42,7 +42,8 @@ public class OpsOrderQueryRepository {
         var rows = jdbc.getObject().query("""
                 SELECT id, order_code, buyer_id, shop_id, status, created_at, updated_at,
                     delivered_at, cancelled_at, ready_at, version, receiver_name, phone,
-                    province_code, district, detail, subtotal, discount_total, shipping_fee, grand_total
+                    province_code, district, detail, subtotal, discount_total, shipping_fee,
+                    shipping_provider_id, shipping_service_code, grand_total
                 FROM uteexpress.orders WHERE id = :id
                 """, new MapSqlParameterSource("id", id), (rs, rowNum) -> {
             var facts = new OpsOrderDetail.Facts(rs.getLong("id"), rs.getString("order_code"),
@@ -52,7 +53,8 @@ public class OpsOrderQueryRepository {
                     new OpsOrderDetail.Address(rs.getString("receiver_name"), rs.getString("phone"),
                             rs.getString("province_code"), rs.getString("district"), rs.getString("detail")),
                     rs.getBigDecimal("subtotal"), rs.getBigDecimal("discount_total"),
-                    rs.getBigDecimal("shipping_fee"), rs.getBigDecimal("grand_total"),
+                    rs.getBigDecimal("shipping_fee"), (Long) rs.getObject("shipping_provider_id"),
+                    rs.getString("shipping_service_code"), rs.getBigDecimal("grand_total"),
                     items(id), timeline(id), payments(id));
             return new OpsOrderDetail(rs.getLong("buyer_id"), rs.getLong("version"),
                     instant(rs.getTimestamp("ready_at")), facts);

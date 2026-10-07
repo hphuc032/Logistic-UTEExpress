@@ -13,6 +13,9 @@
         <dt class="col-sm-3">Người nhận</dt><dd class="col-sm-9" th:text="${order.facts.address.receiverName}"></dd>
         <dt class="col-sm-3">Điện thoại</dt><dd class="col-sm-9" th:text="${order.facts.address.phone}"></dd>
         <dt class="col-sm-3">Địa chỉ</dt><dd class="col-sm-9" th:text="|${order.facts.address.detail}, ${order.facts.address.district}, ${order.facts.address.provinceCode}|"></dd>
+        <dt class="col-sm-3">Nhà vận chuyển ID</dt><dd class="col-sm-9" th:text="${order.facts.shippingProviderId ?: 'Chưa lưu'}"></dd>
+        <dt class="col-sm-3">Dịch vụ vận chuyển</dt><dd class="col-sm-9" th:text="${order.facts.shippingServiceCode ?: 'Chưa lưu'}"></dd>
+        <dt class="col-sm-3">Phí vận chuyển</dt><dd class="col-sm-9" th:text="${order.facts.shippingFee}"></dd>
         <dt class="col-sm-3">Tổng tiền</dt><dd class="col-sm-9" th:text="${order.facts.grandTotal}"></dd>
     </dl>
     <h2>Sản phẩm</h2>

@@ -44,6 +44,7 @@ class OperationsOrderIT {
                 VALUES (?, ?, 'secret-request-hash', ?, ?, 'CONFIRMED', 'Ops buyer', '0123456789',
                     'HCM', 'District', 'Street', 100, 0, 10, 110, 0, 0) RETURNING id
                 """, Long.class, code, code, buyer, shop);
+        jdbc.update("UPDATE uteexpress.orders SET shipping_provider_id=42, shipping_service_code='STANDARD' WHERE id=?", order);
         jdbc.update("""
                 INSERT INTO uteexpress.order_status_history (order_id, from_status, to_status, actor_id)
                 VALUES (?, 'NEW', 'CONFIRMED', ?)
@@ -65,6 +66,8 @@ class OperationsOrderIT {
         assertThat(detail.buyerId()).isEqualTo(buyer);
         assertThat(detail.facts().timeline()).hasSize(1);
         assertThat(detail.facts().payments()).hasSize(1);
+        assertThat(detail.facts().shippingProviderId()).isEqualTo(42L);
+        assertThat(detail.facts().shippingServiceCode()).isEqualTo("STANDARD");
 
         SecurityContextHolder.clearContext();
         mvc.perform(get("/admin/orders").with(user(principal(buyer, "ADMIN")))
@@ -73,6 +76,7 @@ class OperationsOrderIT {
         mvc.perform(get("/manager/orders/{id}", order).with(user(principal(buyer, "MANAGER")))
                         .accept("application/json"))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.facts.orderCode").value(code))
+                .andExpect(jsonPath("$.facts.shippingServiceCode").value("STANDARD"))
                 .andExpect(jsonPath("$.facts.payments[0].status").value("UNPAID"))
                 .andExpect(jsonPath("$.facts.checkoutKey").doesNotExist())
                 .andExpect(jsonPath("$.facts.requestHash").doesNotExist());

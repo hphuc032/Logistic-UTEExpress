@@ -6,6 +6,9 @@ The corresponding `/{id}` route shows an Order's persisted address/amount snapsh
 item snapshots, status history and payment attempts. HTML and JSON representations
 use the same service authorization. USER/VENDOR/SHIPPER have no Ops access. No query
 includes checkout keys, request hashes or payment provider references.
+After ORD-04, detail also shows the persisted shipping provider ID, service code and
+fee. Legacy orders with no recorded provider/service retain null rather than deriving
+either field from the fee.
 
 This slice does not change Order, Payment, or SecurityConfig files. Its read model is
 local to governance so the existing module dependency direction stays acyclic.
