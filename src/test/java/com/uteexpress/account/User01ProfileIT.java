@@ -146,6 +146,41 @@ class User01ProfileIT {
     }
 
     @Test
+    void sec02InvalidAvatarReplacementPreservesExistingFileAndOwnerState() throws Exception {
+        long owner = createUser("sec02-avatar@example.com", "sec02-avatar", "USER");
+        Cookie jwt = login("sec02-avatar", OLD_PASSWORD);
+        mvc.perform(multipart("/user/avatar").file(new MockMultipartFile(
+                        "avatar", "../../original.png", "image/png", TestImages.png()))
+                        .cookie(jwt).with(csrf()))
+                .andExpect(status().is3xxRedirection());
+        String key = jdbc.queryForObject("select avatar_key from uteexpress.users where id=?", String.class, owner);
+        java.util.Set<Path> before;
+        try (var files = Files.walk(STORAGE_ROOT)) {
+            before = files.filter(Files::isRegularFile).collect(java.util.stream.Collectors.toSet());
+        }
+        var invalid = java.util.List.of(
+                new MockMultipartFile("avatar", "../../escape.svg", "image/svg+xml",
+                        "<svg><script>alert(1)</script></svg>".getBytes(java.nio.charset.StandardCharsets.UTF_8)),
+                new MockMultipartFile("avatar", "spoof.jpg", "image/jpeg", TestImages.png()),
+                new MockMultipartFile("avatar", "broken.png", "image/png", new byte[]{(byte) 0x89, 'P', 'N', 'G'}),
+                new MockMultipartFile("avatar", "large.png", "image/png", new byte[2 * 1024 * 1024 + 1]));
+        for (var upload : invalid) {
+            mvc.perform(multipart("/user/avatar").file(upload).cookie(jwt).with(csrf())
+                            .param("userId", "999999").param("avatarKey", "../../escape.png"))
+                    .andExpect(status().is3xxRedirection())
+                    .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.flash()
+                            .attributeExists("errorMessage"));
+            assertThat(jdbc.queryForObject("select avatar_key from uteexpress.users where id=?", String.class, owner))
+                    .isEqualTo(key);
+            assertThat(Files.readAllBytes(STORAGE_ROOT.resolve(key))).isEqualTo(TestImages.png());
+            try (var files = Files.walk(STORAGE_ROOT)) {
+                assertThat(files.filter(Files::isRegularFile).collect(java.util.stream.Collectors.toSet()))
+                        .isEqualTo(before);
+            }
+        }
+    }
+
+    @Test
     void authenticatedPasswordChangeRevokesOldJwtAndChangesBcryptPasswordExactlyOnce() throws Exception {
         long userId = createUser("password01@example.com", "password01", "USER");
         Cookie oldJwt = login("password01", OLD_PASSWORD);
