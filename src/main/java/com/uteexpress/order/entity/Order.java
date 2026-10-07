@@ -49,6 +49,11 @@ public class Order {
     private BigDecimal discountTotal;
     @Column(name = "shipping_fee", nullable = false, precision = 19, scale = 2)
     private BigDecimal shippingFee;
+    // Nullable only for legacy rows; historical checkout facts have no live provider relationship.
+    @Column(name = "shipping_provider_id", updatable = false)
+    private Long shippingProviderId;
+    @Column(name = "shipping_service_code", length = 32, updatable = false)
+    private String shippingServiceCode;
     @Column(name = "grand_total", nullable = false, precision = 19, scale = 2)
     private BigDecimal grandTotal;
     @Column(name = "commission_amount", nullable = false, precision = 19, scale = 2)
@@ -89,6 +94,8 @@ public class Order {
     public BigDecimal getSubtotal() { return subtotal; }
     public BigDecimal getDiscountTotal() { return discountTotal; }
     public BigDecimal getShippingFee() { return shippingFee; }
+    public Long getShippingProviderId() { return shippingProviderId; }
+    public String getShippingServiceCode() { return shippingServiceCode; }
     public BigDecimal getGrandTotal() { return grandTotal; }
     public BigDecimal getCommissionAmount() { return commissionAmount; }
     public Long getCommissionPolicyId() { return commissionPolicyId; }
@@ -105,9 +112,13 @@ public class Order {
     /** Creates NEW from trusted domain snapshots; persistence belongs to the lifecycle service. */
     public Order(Long buyerId, String orderCode, String checkoutKey, String requestHash,
             CheckoutQuote quote, Instant at) {
-        if (buyerId == null || buyerId <= 0 || quote.shopId() == null || quote.shopId() <= 0
+        if (buyerId == null || buyerId <= 0 || quote == null || quote.shopId() == null || quote.shopId() <= 0
                 || orderCode == null || orderCode.isBlank() || checkoutKey == null || checkoutKey.isBlank()
-                || requestHash == null || requestHash.isBlank() || quote.items().isEmpty()) {
+                || requestHash == null || requestHash.isBlank() || quote.items().isEmpty()
+                || quote.shippingProviderId() == null || quote.shippingProviderId() <= 0
+                || quote.shippingServiceSnapshot() == null
+                // Same canonical service-code grammar as ShippingRateRequest and shipping_rates.
+                || !quote.shippingServiceSnapshot().matches("[A-Z][A-Z0-9_]{0,31}")) {
             throw new ApplicationException(
                     ErrorCode.VALIDATION_FAILED);
         }
@@ -133,6 +144,8 @@ public class Order {
         this.subtotal = quote.totals().subtotal();
         this.discountTotal = quote.totals().discountTotal();
         this.shippingFee = quote.totals().shippingFee();
+        this.shippingProviderId = quote.shippingProviderId();
+        this.shippingServiceCode = quote.shippingServiceSnapshot();
         this.grandTotal = quote.totals().grandTotal();
         this.commissionPolicyId = quote.commissionPolicyId();
         this.commissionRateSnapshot = Objects.requireNonNull(quote.commissionRateSnapshot());

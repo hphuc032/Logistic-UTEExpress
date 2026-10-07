@@ -255,6 +255,25 @@ Refund entitlement (shipping/discount inclusion,
 full/partial policy) also needs confirmation; the lifecycle must compare trusted authorized
 refund amount with successful refund evidence, never invent or accept a browser amount.
 
+## ORD-04 persisted shipping selection
+
+Every newly constructed Order requires a positive `shippingProviderId` and canonical
+`shippingServiceCode` matching `[A-Z][A-Z0-9_]{0,31}`. Placement re-quotes inside its
+transaction: `ShippingQuote.providerId()` and `ShippingQuote.serviceCode()` become
+`CheckoutQuote.shippingProviderId()` and `CheckoutQuote.shippingServiceSnapshot()`.
+Order copies those trusted facts and `CheckoutQuote.totals().shippingFee()` exactly;
+raw request fields and preview totals are not persistence sources.
+
+`Order.getShippingProviderId()` and `Order.getShippingServiceCode()` expose immutable
+scalar checkout facts for future SHIP-01. The nullable database columns support legacy
+orders only; no defaults, backfill or live provider foreign key are introduced. Existing
+orders remain readable when either fact is null. Future SHIP-01 must detect missing
+facts and fail safely, without inferring a selection from fee or current configuration.
+Configuration changes do not rewrite these snapshots. Same-hash checkout replay returns
+the existing order before re-quoting or any side effect and never fills legacy nulls;
+changed-hash replay retains CONFLICT. Shipment creation/assignment and fulfillment remain
+outside ORD-04.
+
 ## Checkout idempotency
 
 CHK-02 implements this contract in `order.service.OrderPlacementService`, retaining

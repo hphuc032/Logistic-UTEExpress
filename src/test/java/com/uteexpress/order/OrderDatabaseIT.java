@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 import java.time.*;
 import java.util.*;
 import org.flywaydb.core.Flyway;
+import org.flywaydb.core.api.MigrationVersion;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.testcontainers.junit.jupiter.*;
@@ -69,7 +71,7 @@ class OrderDatabaseIT {
                 2, new BigDecimal("20.00"))),
                 new CheckoutQuote.AddressSnapshot("Receiver", "0900000000", "79", "District", "Detail"),
                 OrderTotals.calculate(new BigDecimal("20.00"), new BigDecimal("3.00"), new BigDecimal("5.00")),
-                903L, "Standard", commissionPolicy, new BigDecimal("10.1234"), new BigDecimal("2.00"));
+                903L, "STANDARD", commissionPolicy, new BigDecimal("10.1234"), new BigDecimal("2.00"));
     }
 
     // Controlled trusted guards exercise persistence, not production authorization.
@@ -115,6 +117,61 @@ class OrderDatabaseIT {
                 "uteexpress.commission_policies")).isEqualTo("uteexpress.commission_policies");
     }
 
+    @Test void shippingMigrationPreservesOrdersCreatedBeforeOrd04() {
+        try (PostgreSQLContainer upgradeDb = new PostgreSQLContainer("postgres:17.6")) {
+            upgradeDb.start();
+            Flyway.configure()
+                    .dataSource(upgradeDb.getJdbcUrl(), upgradeDb.getUsername(), upgradeDb.getPassword())
+                    .schemas("uteexpress").defaultSchema("uteexpress")
+                    .locations("classpath:db/migration")
+                    .target(MigrationVersion.fromVersion("20261002100000"))
+                    .load().migrate();
+            var upgradeJdbc = new JdbcTemplate(new DriverManagerDataSource(
+                    upgradeDb.getJdbcUrl(), upgradeDb.getUsername(), upgradeDb.getPassword()));
+            Long owner = upgradeJdbc.queryForObject("""
+                    INSERT INTO uteexpress.users
+                    (email,normalized_email,username,normalized_username,password_hash,status)
+                    VALUES ('legacy@example.test','legacy@example.test','legacy','legacy','test-only-password','ACTIVE')
+                    RETURNING id
+                    """, Long.class);
+            Long legacyId = upgradeJdbc.queryForObject("""
+                    INSERT INTO uteexpress.orders
+                    (order_code,checkout_key,request_hash,buyer_id,shop_id,status,
+                     receiver_name,phone,province_code,district,detail,
+                     subtotal,discount_total,shipping_fee,grand_total,commission_amount,commission_rate_snapshot)
+                    VALUES ('LEGACY','legacy-key','legacy-hash',?,901,'NEW',
+                            'Receiver','0900000000','VN','District','Detail',20,3,5,22,0,0)
+                    RETURNING id
+                    """, Long.class, owner);
+            var before = upgradeJdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", legacyId);
+            var latest = Flyway.configure()
+                    .dataSource(upgradeDb.getJdbcUrl(), upgradeDb.getUsername(), upgradeDb.getPassword())
+                    .schemas("uteexpress").defaultSchema("uteexpress")
+                    .locations("classpath:db/migration").load();
+            assertThat(latest.migrate().migrationsExecuted).isEqualTo(1);
+            var after = upgradeJdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", legacyId);
+            assertThat(after).containsEntry("shipping_provider_id", null).containsEntry("shipping_service_code", null);
+            after.remove("shipping_provider_id");
+            after.remove("shipping_service_code");
+            assertThat(after).isEqualTo(before);
+            assertThat(latest.validateWithResult().validationSuccessful).isTrue();
+            assertThat(latest.migrate().migrationsExecuted).isZero();
+        }
+    }
+
+    @Test void legacyNullShippingFactsRemainReadableAndUnchangedByLifecycle() {
+        var order = create();
+        jdbc.update("UPDATE uteexpress.orders SET shipping_provider_id=NULL,shipping_service_code=NULL WHERE id=?", order.getId());
+        var legacy = orders.findById(order.getId()).orElseThrow();
+        assertThat(legacy.getShippingProviderId()).isNull();
+        assertThat(legacy.getShippingServiceCode()).isNull();
+        assertThat(legacy.getShippingFee()).isEqualByComparingTo("5");
+        lifecycle(buyer).transition(confirm(legacy));
+        var stored = orders.findById(order.getId()).orElseThrow();
+        assertThat(stored.getShippingProviderId()).isNull();
+        assertThat(stored.getShippingServiceCode()).isNull();
+    }
+
     @Test void persistsAllEntitiesSnapshotsAndVersionAndPublishesAfterCommit() {
         Order order = create();
         assertThat(order.getVersion()).isZero();
@@ -131,6 +188,9 @@ class OrderDatabaseIT {
         assertThat(stored.getVersion()).isEqualTo(1L);
         assertThat(stored.getStatus()).isEqualTo(OrderStatus.CONFIRMED);
         assertThat(stored.getCommissionRateSnapshot()).isEqualByComparingTo("10.1234");
+        assertThat(stored.getShippingProviderId()).isEqualTo(903L);
+        assertThat(stored.getShippingServiceCode()).isEqualTo("STANDARD");
+        assertThat(stored.getShippingFee()).isEqualByComparingTo("5");
         assertThat(history.count()).isEqualTo(2);
         assertThat(events).hasSize(1);
         history.saveAndFlush(new OrderStatusHistory(order.getId(), OrderStatus.CONFIRMED,
@@ -178,7 +238,11 @@ class OrderDatabaseIT {
         payments.saveAndFlush(new Payment(order.getId(), CheckoutRequest.PaymentMethod.COD, quote().totals(), "attempt", NOW));
         for (String assignment : List.of("buyer_id=9223372036854775807", "status='DELIVERY_FAILED'",
                 "subtotal=-1", "shipping_fee=-1", "discount_total=21", "grand_total=23",
-                "commission_amount=18", "commission_rate_snapshot=101", "version=-1", "subtotal='NaN'")) {
+                "commission_amount=18", "commission_rate_snapshot=101", "version=-1", "subtotal='NaN'",
+                "shipping_provider_id=0", "shipping_provider_id=-1", "shipping_service_code=''",
+                "shipping_service_code=' '", "shipping_service_code='standard'", "shipping_service_code='1EXPRESS'",
+                "shipping_service_code='EXPRESS-1'", "shipping_service_code='STANDARD '",
+                "shipping_service_code='A12345678901234567890123456789012'")) {
             rejects("UPDATE uteexpress.orders SET " + assignment);
         }
         for (String assignment : List.of("order_id=9223372036854775807", "quantity=0", "unit_price=0",
