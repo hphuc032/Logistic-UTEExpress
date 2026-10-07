@@ -18,3 +18,8 @@ currently has no status-change event, so this listener handles transitions only.
 
 The inbox is durable and can be fetched after reconnect. Real-time private WebSocket
 delivery belongs to WS-02.
+
+The notification migration is versioned after ORD-04's merged shipping snapshot.
+`NotificationMigrationIT` upgrades a PostgreSQL database already at ORD-04, verifies
+the new table, and checks Flyway validation/idempotence. This protects deployed
+`develop` databases from a pending migration with an older version.
