@@ -14,7 +14,9 @@ public record ProductDetailView(
         String shopName,
         String categorySlug,
         String categoryName,
-        List<ProductImageView> images) {
+        List<ProductImageView> images,
+        BigDecimal discountSnapshot,
+        BigDecimal effectivePrice) {
 
     public ProductDetailView {
         images = List.copyOf(images);
@@ -22,6 +24,12 @@ public record ProductDetailView(
 
     public ProductDetailView withImages(List<ProductImageView> productImages) {
         return new ProductDetailView(id, name, description, price, stock, shopSlug, shopName,
-                categorySlug, categoryName, productImages);
+                categorySlug, categoryName, productImages, discountSnapshot, effectivePrice);
+    }
+
+    public ProductDetailView(Long id, String name, String description, BigDecimal price, int stock,
+            String shopSlug, String shopName, String categorySlug, String categoryName, List<ProductImageView> images) {
+        this(id, name, description, price, stock, shopSlug, shopName, categorySlug, categoryName, images,
+                BigDecimal.ZERO, price);
     }
 }

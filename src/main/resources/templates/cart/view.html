@@ -34,7 +34,9 @@
                             <span th:case="*" class="app-status-badge status-delivered" th:text="|Còn hàng: ${item.stock}|"></span>
                         </div>
                     </td>
-                    <td th:text="${item.unitPrice == null ? 'Không khả dụng' : #numbers.formatDecimal(item.unitPrice, 0, 'POINT', 0, 'COMMA') + ' ₫'}"></td>
+                    <td><del th:if="${item.discountSnapshot.signum() > 0}" class="text-muted d-block"
+                             th:text="${#numbers.formatDecimal(item.originalUnitPrice, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></del>
+                        <span th:text="${item.unitPrice == null ? 'Không khả dụng' : #numbers.formatDecimal(item.unitPrice, 0, 'POINT', 0, 'COMMA') + ' ₫'}"></span></td>
                     <td><form class="position-relative" method="post" th:action="@{/user/cart/view/items/{id}/quantity(id=${item.id})}">
                         <label class="visually-hidden" th:for="|quantity-${item.id}|" th:text="|Số lượng ${item.productName}|"></label>
                         <input class="form-control" type="number" name="quantity" min="1" step="1" required

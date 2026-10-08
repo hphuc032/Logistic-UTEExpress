@@ -119,6 +119,12 @@ reason text. Unchecked free text does not enter history/events. Under the order 
 inventory_released_at must be null; restore uses persisted OrderItem quantities through
 InventoryService.restore, then sets inventory_released_at at the cancellation instant.
 Stock, status, timestamps and exactly one status-history event commit/rollback together.
+PROMO-01 also releases the Order's REDEEMED voucher usage in that transaction after
+the Product/Shop locks, taking Voucher then VoucherUsage locks. RELEASED history is
+retained and excluded from both quotas; original Order/usage discount facts stay intact.
+Legacy Orders without usage remain unchanged; a voucher snapshot missing its expected
+usage is a CONFLICT that rolls back cancellation. Post-delivery returns/refunds never
+restore voucher quota. See [PROMO-01 voucher contract](PROMO-01-vouchers.md).
 Duplicate/stale/late actions conflict with no stock or history change. Cart and Payment
 records are unchanged, including an existing PAID record; refund decisions remain deferred.
 
@@ -179,8 +185,10 @@ contain multiple shops, but selected items across shops are rejected with CONFLI
 the buyer must select one shop for each checkout. One subtotal, one SHIP-00 shipping
 quote and one total are calculated. `CheckoutRequest` is reserved for the later
 place-order flow, not bound by
-the preview endpoints. Preview commission fields are unresolved (`null`), discounts
-are zero, and no promotion/voucher/payment/commission engine is invoked. CHK-02 must
+the preview endpoints. Preview commission fields are unresolved (`null`). PROMO-02
+calculates persisted percentage Product promotions at one server pricing instant per batch.
+PROMO-01 adds optional server-calculated voucher discounts against that post-promotion subtotal;
+preview never reserves quota or writes usage/payment. CHK-02 must
 revalidate every fact; a preview is neither a reservation nor an order command.
 
 Currency for this contract is VND. `Money` uses BigDecimal exclusively, rounds calculated
@@ -194,7 +202,7 @@ dong instead of silently changing a quote/payment. Catalog and shipping owners m
 return amounts conforming to this policy. Payment validation compares exact values,
 ignoring insignificant BigDecimal scale only; 100.01 cannot pay a 100.00 order.
 
-Calculation contract for the future checkout implementation:
+Calculation contract implemented by checkout:
 
 1. Resolve buyer from SEC-01; validate address ownership and checkout key. Reject empty
    items, duplicate product IDs, invalid quantities, unavailable products and multiple
@@ -215,8 +223,8 @@ Calculation contract for the future checkout implementation:
    order-level voucher uses subtotal as its merchandise calculation base, after product
    promotion and before the voucher, excluding shipping. Round the authorized voucher
    discount once with `Money.round`; enforce `0 <= discountTotal <= subtotal`.
-   Voucher stacking, other eligibility rules and allocation remain deferred to later
-   promotion/voucher contracts; no voucher engine is defined or implemented here.
+   PROMO-01 defines voucher eligibility/limits and single-voucher application in
+   [the voucher contract](PROMO-01-vouchers.md). Stacking and allocation remain deferred.
 5. Obtain shippingFee from ShippingQuoteService for the server-resolved destination,
    shop and selected active provider/service. No zero-fee fallback on quote failure.
 6. `OrderTotals.calculate`: subtotal - discountTotal + shippingFee = grandTotal.
@@ -231,7 +239,7 @@ For example, original merchandise of 100,000 VND minus a 20,000 VND product prom
 gives lineTotal and subtotal of 80,000 VND. A 10,000 VND voucher gives discountTotal of
 10,000 VND; with shippingFee of 5,000 VND, grandTotal is 75,000 VND. Subtotal of 100,000
 and discountTotal of 30,000 are incorrect even though they produce the same grandTotal.
-Line promotion calculation belongs to future checkout logic; OrderTotals validates supplied
+PROMO-02 supplies line promotion calculation; OrderTotals validates supplied
 amounts and arithmetic, not their provenance or aggregation from CheckoutQuote items.
 
 ## Commission
@@ -289,14 +297,16 @@ again through CHK-01 in the placement transaction.
 PAY-01 extends new COD placement with one persisted UNPAID Payment attempt in the
 same transaction, using the persisted Order totals. Matching checkout replay returns
 before payment initialization; pre-PAY-01 orders without payment remain unchanged.
-ONLINE and nonblank vouchers are rejected as INVALID_REQUEST; their engines remain
-outside this increment. Product and order discounts remain zero.
+ONLINE remains rejected as INVALID_REQUEST. PROMO-01 extends this contract with
+server-calculated order-level vouchers; PROMO-02 supplies per-unit Product promotion discounts. See
+[PROMO-01 voucher contract](PROMO-01-vouchers.md) for persisted rules, quota locks and snapshots.
 No Shipment or later order-management workflow is created. The placement receipt has
 order ID/code, current status, grand total, creation time and a replay flag.
 
 Canonical hash v1 uses SHA-256 over UTF-8, length-prefixed fields: item count, ascending
 product-ID/quantity pairs, address ID, provider ID, exact validated service code, payment
-method enum name, and stripped voucher code (null/blank becomes empty). Duplicate product
+method enum name, and canonical voucher code (PROMO-01: strip, ASCII validation,
+Locale.ROOT uppercase; null/blank becomes empty). Existing no-voucher hashes remain identical. Duplicate product
 IDs are invalid. Key whitespace is stripped; the key itself is not a hash field. Key
 length is at most the existing VARCHAR(255). No client hash, totals or identity are accepted.
 
@@ -402,7 +412,7 @@ machine. No migration, seed, schema, database convention or configuration is cha
 | Version | expectedVersion checks orders.version; later optimistic/pessimistic implementation |
 | Event/history | order_status_history order_id/from_status/to_status/actor_id nullable/reason/created_at |
 | Return/refund | Unique return/order and refund/order; refund/payment/return same order; preserve E3 unique payment/return references |
-| Promotions/vouchers | Server calculation boundary only; no new tables, enums or altered usage/limit rules |
+| Promotions/vouchers | PROMO-01 persists voucher rules/usage and order snapshots; PROMO-02 persists percentage Product schedules with overlap protection |
 | Shipment | QD fields attempt_count, max_attempts, failure_reason, shipping_service_snapshot, fee_snapshot |
 
 No full PaymentStatus, ReturnRequestStatus or RefundStatus enum is invented here; the

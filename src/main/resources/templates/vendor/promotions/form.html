@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Quản lý khuyến mãi | UTEExpress</title></head>
+<body><main class="app-page-section">
+    <a class="app-back-link" th:href="@{/vendor/products/{p}/promotions(p=${product.id})}">← Khuyến mãi sản phẩm</a>
+    <h1 th:text="${editMode} ? 'Chỉnh sửa khuyến mãi' : 'Tạo khuyến mãi'"></h1><p th:text="${product.name}"></p>
+    <p>Thời gian Việt Nam (UTC+7). Các lịch được bật của cùng sản phẩm không được trùng nhau.</p>
+    <form method="post" th:object="${promotionForm}" novalidate
+          th:action="${editMode} ? @{/vendor/products/{p}/promotions/{id}/update(p=${product.id},id=${promotion.id})} : @{/vendor/products/{p}/promotions(p=${product.id})}">
+        <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}"><p th:each="error : ${#fields.allErrors()}" th:text="${error}"></p></div>
+        <input th:if="${editMode}" type="hidden" th:field="*{version}">
+        <div class="mb-3"><label for="name" class="form-label">Tên khuyến mãi</label>
+            <input id="name" class="form-control" th:field="*{name}" maxlength="200" required></div>
+        <div class="mb-3"><label for="discountPercent" class="form-label">Giảm giá (%)</label>
+            <input id="discountPercent" class="form-control" type="number" step="any" min="0" max="100" th:field="*{discountPercent}" required></div>
+        <div class="mb-3"><label for="startsAt" class="form-label">Bắt đầu (bao gồm)</label>
+            <input id="startsAt" class="form-control" type="datetime-local" step="0.000001" th:field="*{startsAt}" required></div>
+        <div class="mb-3"><label for="endsAt" class="form-label">Kết thúc (không bao gồm)</label>
+            <input id="endsAt" class="form-control" type="datetime-local" step="0.000001" th:field="*{endsAt}" required></div>
+        <div class="form-check mb-3"><input id="active" class="form-check-input" type="checkbox" th:field="*{active}">
+            <label for="active" class="form-check-label">Bật khuyến mãi</label></div>
+        <button type="submit" class="btn btn-app-primary">Lưu khuyến mãi</button>
+        <a class="btn btn-app-secondary" th:href="@{/vendor/products/{p}/promotions(p=${product.id})}">Hủy</a>
+    </form>
+</main></body></html>

@@ -19,7 +19,7 @@ public class CheckoutPageController {
     public CheckoutPageController(CheckoutQuoteService checkout) { this.checkout = checkout; }
 
     @InitBinder("quoteForm")
-    void fields(WebDataBinder binder) { binder.setAllowedFields("addressId", "shippingProviderId", "shippingServiceCode"); }
+    void fields(WebDataBinder binder) { binder.setAllowedFields("addressId", "shippingProviderId", "shippingServiceCode", "voucherCode"); }
 
     @GetMapping
     String view(@RequestParam(required = false) Long addressId, Model model) {
@@ -58,7 +58,7 @@ public class CheckoutPageController {
     @ExceptionHandler(ApplicationException.class)
     String error(ApplicationException exception, RedirectAttributes redirect) {
         if (exception.errorCode() == ErrorCode.UNAUTHENTICATED) throw exception;
-        if (exception.detail() == ErrorCode.Detail.SINGLE_SHOP_CHECKOUT) {
+        if (exception.detail() != null) {
             redirect.addFlashAttribute("errorMessage", exception.publicMessage());
             return "redirect:/user/checkout/view";
         }

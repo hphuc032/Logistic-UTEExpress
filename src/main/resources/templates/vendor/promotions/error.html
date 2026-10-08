@@ -1,0 +1,7 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Khuyến mãi sản phẩm | UTEExpress</title></head>
+<body><main class="app-page-section"><h1>Không thể thực hiện</h1>
+    <p class="alert alert-warning" th:text="${publicMessage}"></p>
+    <a th:href="@{/vendor/products}">Quay lại sản phẩm cửa hàng</a>
+</main></body></html>

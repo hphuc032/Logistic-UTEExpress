@@ -1,6 +1,7 @@
 package com.uteexpress.order.service;
 
 import com.uteexpress.checkout.dto.CheckoutRequest;
+import com.uteexpress.promotion.dto.VoucherCode;
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
 import java.nio.charset.StandardCharsets;
@@ -36,7 +37,7 @@ final class CheckoutRequestHash {
         field(canonical, request.shippingProviderId());
         field(canonical, request.shippingServiceCode());
         field(canonical, request.paymentMethod().name());
-        field(canonical, request.voucherCode() == null ? "" : request.voucherCode().strip());
+        field(canonical, VoucherCode.normalize(request.voucherCode()));
         try {
             return HexFormat.of().formatHex(MessageDigest.getInstance("SHA-256")
                     .digest(canonical.toString().getBytes(StandardCharsets.UTF_8)));

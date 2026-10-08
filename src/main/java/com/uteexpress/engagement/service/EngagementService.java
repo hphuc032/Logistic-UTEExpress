@@ -78,7 +78,7 @@ public class EngagementService {
             CartProductSnapshot product = products.get(row.productId());
             boolean available = product != null && product.purchasable();
             return new SavedProductView(row.productId(), available ? product.productName() : "Sản phẩm không còn hiển thị",
-                    available ? product.unitPrice() : null, available, row.savedAt());
+                    available ? product.finalUnitPrice() : null, available, row.savedAt());
         }).toList();
     }
 

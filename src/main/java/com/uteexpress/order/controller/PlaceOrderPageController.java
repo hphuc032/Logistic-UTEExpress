@@ -36,7 +36,7 @@ public class PlaceOrderPageController {
         if (exception.errorCode() == ErrorCode.UNAUTHENTICATED || exception.errorCode() == ErrorCode.ACCESS_DENIED) {
             throw exception;
         }
-        redirect.addFlashAttribute("errorMessage", exception.detail() == ErrorCode.Detail.SINGLE_SHOP_CHECKOUT
+        redirect.addFlashAttribute("errorMessage", exception.detail() != null
                 ? exception.publicMessage()
                 : "Không thể đặt hàng với lựa chọn hiện tại. Vui lòng kiểm tra giỏ hàng, địa chỉ và xem lại báo giá.");
         return "redirect:/user/checkout/view";
