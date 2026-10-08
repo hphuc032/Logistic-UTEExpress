@@ -12,6 +12,7 @@ import java.time.Instant;
 import java.util.Optional;
 
 public interface VoucherUsageRepository extends JpaRepository<VoucherUsage, Long> {
+    boolean existsByVoucherId(Long voucherId);
     long countByVoucherIdAndStatus(Long voucherId, VoucherUsage.Status status);
     long countByVoucherIdAndUserIdAndStatus(Long voucherId, Long userId, VoucherUsage.Status status);
     Optional<VoucherUsage> findByOrderId(Long orderId);

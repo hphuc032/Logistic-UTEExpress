@@ -3,7 +3,85 @@
 STATUS: READY FOR REVIEW
 
 Owner: Tiến Đạt (TD). Reviewer: Hoàng Phúc (HP). Dependency: CHK-02.
-Scope: shop/platform model, limits, usage, lock quota, checkout apply.
+Scope: shop/platform model, limits, usage, lock quota, checkout apply, Vendor SHOP voucher management.
+
+## Vendor management extension (current PR #40)
+
+Vendor routes now provide list, create, edit/update, and disable:
+`GET /vendor/vouchers`, `GET /vendor/vouchers/new`, `POST /vendor/vouchers`,
+`GET /vendor/vouchers/{id}/edit`, `POST /vendor/vouchers/{id}/update`, and
+`POST /vendor/vouchers/{id}/disable`. The update route follows Vendor products.
+The shared navbar exposes this entry only to Vendors.
+
+The actual ownership model has one Shop per owner (`uq_shops_owner_id`).
+VendorVoucherService uses CurrentAccountIdProvider and VendorShopQueryService;
+all reads require the Vendor's approved Shop, and all resource queries include
+both that Shop and SHOP scope. Foreign, missing and PLATFORM IDs return 404.
+New vouchers always use that Shop, SHOP scope and the authenticated creator.
+Form DTOs contain no owner, creator, Shop or scope fields. A binding allowlist
+rejects forged fields with form feedback. The existing `/vendor/**` security
+rule and method authority checks protect management; CSRF stays enabled and
+Thymeleaf `th:action` POST forms supply the existing cookie-backed CSRF token.
+
+Management writes lock active Vendor account -> approved owned Shop -> Voucher.
+The Voucher lock is the same row used by checkout and cancellation; management
+never acquires Product, Order or Usage locks afterward. Updates check the
+submitted version after refreshing the locked Voucher. History is checked only
+after acquiring that lock, including RELEASED usage, so a checkout committed
+during a lock wait cannot be missed.
+
+Unused vouchers may change code/discount definition, window, quotas and enabled
+state. After any usage, code, type, value, maximum discount and minimum subtotal
+are immutable, and total/per-user limits may only increase. Window and enabled
+state remain editable. No quota counter is reset and no history or Order snapshot
+is changed. Disable is idempotent, retains the row/history, and changes the same
+active flag already enforced by Voucher.apply. Forms/display use Vietnam time
+(UTC+7), converted to persisted Instants; start remains inclusive, end exclusive.
+Duplicate codes, stale versions and domain conflicts return user-friendly form
+feedback without exception text or another Shop's voucher details.
+
+No migration, checkout VoucherService, quota counting/locking, lifecycle,
+cancellation release, PLATFORM administration, PROMO-02 or PROMO-03 behavior
+is changed. Existing datasource-free web test fixtures add only a mock of the
+new management service, with their original assertions intact.
+
+Focused coverage lives in VendorVoucherFormTest and PostgreSQL VendorVoucherIT:
+owned-only listing; create/update/disable; tampering and PLATFORM rejection;
+invalid input/duplicates/stale versions; every route's role and CSRF contract;
+actual login JWT cookies and rendered form token round trips; REDEEMED/RELEASED
+history protections; and an observed PostgreSQL quota-lock wait proving a
+management update sees newly committed usage. VoucherCheckoutIT adds a real
+Vendor-form create/edit -> quote/place -> disable -> rejected future checkout ->
+pre-delivery cancellation flow, preserving historical facts and releasing usage.
+All its existing quota, concurrency, rollback, replay and cancellation cases
+remain intact.
+
+Vendor extension final verification (2026-10-07, Java 21.0.12.1, PostgreSQL 17.6):
+
+| Gate | Surefire tests | Failsafe tests | Failures | Errors | Skipped | Reruns / flakes | Build |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | --- |
+| Focused Vendor/form/architecture/voucher regression | 13 | 124 | 0 | 0 | 0 | 0 / 0 | SUCCESS |
+| Full `mvnw.cmd -Ppostgres-it clean verify` | 384 | 552 | 0 | 0 | 0 | 0 / 0 | SUCCESS |
+
+The full gate ran 58 Surefire suites and 33 Failsafe suites (936 tests), finished
+at 15:13:08 UTC+7 in 4 minutes 43 seconds, and returned exit 0. Counts and Java
+version came from fresh XML reports after clean verify. Failsafe summary has
+completed=552 and timeout=false. The 30-second fork shutdown warning appeared
+after successful tests while cached pools closed; it did not change the build
+result. The focused gate passed on the final production/test code before the
+full run. Earlier development runs exposed test-fixture/compiler/CSRF-isolation
+issues and the URI-variable binding integration defect; all were corrected
+before these final gates. Docker access required running Maven outside the
+filesystem sandbox, without changing security or the test infrastructure.
+
+Evidence is retained under ignored target/: promo-01-vendor-focused.log,
+promo-01-vendor-full.log, promo-01-vendor-verification.json and fresh XML reports.
+No branch switch/create, commit, push, merge, rebase, amend or index mutation was
+performed; HEAD remained a17cd1e014fec949dd02f2156aa65f77e39c7a25 on
+feature/promo-01-vouchers. Review includes the new untracked files; nothing has
+been staged. PLATFORM vouchers remain outside Vendor management, ownership is
+server-derived/enforced, and existing CSRF, checkout quota/locking and cancellation
+semantics are preserved.
 
 ## Inspected starting state
 
@@ -233,7 +311,7 @@ All paths below are relative to the repository.
 ## Explicit scope limits and review decisions
 
 No PROMO-02 product promotion/scheduling, PROMO-03 work, voucher stacking,
-voucher management UI/API, shipping assignment/lifecycle, COD collection,
+PLATFORM voucher administration (PROMO-03), shipping assignment/lifecycle, COD collection,
 return/refund, Admin/Ops cancellation, or unrelated catalog/security changes.
 Voucher release on existing successful pre-delivery cancellation is part of PROMO-01.
 No new cancellation authority or return/refund workflow is introduced.

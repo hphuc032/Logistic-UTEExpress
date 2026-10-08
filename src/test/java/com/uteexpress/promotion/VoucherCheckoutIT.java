@@ -81,6 +81,45 @@ class VoucherCheckoutIT {
     }
     @AfterEach void clear() { SecurityContextHolder.clearContext(); }
 
+    @Test void vendorFormsCreateEditAndDisableVoucherUsedByRealCheckoutAndCancellation() throws Exception {
+        mvc.perform(post("/vendor/vouchers").with(user(vendorPrincipal())).with(csrf())
+                        .param("code", "SAVE").param("type", "PERCENTAGE").param("value", "10")
+                        .param("minSubtotal", "0").param("startsAt", "2020-01-01T00:00")
+                        .param("endsAt", "2100-01-01T00:00").param("totalLimit", "1")
+                        .param("perUserLimit", "1").param("active", "true"))
+                .andExpect(status().is3xxRedirection());
+        long id = jdbc.queryForObject("SELECT id FROM uteexpress.vouchers WHERE code='SAVE'", Long.class);
+        mvc.perform(post("/vendor/vouchers/" + id + "/update").with(user(vendorPrincipal())).with(csrf())
+                        .param("version", "0").param("code", "SAVE").param("type", "PERCENTAGE").param("value", "20")
+                        .param("minSubtotal", "0").param("startsAt", "2020-01-01T00:00")
+                        .param("endsAt", "2100-01-01T00:00").param("totalLimit", "1")
+                        .param("perUserLimit", "1").param("active", "true"))
+                .andExpect(status().is3xxRedirection());
+        authenticate(buyer);
+        assertThat(quotes.quote(new QuoteRequest(address, provider, "STANDARD", "SAVE")).quote().totals().discountTotal())
+                .isEqualByComparingTo("50000");
+        var placed = placement.placeOrder(request("SAVE"));
+        var originalHistory = jdbc.queryForMap("SELECT * FROM uteexpress.voucher_usages WHERE voucher_id=?", id);
+        var snapshots = historicalOrderFacts(placed.orderId());
+        mvc.perform(post("/vendor/vouchers/" + id + "/disable").with(user(vendorPrincipal())).with(csrf()))
+                .andExpect(status().is3xxRedirection());
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.voucher_usages WHERE voucher_id=?", id)).isEqualTo(originalHistory);
+        authenticate(buyer);
+        carts.addProduct(new AddCartProductRequest(product, 2));
+        var before = state();
+        rejects(() -> quotes.quote(new QuoteRequest(address, provider, "STANDARD", "SAVE")), ErrorCode.Detail.VOUCHER_INACTIVE);
+        rejects(() -> placement.placeOrder(command(address, product, 2, "disabled-new-key", "SAVE")), ErrorCode.Detail.VOUCHER_INACTIVE);
+        assertThat(state()).isEqualTo(before);
+        authenticateVendor();
+        lifecycle.transition(new OrderTransitionCommand(placed.orderId(), OrderStatus.NEW,
+                vendorOrders.detail(placed.orderId()).version(), OrderAction.CANCEL_NEW, "OUT_OF_STOCK"));
+        var released = jdbc.queryForMap("SELECT * FROM uteexpress.voucher_usages WHERE voucher_id=?", id);
+        assertThat(released).containsEntry("status", "RELEASED");
+        assertThat(released.get("released_at")).isNotNull();
+        assertThat(originalUsageFacts(released)).isEqualTo(originalUsageFacts(originalHistory));
+        assertThat(historicalOrderFacts(placed.orderId())).isEqualTo(snapshots);
+    }
+
     @ParameterizedTest @ValueSource(strings = {"SHOP", "PLATFORM"})
     void quoteAndPlacementUsePersistedRulesAndSaveOneUsage(String scope) {
         long id = voucher(scope, 10, 1);

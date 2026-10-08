@@ -62,6 +62,52 @@ public class Voucher {
     public String getCode() { return code; }
     public long getTotalLimit() { return totalLimit; }
     public long getPerUserLimit() { return perUserLimit; }
+    public VoucherScope getScope() { return scope; }
+    public Long getShopId() { return shopId; }
+    public VoucherType getType() { return type; }
+    public BigDecimal getValue() { return value; }
+    public BigDecimal getMaxDiscount() { return maxDiscount; }
+    public BigDecimal getMinSubtotal() { return minSubtotal; }
+    public Instant getStartsAt() { return startsAt; }
+    public Instant getEndsAt() { return endsAt; }
+    public boolean isActive() { return active; }
+    public Long getVersion() { return version; }
+
+    /** Caller holds the quota row lock. Released history also prevents redefining a used voucher. */
+    public void update(String code, VoucherType type, BigDecimal value, BigDecimal maxDiscount,
+            BigDecimal minSubtotal, Instant startsAt, Instant endsAt, long totalLimit,
+            long perUserLimit, boolean active, boolean hasUsage, Instant at) {
+        var candidate = new Voucher(code, scope, shopId, type, value, maxDiscount, minSubtotal,
+                startsAt, endsAt, totalLimit, perUserLimit, active, createdBy, at);
+        if (hasUsage && (!this.code.equals(candidate.code) || this.type != candidate.type
+                || this.value.compareTo(candidate.value) != 0
+                || !sameAmount(this.maxDiscount, candidate.maxDiscount)
+                || this.minSubtotal.compareTo(candidate.minSubtotal) != 0
+                || totalLimit < this.totalLimit || perUserLimit < this.perUserLimit)) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+        this.code = candidate.code;
+        this.type = candidate.type;
+        this.value = candidate.value;
+        this.maxDiscount = candidate.maxDiscount;
+        this.minSubtotal = candidate.minSubtotal;
+        this.startsAt = candidate.startsAt;
+        this.endsAt = candidate.endsAt;
+        this.totalLimit = candidate.totalLimit;
+        this.perUserLimit = candidate.perUserLimit;
+        this.active = active;
+        this.updatedAt = at;
+    }
+
+    public void disable(Instant at) {
+        if (!active) return;
+        updatedAt = java.util.Objects.requireNonNull(at);
+        active = false;
+    }
+
+    private static boolean sameAmount(BigDecimal first, BigDecimal second) {
+        return first == null ? second == null : second != null && first.compareTo(second) == 0;
+    }
 
     /** Inclusive start, exclusive end. PLATFORM applies to any otherwise eligible single-shop checkout. */
     public VoucherApplication apply(Long targetShop, BigDecimal subtotal, Instant now) {
