@@ -227,4 +227,3 @@ class ShipmentFulfillmentIT {
         return new UteExpressPrincipal(id, "ship", null, 0, authorities, true);
     }
 }
-
