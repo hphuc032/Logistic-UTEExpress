@@ -88,10 +88,13 @@ public class CheckoutQuoteService {
             if (product.shopId() == null || product.shopId() <= 0) fail(ErrorCode.RESOURCE_NOT_FOUND);
             BigDecimal price = Money.requireAmount(product.unitPrice());
             if (price.signum() <= 0) fail(ErrorCode.VALIDATION_FAILED);
-            BigDecimal lineTotal = Money.requireAmount(price.multiply(BigDecimal.valueOf(item.quantity())));
+            BigDecimal discount = Money.requireAmount(product.discountSnapshot());
+            BigDecimal finalPrice = Money.requireAmount(product.finalUnitPrice());
+            if (discount.compareTo(price) > 0 || price.subtract(discount).compareTo(finalPrice) != 0) fail(ErrorCode.CONFLICT);
+            BigDecimal lineTotal = Money.requireAmount(finalPrice.multiply(BigDecimal.valueOf(item.quantity())));
             shopIds.add(product.shopId());
             items.add(new CheckoutQuote.ItemSnapshot(
-                    product.productId(), product.productName(), price, Money.round(BigDecimal.ZERO), price, item.quantity(), lineTotal));
+                    product.productId(), product.productName(), price, discount, finalPrice, item.quantity(), lineTotal));
         }
         if (shopIds.size() != 1) throw new ApplicationException(ErrorCode.Detail.SINGLE_SHOP_CHECKOUT);
         Long shopId = shopIds.iterator().next();

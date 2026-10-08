@@ -19,6 +19,7 @@ import com.uteexpress.common.storage.StoredContent;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -31,10 +32,12 @@ public class PublicCatalogService {
 
     private final CatalogReadRepository catalog;
     private final FileStorageService storage;
+    private final Clock clock;
 
-    public PublicCatalogService(CatalogReadRepository catalog, FileStorageService storage) {
+    public PublicCatalogService(CatalogReadRepository catalog, FileStorageService storage, Clock clock) {
         this.catalog = catalog;
         this.storage = storage;
+        this.clock = clock;
     }
 
     @Transactional(readOnly = true)
@@ -53,11 +56,12 @@ public class PublicCatalogService {
         ProductSearchCriteria criteria = requested == null ? new ProductSearchCriteria() : requested.normalized();
         validate(criteria);
         ProductSort sort = ProductSort.fromParameter(criteria.getSort());
-        long totalItems = catalog.countPublicProducts(criteria);
+        var pricingAt = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+        long totalItems = catalog.countPublicProducts(criteria, pricingAt);
         long offset = (long) criteria.getPage() * criteria.getSize();
         List<ProductCard> products = offset >= totalItems
                 ? List.of()
-                : catalog.findPublicProducts(criteria, sort, criteria.getSize(), offset);
+                : catalog.findPublicProducts(criteria, sort, criteria.getSize(), offset, pricingAt);
         long totalPages = totalItems == 0 ? 0 : 1 + (totalItems - 1) / criteria.getSize();
         return new ProductSearchPage(products, criteria, totalItems, criteria.getPage(), criteria.getSize(),
                 totalPages, criteria.getPage() > 0, (long) criteria.getPage() + 1 < totalPages);

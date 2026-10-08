@@ -12,5 +12,12 @@ public record ProductCard(
         String shopName,
         String categorySlug,
         String categoryName,
-        Long thumbnailImageId) {
+        Long thumbnailImageId,
+        BigDecimal discountSnapshot,
+        BigDecimal effectivePrice) {
+    public ProductCard(Long id, String name, BigDecimal price, int stock, String shopSlug, String shopName,
+            String categorySlug, String categoryName, Long thumbnailImageId) {
+        this(id, name, price, stock, shopSlug, shopName, categorySlug, categoryName, thumbnailImageId,
+                BigDecimal.ZERO, price);
+    }
 }

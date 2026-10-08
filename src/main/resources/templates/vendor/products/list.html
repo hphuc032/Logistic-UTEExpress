@@ -36,6 +36,7 @@
                           th:text="${product.status == 'ACTIVE'} ? 'Đang bán' : 'Đã ẩn'">Đang bán</span></td>
                 <td>
                     <div class="d-flex justify-content-end flex-wrap gap-2">
+                        <a class="btn btn-sm btn-app-secondary" th:href="@{/vendor/products/{id}/promotions(id=${product.id})}">Khuyến mãi</a>
                         <a class="btn btn-sm btn-app-secondary" th:href="@{/vendor/products/{id}/edit(id=${product.id})}">Chỉnh sửa</a>
                         <form method="post" th:if="${product.status == 'ACTIVE'}"
                               th:action="@{/vendor/products/{id}/delete(id=${product.id})}">

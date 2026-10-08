@@ -185,8 +185,9 @@ contain multiple shops, but selected items across shops are rejected with CONFLI
 the buyer must select one shop for each checkout. One subtotal, one SHIP-00 shipping
 quote and one total are calculated. `CheckoutRequest` is reserved for the later
 place-order flow, not bound by
-the preview endpoints. Preview commission fields are unresolved (`null`) and product
-discounts remain zero. PROMO-01 adds optional server-calculated voucher discounts;
+the preview endpoints. Preview commission fields are unresolved (`null`). PROMO-02
+calculates persisted percentage Product promotions at one server pricing instant per batch.
+PROMO-01 adds optional server-calculated voucher discounts against that post-promotion subtotal;
 preview never reserves quota or writes usage/payment. CHK-02 must
 revalidate every fact; a preview is neither a reservation nor an order command.
 
@@ -201,7 +202,7 @@ dong instead of silently changing a quote/payment. Catalog and shipping owners m
 return amounts conforming to this policy. Payment validation compares exact values,
 ignoring insignificant BigDecimal scale only; 100.01 cannot pay a 100.00 order.
 
-Calculation contract for the future checkout implementation:
+Calculation contract implemented by checkout:
 
 1. Resolve buyer from SEC-01; validate address ownership and checkout key. Reject empty
    items, duplicate product IDs, invalid quantities, unavailable products and multiple
@@ -238,7 +239,7 @@ For example, original merchandise of 100,000 VND minus a 20,000 VND product prom
 gives lineTotal and subtotal of 80,000 VND. A 10,000 VND voucher gives discountTotal of
 10,000 VND; with shippingFee of 5,000 VND, grandTotal is 75,000 VND. Subtotal of 100,000
 and discountTotal of 30,000 are incorrect even though they produce the same grandTotal.
-Line promotion calculation belongs to future checkout logic; OrderTotals validates supplied
+PROMO-02 supplies line promotion calculation; OrderTotals validates supplied
 amounts and arithmetic, not their provenance or aggregation from CheckoutQuote items.
 
 ## Commission
@@ -297,7 +298,7 @@ PAY-01 extends new COD placement with one persisted UNPAID Payment attempt in th
 same transaction, using the persisted Order totals. Matching checkout replay returns
 before payment initialization; pre-PAY-01 orders without payment remain unchanged.
 ONLINE remains rejected as INVALID_REQUEST. PROMO-01 extends this contract with
-server-calculated order-level vouchers; product discounts remain zero. See
+server-calculated order-level vouchers; PROMO-02 supplies per-unit Product promotion discounts. See
 [PROMO-01 voucher contract](PROMO-01-vouchers.md) for persisted rules, quota locks and snapshots.
 No Shipment or later order-management workflow is created. The placement receipt has
 order ID/code, current status, grand total, creation time and a replay flag.
@@ -411,7 +412,7 @@ machine. No migration, seed, schema, database convention or configuration is cha
 | Version | expectedVersion checks orders.version; later optimistic/pessimistic implementation |
 | Event/history | order_status_history order_id/from_status/to_status/actor_id nullable/reason/created_at |
 | Return/refund | Unique return/order and refund/order; refund/payment/return same order; preserve E3 unique payment/return references |
-| Promotions/vouchers | PROMO-01 persists voucher rules/usage and order snapshots; product promotions remain deferred |
+| Promotions/vouchers | PROMO-01 persists voucher rules/usage and order snapshots; PROMO-02 persists percentage Product schedules with overlap protection |
 | Shipment | QD fields attempt_count, max_attempts, failure_reason, shipping_service_snapshot, fee_snapshot |
 
 No full PaymentStatus, ReturnRequestStatus or RefundStatus enum is invented here; the
