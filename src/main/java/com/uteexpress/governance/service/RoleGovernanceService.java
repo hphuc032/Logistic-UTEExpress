@@ -40,6 +40,19 @@ public class RoleGovernanceService {
         return roles.activeShippers();
     }
 
+    /** Serialize assignment with SHIPPER grants/revocations and account locks. */
+    @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority(), T(com.uteexpress.security.RoleCode).MANAGER.authority())")
+    @Transactional
+    public void requireActiveShipperForUpdate(Long accountId) {
+        if (accountId == null || accountId <= 0) throw invalid();
+        roles.lockRole(ManagedRole.SHIPPER.name());
+        RoleGovernanceRepository.AccountState target = roles.lockAccount(accountId);
+        if (target == null || !"ACTIVE".equals(target.status())
+                || !roles.rolesFor(accountId).contains(ManagedRole.SHIPPER.name())) {
+            throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+        }
+    }
+
     @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority())")
     @Transactional
     public void change(Long accountId, Long expectedVersion, ManagedRole role, boolean grant) {

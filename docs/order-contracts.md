@@ -147,7 +147,8 @@ Physical pickup while leaving Order CONFIRMED is outside the present integration
 
 ## Shipment integration (QD)
 
-`shipping.dto.ShipmentStatus` is an integration vocabulary for QD review, not persistence.
+`shipping.dto.ShipmentStatus` is persisted by SHIP-01 for assignment; pickup and
+delivery transitions are reserved for SHIP-02.
 
 | Shipment status | Order status / interpretation |
 | --- | --- |
@@ -162,7 +163,8 @@ Physical pickup while leaving Order CONFIRMED is outside the present integration
 These are consistency rules, not an automatic status setter. For example, rejected return
 goes back to DELIVERED without a second delivery. Assignment/cancellation/physical-return
 operations must call the lifecycle boundary for the relevant order transition in the same
-transaction; implementation is deferred to the owners' tasks.
+transaction. SHIP-01 only creates or reassigns an `ASSIGNED` Shipment while Order stays
+`CONFIRMED`; the later transitions remain deferred to SHIP-02.
 
 `max_attempts = 2`; `attempt_count` starts at zero and increases when each delivery attempt
 starts, not when failure is recorded. Initial PICKED_UP → SHIPPING starts attempt 1.
