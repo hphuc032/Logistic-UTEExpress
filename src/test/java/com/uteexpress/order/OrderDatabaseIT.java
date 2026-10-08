@@ -117,7 +117,7 @@ class OrderDatabaseIT {
                 "uteexpress.commission_policies")).isEqualTo("uteexpress.commission_policies");
     }
 
-    @Test void shippingMigrationPreservesOrdersCreatedBeforeOrd04() {
+    @Test void shippingAndVoucherMigrationsPreserveOrdersCreatedBeforeOrd04() {
         try (PostgreSQLContainer upgradeDb = new PostgreSQLContainer("postgres:17.6")) {
             upgradeDb.start();
             Flyway.configure()
@@ -148,12 +148,17 @@ class OrderDatabaseIT {
                     .dataSource(upgradeDb.getJdbcUrl(), upgradeDb.getUsername(), upgradeDb.getPassword())
                     .schemas("uteexpress").defaultSchema("uteexpress")
                     .locations("classpath:db/migration").load();
-            // Additive migrations after ORD-04 may also run; preserve the legacy Order row.
+            // Later additive migrations may also run; the legacy row must still survive them.
             assertThat(latest.migrate().migrationsExecuted).isGreaterThanOrEqualTo(1);
             var after = upgradeJdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", legacyId);
             assertThat(after).containsEntry("shipping_provider_id", null).containsEntry("shipping_service_code", null);
+            assertThat(after).containsEntry("voucher_id", null).containsEntry("voucher_code", null).containsEntry("voucher_scope", null);
+            assertThat(upgradeJdbc.queryForObject("SELECT count(*) FROM uteexpress.voucher_usages", Integer.class)).isZero();
             after.remove("shipping_provider_id");
             after.remove("shipping_service_code");
+            after.remove("voucher_id");
+            after.remove("voucher_code");
+            after.remove("voucher_scope");
             assertThat(after).isEqualTo(before);
             assertThat(latest.validateWithResult().validationSuccessful).isTrue();
             assertThat(latest.migrate().migrationsExecuted).isZero();

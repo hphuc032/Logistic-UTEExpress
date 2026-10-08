@@ -28,6 +28,17 @@ class CheckoutRequestHashTest {
                 .isNotEqualTo(CheckoutRequestHash.calculate(base));
     }
 
+    @Test void voucherCanonicalIdentityIsHashedAndMalformedInputRejected() {
+        var items = List.of(new CheckoutRequest.Item(1L, 2));
+        assertThat(CheckoutRequestHash.calculate(request("one", items, " save_10 ")))
+                .isEqualTo(CheckoutRequestHash.calculate(request("one", items, "SAVE_10")))
+                .isNotEqualTo(CheckoutRequestHash.calculate(request("one", items, "SAVE_20")));
+        for (String invalid : List.of("bad code", "é", "X".repeat(65), " ".repeat(129))) {
+            assertThatThrownBy(() -> CheckoutRequestHash.calculate(request("one", items, invalid)))
+                    .isInstanceOf(ApplicationException.class);
+        }
+    }
+
     @Test void malformedAndDuplicateProductsRejected() {
         assertThatThrownBy(() -> CheckoutRequestHash.calculate(null)).isInstanceOf(ApplicationException.class);
         for (var items : List.of(List.<CheckoutRequest.Item>of(), List.of(new CheckoutRequest.Item(1L, 0)),

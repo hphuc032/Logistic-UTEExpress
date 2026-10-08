@@ -20,7 +20,7 @@ import java.util.List;
 public record CheckoutRequest(@NotBlank @Size(max = 255) String checkoutKey, @NotEmpty List<@NotNull @Valid Item> items,
         @NotNull @Positive Long addressId, @NotNull @Positive Long shippingProviderId,
         @NotBlank @Pattern(regexp = "[A-Z][A-Z0-9_]{0,31}") String shippingServiceCode,
-        @NotNull PaymentMethod paymentMethod, String voucherCode) {
+        @NotNull PaymentMethod paymentMethod, @Size(max = 128) String voucherCode) {
     public CheckoutRequest {
         if (items != null) { items = Collections.unmodifiableList(new ArrayList<>(items)); }
     }

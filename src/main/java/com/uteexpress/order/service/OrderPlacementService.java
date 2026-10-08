@@ -13,6 +13,7 @@ import com.uteexpress.order.dto.PlaceOrderResult;
 import com.uteexpress.order.entity.Order;
 import com.uteexpress.order.repository.*;
 import com.uteexpress.payment.service.PaymentService;
+import com.uteexpress.promotion.service.VoucherService;
 import com.uteexpress.security.CurrentUserProvider;
 import com.uteexpress.security.service.CurrentAccountIdProvider;
 import java.math.BigDecimal;
@@ -39,6 +40,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     private final InventoryService inventory;
     private final CommissionQueryService commissions;
     private final PaymentService payments;
+    private final VoucherService vouchers;
     private final Clock clock;
     private final VendorOrderAuthority vendorAuthority;
 
@@ -47,7 +49,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
             PlatformTransactionManager transactionManager, ApplicationEventPublisher events, Clock clock,
             CurrentAccountIdProvider accounts, AccountIdentityService identities, CartService carts,
             CheckoutQuoteService quotes, InventoryService inventory, CommissionQueryService commissions,
-            PaymentService payments, VendorOrderAuthority vendorAuthority) {
+            PaymentService payments, VendorOrderAuthority vendorAuthority, VoucherService vouchers) {
         super(orders, items, history, users, transactionManager, events, clock);
         this.orders = orders;
         this.accounts = accounts;
@@ -57,6 +59,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.inventory = inventory;
         this.commissions = commissions;
         this.payments = payments;
+        this.vouchers = vouchers;
         this.clock = clock;
         this.vendorAuthority = vendorAuthority;
     }
@@ -71,6 +74,12 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     @Override protected void beforeValidatedTransition(Order order,
             com.uteexpress.order.dto.OrderTransitionCommand command, java.time.Instant at) {
         vendorAuthority.beforeTransition(order, command, at);
+        // Vendor effects have acquired products then Shop. Only these pre-delivery cancellation
+        // intents release quota; confirmation/ready and future return/refund transitions do not.
+        if (command.action() == com.uteexpress.order.dto.OrderAction.CANCEL_NEW
+                || command.action() == com.uteexpress.order.dto.OrderAction.CANCEL_CONFIRMED) {
+            vouchers.releaseForCancellation(order.getId());
+        }
     }
 
     @Override protected void authorizeReady(com.uteexpress.security.CurrentUser user, Order order) {
@@ -92,9 +101,8 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
             if (!existing.get().getRequestHash().equals(hash)) throw new ApplicationException(ErrorCode.CONFLICT);
             return result(existing.get(), true);
         }
-        // ONLINE and voucher engines remain outside this placement contract.
-        if (request.paymentMethod() != CheckoutRequest.PaymentMethod.COD
-                || (request.voucherCode() != null && !request.voucherCode().isBlank())) {
+        // ONLINE remains outside this placement contract.
+        if (request.paymentMethod() != CheckoutRequest.PaymentMethod.COD) {
             throw new ApplicationException(ErrorCode.INVALID_REQUEST);
         }
         var selected = carts.lockSelectedItemsForCheckout();
@@ -108,19 +116,24 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         // Reuse CHK-01 validation inside this transaction; its inventory locks are retained until commit.
         var fresh = quotes.quote(new QuoteRequest(request.addressId(), request.shippingProviderId(),
                 request.shippingServiceCode())).quote();
+        // After inventory/availability locks, revalidate persisted voucher rules and both quotas under its row lock.
+        var voucher = vouchers.lockForCheckout(request.voucherCode(), fresh.shopId(), fresh.totals().subtotal());
+        var totals = OrderTotals.calculate(fresh.totals().subtotal(),
+                voucher == null ? BigDecimal.ZERO : voucher.discountAmount(), fresh.totals().shippingFee());
         var checkoutAt = clock.instant().truncatedTo(ChronoUnit.MICROS);
         var policy = commissions.requireEffectivePolicy(checkoutAt);
         if (policy.policyId() == null || policy.policyId() <= 0 || policy.ratePercent() == null
                 || policy.ratePercent().signum() < 0 || policy.ratePercent().compareTo(new BigDecimal("100")) > 0) {
             throw new ApplicationException(ErrorCode.CONFLICT);
         }
-        var commission = Money.round(fresh.totals().subtotal().subtract(fresh.totals().discountTotal())
+        var commission = Money.round(totals.subtotal().subtract(totals.discountTotal())
                 .multiply(policy.ratePercent()).movePointLeft(2));
-        var snapshot = new CheckoutQuote(fresh.shopId(), fresh.items(), fresh.address(), fresh.totals(),
+        var snapshot = new CheckoutQuote(fresh.shopId(), fresh.items(), fresh.address(), totals,
                 fresh.shippingProviderId(), fresh.shippingServiceSnapshot(), policy.policyId(),
-                policy.ratePercent(), commission);
+                policy.ratePercent(), commission, voucher);
         inventory.decrease(selected.stream().map(line -> new StockQuantity(line.productId(), line.quantity())).toList());
         Order order = persistNew(buyer, "ORD-" + UUID.randomUUID(), key, hash, snapshot, checkoutAt);
+        if (voucher != null) vouchers.recordUsage(voucher, order.getId());
         payments.initializeCodForNewOrder(order.getId());
         carts.removeCheckedOutItems(selected);
         return result(order, false);

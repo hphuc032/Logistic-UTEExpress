@@ -19,7 +19,8 @@ currently has no status-change event, so this listener handles transitions only.
 The inbox is durable and can be fetched after reconnect. Real-time private WebSocket
 delivery belongs to WS-02.
 
-The notification migration is versioned after ORD-04's merged shipping snapshot.
-`NotificationMigrationIT` upgrades a PostgreSQL database already at ORD-04, verifies
+The pending notification migration is `V20261008100000__qd_ws01_notifications.sql`,
+versioned after PROMO-02's merged migration. `NotificationMigrationIT` upgrades a
+PostgreSQL database already at PROMO-02, verifies exactly one new migration and
 the new table, and checks Flyway validation/idempotence. This protects deployed
 `develop` databases from a pending migration with an older version.

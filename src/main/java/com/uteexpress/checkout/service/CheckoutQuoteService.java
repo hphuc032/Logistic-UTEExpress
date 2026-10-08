@@ -11,6 +11,7 @@ import com.uteexpress.checkout.dto.*;
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
 import com.uteexpress.security.service.CurrentAccountIdProvider;
+import com.uteexpress.promotion.service.VoucherService;
 import com.uteexpress.shipping.dto.ShippingQuoteCommand;
 import com.uteexpress.shipping.dto.ShippingRateView;
 import com.uteexpress.shipping.service.ShippingQuoteService;
@@ -33,15 +34,18 @@ public class CheckoutQuoteService {
     private final CatalogQueryService catalog;
     private final InventoryService inventory;
     private final ShippingQuoteService shipping;
+    private final VoucherService vouchers;
 
     public CheckoutQuoteService(CurrentAccountIdProvider accounts, AddressQueryService addresses,
-            CartService carts, CatalogQueryService catalog, InventoryService inventory, ShippingQuoteService shipping) {
+            CartService carts, CatalogQueryService catalog, InventoryService inventory, ShippingQuoteService shipping,
+            VoucherService vouchers) {
         this.accounts = accounts;
         this.addresses = addresses;
         this.carts = carts;
         this.catalog = catalog;
         this.inventory = inventory;
         this.shipping = shipping;
+        this.vouchers = vouchers;
     }
 
     @Transactional(readOnly = true)
@@ -84,10 +88,13 @@ public class CheckoutQuoteService {
             if (product.shopId() == null || product.shopId() <= 0) fail(ErrorCode.RESOURCE_NOT_FOUND);
             BigDecimal price = Money.requireAmount(product.unitPrice());
             if (price.signum() <= 0) fail(ErrorCode.VALIDATION_FAILED);
-            BigDecimal lineTotal = Money.requireAmount(price.multiply(BigDecimal.valueOf(item.quantity())));
+            BigDecimal discount = Money.requireAmount(product.discountSnapshot());
+            BigDecimal finalPrice = Money.requireAmount(product.finalUnitPrice());
+            if (discount.compareTo(price) > 0 || price.subtract(discount).compareTo(finalPrice) != 0) fail(ErrorCode.CONFLICT);
+            BigDecimal lineTotal = Money.requireAmount(finalPrice.multiply(BigDecimal.valueOf(item.quantity())));
             shopIds.add(product.shopId());
             items.add(new CheckoutQuote.ItemSnapshot(
-                    product.productId(), product.productName(), price, Money.round(BigDecimal.ZERO), price, item.quantity(), lineTotal));
+                    product.productId(), product.productName(), price, discount, finalPrice, item.quantity(), lineTotal));
         }
         if (shopIds.size() != 1) throw new ApplicationException(ErrorCode.Detail.SINGLE_SHOP_CHECKOUT);
         Long shopId = shopIds.iterator().next();
@@ -97,10 +104,11 @@ public class CheckoutQuoteService {
                 request.shippingServiceCode(), address.provinceCode(), address.district(), address.detail()));
         BigDecimal subtotal = items.stream().map(CheckoutQuote.ItemSnapshot::lineTotal)
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
-        var totals = OrderTotals.calculate(subtotal, BigDecimal.ZERO, fee.shippingFee());
+        var voucher = vouchers.preview(request.voucherCode(), shopId, subtotal);
+        var totals = OrderTotals.calculate(subtotal, voucher == null ? BigDecimal.ZERO : voucher.discountAmount(), fee.shippingFee());
         // One checkout = one shop = one prospective order. Commission remains unresolved.
         return new CheckoutPreview(new CheckoutQuote(shopId, items, snapshot, totals,
-                fee.providerId(), fee.serviceCode(), null, null, null));
+                fee.providerId(), fee.serviceCode(), null, null, null, voucher));
     }
 
     private AddressData ownedAddress(Long addressId) {

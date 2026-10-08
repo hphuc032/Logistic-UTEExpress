@@ -24,8 +24,12 @@
         <div class="col-12 col-lg-5">
             <span class="app-eyebrow" th:text="${product.categoryName}">Danh mục</span>
             <h1 id="product-title" class="app-product-detail-title" th:text="${product.name}">Tên sản phẩm</h1>
+            <p th:if="${product.discountSnapshot.signum() > 0}" class="text-muted mb-1">
+                <del th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></del>
+                <span> · Giá khuyến mãi</span>
+            </p>
             <p class="app-product-detail-price"
-               th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">100.000 ₫</p>
+               th:text="${#numbers.formatDecimal(product.effectivePrice, 0, 'POINT', 0, 'COMMA')} + ' ₫'">100.000 ₫</p>
             <p class="app-stock-note" th:classappend="${product.stock == 0} ? ' is-empty'"
                th:text="${product.stock == 0} ? 'Hết hàng' : |Còn ${product.stock} sản phẩm|">Còn hàng</p>
             <div class="app-product-description">
