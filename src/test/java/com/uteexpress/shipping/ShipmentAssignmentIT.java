@@ -5,8 +5,6 @@ import com.uteexpress.common.exception.ErrorCode;
 import com.uteexpress.security.authentication.UteExpressPrincipal;
 import com.uteexpress.shipping.service.ShipmentAssignmentService;
 import com.uteexpress.shipping.service.ShipperAssignmentReadService;
-import com.uteexpress.shipping.service.ShipmentFulfillmentService;
-import com.uteexpress.shipping.dto.ShipmentStatus;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -37,8 +35,6 @@ class ShipmentAssignmentIT {
     @Autowired JdbcTemplate jdbc;
     @Autowired ShipmentAssignmentService assignments;
     @Autowired ShipperAssignmentReadService shipperReads;
-    @Autowired ShipmentFulfillmentService fulfillment;
-    @Autowired org.springframework.transaction.PlatformTransactionManager transactionManager;
     @Autowired MockMvc mvc;
 
     @AfterEach void clear() { SecurityContextHolder.clearContext(); }
@@ -180,148 +176,6 @@ class ShipmentAssignmentIT {
                 .andExpect(status().isNotFound());
         authenticate(second, "SHIPPER");
         assertThat(shipperReads.detail(assigned.id()).shipperId()).isEqualTo(second);
-    }
-
-    @Test void internalFulfillmentRequiresTransactionLiveAssignmentAndRole() {
-        long admin = insertUser("ACTIVE", "ADMIN");
-        long first = insertUser("ACTIVE", "SHIPPER");
-        long second = insertUser("ACTIVE", "SHIPPER");
-        long order = order(true, "CONFIRMED", true);
-        authenticate(admin, "ADMIN");
-        var assigned = assignments.assign(order, first, 0L);
-        assertThatThrownBy(() -> tx().execute(s -> fulfillment.recordPickedUp(order, 0L)))
-                .isInstanceOf(AccessDeniedException.class);
-        assignments.reassign(order, second, assigned.version());
-        authenticate(first, "SHIPPER");
-        assertThatThrownBy(() -> tx().execute(s -> fulfillment.recordPickedUp(order, 1L)))
-                .isInstanceOfSatisfying(ApplicationException.class,
-                        e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND));
-        authenticate(second, "SHIPPER");
-        assertThatThrownBy(() -> fulfillment.recordPickedUp(order, 1L))
-                .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
-        assertThatThrownBy(() -> tx().execute(s -> fulfillment.recordPickedUp(order, 0L)))
-                .isInstanceOfSatisfying(ApplicationException.class,
-                        e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.CONFLICT));
-        var picked = tx().execute(s -> fulfillment.recordPickedUp(order, 1L));
-        assertThat(picked.status()).isEqualTo(ShipmentStatus.PICKED_UP);
-        assertThat(picked.pickedUpAt()).isNotNull();
-        assertThatThrownBy(() -> tx().execute(s -> fulfillment.recordPickedUp(order, 1L)))
-                .isInstanceOf(ApplicationException.class);
-        assertThatThrownBy(() -> tx().execute(s -> fulfillment.recordShipping(order, 2L)))
-                .isInstanceOf(ApplicationException.class); // Order completion is still required.
-        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?", String.class, order))
-                .isEqualTo("CONFIRMED");
-    }
-
-    @Test void provisionalShipmentAndAuditRollbackIfOuterCoordinatorFails() {
-        long admin = insertUser("ACTIVE", "ADMIN");
-        long shipper = insertUser("ACTIVE", "SHIPPER");
-        long order = order(true, "CONFIRMED", true);
-        authenticate(admin, "ADMIN");
-        var assigned = assignments.assign(order, shipper, 0L);
-        authenticate(shipper, "SHIPPER");
-        assertThatThrownBy(() -> tx().executeWithoutResult(s -> {
-            fulfillment.recordPickedUp(order, 0L);
-            throw new IllegalStateException("Simulated Order completion failure");
-        })).isInstanceOf(IllegalStateException.class);
-        var facts = tx().execute(s -> fulfillment.lockAssignedForTransition(order, 0L, ShipmentStatus.ASSIGNED));
-        assertThat(facts.pickedUpAt()).isNull();
-        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=?",
-                Long.class, assigned.id())).isEqualTo(1);
-    }
-
-    @Test void fulfillmentEvidenceMustBePersistedAndMatchesItsState() {
-        long admin = insertUser("ACTIVE", "ADMIN");
-        long shipper = insertUser("ACTIVE", "SHIPPER");
-        long order = order(true, "CONFIRMED", true);
-        authenticate(admin, "ADMIN");
-        assignments.assign(order, shipper, 0L);
-        authenticate(shipper, "SHIPPER");
-        tx().executeWithoutResult(s -> fulfillment.recordPickedUp(order, 0L));
-        // Test-only stand-in for TD's lifecycle completion, never a production status writer.
-        jdbc.update("UPDATE uteexpress.orders SET status='PICKED_UP' WHERE id=?", order);
-        var shipping = tx().execute(s -> fulfillment.recordShipping(order, 1L));
-        assertThat(shipping.attemptCount()).isEqualTo(1);
-        jdbc.update("UPDATE uteexpress.orders SET status='SHIPPING' WHERE id=?", order);
-        var delivered = tx().execute(s -> fulfillment.recordDelivered(order, 2L));
-        assertThat(delivered.deliveredAt()).isNotNull();
-        var evidence = tx().execute(s -> fulfillment.requireFulfillmentEvidence(order, 3L, ShipmentStatus.DELIVERED));
-        assertThat(evidence).isEqualTo(delivered);
-        jdbc.update("UPDATE uteexpress.shipments SET delivered_at=NULL WHERE order_id=?", order);
-        assertThatThrownBy(() -> tx().execute(s ->
-                fulfillment.requireFulfillmentEvidence(order, 3L, ShipmentStatus.DELIVERED)))
-                .isInstanceOf(ApplicationException.class);
-    }
-
-    @Test void pickupAndVendorCancellationSerializeOnOrderLock() throws Exception {
-        long admin = insertUser("ACTIVE", "ADMIN");
-        long shipper = insertUser("ACTIVE", "SHIPPER");
-        long order = order(true, "CONFIRMED", true);
-        long vendor = jdbc.queryForObject("SELECT s.owner_id FROM uteexpress.orders o JOIN uteexpress.shops s ON s.id=o.shop_id WHERE o.id=?",
-                Long.class, order);
-        authenticate(admin, "ADMIN");
-        assignments.assign(order, shipper, 0L);
-        var start = new java.util.concurrent.CountDownLatch(1);
-        var pool = java.util.concurrent.Executors.newFixedThreadPool(2);
-        try {
-            var pickup = pool.submit(() -> race(start, shipper, "SHIPPER", () -> fulfillment.recordPickedUp(order, 0L)));
-            var cancel = pool.submit(() -> race(start, vendor, "VENDOR", () -> fulfillment.cancelAssignedForVendorOrder(order)));
-            start.countDown();
-            assertThat(List.of(pickup.get(15, java.util.concurrent.TimeUnit.SECONDS),
-                    cancel.get(15, java.util.concurrent.TimeUnit.SECONDS))).containsExactlyInAnyOrder(true, false);
-            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.shipments WHERE order_id=?", String.class, order))
-                    .isIn("PICKED_UP", "CANCELLED");
-            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?)",
-                    Long.class, order)).isEqualTo(2);
-        } finally { pool.shutdownNow(); }
-    }
-
-    @Test void vendorClosureChecksOwnerAndRollsBackWithOuterCancellation() {
-        long admin = insertUser("ACTIVE", "ADMIN");
-        long shipper = insertUser("ACTIVE", "SHIPPER");
-        long stranger = insertUser("ACTIVE", "VENDOR");
-        long order = order(true, "CONFIRMED", true);
-        long vendor = jdbc.queryForObject("SELECT s.owner_id FROM uteexpress.orders o JOIN uteexpress.shops s ON s.id=o.shop_id WHERE o.id=?",
-                Long.class, order);
-        authenticate(admin, "ADMIN");
-        var assigned = assignments.assign(order, shipper, 0L);
-        authenticate(stranger, "VENDOR");
-        assertThatThrownBy(() -> tx().executeWithoutResult(s -> fulfillment.cancelAssignedForVendorOrder(order)))
-                .isInstanceOfSatisfying(ApplicationException.class,
-                        e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND));
-        authenticate(vendor, "VENDOR");
-        assertThatThrownBy(() -> tx().executeWithoutResult(s -> {
-            fulfillment.cancelAssignedForVendorOrder(order);
-            throw new IllegalStateException("Simulated inventory restore failure");
-        })).isInstanceOf(IllegalStateException.class);
-        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.shipments WHERE id=?", String.class, assigned.id()))
-                .isEqualTo("ASSIGNED");
-        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=?",
-                Long.class, assigned.id())).isEqualTo(1);
-        tx().executeWithoutResult(s -> fulfillment.cancelAssignedForVendorOrder(order));
-        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.shipments WHERE id=?", String.class, assigned.id()))
-                .isEqualTo("CANCELLED");
-        assertThatThrownBy(() -> tx().executeWithoutResult(s -> fulfillment.cancelAssignedForVendorOrder(order)))
-                .isInstanceOf(ApplicationException.class);
-    }
-
-    private boolean race(java.util.concurrent.CountDownLatch start, long actor, String role, Runnable operation) {
-        try {
-            start.await();
-            authenticate(actor, role);
-            tx().executeWithoutResult(s -> operation.run());
-            return true;
-        } catch (ApplicationException ex) {
-            assertThat(ex.errorCode()).isEqualTo(ErrorCode.CONFLICT);
-            return false;
-        } catch (InterruptedException ex) {
-            Thread.currentThread().interrupt();
-            throw new IllegalStateException(ex);
-        } finally { SecurityContextHolder.clearContext(); }
-    }
-
-    private org.springframework.transaction.support.TransactionTemplate tx() {
-        return new org.springframework.transaction.support.TransactionTemplate(transactionManager);
     }
 
     private long insertUser(String status, String role) {

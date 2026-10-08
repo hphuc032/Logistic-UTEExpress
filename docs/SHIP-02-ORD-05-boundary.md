@@ -1,8 +1,10 @@
 # SHIP-02 / ORD-05 integration proposal
 
-QD's Shipping contract is implemented on `feature/ship-02-delivery`. TD owns the
-Order prepare/complete APIs. The proposed signatures below still need TD's agreement;
-they are not a claim that Order integration is complete.
+QD's Shipping contract is extracted to `feature/ship-02-ord05-foundation`, based
+directly on develop. This prerequisite contains no assigned-list controller/UI,
+fulfillment HTTP coordinator, Order/Payment implementation or new migration.
+TD owns the Order prepare/complete APIs. QD accepts TD's proposed signatures below;
+their implementation and complete integration are still pending.
 
 ## 1. Transactional coordinator
 
@@ -43,6 +45,16 @@ Shipment version once and append AuditLog in the same transaction. No new migrat
 is needed. Shipping never writes orders.status.
 
 ## 3. TD prepare/complete proposal
+
+QD agrees to `prepareShipperTransition(orderId, expectedOrderVersion,
+expectedShipmentVersion, action)` and `completeShipperTransition(orderId,
+expectedOrderVersion, expectedShipmentVersion, action)`.
+Both accept the **original source versions** from the request: prepare locks and
+validates without incrementing Order version; after one Shipment mutation, complete
+requires Shipment version to equal original + 1 and verifies its target evidence.
+Order version must still equal the original value before complete, then increments
+exactly once through the standard lifecycle. Do not pass an incremented Shipment
+version into complete or derive identity/action evidence from browser facts.
 
 Prepare accepts orderId, expectedOrderVersion, expectedShipmentVersion and one of
 PICK_UP/START_SHIPPING/DELIVER. Resolve actor server-side; lock and refresh Order,
@@ -100,3 +112,11 @@ all synchronized transitions, stale/duplicate requests, reassignment, wrong COD
 rollback and cancellation-versus-pickup concurrency using real Order/Payment APIs.
 Current Shipment boundary tests use test-only Order state fixtures and do not prove
 the full COD/Order flow. Keep PR #42 Draft until these integration gates pass.
+
+## Merge sequence
+
+Review and merge this small Shipping foundation PR first. TD then starts ORD-05 from
+updated develop and implements prepare/complete, the Payment guard and cancellation
+wiring on its own branch. QD syncs SHIP-02 #42 with develop after those prerequisites
+merge and connects the coordinator/endpoints. No need to merge the incomplete #42 or
+pull its read/UI changes into ORD-05. No force-push is required.
