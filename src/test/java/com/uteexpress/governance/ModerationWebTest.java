@@ -30,6 +30,8 @@ class ModerationWebTest {
     @MockitoBean com.uteexpress.cart.service.CartService cartService;
     @MockitoBean com.uteexpress.promotion.service.VoucherService voucherService;
     @MockitoBean com.uteexpress.promotion.service.VendorVoucherService vendorVoucherService;
+    @MockitoBean com.uteexpress.catalog.service.ProductPromotionManagementService productPromotionManagementService;
+    @MockitoBean com.uteexpress.promotion.service.PromotionManagementService promotionManagementService;
     @MockitoBean com.uteexpress.order.service.OrderPlacementService orderPlacementService;
     @MockitoBean com.uteexpress.order.service.BuyerOrderService buyerOrderService;
     @MockitoBean com.uteexpress.order.service.VendorOrderService vendorOrderService;

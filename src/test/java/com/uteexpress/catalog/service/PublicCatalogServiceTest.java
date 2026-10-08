@@ -37,7 +37,7 @@ class PublicCatalogServiceTest {
 
     @BeforeEach
     void setup() {
-        service = new PublicCatalogService(repository, storage);
+        service = new PublicCatalogService(repository, storage, java.time.Clock.systemUTC());
     }
 
     @Test
@@ -112,12 +112,12 @@ class PublicCatalogServiceTest {
         requested.setSort("price desc; drop table products");
         requested.setPage(null);
         requested.setSize(null);
-        when(repository.countPublicProducts(org.mockito.ArgumentMatchers.any())).thenReturn(0L);
+        when(repository.countPublicProducts(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any())).thenReturn(0L);
 
         var page = service.search(requested);
 
         ArgumentCaptor<ProductSearchCriteria> criteria = ArgumentCaptor.forClass(ProductSearchCriteria.class);
-        verify(repository).countPublicProducts(criteria.capture());
+        verify(repository).countPublicProducts(criteria.capture(), org.mockito.ArgumentMatchers.any());
         assertThat(criteria.getValue().getQ()).isEqualTo("Laptop");
         assertThat(criteria.getValue().getShop()).isEqualTo("shop-a");
         assertThat(criteria.getValue().getSort()).isEqualTo("newest");
@@ -125,7 +125,7 @@ class PublicCatalogServiceTest {
         assertThat(page.size()).isEqualTo(ProductSearchCriteria.DEFAULT_SIZE);
         verify(repository, never()).findPublicProducts(org.mockito.ArgumentMatchers.any(),
                 org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.anyInt(),
-                org.mockito.ArgumentMatchers.anyLong());
+                org.mockito.ArgumentMatchers.anyLong(), org.mockito.ArgumentMatchers.any());
     }
 
     @Test
@@ -134,10 +134,10 @@ class PublicCatalogServiceTest {
         requested.setPage(1);
         requested.setSize(12);
         requested.setSort("priceAsc");
-        when(repository.countPublicProducts(org.mockito.ArgumentMatchers.any())).thenReturn(25L);
+        when(repository.countPublicProducts(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any())).thenReturn(25L);
         when(repository.findPublicProducts(org.mockito.ArgumentMatchers.any(),
                 org.mockito.ArgumentMatchers.eq(ProductSort.PRICE_ASC),
-                org.mockito.ArgumentMatchers.eq(12), org.mockito.ArgumentMatchers.eq(12L)))
+                org.mockito.ArgumentMatchers.eq(12), org.mockito.ArgumentMatchers.eq(12L), org.mockito.ArgumentMatchers.any()))
                 .thenReturn(List.of());
 
         var page = service.search(requested);
@@ -158,7 +158,21 @@ class PublicCatalogServiceTest {
         ProductSearchCriteria unbounded = new ProductSearchCriteria();
         unbounded.setSize(49);
         assertValidation(() -> service.search(unbounded));
-        verify(repository, never()).countPublicProducts(org.mockito.ArgumentMatchers.any());
+        verify(repository, never()).countPublicProducts(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any());
+    }
+
+    @Test
+    void priceCountAndPageUseExactlyTheSameMicrosecondInstant() {
+        var at = java.time.Instant.parse("2026-10-08T00:00:00.123456789Z");
+        service = new PublicCatalogService(repository, storage, java.time.Clock.fixed(at, java.time.ZoneOffset.UTC));
+        when(repository.countPublicProducts(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any())).thenReturn(1L);
+        when(repository.findPublicProducts(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(),
+                org.mockito.ArgumentMatchers.anyInt(), org.mockito.ArgumentMatchers.anyLong(), org.mockito.ArgumentMatchers.any())).thenReturn(List.of());
+        service.search(new ProductSearchCriteria());
+        var expected = at.truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+        verify(repository).countPublicProducts(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.eq(expected));
+        verify(repository).findPublicProducts(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(),
+                org.mockito.ArgumentMatchers.anyInt(), org.mockito.ArgumentMatchers.anyLong(), org.mockito.ArgumentMatchers.eq(expected));
     }
 
     private static void assertNotFound(org.assertj.core.api.ThrowableAssert.ThrowingCallable action) {

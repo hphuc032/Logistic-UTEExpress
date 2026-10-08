@@ -21,8 +21,12 @@
         </h3>
         <a class="app-catalog-shop-link" th:href="@{/shops/{slug}(slug=${product.shopSlug})}"
            th:text="${product.shopName}">Cửa hàng</a>
+        <p th:if="${product.discountSnapshot.signum() > 0}" class="text-muted mb-1">
+            <del th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></del>
+            <span> · Giá khuyến mãi</span>
+        </p>
         <p class="app-catalog-price"
-           th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'">100.000 ₫</p>
+           th:text="${#numbers.formatDecimal(product.effectivePrice, 0, 'POINT', 0, 'COMMA')} + ' ₫'">100.000 ₫</p>
     </div>
 </article>
 </body>

@@ -50,10 +50,12 @@
             <p th:text="|Dịch vụ: ${quote.shippingServiceSnapshot}|"></p>
             <div class="table-responsive"><table class="table">
                 <caption>Sản phẩm đã chọn, giá hiện tại từ máy chủ</caption>
-                <thead><tr><th>Sản phẩm</th><th>Đơn giá (₫)</th><th>Số lượng</th><th>Thành tiền (₫)</th></tr></thead>
+                <thead><tr><th>Sản phẩm</th><th>Giá gốc (₫)</th><th>Giảm mỗi sản phẩm (₫)</th><th>Giá sau giảm (₫)</th><th>Số lượng</th><th>Thành tiền (₫)</th></tr></thead>
                 <tbody><tr th:each="item : ${quote.items}">
                     <td th:text="${item.productNameSnapshot}"></td>
                     <td th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'POINT', 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatDecimal(item.discountSnapshot, 0, 'POINT', 0, 'COMMA')}"></td>
+                    <td th:text="${#numbers.formatDecimal(item.finalUnitPrice, 0, 'POINT', 0, 'COMMA')}"></td>
                     <td th:text="${item.quantity}"></td>
                     <td th:text="${#numbers.formatDecimal(item.lineTotal, 0, 'POINT', 0, 'COMMA')}"></td>
                 </tr></tbody>
