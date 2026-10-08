@@ -4,8 +4,14 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 /** Preview selections only. Items and quantities come exclusively from the authenticated user's cart. */
 public record QuoteRequest(@NotNull @Positive Long addressId,
         @NotNull @Positive Long shippingProviderId,
-        @NotBlank @Pattern(regexp = "[A-Z][A-Z0-9_]{0,31}") String shippingServiceCode) { }
+        @NotBlank @Pattern(regexp = "[A-Z][A-Z0-9_]{0,31}") String shippingServiceCode,
+        @Size(max = 128) String voucherCode) {
+    public QuoteRequest(Long addressId, Long shippingProviderId, String shippingServiceCode) {
+        this(addressId, shippingProviderId, shippingServiceCode, null);
+    }
+}

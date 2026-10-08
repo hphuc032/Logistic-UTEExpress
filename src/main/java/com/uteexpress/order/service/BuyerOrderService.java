@@ -71,7 +71,7 @@ public class BuyerOrderService {
                 order.getCreatedAt(), order.getUpdatedAt(), order.getDeliveredAt(), order.getCancelledAt(),
                 new BuyerOrderDetail.Address(order.getReceiverName(), order.getPhone(), order.getProvinceCode(),
                         order.getDistrict(), order.getDetail()), order.getSubtotal(), order.getDiscountTotal(),
-                order.getShippingFee(), order.getGrandTotal(), lines, timeline, payments.recordsForOrder(order.getId()));
+                order.getShippingFee(), order.getGrandTotal(), lines, timeline, payments.recordsForOrder(order.getId()), order.getVoucher());
     }
 
     private Long buyerId() {

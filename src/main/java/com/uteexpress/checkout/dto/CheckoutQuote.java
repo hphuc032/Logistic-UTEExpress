@@ -2,6 +2,7 @@ package com.uteexpress.checkout.dto;
 
 import java.math.BigDecimal;
 import java.util.List;
+import com.uteexpress.promotion.dto.VoucherApplication;
 
 /**
  * Server-produced immutable checkout facts for one shop; recompute/validate at submit.
@@ -9,8 +10,16 @@ import java.util.List;
  */
 public record CheckoutQuote(Long shopId, List<ItemSnapshot> items, AddressSnapshot address,
         OrderTotals totals, Long shippingProviderId, String shippingServiceSnapshot,
-        Long commissionPolicyId, BigDecimal commissionRateSnapshot, BigDecimal commissionAmount) {
+        Long commissionPolicyId, BigDecimal commissionRateSnapshot, BigDecimal commissionAmount,
+        VoucherApplication voucher) {
     public CheckoutQuote { items = List.copyOf(items); }
+
+    public CheckoutQuote(Long shopId, List<ItemSnapshot> items, AddressSnapshot address,
+            OrderTotals totals, Long shippingProviderId, String shippingServiceSnapshot,
+            Long commissionPolicyId, BigDecimal commissionRateSnapshot, BigDecimal commissionAmount) {
+        this(shopId, items, address, totals, shippingProviderId, shippingServiceSnapshot,
+                commissionPolicyId, commissionRateSnapshot, commissionAmount, null);
+    }
 
     /**
      * unitPrice is the original unit-price snapshot; discountSnapshot is per-unit product promotion.

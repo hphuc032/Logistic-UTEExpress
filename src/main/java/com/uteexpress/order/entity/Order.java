@@ -5,6 +5,8 @@ import com.uteexpress.checkout.dto.Money;
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
 import com.uteexpress.order.dto.OrderStatus;
+import com.uteexpress.promotion.dto.VoucherApplication;
+import com.uteexpress.promotion.dto.VoucherScope;
 import java.util.Objects;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
@@ -47,6 +49,11 @@ public class Order {
     private BigDecimal subtotal;
     @Column(name = "discount_total", nullable = false, precision = 19, scale = 2)
     private BigDecimal discountTotal;
+    // Nullable for legacy/no-voucher orders. No live relationship or historical backfill.
+    @Column(name = "voucher_id", updatable = false) private Long voucherId;
+    @Column(name = "voucher_code", length = 64, updatable = false) private String voucherCode;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "voucher_scope", length = 16, updatable = false) private VoucherScope voucherScope;
     @Column(name = "shipping_fee", nullable = false, precision = 19, scale = 2)
     private BigDecimal shippingFee;
     // Nullable only for legacy rows; historical checkout facts have no live provider relationship.
@@ -93,6 +100,9 @@ public class Order {
     public String getDetail() { return detail; }
     public BigDecimal getSubtotal() { return subtotal; }
     public BigDecimal getDiscountTotal() { return discountTotal; }
+    public VoucherApplication getVoucher() {
+        return voucherId == null ? null : new VoucherApplication(voucherId, voucherCode, voucherScope, discountTotal);
+    }
     public BigDecimal getShippingFee() { return shippingFee; }
     public Long getShippingProviderId() { return shippingProviderId; }
     public String getShippingServiceCode() { return shippingServiceCode; }
@@ -143,6 +153,14 @@ public class Order {
         this.detail = requireText(quote.address().detail());
         this.subtotal = quote.totals().subtotal();
         this.discountTotal = quote.totals().discountTotal();
+        if (quote.voucher() != null) {
+            if (quote.voucher().discountAmount().compareTo(discountTotal) != 0) {
+                throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
+            }
+            this.voucherId = quote.voucher().voucherId();
+            this.voucherCode = quote.voucher().code();
+            this.voucherScope = quote.voucher().scope();
+        }
         this.shippingFee = quote.totals().shippingFee();
         this.shippingProviderId = quote.shippingProviderId();
         this.shippingServiceCode = quote.shippingServiceSnapshot();

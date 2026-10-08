@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Voucher cửa hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section">
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 app-page-header">
+        <div><span class="app-eyebrow">Kênh người bán</span><h1>Voucher cửa hàng</h1>
+            <p>Quản lý mã giảm giá dành riêng cho cửa hàng. Thời gian hiển thị theo giờ Việt Nam (UTC+7).</p></div>
+        <a class="btn btn-app-primary" th:href="@{/vendor/vouchers/new}">Tạo voucher</a>
+    </div>
+    <div th:if="${#lists.isEmpty(vouchers)}"
+         th:replace="~{fragments/components :: emptyState('Chưa có voucher', 'Tạo mã giảm giá đầu tiên cho cửa hàng.')}"></div>
+    <div class="table-responsive app-table-wrap" th:unless="${#lists.isEmpty(vouchers)}">
+        <table class="table app-table align-middle mb-0">
+            <thead><tr><th>Mã</th><th>Mức giảm</th><th>Đơn tối thiểu</th><th>Thời hạn (UTC+7)</th><th>Lượt dùng / tổng</th><th>Mỗi khách</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+            <tbody><tr th:each="voucher : ${vouchers}">
+                <td><strong th:text="${voucher.code}"></strong></td>
+                <td><span th:text="${voucher.value} + (${voucher.type.name() == 'PERCENTAGE'} ? '%' : ' ₫')"></span>
+                    <div class="small text-secondary" th:if="${voucher.maxDiscount != null}" th:text="|Giảm tối đa ${voucher.maxDiscount} ₫|"></div></td>
+                <td th:text="|${voucher.minSubtotal} ₫|"></td>
+                <td><div th:text="${#temporals.format(voucher.startsAt, 'dd/MM/yyyy HH:mm')}"></div>
+                    <div th:text="${#temporals.format(voucher.endsAt, 'dd/MM/yyyy HH:mm')}"></div></td>
+                <td th:text="|${voucher.used} / ${voucher.totalLimit}|"></td>
+                <td th:text="${voucher.perUserLimit}"></td>
+                <td><span class="app-status-badge" th:classappend="${voucher.active} ? 'status-delivered' : 'status-cancelled'"
+                          th:text="${voucher.active} ? 'Đã bật' : 'Đã ngừng'"></span></td>
+                <td><div class="d-flex flex-wrap gap-2">
+                    <a class="btn btn-sm btn-app-secondary" th:href="@{/vendor/vouchers/{id}/edit(id=${voucher.id})}">Chỉnh sửa</a>
+                    <form method="post" th:if="${voucher.active}" th:action="@{/vendor/vouchers/{id}/disable(id=${voucher.id})}">
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Ngừng voucher</button>
+                    </form>
+                </div></td>
+            </tr></tbody>
+        </table>
+    </div>
+</section></body></html>

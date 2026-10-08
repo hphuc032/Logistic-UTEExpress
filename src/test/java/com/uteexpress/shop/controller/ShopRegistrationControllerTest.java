@@ -48,6 +48,8 @@ class ShopRegistrationControllerTest {
     @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
     @MockitoBean com.uteexpress.account.service.AddressService addressService;
     @MockitoBean com.uteexpress.cart.service.CartService cartService;
+    @MockitoBean com.uteexpress.promotion.service.VoucherService voucherService;
+    @MockitoBean com.uteexpress.promotion.service.VendorVoucherService vendorVoucherService;
     @MockitoBean com.uteexpress.order.service.OrderPlacementService orderPlacementService;
     @MockitoBean com.uteexpress.order.service.BuyerOrderService buyerOrderService;
     @MockitoBean com.uteexpress.order.service.VendorOrderService vendorOrderService;

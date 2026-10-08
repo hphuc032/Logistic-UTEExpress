@@ -36,6 +36,9 @@
                 <input type="hidden" name="addressId" th:value="${addressId}">
                 <input type="hidden" name="shippingProviderId" th:value="${option.providerId}">
                 <input type="hidden" name="shippingServiceCode" th:value="${option.serviceCode}">
+                <label class="form-label">Mã voucher (không bắt buộc)
+                    <input type="text" name="voucherCode" maxlength="64" class="form-control" placeholder="Nhập mã voucher">
+                </label>
                 <button type="submit" class="btn btn-app-primary text-wrap" th:text="|Xem báo giá — ${option.providerName} / ${option.serviceCode}|"></button>
             </form>
         </div>
@@ -57,6 +60,8 @@
             </table></div>
             <p>Tiền sản phẩm: <strong th:text="${#numbers.formatDecimal(quote.totals.subtotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
             <p>Phí vận chuyển: <strong th:text="${#numbers.formatDecimal(quote.totals.shippingFee, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
+            <p th:if="${quote.voucher != null}" th:text="|Voucher: ${quote.voucher.code} (${quote.voucher.scope})|"></p>
+            <p>Giảm giá voucher: <strong th:text="${#numbers.formatDecimal(quote.totals.discountTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
             <p>Tổng cộng: <strong th:text="${#numbers.formatDecimal(quote.totals.grandTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
             <form method="post" th:action="@{/user/checkout/view/place-order}">
                 <input type="hidden" name="checkoutKey" th:value="${placeOrderKey}">
@@ -64,6 +69,7 @@
                 <input type="hidden" name="shippingProviderId" th:value="${quote.shippingProviderId}">
                 <input type="hidden" name="shippingServiceCode" th:value="${quote.shippingServiceSnapshot}">
                 <input type="hidden" name="paymentMethod" value="COD">
+                <input th:if="${quote.voucher != null}" type="hidden" name="voucherCode" th:value="${quote.voucher.code}">
                 <th:block th:each="item, iteration : ${quote.items}">
                     <input type="hidden" th:name="|items[${iteration.index}].productId|" th:value="${item.productId}">
                     <input type="hidden" th:name="|items[${iteration.index}].quantity|" th:value="${item.quantity}">

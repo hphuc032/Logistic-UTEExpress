@@ -42,6 +42,7 @@
         </table></div>
         <p>Tiền sản phẩm sau giảm: <strong th:text="${#numbers.formatDecimal(order.subtotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
         <p>Giảm giá đơn hàng: <strong th:text="${#numbers.formatDecimal(order.discountTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
+        <p th:if="${order.voucher != null}" th:text="|Voucher đã áp dụng: ${order.voucher.code} (${order.voucher.scope})|"></p>
         <p>Phí vận chuyển: <strong th:text="${#numbers.formatDecimal(order.shippingFee, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
         <p>Tổng cộng: <strong th:text="${#numbers.formatDecimal(order.grandTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></strong></p>
     </section>
