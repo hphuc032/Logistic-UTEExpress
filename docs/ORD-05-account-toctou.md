@@ -1,89 +1,75 @@
-# ORD-05 account eligibility race: owner handoff
+# ORD-05 account eligibility TOCTOU regression
 
-Status: reproduced; unresolved. Quoc Dat owns Shipping and Hoang Phuc owns Identity/governance.
-This ORD-05 follow-up changes tests and documentation only. It does not change either owner's production code.
+The former vulnerability witness has been replaced with assertions for the merged
+Shipping security fix. Quoc Dat owns Shipping and Hoang Phuc owns Identity/governance.
+This follow-up changes regression tests and documentation only.
 
-## Exact interleaving
+## Implemented lock order
 
-`ShipperOrderLifecycleIT.accountLockCommittedAfterFinalEvidenceCheckStillAllowsDelivery`
-uses the real prepare, COD collection, Shipment delivery, Order completion and administrative
-account-lock services. A test-only spy pauses the collected-COD guard, immediately after
-completion has obtained persisted Shipment evidence and checked the assigned account.
-Latches and bounded waits let the administrative transaction commit before completion resumes.
+Fulfillment acquires `Order -> Shipment -> assigned Shipper Account -> Payment`.
+`ShipmentFulfillmentService.assigned` locks the assigned `users` row using PostgreSQL
+`FOR SHARE`, checks persisted ACTIVE status, then checks persisted SHIPPER membership.
+The Shipping boundary uses MANDATORY propagation, so the shared account lock lasts
+until the outer coordinator commits or rolls back, including after Order completion
+returns. Different orders can share the same shipper account eligibility lock.
 
-1. Delivery holds Order, Shipment and Payment locks. `ShipmentFulfillmentService.assigned`
-   reads an ACTIVE account with the SHIPPER role using an unlocked `EXISTS` query.
-   `requireFulfillmentEvidence` returns the persisted DELIVERED Shipment at original version + 1.
-2. Before `ShipperOrderAuthority` finishes its collected-COD guard and writes Order DELIVERED,
-   a separate ADMIN calls `AccountGovernanceService.setLocked` for the assigned shipper.
-   `IdentityAccountGovernanceService.setLocked` locks the User with JPA PESSIMISTIC_WRITE,
-   persists LOCKED, increments token version and commits its account audit.
-3. Delivery resumes with its existing authenticated principal and commits PAID Payment,
-   DELIVERED Shipment, DELIVERED Order, Shipment audit, lifecycle history and after-commit event.
-   No account eligibility check or protecting account lock spans the final check through commit.
+Account locking uses the Identity account write lock. Role governance locks the
+global role row, then the account `FOR UPDATE`, before changing `user_roles` and
+rotating the token. Both account locks conflict with fulfillment's `FOR SHARE`.
+Fulfillment never locks the global role row: taking it after Account would invert
+governance's role-before-account order. Governance must not acquire Order, Shipment
+or Payment while holding its role/account locks. Assignment/reassignment keep their
+existing Order-first ordering; no Account-before-Order hierarchy is introduced.
 
-With the current Hibernate PostgreSQL dialect, PESSIMISTIC_WRITE on User uses
-`FOR NO KEY UPDATE`. Shipment audit actor foreign keys take KEY SHARE, which permits
-that account status update. An audit foreign key therefore does not serialize eligibility.
-Token invalidation also does not reauthenticate an already-running request.
-This witness concerns account locking; it does not assume role revocation has identical lock behavior.
+An audit actor foreign key only takes KEY SHARE and does not protect eligibility
+against PostgreSQL NO KEY UPDATE. Token invalidation does not reauthenticate an
+already-running request. The explicit Shipping FOR SHARE lock protects this boundary.
 
-The characterization test deliberately asserts this observed insecure outcome so the existing
-full verification remains runnable. A passing witness means the race is present, not fixed.
-After the owner fix, replace that expectation with the agreed serialized eligibility outcome.
+## Deterministic PostgreSQL regression schedules
 
-## Lock-order-safe proposal for Quoc Dat and Hoang Phuc
+`ShipperOrderLifecycleIT.fulfillmentAccountLockMakesAdminRestrictionWaitUntilOuterCommit`
+reuses the former final-evidence pause, immediately before the real collected-COD
+guard. Each parameter invokes a real administrative account lock or SHIPPER role
+revocation in an independent transaction. `pg_blocking_pids` proves that governance
+waits on the fulfillment transaction. The restriction cannot finish at the guard,
+or after all fulfillment boundaries return while the outer transaction remains open.
+Only after delivery commits may the restriction commit. Payment is PAID, both Order
+and Shipment are DELIVERED, and exactly one delivery history, audit and after-commit
+event exist. The final account is LOCKED or its persisted SHIPPER role is absent.
 
-Agree on a transaction-wide eligibility guard before acquiring Order. Identity/governance
-should expose a MANDATORY internal service returning scalar facts, taking a shared lock on
-the SHIPPER eligibility/role guard and a User lock that conflicts with account status changes
-(for example PostgreSQL FOR SHARE, not FOR KEY SHARE). Validate persisted ACTIVE status and
-SHIPPER membership under those locks, using the server-resolved actor. Hold them until the
-outer fulfillment transaction completes. Expose no Identity entities or repositories.
-Enforce guard ownership at the internal boundaries too: prepare obtains it before its
-first Order lock; complete requires that transaction's already-held guard and revalidates
-assignment under Shipment lock. A direct completion caller must establish the same guard
-before taking any Order lock. Use a server-owned transaction resource to recognize a held
-guard, never a caller-created DTO or principal claim. Coordinator discipline alone must not
-leave an unguarded internal entry point.
+`ShipperOrderLifecycleIT.adminRestrictionCommitsBeforeEligibilityAndDeliveryFailsWithoutEffects`
+first performs the real account lock or role revocation while holding the governance
+transaction open. A competing delivery with the old SHIPPER principal takes Order
+and Shipment and is observed blocked on the account lock. Governance commits first;
+fulfillment then returns ACCESS_DENIED. Complete persisted row snapshots show unchanged
+Order, Shipment, Payment, history, stock, Shipment audits, voucher usage and assignment
+history, with no lifecycle event. ACTIVE status alone is insufficient after role revocation.
 
-Adopt the same hierarchy in fulfillment **and assignment/reassignment**:
+Synchronization uses latches, bounded futures, PostgreSQL blocker observations and
+bounded worker lock timeouts. No assertion expects the old insecure schedule.
 
-`role eligibility guard -> Account -> Order -> Shipment -> Payment`
+## Atomicity and duplicate-delivery evidence
 
-When multiple role guards/accounts are required, lock each set in a defined sorted order.
-Governance mutations must use the same role-before-account hierarchy. Hoang Phuc should
-verify the existing ADMIN guard and SHIPPER grant/revoke paths against it. Quoc Dat should
-move assignment/reassignment eligibility locking before Order/Shipment and arrange for the
-future fulfillment coordinator to obtain the guard before ORD-05 prepare. Keep Order before
-Shipment before Payment, original-version checks, and persisted assignment revalidation.
+The T32 regression rejects a wrong COD amount both before and after provisional
+Shipment delivery. It checks complete row snapshots after each failure and after
+duplicate collection. An injected failure after real Order completion observes PAID
+Payment, DELIVERED Shipment/Order and provisional history/audit through JDBC in the
+outer transaction, then verifies their complete rollback and absence of after-commit
+events. A separate history persistence failure also rolls back collected COD and
+Shipment delivery.
 
-Simply adding an Account lock in ORD-05 prepare before Order is unsafe with today's assignment
-path: assignment takes Order (and Shipment on reassignment) before its SHIPPER role and Account
-locks. Concurrent fulfillment could hold Account while waiting for Order, with assignment
-holding Order while waiting for Account. Adding a late Account lock after Shipment/Payment
-also violates the proposed hierarchy. These paths must change together through owner services;
-Order must not reach into Identity or Shipping repositories or create a reverse dependency.
+The voucher regression obtains a real locked VoucherApplication and records usage,
+then creates a database-valid discount mismatch. It observes provisional Shipment
+cancellation/audit and stock restoration before the real voucher release guard fails
+with CONFLICT. Complete row snapshots and application events verify rollback; usage
+remains REDEEMED. Current lifecycle events are after-commit events, not a persisted outbox.
 
-Acceptance tests should cover both schedules: an account restriction committed before the
-eligibility guard causes ACCESS_DENIED with no fulfillment changes; fulfillment holding the
-guard makes restriction wait until fulfillment commits or rolls back. Also cover role
-revocation, assignment/reassignment, cancellation and failure rollback using bounded lock
-observations. There must be no committed fulfillment performed after a prior committed
-restriction has invalidated the guarded identity. Delivery already serialized before a
-restriction may complete first.
+The full delivery race holds the actual Order row until both delivery workers with
+identical original versions and stale managed snapshots are observed blocked through
+`pg_blocking_pids`. Exactly one delivery commits; the loser returns CONFLICT. Assertions
+count successful collection, Shipment mutation and Order completion plus persisted
+Payment, delivery audit and lifecycle history, preserving prior and unrelated evidence.
 
-## Rollback and concurrency evidence in this follow-up
-
-The voucher test obtains a real locked VoucherApplication, records its usage, confirms and
-assigns the Order, then persists a database-valid discount mismatch. It observes provisional
-Shipment cancellation/audit and stock restoration before invoking the real voucher release
-guard, which returns CONFLICT. Complete persisted row snapshots and application events verify
-rollback. Current lifecycle events are published after commit; there is no persisted outbox.
-
-The full delivery race holds the actual Order row until both workers, with identical original
-versions and stale managed snapshots, are observed blocked through `pg_blocking_pids`.
-After releasing the row, exactly one complete delivery commits and the other returns CONFLICT.
-Assertions count real successful collection/Shipment/completion calls and persisted payment,
-delivery audit and lifecycle history, while preserving stock, usage, assignment history and
-prior lifecycle/audit records. Synchronization has bounded waits and no sleep-based races.
+Public fulfillment coordinator/routes remain the separate SHIP-02 owner integration
+described in `SHIP-02-ORD-05-boundary.md`. These regressions exercise the real internal
+Order, Shipping, Payment and governance services in PostgreSQL transactions.

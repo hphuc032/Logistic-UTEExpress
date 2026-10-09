@@ -4,6 +4,8 @@ import com.uteexpress.checkout.dto.*;
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
 import com.uteexpress.governance.service.AccountGovernanceService;
+import com.uteexpress.governance.service.RoleGovernanceService;
+import com.uteexpress.governance.dto.ManagedRole;
 import com.uteexpress.order.dto.*;
 import com.uteexpress.order.entity.*;
 import com.uteexpress.order.repository.*;
@@ -59,6 +61,7 @@ class ShipperOrderLifecycleIT {
     @MockitoSpyBean PaymentReadService paymentReads;
     @MockitoSpyBean VoucherService vouchers;
     @Autowired AccountGovernanceService accounts;
+    @Autowired RoleGovernanceService roles;
     @Autowired OrderRepository orders;
     @Autowired OrderItemRepository items;
     @Autowired OrderStatusHistoryRepository history;
@@ -285,16 +288,34 @@ class ShipperOrderLifecycleIT {
             lifecycle.prepareShipperTransition(order, 4L, 2L, OrderAction.DELIVER);
             payments.collectCod(new CodCollectionCommand(order, BigDecimal.ONE));
         }), ErrorCode.CONFLICT);
+        assertThat(state()).isEqualTo(before);
+        // Also reject the amount after provisional Shipment delivery, proving its audit rolls back.
+        rejects(() -> tx.executeWithoutResult(s -> {
+            lifecycle.prepareShipperTransition(order, 4L, 2L, OrderAction.DELIVER);
+            shipments.recordDelivered(order, 2L);
+            assertThat(shipmentStatus()).isEqualTo("DELIVERED");
+            payments.collectCod(new CodCollectionCommand(order, BigDecimal.ONE));
+        }), ErrorCode.CONFLICT);
+        assertThat(state()).isEqualTo(before);
         rejects(() -> tx.executeWithoutResult(s -> {
             lifecycle.prepareShipperTransition(order, 4L, 2L, OrderAction.DELIVER);
             payments.collectCod(new CodCollectionCommand(order, TOTAL));
             payments.collectCod(new CodCollectionCommand(order, TOTAL));
         }), ErrorCode.CONFLICT);
+        assertThat(state()).isEqualTo(before);
         assertThatThrownBy(() -> tx.executeWithoutResult(s -> {
             lifecycle.prepareShipperTransition(order, 4L, 2L, OrderAction.DELIVER);
             payments.collectCod(new CodCollectionCommand(order, TOTAL));
             shipments.recordDelivered(order, 2L);
             lifecycle.completeShipperTransition(order, 4L, 2L, OrderAction.DELIVER);
+            // JDBC sees the real Payment/JPA and Shipment/Order writes in this outer transaction.
+            assertThat(status()).isEqualTo("DELIVERED");
+            assertThat(shipmentStatus()).isEqualTo("DELIVERED");
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.payments WHERE order_id=?", String.class, order))
+                    .isEqualTo("PAID");
+            assertThat(historyCount()).isEqualTo(5);
+            assertThat(auditCount()).isEqualTo(4);
+            assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
             throw new IllegalStateException("Failure after lifecycle completion");
         })).isInstanceOf(IllegalStateException.class);
         assertThat(state()).isEqualTo(before);
@@ -452,11 +473,13 @@ class ShipperOrderLifecycleIT {
         assertThat(jdbc.queryForList("SELECT * FROM uteexpress.shipment_assignment_history WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) ORDER BY id", order)).isEqualTo(originalAssignment);
     }
 
-    /** Characterization of the unresolved cross-owner race; change the expected outcome with the owner fix. */
-    @Test void accountLockCommittedAfterFinalEvidenceCheckStillAllowsDelivery() throws Exception {
-        shipping();
+    /** Regression for the former final-evidence TOCTOU witness, for both governance restrictions. */
+    @ParameterizedTest @ValueSource(booleans = {false, true})
+    void fulfillmentAccountLockMakesAdminRestrictionWaitUntilOuterCommit(boolean revokeRole) throws Exception {
+        shipping(); events.clear();
         var evidenceChecked = new CountDownLatch(1);
-        var restrictionCommitted = new CountDownLatch(1);
+        var restrictionPid = new CompletableFuture<Integer>();
+        var restrictionCommitted = new AtomicInteger();
         var guardReached = new AtomicInteger();
         var pool = Executors.newSingleThreadExecutor();
         try {
@@ -464,31 +487,100 @@ class ShipperOrderLifecycleIT {
                 await(evidenceChecked);
                 auth(admin, "ADMIN");
                 try {
-                    accounts.setLocked(shipper, 0L, true);
-                    // The public transactional call returned, so the account restriction has committed.
-                    restrictionCommitted.countDown();
+                    tx.executeWithoutResult(s -> {
+                        jdbc.execute("SET LOCAL lock_timeout='10s'");
+                        restrictionPid.complete(jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class));
+                        restrictShipper(revokeRole);
+                    });
+                    restrictionCommitted.incrementAndGet();
                 } finally { SecurityContextHolder.clearContext(); }
             });
             doAnswer(invocation -> {
                 guardReached.incrementAndGet();
                 evidenceChecked.countDown();
-                await(restrictionCommitted);
+                awaitTransactionBlock(await(restrictionPid));
+                assertThat(restrictionCommitted).hasValue(0);
+                assertThat(restriction.isDone()).isFalse();
                 assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.users WHERE id=?", String.class, shipper))
-                        .isEqualTo("LOCKED");
+                        .isEqualTo("ACTIVE");
+                assertThat(persistedShipperRole()).isTrue();
                 return invocation.callRealMethod();
             }).when(AopTestUtils.<PaymentReadService>getUltimateTargetObject(paymentReads))
                     .requireCollectedCodForDelivery(eq(order), any(BigDecimal.class));
-            perform(OrderAction.DELIVER);
+            tx.executeWithoutResult(s -> {
+                perform(OrderAction.DELIVER);
+                // All boundaries have returned, but the outer coordinator has not committed.
+                awaitTransactionBlock(await(restrictionPid));
+                assertThat(restrictionCommitted).hasValue(0);
+                assertThat(restriction.isDone()).isFalse();
+                assertThat(status()).isEqualTo("DELIVERED");
+                assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
+            });
             restriction.get(15, TimeUnit.SECONDS);
         } finally { evidenceChecked.countDown(); pool.shutdownNow(); }
         assertThat(guardReached).hasValue(1);
-        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.users WHERE id=?", String.class, shipper)).isEqualTo("LOCKED");
+        assertThat(restrictionCommitted).hasValue(1);
+        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.users WHERE id=?", String.class, shipper))
+                .isEqualTo(revokeRole ? "ACTIVE" : "LOCKED");
+        assertThat(persistedShipperRole()).isEqualTo(!revokeRole);
         assertThat(jdbc.queryForObject("SELECT token_version FROM uteexpress.users WHERE id=?", Long.class, shipper)).isEqualTo(1);
         assertThat(status()).isEqualTo("DELIVERED");
         assertThat(shipmentStatus()).isEqualTo("DELIVERED");
+        assertThat(version()).isEqualTo(5);
+        assertThat(shipmentVersion()).isEqualTo(3);
         assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.payments WHERE order_id=?", String.class, order)).isEqualTo("PAID");
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.order_status_history WHERE order_id=? AND to_status='DELIVERED' AND actor_id=?", Long.class, order, shipper)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) AND action='SHIPMENT_DELIVERED'", Long.class, order)).isEqualTo(1);
         assertThat(events.stream(OrderStatusChangedEvent.class).filter(e -> e.toStatus() == OrderStatus.DELIVERED)).hasSize(1);
+    }
+
+    @ParameterizedTest @ValueSource(booleans = {false, true})
+    void adminRestrictionCommitsBeforeEligibilityAndDeliveryFailsWithoutEffects(boolean revokeRole) throws Exception {
+        shipping(); var before = state(); events.clear();
+        var deliveryPid = new CompletableFuture<Integer>();
+        var pool = Executors.newSingleThreadExecutor();
+        var results = new ArrayList<Future<String>>();
+        try {
+            auth(admin, "ADMIN");
+            tx.executeWithoutResult(s -> {
+                restrictShipper(revokeRole);
+                results.add(pool.submit(() -> {
+                    // Keep the old authenticated SHIPPER principal to exercise persisted eligibility.
+                    auth(shipper, "SHIPPER");
+                    try {
+                        return tx.execute(worker -> {
+                            jdbc.execute("SET LOCAL lock_timeout='10s'");
+                            orders.findById(order).orElseThrow();
+                            deliveryPid.complete(jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class));
+                            perform(OrderAction.DELIVER);
+                            return "OK";
+                        });
+                    } catch (ApplicationException e) { return e.errorCode().name(); }
+                    finally { SecurityContextHolder.clearContext(); }
+                }));
+                // Fulfillment holds Order/Shipment and waits on the actual governance account lock.
+                awaitTransactionBlock(await(deliveryPid));
+                assertThat(results.getFirst().isDone()).isFalse();
+            });
+            assertThat(results.getFirst().get(15, TimeUnit.SECONDS)).isEqualTo("ACCESS_DENIED");
+        } finally { pool.shutdownNow(); }
+        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.users WHERE id=?", String.class, shipper))
+                .isEqualTo(revokeRole ? "ACTIVE" : "LOCKED");
+        assertThat(persistedShipperRole()).isEqualTo(!revokeRole);
+        assertThat(state()).isEqualTo(before);
+        assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
+    }
+
+    private void restrictShipper(boolean revokeRole) {
+        if (revokeRole) roles.change(shipper, 0L, ManagedRole.SHIPPER, false);
+        else accounts.setLocked(shipper, 0L, true);
+    }
+
+    private boolean persistedShipperRole() {
+        return Boolean.TRUE.equals(jdbc.queryForObject("""
+                SELECT EXISTS(SELECT 1 FROM uteexpress.user_roles ur JOIN uteexpress.roles r ON r.id=ur.role_id
+                    WHERE ur.user_id=? AND r.code='SHIPPER')
+                """, Boolean.class, shipper));
     }
 
     @Test void historyPersistenceFailureRollsBackCollectedCodShipmentAndOrder() {
@@ -551,6 +643,9 @@ class ShipperOrderLifecycleIT {
     }
 
     private void awaitOrderBlock(int pid) {
+        awaitTransactionBlock(pid);
+    }
+    private void awaitTransactionBlock(int pid) {
         long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
         while (System.nanoTime() < deadline) {
             jdbc.execute("SELECT pg_stat_clear_snapshot()");
@@ -565,7 +660,7 @@ class ShipperOrderLifecycleIT {
             if (Thread.currentThread().isInterrupted()) throw new AssertionError("Interrupted waiting for PostgreSQL lock");
             Thread.onSpinWait();
         }
-        throw new AssertionError("Competing lifecycle must block on held PostgreSQL Order row");
+        throw new AssertionError("Competing transaction must block on this transaction's PostgreSQL lock");
     }
     private static void await(CountDownLatch latch) {
         try { assertThat(latch.await(10, TimeUnit.SECONDS)).as("bounded synchronization wait").isTrue(); }
