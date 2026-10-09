@@ -33,12 +33,13 @@ public class VendorOrderAuthority {
     private final VendorShopQueryService shops;
     private final InventoryService inventory;
     private final PaymentReadService payments;
+    private final com.uteexpress.shipping.service.ShipmentFulfillmentService shipments;
     private final EntityManager entityManager;
 
     public VendorOrderAuthority(OrderRepository orders, OrderItemRepository items,
             CurrentAccountIdProvider accounts, AccountIdentityService identities, VendorShopQueryService shops,
             InventoryService inventory, PaymentReadService payments,
-            EntityManager entityManager) {
+            EntityManager entityManager, com.uteexpress.shipping.service.ShipmentFulfillmentService shipments) {
         this.orders = orders;
         this.items = items;
         this.accounts = accounts;
@@ -47,6 +48,7 @@ public class VendorOrderAuthority {
         this.inventory = inventory;
         this.payments = payments;
         this.entityManager = entityManager;
+        this.shipments = shipments;
     }
 
     public Order lockOwnedOrder(Long id) {
@@ -85,6 +87,7 @@ public class VendorOrderAuthority {
             payments.requireConfirmablePayment(order.getId(), order.getGrandTotal());
         } else {
             if (order.getInventoryReleasedAt() != null) throw new ApplicationException(ErrorCode.CONFLICT);
+            shipments.cancelAssignedForVendorOrder(order.getId());
             var quantities = items.findByOrderIdOrderByIdAsc(order.getId()).stream()
                     .map(item -> new StockQuantity(item.getProductId(), item.getQuantity())).toList();
             inventory.restore(quantities);
