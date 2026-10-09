@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Chuyến giao của tôi | UTEExpress</title></head>
+<body><section th:fragment="content" aria-label="Chuyến giao của tôi">
+<h1>Chuyến giao của tôi</h1>
+<p th:if="${shipments.empty}">Bạn chưa có chuyến giao được phân công.</p>
+<table th:unless="${shipments.empty}" class="table">
+<thead><tr><th>Chuyến giao</th><th>Đơn hàng</th><th>Dịch vụ</th><th>Trạng thái</th></tr></thead>
+<tbody><tr th:each="shipment : ${shipments}">
+<td><a th:href="@{/shipper/shipments/{id}/view(id=${shipment.id})}" th:text="${shipment.id}"></a></td>
+<td th:text="${shipment.orderId}"></td><td th:text="${shipment.serviceCode}"></td><td th:text="${shipment.status}"></td>
+</tr></tbody></table>
+</section></body></html>
