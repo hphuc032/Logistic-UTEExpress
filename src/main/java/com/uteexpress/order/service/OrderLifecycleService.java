@@ -11,6 +11,14 @@ import com.uteexpress.order.dto.OrderTransitionCommand;
  * update timestamps, append history and publish the result only after commit.
  */
 public interface OrderLifecycleService {
+    /** Internal MANDATORY boundary; both versions are the original source versions. */
+    void prepareShipperTransition(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, com.uteexpress.order.dto.OrderAction action);
+
+    /** Requires persisted Shipment target evidence at original version + 1. */
+    OrderStatusChangedEvent completeShipperTransition(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, com.uteexpress.order.dto.OrderAction action);
+
     /** Authenticated callers only; EXPIRE_PAYMENT is rejected with ACCESS_DENIED. */
     OrderStatusChangedEvent transition(OrderTransitionCommand command);
 
