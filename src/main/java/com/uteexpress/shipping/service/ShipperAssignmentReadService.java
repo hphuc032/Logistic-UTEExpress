@@ -49,6 +49,18 @@ public class ShipperAssignmentReadService {
         return rows.getFirst();
     }
 
+    @Transactional(readOnly = true)
+    public Long orderVersion(Long shipmentId) {
+        if (shipmentId == null || shipmentId <= 0)
+            throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
+        List<Long> versions = jdbc().query("""
+                SELECT o.version FROM uteexpress.orders o JOIN uteexpress.shipments s ON s.order_id=o.id
+                WHERE s.id=? AND s.assigned_shipper_id=?
+                """, (rs, ignored) -> rs.getLong(1), shipmentId, actor());
+        if (versions.isEmpty()) throw new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND);
+        return versions.getFirst();
+    }
+
     private long actor() {
         return currentAccount.currentAccountId().filter(id -> id > 0)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));

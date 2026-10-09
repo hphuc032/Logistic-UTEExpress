@@ -20,6 +20,7 @@ public class ShipperShipmentPageController {
     @GetMapping("/shipper/shipments/{shipmentId}/view")
     public String detail(@PathVariable Long shipmentId, Model model) {
         model.addAttribute("shipment", assignments.detail(shipmentId));
+        model.addAttribute("orderVersion", assignments.orderVersion(shipmentId));
         return "shipping/shipper/detail";
     }
 }

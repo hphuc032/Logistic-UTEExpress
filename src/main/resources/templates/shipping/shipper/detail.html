@@ -9,5 +9,18 @@
 <dt>Dịch vụ</dt><dd th:text="${shipment.serviceCode}"></dd>
 <dt>Phí vận chuyển</dt><dd th:text="${#numbers.formatDecimal(shipment.fee, 1, 'COMMA', 0, 'POINT') + ' VND'}"></dd>
 <dt>Trạng thái</dt><dd th:text="${shipment.status}"></dd></dl>
+<form method="post" th:if="${shipment.status.name() == 'ASSIGNED'}" th:action="@{/shipper/orders/{id}/pickup(id=${shipment.orderId})}">
+<input type="hidden" name="expectedOrderVersion" th:value="${orderVersion}"><input type="hidden" name="expectedShipmentVersion" th:value="${shipment.version}">
+<button type="submit" class="btn btn-primary">Đã nhận hàng</button>
+</form>
+<form method="post" th:if="${shipment.status.name() == 'PICKED_UP'}" th:action="@{/shipper/orders/{id}/shipping(id=${shipment.orderId})}">
+<input type="hidden" name="expectedOrderVersion" th:value="${orderVersion}"><input type="hidden" name="expectedShipmentVersion" th:value="${shipment.version}">
+<button type="submit" class="btn btn-primary">Bắt đầu giao hàng</button>
+</form>
+<form method="post" th:if="${shipment.status.name() == 'SHIPPING'}" th:action="@{/shipper/orders/{id}/delivered(id=${shipment.orderId})}">
+<input type="hidden" name="expectedOrderVersion" th:value="${orderVersion}"><input type="hidden" name="expectedShipmentVersion" th:value="${shipment.version}">
+<label for="collectedAmount">Số tiền COD đã thu (VND)</label><input id="collectedAmount" name="collectedAmount" type="number" min="0" step="0.01" required>
+<button type="submit" class="btn btn-primary">Xác nhận giao thành công</button>
+</form>
 <a th:href="@{/shipper/shipments/view}">Quay lại danh sách</a>
 </section></body></html>
