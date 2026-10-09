@@ -185,10 +185,11 @@ public class CartService {
                     : CartItemStatus.AVAILABLE;
             return new CartItemView(line.getId(), line.getProductId(),
                     product == null ? "Sản phẩm #" + line.getProductId() : product.productName(),
-                    line.getQuantity(), line.isSelected(), product == null ? null : product.unitPrice(),
+                    line.getQuantity(), line.isSelected(), product == null ? null : product.finalUnitPrice(),
                     status == CartItemStatus.AVAILABLE
-                            ? product.unitPrice().multiply(BigDecimal.valueOf(line.getQuantity())) : BigDecimal.ZERO,
-                    product == null ? 0 : product.stock(), status);
+                            ? product.finalUnitPrice().multiply(BigDecimal.valueOf(line.getQuantity())) : BigDecimal.ZERO,
+                    product == null ? 0 : product.stock(), status,
+                    product == null ? null : product.unitPrice(), product == null ? BigDecimal.ZERO : product.discountSnapshot());
         }).toList();
         return new CartView(cart.getId(), views,
                 views.stream().map(CartItemView::subtotal).reduce(BigDecimal.ZERO, BigDecimal::add));

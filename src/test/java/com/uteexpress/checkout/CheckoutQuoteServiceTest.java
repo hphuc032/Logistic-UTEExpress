@@ -27,7 +27,8 @@ class CheckoutQuoteServiceTest {
     final CatalogQueryService catalog = mock(CatalogQueryService.class);
     final InventoryService inventory = mock(InventoryService.class);
     final ShippingQuoteService shipping = mock(ShippingQuoteService.class);
-    final CheckoutQuoteService checkout = new CheckoutQuoteService(accounts, addresses, carts, catalog, inventory, shipping);
+    final com.uteexpress.promotion.service.VoucherService vouchers = mock(com.uteexpress.promotion.service.VoucherService.class);
+    final CheckoutQuoteService checkout = new CheckoutQuoteService(accounts, addresses, carts, catalog, inventory, shipping, vouchers);
     final QuoteRequest request = new QuoteRequest(2L, 3L, "STANDARD");
 
     @BeforeEach void fixture() {
@@ -50,6 +51,18 @@ class CheckoutQuoteServiceTest {
         verifyNoMoreInteractions(inventory);
         verify(carts).getCurrentUserCart();
         verifyNoMoreInteractions(carts);
+    }
+
+    @Test void voucherDiscountAndIdentityComeFromServerBoundary() {
+        var voucher = new com.uteexpress.promotion.dto.VoucherApplication(8L, "SAVE",
+                com.uteexpress.promotion.dto.VoucherScope.SHOP, new BigDecimal("50"));
+        when(vouchers.preview("save", 5L, new BigDecimal("250.00"))).thenReturn(voucher);
+        var quote = checkout.quote(new QuoteRequest(2L, 3L, "STANDARD", "save")).quote();
+        assertThat(quote.voucher()).isEqualTo(voucher);
+        assertThat(quote.totals().discountTotal()).isEqualByComparingTo("50");
+        assertThat(quote.totals().grandTotal()).isEqualByComparingTo("217");
+        verify(vouchers).preview("save", 5L, new BigDecimal("250.00"));
+        verifyNoMoreInteractions(vouchers);
     }
 
     @Test void multipleSelectedShopsAreRejected() {

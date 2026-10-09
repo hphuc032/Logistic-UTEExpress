@@ -154,7 +154,7 @@ The following is transcribed from the supplied plan. Detailed lengths, nullabili
 - 16 Payment /   payments method, status, amount, provider_reference unique nullable, attempt_key unique, paid_at, expired_at FK order_id → orders; 1 order:N payment attempts TD
 - 17 Voucher /   vouchers code unique, scope, type, value, max_discount, min_subtotal, starts_at, ends_at, total_limit, per_user_limit, active, version FK shop_id nullable; created_by → users TD
 - 18 VoucherUsage /   voucher_usages status, discount_amount, version FK voucher_id, user_id, order_id; unique order_id TD
-- 19 Promotion /   promotions name, discount_percent, starts_at, ends_at, active FK product_id, created_by; mỗi promotion cho 1 sản phẩm TD
+- 19 Promotion /   promotions name, discount_percent, starts_at, ends_at, active, created_at, updated_at, version FK product_id, created_by; one Product per promotion, active half-open windows protected by PostgreSQL GiST exclusion (PROMO-02) TD
 - 20 Review /   reviews rating, comment, visibility, created_at FK order_item_id unique; user_id, product_id QD
 - 21 ReviewMedia /   review_media media_type, storage_key, position FK review_id → reviews QD
 - 22 ShippingProvider /   shipping_providers code unique, name, active 1:N ShippingRate/Shipment QD

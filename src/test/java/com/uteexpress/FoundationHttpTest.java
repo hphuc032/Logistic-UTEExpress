@@ -33,6 +33,10 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 @AutoConfigureMockMvc
 @Import(FoundationHttpTest.ErrorFixtureController.class)
 class FoundationHttpTest {
+    @MockitoBean com.uteexpress.promotion.service.VoucherService voucherService;
+    @MockitoBean com.uteexpress.promotion.service.VendorVoucherService vendorVoucherService;
+    @MockitoBean com.uteexpress.catalog.service.ProductPromotionManagementService productPromotionManagementService;
+    @MockitoBean com.uteexpress.promotion.service.PromotionManagementService promotionManagementService;
     @MockitoBean com.uteexpress.governance.service.ProductModerationService productModerationService;
     @MockitoBean com.uteexpress.governance.service.ShopModerationService shopModerationService;
     @MockitoBean com.uteexpress.catalog.service.ProductService productService;

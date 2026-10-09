@@ -67,7 +67,7 @@ public class VendorOrderService {
                 order.getUpdatedAt(), order.getDeliveredAt(), order.getCancelledAt(),
                 new BuyerOrderDetail.Address(order.getReceiverName(), order.getPhone(), order.getProvinceCode(),
                         order.getDistrict(), order.getDetail()), order.getSubtotal(), order.getDiscountTotal(),
-                order.getShippingFee(), order.getGrandTotal(), lines, timeline, payments.recordsForOrder(id));
+                order.getShippingFee(), order.getGrandTotal(), lines, timeline, payments.recordsForOrder(id), order.getVoucher());
         return new VendorOrderDetail(facts, order.getVersion(), order.getReadyAt());
     }
 
