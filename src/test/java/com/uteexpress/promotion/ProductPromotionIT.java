@@ -92,7 +92,10 @@ class ProductPromotionIT {
         jdbc.execute("CREATE DATABASE " + database + " OWNER " + role);
         String url = "jdbc:postgresql://" + POSTGRES.getHost() + ":" + POSTGRES.getMappedPort(5432) + "/" + database;
         Flyway migration = Flyway.configure().dataSource(url, role, password).defaultSchema("uteexpress").schemas("uteexpress").load();
-        assertThat(migration.migrate().migrationsExecuted).isEqualTo(20);
+        int pending = migration.info().pending().length;
+        assertThat(pending).isGreaterThanOrEqualTo(20);
+        assertThat(migration.migrate().migrationsExecuted).isEqualTo(pending);
+        assertThat(migration.info().pending()).isEmpty();
         migration.validate(); assertThat(migration.migrate().migrationsExecuted).isZero();
         try (var connection = DriverManager.getConnection(url, role, password); var statement = connection.createStatement()) {
             var rows = statement.executeQuery("SELECT rolsuper, extversion FROM pg_roles JOIN pg_extension ON extname='btree_gist' WHERE rolname=current_user");
