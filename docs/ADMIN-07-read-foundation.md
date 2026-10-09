@@ -21,3 +21,7 @@ authority with Order locking, version/state checks and transactional audit/shipm
 resolution. A governance repository update of `orders.status` would bypass those
 guards, so this PR must remain draft until the Order owner reviews the shared
 mutation contract.
+
+## Shipment visibility
+
+Detail now includes a nullable persisted Shipment read model: current assignee, status, attempt counts and pickup/delivery timestamps. No assignment is shown as absent, without inventing fulfillment facts from Order status or shipping fees. Order, history, payment and Shipment reads use the existing REPEATABLE_READ transaction. No Shipping mutation or lifecycle operation is exposed. ADMIN/MANAGER can view this data; USER/VENDOR/SHIPPER cannot access Ops detail.

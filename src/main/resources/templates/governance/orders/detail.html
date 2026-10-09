@@ -26,6 +26,16 @@
     <h2>Lịch sử trạng thái</h2>
     <p th:if="${order.facts.timeline.empty}">Chưa có lịch sử được ghi.</p>
     <ol><li th:each="entry : ${order.facts.timeline}" th:text="|${entry.createdAt}: ${entry.fromStatus ?: 'Bắt đầu'} → ${entry.toStatus}|"></li></ol>
+    <h2>Chuyến giao</h2>
+    <p th:if="${order.shipment == null}">Chưa có chuyến giao được phân công.</p>
+    <dl class="row" th:if="${order.shipment != null}">
+        <dt class="col-sm-3">Chuyến giao ID</dt><dd class="col-sm-9" th:text="${order.shipment.id}"></dd>
+        <dt class="col-sm-3">Shipper ID</dt><dd class="col-sm-9" th:text="${order.shipment.assignedShipperId}"></dd>
+        <dt class="col-sm-3">Trạng thái giao hàng</dt><dd class="col-sm-9" th:text="${order.shipment.status}"></dd>
+        <dt class="col-sm-3">Số lần giao</dt><dd class="col-sm-9" th:text="|${order.shipment.attemptCount}/${order.shipment.maxAttempts}|"></dd>
+        <dt class="col-sm-3">Nhận hàng lúc</dt><dd class="col-sm-9" th:text="${order.shipment.pickedUpAt ?: 'Chưa ghi nhận'}"></dd>
+        <dt class="col-sm-3">Giao thành công lúc</dt><dd class="col-sm-9" th:text="${order.shipment.deliveredAt ?: 'Chưa ghi nhận'}"></dd>
+    </dl>
     <h2>Thanh toán</h2>
     <p th:if="${order.facts.payments.empty}">Chưa có bản ghi thanh toán.</p>
     <ul><li th:each="payment : ${order.facts.payments}"

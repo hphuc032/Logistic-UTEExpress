@@ -57,8 +57,19 @@ public class OpsOrderQueryRepository {
                     rs.getString("shipping_service_code"), rs.getBigDecimal("grand_total"),
                     items(id), timeline(id), payments(id));
             return new OpsOrderDetail(rs.getLong("buyer_id"), rs.getLong("version"),
-                    instant(rs.getTimestamp("ready_at")), facts);
+                    instant(rs.getTimestamp("ready_at")), facts, shipment(id));
         });
+        return rows.isEmpty() ? null : rows.getFirst();
+    }
+
+    private OpsOrderDetail.Shipment shipment(Long orderId) {
+        var rows = jdbc.getObject().query("""
+                SELECT id, assigned_shipper_id, status, attempt_count, max_attempts,
+                    picked_up_at, delivered_at, version FROM uteexpress.shipments WHERE order_id=:orderId
+                """, new MapSqlParameterSource("orderId", orderId), (rs, ignored) ->
+                new OpsOrderDetail.Shipment(rs.getLong(1), rs.getLong(2), rs.getString(3),
+                        rs.getInt(4), rs.getInt(5), instant(rs.getTimestamp(6)),
+                        instant(rs.getTimestamp(7)), rs.getLong(8)));
         return rows.isEmpty() ? null : rows.getFirst();
     }
 

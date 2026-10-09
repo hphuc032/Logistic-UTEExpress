@@ -69,6 +69,18 @@ class OperationsOrderIT {
         assertThat(detail.facts().shippingProviderId()).isEqualTo(42L);
         assertThat(detail.facts().shippingServiceCode()).isEqualTo("STANDARD");
 
+        assertThat(detail.shipment()).isNull();
+        long provider = jdbc.queryForObject("""
+                INSERT INTO uteexpress.shipping_providers(code,name,active)
+                VALUES (?, 'Ops carrier', true) RETURNING id
+                """, Long.class, "OPS_" + System.nanoTime());
+        jdbc.update("""
+                INSERT INTO uteexpress.shipments(order_id,provider_id,assigned_shipper_id,status,
+                    shipping_service_snapshot,fee_snapshot) VALUES (?, ?, ?, 'ASSIGNED', 'STANDARD', 10)
+                """, order, provider, vendor);
+        assertThat(orders.detail(order).shipment().assignedShipperId()).isEqualTo(vendor);
+        assertThat(orders.detail(order).shipment().status()).isEqualTo("ASSIGNED");
+
         SecurityContextHolder.clearContext();
         mvc.perform(get("/admin/orders").with(user(principal(buyer, "ADMIN")))
                         .param("query", code).accept("text/html"))
@@ -78,8 +90,18 @@ class OperationsOrderIT {
                 .andExpect(status().isOk()).andExpect(jsonPath("$.facts.orderCode").value(code))
                 .andExpect(jsonPath("$.facts.shippingServiceCode").value("STANDARD"))
                 .andExpect(jsonPath("$.facts.payments[0].status").value("UNPAID"))
+                .andExpect(jsonPath("$.shipment.status").value("ASSIGNED"))
+                .andExpect(jsonPath("$.shipment.assignedShipperId").value(vendor))
                 .andExpect(jsonPath("$.facts.checkoutKey").doesNotExist())
                 .andExpect(jsonPath("$.facts.requestHash").doesNotExist());
+        mvc.perform(get("/admin/orders/{id}", order).with(user(principal(buyer, "ADMIN")))
+                        .accept("text/html"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("ASSIGNED")));
+        for (String denied : List.of("USER", "VENDOR", "SHIPPER"))
+            mvc.perform(get("/manager/orders/{id}", order).with(user(principal(buyer, denied)))
+                            .accept("application/json"))
+                    .andExpect(status().isForbidden());
         mvc.perform(get("/manager/orders").with(user(principal(buyer, "USER")))
                         .accept("application/json"))
                 .andExpect(status().isForbidden());
