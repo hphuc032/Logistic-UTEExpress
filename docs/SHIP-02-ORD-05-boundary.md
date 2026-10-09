@@ -123,3 +123,7 @@ updated develop and implements prepare/complete, the Payment guard and cancellat
 wiring on its own branch. QD syncs SHIP-02 #42 with develop after those prerequisites
 merge and connects the coordinator/endpoints. No need to merge the incomplete #42 or
 pull its read/UI changes into ORD-05. No force-push is required.
+
+## Account eligibility locking
+
+Fulfillment locks Order, Shipment, then the assigned users row with FOR SHARE before checking ACTIVE and the persisted SHIPPER role. Keep this lock until the outer transaction commits or rolls back; acquire Payment afterward. Account status updates conflict with FOR SHARE. Role governance locks the account FOR UPDATE before changing user_roles, so role revocation also waits. Shipping must not acquire the global roles row lock after locking the account: governance acquires role then account, which would reverse the ordering. Admin account/role operations must never acquire Order/Shipment/Payment while holding account locks. Shared account locks allow concurrent deliveries of different orders by one shipper without an account lock upgrade. A committed account lock before eligibility acquisition causes ACCESS_DENIED; a later lock waits until fulfillment ends.
