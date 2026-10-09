@@ -135,6 +135,13 @@ public class ShipmentFulfillmentService {
     private ShipmentFulfillmentFacts assigned(Long orderId) {
         ShipmentFulfillmentFacts facts = shipment(orderId);
         if (facts == null || !facts.shipperId().equals(actor())) throw missing();
+        // Hold eligibility until the outer Order/Shipment/Payment transaction completes.
+        // FOR SHARE conflicts with status updates and governance's account FOR UPDATE,
+        // but lets deliveries for different orders by the same shipper proceed together.
+        List<String> statuses = jdbc().query("SELECT status FROM uteexpress.users WHERE id=? FOR SHARE",
+                (rs, ignored) -> rs.getString(1), actor());
+        if (statuses.isEmpty() || !"ACTIVE".equals(statuses.getFirst()))
+            throw new ApplicationException(ErrorCode.ACCESS_DENIED);
         Boolean active = jdbc().queryForObject("""
                 SELECT EXISTS(SELECT 1 FROM uteexpress.users u JOIN uteexpress.user_roles ur ON ur.user_id=u.id
                     JOIN uteexpress.roles r ON r.id=ur.role_id WHERE u.id=? AND u.status='ACTIVE' AND r.code='SHIPPER')
