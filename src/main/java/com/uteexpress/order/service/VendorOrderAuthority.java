@@ -53,12 +53,14 @@ public class VendorOrderAuthority {
 
     public Order lockOwnedOrder(Long id) {
         Long vendor = vendorId();
-        identities.requireActiveAccountForUpdate(vendor);
         Long shop = shops.requireApprovedOwnedShop(vendor).shopId();
         var order = orders.findByIdAndShopIdForUpdate(id, shop)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND));
         // Discard an earlier managed snapshot if a caller joined an existing transaction.
         entityManager.refresh(order, LockModeType.PESSIMISTIC_WRITE);
+        // Resource first: a multi-role vendor/shipper must never hold Account while waiting for Order.
+        // Keep eligibility locked through commit; Shipping acquires it after this same Order lock.
+        identities.requireActiveAccountForUpdate(vendor);
         return order;
     }
 

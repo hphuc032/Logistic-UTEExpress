@@ -34,6 +34,8 @@ class ShipperFulfillmentIT {
     @Autowired ShipmentAssignmentService assignments;
     @Autowired ShipperFulfillmentService fulfillment;
     @Autowired MockMvc mvc;
+    @Autowired org.springframework.transaction.PlatformTransactionManager transactions;
+    @Autowired com.uteexpress.order.service.OrderLifecycleService orderLifecycle;
     long orderId, shipper;
     @BeforeEach void setup() {
         long admin = insertUser("ACTIVE", "ADMIN");
@@ -115,6 +117,60 @@ class ShipperFulfillmentIT {
             assertThat(jdbc.queryForObject("SELECT version FROM uteexpress.shipments WHERE order_id=?",Long.class,orderId)).isEqualTo(3);
             assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.payments WHERE order_id=?",String.class,orderId)).isEqualTo("PAID");
         } finally {pool.shutdownNow();}
+    }
+
+    @Test void multiRoleVendorWaitsForOrderWithoutBlockingShipperEligibility() throws Exception {
+        // The same persisted account owns the shop and is assigned to its shipment.
+        jdbc.update("INSERT INTO uteexpress.user_roles(user_id,role_id) SELECT ?,id FROM uteexpress.roles WHERE code='VENDOR'", shipper);
+        jdbc.update("UPDATE uteexpress.shops SET owner_id=? WHERE id=(SELECT shop_id FROM uteexpress.orders WHERE id=?)", shipper, orderId);
+        var tx = new org.springframework.transaction.support.TransactionTemplate(transactions);
+        var pool = java.util.concurrent.Executors.newSingleThreadExecutor();
+        var vendorPid = new java.util.concurrent.atomic.AtomicInteger();
+        var started = new java.util.concurrent.CountDownLatch(1);
+        var vendorFuture = new java.util.concurrent.atomic.AtomicReference<java.util.concurrent.Future<?>>();
+        try {
+            tx.executeWithoutResult(outer -> {
+                jdbc.execute("SET LOCAL lock_timeout='3s'");
+                int shippingPid = jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class);
+                jdbc.queryForObject("SELECT id FROM uteexpress.orders WHERE id=? FOR UPDATE", Long.class, orderId);
+                vendorFuture.set(pool.submit(() -> {
+                    authenticate(shipper, "VENDOR");
+                    try {
+                        assertThatThrownBy(() -> tx.executeWithoutResult(inner -> {
+                            jdbc.execute("SET LOCAL lock_timeout='10s'");
+                            vendorPid.set(jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class));
+                            started.countDown();
+                            orderLifecycle.transition(
+                                    new com.uteexpress.order.dto.OrderTransitionCommand(orderId,
+                                            com.uteexpress.order.dto.OrderStatus.CONFIRMED, 0L,
+                                            OrderAction.CANCEL_CONFIRMED, "UNABLE_TO_FULFILL"));
+                        })).isInstanceOfSatisfying(ApplicationException.class,
+                                ex -> assertThat(ex.errorCode()).isEqualTo(ErrorCode.CONFLICT));
+                    } finally { SecurityContextHolder.clearContext(); }
+                }));
+                try {
+                    assertThat(started.await(5, java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+                    long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(5);
+                    boolean blocked = false;
+                    while (System.nanoTime() < deadline) {
+                        blocked = Boolean.TRUE.equals(jdbc.queryForObject(
+                                "SELECT ? = ANY(pg_blocking_pids(?))", Boolean.class, shippingPid, vendorPid.get()));
+                        if (blocked) break;
+                        java.util.concurrent.locks.LockSupport.parkNanos(java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(10));
+                    }
+                    assertThat(blocked).as("Vendor is waiting for the held Order row").isTrue();
+                    // Old Account -> Order ordering held this account FOR UPDATE and deadlocked here.
+                    authenticate(shipper, "SHIPPER");
+                    fulfillment.transition(orderId, OrderAction.PICK_UP, new FulfillmentRequest(0L, 0L, null));
+                } catch (InterruptedException ex) {
+                    Thread.currentThread().interrupt(); throw new AssertionError(ex);
+                }
+            });
+            vendorFuture.get().get(15, java.util.concurrent.TimeUnit.SECONDS);
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?", String.class, orderId)).isEqualTo("PICKED_UP");
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.shipments WHERE order_id=?", String.class, orderId)).isEqualTo("PICKED_UP");
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.payments WHERE order_id=?", String.class, orderId)).isEqualTo("UNPAID");
+        } finally { pool.shutdownNow(); }
     }
 
     private List<Object> state() {
