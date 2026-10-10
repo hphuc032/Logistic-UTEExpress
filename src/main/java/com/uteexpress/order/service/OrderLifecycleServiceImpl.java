@@ -177,22 +177,43 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
                     throw new ApplicationException(ErrorCode.CONFLICT);
                 }
                 beforeValidatedTransition(order, command, at);
-                order.applyValidatedTransition(to, at, reason);
-                orders.saveAndFlush(order);
-                history.saveAndFlush(new OrderStatusHistory(order.getId(), from, to, actorId, at, reason));
-                var event = new OrderStatusChangedEvent(UUID.randomUUID(),
-                        order.getId(), from, to, actorId, at, reason);
-                TransactionSynchronizationManager.registerSynchronization(
-                        new TransactionSynchronization() {
-                            @Override public void afterCommit() { events.publishEvent(event); }
-                        });
-                return event;
+                return persistValidatedTransition(order, to, actorId, at, reason);
             });
         } catch (OptimisticLockingFailureException
                 | OptimisticLockException ex) {
             throw new ApplicationException(
                     ErrorCode.CONFLICT);
         }
+    }
+
+    /** Shared writer after action-specific authorization and guards, inside the caller's transaction. */
+    protected final OrderStatusChangedEvent persistValidatedTransition(Order order, OrderStatus to,
+            Long actorId, Instant at, String reason) {
+        if (!TransactionSynchronizationManager.isActualTransactionActive()) {
+            throw new IllegalStateException("Order transition requires the lifecycle transaction");
+        }
+        requireHumanActor(actorId);
+        var from = order.getStatus();
+        order.applyValidatedTransition(to, at, reason);
+        orders.saveAndFlush(order);
+        history.saveAndFlush(new OrderStatusHistory(order.getId(), from, to, actorId, at, reason));
+        var event = new OrderStatusChangedEvent(UUID.randomUUID(), order.getId(), from, to, actorId, at, reason);
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override public void afterCommit() { events.publishEvent(event); }
+        });
+        return event;
+    }
+
+    @Override
+    public void prepareShipperTransition(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, OrderAction action) {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    @Override
+    public OrderStatusChangedEvent completeShipperTransition(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, OrderAction action) {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
     }
 
     private CurrentUser currentUser() {
