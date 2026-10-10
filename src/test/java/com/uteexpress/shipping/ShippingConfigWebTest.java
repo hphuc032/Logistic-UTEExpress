@@ -53,7 +53,32 @@ class ShippingConfigWebTest {
     @MockitoBean com.uteexpress.identity.service.RegistrationService registration;
     @MockitoBean com.uteexpress.identity.service.IdentityAuthenticationService identities;
     @MockitoBean com.uteexpress.identity.repository.UserRoleRepository userRoles;
+    @MockitoBean ShipperAssignmentReadService shipperAssignments;
     @Autowired MockMvc mvc;
+
+    @Test void shipperPagesRejectOtherRolesBeforeReadingAssignments() throws Exception {
+        for (String path : List.of("/shipper/shipments/view", "/shipper/shipments/1/view")) {
+            mvc.perform(get(path)).andExpect(status().isUnauthorized());
+            for (String role : List.of("USER", "VENDOR", "ADMIN", "MANAGER"))
+                mvc.perform(get(path).with(user("actor").roles(role))).andExpect(status().isForbidden());
+        }
+        verifyNoInteractions(shipperAssignments);
+    }
+
+    @Test void shipperPagesRenderEscapedAssignmentAndEmptyState() throws Exception {
+        when(shipperAssignments.assigned()).thenReturn(List.of());
+        mvc.perform(get("/shipper/shipments/view").with(user("shipper").roles("SHIPPER")))
+                .andExpect(status().isOk()).andExpect(content().string(containsString("Bạn chưa có")));
+        var shipment = new ShipmentAssignment(1L, 2L, 3L, "<script>unsafe</script>",
+                new BigDecimal("30000"), 4L, ShipmentStatus.ASSIGNED, 0L);
+        when(shipperAssignments.assigned()).thenReturn(List.of(shipment));
+        when(shipperAssignments.detail(1L)).thenReturn(shipment);
+        for (String path : List.of("/shipper/shipments/view", "/shipper/shipments/1/view"))
+            mvc.perform(get(path).with(user("shipper").roles("SHIPPER")))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(containsString("ASSIGNED")))
+                    .andExpect(content().string(not(containsString("<script>unsafe</script>"))));
+    }
 
     @Test void roleAndCsrfMatrix() throws Exception {
         for(String ops:List.of("admin","manager")) for(String kind:List.of("providers","rates")) {
