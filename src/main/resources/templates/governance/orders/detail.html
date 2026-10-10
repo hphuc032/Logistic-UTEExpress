@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Chi tiết đơn hàng vận hành | UTEExpress</title></head>
+<body><section th:fragment="content" aria-label="Chi tiết đơn hàng vận hành">
+    <a th:href="@{/{ops}/orders(ops=${ops})}">Quay lại danh sách</a>
+    <h1 th:text="|Đơn hàng ${order.facts.orderCode}|"></h1>
+    <dl class="row">
+        <dt class="col-sm-3">Trạng thái</dt><dd class="col-sm-9" th:text="${order.facts.status}"></dd>
+        <dt class="col-sm-3">Buyer ID</dt><dd class="col-sm-9" th:text="${order.buyerId}"></dd>
+        <dt class="col-sm-3">Shop ID</dt><dd class="col-sm-9" th:text="${order.facts.shopId}"></dd>
+        <dt class="col-sm-3">Phiên bản</dt><dd class="col-sm-9" th:text="${order.version}"></dd>
+        <dt class="col-sm-3">Sẵn sàng giao</dt><dd class="col-sm-9" th:text="${order.readyAt ?: 'Chưa'}"></dd>
+        <dt class="col-sm-3">Người nhận</dt><dd class="col-sm-9" th:text="${order.facts.address.receiverName}"></dd>
+        <dt class="col-sm-3">Điện thoại</dt><dd class="col-sm-9" th:text="${order.facts.address.phone}"></dd>
+        <dt class="col-sm-3">Địa chỉ</dt><dd class="col-sm-9" th:text="|${order.facts.address.detail}, ${order.facts.address.district}, ${order.facts.address.provinceCode}|"></dd>
+        <dt class="col-sm-3">Nhà vận chuyển ID</dt><dd class="col-sm-9" th:text="${order.facts.shippingProviderId ?: 'Chưa lưu'}"></dd>
+        <dt class="col-sm-3">Dịch vụ vận chuyển</dt><dd class="col-sm-9" th:text="${order.facts.shippingServiceCode ?: 'Chưa lưu'}"></dd>
+        <dt class="col-sm-3">Phí vận chuyển</dt><dd class="col-sm-9" th:text="${order.facts.shippingFee}"></dd>
+        <dt class="col-sm-3">Tổng tiền</dt><dd class="col-sm-9" th:text="${order.facts.grandTotal}"></dd>
+    </dl>
+    <h2>Sản phẩm</h2>
+    <p th:if="${order.facts.items.empty}">Chưa có dữ liệu sản phẩm.</p>
+    <table th:unless="${order.facts.items.empty}" class="table"><thead><tr><th>Tên</th><th>Số lượng</th><th>Thành tiền</th></tr></thead>
+        <tbody><tr th:each="item : ${order.facts.items}"><td th:text="${item.productNameSnapshot}"></td>
+            <td th:text="${item.quantity}"></td><td th:text="${item.lineTotal}"></td></tr></tbody></table>
+    <h2>Lịch sử trạng thái</h2>
+    <p th:if="${order.facts.timeline.empty}">Chưa có lịch sử được ghi.</p>
+    <ol><li th:each="entry : ${order.facts.timeline}" th:text="|${entry.createdAt}: ${entry.fromStatus ?: 'Bắt đầu'} → ${entry.toStatus}|"></li></ol>
+    <h2>Chuyến giao</h2>
+    <p th:if="${order.shipment == null}">Chưa có chuyến giao được phân công.</p>
+    <dl class="row" th:if="${order.shipment != null}">
+        <dt class="col-sm-3">Chuyến giao ID</dt><dd class="col-sm-9" th:text="${order.shipment.id}"></dd>
+        <dt class="col-sm-3">Shipper ID</dt><dd class="col-sm-9" th:text="${order.shipment.assignedShipperId}"></dd>
+        <dt class="col-sm-3">Trạng thái giao hàng</dt><dd class="col-sm-9" th:text="${order.shipment.status}"></dd>
+        <dt class="col-sm-3">Số lần giao</dt><dd class="col-sm-9" th:text="|${order.shipment.attemptCount}/${order.shipment.maxAttempts}|"></dd>
+        <dt class="col-sm-3">Nhận hàng lúc</dt><dd class="col-sm-9" th:text="${order.shipment.pickedUpAt ?: 'Chưa ghi nhận'}"></dd>
+        <dt class="col-sm-3">Giao thành công lúc</dt><dd class="col-sm-9" th:text="${order.shipment.deliveredAt ?: 'Chưa ghi nhận'}"></dd>
+    </dl>
+    <h2>Thanh toán</h2>
+    <p th:if="${order.facts.payments.empty}">Chưa có bản ghi thanh toán.</p>
+    <ul><li th:each="payment : ${order.facts.payments}"
+            th:text="|${payment.method} · ${payment.status} · ${payment.amount}|"></li></ul>
+</section></body></html>
