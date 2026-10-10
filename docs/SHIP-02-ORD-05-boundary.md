@@ -3,8 +3,9 @@
 QD's Shipping contract is extracted to `feature/ship-02-ord05-foundation`, based
 directly on develop. This prerequisite contains no assigned-list controller/UI,
 fulfillment HTTP coordinator, Order/Payment implementation or new migration.
-TD owns the Order prepare/complete APIs. QD accepts TD's proposed signatures below;
-their implementation and complete integration are still pending.
+TD owns the Order prepare/complete APIs. ORD-05 implements the agreed signatures,
+the Payment delivery guard and Vendor cancellation hook below. QD's production
+coordinator/endpoints and complete HTTP integration remain pending.
 
 ## 1. Transactional coordinator
 
@@ -44,7 +45,7 @@ status/version, attemptCount/maxAttempts, pickedUpAt/deliveredAt. Mutations incr
 Shipment version once and append AuditLog in the same transaction. No new migration
 is needed. Shipping never writes orders.status.
 
-## 3. TD prepare/complete proposal
+## 3. TD prepare/complete boundary (ORD-05)
 
 QD agrees to `prepareShipperTransition(orderId, expectedOrderVersion,
 expectedShipmentVersion, action)` and `completeShipperTransition(orderId,
@@ -82,7 +83,7 @@ record and exact persisted grand_total, and joins the transaction. Then record
 Shipment DELIVERED and complete Order DELIVERED. TD's complete must verify persisted
 PAID COD evidence and exact amount through PaymentReadService. Its current
 `requireConfirmablePayment` requires UNPAID COD and must not be reused for delivery.
-TD should supply a dedicated MANDATORY `requireCollectedCodForDelivery(orderId, total)`
+TD supplies a dedicated MANDATORY `requireCollectedCodForDelivery(orderId, total)`
 guard: lock/refresh Payment rows, require exactly one COD PAID record, matching
 grand_total, non-null paid_at and null expired_at. Duplicate collection,
 wrong amount, stale version, audit failure or Order completion failure rolls back
@@ -96,8 +97,8 @@ with persisted Shop owner validation. TD invokes it after authorizing cancellati
 and locking Order, **before inventory restore**. No Shipment is a no-op. ASSIGNED
 becomes CANCELLED with version + 1 and AuditLog; any picked-up/later Shipment conflicts.
 Order cancellation/history, stock/voucher release and Shipment closure must commit
-or roll back together. This hook still needs wiring by TD; it is not active in
-VendorOrderAuthority yet. Ops cancellation remains a separate ADMIN-07 Order boundary.
+or roll back together. ORD-05 wires this hook in VendorOrderAuthority before inventory
+restoration. Ops cancellation remains a separate ADMIN-07 Order boundary.
 
 Concurrent cancellation and pickup serialize on Order before Shipment. The loser
 must conflict with zero partial effects. In production pickup must also complete
@@ -110,8 +111,10 @@ Add public coordinator routes with SHIPPER + CSRF, expected Order/Shipment versi
 and only action-specific input (COD amount for delivery). Run PostgreSQL tests for
 all synchronized transitions, stale/duplicate requests, reassignment, wrong COD
 rollback and cancellation-versus-pickup concurrency using real Order/Payment APIs.
-Current Shipment boundary tests use test-only Order state fixtures and do not prove
-the full COD/Order flow. Keep PR #42 Draft until these integration gates pass.
+Shipping's existing boundary tests use test-only Order state fixtures. ORD-05 adds
+PostgreSQL tests using real Order/Shipment/Payment APIs, original versions, persisted
+evidence, after-commit events, rollback and cancellation/pickup lock contention.
+Public-route integration still needs QD verification. Keep PR #42 Draft until those gates pass.
 
 ## Merge sequence
 
@@ -120,3 +123,7 @@ updated develop and implements prepare/complete, the Payment guard and cancellat
 wiring on its own branch. QD syncs SHIP-02 #42 with develop after those prerequisites
 merge and connects the coordinator/endpoints. No need to merge the incomplete #42 or
 pull its read/UI changes into ORD-05. No force-push is required.
+
+## Account eligibility locking
+
+Fulfillment locks Order, Shipment, then the assigned users row with FOR SHARE before checking ACTIVE and the persisted SHIPPER role. Keep this lock until the outer transaction commits or rolls back; acquire Payment afterward. Account status updates conflict with FOR SHARE. Role governance locks the account FOR UPDATE before changing user_roles, so role revocation also waits. Shipping must not acquire the global roles row lock after locking the account: governance acquires role then account, which would reverse the ordering. Admin account/role operations must never acquire Order/Shipment/Payment while holding account locks. Shared account locks allow concurrent deliveries of different orders by one shipper without an account lock upgrade. A committed account lock before eligibility acquisition causes ACCESS_DENIED; a later lock waits until fulfillment ends.

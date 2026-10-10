@@ -13,8 +13,8 @@ Controllers, Shipping, Payment and Admin must call it; never expose `setStatus` 
 Initial NEW creation and its history use the ORD-01 lifecycle persistence primitive.
 `OrderTransitionPolicy` only checks graph edges: it neither authorizes an actor nor writes
 data. `OrderPlacementService` is the single production lifecycle bean. It reuses
-`OrderLifecycleServiceImpl` orchestration for CHK-02 creation and ORD-03 vendor operations;
-unintegrated Shipping, return, refund, Ops and system actions remain denied.
+`OrderLifecycleServiceImpl` orchestration for CHK-02 creation, ORD-03 vendor operations
+and ORD-05 internal shipper completion. Return, refund, Ops and system actions remain denied.
 
 The future implementation obtains `CurrentUser` from the existing SEC-01
 `CurrentUserProvider`, using the existing `RoleCode`. It must resolve `subject` to the
@@ -128,7 +128,8 @@ restore voucher quota. See [PROMO-01 voucher contract](PROMO-01-vouchers.md).
 Duplicate/stale/late actions conflict with no stock or history change. Cart and Payment
 records are unchanged, including an existing PAID record; refund decisions remain deferred.
 
-Write lock order is active vendor account -> owned Order -> either ascending products
+Write lock order is active vendor account -> owned Order -> assigned Shipment (cancellation,
+if present) -> either ascending products
 (cancellation) or ascending Payment records (confirm) -> owned Shop. Order and Shop
 are refreshed under their locks; payment guards also refresh locked attempts. Shop is
 locked AFTER inventory to preserve checkout's products-before-shop ordering. Expected
@@ -137,13 +138,38 @@ Clock at PostgreSQL microsecond precision; status-change events publish after co
 Optimistic conflicts, including earlier managed snapshots in joined transactions, map
 to CONFLICT. Ready never creates a status-change event.
 
-ORD-03 precedes assignment. No Shipment/assignment evidence is fabricated; current
-cancellation rejects PICKED_UP and every subsequent state. SHIP-01/SHIP-02 must lock
-Order before Shipment, revalidate current assignment/ready_at, and atomically perform
-pickup through this lifecycle authority before introducing public pickup operations.
-They must integrate action-specific guards and assignment cancellation in that same
-transaction; current vendor authorization intentionally denies all shipper actions.
-Physical pickup while leaving Order CONFIRMED is outside the present integration contract.
+Vendor cancellation rejects PICKED_UP and every subsequent Order state. ORD-05 calls
+Shipping's `cancelAssignedForVendorOrder` before inventory restoration: no Shipment is
+a no-op, ASSIGNED closes atomically, and physical pickup/later Shipment evidence conflicts.
+Stock/voucher release, Shipment audit, Order history and after-commit events share the
+existing transaction. Vendor authorization continues to deny all shipper actions.
+
+## ORD-05 trusted shipper lifecycle boundary
+
+`prepareShipperTransition(orderId, expectedOrderVersion, expectedShipmentVersion, action)`
+and `completeShipperTransition` accept the same original source versions and only
+PICK_UP, START_SHIPPING or DELIVER. Both require an existing write transaction and
+SHIPPER authority. A dedicated Order guard locks and refreshes Order before calling
+Shipping's service contract, which rechecks the persisted active SHIPPER and current
+assignment. Foreign/reassigned actors receive RESOURCE_NOT_FOUND. No actor, payment,
+timestamp or Shipment evidence DTO is accepted from the caller.
+
+Prepare validates source state/version, ready_at and Shipment source evidence without
+writing Order/history/events. After exactly one Shipment mutation, complete requires
+persisted target evidence at original Shipment version + 1, unchanged original Order
+version and matching Order source state. It uses the standard lifecycle writer for
+timestamps, one version increment, one history row and the existing after-commit event.
+The generic `transition` API remains vendor-only; it is not a shipper bypass.
+
+Delivery also calls MANDATORY `PaymentReadService.requireCollectedCodForDelivery`
+after Order/Shipment locks. It locks and refreshes Payment rows, requires exactly one
+record, COD, PAID, exact persisted grand_total, paid_at present and expired_at absent.
+ONLINE and ambiguous/missing evidence conflict. The outer Shipping coordinator must
+collect COD while Order remains SHIPPING, mutate Shipment and complete Order in one
+transaction, allowing every failure to escape. ORD-05 adds no coordinator, endpoint,
+migration, online-payment fallback or other owner's persistence access.
+
+See [the shared integration boundary](SHIP-02-ORD-05-boundary.md).
 
 ## Shipment integration (QD)
 

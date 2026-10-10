@@ -155,6 +155,40 @@ class ShipmentFulfillmentIT {
                 .isInstanceOf(ApplicationException.class);
     }
 
+    @Test void eligibilityLockLivesUntilOuterTransactionEnds() throws Exception {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long shipper = insertUser("ACTIVE", "SHIPPER");
+        long order = order(true, "CONFIRMED", true);
+        authenticate(admin, "ADMIN");
+        assignments.assign(order, shipper, 0L);
+        authenticate(shipper, "SHIPPER");
+        var pool = java.util.concurrent.Executors.newSingleThreadExecutor();
+        try {
+            tx().executeWithoutResult(s -> {
+                fulfillment.lockAssignedForTransition(order, 0L, ShipmentStatus.ASSIGNED);
+                // Independent PostgreSQL transaction must not commit a status update
+                // while the coordinator holds eligibility, even before mutation.
+                var blocked = pool.submit(() -> {
+                    try {
+                        tx().executeWithoutResult(other -> {
+                            jdbc.execute("SET LOCAL lock_timeout='500ms'");
+                            jdbc.update("UPDATE uteexpress.users SET status='LOCKED' WHERE id=?", shipper);
+                        });
+                        return false;
+                    } catch (org.springframework.dao.DataAccessException expected) { return true; }
+                });
+                try { assertThat(blocked.get(10, java.util.concurrent.TimeUnit.SECONDS)).isTrue(); }
+                catch (Exception ex) { throw new IllegalStateException(ex); }
+                fulfillment.recordPickedUp(order, 0L);
+            });
+            jdbc.update("UPDATE uteexpress.users SET status='LOCKED' WHERE id=?", shipper);
+            assertThatThrownBy(() -> tx().execute(s -> fulfillment.lockAssignedForTransition(
+                    order, 1L, ShipmentStatus.PICKED_UP)))
+                    .isInstanceOfSatisfying(ApplicationException.class,
+                            e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.ACCESS_DENIED));
+        } finally { pool.shutdownNow(); }
+    }
+
     private boolean race(java.util.concurrent.CountDownLatch start, long actor, String role, Runnable operation) {
         try {
             start.await();

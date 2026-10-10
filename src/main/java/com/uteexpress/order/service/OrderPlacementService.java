@@ -27,7 +27,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
 
-/** Single production lifecycle bean: CHK-02 creation and ORD-03 vendor mutations. */
+/** Single production lifecycle bean: placement, vendor mutations and internal shipper completion. */
 @Service
 @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).USER.authority(), "
         + "T(com.uteexpress.security.RoleCode).VENDOR.authority())")
@@ -43,13 +43,17 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     private final VoucherService vouchers;
     private final Clock clock;
     private final VendorOrderAuthority vendorAuthority;
+    private final ShipperOrderAuthority shipperAuthority;
 
     public OrderPlacementService(OrderRepository orders, OrderItemRepository items,
             OrderStatusHistoryRepository history, CurrentUserProvider users,
             PlatformTransactionManager transactionManager, ApplicationEventPublisher events, Clock clock,
             CurrentAccountIdProvider accounts, AccountIdentityService identities, CartService carts,
             CheckoutQuoteService quotes, InventoryService inventory, CommissionQueryService commissions,
-            PaymentService payments, VendorOrderAuthority vendorAuthority, VoucherService vouchers) {
+            PaymentService payments, VendorOrderAuthority vendorAuthority, VoucherService vouchers,
+            jakarta.persistence.EntityManager entityManager,
+            com.uteexpress.shipping.service.ShipmentFulfillmentService shipments,
+            com.uteexpress.payment.service.PaymentReadService paymentReads) {
         super(orders, items, history, users, transactionManager, events, clock);
         this.orders = orders;
         this.accounts = accounts;
@@ -62,6 +66,42 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.vouchers = vouchers;
         this.clock = clock;
         this.vendorAuthority = vendorAuthority;
+        this.shipperAuthority = new ShipperOrderAuthority(orders, entityManager, shipments, paymentReads);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).SHIPPER.authority())")
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public void prepareShipperTransition(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, com.uteexpress.order.dto.OrderAction action) {
+        try {
+            shipperAuthority.requireTransition(orderId, expectedOrderVersion, expectedShipmentVersion, action, false);
+        } catch (org.springframework.dao.OptimisticLockingFailureException | jakarta.persistence.OptimisticLockException ex) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).SHIPPER.authority())")
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public com.uteexpress.order.dto.OrderStatusChangedEvent completeShipperTransition(Long orderId,
+            Long expectedOrderVersion, Long expectedShipmentVersion, com.uteexpress.order.dto.OrderAction action) {
+        try {
+            var guarded = shipperAuthority.requireTransition(orderId, expectedOrderVersion, expectedShipmentVersion, action, true);
+            return persistValidatedTransition(guarded.order(),
+                    OrderTransitionPolicy.requireTarget(guarded.order().getStatus(), action), guarded.actorId(),
+                    clock.instant().truncatedTo(ChronoUnit.MICROS), null);
+        } catch (org.springframework.dao.OptimisticLockingFailureException | jakarta.persistence.OptimisticLockException ex) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+    }
+
+    @Override
+    @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).USER.authority(), "
+            + "T(com.uteexpress.security.RoleCode).VENDOR.authority())")
+    public com.uteexpress.order.dto.OrderStatusChangedEvent transition(
+            com.uteexpress.order.dto.OrderTransitionCommand command) {
+        return super.transition(command);
     }
 
     @Override protected Order loadForMutation(Long id) { return vendorAuthority.lockOwnedOrder(id); }
