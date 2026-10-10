@@ -14,6 +14,8 @@ Recommend expectedShipmentVersion in addition to expectedOrderVersion. Assignmen
 
 An Order-owned caller invokes cancelAssignedForOpsOrder(orderId, expectedShipmentVersion, reasonCode) in its existing REQUIRED transaction; Shipping uses MANDATORY. Before mutation, lock/reload Order then Shipment, reject NEW with any Shipment, and require CONFIRMED plus clean ASSIGNED evidence (picked_up_at and delivered_at null, attempt_count zero). An absent Shipment is valid only if the command observed absence. Duplicate/stale/incompatible versions conflict. No Vendor shop-owner guard is reused.
 
+Do not import the Order-owned reason enum into Shipping: that would create Shipping -> Order -> Checkout -> Shipping. If the hook carries a reason, use a validated scalar code under the agreed vocabulary; alternatively use a fixed Shipment audit reason OPS_ORDER_CANCELLATION while retaining the business reason in Order history/audit.
+
 HP's eligibility boundary must validate ACTIVE persisted ADMIN/MANAGER membership and retain the account lock until outer commit. A raw method-security authority from an old principal is insufficient. Only after that check may Shipping close ASSIGNED -> CANCELLED and append exactly one Shipment audit. Shipping never writes Order status or changes Payment. The Order owner restores stock/releases vouchers and writes history/Order audit; failures propagate and roll the whole transaction back.
 
 A prepare/complete split or an HP eligibility boundary invoked from the Shipping hook may be needed so the required Order -> Shipment -> Account ordering is actually enforced. Do not authorize from caller-provided booleans or a fabricated actor/evidence DTO.
