@@ -646,105 +646,114 @@ class ShipperOrderLifecycleIT {
         assertThat(auditCount()).isEqualTo(2);
     }
 
-    /** Characterization of the current inversion, not a desired cancellation contract. */
-    @Test @Timeout(60)
-    void sameAccountVendorCancellationAndPickupReproduceAccountOrderDeadlock() throws Exception {
+    /** Former inversion: Order must serialize contenders before either acquires Account. */
+    @ParameterizedTest @ValueSource(booleans = {false, true}) @Timeout(60)
+    void sameAccountVendorCancellationAndPickupSerializeBeforeEligibility(boolean shippingFirst) throws Exception {
         assignVendorAsShipper();
-        characterizeAccountOrderDeadlock(false);
+        verifyAccountOrderSerialization(false, shippingFirst);
     }
 
     /** ADMIN assignment is an existing Ops operation; no Ops cancellation boundary is invented. */
-    @Test @Timeout(60)
-    void sameAccountVendorAndAdminAssignmentTargetReproduceAccountOrderDeadlock() throws Exception {
+    @ParameterizedTest @ValueSource(booleans = {false, true}) @Timeout(60)
+    void sameAccountVendorAndAdminAssignmentTargetSerializeBeforeEligibility(boolean shippingFirst) throws Exception {
         grant(vendor, "SHIPPER"); grant(vendor, "ADMIN");
-        characterizeAccountOrderDeadlock(true);
+        verifyAccountOrderSerialization(true, shippingFirst);
     }
 
-    private void characterizeAccountOrderDeadlock(boolean assignment) throws Exception {
+    private void verifyAccountOrderSerialization(boolean assignment, boolean shippingFirst) throws Exception {
         long originalShipmentVersion = shipmentVersion();
         var unchangedPayment = jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?", order);
         var originalAssignments = jdbc.queryForList("SELECT * FROM uteexpress.shipment_assignment_history WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) ORDER BY id", order);
         long originalHistory = historyCount(), originalAudits = auditCount();
-        var accountHeld = new CountDownLatch(1);
-        var orderHeld = new CountDownLatch(1);
-        var runVendor = new CountDownLatch(1);
-        var runShipping = new CountDownLatch(1);
+        var vendorAtEligibility = new CountDownLatch(1);
+        var shippingAtEligibility = new CountDownLatch(1);
+        var releaseHolder = new CountDownLatch(1);
         var vendorPid = new CompletableFuture<Integer>();
         var shippingPid = new CompletableFuture<Integer>();
         doAnswer(invocation -> {
-            invocation.callRealMethod(); // Real Hibernate account lock, with no added test lock.
-            accountHeld.countDown();
-            await(runVendor);
-            return null;
+            // Pause BEFORE Account acquisition, after the real owned Order lock/refresh.
+            vendorAtEligibility.countDown();
+            if (!shippingFirst) await(releaseHolder);
+            return invocation.callRealMethod();
         }).when(AopTestUtils.<AccountIdentityService>getUltimateTargetObject(identities))
                 .requireActiveAccountForUpdate(vendor);
         if (assignment) {
             doAnswer(invocation -> {
-                orderHeld.countDown(); // Assignment has already locked Order and Shipment.
-                await(runShipping);
+                shippingAtEligibility.countDown(); // Real Order/Shipment locks; target Account not acquired.
+                if (shippingFirst) await(releaseHolder);
                 return invocation.callRealMethod();
             }).when(AopTestUtils.<RoleGovernanceService>getUltimateTargetObject(roles))
                     .requireActiveShipperForUpdate(vendor);
         } else {
             doAnswer(invocation -> {
-                orderHeld.countDown(); // ShipperOrderAuthority has locked and refreshed Order.
-                await(runShipping);
+                shippingAtEligibility.countDown(); // Real Order lock; assigned Account not acquired.
+                if (shippingFirst) await(releaseHolder);
                 return invocation.callRealMethod();
             }).when(AopTestUtils.<ShipmentFulfillmentService>getUltimateTargetObject(shipments))
                     .lockAssignedForTransition(order, originalShipmentVersion, com.uteexpress.shipping.dto.ShipmentStatus.ASSIGNED);
         }
         var pool = Executors.newFixedThreadPool(2);
         try {
-            Future<String> cancellation = pool.submit(() -> characterizedWorker(vendorPid,
+            Callable<String> cancelWorker = () -> characterizedWorker(vendorPid,
                     () -> { auth(vendor, assignment ? new String[]{"VENDOR", "SHIPPER", "ADMIN"}
-                            : new String[]{"VENDOR", "SHIPPER"}); cancel(); }));
-            await(accountHeld);
-            assertThat(observe(vendorPid.get(10, TimeUnit.SECONDS)).sql())
-                    .contains("uteexpress.users", "for no key update");
-            Future<String> shipping = pool.submit(() -> characterizedWorker(shippingPid, () -> {
+                            : new String[]{"VENDOR", "SHIPPER"}); cancel(); });
+            Callable<String> shippingWorker = () -> characterizedWorker(shippingPid, () -> {
                 auth(vendor, assignment ? new String[]{"VENDOR", "SHIPPER", "ADMIN"}
                         : new String[]{"VENDOR", "SHIPPER"});
                 if (assignment) assignments.reassign(order, vendor, originalShipmentVersion);
                 else pickup(originalShipmentVersion);
-            }));
-            await(orderHeld);
+            });
+            Future<String> cancellation, shipping;
+            if (shippingFirst) {
+                shipping = pool.submit(shippingWorker);
+                await(shippingAtEligibility);
+                cancellation = pool.submit(cancelWorker);
+            } else {
+                cancellation = pool.submit(cancelWorker);
+                await(vendorAtEligibility);
+                shipping = pool.submit(shippingWorker);
+            }
             int vp = vendorPid.get(10, TimeUnit.SECONDS), sp = shippingPid.get(10, TimeUnit.SECONDS);
             assertThat(vp).isNotEqualTo(sp);
-            var heldSql = observe(sp).sql();
-            assertThat(heldSql).contains(assignment ? "shipments" : "orders");
-            if (assignment) assertThat(heldSql).contains("for update");
-            // Hibernate's refresh read can omit a lock clause after the initial Order lock.
-            // The following real Vendor wait proves that Shipping still holds the Order lock.
-            runVendor.countDown();
-            var vendorWait = awaitWait(vp, sp);
-            assertThat(vendorWait.sql()).contains("orders", "for no key update");
-            runShipping.countDown();
-            // Observe BOTH edges before PostgreSQL's bounded deadlock detector selects either victim.
-            var shippingWait = awaitWait(sp, vp);
-            assertThat(shippingWait.sql()).contains("uteexpress.users", assignment ? "for update" : "for share");
-            assertThat(observe(vp).blockers()).contains(sp);
-            System.out.println("ORD-OPS-01 observed cycle " + vendorWait + " <-> " + shippingWait);
+            int holder = shippingFirst ? sp : vp, waiter = shippingFirst ? vp : sp;
+            var wait = awaitWait(waiter, holder);
+            assertThat(wait.sql()).contains("orders",
+                    !shippingFirst && assignment ? "for update" : "for no key update");
+            assertThat(shippingFirst ? vendorAtEligibility.getCount() : shippingAtEligibility.getCount()).isEqualTo(1);
+            assertThat(observe(holder).blockers()).isEmpty();
+            assertThat(cancellation.isDone()).isFalse(); assertThat(shipping.isDone()).isFalse();
+            System.out.println("ORD-OPS-01 resource-first assignment=" + assignment
+                    + " shippingFirst=" + shippingFirst + " " + wait);
+            releaseHolder.countDown();
             String vendorResult = cancellation.get(25, TimeUnit.SECONDS);
             String shippingResult = shipping.get(25, TimeUnit.SECONDS);
-            assertThat(List.of(vendorResult, shippingResult)).containsExactlyInAnyOrder("40P01", "OK");
-            System.out.println("ORD-OPS-01 deadlock outcomes assignment=" + assignment
+            assertThat(vendorResult).isEqualTo(shippingFirst && !assignment ? "CONFLICT" : "OK");
+            assertThat(shippingResult).isEqualTo(shippingFirst ? "OK" : "CONFLICT");
+            System.out.println("ORD-OPS-01 serialized outcomes assignment=" + assignment
+                    + " shippingFirst=" + shippingFirst
                     + " vendor=" + vendorResult + " shipping=" + shippingResult);
             boolean cancelled = vendorResult.equals("OK");
+            boolean reassigned = assignment && shippingFirst;
             assertThat(status()).isEqualTo(cancelled ? "CANCELLED" : assignment ? "CONFIRMED" : "PICKED_UP");
             assertThat(shipmentStatus()).isEqualTo(cancelled ? "CANCELLED" : assignment ? "ASSIGNED" : "PICKED_UP");
             assertThat(version()).isEqualTo(cancelled || !assignment ? 3 : 2);
-            assertThat(shipmentVersion()).isEqualTo(originalShipmentVersion + 1);
+            assertThat(shipmentVersion()).isEqualTo(originalShipmentVersion + (reassigned ? 2 : 1));
             assertThat(stock()).isEqualTo(cancelled ? 9 : 8);
             assertThat(historyCount()).isEqualTo(originalHistory + (cancelled || !assignment ? 1 : 0));
-            assertThat(auditCount()).isEqualTo(originalAudits + 1);
+            assertThat(auditCount()).isEqualTo(originalAudits + (reassigned ? 2 : 1));
+            assertThat(jdbc.queryForObject("SELECT inventory_released_at IS NOT NULL FROM uteexpress.orders WHERE id=?", Boolean.class, order)).isEqualTo(cancelled);
+            assertThat(jdbc.queryForObject("SELECT assigned_shipper_id FROM uteexpress.shipments WHERE order_id=?", Long.class, order))
+                    .isEqualTo(assignment && !reassigned ? shipper : vendor);
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) AND action=? AND actor_id=?", Long.class, order,
+                    cancelled ? "SHIPMENT_CANCELLED" : "SHIPMENT_PICKED_UP", vendor)).isEqualTo(1);
             assertThat(jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?", order)).isEqualTo(unchangedPayment);
             var assignmentsAfter = jdbc.queryForList("SELECT * FROM uteexpress.shipment_assignment_history WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) ORDER BY id", order);
-            if (assignment && !cancelled) {
+            if (reassigned) {
                 assertThat(assignmentsAfter).hasSize(originalAssignments.size() + 1);
                 assertThat(assignmentsAfter.subList(0, originalAssignments.size())).isEqualTo(originalAssignments);
             } else assertThat(assignmentsAfter).isEqualTo(originalAssignments);
         } finally {
-            runVendor.countDown(); runShipping.countDown(); stop(pool);
+            releaseHolder.countDown(); stop(pool);
         }
     }
 
@@ -752,6 +761,7 @@ class ShipperOrderLifecycleIT {
     void sameAccountVendorAndPickupSerializeWhenOneOwnsAllRequiredLocks(boolean pickupFirst) throws Exception {
         assignVendorAsShipper();
         long sv = shipmentVersion(), originalHistory = historyCount(), originalAudits = auditCount();
+        var unchangedPayment = jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?", order);
         var winnerHeld = new CountDownLatch(1);
         var releaseWinner = new CountDownLatch(1);
         var winnerPid = new CompletableFuture<Integer>();
@@ -780,7 +790,7 @@ class ShipperOrderLifecycleIT {
                 if (pickupFirst) cancel(); else pickup(sv);
             }));
             var wait = awaitWait(loserPid.get(10, TimeUnit.SECONDS), winnerPid.get(10, TimeUnit.SECONDS));
-            assertThat(wait.sql()).contains(pickupFirst ? "users" : "orders", "for no key update");
+            assertThat(wait.sql()).contains("orders", "for no key update");
             assertThat(winner.isDone()).isFalse(); assertThat(loser.isDone()).isFalse();
             System.out.println("ORD-OPS-01 safe serialization pickupFirst=" + pickupFirst + " " + wait);
             releaseWinner.countDown();
@@ -792,6 +802,7 @@ class ShipperOrderLifecycleIT {
             assertThat(stock()).isEqualTo(pickupFirst ? 8 : 9);
             assertThat(historyCount()).isEqualTo(originalHistory + 1);
             assertThat(auditCount()).isEqualTo(originalAudits + 1);
+            assertThat(jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?", order)).isEqualTo(unchangedPayment);
         } finally { releaseWinner.countDown(); stop(pool); }
     }
 
@@ -806,6 +817,8 @@ class ShipperOrderLifecycleIT {
         auth(admin, "ADMIN"); assignments.assign(order, other, 2L);
         long assignmentOrder = order;
         order = pickupOrder;
+        long originalHistory = historyCount(), originalAudits = auditCount(), originalStock = stock();
+        var unchangedPayment = jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id IN (?,?) ORDER BY id", pickupOrder, assignmentOrder);
         var workerPid = new CompletableFuture<Integer>();
         var pool = Executors.newSingleThreadExecutor();
         var result = new ArrayList<Future<String>>();
@@ -830,16 +843,27 @@ class ShipperOrderLifecycleIT {
             });
             assertThat(result.getFirst().get(25, TimeUnit.SECONDS)).isEqualTo("OK");
             assertThat(status()).isEqualTo("PICKED_UP");
+            assertThat(shipmentStatus()).isEqualTo("PICKED_UP");
+            assertThat(version()).isEqualTo(3); assertThat(shipmentVersion()).isEqualTo(1);
+            assertThat(historyCount()).isEqualTo(originalHistory + 1);
+            assertThat(auditCount()).isEqualTo(originalAudits + 1);
+            assertThat(stock()).isEqualTo(originalStock);
+            assertThat(jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id IN (?,?) ORDER BY id", pickupOrder, assignmentOrder)).isEqualTo(unchangedPayment);
             assertThat(jdbc.queryForObject("SELECT assigned_shipper_id FROM uteexpress.shipments WHERE order_id=?", Long.class, assignmentOrder)).isEqualTo(shipper);
             assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?", String.class, assignmentOrder)).isEqualTo("CONFIRMED");
             assertThat(jdbc.queryForObject("SELECT version FROM uteexpress.orders WHERE id=?", Long.class, assignmentOrder)).isEqualTo(2);
             assertThat(jdbc.queryForObject("SELECT version FROM uteexpress.shipments WHERE order_id=?", Long.class, assignmentOrder)).isEqualTo(1);
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.order_status_history WHERE order_id=?", Long.class, assignmentOrder)).isEqualTo(2);
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_assignment_history WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?)", Long.class, assignmentOrder)).isEqualTo(2);
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) AND action='SHIPMENT_REASSIGNED' AND actor_id=?", Long.class, assignmentOrder, shipper)).isEqualTo(1);
         } finally { stop(pool); }
     }
 
     @Test @Timeout(60)
     void adminRoleRevocationOfAdminShipperWaitsForOuterFulfillmentCommit() throws Exception {
         grant(shipper, "ADMIN");
+        long originalHistory = historyCount(), originalAudits = auditCount(), originalStock = stock();
+        var unchangedPayment = jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?", order);
         var workerPid = new CompletableFuture<Integer>();
         var pool = Executors.newSingleThreadExecutor();
         var result = new ArrayList<Future<String>>();
@@ -862,9 +886,76 @@ class ShipperOrderLifecycleIT {
             });
             assertThat(result.getFirst().get(25, TimeUnit.SECONDS)).isEqualTo("OK");
             assertThat(status()).isEqualTo("PICKED_UP");
+            assertThat(shipmentStatus()).isEqualTo("PICKED_UP");
+            assertThat(version()).isEqualTo(3); assertThat(shipmentVersion()).isEqualTo(1);
+            assertThat(historyCount()).isEqualTo(originalHistory + 1);
+            assertThat(auditCount()).isEqualTo(originalAudits + 1);
+            assertThat(stock()).isEqualTo(originalStock);
+            assertThat(jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?", order)).isEqualTo(unchangedPayment);
             assertThat(persistedShipperRole()).isTrue();
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.users WHERE id=?", String.class, shipper)).isEqualTo("ACTIVE");
+            assertThat(jdbc.queryForObject("SELECT token_version FROM uteexpress.users WHERE id=?", Long.class, shipper)).isEqualTo(1);
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='ACCOUNT' AND target_id=? AND action='ROLE_REVOKED' AND actor_id=?", Long.class, shipper, admin)).isEqualTo(1);
             assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.user_roles ur JOIN uteexpress.roles r ON r.id=ur.role_id WHERE ur.user_id=? AND r.code='ADMIN'", Long.class, shipper)).isZero();
         } finally { stop(pool); }
+    }
+
+    /** The moved eligibility boundary must still reject restriction-first and retain its lock. */
+    @ParameterizedTest @ValueSource(booleans = {false, true}) @Timeout(60)
+    void vendorEligibilityAfterOrderSerializesWithAccountRestriction(boolean restrictionFirst) throws Exception {
+        var before = state();
+        long originalHistory = historyCount(), originalAudits = auditCount();
+        var atEligibility = new CountDownLatch(1);
+        var releaseVendor = new CountDownLatch(1);
+        var vendorPid = new CompletableFuture<Integer>();
+        var restrictionPid = new CompletableFuture<Integer>();
+        doAnswer(invocation -> {
+            if (restrictionFirst) {
+                // Owned Order is locked, but the real Account check has not yet run.
+                atEligibility.countDown(); await(releaseVendor);
+                return invocation.callRealMethod();
+            }
+            var result = invocation.callRealMethod();
+            atEligibility.countDown(); await(releaseVendor);
+            return result;
+        }).when(AopTestUtils.<AccountIdentityService>getUltimateTargetObject(identities))
+                .requireActiveAccountForUpdate(vendor);
+        var pool = Executors.newFixedThreadPool(2);
+        try {
+            var cancellation = pool.submit(() -> characterizedWorker(vendorPid, () -> {
+                auth(vendor, "VENDOR"); cancel();
+            }));
+            await(atEligibility);
+            var restriction = pool.submit(() -> characterizedWorker(restrictionPid, () -> {
+                auth(admin, "ADMIN"); accounts.setLocked(vendor, 0L, true);
+            }));
+            if (restrictionFirst) {
+                assertThat(restriction.get(25, TimeUnit.SECONDS)).isEqualTo("OK");
+                assertThat(cancellation.isDone()).isFalse();
+                assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.users WHERE id=?", String.class, vendor)).isEqualTo("LOCKED");
+                System.out.println("ORD-OPS-01 Vendor restriction committed before Account eligibility after Order lock");
+            } else {
+                var wait = awaitWait(restrictionPid.get(10, TimeUnit.SECONDS), vendorPid.get(10, TimeUnit.SECONDS));
+                assertThat(wait.sql()).contains("uteexpress.users", "for no key update");
+                assertThat(restriction.isDone()).isFalse();
+                System.out.println("ORD-OPS-01 Vendor eligibility retained against restriction " + wait);
+            }
+            releaseVendor.countDown();
+            assertThat(cancellation.get(25, TimeUnit.SECONDS)).isEqualTo(restrictionFirst ? "ACCESS_DENIED" : "OK");
+            assertThat(restriction.get(25, TimeUnit.SECONDS)).isEqualTo("OK");
+            if (restrictionFirst) assertThat(state()).isEqualTo(before);
+            else {
+                assertThat(status()).isEqualTo("CANCELLED"); assertThat(shipmentStatus()).isEqualTo("CANCELLED");
+                assertThat(version()).isEqualTo(3); assertThat(shipmentVersion()).isEqualTo(1);
+                assertThat(stock()).isEqualTo(9);
+                assertThat(historyCount()).isEqualTo(originalHistory + 1);
+                assertThat(auditCount()).isEqualTo(originalAudits + 1);
+                assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.payments WHERE order_id=?", String.class, order)).isEqualTo("UNPAID");
+            }
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.users WHERE id=?", String.class, vendor)).isEqualTo("LOCKED");
+            assertThat(jdbc.queryForObject("SELECT token_version FROM uteexpress.users WHERE id=?", Long.class, vendor)).isEqualTo(1);
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='ACCOUNT' AND target_id=? AND action='ACCOUNT_LOCKED' AND actor_id=?", Long.class, vendor, admin)).isEqualTo(1);
+        } finally { releaseVendor.countDown(); stop(pool); }
     }
 
     private void assignVendorAsShipper() {
@@ -892,9 +983,11 @@ class ShipperOrderLifecycleIT {
                 operation.run(); return "OK";
             });
         } catch (RuntimeException failure) {
-            // Only a real PostgreSQL deadlock counts. Timeouts and unexpected errors fail the test.
+            // All SQL failures, including deadlocks and lock/statement timeouts, fail verification.
             for (Throwable cause = failure; cause != null; cause = cause.getCause()) {
-                if (cause instanceof SQLException sql && "40P01".equals(sql.getSQLState())) return "40P01";
+                if (cause instanceof SQLException sql) {
+                    throw new AssertionError("Unexpected PostgreSQL SQLSTATE " + sql.getSQLState(), failure);
+                }
             }
             if (failure instanceof ApplicationException application) return application.errorCode().name();
             throw failure;
