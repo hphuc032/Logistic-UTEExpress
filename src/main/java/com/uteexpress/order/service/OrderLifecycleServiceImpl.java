@@ -78,6 +78,70 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
 
     protected void beforeValidatedTransition(Order order, OrderTransitionCommand command, Instant at) { }
 
+    protected Order loadForOpsMutation(Long id) {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    /** QD dependency: lock/read in this transaction, without taking any Account lock. */
+    protected java.util.Optional<com.uteexpress.shipping.dto.ShipmentFulfillmentFacts> lockShipmentForOps(
+            Order order, com.uteexpress.order.dto.OpsOrderCancellationCommand command) {
+        // No approved QD hook exists. Absence must never be inferred or fabricated here.
+        throw new ApplicationException(ErrorCode.CONFLICT);
+    }
+
+    protected Long authorizeOps(Order order) {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    /** QD dependency: resolve the previously locked, validated assignment and append Shipment audit. */
+    protected void resolveShipmentForOps(Order order,
+            java.util.Optional<com.uteexpress.shipping.dto.ShipmentFulfillmentFacts> shipment, Instant at) {
+        throw new ApplicationException(ErrorCode.CONFLICT);
+    }
+
+    protected void beforeOpsCancellation(Order order, Instant at) {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    protected void auditOpsCancellation(Order order, OrderStatus from, Long originalVersion,
+            Long actor, com.uteexpress.order.dto.OpsCancellationReason reason) {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    @Override
+    public OrderStatusChangedEvent cancelForOps(com.uteexpress.order.dto.OpsOrderCancellationCommand command) {
+        OpsOrderAuthority.validateCommand(command);
+        // Joining cannot repair an Account lock held by an outer coordinator. Never suspend it
+        // with REQUIRES_NEW either: that could wait on locks owned by the suspended caller.
+        if (TransactionSynchronizationManager.isActualTransactionActive()) {
+            throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        }
+        try {
+            return transactions.execute(tx -> {
+                var user = currentUser();
+                if (!user.authorities().contains("ROLE_ADMIN") && !user.authorities().contains("ROLE_MANAGER")) {
+                    throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+                }
+                Order order = loadForOpsMutation(command.orderId());
+                var shipment = Objects.requireNonNull(lockShipmentForOps(order, command));
+                Long actor = requireHumanActor(authorizeOps(order));
+                OpsOrderAuthority.requireCancellable(order, command, shipment);
+                OrderStatus from = order.getStatus();
+                Long version = order.getVersion();
+                var action = from == OrderStatus.NEW ? OrderAction.CANCEL_NEW : OrderAction.CANCEL_CONFIRMED;
+                var target = OrderTransitionPolicy.requireTarget(from, action);
+                Instant at = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+                resolveShipmentForOps(order, shipment, at);
+                beforeOpsCancellation(order, at);
+                var event = persistValidatedTransition(order, target, actor, at, command.reasonCode().description());
+                auditOpsCancellation(order, from, version, actor, command.reasonCode());
+                return event;
+            });
+        } catch (OptimisticLockingFailureException | OptimisticLockException ex) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+    }
+
     protected void authorizeReady(CurrentUser user, Order order) {
         throw new ApplicationException(ErrorCode.ACCESS_DENIED);
     }
