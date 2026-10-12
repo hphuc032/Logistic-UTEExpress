@@ -19,3 +19,15 @@ The test keeps eligibility locking intact. Existing ORD-05 tests continue to cov
 The pre-fix version of the regression was executed against the original Vendor authority and PostgreSQL reported deadlock detected. The corrected version passed; the final regression also exercises lifecycle cancellation rather than only its locking authority.
 
 VendorOrderIT's four concurrent mutation cases now hold Order instead of Account and observe workers waiting for Order. Their original single-winner, version, stock, history and payment assertions are retained. The 73 Vendor cases and six coordinator cases passed the focused PostgreSQL gate.
+
+## Integrated TD regression evidence (2026-10-12)
+
+The final ShipperOrderLifecycleIT regression suite is imported from TD's verification commit 3b442c0 on verify/ship-02-multirole-locks. The original deadlock characterization remains available on feature/ord-ops-01-cancellation at d100cab. Those branches/reports retain their own historical test results; importing the tests does not claim a fresh result for this branch.
+
+The imported suite adds ten invocations: Vendor/pickup and Vendor/ADMIN reassignment in both scheduling directions, retained-lock pickup schedules, ADMIN+SHIPPER reassignment on a different Order, ADMIN-role revocation during fulfillment, and Vendor eligibility versus Account restriction. It asserts real PostgreSQL blockers, final versions, stock, assignment/history/audit effects and unchanged Payment facts. SQL exceptions including deadlock and lock/statement timeout fail the worker; no expected-deadlock characterization is retained in the executable regression suite.
+
+Supported existing-Order entry points must begin without an earlier conflicting Account lock. REQUIRED/MANDATORY boundaries cannot reorder locks acquired by an outer caller. No current production lifecycle caller with Account-before-existing-Order composition was found in TD's audit or QD's inspected controller/coordinator paths. This is a documented precondition and residual risk, not proof that arbitrary joined compositions are safe. HP/TD should review earlier managed Account snapshots separately; this integration does not change Identity locking or freshness policy.
+
+Future Ops cancellation must use the agreed resource-first hierarchy, retain persisted eligibility checks through commit, and preserve the existing Order lifecycle authority. cancelForOps, reason enum and restricted-shop policy remain pending; these regression tests do not implement or authorize that proposed operation.
+
+Fresh integration verification on 2026-10-12: Java 21, .\mvnw.cmd -q -Ppostgres-it clean verify, exit 0; 1,106 tests, zero failures/errors/skips. ShipperOrderLifecycleIT ran 48 invocations. This is QD's full repository run after importing the final TD regression file, distinct from TD's focused 152-test run.
