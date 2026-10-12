@@ -461,7 +461,7 @@ class VendorOrderIT {
         List<Future<String>> futures = new ArrayList<>();
         try {
             transactions.executeWithoutResult(tx -> {
-                jdbc.queryForObject("SELECT id FROM uteexpress.users WHERE id=? FOR UPDATE", Long.class, vendor);
+                jdbc.queryForObject("SELECT id FROM uteexpress.orders WHERE id=? FOR UPDATE", Long.class, owned.getId());
                 for (int index = 0; index < 2; index++) {
                     boolean cancellation = kind.equals("cancel") || (kind.equals("competing") && index == 1);
                     futures.add(executor.submit(() -> {
@@ -594,11 +594,11 @@ class VendorOrderIT {
         long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(10);
         while (System.nanoTime() < deadline) {
             jdbc.execute("SELECT pg_stat_clear_snapshot()");
-            var count = jdbc.queryForObject("SELECT count(*) FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND query ILIKE '%users%'", Long.class);
+            var count = jdbc.queryForObject("SELECT count(*) FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND query ILIKE '%orders%'", Long.class);
             if (count >= expected) return;
             try { Thread.sleep(20); } catch (InterruptedException error) { Thread.currentThread().interrupt(); throw new AssertionError(error); }
         }
-        throw new AssertionError("Both lifecycle requests must reach the PostgreSQL account row lock");
+        throw new AssertionError("Both lifecycle requests must reach the PostgreSQL Order row lock");
     }
 
     private void awaitBlockedShop() {

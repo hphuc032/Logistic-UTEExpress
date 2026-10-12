@@ -4,6 +4,7 @@ import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
 import com.uteexpress.security.authentication.UteExpressPrincipal;
 import com.uteexpress.shipping.service.ShipmentAssignmentService;
+import com.uteexpress.shipping.service.ShipperAssignmentReadService;
 import java.util.List;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
@@ -24,6 +25,7 @@ import static org.assertj.core.api.Assertions.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest @AutoConfigureMockMvc @Testcontainers
@@ -32,6 +34,7 @@ class ShipmentAssignmentIT {
     static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17.6");
     @Autowired JdbcTemplate jdbc;
     @Autowired ShipmentAssignmentService assignments;
+    @Autowired ShipperAssignmentReadService shipperReads;
     @Autowired MockMvc mvc;
 
     @AfterEach void clear() { SecurityContextHolder.clearContext(); }
@@ -141,6 +144,38 @@ class ShipmentAssignmentIT {
                         .with(user(principal(admin, "ADMIN"))).with(csrf())
                         .contentType("application/json").content(body))
                 .andExpect(status().isCreated());
+    }
+
+    @Test void shipperCanOnlyReadCurrentAssignmentsAfterReassignment() throws Exception {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long first = insertUser("ACTIVE", "SHIPPER");
+        long second = insertUser("ACTIVE", "SHIPPER");
+        long order = order(true, "CONFIRMED", true);
+        authenticate(admin, "ADMIN");
+        var assigned = assignments.assign(order, first, 0L);
+
+        authenticate(first, "SHIPPER");
+        assertThat(shipperReads.assigned()).extracting(a -> a.id()).contains(assigned.id());
+        assertThat(shipperReads.detail(assigned.id()).orderId()).isEqualTo(order);
+        mvc.perform(get("/shipper/shipments/{id}", assigned.id())
+                .with(user(principal(first, "SHIPPER"))))
+                .andExpect(status().isOk());
+        mvc.perform(get("/shipper/shipments/{id}", assigned.id())
+                .with(user(principal(admin, "ADMIN"))))
+                .andExpect(status().isForbidden());
+
+        authenticate(admin, "ADMIN");
+        assignments.reassign(order, second, assigned.version());
+        authenticate(first, "SHIPPER");
+        assertThat(shipperReads.assigned()).extracting(a -> a.id()).doesNotContain(assigned.id());
+        assertThatThrownBy(() -> shipperReads.detail(assigned.id()))
+                .isInstanceOfSatisfying(ApplicationException.class,
+                        e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND));
+        mvc.perform(get("/shipper/shipments/{id}", assigned.id())
+                .with(user(principal(first, "SHIPPER"))))
+                .andExpect(status().isNotFound());
+        authenticate(second, "SHIPPER");
+        assertThat(shipperReads.detail(assigned.id()).shipperId()).isEqualTo(second);
     }
 
     private long insertUser(String status, String role) {
