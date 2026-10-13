@@ -337,7 +337,7 @@ class OpsOrderCancellationIT {
             assertThat(second.get(25, TimeUnit.SECONDS)).isEqualTo("CONFLICT");
         } finally { release.countDown(); executor.shutdownNow(); assertThat(executor.awaitTermination(10, TimeUnit.SECONDS)).isTrue(); }
         assertThat(paymentState()).isEqualTo(payment);
-        assertThat(snapshots()).isEqualTo(snapshots);
+        assertThat(this.snapshots()).isEqualTo(snapshots);
         boolean cancelled = opsFirst || race == Race.VENDOR_CANCEL || race == Race.VENDOR_CANCEL_ASSIGNED;
         assertThat(stock()).isEqualTo(cancelled ? 9 : 8);
         assertThat(status()).isEqualTo(cancelled ? "CANCELLED" : race == Race.PICKUP ? "PICKED_UP" : "CONFIRMED");
