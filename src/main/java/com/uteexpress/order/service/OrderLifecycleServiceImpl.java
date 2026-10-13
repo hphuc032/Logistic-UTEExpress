@@ -85,7 +85,7 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
     /** QD dependency: lock/read in this transaction, without taking any Account lock. */
     protected java.util.Optional<com.uteexpress.shipping.dto.ShipmentFulfillmentFacts> lockShipmentForOps(
             Order order, com.uteexpress.order.dto.OpsOrderCancellationCommand command) {
-        // No approved QD hook exists. Absence must never be inferred or fabricated here.
+        // The production lifecycle bean supplies Shipping's authoritative lock/read boundary.
         throw new ApplicationException(ErrorCode.CONFLICT);
     }
 

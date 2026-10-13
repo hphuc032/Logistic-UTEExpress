@@ -45,6 +45,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     private final VendorOrderAuthority vendorAuthority;
     private final ShipperOrderAuthority shipperAuthority;
     private final OpsOrderAuthority opsAuthority;
+    private final com.uteexpress.shipping.service.ShipmentFulfillmentService shipments;
 
     public OrderPlacementService(OrderRepository orders, OrderItemRepository items,
             OrderStatusHistoryRepository history, CurrentUserProvider users,
@@ -69,6 +70,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.vouchers = vouchers;
         this.clock = clock;
         this.vendorAuthority = vendorAuthority;
+        this.shipments = shipments;
         this.shipperAuthority = new ShipperOrderAuthority(orders, entityManager, shipments, paymentReads);
         this.opsAuthority = new OpsOrderAuthority(orders, items, entityManager, accounts, identities,
                 roles, inventory, vouchers, audit);
@@ -84,7 +86,18 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
 
     @Override protected Order loadForOpsMutation(Long id) { return opsAuthority.lockOrder(id); }
 
+    @Override protected java.util.Optional<com.uteexpress.shipping.dto.ShipmentFulfillmentFacts> lockShipmentForOps(
+            Order order, com.uteexpress.order.dto.OpsOrderCancellationCommand command) {
+        return shipments.lockForOpsCancellation(order.getId());
+    }
+
     @Override protected Long authorizeOps(Order order) { return opsAuthority.authorize(); }
+
+    @Override protected void resolveShipmentForOps(Order order,
+            java.util.Optional<com.uteexpress.shipping.dto.ShipmentFulfillmentFacts> shipment, java.time.Instant at) {
+        shipments.cancelLockedForOpsOrder(order.getId(), shipment.map(
+                com.uteexpress.shipping.dto.ShipmentFulfillmentFacts::version).orElse(null));
+    }
 
     @Override protected void beforeOpsCancellation(Order order, java.time.Instant at) {
         opsAuthority.release(order, at);
