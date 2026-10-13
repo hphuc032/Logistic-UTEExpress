@@ -78,6 +78,67 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
 
     protected void beforeValidatedTransition(Order order, OrderTransitionCommand command, Instant at) { }
 
+    /** Return integration stays separate from vendor cancellation effects. */
+    protected ReturnOrderAuthority returnAuthority() {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    @Override
+    public OrderStatusChangedEvent requestReturn(com.uteexpress.order.dto.RequestReturnCommand command) {
+        ReturnOrderAuthority.validate(command);
+        return returnTransaction(() -> {
+            var authority = returnAuthority();
+            var guarded = authority.lockBuyer(command.orderId());
+            // Compare the actual UTC instant before rounding stored timestamps to PostgreSQL precision.
+            var now = clock.instant();
+            authority.requireRequestable(guarded, command.expectedVersion(), now);
+            var at = now.truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+            authority.create(guarded, command.reason(), at);
+            return persistValidatedTransition(guarded.order(),
+                    OrderTransitionPolicy.requireTarget(guarded.order().getStatus(), OrderAction.REQUEST_RETURN),
+                    guarded.actorId(), at, "Buyer requested return");
+        });
+    }
+
+    @Override
+    public void approveReturn(com.uteexpress.order.dto.ReturnDecisionCommand command) {
+        decideReturn(command, true);
+    }
+
+    @Override
+    public OrderStatusChangedEvent rejectReturn(com.uteexpress.order.dto.ReturnDecisionCommand command) {
+        return decideReturn(command, false);
+    }
+
+    private OrderStatusChangedEvent decideReturn(com.uteexpress.order.dto.ReturnDecisionCommand command,
+            boolean approve) {
+        ReturnOrderAuthority.validate(command, approve);
+        return returnTransaction(() -> {
+            var authority = returnAuthority();
+            var guarded = authority.lockVendor(command.orderId());
+            authority.requirePending(guarded, command);
+            var at = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+            authority.decide(guarded, approve, command.reason(), at);
+            if (approve) return null; // Evidence only: Order/version/history/events stay untouched.
+            return persistValidatedTransition(guarded.order(),
+                    OrderTransitionPolicy.requireTarget(guarded.order().getStatus(), OrderAction.REJECT_RETURN),
+                    // Keep free-text decision evidence in its owned projection, out of lifecycle consumers.
+                    guarded.actorId(), at, "Vendor rejected return");
+        });
+    }
+
+    private <T> T returnTransaction(java.util.function.Supplier<T> operation) {
+        // Never join or suspend a coordinator which might already hold Account/Shop locks.
+        if (TransactionSynchronizationManager.isActualTransactionActive())
+            throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        try {
+            return transactions.execute(tx -> operation.get());
+        } catch (OptimisticLockingFailureException | OptimisticLockException
+                | org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+    }
+
     protected Order loadForOpsMutation(Long id) {
         throw new ApplicationException(ErrorCode.ACCESS_DENIED);
     }

@@ -45,6 +45,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     private final VendorOrderAuthority vendorAuthority;
     private final ShipperOrderAuthority shipperAuthority;
     private final OpsOrderAuthority opsAuthority;
+    private final ReturnOrderAuthority returnAuthority;
     private final com.uteexpress.shipping.service.ShipmentFulfillmentService shipments;
 
     public OrderPlacementService(OrderRepository orders, OrderItemRepository items,
@@ -57,7 +58,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
             com.uteexpress.shipping.service.ShipmentFulfillmentService shipments,
             com.uteexpress.payment.service.PaymentReadService paymentReads,
             com.uteexpress.governance.service.RoleGovernanceService roles,
-            com.uteexpress.governance.service.AuditLogService audit) {
+            com.uteexpress.governance.service.AuditLogService audit, ReturnOrderAuthority returnAuthority) {
         super(orders, items, history, users, transactionManager, events, clock);
         this.orders = orders;
         this.accounts = accounts;
@@ -71,9 +72,33 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.clock = clock;
         this.vendorAuthority = vendorAuthority;
         this.shipments = shipments;
+        this.returnAuthority = returnAuthority;
         this.shipperAuthority = new ShipperOrderAuthority(orders, entityManager, shipments, paymentReads);
         this.opsAuthority = new OpsOrderAuthority(orders, items, entityManager, accounts, identities,
                 roles, inventory, vouchers, audit);
+    }
+
+    @Override protected ReturnOrderAuthority returnAuthority() { return returnAuthority; }
+
+    @Override
+    @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).USER.authority(), "
+            + "T(com.uteexpress.security.RoleCode).VENDOR.authority())")
+    public com.uteexpress.order.dto.OrderStatusChangedEvent requestReturn(
+            com.uteexpress.order.dto.RequestReturnCommand command) {
+        return super.requestReturn(command);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).VENDOR.authority())")
+    public void approveReturn(com.uteexpress.order.dto.ReturnDecisionCommand command) {
+        super.approveReturn(command);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).VENDOR.authority())")
+    public com.uteexpress.order.dto.OrderStatusChangedEvent rejectReturn(
+            com.uteexpress.order.dto.ReturnDecisionCommand command) {
+        return super.rejectReturn(command);
     }
 
     @Override

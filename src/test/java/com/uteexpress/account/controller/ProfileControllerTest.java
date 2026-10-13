@@ -64,6 +64,8 @@ class ProfileControllerTest {
     @MockitoBean com.uteexpress.order.service.BuyerOrderService buyerOrderService;
     @MockitoBean com.uteexpress.order.service.VendorOrderService vendorOrderService;
     @MockitoBean com.uteexpress.order.service.VendorOrderAuthority vendorOrderAuthority;
+    @MockitoBean com.uteexpress.order.service.ReturnOrderAuthority returnOrderAuthority;
+    @MockitoBean com.uteexpress.order.service.ReturnQueryService returnQueryService;
     @MockitoBean com.uteexpress.payment.service.PaymentReadService paymentReadService;
     @MockitoBean com.uteexpress.payment.service.PaymentService paymentService;
     @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
