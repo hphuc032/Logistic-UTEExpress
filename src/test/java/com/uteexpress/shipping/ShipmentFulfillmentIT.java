@@ -189,6 +189,162 @@ class ShipmentFulfillmentIT {
         } finally { pool.shutdownNow(); }
     }
 
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(strings = {"ADMIN", "MANAGER"})
+    void opsCancellationIsSystemWideAndPreservesOrderAndPayment(String role) {
+        long actor = insertUser("ACTIVE", role);
+        long shipper = insertUser("ACTIVE", "SHIPPER");
+        long order = order(true, "CONFIRMED", true);
+        authenticate(actor, role);
+        var assignment = assignments.assign(order, shipper, 0L);
+        var beforeOrder = jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", order);
+        var beforePayment = jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?", order);
+        tx().executeWithoutResult(s -> {
+            jdbc.queryForObject("SELECT id FROM uteexpress.orders WHERE id=? FOR UPDATE", Long.class, order);
+            var locked = fulfillment.lockForOpsCancellation(order).orElseThrow();
+            assertThat(locked.shipmentId()).isEqualTo(assignment.id());
+            fulfillment.cancelLockedForOpsOrder(order, locked.version());
+        });
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", order)).isEqualTo(beforeOrder);
+        assertThat(jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?", order)).isEqualTo(beforePayment);
+        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.shipments WHERE order_id=?", String.class, order)).isEqualTo("CANCELLED");
+        assertThat(jdbc.queryForObject("SELECT version FROM uteexpress.shipments WHERE order_id=?", Long.class, order)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=? AND action='SHIPMENT_CANCELLED' AND actor_id=? AND reason='UNABLE_TO_FULFILL'", Long.class, assignment.id(), actor)).isEqualTo(1);
+        assertThatThrownBy(() -> tx().executeWithoutResult(s -> fulfillment.cancelLockedForOpsOrder(order, 0L)))
+                .isInstanceOfSatisfying(ApplicationException.class, e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.CONFLICT));
+    }
+
+    @Test void opsHooksRequireTransactionAndOpsRoleAndExplicitAbsence() {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long order = order(true, "NEW", false);
+        authenticate(admin, "ADMIN");
+        assertThatThrownBy(() -> fulfillment.lockForOpsCancellation(order))
+                .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+        assertThatThrownBy(() -> fulfillment.cancelLockedForOpsOrder(order, null))
+                .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+        tx().executeWithoutResult(s -> {
+            jdbc.queryForObject("SELECT id FROM uteexpress.orders WHERE id=? FOR UPDATE", Long.class, order);
+            assertThat(fulfillment.lockForOpsCancellation(order)).isEmpty();
+            fulfillment.cancelLockedForOpsOrder(order, null);
+        });
+        assertThatThrownBy(() -> tx().executeWithoutResult(s -> fulfillment.cancelLockedForOpsOrder(order, 0L)))
+                .isInstanceOfSatisfying(ApplicationException.class, e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.CONFLICT));
+        for (String role : List.of("USER", "VENDOR", "SHIPPER")) {
+            authenticate(admin, role);
+            assertThatThrownBy(() -> tx().execute(s -> fulfillment.lockForOpsCancellation(order))).isInstanceOf(AccessDeniedException.class);
+            assertThatThrownBy(() -> tx().executeWithoutResult(s -> fulfillment.cancelLockedForOpsOrder(order, null))).isInstanceOf(AccessDeniedException.class);
+        }
+    }
+
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.ValueSource(strings = {"version", "absent", "pickup", "delivered", "attempt", "status"})
+    void opsCancellationRejectsStaleOrPhysicalEvidenceWithoutEffects(String kind) {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long order = order(true, "CONFIRMED", true);
+        authenticate(admin, "ADMIN");
+        var assignment = assignments.assign(order, insertUser("ACTIVE", "SHIPPER"), 0L);
+        switch (kind) {
+            case "pickup" -> jdbc.update("UPDATE uteexpress.shipments SET picked_up_at=CURRENT_TIMESTAMP WHERE order_id=?", order);
+            case "delivered" -> jdbc.update("UPDATE uteexpress.shipments SET picked_up_at=CURRENT_TIMESTAMP,delivered_at=CURRENT_TIMESTAMP WHERE order_id=?", order);
+            case "attempt" -> jdbc.update("UPDATE uteexpress.shipments SET attempt_count=1 WHERE order_id=?", order);
+            case "status" -> jdbc.update("UPDATE uteexpress.shipments SET status='PICKED_UP',picked_up_at=CURRENT_TIMESTAMP WHERE order_id=?", order);
+            default -> { }
+        }
+        var before = jdbc.queryForMap("SELECT * FROM uteexpress.shipments WHERE id=?", assignment.id());
+        var audits = jdbc.queryForList("SELECT * FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=? ORDER BY id", assignment.id());
+        Long expected = kind.equals("absent") ? null : kind.equals("version") ? 1L : 0L;
+        assertThatThrownBy(() -> tx().executeWithoutResult(s -> {
+            jdbc.queryForObject("SELECT id FROM uteexpress.orders WHERE id=? FOR UPDATE", Long.class, order);
+            fulfillment.lockForOpsCancellation(order);
+            fulfillment.cancelLockedForOpsOrder(order, expected);
+        })).isInstanceOfSatisfying(ApplicationException.class, e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.CONFLICT));
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.shipments WHERE id=?", assignment.id())).isEqualTo(before);
+        assertThat(jdbc.queryForList("SELECT * FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=? ORDER BY id", assignment.id())).isEqualTo(audits);
+    }
+
+    @Test void opsShipmentAndAuditRollbackWithOuterFailure() {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long order = order(true, "CONFIRMED", true);
+        authenticate(admin, "ADMIN");
+        var assignment = assignments.assign(order, insertUser("ACTIVE", "SHIPPER"), 0L);
+        var before = jdbc.queryForMap("SELECT * FROM uteexpress.shipments WHERE id=?", assignment.id());
+        var audits = jdbc.queryForList("SELECT * FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=? ORDER BY id", assignment.id());
+        assertThatThrownBy(() -> tx().executeWithoutResult(s -> {
+            jdbc.queryForObject("SELECT id FROM uteexpress.orders WHERE id=? FOR UPDATE", Long.class, order);
+            fulfillment.lockForOpsCancellation(order);
+            fulfillment.cancelLockedForOpsOrder(order, 0L);
+            throw new IllegalStateException("Order completion failed after Shipping audit");
+        })).isInstanceOf(IllegalStateException.class);
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.shipments WHERE id=?", assignment.id())).isEqualTo(before);
+        assertThat(jdbc.queryForList("SELECT * FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=? ORDER BY id", assignment.id())).isEqualTo(audits);
+    }
+
+    @Test void opsAuditFailureRollsBackShipmentMutation() {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long order = order(true, "CONFIRMED", true);
+        authenticate(admin, "ADMIN");
+        var assignment = assignments.assign(order, insertUser("ACTIVE", "SHIPPER"), 0L);
+        var before = jdbc.queryForMap("SELECT * FROM uteexpress.shipments WHERE id=?", assignment.id());
+        var audits = jdbc.queryForList("SELECT * FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=? ORDER BY id", assignment.id());
+        jdbc.execute("ALTER TABLE uteexpress.audit_logs ADD CONSTRAINT ops_hook_audit_failure CHECK (action <> 'SHIPMENT_CANCELLED') NOT VALID");
+        try {
+            assertThatThrownBy(() -> tx().executeWithoutResult(s -> {
+                jdbc.queryForObject("SELECT id FROM uteexpress.orders WHERE id=? FOR UPDATE", Long.class, order);
+                fulfillment.lockForOpsCancellation(order);
+                fulfillment.cancelLockedForOpsOrder(order, 0L);
+            })).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        } finally { jdbc.execute("ALTER TABLE uteexpress.audit_logs DROP CONSTRAINT ops_hook_audit_failure"); }
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.shipments WHERE id=?", assignment.id())).isEqualTo(before);
+        assertThat(jdbc.queryForList("SELECT * FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=? ORDER BY id", assignment.id())).isEqualTo(audits);
+    }
+
+    @Test void opsAbsenceUsesCallerOrderLockAndReadDoesNotLockAccount() throws Exception {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long order = order(true, "CONFIRMED", true);
+        long shipper = insertUser("ACTIVE", "SHIPPER");
+        authenticate(admin, "ADMIN");
+        var pool = java.util.concurrent.Executors.newFixedThreadPool(2);
+        var assignmentPid = new java.util.concurrent.CompletableFuture<Integer>();
+        var assigned = new java.util.ArrayList<java.util.concurrent.Future<?>>();
+        try {
+            tx().executeWithoutResult(s -> {
+                int holder = jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class);
+                jdbc.queryForObject("SELECT id FROM uteexpress.orders WHERE id=? FOR UPDATE", Long.class, order);
+                assertThat(fulfillment.lockForOpsCancellation(order)).isEmpty();
+                // Another transaction can lock Ops Account while the read hook remains open.
+                var account = pool.submit(() -> tx().execute(other -> {
+                    jdbc.execute("SET LOCAL lock_timeout='2s'");
+                    return jdbc.queryForObject("SELECT id FROM uteexpress.users WHERE id=? FOR UPDATE", Long.class, admin);
+                }));
+                try { assertThat(account.get(5, java.util.concurrent.TimeUnit.SECONDS)).isEqualTo(admin); }
+                catch (Exception ex) { throw new AssertionError(ex); }
+                assigned.add(pool.submit(() -> {
+                    authenticate(admin, "ADMIN");
+                    try { tx().executeWithoutResult(other -> {
+                        jdbc.execute("SET LOCAL lock_timeout='15s'");
+                        assignmentPid.complete(jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class));
+                        assignments.assign(order, shipper, 0L);
+                    }); } finally { SecurityContextHolder.clearContext(); }
+                }));
+                try {
+                    int waiter = assignmentPid.get(5, java.util.concurrent.TimeUnit.SECONDS);
+                    long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(5);
+                    boolean blocked = false;
+                    while (System.nanoTime() < deadline) {
+                        blocked = Boolean.TRUE.equals(jdbc.queryForObject("SELECT ? = ANY(pg_blocking_pids(?))", Boolean.class, holder, waiter));
+                        if (blocked) break;
+                        java.util.concurrent.locks.LockSupport.parkNanos(java.util.concurrent.TimeUnit.MILLISECONDS.toNanos(10));
+                    }
+                    assertThat(blocked).as("Assignment waits for caller's Order lock").isTrue();
+                    assertThat(fulfillment.lockForOpsCancellation(order)).isEmpty();
+                    fulfillment.cancelLockedForOpsOrder(order, null);
+                } catch (Exception ex) { throw new AssertionError(ex); }
+            });
+            assigned.getFirst().get(15, java.util.concurrent.TimeUnit.SECONDS);
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.shipments WHERE order_id=?", String.class, order)).isEqualTo("ASSIGNED");
+        } finally { pool.shutdownNow(); }
+    }
+
     private boolean race(java.util.concurrent.CountDownLatch start, long actor, String role, Runnable operation) {
         try {
             start.await();
