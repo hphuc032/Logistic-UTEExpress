@@ -44,6 +44,8 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     private final Clock clock;
     private final VendorOrderAuthority vendorAuthority;
     private final ShipperOrderAuthority shipperAuthority;
+    private final OpsOrderAuthority opsAuthority;
+    private final com.uteexpress.shipping.service.ShipmentFulfillmentService shipments;
 
     public OrderPlacementService(OrderRepository orders, OrderItemRepository items,
             OrderStatusHistoryRepository history, CurrentUserProvider users,
@@ -53,7 +55,9 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
             PaymentService payments, VendorOrderAuthority vendorAuthority, VoucherService vouchers,
             jakarta.persistence.EntityManager entityManager,
             com.uteexpress.shipping.service.ShipmentFulfillmentService shipments,
-            com.uteexpress.payment.service.PaymentReadService paymentReads) {
+            com.uteexpress.payment.service.PaymentReadService paymentReads,
+            com.uteexpress.governance.service.RoleGovernanceService roles,
+            com.uteexpress.governance.service.AuditLogService audit) {
         super(orders, items, history, users, transactionManager, events, clock);
         this.orders = orders;
         this.accounts = accounts;
@@ -66,7 +70,42 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.vouchers = vouchers;
         this.clock = clock;
         this.vendorAuthority = vendorAuthority;
+        this.shipments = shipments;
         this.shipperAuthority = new ShipperOrderAuthority(orders, entityManager, shipments, paymentReads);
+        this.opsAuthority = new OpsOrderAuthority(orders, items, entityManager, accounts, identities,
+                roles, inventory, vouchers, audit);
+    }
+
+    @Override
+    @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority(), "
+            + "T(com.uteexpress.security.RoleCode).MANAGER.authority())")
+    public com.uteexpress.order.dto.OrderStatusChangedEvent cancelForOps(
+            com.uteexpress.order.dto.OpsOrderCancellationCommand command) {
+        return super.cancelForOps(command);
+    }
+
+    @Override protected Order loadForOpsMutation(Long id) { return opsAuthority.lockOrder(id); }
+
+    @Override protected java.util.Optional<com.uteexpress.shipping.dto.ShipmentFulfillmentFacts> lockShipmentForOps(
+            Order order, com.uteexpress.order.dto.OpsOrderCancellationCommand command) {
+        return shipments.lockForOpsCancellation(order.getId());
+    }
+
+    @Override protected Long authorizeOps(Order order) { return opsAuthority.authorize(); }
+
+    @Override protected void resolveShipmentForOps(Order order,
+            java.util.Optional<com.uteexpress.shipping.dto.ShipmentFulfillmentFacts> shipment, java.time.Instant at) {
+        shipments.cancelLockedForOpsOrder(order.getId(), shipment.map(
+                com.uteexpress.shipping.dto.ShipmentFulfillmentFacts::version).orElse(null));
+    }
+
+    @Override protected void beforeOpsCancellation(Order order, java.time.Instant at) {
+        opsAuthority.release(order, at);
+    }
+
+    @Override protected void auditOpsCancellation(Order order, com.uteexpress.order.dto.OrderStatus from,
+            Long originalVersion, Long actor, com.uteexpress.order.dto.OpsCancellationReason reason) {
+        opsAuthority.appendAudit(order, from, originalVersion, actor, reason);
     }
 
     @Override
