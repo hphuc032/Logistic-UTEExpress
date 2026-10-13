@@ -84,6 +84,39 @@ public class ShipmentFulfillmentService {
                 ShipmentStatus.DELIVERED, "SHIPPING");
     }
 
+    /** Caller holds Order first; this hook locks only Shipment and returns authoritative absence. */
+    @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority(), T(com.uteexpress.security.RoleCode).MANAGER.authority())")
+    public java.util.Optional<ShipmentFulfillmentFacts> lockForOpsCancellation(Long orderId) {
+        requireOrderId(orderId);
+        return java.util.Optional.ofNullable(shipment(orderId));
+    }
+
+    /** After Order-owned persisted Ops eligibility; null version means explicitly expected absent. */
+    @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority(), T(com.uteexpress.security.RoleCode).MANAGER.authority())")
+    public void cancelLockedForOpsOrder(Long orderId, Long expectedShipmentVersion) {
+        requireOrderId(orderId);
+        if (expectedShipmentVersion != null && expectedShipmentVersion < 0) throw invalid();
+        ShipmentFulfillmentFacts facts = shipment(orderId);
+        if (facts == null) {
+            if (expectedShipmentVersion != null) throw conflict();
+            return;
+        }
+        if (expectedShipmentVersion == null || facts.version() != expectedShipmentVersion
+                || facts.status() != ShipmentStatus.ASSIGNED || facts.pickedUpAt() != null
+                || facts.deliveredAt() != null || facts.attemptCount() != 0 || facts.maxAttempts() != 2
+                || facts.shipmentId() == null || facts.shipmentId() <= 0
+                || facts.shipperId() == null || facts.shipperId() <= 0) throw conflict();
+        long actor = actor();
+        update(facts, ShipmentStatus.CANCELLED, clock.instant().truncatedTo(ChronoUnit.MICROS));
+        audit.append(new AuditEntry(actor, "SHIPMENT_CANCELLED", "SHIPMENT", facts.shipmentId(),
+                Map.of("status", facts.status().name(), "version", Long.toString(facts.version())),
+                Map.of("status", "CANCELLED", "version", Long.toString(facts.version() + 1)), "UNABLE_TO_FULFILL"));
+    }
+
+    private static void requireOrderId(Long id) {
+        if (id == null || id <= 0) throw invalid();
+    }
+
     /** Invoke from authorized Order cancellation before status changes, in its existing transaction. */
     @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).VENDOR.authority())")
     public void cancelAssignedForVendorOrder(Long orderId) {
