@@ -40,4 +40,17 @@
     <p th:if="${order.facts.payments.empty}">Chưa có bản ghi thanh toán.</p>
     <ul><li th:each="payment : ${order.facts.payments}"
             th:text="|${payment.method} · ${payment.status} · ${payment.amount}|"></li></ul>
+    <section th:if="${(order.facts.status == 'NEW' or order.facts.status == 'CONFIRMED') and order.facts.cancelledAt == null and order.facts.deliveredAt == null and (order.shipment == null or (order.facts.status == 'CONFIRMED' and order.readyAt != null and order.shipment.status == 'ASSIGNED' and order.shipment.pickedUpAt == null and order.shipment.deliveredAt == null and order.shipment.attemptCount == 0 and order.shipment.maxAttempts == 2))}">
+        <h2>Hủy đơn hàng</h2>
+        <p>Chỉ hủy đơn chưa được nhận hàng. Mọi thay đổi được kiểm tra lại khi gửi.</p>
+        <form method="post" th:action="@{/{ops}/orders/{id}/cancel(ops=${ops},id=${order.facts.id})}">
+            <input type="hidden" name="expectedOrderStatus" th:value="${order.facts.status}">
+            <input type="hidden" name="expectedOrderVersion" th:value="${order.version}">
+            <input type="hidden" name="expectedShipment" th:value="${order.shipment == null ? 'EXPECTED_ABSENT' : 'EXPECTED_PRESENT'}">
+            <input th:if="${order.shipment != null}" type="hidden" name="expectedShipmentVersion" th:value="${order.shipment.version}">
+            <label for="ops-cancel-reason">Lý do</label>
+            <select id="ops-cancel-reason" name="reasonCode" required><option value="UNABLE_TO_FULFILL">Không thể thực hiện đơn hàng</option></select>
+            <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
+        </form>
+    </section>
 </section></body></html>

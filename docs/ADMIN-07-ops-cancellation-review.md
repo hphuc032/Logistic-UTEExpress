@@ -1,3 +1,5 @@
+> Historical proposed-contract review. HP approval and the merged ORD-OPS-01 production boundary now supersede its pending-contract notes; see ADMIN-07-http-cancellation.md for current integration.
+
 # ADMIN-07 Ops cancellation — QD review, 2026-10-10
 
 Status: proposed integration decisions, not a deployed cancellation API. Reviewed against develop f062d7e and TD's v0.1 attachment. No Order, Identity or cancellation behavior is changed by this document.
