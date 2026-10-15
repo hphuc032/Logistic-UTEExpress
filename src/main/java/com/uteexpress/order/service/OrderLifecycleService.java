@@ -11,6 +11,20 @@ import com.uteexpress.order.dto.OrderTransitionCommand;
  * update timestamps, append history and publish the result only after commit.
  */
 public interface OrderLifecycleService {
+    /**
+     * Starts its own Order-first transaction; an existing transaction is rejected.
+     * Fails closed until QD supplies the approved Ops Shipment lock/cancellation hooks.
+     */
+    OrderStatusChangedEvent cancelForOps(com.uteexpress.order.dto.OpsOrderCancellationCommand command);
+
+    /** Internal MANDATORY boundary; both versions are the original source versions. */
+    void prepareShipperTransition(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, com.uteexpress.order.dto.OrderAction action);
+
+    /** Requires persisted Shipment target evidence at original version + 1. */
+    OrderStatusChangedEvent completeShipperTransition(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, com.uteexpress.order.dto.OrderAction action);
+
     /** Authenticated callers only; EXPIRE_PAYMENT is rejected with ACCESS_DENIED. */
     OrderStatusChangedEvent transition(OrderTransitionCommand command);
 

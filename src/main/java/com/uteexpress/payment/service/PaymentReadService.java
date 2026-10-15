@@ -17,6 +17,22 @@ public class PaymentReadService {
         this.entityManager = entityManager;
     }
 
+    /** ORD-05 delivery guard. Caller already holds Order then Shipment; locks and refreshes Payment evidence. */
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public void requireCollectedCodForDelivery(Long authorizedOrderId, java.math.BigDecimal total) {
+        var records = payments.lockRecordsForOrder(authorizedOrderId);
+        records.forEach(payment -> entityManager.refresh(payment, jakarta.persistence.LockModeType.PESSIMISTIC_WRITE));
+        if (records.size() != 1 || total == null) throw new com.uteexpress.common.exception.ApplicationException(
+                com.uteexpress.common.exception.ErrorCode.CONFLICT);
+        var payment = records.getFirst();
+        if (payment.getMethod() != com.uteexpress.checkout.dto.CheckoutRequest.PaymentMethod.COD
+                || payment.getStatus() != com.uteexpress.payment.dto.PaymentStatus.PAID
+                || payment.getAmount().compareTo(total) != 0
+                || payment.getPaidAt() == null || payment.getExpiredAt() != null) {
+            throw new com.uteexpress.common.exception.ApplicationException(com.uteexpress.common.exception.ErrorCode.CONFLICT);
+        }
+    }
+
     /** ORD-03 guard only. Caller already holds the Order lock; payment facts are never mutated. */
     @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
     public void requireConfirmablePayment(Long authorizedOrderId, java.math.BigDecimal total) {

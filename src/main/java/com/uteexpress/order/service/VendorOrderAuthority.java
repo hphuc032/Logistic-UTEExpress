@@ -33,12 +33,13 @@ public class VendorOrderAuthority {
     private final VendorShopQueryService shops;
     private final InventoryService inventory;
     private final PaymentReadService payments;
+    private final com.uteexpress.shipping.service.ShipmentFulfillmentService shipments;
     private final EntityManager entityManager;
 
     public VendorOrderAuthority(OrderRepository orders, OrderItemRepository items,
             CurrentAccountIdProvider accounts, AccountIdentityService identities, VendorShopQueryService shops,
             InventoryService inventory, PaymentReadService payments,
-            EntityManager entityManager) {
+            EntityManager entityManager, com.uteexpress.shipping.service.ShipmentFulfillmentService shipments) {
         this.orders = orders;
         this.items = items;
         this.accounts = accounts;
@@ -47,16 +48,19 @@ public class VendorOrderAuthority {
         this.inventory = inventory;
         this.payments = payments;
         this.entityManager = entityManager;
+        this.shipments = shipments;
     }
 
     public Order lockOwnedOrder(Long id) {
         Long vendor = vendorId();
-        identities.requireActiveAccountForUpdate(vendor);
         Long shop = shops.requireApprovedOwnedShop(vendor).shopId();
         var order = orders.findByIdAndShopIdForUpdate(id, shop)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND));
         // Discard an earlier managed snapshot if a caller joined an existing transaction.
         entityManager.refresh(order, LockModeType.PESSIMISTIC_WRITE);
+        // Resource first: a multi-role vendor/shipper must never hold Account while waiting for Order.
+        // Keep eligibility locked through commit; Shipping acquires it after this same Order lock.
+        identities.requireActiveAccountForUpdate(vendor);
         return order;
     }
 
@@ -85,6 +89,7 @@ public class VendorOrderAuthority {
             payments.requireConfirmablePayment(order.getId(), order.getGrandTotal());
         } else {
             if (order.getInventoryReleasedAt() != null) throw new ApplicationException(ErrorCode.CONFLICT);
+            shipments.cancelAssignedForVendorOrder(order.getId());
             var quantities = items.findByOrderIdOrderByIdAsc(order.getId()).stream()
                     .map(item -> new StockQuantity(item.getProductId(), item.getQuantity())).toList();
             inventory.restore(quantities);
