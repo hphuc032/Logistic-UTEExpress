@@ -59,7 +59,8 @@ final class ShipperOrderAuthority {
         if (!completion && (facts.maxAttempts() != 2 || facts.deliveredAt() != null
                 || (action == OrderAction.PICK_UP && (facts.pickedUpAt() != null || facts.attemptCount() != 0))
                 || (action == OrderAction.START_SHIPPING && (facts.pickedUpAt() == null || facts.attemptCount() != 0))
-                || (action == OrderAction.DELIVER && (facts.pickedUpAt() == null || facts.attemptCount() != 1)))) {
+                || (action == OrderAction.DELIVER && (facts.pickedUpAt() == null
+                || facts.attemptCount() < 1 || facts.attemptCount() > facts.maxAttempts())))) {
             throw new ApplicationException(ErrorCode.CONFLICT);
         }
         OrderTransitionPolicy.requireTarget(order.getStatus(), action);
