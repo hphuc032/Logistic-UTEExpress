@@ -19,3 +19,40 @@ The pending migration V20261008100000__qd_ws01_notifications.sql remains newer t
 Real-time private socket delivery belongs to WS-02 and must follow SEC-02's Origin/CSRF/JWT/expiry/revocation/destination contract. This PR adds no socket endpoint and makes no socket security claim.
 
 Verification on 2026-10-15 with Java 21: .\mvnw.cmd -q -Ppostgres-it clean verify PASS, exit 0; 1,188 tests (423 unit/architecture + 765 PostgreSQL), zero failures/errors/skips. NotificationIT 3, NotificationMigrationIT 1, NotificationRecoveryIT 5 and NotificationSchedulerIT 1 all passed. The out-of-order regression uses two real Vendor CONFIRM lifecycle transactions, forces the lower-history-ID callback to fail after its late commit, and verifies recovery. Real scheduled execution is tested separately; other fixtures disable background jobs deterministically. No Order/Payment production file is changed by this recovery implementation.
+
+## Recipient policy and ownership transfer
+
+The implemented policy is **buyer plus Shop owner at projection time**, resolved from persisted rows. It is not an owner-at-event snapshot. Once inserted, a notification keeps its recipient_id; recovery never reassigns or deletes that recipient's inbox row. If ownership were changed directly, a later reconciliation could create another notification for the new owner for the same historical event, because the deduplication key includes the recipient. Existing notices would remain with the previous owner.
+
+The supported Shop flows currently expose no ownership-transfer operation. This PR does not authorize adding one. Before enabling transfer, HP/TD/QD must approve historical visibility and recovery semantics, including whether to persist event-time recipients. An event-time policy cannot be reconstructed reliably from the current shops.owner_id. Do not describe current delivery as owner-at-event or enable transfer without resolving this privacy/retention contract.
+
+## Reconciliation operations runbook
+
+Current instrumentation is warning logs for callback/worker failures, not exported backlog metrics. Operations should track repeated warnings, cycle/query duration, oldest missing history age and pending recipient pairs. Run the following read-only diagnostic against a staging copy first; it can scan retained history and is intended for periodic operator diagnosis, not each 30-second worker tick:
+
+```sql
+WITH source AS (
+    SELECT h.created_at,
+           concat('order-history:', h.id, ':', r.recipient_id) AS dedup_key
+    FROM uteexpress.order_status_history h
+    JOIN uteexpress.orders o ON o.id = h.order_id
+    LEFT JOIN uteexpress.shops s ON s.id = o.shop_id
+    CROSS JOIN LATERAL (
+        SELECT DISTINCT recipient_id
+        FROM (VALUES (o.buyer_id), (s.owner_id)) ids(recipient_id)
+        WHERE recipient_id IS NOT NULL
+    ) r
+    WHERE h.from_status IS NOT NULL
+)
+SELECT count(*) AS pending_recipient_pairs,
+       min(source.created_at) AS oldest_pending_history_at,
+       current_timestamp - min(source.created_at) AS oldest_pending_age
+FROM source
+WHERE NOT EXISTS (
+    SELECT 1 FROM uteexpress.notifications n WHERE n.dedup_key = source.dedup_key
+);
+```
+
+Alert thresholds must be chosen against the team's notification-latency objective; there is no measured production SLO yet. Compare successive samples to detect a growing backlog. Use statement_timeout on the diagnostic session and inspect EXPLAIN (ANALYZE, BUFFERS) on representative staging data before tuning discovery. LIMIT 100 bounds returned Orders, not history rows examined: discovery can become expensive as history grows, even when no notifications are missing. LIMIT 200 bounds inserts per Order, not total work scanned. A persistently failing first Order also aborts the current cycle and can delay later Orders; monitor recurring failure logs and repair the underlying fault rather than claiming guaranteed fairness.
+
+Do not purge history, replace discovery with a max-ID cursor, increase batches blindly, expose diagnostic SQL through HTTP, or introduce a cross-Order write transaction as a performance shortcut. Future incremental recovery/checkpoint or per-Order failure isolation needs its own concurrency, late-commit and recovery tests. Deployment monitoring remains an operational follow-up; this runbook does not claim metrics or production load tests were implemented.
