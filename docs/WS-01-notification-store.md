@@ -1,26 +1,21 @@
-# WS-01 notification store
+# WS-01 notification store and recovery
 
-`GET /notifications` shows the authenticated account's latest 100 notifications.
-`POST /notifications/{id}/read` marks only that account's notification read; a repeat
-request preserves the original `read_at`. The POST uses the existing CSRF protection.
-There is no public write endpoint or client-supplied recipient ID.
+GET /notifications shows the authenticated account's latest 100 notifications. POST /notifications/{id}/read is owner-scoped, CSRF protected and idempotently preserves the first read_at. There is no public notification-write endpoint or client-supplied recipient ID. Rendering uses escaped Thymeleaf text.
 
-`NotificationService.record` is for trusted server-side callers and requires an
-existing transaction. A caller's rollback removes the notification. The unique
-`dedup_key` makes a retry idempotent. The ORD-01 status-change event is dispatched
-**after** the order transaction commits, so `OrderNotificationListener` opens a
-separate transaction and targets the buyer and shop owner from the database.
-This event path cannot be atomic with the order transition: if notification
-persistence fails after the order commit, the order remains committed and the
-notification is missing. Exactly-once delivery or recovery requires a transactional
-outbox / synchronous order integration in a later cross-owner change. Order creation
-currently has no status-change event, so this listener handles transitions only.
+NotificationService.record remains a trusted MANDATORY API for callers which can participate in the same business transaction. Its rollback removes the notification. Order status events, however, are published only after commit. The event listener now uses the event only as a wake-up hint and projects committed order_status_history, never the event's recipient/state/reason as source data. Failures after Order commit are logged and left retryable; they do not turn a successful Order operation into an apparent failure.
 
-The inbox is durable and can be fetched after reconnect. Real-time private WebSocket
-delivery belongs to WS-02.
+## Durable recovery without Order changes
 
-The pending notification migration is `V20261008100000__qd_ws01_notifications.sql`,
-versioned after PROMO-02's merged migration. `NotificationMigrationIT` upgrades a
-PostgreSQL database already at PROMO-02, verifies exactly one new migration and
-the new table, and checks Flyway validation/idempotence. This protects deployed
-`develop` databases from a pending migration with an older version.
+The existing immutable, transactionally persisted Order history is the replay source. No Order/Payment entity, repository, lifecycle writer or publisher is modified. Notifications deduplicate by order-history:<historyId>:<recipientId>. Initial NEW history (from_status NULL) is excluded; transition notifications target the persisted buyer and current persisted Shop owner, with overlap deduplicated. Payloads contain only Order ID, state and fixed display text; history reason, address, phone, money and payment/token data are not copied.
+
+The default-enabled scheduled worker runs every 30 seconds and discovers unprojected history/recipient pairs with NOT EXISTS, not a highest-ID cursor. This recovers lost in-memory callbacks, restarts, post-commit failures and a lower history ID committing after a higher ID. Each cycle processes at most 100 Orders and 200 missing notification rows per Order; remaining work stays visible for later cycles. An unavailable database delays recovery until it is available again. Throughput and notification latency depend on backlog; no exactly-once WebSocket delivery claim is made.
+
+Each Order is projected in its own REQUIRES_NEW transaction, beginning with Order FOR KEY SHARE before notification recipient/Order FK checks. This retains no recipient FK locks while waiting for another Order and avoids introducing an Account-before-Order edge through a multi-Order write batch. Discovery reads do not lock business rows. Inserts are sorted by history/recipient and ON CONFLICT deduplicates concurrent workers. Projection methods are internal worker/after-commit entry points, not APIs to invoke from an active business transaction already holding locks.
+
+Configuration: uteexpress.notifications.reconciliation-enabled (default true), reconcile-initial-delay-ms (default 30000), reconcile-delay-ms (default 30000). Tests disable background reconciliation in test-only application.properties; NotificationSchedulerIT explicitly enables the real scheduler and verifies recovery without an event callback. There is no new table/outbox pretending to be atomic with Order; recovery depends on retained committed Order history. History retention/deletion or Shop ownership-transfer policy needs a separate contract before changing that source.
+
+The pending migration V20261008100000__qd_ws01_notifications.sql remains newer than current develop's latest V20261008090000. NotificationMigrationIT upgrades that deployed baseline, checks validation and exactly one pending migration, and proves repeat migration is a no-op. Recheck the unmerged migration version against latest develop before merge, particularly if RETURN-01 #49 merges first.
+
+Real-time private socket delivery belongs to WS-02 and must follow SEC-02's Origin/CSRF/JWT/expiry/revocation/destination contract. This PR adds no socket endpoint and makes no socket security claim.
+
+Verification on 2026-10-15 with Java 21: .\mvnw.cmd -q -Ppostgres-it clean verify PASS, exit 0; 1,188 tests (423 unit/architecture + 765 PostgreSQL), zero failures/errors/skips. NotificationIT 3, NotificationMigrationIT 1, NotificationRecoveryIT 5 and NotificationSchedulerIT 1 all passed. The out-of-order regression uses two real Vendor CONFIRM lifecycle transactions, forces the lower-history-ID callback to fail after its late commit, and verifies recovery. Real scheduled execution is tested separately; other fixtures disable background jobs deterministically. No Order/Payment production file is changed by this recovery implementation.

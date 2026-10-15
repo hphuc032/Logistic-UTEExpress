@@ -1,43 +1,23 @@
 package com.uteexpress.notification.service;
 
-import com.uteexpress.notification.repository.NotificationRepository;
 import com.uteexpress.order.dto.OrderStatusChangedEvent;
-import java.util.Objects;
-import org.springframework.beans.factory.ObjectProvider;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.support.TransactionTemplate;
 
-/** ORD-01 publishes only after commit; this consumer deduplicates retries by event ID. */
+/** After-commit event is a wake-up hint; only persisted history creates inbox entries. */
 @Component
 public class OrderNotificationListener {
-    private final NotificationRepository repository;
-    private final NotificationService notifications;
-    private final ObjectProvider<PlatformTransactionManager> transactionManager;
-
-    public OrderNotificationListener(NotificationRepository repository,
-            NotificationService notifications, ObjectProvider<PlatformTransactionManager> transactionManager) {
-        this.repository = repository;
-        this.notifications = notifications;
-        this.transactionManager = transactionManager;
-    }
-
+    private static final Logger LOG = LoggerFactory.getLogger(OrderNotificationListener.class);
+    private final NotificationProjectionService projection;
+    public OrderNotificationListener(NotificationProjectionService projection) { this.projection = projection; }
     @EventListener
     public void onOrderStatusChanged(OrderStatusChangedEvent event) {
-        Objects.requireNonNull(event);
-        TransactionTemplate transaction = new TransactionTemplate(transactionManager.getObject());
-        // The order event is dispatched in afterCommit while the old resources remain bound.
-        // A new transaction is required or the inbox insert may never commit.
-        transaction.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-        transaction.executeWithoutResult(status -> {
-            String state = event.toStatus().name();
-            for (Long recipientId : repository.orderRecipients(event.orderId())) {
-                notifications.record(recipientId, event.orderId(), "ORDER_STATUS",
-                        "Cập nhật đơn hàng", "Đơn hàng #" + event.orderId() + " chuyển sang " + state + ".",
-                        "order-status:" + event.eventId() + ":" + recipientId);
-            }
-        });
+        try { projection.projectOrder(event.orderId()); }
+        catch (RuntimeException failure) {
+            // Order already committed: leave history as the retry source, never report a failed Order write.
+            LOG.warn("Notification projection failed for Order {}; reconciliation will retry", event.orderId(), failure);
+        }
     }
 }

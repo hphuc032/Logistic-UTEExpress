@@ -101,6 +101,9 @@ class NotificationIT {
                 """, Long.class, key, key, buyer, shop);
         var event = new OrderStatusChangedEvent(UUID.randomUUID(), order, OrderStatus.NEW,
                 OrderStatus.CONFIRMED, buyer, Instant.now(), null);
+        orderListener.onOrderStatusChanged(event);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id=?", Integer.class, order)).isZero();
+        jdbc.update("INSERT INTO uteexpress.order_status_history(order_id,from_status,to_status,actor_id) VALUES (?,'NEW','CONFIRMED',?)",order,buyer);
         new TransactionTemplate(transactionManager).executeWithoutResult(status ->
                 TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
                     @Override public void afterCommit() { orderListener.onOrderStatusChanged(event); }
@@ -114,6 +117,7 @@ class NotificationIT {
                 Integer.class, order, owner)).isEqualTo(1);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id=? AND recipient_id=?",
                 Integer.class, order, stranger)).isZero();
+        jdbc.update("DELETE FROM uteexpress.order_status_history WHERE order_id=?", order);
         jdbc.update("DELETE FROM uteexpress.orders WHERE id=?", order);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id IS NULL AND recipient_id IN (?, ?)",
                 Integer.class, buyer, owner)).isEqualTo(2);

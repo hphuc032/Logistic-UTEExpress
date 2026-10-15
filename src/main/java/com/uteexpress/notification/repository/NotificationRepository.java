@@ -57,15 +57,48 @@ public class NotificationRepository {
                 .addValue("dedupKey", dedupKey).addValue("at", Timestamp.from(at)));
     }
 
-    public List<Long> orderRecipients(Long orderId) {
+    // Durable source: committed lifecycle history, never a client payload or an ID high-water mark.
+    private static final String HISTORY_RECIPIENTS = """
+            SELECT h.id AS history_id, h.order_id, h.to_status, h.created_at, r.recipient_id,
+                concat('order-history:', h.id, ':', r.recipient_id) AS dedup_key
+            FROM uteexpress.order_status_history h JOIN uteexpress.orders o ON o.id=h.order_id
+            LEFT JOIN uteexpress.shops s ON s.id=o.shop_id
+            CROSS JOIN LATERAL (
+                SELECT DISTINCT recipient_id FROM (VALUES (o.buyer_id), (s.owner_id)) ids(recipient_id)
+                WHERE recipient_id IS NOT NULL
+            ) r WHERE h.from_status IS NOT NULL
+            """;
+
+    public List<Long> pendingOrders() {
         return jdbc.getObject().query("""
-                SELECT DISTINCT recipient_id FROM (
-                    SELECT o.buyer_id AS recipient_id FROM uteexpress.orders o WHERE o.id = :orderId
-                    UNION ALL
-                    SELECT s.owner_id AS recipient_id FROM uteexpress.orders o
-                    JOIN uteexpress.shops s ON s.id = o.shop_id WHERE o.id = :orderId
-                ) recipients
-                """, new MapSqlParameterSource("orderId", orderId), (rs, rowNum) -> rs.getLong(1));
+                WITH source AS (
+                """ + HISTORY_RECIPIENTS + """
+                ) SELECT DISTINCT source.order_id FROM source
+                WHERE NOT EXISTS (SELECT 1 FROM uteexpress.notifications n WHERE n.dedup_key=source.dedup_key)
+                ORDER BY source.order_id LIMIT 100
+                """, new MapSqlParameterSource(), (rs, ignored) -> rs.getLong(1));
+    }
+
+    /** One Order per transaction: never retain recipient FK locks while waiting for another Order. */
+    public boolean lockProjectionOrder(Long orderId) {
+        return !jdbc.getObject().query("SELECT id FROM uteexpress.orders WHERE id=:id FOR KEY SHARE",
+                new MapSqlParameterSource("id", orderId), (rs, ignored) -> rs.getLong(1)).isEmpty();
+    }
+
+    public int projectOrderHistory(Long orderId) {
+        return jdbc.getObject().update("""
+                WITH source AS (
+                """ + HISTORY_RECIPIENTS + """
+                    AND h.order_id=:orderId
+                ) INSERT INTO uteexpress.notifications
+                    (recipient_id,order_id,type,title,message,dedup_key,created_at)
+                SELECT recipient_id,order_id,'ORDER_STATUS','Cập nhật đơn hàng',
+                    concat('Đơn hàng #',order_id,' chuyển sang ',to_status,'.'),dedup_key,created_at
+                FROM source WHERE NOT EXISTS (
+                    SELECT 1 FROM uteexpress.notifications n WHERE n.dedup_key=source.dedup_key)
+                ORDER BY history_id,recipient_id LIMIT 200
+                ON CONFLICT (dedup_key) DO NOTHING
+                """, new MapSqlParameterSource("orderId", orderId));
     }
 
     private static Instant instant(Timestamp value) {
