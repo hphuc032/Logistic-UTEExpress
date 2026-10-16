@@ -143,6 +143,18 @@ class ShipperOrderLifecycleIT {
         assertThat(stock()).isEqualTo(8);
     }
 
+    @ParameterizedTest @ValueSource(ints = {1, 2})
+    void deliveryPrepareAcceptsPersistedAttemptsWithoutMutatingState(int attemptCount) {
+        shipping();
+        // Fixture for Order prepare only; this does not exercise Shipping's retry/delivery flow.
+        jdbc.update("UPDATE uteexpress.shipments SET attempt_count=?,version=version+1 WHERE order_id=?", attemptCount, order);
+        long ov = version(), sv = shipmentVersion();
+        var before = state(); events.clear();
+        tx.executeWithoutResult(s -> lifecycle.prepareShipperTransition(order, ov, sv, OrderAction.DELIVER));
+        assertThat(state()).isEqualTo(before);
+        assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
+    }
+
     @Test void boundariesRequireExistingTransaction() {
         assertThatThrownBy(() -> lifecycle.prepareShipperTransition(order, 2L, 0L, OrderAction.PICK_UP))
                 .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
