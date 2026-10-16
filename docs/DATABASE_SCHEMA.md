@@ -162,7 +162,7 @@ The following is transcribed from the supplied plan. Detailed lengths, nullabili
 - 24 Shipment /   shipments status, shipping_service_snapshot, fee_snapshot, attempt_count, max_attempts, failure_reason, picked_up_at, delivered_at, version FK order_id unique; provider_id; assigned_shipper_id → users nullable QD
 - 25 Notification /   notifications type, title, message, read_at, dedup_key unique, created_at FK recipient_id → users; order_id nullable QD
 - 26 OrderStatusHistory /   order_status_history from_status, to_status, reason, created_at FK order_id; actor_id nullable cho system action TD
-- 27 ReturnRequest /   return_requests reason, status, requested_at, decision_at, received_at, decision_note, restockable FK order_id unique; requested_by; decided_by nullable TD
+- 27 ReturnRequest /   return_requests reason, status, requested_at, decision_at, received_at, decision_note, restockable FK order_id unique; requested_by; decided_by nullable TD. RETURN-01 Phase 1 adds created_at/updated_at and version, pending QD schema approval; composite (order_id, requested_by) references orders(id, buyer_id). Only PENDING/APPROVED/REJECTED are enabled; receipt/restockability remain NULL.
 - 28 Refund /   refunds amount, status, reason, proof_reference, requested_at, completed_at, version FK order_id unique; payment_id; return_request_id nullable; processed_by nullable TD
 - 29 CommissionPolicy /   commission_policies rate_percent, effective_from, active, created_at FK created_by → users; policy toàn hệ thống QD
 - 30 AuditLog /   audit_logs action, target_type, target_id, before_summary, after_summary, reason, created_at FK actor_id → users nullable; target là tham chiếu logic QD

@@ -19,6 +19,8 @@
             th:text="${#temporals.format(order.cancelledAt, 'dd/MM/yyyy HH:mm:ss', 'UTC')}"></time></p>
     </div>
 
+    <a th:if="${order.status.name() == 'DELIVERED' or order.status.name() == 'RETURN_REQUESTED'}"
+       th:href="@{/vendor/orders/{id}/return(id=${order.id})}" class="btn btn-app-secondary mb-3">Quản lý yêu cầu trả hàng</a>
     <section class="app-surface p-3 mb-3" aria-label="Thao tác của cửa hàng">
         <form th:if="${order.status.name() == 'NEW'}" method="post" th:action="@{/vendor/orders/{id}/confirm(id=${order.id})}" class="mb-3">
             <input type="hidden" name="expectedVersion" th:value="${vendorOrder.version}">

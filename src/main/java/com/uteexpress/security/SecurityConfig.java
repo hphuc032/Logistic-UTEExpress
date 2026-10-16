@@ -68,6 +68,8 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_ROUTES).permitAll()
                         .requestMatchers("/user/**").hasAnyAuthority(
                                 RoleCode.USER.authority(), RoleCode.VENDOR.authority())
+                        .requestMatchers("/orders/*/return").hasAnyAuthority(
+                                RoleCode.USER.authority(), RoleCode.VENDOR.authority())
                         .requestMatchers("/vendor/**").hasAuthority(RoleCode.VENDOR.authority())
                         .requestMatchers("/manager/**").hasAuthority(RoleCode.MANAGER.authority())
                         .requestMatchers("/admin/**").hasAuthority(RoleCode.ADMIN.authority())

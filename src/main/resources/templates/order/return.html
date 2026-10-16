@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Yêu cầu trả hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="return-title">
+    <a th:href="${vendor} ? @{/vendor/orders/{id}(id=${returnView.orderId})} : @{/orders/{id}(id=${returnView.orderId})}"
+       class="btn btn-app-secondary mb-3">Chi tiết đơn hàng</a>
+    <h1 id="return-title">Yêu cầu trả hàng</h1>
+    <p th:text="|Đơn #${returnView.orderId} — ${returnView.orderStatus}|"></p>
+    <p th:if="${returnView.deadline != null}">Hạn yêu cầu trả hàng:
+        <time th:datetime="${returnView.deadline}"
+              th:text="${#temporals.format(returnView.deadline, 'dd/MM/yyyy HH:mm:ss', 'Asia/Ho_Chi_Minh')}"></time> (giờ Việt Nam)
+    </p>
+    <p th:if="${!vendor and !returnView.canRequest and returnView.request == null}">
+        Đơn hàng hiện không đủ điều kiện yêu cầu trả hàng.
+    </p>
+    <form th:if="${returnView.canRequest}" method="post"
+          th:action="@{/orders/{id}/return(id=${returnView.orderId})}" class="app-surface p-3 mb-3">
+        <input type="hidden" name="expectedVersion" th:value="${returnView.expectedVersion}">
+        <label for="request-reason" class="form-label">Lý do trả hàng</label>
+        <textarea id="request-reason" name="reason" maxlength="1000" required class="form-control mb-3"></textarea>
+        <button type="submit" class="btn btn-app-primary">Gửi yêu cầu trả hàng</button>
+    </form>
+    <section th:if="${returnView.request != null}" class="app-surface p-3 mb-3" aria-label="Thông tin yêu cầu">
+        <p>Trạng thái yêu cầu: <strong th:text="${returnView.request.status}"></strong></p>
+        <p th:text="${returnView.request.reason}" class="text-break"></p>
+        <p>Ngày yêu cầu:
+            <time th:datetime="${returnView.request.requestedAt}"
+                  th:text="${#temporals.format(returnView.request.requestedAt, 'dd/MM/yyyy HH:mm:ss', 'Asia/Ho_Chi_Minh')}"></time> (giờ Việt Nam)
+        </p>
+        <p th:if="${returnView.request.decisionAt != null}">Ngày quyết định:
+            <time th:datetime="${returnView.request.decisionAt}"
+                  th:text="${#temporals.format(returnView.request.decisionAt, 'dd/MM/yyyy HH:mm:ss', 'Asia/Ho_Chi_Minh')}"></time> (giờ Việt Nam)
+        </p>
+        <p th:if="${returnView.request.decisionNote != null}" th:text="${returnView.request.decisionNote}" class="text-break"></p>
+        <p th:if="${returnView.request.status.name() == 'APPROVED'}">
+            Yêu cầu đã được chấp thuận. Việc nhận hàng và hoàn tiền chưa được ghi nhận.
+        </p>
+    </section>
+    <section th:if="${returnView.canDecide}" class="app-surface p-3" aria-label="Quyết định của cửa hàng">
+        <form method="post" th:action="@{/vendor/orders/{id}/return/approve(id=${returnView.orderId})}" class="mb-3">
+            <input type="hidden" name="expectedVersion" th:value="${returnView.expectedVersion}">
+            <input type="hidden" name="expectedRequestVersion" th:value="${returnView.request.version}">
+            <button type="submit" class="btn btn-app-primary">Chấp thuận yêu cầu</button>
+        </form>
+        <form method="post" th:action="@{/vendor/orders/{id}/return/reject(id=${returnView.orderId})}">
+            <input type="hidden" name="expectedVersion" th:value="${returnView.expectedVersion}">
+            <input type="hidden" name="expectedRequestVersion" th:value="${returnView.request.version}">
+            <label for="decision-reason" class="form-label">Lý do từ chối</label>
+            <textarea id="decision-reason" name="reason" maxlength="1000" required class="form-control mb-3"></textarea>
+            <button type="submit" class="btn btn-app-secondary">Từ chối yêu cầu</button>
+        </form>
+    </section>
+</section></body>
+</html>

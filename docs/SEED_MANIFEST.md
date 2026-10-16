@@ -35,7 +35,7 @@ request payloads in logs/audit. Never seed production credentials.
 | 7 | Multi-shop carts, selected/unselected items and fixture promotions/vouchers | TD / CART and PROMO; honor availability |
 | 8 | Orders/items snapshots, payments and status history for core and exception flows | TD / lifecycle service, PAY-01; never update order status directly |
 | 9 | Assigned/unassigned shipments, success/failure cases and matching order history | QD via TD lifecycle contract / SHIP tasks |
-| 10 | Return/refund fixtures consistent with payment and order | TD / ORD-04 + PAY-02 |
+| 10 | Return/refund fixtures consistent with payment and order | TD / RETURN-01 + PAY-02 |
 | 11 | Favorites/views, eligible reviews/media, recipient notifications and sanitized audit records | QD / corresponding modules |
 
 Stages describe dependencies, not instructions to implement future tasks now.

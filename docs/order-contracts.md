@@ -14,7 +14,9 @@ Initial NEW creation and its history use the ORD-01 lifecycle persistence primit
 `OrderTransitionPolicy` only checks graph edges: it neither authorizes an actor nor writes
 data. `OrderPlacementService` is the single production lifecycle bean. It reuses
 `OrderLifecycleServiceImpl` orchestration for CHK-02 creation, ORD-03 vendor operations
-and ORD-05 internal shipper completion. Return, refund, Ops and system actions remain denied.
+and ORD-05 internal shipper completion. RETURN-01 Phase 1 adds dedicated buyer request
+and vendor approval/rejection boundaries. Receipt/refund and system actions remain denied;
+Ops uses its separately guarded cancellation boundary.
 
 The future implementation obtains `CurrentUser` from the existing SEC-01
 `CurrentUserProvider`, using the existing `RoleCode`. It must resolve `subject` to the
@@ -128,7 +130,7 @@ restore voucher quota. See [PROMO-01 voucher contract](PROMO-01-vouchers.md).
 Duplicate/stale/late actions conflict with no stock or history change. Cart and Payment
 records are unchanged, including an existing PAID record; refund decisions remain deferred.
 
-Write lock order is active vendor account -> owned Order -> assigned Shipment (cancellation,
+Write lock order is owned Order -> active vendor account -> assigned Shipment (cancellation,
 if present) -> either ascending products
 (cancellation) or ascending Payment records (confirm) -> owned Shop. Order and Shop
 are refreshed under their locks; payment guards also refresh locked attempts. Shop is
@@ -143,6 +145,46 @@ Shipping's `cancelAssignedForVendorOrder` before inventory restoration: no Shipm
 a no-op, ASSIGNED closes atomically, and physical pickup/later Shipment evidence conflicts.
 Stock/voucher release, Shipment audit, Order history and after-commit events share the
 existing transaction. Vendor authorization continues to deny all shipper actions.
+
+## RETURN-01 Phase 1
+
+Buyer GET/POST `/orders/{id}/return` and Vendor GET
+`/vendor/orders/{id}/return`, POST `/approve` or `/reject` use the existing
+Order route conventions. Buyer routes require USER/VENDOR; vendor routes require VENDOR.
+JSON and form writes retain CSRF and reject forged/unknown fields. Resource IDs come
+only from the route; persisted principal identity and parent ownership scope every lookup.
+
+`requestReturn(RequestReturnCommand)`, `approveReturn(ReturnDecisionCommand)` and
+`rejectReturn(ReturnDecisionCommand)` are dedicated lifecycle methods; generic vendor
+transition/cancellation effects do not handle returns. Every public return mutation
+rejects an existing transaction and starts its own Order-first transaction. Lock Order,
+then existing ReturnRequest, then active Account; vendor decisions also lock/recheck
+approved owned Shop. Persisted roles are rechecked under the Account lock, with no global
+Role lock afterward. Read projections use a repeatable-read snapshot.
+
+Request accepts `expectedVersion` and a nonblank reason, maximum 1000 characters before
+stripping. Compare the actual server UTC Instant with the original inclusive 168-hour
+window before rounding stored times to PostgreSQL microseconds. Missing/future delivery,
+stale version or any previous request conflicts. Insert PENDING and use the existing
+lifecycle writer for RETURN_REQUESTED, one Order version increment/history row and
+after-commit event in the same transaction.
+
+Decisions accept `expectedVersion` and `expectedRequestVersion`; require PENDING evidence
+and RETURN_REQUESTED Order. Approval accepts no reason and changes only ReturnRequest
+status/decision actor/time/version. Rejection requires a nonblank reason of at most 1000
+characters, retains all original request facts, marks REJECTED and uses the shared writer
+for DELIVERED without changing original delivered_at. Approval emits no status event/history.
+Full rejection text is retained in owned return evidence; history/events use the fixed
+"Vendor rejected return" reason so free text cannot embed payment/address data in lifecycle facts.
+
+Database uniqueness is unconditional across statuses. A composite Order/requester FK
+requires requested_by to equal the persisted Order buyer. Phase 1 statuses are PENDING,
+APPROVED and REJECTED. received_at/restockable remain NULL, enforced by a named check;
+future receipt contracts require a new migration. No Payment, Shipment, voucher, inventory
+or cart effect runs. RECEIVE_RETURN/COMPLETE_REFUND are not exposed or enabled.
+
+Migration timestamp/order, the added ReturnRequest @Version, reason limits and checks
+still require QD approval before merge. See [RETURN-01 implementation](RETURN-01-phase1-report.md).
 
 ## ORD-05 trusted shipper lifecycle boundary
 

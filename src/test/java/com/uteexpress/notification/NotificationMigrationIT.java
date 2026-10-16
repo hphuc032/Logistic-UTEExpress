@@ -25,7 +25,9 @@ class NotificationMigrationIT {
                     .dataSource(postgres.getJdbcUrl(), postgres.getUsername(), postgres.getPassword())
                     .schemas("uteexpress").defaultSchema("uteexpress")
                     .locations("classpath:db/migration").load();
-            assertThat(latest.migrate().migrationsExecuted).isEqualTo(1);
+            int pending = latest.info().pending().length;
+            assertThat(latest.migrate().migrationsExecuted).isEqualTo(pending);
+            assertThat(latest.info().pending()).isEmpty();
             assertThat(jdbc.queryForObject("SELECT to_regclass('uteexpress.notifications')::text", String.class))
                     .isEqualTo("uteexpress.notifications");
             assertThat(latest.validateWithResult().validationSuccessful).isTrue();
