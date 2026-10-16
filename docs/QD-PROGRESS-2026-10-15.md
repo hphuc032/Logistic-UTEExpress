@@ -19,3 +19,7 @@ Blocked follow-ups:
 No PR is merged by this work. Recheck latest develop, pending migration ordering and exact-head CI before any merge.
 
 WS-01 final source verification: 1,188 tests passed, 0 failures/errors/skips, Java 21 full PostgreSQL clean verify. Exact-head CI and review status are recorded on PR #36; no merge is performed.
+
+## Update — 2026-10-16
+
+The entries above are historical. ADMIN-07 #37 and Shipping compatibility #51 are now merged; develop is 5de0934. WS-01 #36 has synced that develop without conflicts and passed focused Flyway upgrade verification plus full Java 21 PostgreSQL clean verify (1,199 tests, zero failures/errors/skips). Its migration version remains valid and unchanged. #36 awaits exact-head CI and final HP/TD review; #49 remains unmerged until #36. No new feature implementation has started.

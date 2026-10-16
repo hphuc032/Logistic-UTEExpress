@@ -56,3 +56,11 @@ WHERE NOT EXISTS (
 Alert thresholds must be chosen against the team's notification-latency objective; there is no measured production SLO yet. Compare successive samples to detect a growing backlog. Use statement_timeout on the diagnostic session and inspect EXPLAIN (ANALYZE, BUFFERS) on representative staging data before tuning discovery. LIMIT 100 bounds returned Orders, not history rows examined: discovery can become expensive as history grows, even when no notifications are missing. LIMIT 200 bounds inserts per Order, not total work scanned. A persistently failing first Order also aborts the current cycle and can delay later Orders; monitor recurring failure logs and repair the underlying fault rather than claiming guaranteed fairness.
 
 Do not purge history, replace discovery with a max-ID cursor, increase batches blindly, expose diagnostic SQL through HTTP, or introduce a cross-Order write transaction as a performance shortcut. Future incremental recovery/checkpoint or per-Order failure isolation needs its own concurrency, late-commit and recovery tests. Deployment monitoring remains an operational follow-up; this runbook does not claim metrics or production load tests were implemented.
+
+## Sync verification — 2026-10-16
+
+Synced with develop 5de0934 after ADMIN-07 #37 merged, without conflicts. No notification production/test behavior changed in this sync. The pending notification migration remains V20261008100000__qd_ws01_notifications.sql, after develop latest V20261008090000; RETURN-01 #49 is held until #36 merges.
+
+Java 21 focused migration gate: .\mvnw.cmd -q -Ppostgres-it '-Dtest=ArchitectureTest' '-Dit.test=NotificationMigrationIT' clean verify PASS, exit 0 (7 architecture checks + 1 migration test). It validates upgrade from the deployed baseline, exactly one added migration and a no-op repeat.
+
+Full gate: .\mvnw.cmd -q -Ppostgres-it clean verify PASS, exit 0; 1,199 tests (423 unit/architecture + 776 PostgreSQL), zero failures/errors/skips, Failsafe timeout=false. All 10 notification tests PASS including recovery/concurrent workers/out-of-order commits and scheduler. git diff --check PASS. Exact-head CI and HP/TD final review remain required; no merge performed. Projection-time recipient policy, transfer restriction and per-Order lock ordering remain unchanged.
