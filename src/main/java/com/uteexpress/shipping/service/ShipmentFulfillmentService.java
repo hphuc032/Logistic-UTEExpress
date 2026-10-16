@@ -56,9 +56,9 @@ public class ShipmentFulfillmentService {
         ShipmentFulfillmentFacts facts = lockAssignedForTransition(orderId, expectedShipmentVersion, expectedStatus);
         boolean valid = switch (facts.status()) {
             case PICKED_UP -> facts.pickedUpAt() != null && facts.deliveredAt() == null && facts.attemptCount() == 0;
-            case SHIPPING -> facts.pickedUpAt() != null && facts.deliveredAt() == null && facts.attemptCount() == 1;
+            case SHIPPING -> facts.pickedUpAt() != null && facts.deliveredAt() == null && validDeliveryAttempt(facts);
             case DELIVERED -> facts.pickedUpAt() != null && facts.deliveredAt() != null
-                    && !facts.deliveredAt().isBefore(facts.pickedUpAt()) && facts.attemptCount() == 1;
+                    && !facts.deliveredAt().isBefore(facts.pickedUpAt()) && validDeliveryAttempt(facts);
             default -> false;
         };
         if (!valid || facts.maxAttempts() != 2) throw conflict();
@@ -141,10 +141,14 @@ public class ShipmentFulfillmentService {
         if (from == ShipmentStatus.ASSIGNED && (facts.pickedUpAt() != null || facts.attemptCount() != 0)) throw conflict();
         if (from == ShipmentStatus.PICKED_UP && (facts.pickedUpAt() == null || facts.attemptCount() != 0)) throw conflict();
         if (from == ShipmentStatus.SHIPPING && (facts.pickedUpAt() == null
-                || facts.attemptCount() != 1 || facts.deliveredAt() != null)) throw conflict();
+                || !validDeliveryAttempt(facts) || facts.deliveredAt() != null)) throw conflict();
         update(facts, to, clock.instant().truncatedTo(ChronoUnit.MICROS));
         appendAudit(actor(), facts, to);
         return assigned(orderId);
+    }
+
+    private static boolean validDeliveryAttempt(ShipmentFulfillmentFacts facts) {
+        return facts.maxAttempts() == 2 && (facts.attemptCount() == 1 || facts.attemptCount() == 2);
     }
 
     private void update(ShipmentFulfillmentFacts facts, ShipmentStatus to, Instant at) {
