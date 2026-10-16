@@ -13,3 +13,5 @@ PostgreSQL HTTP tests use real Order/Shipping/Payment/inventory boundaries: ADMI
 No migration or RETURN-01 receipt/refund feature is added. RETURN-01 PR #49 is independently reviewed; it is not a dependency of this cancellation integration.
 
 Verification on 2026-10-13, Java 21: .\mvnw.cmd -q -Ppostgres-it clean verify PASS, exit 0; 1,185 tests, 0 failures/errors/skips (423 unit/architecture + 762 PostgreSQL). OperationsCancellationIT: six invocations PASS; OperationsOrderIT: one PASS; production OpsOrderCancellationIT: 60 PASS. git diff --check and staged whitespace check passed. Synchronized develop: fc78b41.
+
+Sync verification on 2026-10-16: merged latest develop fb6bb9f without conflicts. Java 21 .\mvnw.cmd -q -Ppostgres-it clean verify PASS, exit 0; 1,189 tests (423 unit/architecture + 766 PostgreSQL), zero failures/errors/skips, Failsafe timeout=false. No ADMIN-07 business logic changes or migration added. git diff --check passed; behind=0 at verification. Exact-head CI must be checked on the pushed head before merge. #36 follows only after #37 merges; #49 remains held until #36.
