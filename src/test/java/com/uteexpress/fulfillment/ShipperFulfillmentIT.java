@@ -173,6 +173,41 @@ class ShipperFulfillmentIT {
         } finally { pool.shutdownNow(); }
     }
 
+    @Test void secondAttemptDeliveryCollectsCodAndDuplicateConflicts() {
+        prepareSecondAttemptFixture();
+        fulfillment.transition(orderId, OrderAction.DELIVER,
+                new FulfillmentRequest(2L, 4L, new BigDecimal("115000")));
+        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?", String.class, orderId)).isEqualTo("DELIVERED");
+        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.shipments WHERE order_id=?", String.class, orderId)).isEqualTo("DELIVERED");
+        assertThat(jdbc.queryForObject("SELECT attempt_count FROM uteexpress.shipments WHERE order_id=?", Integer.class, orderId)).isEqualTo(2);
+        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.payments WHERE order_id=?", String.class, orderId)).isEqualTo("PAID");
+        var committed = state();
+        assertThatThrownBy(() -> fulfillment.transition(orderId, OrderAction.DELIVER,
+                new FulfillmentRequest(2L, 4L, new BigDecimal("115000"))))
+                .isInstanceOfSatisfying(ApplicationException.class, ex -> assertThat(ex.errorCode()).isEqualTo(ErrorCode.CONFLICT));
+        assertThat(state()).isEqualTo(committed);
+    }
+
+    @Test void secondAttemptWrongCodRollsBackAllFulfillmentState() {
+        prepareSecondAttemptFixture();
+        var before = state();
+        assertThatThrownBy(() -> fulfillment.transition(orderId, OrderAction.DELIVER,
+                new FulfillmentRequest(2L, 4L, new BigDecimal("1"))))
+                .isInstanceOf(ApplicationException.class);
+        assertThat(state()).isEqualTo(before);
+        // A rejected amount must not prevent a subsequent valid delivery.
+        fulfillment.transition(orderId, OrderAction.DELIVER,
+                new FulfillmentRequest(2L, 4L, new BigDecimal("115000")));
+        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?", String.class, orderId)).isEqualTo("DELIVERED");
+    }
+
+    private void prepareSecondAttemptFixture() {
+        fulfillment.transition(orderId, OrderAction.PICK_UP, new FulfillmentRequest(0L, 0L, null));
+        fulfillment.transition(orderId, OrderAction.START_SHIPPING, new FulfillmentRequest(1L, 1L, null));
+        // Fixture only: failure/retry authority is not implemented yet. This does NOT test retry mutation.
+        jdbc.update("UPDATE uteexpress.shipments SET attempt_count=2, version=4 WHERE order_id=?", orderId);
+    }
+
     private List<Object> state() {
         return List.of(jdbc.queryForList("SELECT * FROM uteexpress.orders WHERE id=?",orderId),
                 jdbc.queryForList("SELECT * FROM uteexpress.shipments WHERE order_id=?",orderId),
