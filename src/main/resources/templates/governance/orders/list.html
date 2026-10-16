@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Theo dõi đơn hàng | UTEExpress</title></head>
+<body><section th:fragment="content" aria-label="Theo dõi đơn hàng">
+    <h1>Theo dõi đơn hàng</h1>
+    <form method="get" th:action="@{/{ops}/orders(ops=${ops})}" class="row g-2 mb-3">
+        <div class="col-md-5"><label for="order-query" class="form-label">Mã đơn</label>
+            <input id="order-query" name="query" class="form-control" maxlength="80" th:value="${query}" /></div>
+        <div class="col-md-3"><label for="order-status" class="form-label">Trạng thái</label>
+            <select id="order-status" name="status" class="form-select"><option value="">Tất cả</option>
+                <option th:each="candidate : ${statuses}" th:value="${candidate}" th:text="${candidate}"
+                        th:selected="${candidate == status}"></option></select></div>
+        <div class="col-md-2 align-self-end"><button class="btn btn-app-primary" type="submit">Tìm kiếm</button></div>
+    </form>
+    <p th:if="${orders.totalElements == 0}">Không tìm thấy đơn hàng.</p>
+    <div class="table-responsive" th:unless="${orders.content.empty}"><table class="table align-middle">
+        <caption>Đơn hàng theo bộ lọc</caption>
+        <thead><tr><th>Mã đơn</th><th>Buyer ID</th><th>Shop ID</th><th>Trạng thái</th><th>Tổng tiền</th><th>Ngày tạo (UTC)</th></tr></thead>
+        <tbody><tr th:each="order : ${orders.content}">
+            <td><a th:href="@{/{ops}/orders/{id}(ops=${ops},id=${order.id})}" th:text="${order.orderCode}"></a></td>
+            <td th:text="${order.buyerId}"></td><td th:text="${order.shopId}"></td>
+            <td th:text="${order.status}"></td><td th:text="${order.grandTotal}"></td>
+            <td><time th:datetime="${order.createdAt}" th:text="${order.createdAt}"></time></td>
+        </tr></tbody>
+    </table></div>
+    <nav aria-label="Phân trang đơn hàng" class="d-flex gap-3">
+        <a th:if="${orders.hasPrevious}" th:href="@{/{ops}/orders(ops=${ops},query=${query},status=${status},page=${orders.page - 1},size=${orders.size})}">Trang trước</a>
+        <span th:text="|Tổng ${orders.totalElements} đơn hàng|"></span>
+        <a th:if="${orders.hasNext}" th:href="@{/{ops}/orders(ops=${ops},query=${query},status=${status},page=${orders.page + 1},size=${orders.size})}">Trang sau</a>
+    </nav>
+</section></body></html>

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Thông báo | UTEExpress</title></head>
+<body><section th:fragment="content" aria-label="Thông báo">
+    <h1>Thông báo</h1>
+    <p th:if="${notifications.empty}">Bạn chưa có thông báo.</p>
+    <ul th:unless="${notifications.empty}" class="list-group">
+        <li th:each="notification : ${notifications}" class="list-group-item">
+            <strong th:text="${notification.title}"></strong>
+            <p class="mb-1" th:text="${notification.message}"></p>
+            <time th:text="${notification.createdAt}"></time>
+            <span th:if="${notification.readAt != null}">Đã đọc</span>
+            <form th:if="${notification.readAt == null}" th:action="@{/notifications/{id}/read(id=${notification.id})}" method="post">
+                <input type="hidden" th:if="${_csrf != null}" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+                <button type="submit" class="btn btn-sm btn-outline-primary">Đánh dấu đã đọc</button>
+            </form>
+        </li>
+    </ul>
+</section></body></html>
