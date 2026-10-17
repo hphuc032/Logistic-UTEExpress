@@ -1,6 +1,8 @@
 package com.uteexpress.notification.service;
 
 import com.uteexpress.notification.repository.NotificationRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -10,6 +12,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 /** Rebuildable inbox projection; does not write Order or require changes to its publisher. */
 @Service
 public class NotificationProjectionService {
+    private static final Logger LOG = LoggerFactory.getLogger(NotificationProjectionService.class);
     private final NotificationRepository repository;
     private final ObjectProvider<PlatformTransactionManager> managers;
     public NotificationProjectionService(NotificationRepository repository, ObjectProvider<PlatformTransactionManager> managers) {
@@ -23,7 +26,14 @@ public class NotificationProjectionService {
     }
     public int reconcileBatch() {
         int inserted = 0;
-        for (Long id : repository.pendingOrders()) inserted += projectOrder(id);
+        for (Long id : repository.pendingOrders()) {
+            try {
+                inserted += projectOrder(id);
+            } catch (RuntimeException failure) {
+                // projectOrder has already rolled back its own transaction. Other Orders can progress.
+                LOG.warn("Notification projection failed for Order {}; committed history remains retryable", id, failure);
+            }
+        }
         return inserted;
     }
 }

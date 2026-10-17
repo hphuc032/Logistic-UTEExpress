@@ -122,6 +122,31 @@ class NotificationRecoveryIT {
         assertThat(jdbc.queryForObject("SELECT message FROM uteexpress.notifications WHERE order_id=?",String.class,order))
                 .doesNotContain("sensitive source reason");
     }
+    @Test void failedOrderDoesNotBlockOtherOrdersAndRemainsRetryable() {
+        long otherOwner = account("VENDOR"), otherOrder = createOrder(account("USER"), otherOwner);
+        assertThat(otherOrder).isGreaterThan(order); // Discovery orders by Order ID.
+        history("NEW", "CONFIRMED");
+        jdbc.update("INSERT INTO uteexpress.order_status_history(order_id,from_status,to_status,actor_id) VALUES (?,'NEW','CONFIRMED',?)",
+                otherOrder, otherOwner);
+        // Fail one recipient after the first recipient insert, proving the whole Order rolls back.
+        jdbc.execute("ALTER TABLE uteexpress.notifications ADD CONSTRAINT notice_batch_fail CHECK (order_id <> "
+                + order + " OR recipient_id <> " + owner + ") NOT VALID");
+        try {
+            assertThat(projection.reconcileBatch()).isGreaterThanOrEqualTo(2);
+            assertThat(count()).isZero();
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id=?",
+                    Integer.class, otherOrder)).isEqualTo(2);
+            assertThat(projection.reconcileBatch()).isZero();
+            assertThat(count()).isZero();
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id=?",
+                    Integer.class, otherOrder)).isEqualTo(2);
+        } finally {
+            jdbc.execute("ALTER TABLE uteexpress.notifications DROP CONSTRAINT notice_batch_fail");
+        }
+        assertThat(projection.reconcileBatch()).isEqualTo(2);
+        assertThat(count()).isEqualTo(2);
+        assertThat(projection.reconcileBatch()).isZero();
+    }
     private long history(String from,String to) {
         return jdbc.queryForObject("INSERT INTO uteexpress.order_status_history(order_id,from_status,to_status,actor_id,reason) VALUES (?,?,?,?, 'sensitive source reason') RETURNING id",Long.class,order,from,to,owner);
     }
