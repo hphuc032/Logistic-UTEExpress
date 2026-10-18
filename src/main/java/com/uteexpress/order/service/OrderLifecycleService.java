@@ -2,6 +2,7 @@ package com.uteexpress.order.service;
 
 import com.uteexpress.order.dto.OrderStatusChangedEvent;
 import com.uteexpress.order.dto.OrderTransitionCommand;
+import com.uteexpress.shipping.dto.DeliveryAttemptOperation;
 
 /**
  * Sole authority for OrderStatus writes. No implementation in ORD-00.
@@ -29,6 +30,20 @@ public interface OrderLifecycleService {
     /** Requires persisted Shipment target evidence at original version + 1. */
     OrderStatusChangedEvent completeShipperTransition(Long orderId, Long expectedOrderVersion,
             Long expectedShipmentVersion, com.uteexpress.order.dto.OrderAction action);
+
+    /**
+     * Internal MANDATORY + SHIPPER boundary, using both ORIGINAL versions.
+     * Keeps Order SHIPPING without writes/events; blocked until QD's persisted source hook exists.
+     */
+    void prepareShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation);
+
+    /**
+     * Rechecks unchanged Order and persisted Shipment/evidence at original Shipment version + 1.
+     * No caller-supplied facts; blocked until QD's persisted evidence hook exists.
+     */
+    void verifyShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation);
 
     /** Authenticated callers only; EXPIRE_PAYMENT is rejected with ACCESS_DENIED. */
     OrderStatusChangedEvent transition(OrderTransitionCommand command);

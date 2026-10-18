@@ -18,6 +18,7 @@ import com.uteexpress.promotion.service.VoucherService;
 import com.uteexpress.security.authentication.UteExpressPrincipal;
 import com.uteexpress.shipping.service.ShipmentAssignmentService;
 import com.uteexpress.shipping.service.ShipmentFulfillmentService;
+import com.uteexpress.shipping.dto.DeliveryAttemptOperation;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -162,6 +163,60 @@ class ShipperOrderLifecycleIT {
                 .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
         assertThatThrownBy(() -> paymentReads.requireCollectedCodForDelivery(order, TOTAL))
                 .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+    }
+
+    @ParameterizedTest @EnumSource(DeliveryAttemptOperation.class)
+    void shipmentOnlyBoundariesRequireExistingTransaction(DeliveryAttemptOperation operation) {
+        for (boolean verify : List.of(false, true)) {
+            assertThatThrownBy(() -> shipmentOnlyBoundary(verify, 4L, 2L, operation))
+                    .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+        }
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"USER", "VENDOR", "ADMIN", "MANAGER"})
+    void shipmentOnlyBoundariesRequireShipperRole(String role) {
+        auth(shipper, role);
+        for (var operation : DeliveryAttemptOperation.values()) {
+            for (boolean verify : List.of(false, true)) {
+                assertThatThrownBy(() -> tx.executeWithoutResult(s -> shipmentOnlyBoundary(verify, 4L, 2L, operation)))
+                        .isInstanceOf(AccessDeniedException.class);
+            }
+        }
+    }
+
+    @ParameterizedTest @EnumSource(DeliveryAttemptOperation.class)
+    void shipmentOnlyBoundariesRejectForgedIdentity(DeliveryAttemptOperation operation) {
+        SecurityContextHolder.getContext().setAuthentication(UsernamePasswordAuthenticationToken.authenticated(
+                "" + shipper, null, List.of(new SimpleGrantedAuthority("ROLE_SHIPPER"))));
+        for (boolean verify : List.of(false, true)) {
+            rejects(() -> tx.executeWithoutResult(s -> shipmentOnlyBoundary(verify, 4L, 2L, operation)),
+                    ErrorCode.UNAUTHENTICATED);
+        }
+    }
+
+    @ParameterizedTest @EnumSource(DeliveryAttemptOperation.class)
+    void shipmentOnlyOperationsStayBlockedWithoutQdHooksAndHaveNoEffects(DeliveryAttemptOperation operation) {
+        shipping();
+        long ov = version(), sv = shipmentVersion();
+        var before = state();
+        var returnsBefore = jdbc.queryForList("SELECT * FROM uteexpress.return_requests WHERE order_id=?", order);
+        events.clear();
+        for (boolean verify : List.of(false, true)) {
+            // Repeated reads must neither turn missing evidence into success nor write any state.
+            for (int call = 0; call < 2; call++) {
+                rejects(() -> tx.executeWithoutResult(s -> shipmentOnlyBoundary(verify, ov, sv, operation)),
+                        ErrorCode.CONFLICT);
+                assertThat(state()).isEqualTo(before);
+                assertThat(jdbc.queryForList("SELECT * FROM uteexpress.return_requests WHERE order_id=?", order))
+                        .isEqualTo(returnsBefore);
+                assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
+            }
+        }
+    }
+
+    private void shipmentOnlyBoundary(boolean verify, Long ov, Long sv, DeliveryAttemptOperation operation) {
+        if (verify) lifecycle.verifyShipmentOnlyOperation(order, ov, sv, operation);
+        else lifecycle.prepareShipmentOnlyOperation(order, ov, sv, operation);
     }
 
     @ParameterizedTest @EnumSource(value = OrderAction.class, names = {"PICK_UP", "START_SHIPPING", "DELIVER"})

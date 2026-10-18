@@ -3,9 +3,11 @@ package com.uteexpress.order.service;
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
 import com.uteexpress.order.dto.OrderAction;
+import com.uteexpress.order.dto.OrderStatus;
 import com.uteexpress.order.entity.Order;
 import com.uteexpress.order.repository.OrderRepository;
 import com.uteexpress.payment.service.PaymentReadService;
+import com.uteexpress.shipping.dto.DeliveryAttemptOperation;
 import com.uteexpress.shipping.dto.ShipmentStatus;
 import com.uteexpress.shipping.service.ShipmentFulfillmentService;
 import jakarta.persistence.EntityManager;
@@ -71,4 +73,32 @@ final class ShipperOrderAuthority {
     }
 
     record GuardedTransition(Order order, Long actorId) { }
+
+    /**
+     * Only the Order-owned part of SHIP-03. Success here does not authorize a Shipment mutation.
+     * The caller must next use QD's persisted source/evidence hook under this retained Order lock.
+     */
+    void requireShipmentOnlyOrder(Long orderId, Long orderVersion, Long shipmentVersion,
+            DeliveryAttemptOperation operation) {
+        if (orderId == null || orderId <= 0 || orderVersion == null || orderVersion < 0
+                || orderVersion == Long.MAX_VALUE || shipmentVersion == null || shipmentVersion < 0
+                || shipmentVersion == Long.MAX_VALUE || operation == null) {
+            throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        }
+        switch (operation) {
+            case REPORT_DELIVERY_FAILURE, RETRY_DELIVERY -> { }
+            default -> throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        }
+        Order order = orders.findByIdForUpdate(orderId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND));
+        // A preceding caller read may have put an obsolete entity in this persistence context.
+        // Refresh while holding Order before acquiring any Shipment or Account lock.
+        entityManager.refresh(order, LockModeType.PESSIMISTIC_WRITE);
+        if (order.getStatus() != OrderStatus.SHIPPING || !orderVersion.equals(order.getVersion())
+                || order.getReadyAt() == null || order.getDeliveredAt() != null
+                || order.getCancelledAt() != null || order.getCancellationReason() != null
+                || order.getInventoryReleasedAt() != null) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+    }
 }
