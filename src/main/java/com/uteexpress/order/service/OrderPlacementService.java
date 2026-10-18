@@ -16,6 +16,7 @@ import com.uteexpress.payment.service.PaymentService;
 import com.uteexpress.promotion.service.VoucherService;
 import com.uteexpress.security.CurrentUserProvider;
 import com.uteexpress.security.service.CurrentAccountIdProvider;
+import com.uteexpress.shipping.dto.DeliveryAttemptOperation;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.temporal.ChronoUnit;
@@ -166,6 +167,39 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     public com.uteexpress.order.dto.OrderStatusChangedEvent transition(
             com.uteexpress.order.dto.OrderTransitionCommand command) {
         return super.transition(command);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).SHIPPER.authority())")
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public void prepareShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation) {
+        requireShipmentOnlyOrderBeforeIntegration(orderId, expectedOrderVersion, expectedShipmentVersion, operation);
+        // QD's ShipmentAttemptService.lockForOperation is absent. Never substitute SHIP-02 facts:
+        // they cannot prove per-attempt failure evidence or authorize a retry.
+        throw new ApplicationException(ErrorCode.CONFLICT);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).SHIPPER.authority())")
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public void verifyShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation) {
+        requireShipmentOnlyOrderBeforeIntegration(orderId, expectedOrderVersion, expectedShipmentVersion, operation);
+        // QD's requireOperationEvidence must reload persisted Shipment + immutable evidence with
+        // the ORIGINAL version. Until it exists, no target status/attempt/version can be accepted.
+        throw new ApplicationException(ErrorCode.CONFLICT);
+    }
+
+    private void requireShipmentOnlyOrderBeforeIntegration(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation) {
+        accounts.currentAccountId().filter(id -> id > 0)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));
+        try {
+            shipperAuthority.requireShipmentOnlyOrder(orderId, expectedOrderVersion, expectedShipmentVersion, operation);
+        } catch (org.springframework.dao.OptimisticLockingFailureException | jakarta.persistence.OptimisticLockException ex) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
     }
 
     @Override protected Order loadForMutation(Long id) { return vendorAuthority.lockOwnedOrder(id); }
