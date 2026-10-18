@@ -33,6 +33,7 @@ class ShipperFulfillmentIT {
     @Autowired JdbcTemplate jdbc;
     @Autowired ShipmentAssignmentService assignments;
     @Autowired ShipperFulfillmentService fulfillment;
+    @Autowired com.uteexpress.fulfillment.service.DeliveryAttemptCoordinator deliveryAttempts;
     @Autowired MockMvc mvc;
     @Autowired org.springframework.transaction.PlatformTransactionManager transactions;
     @Autowired com.uteexpress.order.service.OrderLifecycleService orderLifecycle;
@@ -208,6 +209,34 @@ class ShipperFulfillmentIT {
         jdbc.update("UPDATE uteexpress.shipments SET attempt_count=2, version=4 WHERE order_id=?", orderId);
     }
 
+    @Test void shipmentOnlyCoordinatorRemainsFailClosedUntilTdWiresPersistedHooks() throws Exception {
+        fulfillment.transition(orderId,OrderAction.PICK_UP,new FulfillmentRequest(0L,0L,null));
+        fulfillment.transition(orderId,OrderAction.START_SHIPPING,new FulfillmentRequest(1L,1L,null));
+        var before=state();
+        String path="/shipper/orders/"+orderId+"/delivery-failed";
+        String json="{\"expectedOrderVersion\":2,\"expectedShipmentVersion\":2,\"failureReason\":\"No answer\",\"evidenceReference\":\"PROOF\"}";
+        mvc.perform(post(path).with(user(principal(shipper,"SHIPPER"))).with(csrf()).contentType("application/json").content(json))
+                .andExpect(status().isConflict());
+        assertThat(state()).isEqualTo(before);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_delivery_failures WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?)",Long.class,orderId)).isZero();
+        mvc.perform(post(path).with(user(principal(shipper,"SHIPPER"))).contentType("application/json").content(json)).andExpect(status().isForbidden());
+        for(String role:List.of("USER","VENDOR","ADMIN","MANAGER"))
+            mvc.perform(post(path).with(user(principal(shipper,role))).with(csrf()).contentType("application/json").content(json)).andExpect(status().isForbidden());
+        mvc.perform(post(path).with(user(principal(shipper,"SHIPPER"))).with(csrf()).contentType("application/json")
+                .content(json.replace("}",",\"shipperId\":99}"))).andExpect(status().isBadRequest());
+        mvc.perform(post(path).with(user(principal(shipper,"SHIPPER"))).with(csrf()).contentType("application/x-www-form-urlencoded")
+                .param("expectedOrderVersion","2").param("expectedShipmentVersion","2").param("failureReason","No answer")
+                .param("evidenceReference","PROOF").param("attemptCount","2")).andExpect(status().isBadRequest());
+        mvc.perform(post("/shipper/orders/"+orderId+"/retry").with(user(principal(shipper,"SHIPPER"))).with(csrf())
+                .contentType("application/x-www-form-urlencoded").param("expectedOrderVersion","2").param("expectedShipmentVersion","2"))
+                .andExpect(status().isConflict());
+        authenticate(shipper,"SHIPPER");
+        new org.springframework.transaction.support.TransactionTemplate(transactions).executeWithoutResult(tx ->
+                assertThatThrownBy(() -> deliveryAttempts.reportFailure(orderId,
+                    new com.uteexpress.fulfillment.dto.DeliveryFailureRequest(2L,2L,"No answer","PROOF")))
+                    .isInstanceOfSatisfying(ApplicationException.class,e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.INVALID_REQUEST)));
+        assertThat(state()).isEqualTo(before);
+    }
     private List<Object> state() {
         return List.of(jdbc.queryForList("SELECT * FROM uteexpress.orders WHERE id=?",orderId),
                 jdbc.queryForList("SELECT * FROM uteexpress.shipments WHERE order_id=?",orderId),

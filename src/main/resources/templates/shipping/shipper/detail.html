@@ -22,5 +22,15 @@
 <label for="collectedAmount">Số tiền COD đã thu (VND)</label><input id="collectedAmount" name="collectedAmount" type="number" min="0" step="0.01" required>
 <button type="submit" class="btn btn-primary">Xác nhận giao thành công</button>
 </form>
+<form method="post" th:if="${shipment.status.name() == 'SHIPPING'}" th:action="@{/shipper/orders/{id}/delivery-failed(id=${shipment.orderId})}">
+<input type="hidden" name="expectedOrderVersion" th:value="${orderVersion}"><input type="hidden" name="expectedShipmentVersion" th:value="${shipment.version}">
+<label for="failureReason">Lý do giao thất bại</label><textarea id="failureReason" name="failureReason" required maxlength="1000"></textarea>
+<label for="evidenceReference">Mã chứng từ giao thất bại</label><input id="evidenceReference" name="evidenceReference" required maxlength="255">
+<button type="submit" class="btn btn-warning">Xác nhận giao thất bại</button>
+</form>
+<form method="post" th:if="${shipment.status.name() == 'DELIVERY_FAILED' and attemptCount == 1}" th:action="@{/shipper/orders/{id}/retry(id=${shipment.orderId})}">
+<input type="hidden" name="expectedOrderVersion" th:value="${orderVersion}"><input type="hidden" name="expectedShipmentVersion" th:value="${shipment.version}">
+<button type="submit" class="btn btn-primary">Bắt đầu lần giao thứ hai</button>
+</form>
 <a th:href="@{/shipper/shipments/view}">Quay lại danh sách</a>
 </section></body></html>

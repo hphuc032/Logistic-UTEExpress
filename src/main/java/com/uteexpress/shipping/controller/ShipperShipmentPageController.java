@@ -21,6 +21,7 @@ public class ShipperShipmentPageController {
     public String detail(@PathVariable Long shipmentId, Model model) {
         model.addAttribute("shipment", assignments.detail(shipmentId));
         model.addAttribute("orderVersion", assignments.orderVersion(shipmentId));
+        model.addAttribute("attemptCount", assignments.attemptCount(shipmentId));
         return "shipping/shipper/detail";
     }
 }

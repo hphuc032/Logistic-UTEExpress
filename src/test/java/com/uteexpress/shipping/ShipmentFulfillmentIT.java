@@ -366,7 +366,7 @@ class ShipmentFulfillmentIT {
         var before = jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", order);
         tx().executeWithoutResult(s -> {
             attempts.reportFailure(order, 2L, "  No answer  ", "  POD-1  ");
-            var evidence = attempts.requireFailureEvidence(order, 2L);
+            var evidence = attempts.requireOperationEvidence(order, 2L, com.uteexpress.shipping.dto.DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE);
             assertThat(evidence.shipment().version()).isEqualTo(3);
             assertThat(evidence.shipment().attemptCount()).isEqualTo(1);
             assertThat(evidence.failure().failureReason()).isEqualTo("No answer");
@@ -376,7 +376,7 @@ class ShipmentFulfillmentIT {
                 .isInstanceOfSatisfying(ApplicationException.class,e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.CONFLICT));
         tx().executeWithoutResult(s -> {
             attempts.retryDelivery(order, 3L);
-            var facts = attempts.requireRetryEvidence(order, 3L);
+            var facts = attempts.requireOperationEvidence(order, 3L, com.uteexpress.shipping.dto.DeliveryAttemptOperation.RETRY_DELIVERY);
             assertThat(facts.shipment().version()).isEqualTo(4);
             assertThat(facts.shipment().attemptCount()).isEqualTo(2);
             assertThat(facts.failure().attemptNumber()).isEqualTo(1);
@@ -453,6 +453,23 @@ class ShipmentFulfillmentIT {
         } finally { pool.shutdownNow(); }
     }
 
+    @Test void failureSchemaRejectsMalformedOrUnlinkedEvidenceAndDuplicateAttempt() {
+        long order=shippingAttemptFixture();
+        long shipment=jdbc.queryForObject("SELECT id FROM uteexpress.shipments WHERE order_id=?",Long.class,order);
+        long shipper=jdbc.queryForObject("SELECT assigned_shipper_id FROM uteexpress.shipments WHERE id=?",Long.class,shipment);
+        var now=java.sql.Timestamp.from(java.time.Instant.now());
+        String sql="INSERT INTO uteexpress.shipment_delivery_failures(shipment_id,attempt_number,source_shipment_version,shipper_id,failure_reason,evidence_reference,recorded_at) VALUES (?,?,?,?,?,?,?)";
+        for(int field=0;field<7;field++) {
+            Object[] values={shipment,1,2L,shipper,"Reason","PROOF",now};
+            values[field]=switch(field) { case 0,3 -> Long.MAX_VALUE; case 1 -> 3; case 2 -> -1L; case 4,5 -> " \t\n"; default -> null; };
+            assertThatThrownBy(() -> jdbc.update(sql,values)).isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        }
+        jdbc.update(sql,shipment,1,2L,shipper,"Reason","PROOF",now);
+        assertThatThrownBy(() -> jdbc.update(sql,shipment,1,4L,shipper,"Other","OTHER",now))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        assertThatThrownBy(() -> jdbc.update(sql,shipment,2,2L,shipper,"Other","OTHER",now))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+    }
     private long shippingAttemptFixture() {
         long admin=insertUser("ACTIVE","ADMIN"), shipper=insertUser("ACTIVE","SHIPPER");
         long order=order(true,"CONFIRMED",true);

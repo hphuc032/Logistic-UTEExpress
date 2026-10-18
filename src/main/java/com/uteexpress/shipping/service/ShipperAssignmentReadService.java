@@ -61,6 +61,12 @@ public class ShipperAssignmentReadService {
         return versions.getFirst();
     }
 
+    @Transactional(readOnly = true)
+    public int attemptCount(Long shipmentId) {
+        detail(shipmentId); // Resolve current assignment before disclosing attempt facts.
+        return jdbc().queryForObject("SELECT attempt_count FROM uteexpress.shipments WHERE id=? AND assigned_shipper_id=?",
+                Integer.class,shipmentId,actor());
+    }
     private long actor() {
         return currentAccount.currentAccountId().filter(id -> id > 0)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));

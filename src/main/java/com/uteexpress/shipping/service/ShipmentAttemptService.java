@@ -31,6 +31,23 @@ public class ShipmentAttemptService {
         this.fulfillment = fulfillment; this.jdbc = jdbc; this.audit = audit; this.clock = clock;
     }
 
+    /** TD calls this after locking Order; no caller-created facts are accepted. */
+    public ShipmentDeliveryFacts lockForOperation(Long orderId, Long version, DeliveryAttemptOperation operation) {
+        if (operation == null) throw invalid();
+        return switch (operation) {
+            case REPORT_DELIVERY_FAILURE -> lockForReportFailure(orderId, version);
+            case RETRY_DELIVERY -> lockForRetryDelivery(orderId, version);
+        };
+    }
+
+    /** The version is always the original source token; reload target and immutable evidence. */
+    public ShipmentDeliveryFacts requireOperationEvidence(Long orderId, Long version, DeliveryAttemptOperation operation) {
+        if (operation == null) throw invalid();
+        return switch (operation) {
+            case REPORT_DELIVERY_FAILURE -> requireFailureEvidence(orderId, version);
+            case RETRY_DELIVERY -> requireRetryEvidence(orderId, version);
+        };
+    }
     public ShipmentDeliveryFacts lockForReportFailure(Long orderId, Long version) {
         requireVersion(version);
         var facts = lock(orderId, version, ShipmentStatus.SHIPPING);
