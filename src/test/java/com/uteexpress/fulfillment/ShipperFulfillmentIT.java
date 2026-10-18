@@ -251,6 +251,41 @@ class ShipperFulfillmentIT {
         assertThat(state()).isEqualTo(committed);
         assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", orderId)).isEqualTo(orderBefore);
     }
+    @org.junit.jupiter.params.ParameterizedTest
+    @org.junit.jupiter.params.provider.CsvSource({"true,true","true,false","false,true","false,false"})
+    void allAttemptHttpRepresentationsPreserveOrderAndHideExhaustedRetry(boolean failureJson, boolean retryJson) throws Exception {
+        fulfillment.transition(orderId,OrderAction.PICK_UP,new FulfillmentRequest(0L,0L,null));
+        fulfillment.transition(orderId,OrderAction.START_SHIPPING,new FulfillmentRequest(1L,1L,null));
+        var original=jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?",orderId);
+        var originalPayment=jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?",orderId);
+        long history=jdbc.queryForObject("SELECT count(*) FROM uteexpress.order_status_history WHERE order_id=?",Long.class,orderId);
+        String base="/shipper/orders/"+orderId;
+        var failure=post(base+"/delivery-failed").with(user(principal(shipper,"SHIPPER"))).with(csrf());
+        if(failureJson) failure.contentType("application/json").content("{\"expectedOrderVersion\":2,\"expectedShipmentVersion\":2,\"failureReason\":\"No answer\",\"evidenceReference\":\"POD-1\"}");
+        else failure.contentType("application/x-www-form-urlencoded").param("expectedOrderVersion","2").param("expectedShipmentVersion","2")
+                .param("failureReason","No answer").param("evidenceReference","POD-1");
+        mvc.perform(failure).andExpect(failureJson ? status().isOk() : status().is3xxRedirection());
+        long shipment=jdbc.queryForObject("SELECT id FROM uteexpress.shipments WHERE order_id=?",Long.class,orderId);
+        mvc.perform(get("/shipper/shipments/{id}/view",shipment).with(user(principal(shipper,"SHIPPER"))).accept("text/html"))
+                .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString(base+"/retry")));
+        var retry=post(base+"/retry").with(user(principal(shipper,"SHIPPER"))).with(csrf());
+        if(retryJson) retry.contentType("application/json").content("{\"expectedOrderVersion\":2,\"expectedShipmentVersion\":3}");
+        else retry.contentType("application/x-www-form-urlencoded").param("expectedOrderVersion","2").param("expectedShipmentVersion","3");
+        mvc.perform(retry).andExpect(retryJson ? status().isOk() : status().is3xxRedirection());
+        assertThat(jdbc.queryForMap("SELECT status,attempt_count,version FROM uteexpress.shipments WHERE id=?",shipment))
+                .containsEntry("status","SHIPPING").containsEntry("attempt_count",2).containsEntry("version",4L);
+        mvc.perform(post(base+"/delivery-failed").with(user(principal(shipper,"SHIPPER"))).with(csrf()).contentType("application/x-www-form-urlencoded")
+                .param("expectedOrderVersion","2").param("expectedShipmentVersion","4").param("failureReason","Still unavailable").param("evidenceReference","POD-2"))
+                .andExpect(status().is3xxRedirection());
+        mvc.perform(get("/shipper/shipments/{id}/view",shipment).with(user(principal(shipper,"SHIPPER"))).accept("text/html"))
+                .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString(base+"/retry"))));
+        mvc.perform(post(base+"/retry").with(user(principal(shipper,"SHIPPER"))).with(csrf()).contentType("application/json")
+                .content("{\"expectedOrderVersion\":2,\"expectedShipmentVersion\":5}")).andExpect(status().isConflict());
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_delivery_failures WHERE shipment_id=?",Long.class,shipment)).isEqualTo(2);
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?",orderId)).isEqualTo(original);
+        assertThat(jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?",orderId)).isEqualTo(originalPayment);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.order_status_history WHERE order_id=?",Long.class,orderId)).isEqualTo(history);
+    }
     private List<Object> state() {
         return List.of(jdbc.queryForList("SELECT * FROM uteexpress.orders WHERE id=?",orderId),
                 jdbc.queryForList("SELECT * FROM uteexpress.shipments WHERE order_id=?",orderId),

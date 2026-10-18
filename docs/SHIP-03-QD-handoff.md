@@ -1,33 +1,37 @@
-# SHIP-03 QD implementation handoff
+# SHIP-03 — QD Shipping and integrated Order protocol
 
-Branch: feature/ship-03-delivery-attempts. Base develop 85352d9 plus TD feature/ship-03-order-boundary at 87d3d02. QD reuses TD's DeliveryAttemptOperation enum; no duplicate enum and no TD Order production edits.
+Base: develop 85352d9. TD Order interface 87d3d02 and real wiring 6a5f336 are merged into feature/ship-03-delivery-attempts / PR #54. The earlier fail-closed handoff is superseded: prepare/verify now invoke real persisted Shipping hooks. QD did not replace TD-owned production code with a local guard; Order changes come from TD's integration commit.
 
-## Implemented QD surface
+## Implemented behavior
 
-ShipmentAttemptService (MANDATORY + SHIPPER):
-- lockForOperation(orderId, expectedShipmentVersion, operation)
-- requireOperationEvidence(orderId, originalShipmentVersion, operation)
-- reportFailure(orderId, expectedShipmentVersion, failureReason, evidenceReference)
-- retryDelivery(orderId, expectedShipmentVersion)
+Operations are REPORT_DELIVERY_FAILURE and RETRY_DELIVERY using TD's single shipping.dto.DeliveryAttemptOperation enum. Failure records Shipper attestation (reason <=1000, reference <=255, both nonblank) with server actor/time, leaves attempt 1/2 unchanged and moves Shipment SHIPPING -> DELIVERY_FAILED. Retry only accepts failed attempt 1, starts SHIPPING/attempt 2 immediately and increments the Shipment version once. A second failure cannot retry again.
 
-The hooks return ShipmentDeliveryFacts(shipment, failure), wrapping unchanged ShipmentFulfillmentFacts and DeliveryFailureEvidence. Evidence fields: id, shipmentId, attemptNumber, sourceShipmentVersion, shipperId, failureReason, evidenceReference, recordedAt. Source report has no current failure; source retry includes persisted attempt-1 failure. Target report includes current persisted failure; target retry includes retained attempt-1 evidence. Both hooks re-read DB, enforce active assigned SHIPPER under Order -> Shipment -> Account locks and retain eligibility through commit. Caller-constructed DTOs cannot authorize operations.
+Order stays SHIPPING with unchanged version/history/event for both operations. Payment, inventory, voucher, buyer ReturnRequest, refund and restock are untouched. No fake OrderStatusChangedEvent is published. Actual second-attempt delivery still uses SHIP-02 Order lifecycle and Payment.collectCod, with full wrong-amount rollback.
 
-Failure keeps attempt 1 or 2, inserts immutable evidence and increments Shipment version once; retry only accepts failed attempt 1 and moves SHIPPING/attempt 2 with version +1. Evidence sourceShipmentVersion binds failure to its source token; retry validates the preceding failure version. Second-attempt failure requires retained first-attempt evidence. Wrong source/status/version/assignment/evidence conflicts. Order is checked SHIPPING/ready in Shipping too; only TD authority validates the expected Order token and lifecycle flags.
+## Persistence and guards
 
-Migration V20261018110000__qd_ship03_delivery_failures.sql adds shipment_delivery_failures, unique Shipment/attempt and Shipment/source-version, actor/Shipment FKs, text and range checks, server timestamp field and an UPDATE/DELETE rejection trigger. No applied migration changed. It sorts after current develop and proposed receipt migration V20261018090000 if #53 merges first; recheck actual latest version before merge.
+V20261018110000__qd_ship03_delivery_failures.sql creates append-only shipment_delivery_failures. Unique Shipment/attempt and Shipment/source-version prevent duplicate evidence; Shipment/actor FKs, range/nonblank/bounded fields and required timestamp constrain rows. A BEFORE UPDATE OR DELETE trigger rejects evidence changes/removal. Source Order is resolved through Shipment, so no independent client-supplied Order/evidence association exists. No applied migration changed.
 
-DeliveryAttemptCoordinator has no @Transactional wrapper: rejects outer transaction, opens TransactionTemplate, invokes TD prepare -> Shipping mutation -> TD verify -> reload result with original tokens. Response reports unchanged Order SHIPPING/version and actual Shipment state/version/attempt. DTOs DeliveryFailureRequest, RetryDeliveryRequest, DeliveryAttemptResult use the agreed fields/limits. JSON/form endpoints and CSRF/strict parameter allowlists use the agreed /delivery-failed and /retry routes. Forms use persisted versions and only offer retry for failure attempt 1.
+ShipmentAttemptService is MANDATORY + SHIPPER. lockForOperation and requireOperationEvidence reload persisted Shipment/evidence and enforce assignment, ACTIVE/SHIPPER, source/target state/version, max attempts, pickup/no-delivery evidence and per-attempt chronology. ShipmentDeliveryFacts wraps the existing unchanged ShipmentFulfillmentFacts and relevant DeliveryFailureEvidence. Failure source has no current evidence; retry source/target retains immutable attempt-1 evidence; failure target contains its persisted current-attempt evidence. Target checks use original version + 1, and evidence source version matches the original token. Caller-created facts are never accepted by Order verify.
 
-## Required TD integration — still BLOCKED
+DeliveryAttemptCoordinator rejects outer transactions before opening a new TransactionTemplate, then calls TD prepare -> Shipping mutation/audit -> TD verify -> result reload. Locks remain Order -> Shipment -> Account through commit. Order authority refreshes/validates lifecycle flags, original Order version and persisted Shipping target facts, without saving Order. Shipping audit or target-verify failure rolls back Shipment and evidence atomically.
 
-TD at 87d3d02 unconditionally throws CONFLICT after Order guards. Presence of these QD hooks DOES NOT remove that rejection. TD must wire Order prepare to lockForOperation and verify to requireOperationEvidence, validate the returned persisted facts/evidence and preserve unchanged Order version/history/event. QD intentionally does not edit OrderPlacementService or ShipperOrderAuthority. Current legitimate HTTP requests remain fail-closed, and a regression explicitly tests that no mutation/evidence escapes.
+## HTTP / UI
 
-TD can merge this QD branch into its integration branch and own the small Order wiring diff, then run real successful prepare/mutate/verify F01-F17 integration. Do not mark end-to-end SHIP-03 complete or merge this branch into develop while that fail-closed WIP remains. No reflection dispatch, fabricated Order guard, test-only authority in production or direct Order/Payment write was introduced.
+JSON and URL-encoded POST /shipper/orders/{orderId}/delivery-failed and /retry use DeliveryFailureRequest / RetryDeliveryRequest and return DeliveryAttemptResult for JSON. Forms redirect to assigned shipments. Both expected versions are required; strict JSON/form/query field rules reject caller actor/attempt/status/amount injection and duplicate parameters. CSRF and SHIPPER authorization remain enabled; persisted assignment and eligibility are rechecked under locks. Result returns unchanged Order SHIPPING/version and actual Shipment status/version/attempt.
 
-## Verification status
+The detail page offers failure on SHIPPING and retry only for failed attempt 1, with server-provided versions and CSRF. Attempt reads use one owner-scoped query, so reassignment cannot produce a null/unboxing error between separate ownership/count reads. Acceptance tests exercise all four JSON/form combinations, actual failure -> retry -> second failure, hidden exhausted retry and rejected third retry.
 
-Focused Java 21 PostgreSQL verification of foundation before final adapter tests: ArchitectureTest + ShipmentFulfillmentIT + ShipperOrderLifecycleIT + ShipperFulfillmentIT PASS, 97 tests (7 + 22 + 60 + 8), no failures/errors/skips. An earlier fixture used INACTIVE, rejected by existing users CHECK; fixed to LOCKED before the passing run. This is not an end-to-end failure/retry success claim.
+## Verification and acceptance
 
-Full Java 21 -Ppostgres-it clean verify is running for the final hooks/DTO/coordinator/form/migration source. Final report/CI must be recorded after completion. New tests include failure/retry/exhaustion, append-only SQL checks, audit rollback, concurrent duplicate failure, validation/assignment/locked actor, fresh/upgrade Flyway and endpoint fail-closed/role/CSRF/forged-input/outer-transaction checks. Test fixture sets Order states to focus Shipping; it does not pretend to implement TD's lifecycle authority.
+Earlier Shipping-only focused run passed 97 tests before TD wiring (7 architecture + 22 Shipping + 60 Order + 8 fulfillment). The fixture's initial INACTIVE status error was corrected to schema-supported LOCKED before that passing run. TD independently reported 504 unit + 126 targeted PostgreSQL tests on 6a5f336; this is author-reported, not QD full verification.
 
-Remaining acceptance after TD wires guards: successful real-coordinator failure/retry and attempt-2 COD/wrong amount; deterministic concurrent retry/failure-vs-delivery, Account/role revocation in both schedules and multi-role lock evidence; end-to-end UI behavior and full PostgreSQL on integrated exact head. Existing SHIP-02 regressions remain, but do not replace those SHIP-03 acceptance cases. This is an integration handoff, not merge-ready SHIP-03.
+The current QD clean full PostgreSQL gate is running on the real integrated production code plus final HTTP acceptance cases. Final counts/exit and exact-head CI will be recorded after completion. Intermediate full runs were superseded when final source changes or TD wiring arrived; their counts are not substituted for this final run.
+
+Coverage includes immutable evidence/FK/unique checks, deployed/fresh Flyway upgrade and no-op repeat; failure/retry/exhaustion and both original tokens; audit and target-verification rollback; stale/duplicate/wrong-assignee requests; actual attempt-2 COD success/wrong amount; duplicate failure/retry and failure-vs-delivery in both schedules; governance account/role revocation in both schedules with multi-role actors and PostgreSQL blocking evidence; strict DTO/CSRF/role/outer-transaction rejection and JSON/form UI. Full acceptance and security/lifecycle review still belong to HP before merge.
+
+## Merge-time coordination
+
+Keep SHIP-03 independent of buyer RECEIVE_RETURN #53, SHIP-04 and PAY-02. Current migration sorts after #53's proposed V20261018090000 if that PR merges first; recheck latest develop and migration order before merge. When #53 and this migration coexist, rerun ReturnReceiptMigrationIT: its current Phase-1 upgrade assertion assumes exactly one pending migration, while receipt + Shipping evidence together add two. TD/QD should update that pending-count assertion as a compatibility test change when syncing the two branches, without editing either applied migration.
+
+No merge performed. Do not rely on the historical fail-closed wording in the earlier Order handoff; docs/SHIP-03-integration-validation.md records TD wiring and this report describes the current integrated behavior.
