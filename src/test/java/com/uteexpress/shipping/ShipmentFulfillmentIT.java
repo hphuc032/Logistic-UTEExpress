@@ -394,19 +394,26 @@ class ShipmentFulfillmentIT {
         assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?",order)).isEqualTo(before);
     }
 
-    @Test void failedAuditRollsBackShipmentAndNewFailureEvidence() {
+    @org.junit.jupiter.params.ParameterizedTest @org.junit.jupiter.params.provider.ValueSource(booleans={false,true})
+    void failedAuditRollsBackShipmentAndNewFailureEvidence(boolean retry) {
         long order = shippingAttemptFixture();
+        if(retry) tx().executeWithoutResult(s -> attempts.reportFailure(order,2L,"No answer","PROOF"));
         var before = jdbc.queryForMap("SELECT * FROM uteexpress.shipments WHERE order_id=?",order);
         long shipment = ((Number) before.get("id")).longValue();
+        String action=retry ? "DELIVERY_RETRIED" : "DELIVERY_FAILURE_REPORTED";
         jdbc.execute("ALTER TABLE uteexpress.audit_logs ADD CONSTRAINT ship03_audit_fail CHECK (target_id <> "
-                + shipment + " OR action <> 'DELIVERY_FAILURE_REPORTED') NOT VALID");
+                + shipment + " OR action <> '" + action + "') NOT VALID");
         try {
-            assertThatThrownBy(() -> tx().executeWithoutResult(s -> attempts.reportFailure(order,2L,"No answer","PROOF")))
+            assertThatThrownBy(() -> tx().executeWithoutResult(s -> {
+                if(retry) attempts.retryDelivery(order,3L); else attempts.reportFailure(order,2L,"No answer","PROOF");
+            }))
                     .isInstanceOf(RuntimeException.class);
         } finally { jdbc.execute("ALTER TABLE uteexpress.audit_logs DROP CONSTRAINT ship03_audit_fail"); }
         assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.shipments WHERE order_id=?",order)).isEqualTo(before);
-        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_delivery_failures WHERE shipment_id=?",Long.class,shipment)).isZero();
-        tx().executeWithoutResult(s -> attempts.reportFailure(order,2L,"No answer","PROOF"));
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_delivery_failures WHERE shipment_id=?",Long.class,shipment)).isEqualTo(retry ? 1L : 0L);
+        tx().executeWithoutResult(s -> {
+            if(retry) attempts.retryDelivery(order,3L); else attempts.reportFailure(order,2L,"No answer","PROOF");
+        });
     }
 
     @Test void deliveryAttemptHooksRequireTransactionLiveAssignmentAndBoundedInput() {
@@ -427,10 +434,12 @@ class ShipmentFulfillmentIT {
                 .isInstanceOfSatisfying(ApplicationException.class,e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.ACCESS_DENIED));
     }
 
-    @Test @org.junit.jupiter.api.Timeout(40)
-    void concurrentFailureRequestsCommitExactlyOneEvidence() throws Exception {
+    @org.junit.jupiter.params.ParameterizedTest @org.junit.jupiter.params.provider.ValueSource(booleans={false,true})
+    @org.junit.jupiter.api.Timeout(40)
+    void concurrentFailureRequestsCommitExactlyOneEvidence(boolean retry) throws Exception {
         long order = shippingAttemptFixture();
         long shipper = jdbc.queryForObject("SELECT assigned_shipper_id FROM uteexpress.shipments WHERE order_id=?",Long.class,order);
+        if(retry) tx().executeWithoutResult(s -> attempts.reportFailure(order,2L,"No answer","PROOF"));
         var pool = java.util.concurrent.Executors.newFixedThreadPool(2);
         var start = new java.util.concurrent.CountDownLatch(1);
         java.util.concurrent.Callable<Boolean> call = () -> {
@@ -439,7 +448,7 @@ class ShipmentFulfillmentIT {
                 assertThat(start.await(5,java.util.concurrent.TimeUnit.SECONDS)).isTrue();
                 tx().executeWithoutResult(s -> {
                     jdbc.execute("SET LOCAL lock_timeout='10s'");
-                    attempts.reportFailure(order,2L,"No answer","PROOF");
+                    if(retry) attempts.retryDelivery(order,3L); else attempts.reportFailure(order,2L,"No answer","PROOF");
                 }); return true;
             } catch(ApplicationException ex) { assertThat(ex.errorCode()).isEqualTo(ErrorCode.CONFLICT); return false; }
             finally { SecurityContextHolder.clearContext(); }
@@ -449,7 +458,7 @@ class ShipmentFulfillmentIT {
             assertThat(List.of(first.get(15,java.util.concurrent.TimeUnit.SECONDS),second.get(15,java.util.concurrent.TimeUnit.SECONDS)))
                     .containsExactlyInAnyOrder(true,false);
             assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_delivery_failures WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?)",Long.class,order)).isEqualTo(1);
-            assertThat(jdbc.queryForObject("SELECT version FROM uteexpress.shipments WHERE order_id=?",Long.class,order)).isEqualTo(3);
+            assertThat(jdbc.queryForObject("SELECT version FROM uteexpress.shipments WHERE order_id=?",Long.class,order)).isEqualTo(retry ? 4L : 3L);
         } finally { pool.shutdownNow(); }
     }
 
