@@ -48,14 +48,17 @@ public class ReturnQueryService {
     private ReturnManagementView view(Order order, boolean vendor) {
         var request = returns.findByOrderId(order.getId()).map(r -> new ReturnRequestView(
                 r.getId(), r.getStatus(), r.getReason(), r.getRequestedAt(),
-                r.getDecisionAt(), r.getDecisionNote(), r.getVersion())).orElse(null);
+                r.getDecisionAt(), r.getDecisionNote(), r.getVersion(),
+                r.getReceivedAt(), r.getReceiptReference())).orElse(null);
         Instant delivered = order.getDeliveredAt();
         return new ReturnManagementView(order.getId(), order.getStatus(), order.getVersion(), delivered,
                 delivered == null ? null : delivered.plus(Duration.ofDays(7)),
                 !vendor && order.getStatus() == OrderStatus.DELIVERED && request == null
                     && ReturnOrderAuthority.withinWindow(delivered, clock.instant()),
                 vendor && order.getStatus() == OrderStatus.RETURN_REQUESTED && request != null
-                    && request.status() == ReturnRequestStatus.PENDING, request);
+                    && request.status() == ReturnRequestStatus.PENDING,
+                vendor && order.getStatus() == OrderStatus.RETURN_REQUESTED && request != null
+                    && request.status() == ReturnRequestStatus.APPROVED && request.receivedAt() == null, request);
     }
 
     private Long actor(boolean vendor) {

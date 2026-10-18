@@ -109,6 +109,13 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         return super.cancelForOps(command);
     }
 
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).VENDOR.authority())")
+    public com.uteexpress.order.dto.OrderStatusChangedEvent receiveReturn(
+            com.uteexpress.order.dto.ReceiveReturnCommand command) {
+        return super.receiveReturn(command);
+    }
+
     @Override protected Order loadForOpsMutation(Long id) { return opsAuthority.lockOrder(id); }
 
     @Override protected java.util.Optional<com.uteexpress.shipping.dto.ShipmentFulfillmentFacts> lockShipmentForOps(

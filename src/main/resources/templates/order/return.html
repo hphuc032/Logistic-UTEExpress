@@ -33,8 +33,14 @@
                   th:text="${#temporals.format(returnView.request.decisionAt, 'dd/MM/yyyy HH:mm:ss', 'Asia/Ho_Chi_Minh')}"></time> (giờ Việt Nam)
         </p>
         <p th:if="${returnView.request.decisionNote != null}" th:text="${returnView.request.decisionNote}" class="text-break"></p>
-        <p th:if="${returnView.request.status.name() == 'APPROVED'}">
-            Yêu cầu đã được chấp thuận. Việc nhận hàng và hoàn tiền chưa được ghi nhận.
+        <p th:if="${returnView.request.status.name() == 'APPROVED' and returnView.request.receivedAt == null}">
+            Yêu cầu đã được chấp thuận. Chưa xác nhận nhận lại hàng.
+        </p>
+        <p th:if="${returnView.request.receivedAt != null}">
+            Cửa hàng đã xác nhận nhận lại hàng:
+            <time th:datetime="${returnView.request.receivedAt}"
+                  th:text="${#temporals.format(returnView.request.receivedAt, 'dd/MM/yyyy HH:mm:ss', 'Asia/Ho_Chi_Minh')}"></time>
+            <span th:text="${returnView.request.receiptReference}" class="text-break"></span>
         </p>
     </section>
     <section th:if="${returnView.canDecide}" class="app-surface p-3" aria-label="Quyết định của cửa hàng">
@@ -51,5 +57,15 @@
             <button type="submit" class="btn btn-app-secondary">Từ chối yêu cầu</button>
         </form>
     </section>
+    <form th:if="${vendor and returnView.canReceive()}" method="post"
+          th:action="@{/vendor/orders/{id}/return/receive(id=${returnView.orderId})}" class="app-surface p-3">
+        <input type="hidden" name="expectedVersion" th:value="${returnView.expectedVersion}">
+        <input type="hidden" name="expectedRequestVersion" th:value="${returnView.request.version}">
+        <label for="receipt-reference" class="form-label">Tham chiếu chứng từ nhận hàng</label>
+        <p>Biên bản bàn giao, phiếu nhận hàng, mã vận đơn hoàn trả hoặc chứng từ điện tử có thể truy vết.</p>
+        <input id="receipt-reference" name="receiptReference" maxlength="255" required class="form-control mb-3">
+        <p>Khi xác nhận, tôi đại diện cửa hàng cam kết đã nhận lại hàng của yêu cầu này và chứng từ trên là hợp lệ.</p>
+        <button type="submit" class="btn btn-app-primary">Xác nhận đã nhận lại hàng</button>
+    </form>
 </section></body>
 </html>

@@ -15,8 +15,9 @@ Initial NEW creation and its history use the ORD-01 lifecycle persistence primit
 data. `OrderPlacementService` is the single production lifecycle bean. It reuses
 `OrderLifecycleServiceImpl` orchestration for CHK-02 creation, ORD-03 vendor operations
 and ORD-05 internal shipper completion. RETURN-01 Phase 1 adds dedicated buyer request
-and vendor approval/rejection boundaries. Receipt/refund and system actions remain denied;
-Ops uses its separately guarded cancellation boundary.
+and vendor approval/rejection boundaries. ORD-04 Phase 2 implements RECEIVE_RETURN through
+its dedicated vendor-attestation boundary. COMPLETE_REFUND remains unimplemented and
+system actions remain denied; Ops uses its separately guarded cancellation boundary.
 
 The future implementation obtains `CurrentUser` from the existing SEC-01
 `CurrentUserProvider`, using the existing `RoleCode`. It must resolve `subject` to the
@@ -179,12 +180,57 @@ Full rejection text is retained in owned return evidence; history/events use the
 
 Database uniqueness is unconditional across statuses. A composite Order/requester FK
 requires requested_by to equal the persisted Order buyer. Phase 1 statuses are PENDING,
-APPROVED and REJECTED. received_at/restockable remain NULL, enforced by a named check;
-future receipt contracts require a new migration. No Payment, Shipment, voucher, inventory
-or cart effect runs. RECEIVE_RETURN/COMPLETE_REFUND are not exposed or enabled.
+APPROVED and REJECTED. Phase 1 kept received_at/restockable NULL. Phase 2 below adds
+receipt evidence through a new migration. No Payment, Shipment, voucher, inventory
+or cart effect runs. COMPLETE_REFUND remains blocked.
 
-Migration timestamp/order, the added ReturnRequest @Version, reason limits and checks
-still require QD approval before merge. See [RETURN-01 implementation](RETURN-01-phase1-report.md).
+The original Phase 1 schema review notes remain in
+[RETURN-01 implementation](RETURN-01-phase1-report.md). Phase 2 follows the HP-approved
+contract below; changes await TD review before commit.
+
+## ORD-04 Phase 2: RECEIVE_RETURN (HP-approved vendor attestation)
+
+`POST /vendor/orders/{id}/return/receive` accepts JSON or form fields `expectedVersion`,
+`expectedRequestVersion`, `receiptReference`. Both versions are required and nonnegative.
+The reference must be nonblank and at most 255 Java characters before stripping. It
+identifies a handover record, goods-receipt note, return tracking number or traceable
+electronic document for this Order/ReturnRequest. Submitting this operation is the
+Vendor's attestation that physical goods were received and the referenced evidence is
+valid. HP accepts this attestation for Phase 2; it is not independent carrier verification.
+No additional attestation field is accepted. The form explicitly states this commitment.
+
+The active persisted Account must still hold VENDOR and own the APPROVED Shop. The
+dedicated `receiveReturn(ReceiveReturnCommand)` starts the existing return transaction,
+rejecting an outer transaction. It pessimistically locks and refreshes Order then
+ReturnRequest, locks/rechecks Account and Shop, checks both expected versions, requires
+RETURN_REQUESTED and a linked APPROVED request without receipt, then records server
+actor and Clock timestamp. Receipt stays on the unique immutable `order_id` request;
+the same reference text may identify a shared handover document for different Orders.
+Duplicate means another receipt for the same Order/ReturnRequest, not reuse of document text.
+
+The Order becomes RETURNED; ReturnRequest stays APPROVED. Each JPA version increments
+once. One history row and the existing after-commit lifecycle event use the safe fixed
+reason `Vendor attested return receipt`; free-text evidence stays in the owned return
+projection. Rollback removes all writes and emits no event. Duplicate/stale attempts
+conflict; generic `transition(RECEIVE_RETURN)` always conflicts, including callers with
+custom authorization. No Shipping/Ops receipt surrogate is used.
+
+As in Phase 1, a concurrent Shop restriction can return CONFLICT when Hibernate detects
+the changed Shop version while acquiring its lock, or ACCESS_DENIED after refreshed
+eligibility checks. Both paths roll back all receipt effects. Account/role restrictions
+committed before eligibility checks are denied.
+
+Migration `V20261018090000__td_ord04_return_receipt.sql` adds `received_by` (users FK)
+and `receipt_reference VARCHAR(255)`, preserving Phase 1 rows/checksum and `received_at`.
+It replaces the old no-receipt and timestamp checks with all-or-none receipt fields,
+APPROVED-only evidence, `received_at >= decision_at >= requested_at` and
+`updated_at = received_at` for received rows. A trigger prevents overwriting, clearing
+or reassigning successful receipt evidence. Existing unique Order and composite buyer
+FK constraints remain. `restockable` remains nullable and constrained to NULL.
+
+Payment, Shipment, inventory, restocking, vouchers, refunds and cart are unaffected.
+Receipt does not authorize REFUNDED or COMPLETE_REFUND. Owned reads expose receipt
+reference/time, preserving the convention that actor IDs remain internal.
 
 ## ORD-05 trusted shipper lifecycle boundary
 

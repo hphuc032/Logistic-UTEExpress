@@ -51,6 +51,26 @@ public class VendorReturnController extends ReturnControllerSupport {
         return "redirect:/vendor/orders/" + id + "/return";
     }
 
+    @PostMapping(value = "/receive", consumes = MediaType.APPLICATION_JSON_VALUE) @ResponseBody
+    Map<String, String> receive(@PathVariable Long id, @Valid @RequestBody ReceiveReturnInput input,
+            HttpServletRequest request) {
+        parameters(request);
+        receive(id, input);
+        return Map.of("result", "OK");
+    }
+
+    @PostMapping(value = "/receive", consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
+    String receiveForm(@PathVariable Long id, @Valid ReceiveReturnInput input, HttpServletRequest request) {
+        parameters(request, "expectedVersion", "expectedRequestVersion", "receiptReference");
+        receive(id, input);
+        return "redirect:/vendor/orders/" + id + "/return";
+    }
+
+    private void receive(Long id, ReceiveReturnInput input) {
+        lifecycle.receiveReturn(new ReceiveReturnCommand(id, input.expectedVersion(),
+                input.expectedRequestVersion(), input.receiptReference()));
+    }
+
     private void perform(Long id, String operation, ReturnDecisionInput input) {
         var command = new ReturnDecisionCommand(id, input.expectedVersion(), input.expectedRequestVersion(), input.reason());
         if (operation.equals("approve")) lifecycle.approveReturn(command);
