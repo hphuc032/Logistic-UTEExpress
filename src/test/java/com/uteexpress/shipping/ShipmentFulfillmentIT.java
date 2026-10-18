@@ -29,6 +29,7 @@ class ShipmentFulfillmentIT {
     @Autowired JdbcTemplate jdbc;
     @Autowired ShipmentAssignmentService assignments;
     @Autowired ShipmentFulfillmentService fulfillment;
+    @Autowired com.uteexpress.shipping.service.ShipmentAttemptService attempts;
     @Autowired org.springframework.transaction.PlatformTransactionManager transactionManager;
     @AfterEach void clear() { SecurityContextHolder.clearContext(); }
 
@@ -360,6 +361,109 @@ class ShipmentFulfillmentIT {
         } finally { SecurityContextHolder.clearContext(); }
     }
 
+    @Test void failedDeliveryRetryAndExhaustionPreserveOrderAndImmutableEvidence() {
+        long order = shippingAttemptFixture();
+        var before = jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", order);
+        tx().executeWithoutResult(s -> {
+            attempts.reportFailure(order, 2L, "  No answer  ", "  POD-1  ");
+            var evidence = attempts.requireFailureEvidence(order, 2L);
+            assertThat(evidence.shipment().version()).isEqualTo(3);
+            assertThat(evidence.shipment().attemptCount()).isEqualTo(1);
+            assertThat(evidence.failure().failureReason()).isEqualTo("No answer");
+            assertThat(evidence.failure().evidenceReference()).isEqualTo("POD-1");
+        });
+        assertThatThrownBy(() -> tx().executeWithoutResult(s -> attempts.reportFailure(order, 2L, "Again", "POD-1")))
+                .isInstanceOfSatisfying(ApplicationException.class,e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.CONFLICT));
+        tx().executeWithoutResult(s -> {
+            attempts.retryDelivery(order, 3L);
+            var facts = attempts.requireRetryEvidence(order, 3L);
+            assertThat(facts.shipment().version()).isEqualTo(4);
+            assertThat(facts.shipment().attemptCount()).isEqualTo(2);
+            assertThat(facts.failure().attemptNumber()).isEqualTo(1);
+            attempts.reportFailure(order, 4L, "Still unavailable", "POD-2");
+            assertThat(attempts.requireFailureEvidence(order, 4L).shipment().version()).isEqualTo(5);
+        });
+        assertThatThrownBy(() -> tx().executeWithoutResult(s -> attempts.retryDelivery(order, 5L)))
+                .isInstanceOfSatisfying(ApplicationException.class,e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.CONFLICT));
+        long shipment = jdbc.queryForObject("SELECT id FROM uteexpress.shipments WHERE order_id=?", Long.class,order);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_delivery_failures WHERE shipment_id=?",Long.class,shipment)).isEqualTo(2);
+        assertThatThrownBy(() -> jdbc.update("UPDATE uteexpress.shipment_delivery_failures SET evidence_reference='overwrite' WHERE shipment_id=?",shipment))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        assertThatThrownBy(() -> jdbc.update("DELETE FROM uteexpress.shipment_delivery_failures WHERE shipment_id=?",shipment))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class);
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?",order)).isEqualTo(before);
+    }
+
+    @Test void failedAuditRollsBackShipmentAndNewFailureEvidence() {
+        long order = shippingAttemptFixture();
+        var before = jdbc.queryForMap("SELECT * FROM uteexpress.shipments WHERE order_id=?",order);
+        long shipment = ((Number) before.get("id")).longValue();
+        jdbc.execute("ALTER TABLE uteexpress.audit_logs ADD CONSTRAINT ship03_audit_fail CHECK (target_id <> "
+                + shipment + " OR action <> 'DELIVERY_FAILURE_REPORTED') NOT VALID");
+        try {
+            assertThatThrownBy(() -> tx().executeWithoutResult(s -> attempts.reportFailure(order,2L,"No answer","PROOF")))
+                    .isInstanceOf(RuntimeException.class);
+        } finally { jdbc.execute("ALTER TABLE uteexpress.audit_logs DROP CONSTRAINT ship03_audit_fail"); }
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.shipments WHERE order_id=?",order)).isEqualTo(before);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_delivery_failures WHERE shipment_id=?",Long.class,shipment)).isZero();
+        tx().executeWithoutResult(s -> attempts.reportFailure(order,2L,"No answer","PROOF"));
+    }
+
+    @Test void deliveryAttemptHooksRequireTransactionLiveAssignmentAndBoundedInput() {
+        long order = shippingAttemptFixture();
+        long shipper = jdbc.queryForObject("SELECT assigned_shipper_id FROM uteexpress.shipments WHERE order_id=?",Long.class,order);
+        assertThatThrownBy(() -> attempts.reportFailure(order,2L,"Reason","PROOF"))
+                .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+        for (String reason : List.of(" ", "x".repeat(1001)))
+            assertThatThrownBy(() -> tx().executeWithoutResult(s -> attempts.reportFailure(order,2L,reason,"PROOF")))
+                    .isInstanceOfSatisfying(ApplicationException.class,e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.VALIDATION_FAILED));
+        assertThatThrownBy(() -> tx().executeWithoutResult(s -> attempts.reportFailure(order,2L,"Reason","x".repeat(256))))
+                .isInstanceOf(ApplicationException.class);
+        authenticate(insertUser("ACTIVE","SHIPPER"),"SHIPPER");
+        assertThatThrownBy(() -> tx().executeWithoutResult(s -> attempts.reportFailure(order,2L,"Reason","PROOF")))
+                .isInstanceOfSatisfying(ApplicationException.class,e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.RESOURCE_NOT_FOUND));
+        authenticate(shipper,"SHIPPER"); jdbc.update("UPDATE uteexpress.users SET status='LOCKED' WHERE id=?",shipper);
+        assertThatThrownBy(() -> tx().executeWithoutResult(s -> attempts.reportFailure(order,2L,"Reason","PROOF")))
+                .isInstanceOfSatisfying(ApplicationException.class,e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.ACCESS_DENIED));
+    }
+
+    @Test @org.junit.jupiter.api.Timeout(40)
+    void concurrentFailureRequestsCommitExactlyOneEvidence() throws Exception {
+        long order = shippingAttemptFixture();
+        long shipper = jdbc.queryForObject("SELECT assigned_shipper_id FROM uteexpress.shipments WHERE order_id=?",Long.class,order);
+        var pool = java.util.concurrent.Executors.newFixedThreadPool(2);
+        var start = new java.util.concurrent.CountDownLatch(1);
+        java.util.concurrent.Callable<Boolean> call = () -> {
+            authenticate(shipper,"SHIPPER");
+            try {
+                assertThat(start.await(5,java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+                tx().executeWithoutResult(s -> {
+                    jdbc.execute("SET LOCAL lock_timeout='10s'");
+                    attempts.reportFailure(order,2L,"No answer","PROOF");
+                }); return true;
+            } catch(ApplicationException ex) { assertThat(ex.errorCode()).isEqualTo(ErrorCode.CONFLICT); return false; }
+            finally { SecurityContextHolder.clearContext(); }
+        };
+        try {
+            var first=pool.submit(call); var second=pool.submit(call); start.countDown();
+            assertThat(List.of(first.get(15,java.util.concurrent.TimeUnit.SECONDS),second.get(15,java.util.concurrent.TimeUnit.SECONDS)))
+                    .containsExactlyInAnyOrder(true,false);
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_delivery_failures WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?)",Long.class,order)).isEqualTo(1);
+            assertThat(jdbc.queryForObject("SELECT version FROM uteexpress.shipments WHERE order_id=?",Long.class,order)).isEqualTo(3);
+        } finally { pool.shutdownNow(); }
+    }
+
+    private long shippingAttemptFixture() {
+        long admin=insertUser("ACTIVE","ADMIN"), shipper=insertUser("ACTIVE","SHIPPER");
+        long order=order(true,"CONFIRMED",true);
+        authenticate(admin,"ADMIN"); assignments.assign(order,shipper,0L); authenticate(shipper,"SHIPPER");
+        tx().executeWithoutResult(s -> fulfillment.recordPickedUp(order,0L));
+        // Test fixture only: Order boundary is TD-owned and not on remote yet.
+        jdbc.update("UPDATE uteexpress.orders SET status='PICKED_UP' WHERE id=?",order);
+        tx().executeWithoutResult(s -> fulfillment.recordShipping(order,1L));
+        jdbc.update("UPDATE uteexpress.orders SET status='SHIPPING' WHERE id=?",order);
+        return order;
+    }
     private org.springframework.transaction.support.TransactionTemplate tx() {
         return new org.springframework.transaction.support.TransactionTemplate(transactionManager);
     }
