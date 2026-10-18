@@ -2,6 +2,11 @@
 
 Date: 2026-10-17. Audited develop: fdbf6a2 (#37, #36 and RETURN-01 Phase 1 #49 merged). Status: QD proposal for HP/TD approval, NOT an approved policy or implemented receipt/refund feature. This document answers TD's five open questions without changing production behavior.
 
+## Decision update — 2026-10-18 (supersedes conflicting proposals below)
+
+HP approved Vendor-owner attestation plus traceable receipt reference for an APPROVED return, with expected Order/Return versions and server received_by/received_at. Phase 2 is RECEIPT ONLY: Order RETURNED, ReturnRequest APPROVED, restockable NULL; no refund, restocking, Payment, Shipment or inventory effect. Receipt cannot be edited after success. The earlier GOOD/DAMAGED immediate-restock proposal is superseded. TD owns implementation; QD reviews DB/locking. SHIP-04 remains separate failed-delivery return-to-sender.
+
+HP selected goods-only refund after original discount, excluding shipping, one refund/Order, no more than collected amount, COD PAID and ADMIN completion with proof/reference. PAY-02 follows reviewed Phase 2. These decisions replace the open entitlement alternatives below; detailed refund schema/locking/completion remains TD-owned and must be reviewed. See QD-PR53-receipt-review.md for QD's independent technical review of the actual receipt implementation.
 ## 1. Ownership and sequence
 
 Existing order-contracts.md assigns RECEIVE_RETURN (RETURN_REQUESTED -> RETURNED) to the Vendor through the Order lifecycle. TD should implement the trusted buyer-return receipt authority, ReturnRequest changes and lifecycle operation in RETURN-01 Phase 2. QD reviews migration/evidence/locking and supplies a Shipping adapter only if an approved logistics-evidence boundary is needed. QD must not write OrderStatus or ReturnRequest directly.
