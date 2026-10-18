@@ -10,15 +10,15 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 import static org.assertj.core.api.Assertions.*;
 
 class ShipmentAttemptMigrationIT {
-    @ParameterizedTest @ValueSource(booleans={false,true})
-    void freshAndDeployedUpgradeValidateImmutableEvidenceSchema(boolean upgrade) {
+    @ParameterizedTest @ValueSource(strings={"fresh","phase1","receipt"})
+    void freshAndDeployedUpgradeValidateImmutableEvidenceSchema(String baseline) {
         try(var db=new PostgreSQLContainer("postgres:17.6")) {
             db.start();
             var config=Flyway.configure().dataSource(db.getJdbcUrl(),db.getUsername(),db.getPassword())
                     .schemas("uteexpress").defaultSchema("uteexpress").locations("classpath:db/migration");
             var jdbc=new JdbcTemplate(new DriverManagerDataSource(db.getJdbcUrl(),db.getUsername(),db.getPassword()));
-            if(upgrade) {
-                config.target(MigrationVersion.fromVersion("20261013090000")).load().migrate();
+            if(!baseline.equals("fresh")) {
+                config.target(MigrationVersion.fromVersion(baseline.equals("phase1") ? "20261013090000" : "20261018090000")).load().migrate();
                 assertThat(jdbc.queryForObject("SELECT to_regclass('uteexpress.shipment_delivery_failures')::text",String.class)).isNull();
             }
             var latest=Flyway.configure().dataSource(db.getJdbcUrl(),db.getUsername(),db.getPassword())

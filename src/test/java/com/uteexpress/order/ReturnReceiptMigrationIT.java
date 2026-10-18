@@ -12,12 +12,13 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 import static org.assertj.core.api.Assertions.*;
 
 class ReturnReceiptMigrationIT {
-    @ParameterizedTest @ValueSource(booleans = {false, true})
-    void freshAndPhase1UpgradePreserveAllStatusesAndEnforceReceiptContract(boolean upgrade) {
+    @ParameterizedTest @ValueSource(strings = {"fresh", "phase1", "receipt"})
+    void freshAndPhase1UpgradePreserveAllStatusesAndEnforceReceiptContract(String baseline) {
         try (var db = new PostgreSQLContainer("postgres:17.6")) {
             db.start();
             var jdbc = new JdbcTemplate(new DriverManagerDataSource(db.getJdbcUrl(), db.getUsername(), db.getPassword()));
-            if (upgrade) migration(db, "20261013090000").migrate();
+            boolean phase1 = baseline.equals("phase1");
+            if (!baseline.equals("fresh")) migration(db, phase1 ? "20261013090000" : "20261018090000").migrate();
             else migration(db, null).migrate();
             long actor = jdbc.queryForObject("""
                     INSERT INTO uteexpress.users(email,normalized_email,username,normalized_username,password_hash,status)
@@ -46,14 +47,18 @@ class ReturnReceiptMigrationIT {
             var before = jdbc.queryForList("SELECT * FROM uteexpress.return_requests ORDER BY id");
             var phase1Checksum = jdbc.queryForObject("SELECT checksum FROM uteexpress.flyway_schema_history WHERE version='20261013090000'", Integer.class);
             var latest = migration(db, null);
-            assertThat(latest.migrate().migrationsExecuted).isEqualTo(upgrade ? 1 : 0);
+            var pendingVersions = Arrays.stream(latest.info().pending()).map(info -> info.getVersion().getVersion()).toList();
+            assertThat(pendingVersions).containsExactlyElementsOf(phase1
+                    ? List.of("20261018090000", "20261018110000")
+                    : baseline.equals("receipt") ? List.of("20261018110000") : List.of());
+            assertThat(latest.migrate().migrationsExecuted).isEqualTo(pendingVersions.size());
             assertThat(latest.validateWithResult().validationSuccessful).isTrue();
             assertThat(latest.info().pending()).isEmpty();
             assertThat(latest.migrate().migrationsExecuted).isZero();
             assertThat(jdbc.queryForObject("SELECT checksum FROM uteexpress.flyway_schema_history WHERE version='20261013090000'", Integer.class))
                     .isEqualTo(phase1Checksum);
             var after = jdbc.queryForList("SELECT * FROM uteexpress.return_requests ORDER BY id");
-            if (upgrade) for (var row : after) {
+            if (phase1) for (var row : after) {
                 assertThat(row.remove("received_by")).isNull(); assertThat(row.remove("receipt_reference")).isNull();
             }
             assertThat(after).isEqualTo(before);
