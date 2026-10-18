@@ -360,14 +360,14 @@ class ReturnManagementIT {
                 .andExpect(content().string(not(containsString("id=\"request-reason\""))));
     }
 
-    @Test void approveFormDoesNotOfferReceiptOrRefundActions() throws Exception {
+    @Test void approvedFormOffersAttestedReceiptAndKeepsGenericReceiptAndRefundBlocked() throws Exception {
         lifecycle.requestReturn(request());
         mvc.perform(post("/vendor/orders/{id}/return/approve", order).with(user(principal(vendor, "VENDOR"))).with(csrf())
                 .contentType(MediaType.APPLICATION_FORM_URLENCODED).param("expectedVersion", "" + version())
                 .param("expectedRequestVersion", "0")).andExpect(status().is3xxRedirection());
         mvc.perform(get("/vendor/orders/{id}/return", order).with(user(principal(vendor, "VENDOR"))).accept(MediaType.TEXT_HTML))
-                .andExpect(status().isOk()).andExpect(content().string(containsString("chưa được ghi nhận")))
-                .andExpect(content().string(not(containsString("/return/receive"))))
+                .andExpect(status().isOk()).andExpect(content().string(containsString("Chưa xác nhận nhận lại hàng")))
+                .andExpect(content().string(containsString("/return/receive")))
                 .andExpect(content().string(not(containsString("/return/refund"))));
         auth(vendor, "VENDOR"); var before = state();
         for (OrderAction action : List.of(OrderAction.RECEIVE_RETURN, OrderAction.COMPLETE_REFUND))
@@ -744,6 +744,388 @@ class ReturnManagementIT {
         assertThatThrownBy(() -> insertEvidence(order, otherBuyer, "PENDING", null, null, null))
                 .isInstanceOf(DataIntegrityViolationException.class);
         assertThat(jdbc.queryForList("SELECT * FROM uteexpress.return_requests WHERE order_id=?", order)).isEmpty();
+    }
+
+    private void approvedReturn() {
+        lifecycle.requestReturn(request());
+        auth(vendor, "VENDOR");
+        lifecycle.approveReturn(decision(null));
+        clock.at = clock.at.plusSeconds(60);
+        events.values.clear();
+    }
+
+    private ReceiveReturnCommand receipt() {
+        return new ReceiveReturnCommand(order, version(), (Long) evidence().get("version"), "  HANDOVER-123  ");
+    }
+
+    private String receiptBody() {
+        return "{\"expectedVersion\":" + version() + ",\"expectedRequestVersion\":"
+                + evidence().get("version") + ",\"receiptReference\":\"HANDOVER-123\"}";
+    }
+
+    @Test void attestedReceiptIsAtomicVersionedAndHasNoOtherModuleEffects() throws Exception {
+        approvedReturn();
+        var side = sideEffects(); var original = evidence(); var originalOrder = row();
+        long ov = version(), hc = historyCount();
+        var event = lifecycle.receiveReturn(receipt());
+        assertThat(orderStatus()).isEqualTo("RETURNED");
+        assertThat(version()).isEqualTo(ov + 1);
+        assertThat(historyCount()).isEqualTo(hc + 1);
+        assertThat(evidence()).containsEntry("status", "APPROVED").containsEntry("received_by", vendor)
+                .containsEntry("receipt_reference", "HANDOVER-123").containsEntry("restockable", null)
+                .containsEntry("version", (Long) original.get("version") + 1)
+                .containsEntry("id", original.get("id")).containsEntry("order_id", order)
+                .containsEntry("decision_at", original.get("decision_at"))
+                .containsEntry("requested_at", original.get("requested_at"));
+        assertThat(jdbc.queryForObject("SELECT received_at FROM uteexpress.return_requests WHERE order_id=?",
+                java.time.OffsetDateTime.class, order).toInstant()).isEqualTo(clock.at);
+        assertThat(evidence().get("updated_at")).isEqualTo(evidence().get("received_at"));
+        assertThat(row().get("delivered_at")).isEqualTo(originalOrder.get("delivered_at"));
+        assertThat(sideEffects()).isEqualTo(side);
+        assertThat(events.values).containsExactly(event);
+        assertThat(event.actorId()).isEqualTo(vendor);
+        assertThat(event.fromStatus()).isEqualTo(OrderStatus.RETURN_REQUESTED);
+        assertThat(event.toStatus()).isEqualTo(OrderStatus.RETURNED);
+        assertThat(event.reason()).isEqualTo("Vendor attested return receipt");
+        var last = jdbc.queryForMap("SELECT * FROM uteexpress.order_status_history WHERE order_id=? ORDER BY id DESC LIMIT 1", order);
+        assertThat(last).containsEntry("actor_id", vendor).containsEntry("from_status", "RETURN_REQUESTED")
+                .containsEntry("to_status", "RETURNED").containsEntry("reason", event.reason());
+        mvc.perform(get("/vendor/orders/{id}/return", order).with(user(principal(vendor, "VENDOR")))
+                .accept(MediaType.APPLICATION_JSON)).andExpect(status().isOk())
+                .andExpect(jsonPath("$.request.receiptReference").value("HANDOVER-123"))
+                .andExpect(jsonPath("$.request.receivedAt").exists())
+                .andExpect(jsonPath("$.request.receivedBy").doesNotExist());
+        var after = state();
+        auth(vendor, "VENDOR");
+        rejects(() -> lifecycle.receiveReturn(receipt()), ErrorCode.CONFLICT);
+        assertThat(state()).isEqualTo(after); assertThat(events.values).hasSize(1);
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"application/json", "application/x-www-form-urlencoded"})
+    void receiveApiSupportsJsonAndFormsWithServerIdentityAndEscapedEvidence(String type) throws Exception {
+        approvedReturn();
+        mvc.perform(get("/vendor/orders/{id}/return", order).with(user(principal(vendor, "VENDOR")))
+                .accept(MediaType.TEXT_HTML)).andExpect(status().isOk())
+                .andExpect(content().string(containsString("name=\"_csrf\"")))
+                .andExpect(content().string(containsString("name=\"expectedRequestVersion\"")))
+                .andExpect(content().string(containsString("name=\"receiptReference\"")));
+        var call = post("/vendor/orders/{id}/return/receive", order).with(user(principal(vendor, "VENDOR"))).with(csrf())
+                .contentType(type);
+        if (type.equals("application/json")) {
+            mvc.perform(call.content(receiptBody().replace("HANDOVER-123", "<script>proof</script>")))
+                    .andExpect(status().isOk()).andExpect(jsonPath("$.result").value("OK"));
+        } else {
+            mvc.perform(call.param("expectedVersion", "" + version()).param("expectedRequestVersion", "1")
+                    .param("receiptReference", "<script>proof</script>"))
+                    .andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/vendor/orders/" + order + "/return"));
+        }
+        assertThat(evidence()).containsEntry("received_by", vendor);
+        mvc.perform(get("/orders/{id}/return", order).with(user(principal(buyer, "USER"))).accept(MediaType.TEXT_HTML))
+                .andExpect(status().isOk()).andExpect(content().string(containsString("&lt;script&gt;proof&lt;/script&gt;")))
+                .andExpect(content().string(not(containsString("/return/receive"))));
+        assertThat(events.values).hasSize(1);
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"USER", "SHIPPER", "ADMIN"})
+    void receiveApiDeniesNonVendorRoles(String role) throws Exception {
+        approvedReturn(); var before = state();
+        long actor = role.equals("USER") ? buyer : role.equals("SHIPPER") ? shipper : admin;
+        mvc.perform(post("/vendor/orders/{id}/return/receive", order).with(user(principal(actor, role))).with(csrf())
+                .contentType(MediaType.APPLICATION_JSON).content(receiptBody())).andExpect(status().isForbidden());
+        auth(actor, role);
+        assertThatThrownBy(() -> lifecycle.receiveReturn(receipt())).isInstanceOf(org.springframework.security.access.AccessDeniedException.class);
+        assertThat(state()).isEqualTo(before); assertThat(events.values).isEmpty();
+    }
+
+    @Test void receiveRequiresAuthenticationPersistedIdentityAndCsrf() throws Exception {
+        approvedReturn(); var before = state();
+        SecurityContextHolder.clearContext();
+        mvc.perform(post("/vendor/orders/{id}/return/receive", order).with(csrf())
+                .contentType(MediaType.APPLICATION_JSON).content(receiptBody())).andExpect(status().isUnauthorized());
+        mvc.perform(post("/vendor/orders/{id}/return/receive", order).with(user("opaque").roles("VENDOR")).with(csrf())
+                .contentType(MediaType.APPLICATION_JSON).content(receiptBody())).andExpect(status().isUnauthorized());
+        mvc.perform(post("/vendor/orders/{id}/return/receive", order).with(user(principal(vendor, "VENDOR")))
+                .contentType(MediaType.APPLICATION_JSON).content(receiptBody())).andExpect(status().isForbidden());
+        assertThat(state()).isEqualTo(before); assertThat(events.values).isEmpty();
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"role", "account", "shop", "foreign"})
+    void receiptRechecksPersistedVendorAndShopEligibility(String restriction) {
+        approvedReturn();
+        if (restriction.equals("role")) jdbc.update("DELETE FROM uteexpress.user_roles WHERE user_id=?", vendor);
+        if (restriction.equals("account")) jdbc.update("UPDATE uteexpress.users SET status='LOCKED' WHERE id=?", vendor);
+        if (restriction.equals("shop")) jdbc.update("UPDATE uteexpress.shops SET status='SUSPENDED',moderation_reason='Test' WHERE id=?", shop);
+        if (restriction.equals("foreign")) auth(otherVendor, "VENDOR");
+        var before = state();
+        rejects(() -> lifecycle.receiveReturn(receipt()), restriction.equals("foreign") ? ErrorCode.RESOURCE_NOT_FOUND : ErrorCode.ACCESS_DENIED);
+        assertThat(state()).isEqualTo(before); assertThat(events.values).isEmpty();
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"vendorId", "shopId", "receivedBy", "receivedAt", "orderStatus",
+            "returnStatus", "restockable", "refundAmount", "orderId"})
+    void receiptApiRejectsForgedJsonFormAndQueryFields(String field) throws Exception {
+        approvedReturn(); var before = state();
+        mvc.perform(post("/vendor/orders/{id}/return/receive", order).with(user(principal(vendor, "VENDOR"))).with(csrf())
+                .contentType(MediaType.APPLICATION_JSON).content(receiptBody().replace("}", ",\"" + field + "\":\"forged\"}")))
+                .andExpect(status().isBadRequest());
+        mvc.perform(post("/vendor/orders/{id}/return/receive", order).with(user(principal(vendor, "VENDOR"))).with(csrf())
+                .contentType(MediaType.APPLICATION_FORM_URLENCODED).param("expectedVersion", "" + version())
+                .param("expectedRequestVersion", "1").param("receiptReference", "PROOF").param(field, "forged"))
+                .andExpect(status().isBadRequest());
+        mvc.perform(post("/vendor/orders/{id}/return/receive", order).with(user(principal(vendor, "VENDOR"))).with(csrf())
+                .contentType(MediaType.APPLICATION_JSON).content(receiptBody()).param(field, "forged"))
+                .andExpect(status().isBadRequest());
+        assertThat(state()).isEqualTo(before); assertThat(events.values).isEmpty();
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"missingReference", "blank", "oversized", "missingOrderVersion", "missingRequestVersion", "negative"})
+    void receiptInputValidationAppliesAtHttpAndServiceBoundaries(String invalid) throws Exception {
+        approvedReturn(); var before = state();
+        Long ov = invalid.equals("missingOrderVersion") ? null : version();
+        Long rv = invalid.equals("missingRequestVersion") ? null : invalid.equals("negative") ? -1L : 1L;
+        String ref = switch (invalid) { case "missingReference" -> null; case "blank" -> " \t ";
+            case "oversized" -> "x".repeat(256); default -> "PROOF"; };
+        String json = "{\"expectedVersion\":" + ov + ",\"expectedRequestVersion\":" + rv
+                + ",\"receiptReference\":" + (ref == null ? "null" : "\"" + ref.replace("\t", "\\t") + "\"") + "}";
+        mvc.perform(post("/vendor/orders/{id}/return/receive", order).with(user(principal(vendor, "VENDOR"))).with(csrf())
+                .contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isBadRequest());
+        auth(vendor, "VENDOR");
+        rejects(() -> lifecycle.receiveReturn(new ReceiveReturnCommand(order, ov, rv, ref)),
+                ov == null || rv == null || rv < 0 ? ErrorCode.INVALID_REQUEST : ErrorCode.VALIDATION_FAILED);
+        assertThat(state()).isEqualTo(before); assertThat(events.values).isEmpty();
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"order", "request", "pending", "rejected", "orderState", "existing", "clock"})
+    void receiptConflictsOnStaleOrIneligibleEvidence(String invalid) throws Exception {
+        approvedReturn(); var command = receipt();
+        switch (invalid) {
+            case "order" -> command = new ReceiveReturnCommand(order, version() - 1, 1L, "PROOF");
+            case "request" -> command = new ReceiveReturnCommand(order, version(), 0L, "PROOF");
+            case "pending" -> jdbc.update("UPDATE uteexpress.return_requests SET status='PENDING',decided_by=NULL,decision_at=NULL WHERE order_id=?", order);
+            case "rejected" -> jdbc.update("UPDATE uteexpress.return_requests SET status='REJECTED',decision_note='No' WHERE order_id=?", order);
+            case "orderState" -> jdbc.update("UPDATE uteexpress.orders SET status='DELIVERED' WHERE id=?", order);
+            case "existing" -> {
+                lifecycle.receiveReturn(receipt());
+                // Isolate the receipt guard even if Order were incorrectly restored to the source state.
+                jdbc.update("UPDATE uteexpress.orders SET status='RETURN_REQUESTED' WHERE id=?", order);
+                command = receipt(); events.values.clear();
+            }
+            case "clock" -> clock.at = DELIVERED;
+            default -> throw new AssertionError(invalid);
+        }
+        var before = state(); var selected = command;
+        rejects(() -> lifecycle.receiveReturn(selected), ErrorCode.CONFLICT);
+        assertThat(state()).isEqualTo(before); assertThat(events.values).isEmpty();
+        if (!invalid.equals("clock")) {
+            String json = "{\"expectedVersion\":" + selected.expectedVersion() + ",\"expectedRequestVersion\":"
+                    + selected.expectedRequestVersion() + ",\"receiptReference\":\"PROOF\"}";
+            mvc.perform(post("/vendor/orders/{id}/return/receive", order).with(user(principal(vendor, "VENDOR"))).with(csrf())
+                    .contentType(MediaType.APPLICATION_JSON).content(json)).andExpect(status().isConflict());
+            assertThat(state()).isEqualTo(before);
+        }
+    }
+
+    @Test void receiptRejectsOuterTransactionAndMissingRequest() {
+        auth(vendor, "VENDOR");
+        rejects(() -> lifecycle.receiveReturn(new ReceiveReturnCommand(order, version(), 0L, "PROOF")), ErrorCode.CONFLICT);
+        auth(buyer, "USER"); approvedReturn(); var before = state();
+        tx.executeWithoutResult(s -> rejects(() -> lifecycle.receiveReturn(receipt()), ErrorCode.INVALID_REQUEST));
+        assertThat(state()).isEqualTo(before);
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"receiptFlush", "history", "beforeCommit"})
+    void receiptRollbackRestoresEveryFactAndSuppressesEvents(String failure) {
+        approvedReturn(); var before = state();
+        var injectionReached = new java.util.concurrent.atomic.AtomicBoolean();
+        var injectedFailure = new IllegalStateException("receipt rollback");
+        if (failure.equals("receiptFlush")) doAnswer(call -> {
+            call.callRealMethod(); injectionReached.set(true); throw injectedFailure;
+        }).when(guardSpy).receive(any(), anyString(), any());
+        if (failure.equals("history")) doAnswer(call -> {
+            injectionReached.set(true); throw new DataIntegrityViolationException("receipt history rollback");
+        }).when(history).saveAndFlush(any(OrderStatusHistory.class));
+        if (failure.equals("beforeCommit")) doAnswer(call -> {
+            call.callRealMethod();
+            org.springframework.transaction.support.TransactionSynchronizationManager.registerSynchronization(
+                    new org.springframework.transaction.support.TransactionSynchronization() {
+                        @Override public void beforeCommit(boolean readOnly) {
+                            assertThat(events.values).isEmpty(); injectionReached.set(true); throw injectedFailure;
+                        }
+                    });
+            return null;
+        }).when(guardSpy).receive(any(), anyString(), any());
+        if (failure.equals("history")) rejects(() -> lifecycle.receiveReturn(receipt()), ErrorCode.CONFLICT);
+        else assertThatThrownBy(() -> lifecycle.receiveReturn(receipt())).isSameAs(injectedFailure);
+        assertThat(injectionReached.get()).as("reached %s fault injection", failure).isTrue();
+        assertThat(state()).isEqualTo(before); assertThat(events.values).isEmpty();
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"actor", "reference", "timestamp", "blank", "oversized", "foreignActor",
+            "beforeDecision", "updatedAt", "pending", "rejected", "restockable"})
+    void databaseEnforcesCompleteApprovedReceiptAndTimestamp(String invalid) {
+        approvedReturn(); var before = state();
+        String assignment = "received_by=" + vendor + ",receipt_reference='PROOF',received_at=decision_at,updated_at=decision_at";
+        assignment = switch (invalid) {
+            case "actor" -> assignment.replace("received_by=" + vendor, "received_by=NULL");
+            case "reference" -> assignment.replace("receipt_reference='PROOF'", "receipt_reference=NULL");
+            case "timestamp" -> assignment.replace("received_at=decision_at", "received_at=NULL");
+            case "blank" -> assignment.replace("'PROOF'", "E'\\t\\n '");
+            case "oversized" -> assignment.replace("'PROOF'", "repeat('x',256)");
+            case "foreignActor" -> assignment.replace("received_by=" + vendor, "received_by=9223372036854775807");
+            case "beforeDecision" -> assignment.replace("received_at=decision_at", "received_at=decision_at-interval '1 second'");
+            case "updatedAt" -> assignment.replace("updated_at=decision_at", "updated_at=decision_at+interval '1 second'");
+            case "pending" -> assignment + ",status='PENDING',decided_by=NULL,decision_at=NULL";
+            case "rejected" -> assignment + ",status='REJECTED',decision_note='No'";
+            case "restockable" -> assignment + ",restockable=false";
+            default -> throw new AssertionError(invalid);
+        };
+        String change = assignment;
+        assertThatThrownBy(() -> jdbc.update("UPDATE uteexpress.return_requests SET " + change + " WHERE order_id=?", order))
+                .isInstanceOf(DataIntegrityViolationException.class);
+        assertThat(state()).isEqualTo(before);
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"reference", "actor", "time", "clear", "move"})
+    void successfulReceiptCannotBeOverwrittenEvenBySql(String change) {
+        approvedReturn(); lifecycle.receiveReturn(receipt()); var before = state();
+        String assignment = switch (change) {
+            case "reference" -> "receipt_reference='OTHER'";
+            case "actor" -> "received_by=" + otherVendor;
+            case "time" -> "received_at=received_at+interval '1 second',updated_at=updated_at+interval '1 second'";
+            case "clear" -> "received_at=NULL,received_by=NULL,receipt_reference=NULL,updated_at=decision_at";
+            case "move" -> "order_id=" + foreign + ",requested_by=" + otherBuyer;
+            default -> throw new AssertionError(change);
+        };
+        assertThatThrownBy(() -> jdbc.update("UPDATE uteexpress.return_requests SET " + assignment + " WHERE order_id=?", order))
+                .isInstanceOf(DataIntegrityViolationException.class);
+        assertThat(state()).isEqualTo(before);
+    }
+
+    @ParameterizedTest @ValueSource(booleans = {false, true}) @Timeout(40)
+    void concurrentReceiptUsesActualOrderLockAndRollbackAllowsWaitingRetry(boolean rollback) throws Exception {
+        approvedReturn(); var side = sideEffects(); long ov = version(), hc = historyCount();
+        var pids = new ConcurrentHashMap<String, Integer>();
+        var held = new CountDownLatch(1); var release = new CountDownLatch(1);
+        doAnswer(call -> {
+            jdbc.execute("SET LOCAL lock_timeout='15s'"); jdbc.execute("SET LOCAL statement_timeout='20s'");
+            pids.put(Thread.currentThread().getName(), pid()); return call.callRealMethod();
+        }).when(guardSpy).lockVendor(anyLong());
+        doAnswer(call -> {
+            call.callRealMethod();
+            if (Thread.currentThread().getName().equals("receipt-first")) {
+                held.countDown(); await(release);
+                if (rollback) throw new IllegalStateException("receipt rollback");
+            }
+            return null;
+        }).when(guardSpy).receive(any(), anyString(), any());
+        var pool = Executors.newFixedThreadPool(2);
+        try {
+            var first = pool.submit(() -> receiptWorker("receipt-first", ov)); await(held);
+            assertThat(events.values).isEmpty();
+            assertThat(evidence().get("received_at")).isNull();
+            var second = pool.submit(() -> receiptWorker("receipt-second", ov));
+            awaitPid(pids, "receipt-second");
+            awaitBlocked(pids.get("receipt-second"), pids.get("receipt-first"), "orders");
+            release.countDown();
+            assertThat(first.get(25, TimeUnit.SECONDS)).isEqualTo(rollback ? "ROLLBACK" : "OK");
+            assertThat(second.get(25, TimeUnit.SECONDS)).isEqualTo(rollback ? "OK" : "CONFLICT");
+        } finally { release.countDown(); pool.shutdownNow(); assertThat(pool.awaitTermination(5, TimeUnit.SECONDS)).isTrue(); }
+        assertThat(orderStatus()).isEqualTo("RETURNED"); assertThat(version()).isEqualTo(ov + 1);
+        assertThat(evidence()).containsEntry("version", 2L).containsEntry("received_by", vendor)
+                .containsEntry("receipt_reference", rollback ? "receipt-second" : "receipt-first")
+                .containsEntry("status", "APPROVED").containsEntry("restockable", null);
+        assertThat(jdbc.queryForList("SELECT * FROM uteexpress.return_requests WHERE order_id=?", order)).hasSize(1);
+        assertThat(historyCount()).isEqualTo(hc + 1); assertThat(events.values).hasSize(1);
+        assertThat(sideEffects()).isEqualTo(side);
+    }
+
+    @Test @Timeout(40)
+    void receiptWaitsForPersistedRequestLockAndRefreshesChangedVersion() throws Exception {
+        approvedReturn(); long ov = version(); var before = state();
+        var workerPid = new CompletableFuture<Integer>();
+        doAnswer(call -> {
+            jdbc.execute("SET LOCAL lock_timeout='15s'"); workerPid.complete(pid()); return call.callRealMethod();
+        }).when(guardSpy).lockVendor(anyLong());
+        var pool = Executors.newSingleThreadExecutor();
+        try {
+            var worker = tx.execute(s -> {
+                int holder = pid();
+                jdbc.queryForObject("SELECT id FROM uteexpress.return_requests WHERE order_id=? FOR UPDATE", Long.class, order);
+                var future = pool.submit(() -> receiptWorker("request-lock-waiter", ov));
+                try { awaitBlocked(workerPid.get(10, TimeUnit.SECONDS), holder, "return_requests"); }
+                catch (Exception e) { throw new AssertionError(e); }
+                jdbc.update("UPDATE uteexpress.return_requests SET version=version+1 WHERE order_id=?", order);
+                return future;
+            });
+            assertThat(worker.get(25, TimeUnit.SECONDS)).isEqualTo("CONFLICT");
+        } finally { pool.shutdownNow(); assertThat(pool.awaitTermination(5, TimeUnit.SECONDS)).isTrue(); }
+        assertThat(row()).isEqualTo(before.getFirst()); assertThat(events.values).isEmpty();
+        assertThat(evidence()).containsEntry("received_at", null).containsEntry("version", 2L);
+        assertThat(historyCount()).isEqualTo(initialHistory + 1);
+    }
+
+    @ParameterizedTest @CsvSource({"vendorAccount,true", "vendorShop,true", "vendorRole,true",
+            "vendorAccount,false", "vendorShop,false", "vendorRole,false"}) @Timeout(40)
+    void receiptEligibilityIsSerializedThroughCommit(String restriction, boolean restrictionFirst) throws Exception {
+        approvedReturn(); long ov = version(); var beforeOrder = row(); var beforeRequest = evidence();
+        var held = new CountDownLatch(1); var release = new CountDownLatch(1);
+        var holder = new CompletableFuture<Integer>(); var waiter = new CompletableFuture<Integer>();
+        if (restrictionFirst) doAnswer(call -> {
+            jdbc.execute("SET LOCAL lock_timeout='15s'"); waiter.complete(pid()); return call.callRealMethod();
+        }).when(guardSpy).lockVendor(anyLong());
+        else doAnswer(call -> {
+            call.callRealMethod(); holder.complete(pid()); held.countDown(); await(release); return null;
+        }).when(guardSpy).receive(any(), anyString(), any());
+        var pool = Executors.newFixedThreadPool(2);
+        Callable<String> restrictionCall = () -> {
+            auth(admin, "ADMIN");
+            try {
+                tx.executeWithoutResult(s -> {
+                    jdbc.execute("SET LOCAL lock_timeout='15s'");
+                    if (!restrictionFirst) waiter.complete(pid());
+                    if (restriction.equals("vendorRole")) {
+                        // Simulate vendor-role revocation under the owning Account lock.
+                        jdbc.queryForObject("SELECT id FROM uteexpress.users WHERE id=? FOR UPDATE", Long.class, vendor);
+                        jdbc.update("DELETE FROM uteexpress.user_roles WHERE user_id=? AND role_id=(SELECT id FROM uteexpress.roles WHERE code='VENDOR')", vendor);
+                    } else restrict(restriction);
+                    if (restrictionFirst) { holder.complete(pid()); held.countDown(); await(release); }
+                });
+                return "OK";
+            } finally { SecurityContextHolder.clearContext(); }
+        };
+        Callable<String> receiptCall = () -> receiptWorker("receipt-eligibility", ov);
+        try {
+            var first = pool.submit(restrictionFirst ? restrictionCall : receiptCall); await(held);
+            assertThat(events.values).isEmpty();
+            var second = pool.submit(restrictionFirst ? receiptCall : restrictionCall);
+            awaitBlocked(waiter.get(10, TimeUnit.SECONDS), holder.get(10, TimeUnit.SECONDS),
+                    restriction.equals("vendorShop") ? "shops" : "users");
+            release.countDown();
+            assertThat(first.get(25, TimeUnit.SECONDS)).isEqualTo("OK");
+            String result = second.get(25, TimeUnit.SECONDS);
+            if (restrictionFirst && restriction.equals("vendorShop")) {
+                // The ownership pre-read may cache the old Shop @Version. Hibernate then
+                // rejects the changed version while locking, before refresh, as in Phase 1.
+                assertThat(result).isIn("ACCESS_DENIED", "CONFLICT");
+            } else assertThat(result).isEqualTo(restrictionFirst ? "ACCESS_DENIED" : "OK");
+        } finally { release.countDown(); pool.shutdownNow(); assertThat(pool.awaitTermination(5, TimeUnit.SECONDS)).isTrue(); }
+        if (restrictionFirst) {
+            assertThat(row()).isEqualTo(beforeOrder); assertThat(evidence()).isEqualTo(beforeRequest);
+            assertThat(events.values).isEmpty();
+        } else {
+            assertThat(orderStatus()).isEqualTo("RETURNED"); assertThat(evidence()).containsEntry("version", 2L);
+            assertThat(events.values).hasSize(1);
+        }
+    }
+
+    private String receiptWorker(String name, long ov) {
+        Thread.currentThread().setName(name); auth(vendor, "VENDOR");
+        try { lifecycle.receiveReturn(new ReceiveReturnCommand(order, ov, 1L, name)); return "OK"; }
+        catch (ApplicationException e) { return e.errorCode().name(); }
+        catch (IllegalStateException e) {
+            if (!"receipt rollback".equals(e.getMessage())) throw e;
+            return "ROLLBACK";
+        } finally { SecurityContextHolder.clearContext(); }
     }
 
     private int pid() { return jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class); }
