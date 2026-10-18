@@ -93,6 +93,30 @@ public class ReturnOrderAuthority {
         returns.saveAndFlush(guarded.request());
     }
 
+    public void requireReceivable(LockedReturn guarded, ReceiveReturnCommand command) {
+        var request = guarded.request();
+        if (guarded.order().getStatus() != OrderStatus.RETURN_REQUESTED
+                || !Objects.equals(guarded.order().getVersion(), command.expectedVersion())
+                || request == null || request.getStatus() != ReturnRequestStatus.APPROVED
+                || !Objects.equals(request.getOrderId(), guarded.order().getId())
+                || !Objects.equals(request.getRequestedBy(), guarded.order().getBuyerId())
+                || !Objects.equals(request.getVersion(), command.expectedRequestVersion())
+                || request.getReceivedAt() != null || request.getReceivedBy() != null
+                || request.getReceiptReference() != null) throw conflict();
+    }
+
+    public void receive(LockedReturn guarded, String reference, Instant at) {
+        guarded.request().receive(guarded.actorId(), reference, at);
+        returns.saveAndFlush(guarded.request());
+    }
+
+    static void validate(ReceiveReturnCommand command) {
+        if (command == null) throw invalid();
+        validateSelection(command.orderId(), command.expectedVersion());
+        if (command.expectedRequestVersion() == null || command.expectedRequestVersion() < 0) throw invalid();
+        ReturnRequest.requireReceiptReference(command.receiptReference());
+    }
+
     static void validate(RequestReturnCommand command) {
         if (command == null) throw invalid();
         validateSelection(command.orderId(), command.expectedVersion());

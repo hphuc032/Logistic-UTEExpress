@@ -22,6 +22,8 @@ public class ReturnRequest {
     @Column(name = "decision_at") private Instant decisionAt;
     @Column(name = "decision_note", length = 1000) private String decisionNote;
     @Column(name = "received_at") private Instant receivedAt;
+    @Column(name = "received_by") private Long receivedBy;
+    @Column(name = "receipt_reference", length = 255) private String receiptReference;
     @Column(name = "restockable") private Boolean restockable;
     @Column(name = "created_at", nullable = false, updatable = false) private Instant createdAt;
     @Column(name = "updated_at", nullable = false) private Instant updatedAt;
@@ -53,6 +55,23 @@ public class ReturnRequest {
         updatedAt = at;
     }
 
+    public void receive(Long actor, String reference, Instant at) {
+        if (status != ReturnRequestStatus.APPROVED || receivedAt != null || receivedBy != null
+                || receiptReference != null || actor == null || actor <= 0 || at == null
+                || decisionAt == null || at.isBefore(decisionAt))
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        receiptReference = requireReceiptReference(reference);
+        receivedBy = actor;
+        receivedAt = at;
+        updatedAt = at;
+    }
+
+    public static String requireReceiptReference(String value) {
+        if (value == null || value.isBlank() || value.length() > 255)
+            throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
+        return value.strip();
+    }
+
     public static String requireReason(String value) {
         if (value == null || value.isBlank() || value.length() > 1000)
             throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
@@ -69,6 +88,8 @@ public class ReturnRequest {
     public Instant getDecisionAt() { return decisionAt; }
     public String getDecisionNote() { return decisionNote; }
     public Instant getReceivedAt() { return receivedAt; }
+    public Long getReceivedBy() { return receivedBy; }
+    public String getReceiptReference() { return receiptReference; }
     public Boolean getRestockable() { return restockable; }
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }

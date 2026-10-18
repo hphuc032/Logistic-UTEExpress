@@ -12,10 +12,11 @@ import com.uteexpress.shipping.dto.DeliveryAttemptOperation;
  * update timestamps, append history and publish the result only after commit.
  */
 public interface OrderLifecycleService {
-    /** Phase 1 return mutations own an Order-first transaction and reject an existing transaction. */
+    /** Return mutations own an Order-first transaction and reject an existing transaction. */
     OrderStatusChangedEvent requestReturn(com.uteexpress.order.dto.RequestReturnCommand command);
     void approveReturn(com.uteexpress.order.dto.ReturnDecisionCommand command);
     OrderStatusChangedEvent rejectReturn(com.uteexpress.order.dto.ReturnDecisionCommand command);
+    OrderStatusChangedEvent receiveReturn(com.uteexpress.order.dto.ReceiveReturnCommand command);
 
     /**
      * Starts its own Order-first transaction; an existing transaction is rejected.

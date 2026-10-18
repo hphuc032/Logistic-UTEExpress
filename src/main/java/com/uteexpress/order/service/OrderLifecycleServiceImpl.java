@@ -127,6 +127,21 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
         });
     }
 
+    @Override
+    public OrderStatusChangedEvent receiveReturn(com.uteexpress.order.dto.ReceiveReturnCommand command) {
+        ReturnOrderAuthority.validate(command);
+        return returnTransaction(() -> {
+            var authority = returnAuthority();
+            var guarded = authority.lockVendor(command.orderId());
+            authority.requireReceivable(guarded, command);
+            var at = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+            authority.receive(guarded, command.receiptReference(), at);
+            return persistValidatedTransition(guarded.order(),
+                    OrderTransitionPolicy.requireTarget(guarded.order().getStatus(), OrderAction.RECEIVE_RETURN),
+                    guarded.actorId(), at, "Vendor attested return receipt");
+        });
+    }
+
     private <T> T returnTransaction(java.util.function.Supplier<T> operation) {
         // Never join or suspend a coordinator which might already hold Account/Shop locks.
         if (TransactionSynchronizationManager.isActualTransactionActive())
@@ -273,6 +288,9 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
             throw new ApplicationException(
                     ErrorCode.INVALID_REQUEST);
         }
+        // Receipt always needs the dedicated two-version, persisted-evidence boundary.
+        if (command.action() == OrderAction.RECEIVE_RETURN)
+            throw new ApplicationException(ErrorCode.CONFLICT);
         try {
             return transactions.execute(tx -> {
                 var user = currentUser();
