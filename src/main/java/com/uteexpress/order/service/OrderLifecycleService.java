@@ -33,14 +33,14 @@ public interface OrderLifecycleService {
 
     /**
      * Internal MANDATORY + SHIPPER boundary, using both ORIGINAL versions.
-     * Keeps Order SHIPPING without writes/events; blocked until QD's persisted source hook exists.
+     * Keeps Order SHIPPING without writes/events; validates QD's persisted source facts.
      */
     void prepareShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
             Long expectedShipmentVersion, DeliveryAttemptOperation operation);
 
     /**
      * Rechecks unchanged Order and persisted Shipment/evidence at original Shipment version + 1.
-     * No caller-supplied facts; blocked until QD's persisted evidence hook exists.
+     * No caller-supplied facts; reloads QD's persisted operation evidence.
      */
     void verifyShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
             Long expectedShipmentVersion, DeliveryAttemptOperation operation);

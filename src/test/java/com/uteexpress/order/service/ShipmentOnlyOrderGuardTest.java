@@ -8,6 +8,7 @@ import com.uteexpress.order.repository.OrderRepository;
 import com.uteexpress.payment.service.PaymentReadService;
 import com.uteexpress.shipping.dto.DeliveryAttemptOperation;
 import com.uteexpress.shipping.service.ShipmentFulfillmentService;
+import com.uteexpress.shipping.service.ShipmentAttemptService;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.LockModeType;
 import java.time.Instant;
@@ -29,8 +30,9 @@ class ShipmentOnlyOrderGuardTest {
     final EntityManager entityManager = mock(EntityManager.class);
     final ShipmentFulfillmentService shipments = mock(ShipmentFulfillmentService.class);
     final PaymentReadService payments = mock(PaymentReadService.class);
+    final ShipmentAttemptService attempts = mock(ShipmentAttemptService.class);
     final Order order = mock(Order.class);
-    final ShipperOrderAuthority authority = new ShipperOrderAuthority(orders, entityManager, shipments, payments);
+    final ShipperOrderAuthority authority = new ShipperOrderAuthority(orders, entityManager, shipments, payments, attempts);
 
     @BeforeEach void shippingOrder() {
         when(orders.findByIdForUpdate(10L)).thenReturn(Optional.of(order));

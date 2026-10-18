@@ -59,7 +59,8 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
             com.uteexpress.shipping.service.ShipmentFulfillmentService shipments,
             com.uteexpress.payment.service.PaymentReadService paymentReads,
             com.uteexpress.governance.service.RoleGovernanceService roles,
-            com.uteexpress.governance.service.AuditLogService audit, ReturnOrderAuthority returnAuthority) {
+            com.uteexpress.governance.service.AuditLogService audit, ReturnOrderAuthority returnAuthority,
+            com.uteexpress.shipping.service.ShipmentAttemptService attempts) {
         super(orders, items, history, users, transactionManager, events, clock);
         this.orders = orders;
         this.accounts = accounts;
@@ -74,7 +75,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.vendorAuthority = vendorAuthority;
         this.shipments = shipments;
         this.returnAuthority = returnAuthority;
-        this.shipperAuthority = new ShipperOrderAuthority(orders, entityManager, shipments, paymentReads);
+        this.shipperAuthority = new ShipperOrderAuthority(orders, entityManager, shipments, paymentReads, attempts);
         this.opsAuthority = new OpsOrderAuthority(orders, items, entityManager, accounts, identities,
                 roles, inventory, vouchers, audit);
     }
@@ -174,10 +175,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
     public void prepareShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
             Long expectedShipmentVersion, DeliveryAttemptOperation operation) {
-        requireShipmentOnlyOrderBeforeIntegration(orderId, expectedOrderVersion, expectedShipmentVersion, operation);
-        // QD's ShipmentAttemptService.lockForOperation is absent. Never substitute SHIP-02 facts:
-        // they cannot prove per-attempt failure evidence or authorize a retry.
-        throw new ApplicationException(ErrorCode.CONFLICT);
+        requireShipmentOnlyOperation(orderId, expectedOrderVersion, expectedShipmentVersion, operation, false);
     }
 
     @Override
@@ -185,18 +183,16 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
     public void verifyShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
             Long expectedShipmentVersion, DeliveryAttemptOperation operation) {
-        requireShipmentOnlyOrderBeforeIntegration(orderId, expectedOrderVersion, expectedShipmentVersion, operation);
-        // QD's requireOperationEvidence must reload persisted Shipment + immutable evidence with
-        // the ORIGINAL version. Until it exists, no target status/attempt/version can be accepted.
-        throw new ApplicationException(ErrorCode.CONFLICT);
+        requireShipmentOnlyOperation(orderId, expectedOrderVersion, expectedShipmentVersion, operation, true);
     }
 
-    private void requireShipmentOnlyOrderBeforeIntegration(Long orderId, Long expectedOrderVersion,
-            Long expectedShipmentVersion, DeliveryAttemptOperation operation) {
-        accounts.currentAccountId().filter(id -> id > 0)
+    private void requireShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation, boolean completion) {
+        Long actor = accounts.currentAccountId().filter(id -> id > 0)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));
         try {
-            shipperAuthority.requireShipmentOnlyOrder(orderId, expectedOrderVersion, expectedShipmentVersion, operation);
+            shipperAuthority.requireShipmentOnlyOperation(orderId, expectedOrderVersion,
+                    expectedShipmentVersion, operation, completion, actor);
         } catch (org.springframework.dao.OptimisticLockingFailureException | jakarta.persistence.OptimisticLockException ex) {
             throw new ApplicationException(ErrorCode.CONFLICT);
         }
