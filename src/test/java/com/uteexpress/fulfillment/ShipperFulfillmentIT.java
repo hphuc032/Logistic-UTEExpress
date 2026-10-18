@@ -175,7 +175,7 @@ class ShipperFulfillmentIT {
     }
 
     @Test void secondAttemptDeliveryCollectsCodAndDuplicateConflicts() {
-        prepareSecondAttemptFixture();
+        prepareSecondAttempt();
         fulfillment.transition(orderId, OrderAction.DELIVER,
                 new FulfillmentRequest(2L, 4L, new BigDecimal("115000")));
         assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?", String.class, orderId)).isEqualTo("DELIVERED");
@@ -190,7 +190,7 @@ class ShipperFulfillmentIT {
     }
 
     @Test void secondAttemptWrongCodRollsBackAllFulfillmentState() {
-        prepareSecondAttemptFixture();
+        prepareSecondAttempt();
         var before = state();
         assertThatThrownBy(() -> fulfillment.transition(orderId, OrderAction.DELIVER,
                 new FulfillmentRequest(2L, 4L, new BigDecimal("1"))))
@@ -202,23 +202,25 @@ class ShipperFulfillmentIT {
         assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?", String.class, orderId)).isEqualTo("DELIVERED");
     }
 
-    private void prepareSecondAttemptFixture() {
+    private void prepareSecondAttempt() {
         fulfillment.transition(orderId, OrderAction.PICK_UP, new FulfillmentRequest(0L, 0L, null));
         fulfillment.transition(orderId, OrderAction.START_SHIPPING, new FulfillmentRequest(1L, 1L, null));
-        // Fixture only: failure/retry authority is not implemented yet. This does NOT test retry mutation.
-        jdbc.update("UPDATE uteexpress.shipments SET attempt_count=2, version=4 WHERE order_id=?", orderId);
+        deliveryAttempts.reportFailure(orderId, new com.uteexpress.fulfillment.dto.DeliveryFailureRequest(2L, 2L, "No answer", "PROOF"));
+        deliveryAttempts.retryDelivery(orderId, new com.uteexpress.fulfillment.dto.RetryDeliveryRequest(2L, 3L));
     }
 
-    @Test void shipmentOnlyCoordinatorRemainsFailClosedUntilTdWiresPersistedHooks() throws Exception {
+    @Test void shipmentOnlyHttpFlowUsesPersistedVersionsAndKeepsAuthorizationGuards() throws Exception {
         fulfillment.transition(orderId,OrderAction.PICK_UP,new FulfillmentRequest(0L,0L,null));
         fulfillment.transition(orderId,OrderAction.START_SHIPPING,new FulfillmentRequest(1L,1L,null));
-        var before=state();
+        var orderBefore=jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", orderId);
         String path="/shipper/orders/"+orderId+"/delivery-failed";
         String json="{\"expectedOrderVersion\":2,\"expectedShipmentVersion\":2,\"failureReason\":\"No answer\",\"evidenceReference\":\"PROOF\"}";
         mvc.perform(post(path).with(user(principal(shipper,"SHIPPER"))).with(csrf()).contentType("application/json").content(json))
-                .andExpect(status().isConflict());
-        assertThat(state()).isEqualTo(before);
-        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_delivery_failures WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?)",Long.class,orderId)).isZero();
+                .andExpect(status().isOk()).andExpect(jsonPath("$.orderVersion").value(2))
+                .andExpect(jsonPath("$.shipmentVersion").value(3)).andExpect(jsonPath("$.attemptCount").value(1))
+                .andExpect(jsonPath("$.shipmentStatus").value("DELIVERY_FAILED"));
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", orderId)).isEqualTo(orderBefore);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_delivery_failures WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?)",Long.class,orderId)).isEqualTo(1);
         mvc.perform(post(path).with(user(principal(shipper,"SHIPPER"))).contentType("application/json").content(json)).andExpect(status().isForbidden());
         for(String role:List.of("USER","VENDOR","ADMIN","MANAGER"))
             mvc.perform(post(path).with(user(principal(shipper,role))).with(csrf()).contentType("application/json").content(json)).andExpect(status().isForbidden());
@@ -230,19 +232,32 @@ class ShipperFulfillmentIT {
         mvc.perform(post("/shipper/orders/"+orderId+"/retry").with(user(principal(shipper,"SHIPPER"))).with(csrf())
                 .contentType("application/x-www-form-urlencoded").param("expectedOrderVersion","2").param("expectedShipmentVersion","2"))
                 .andExpect(status().isConflict());
+        mvc.perform(post("/shipper/orders/"+orderId+"/retry").with(user(principal(shipper,"SHIPPER"))).with(csrf())
+                .contentType("application/x-www-form-urlencoded").param("expectedOrderVersion","2").param("expectedShipmentVersion","3"))
+                .andExpect(status().is3xxRedirection()).andExpect(redirectedUrl("/shipper/shipments/view"));
+        mvc.perform(post(path).with(user(principal(shipper,"SHIPPER"))).with(csrf()).contentType("application/json")
+                .content(json.replace("\"expectedShipmentVersion\":2", "\"expectedShipmentVersion\":4")))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.shipmentVersion").value(5))
+                .andExpect(jsonPath("$.attemptCount").value(2));
+        mvc.perform(post("/shipper/orders/"+orderId+"/retry").with(user(principal(shipper,"SHIPPER"))).with(csrf())
+                .contentType("application/json").content("{\"expectedOrderVersion\":2,\"expectedShipmentVersion\":5}"))
+                .andExpect(status().isConflict());
+        var committed=state();
         authenticate(shipper,"SHIPPER");
         new org.springframework.transaction.support.TransactionTemplate(transactions).executeWithoutResult(tx ->
                 assertThatThrownBy(() -> deliveryAttempts.reportFailure(orderId,
                     new com.uteexpress.fulfillment.dto.DeliveryFailureRequest(2L,2L,"No answer","PROOF")))
                     .isInstanceOfSatisfying(ApplicationException.class,e -> assertThat(e.errorCode()).isEqualTo(ErrorCode.INVALID_REQUEST)));
-        assertThat(state()).isEqualTo(before);
+        assertThat(state()).isEqualTo(committed);
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?", orderId)).isEqualTo(orderBefore);
     }
     private List<Object> state() {
         return List.of(jdbc.queryForList("SELECT * FROM uteexpress.orders WHERE id=?",orderId),
                 jdbc.queryForList("SELECT * FROM uteexpress.shipments WHERE order_id=?",orderId),
                 jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=?",orderId),
                 jdbc.queryForList("SELECT * FROM uteexpress.order_status_history WHERE order_id=? ORDER BY id",orderId),
-                jdbc.queryForList("SELECT * FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) ORDER BY id",orderId));
+                jdbc.queryForList("SELECT * FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) ORDER BY id",orderId),
+                jdbc.queryForList("SELECT * FROM uteexpress.shipment_delivery_failures WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) ORDER BY attempt_number", orderId));
     }
     private long insertUser(String status, String role) {
         String name = "ship" + java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 20);
