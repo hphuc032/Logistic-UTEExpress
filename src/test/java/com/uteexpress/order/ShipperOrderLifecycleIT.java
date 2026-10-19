@@ -18,6 +18,11 @@ import com.uteexpress.promotion.service.VoucherService;
 import com.uteexpress.security.authentication.UteExpressPrincipal;
 import com.uteexpress.shipping.service.ShipmentAssignmentService;
 import com.uteexpress.shipping.service.ShipmentFulfillmentService;
+import com.uteexpress.shipping.service.ShipmentAttemptService;
+import com.uteexpress.fulfillment.service.DeliveryAttemptCoordinator;
+import com.uteexpress.fulfillment.dto.DeliveryFailureRequest;
+import com.uteexpress.fulfillment.dto.RetryDeliveryRequest;
+import com.uteexpress.shipping.dto.DeliveryAttemptOperation;
 import java.math.BigDecimal;
 import java.sql.SQLException;
 import java.time.Instant;
@@ -31,6 +36,8 @@ import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
@@ -60,6 +67,8 @@ class ShipperOrderLifecycleIT {
     @Autowired OrderLifecycleService lifecycle;
     @Autowired ShipmentAssignmentService assignments;
     @MockitoSpyBean ShipmentFulfillmentService shipments;
+    @Autowired ShipmentAttemptService attempts;
+    @Autowired DeliveryAttemptCoordinator deliveryAttempts;
     @Autowired PaymentService payments;
     @MockitoSpyBean PaymentReadService paymentReads;
     @MockitoSpyBean VoucherService vouchers;
@@ -162,6 +171,341 @@ class ShipperOrderLifecycleIT {
                 .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
         assertThatThrownBy(() -> paymentReads.requireCollectedCodForDelivery(order, TOTAL))
                 .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+    }
+
+    @ParameterizedTest @EnumSource(DeliveryAttemptOperation.class)
+    void shipmentOnlyBoundariesRequireExistingTransaction(DeliveryAttemptOperation operation) {
+        for (boolean verify : List.of(false, true)) {
+            assertThatThrownBy(() -> shipmentOnlyBoundary(verify, 4L, 2L, operation))
+                    .isInstanceOf(org.springframework.transaction.IllegalTransactionStateException.class);
+        }
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"USER", "VENDOR", "ADMIN", "MANAGER"})
+    void shipmentOnlyBoundariesRequireShipperRole(String role) {
+        auth(shipper, role);
+        for (var operation : DeliveryAttemptOperation.values()) {
+            for (boolean verify : List.of(false, true)) {
+                assertThatThrownBy(() -> tx.executeWithoutResult(s -> shipmentOnlyBoundary(verify, 4L, 2L, operation)))
+                        .isInstanceOf(AccessDeniedException.class);
+            }
+        }
+    }
+
+    @ParameterizedTest @EnumSource(DeliveryAttemptOperation.class)
+    void shipmentOnlyBoundariesRejectForgedIdentity(DeliveryAttemptOperation operation) {
+        SecurityContextHolder.getContext().setAuthentication(UsernamePasswordAuthenticationToken.authenticated(
+                "" + shipper, null, List.of(new SimpleGrantedAuthority("ROLE_SHIPPER"))));
+        for (boolean verify : List.of(false, true)) {
+            rejects(() -> tx.executeWithoutResult(s -> shipmentOnlyBoundary(verify, 4L, 2L, operation)),
+                    ErrorCode.UNAUTHENTICATED);
+        }
+    }
+
+    @ParameterizedTest @EnumSource(DeliveryAttemptOperation.class)
+    void shipmentOnlyReadsDoNotMutateOrAcceptMissingTargetEvidence(DeliveryAttemptOperation operation) {
+        shipping();
+        long ov = version(), sv = shipmentVersion();
+        var before = state();
+        var returnsBefore = jdbc.queryForList("SELECT * FROM uteexpress.return_requests WHERE order_id=?", order);
+        events.clear();
+        for (boolean verify : List.of(false, true)) {
+            for (int call = 0; call < 2; call++) {
+                if (!verify && operation == DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE)
+                    tx.executeWithoutResult(s -> shipmentOnlyBoundary(false, ov, sv, operation));
+                else rejects(() -> tx.executeWithoutResult(s -> shipmentOnlyBoundary(verify, ov, sv, operation)), ErrorCode.CONFLICT);
+                assertThat(state()).isEqualTo(before);
+                assertThat(jdbc.queryForList("SELECT * FROM uteexpress.return_requests WHERE order_id=?", order))
+                        .isEqualTo(returnsBefore);
+                assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
+            }
+        }
+    }
+
+    private void shipmentOnlyBoundary(boolean verify, Long ov, Long sv, DeliveryAttemptOperation operation) {
+        if (verify) lifecycle.verifyShipmentOnlyOperation(order, ov, sv, operation);
+        else lifecycle.prepareShipmentOnlyOperation(order, ov, sv, operation);
+    }
+
+    @Test void realCoordinatorFailureRetrySecondFailureKeepsOrderAndOtherModulesUntouched() {
+        shipping(); events.clear();
+        var unchanged = nonAttemptState();
+        var first = deliveryAttempts.reportFailure(order, new DeliveryFailureRequest(4L, 2L, " No answer ", " PROOF-1 "));
+        assertThat(first.orderStatus()).isEqualTo("SHIPPING");
+        assertThat(first.orderVersion()).isEqualTo(4L);
+        assertThat(first.shipmentStatus().name()).isEqualTo("DELIVERY_FAILED");
+        assertThat(first.shipmentVersion()).isEqualTo(3L);
+        assertThat(first.attemptCount()).isEqualTo(1);
+        var retained = failureRows();
+        assertThat(retained).hasSize(1);
+        assertThat(retained.getFirst()).containsEntry("attempt_number", 1).containsEntry("source_shipment_version", 2L)
+                .containsEntry("shipper_id", shipper).containsEntry("failure_reason", "No answer").containsEntry("evidence_reference", "PROOF-1");
+        var retried = deliveryAttempts.retryDelivery(order, new RetryDeliveryRequest(4L, 3L));
+        assertThat(retried.orderVersion()).isEqualTo(4L);
+        assertThat(retried.shipmentStatus().name()).isEqualTo("SHIPPING");
+        assertThat(retried.shipmentVersion()).isEqualTo(4L);
+        assertThat(retried.attemptCount()).isEqualTo(2);
+        assertThat(failureRows()).isEqualTo(retained);
+        var second = deliveryAttempts.reportFailure(order, new DeliveryFailureRequest(4L, 4L, "Unavailable", "PROOF-2"));
+        assertThat(second.shipmentStatus().name()).isEqualTo("DELIVERY_FAILED");
+        assertThat(second.shipmentVersion()).isEqualTo(5L);
+        assertThat(second.attemptCount()).isEqualTo(2);
+        assertThat(failureRows()).hasSize(2).containsAll(retained);
+        assertThat(failureRows().get(1)).containsEntry("attempt_number", 2).containsEntry("source_shipment_version", 4L);
+        var exhausted = state();
+        rejects(() -> deliveryAttempts.retryDelivery(order, new RetryDeliveryRequest(4L, 5L)), ErrorCode.CONFLICT);
+        assertThat(state()).isEqualTo(exhausted);
+        assertThat(nonAttemptState()).isEqualTo(unchanged);
+        assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
+    }
+
+    @ParameterizedTest @EnumSource(DeliveryAttemptOperation.class)
+    void staleDuplicateAndWrongShipperRequestsHaveNoEffects(DeliveryAttemptOperation operation) {
+        shipping();
+        if (operation == DeliveryAttemptOperation.RETRY_DELIVERY) reportFirstFailure();
+        long ov = version(), sv = shipmentVersion();
+        var before = state();
+        rejects(() -> coordinate(operation, ov - 1, sv), ErrorCode.CONFLICT);
+        rejects(() -> coordinate(operation, ov, sv - 1), ErrorCode.CONFLICT);
+        auth(other, "SHIPPER");
+        rejects(() -> coordinate(operation, ov, sv), ErrorCode.RESOURCE_NOT_FOUND);
+        auth(shipper, "SHIPPER");
+        assertThat(state()).isEqualTo(before);
+        events.clear();
+        coordinate(operation, ov, sv);
+        var committed = state();
+        rejects(() -> coordinate(operation, ov, sv), ErrorCode.CONFLICT);
+        assertThat(state()).isEqualTo(committed);
+        assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"order_version", "order_status", "ready", "shipment_version", "shipment_status", "attempt", "wrong_operation", "wrong_actor"})
+    void verifyFailureRollsBackRealMutationEvidenceAndAudit(String defect) {
+        shipping(); events.clear();
+        var before = state();
+        rejects(() -> tx.executeWithoutResult(s -> {
+            var operation = DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE;
+            lifecycle.prepareShipmentOnlyOperation(order, 4L, 2L, operation);
+            attempts.reportFailure(order, 2L, "No answer", "PROOF");
+            switch (defect) {
+                case "order_version" -> jdbc.update("UPDATE uteexpress.orders SET version=version+1 WHERE id=?", order);
+                case "order_status" -> jdbc.update("UPDATE uteexpress.orders SET status='PICKED_UP' WHERE id=?", order);
+                case "ready" -> jdbc.update("UPDATE uteexpress.orders SET ready_at=NULL WHERE id=?", order);
+                case "shipment_version" -> jdbc.update("UPDATE uteexpress.shipments SET version=version+1 WHERE order_id=?", order);
+                case "shipment_status" -> jdbc.update("UPDATE uteexpress.shipments SET status='SHIPPING' WHERE order_id=?", order);
+                case "attempt" -> jdbc.update("UPDATE uteexpress.shipments SET attempt_count=2 WHERE order_id=?", order);
+                case "wrong_operation" -> operation = DeliveryAttemptOperation.RETRY_DELIVERY;
+                case "wrong_actor" -> auth(other, "SHIPPER");
+                default -> throw new AssertionError(defect);
+            }
+            lifecycle.verifyShipmentOnlyOperation(order, 4L, 2L, operation);
+        }), defect.equals("wrong_actor") ? ErrorCode.RESOURCE_NOT_FOUND : ErrorCode.CONFLICT);
+        assertThat(state()).isEqualTo(before);
+        assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
+    }
+
+    @ParameterizedTest @EnumSource(DeliveryAttemptOperation.class)
+    void retryAndFailureAuditErrorsRollBackEntireCoordinator(DeliveryAttemptOperation operation) {
+        shipping();
+        if (operation == DeliveryAttemptOperation.RETRY_DELIVERY) reportFirstFailure();
+        var before = state(); events.clear();
+        String action = operation == DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE ? "DELIVERY_FAILURE_REPORTED" : "DELIVERY_RETRIED";
+        long shipment = jdbc.queryForObject("SELECT id FROM uteexpress.shipments WHERE order_id=?", Long.class, order);
+        jdbc.execute("ALTER TABLE uteexpress.audit_logs ADD CONSTRAINT ship03_integration_audit CHECK (target_id <> "
+                + shipment + " OR action <> '" + action + "') NOT VALID");
+        try { assertThatThrownBy(() -> coordinate(operation, 4L, shipmentVersion())).isInstanceOf(RuntimeException.class); }
+        finally { jdbc.execute("ALTER TABLE uteexpress.audit_logs DROP CONSTRAINT ship03_integration_audit"); }
+        assertThat(state()).isEqualTo(before);
+        assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
+        coordinate(operation, 4L, shipmentVersion());
+    }
+
+    @ParameterizedTest @EnumSource(DeliveryAttemptOperation.class) @Timeout(60)
+    void competingAttemptRequestsWaitOnOrderAndCommitOnce(DeliveryAttemptOperation operation) throws Exception {
+        shipping();
+        if (operation == DeliveryAttemptOperation.RETRY_DELIVERY) reportFirstFailure();
+        long sv = shipmentVersion(), audits = auditCount();
+        var unchanged = nonAttemptState();
+        var pid = new CompletableFuture<Integer>();
+        var pool = Executors.newSingleThreadExecutor();
+        var result = new ArrayList<Future<String>>();
+        try {
+            tx.executeWithoutResult(s -> {
+                limits();
+                lifecycle.prepareShipmentOnlyOperation(order, 4L, sv, operation);
+                int holder = jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class);
+                result.add(pool.submit(() -> characterizedWorker(pid, () -> {
+                    auth(shipper, "SHIPPER"); attemptProtocol(operation, sv);
+                })));
+                assertThat(awaitWait(await(pid), holder).sql()).contains("orders", "for no key update");
+                mutateAttempt(operation, sv);
+                lifecycle.verifyShipmentOnlyOperation(order, 4L, sv, operation);
+                assertThat(result.getFirst().isDone()).isFalse();
+            });
+            assertThat(result.getFirst().get(25, TimeUnit.SECONDS)).isEqualTo("CONFLICT");
+            assertThat(shipmentVersion()).isEqualTo(sv + 1);
+            assertThat(auditCount()).isEqualTo(audits + 1);
+            assertThat(failureRows()).hasSize(1);
+            assertThat(nonAttemptState()).isEqualTo(unchanged);
+        } finally { stop(pool); }
+    }
+
+    @ParameterizedTest @ValueSource(booleans = {false, true}) @Timeout(60)
+    void failureAndDeliverySerializeOnOrderWithExactCommittedEffects(boolean failureFirst) throws Exception {
+        shipping();
+        var pid = new CompletableFuture<Integer>();
+        var pool = Executors.newSingleThreadExecutor();
+        var result = new ArrayList<Future<String>>();
+        try {
+            tx.executeWithoutResult(s -> {
+                limits();
+                if (failureFirst) lifecycle.prepareShipmentOnlyOperation(order, 4L, 2L, DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE);
+                else lifecycle.prepareShipperTransition(order, 4L, 2L, OrderAction.DELIVER);
+                int holder = jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class);
+                result.add(pool.submit(() -> characterizedWorker(pid, () -> {
+                    auth(shipper, "SHIPPER");
+                    if (failureFirst) perform(OrderAction.DELIVER);
+                    else attemptProtocol(DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE, 2L);
+                })));
+                assertThat(awaitWait(await(pid), holder).sql()).contains("orders", "for no key update");
+                if (failureFirst) {
+                    mutateAttempt(DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE, 2L);
+                    lifecycle.verifyShipmentOnlyOperation(order, 4L, 2L, DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE);
+                } else perform(OrderAction.DELIVER);
+            });
+            assertThat(result.getFirst().get(25, TimeUnit.SECONDS)).isEqualTo("CONFLICT");
+            assertThat(status()).isEqualTo(failureFirst ? "SHIPPING" : "DELIVERED");
+            assertThat(version()).isEqualTo(failureFirst ? 4 : 5);
+            assertThat(shipmentStatus()).isEqualTo(failureFirst ? "DELIVERY_FAILED" : "DELIVERED");
+            assertThat(shipmentVersion()).isEqualTo(3);
+            assertThat(failureRows()).hasSize(failureFirst ? 1 : 0);
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.payments WHERE order_id=?", String.class, order))
+                    .isEqualTo(failureFirst ? "UNPAID" : "PAID");
+        } finally { stop(pool); }
+    }
+
+    static java.util.stream.Stream<Arguments> attemptRestrictions() {
+        return Arrays.stream(DeliveryAttemptOperation.values()).flatMap(operation ->
+                java.util.stream.Stream.of(false, true).flatMap(revoke ->
+                        java.util.stream.Stream.of(false, true).map(first -> Arguments.of(operation, revoke, first))));
+    }
+
+    @ParameterizedTest @MethodSource("attemptRestrictions") @Timeout(60)
+    void attemptEligibilitySerializesWithGovernanceInBothSchedulesForMultiRoleActor(
+            DeliveryAttemptOperation operation, boolean revokeRole, boolean restrictionFirst) throws Exception {
+        shipping();
+        if (operation == DeliveryAttemptOperation.RETRY_DELIVERY) reportFirstFailure();
+        grant(shipper, "ADMIN"); grant(shipper, "VENDOR");
+        long sv = shipmentVersion(), audits = auditCount();
+        var before = state(); var unchanged = nonAttemptState();
+        var pid = new CompletableFuture<Integer>();
+        var pool = Executors.newSingleThreadExecutor();
+        var result = new ArrayList<Future<String>>();
+        try {
+            tx.executeWithoutResult(s -> {
+                limits();
+                if (restrictionFirst) {
+                    auth(admin, "ADMIN"); restrictShipper(revokeRole);
+                } else {
+                    auth(shipper, "SHIPPER", "ADMIN", "VENDOR");
+                    lifecycle.prepareShipmentOnlyOperation(order, 4L, sv, operation);
+                }
+                int holder = jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class);
+                result.add(pool.submit(() -> characterizedWorker(pid, () -> {
+                    if (restrictionFirst) {
+                        auth(shipper, "SHIPPER", "ADMIN", "VENDOR"); attemptProtocol(operation, sv);
+                    } else {
+                        auth(admin, "ADMIN"); restrictShipper(revokeRole);
+                    }
+                })));
+                var wait = awaitWait(await(pid), holder);
+                assertThat(wait.sql()).contains("uteexpress.users", restrictionFirst ? "for share" : revokeRole ? "for update" : "for no key update");
+                assertThat(result.getFirst().isDone()).isFalse();
+                if (!restrictionFirst) {
+                    mutateAttempt(operation, sv);
+                    lifecycle.verifyShipmentOnlyOperation(order, 4L, sv, operation);
+                    awaitWait(await(pid), holder);
+                }
+            });
+            assertThat(result.getFirst().get(25, TimeUnit.SECONDS)).isEqualTo(restrictionFirst ? "ACCESS_DENIED" : "OK");
+            if (restrictionFirst) assertThat(state()).isEqualTo(before);
+            else {
+                assertThat(nonAttemptState()).isEqualTo(unchanged);
+                assertThat(shipmentVersion()).isEqualTo(sv + 1);
+                assertThat(auditCount()).isEqualTo(audits + 1);
+                assertThat(failureRows()).hasSize(1);
+            }
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.users WHERE id=?", String.class, shipper))
+                    .isEqualTo(revokeRole ? "ACTIVE" : "LOCKED");
+            assertThat(persistedShipperRole()).isEqualTo(!revokeRole);
+        } finally { stop(pool); }
+    }
+
+    @ParameterizedTest @ValueSource(strings = {"missing", "attempt", "source_version", "actor", "time"})
+    void verifyReloadsPersistedEvidenceAndRejectsMalformedTarget(String defect) {
+        shipping(); var before = state();
+        rejects(() -> tx.executeWithoutResult(s -> {
+            lifecycle.prepareShipmentOnlyOperation(order, 4L, 2L, DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE);
+            // Simulate a broken mutation: a target status alone cannot authorize verify.
+            jdbc.update("UPDATE uteexpress.shipments SET status='DELIVERY_FAILED',version=version+1 WHERE order_id=?", order);
+            if (!defect.equals("missing")) {
+                var pickup = jdbc.queryForObject("SELECT picked_up_at FROM uteexpress.shipments WHERE order_id=?", java.sql.Timestamp.class, order);
+                jdbc.update("""
+                        INSERT INTO uteexpress.shipment_delivery_failures
+                        (shipment_id,attempt_number,source_shipment_version,shipper_id,failure_reason,evidence_reference,recorded_at)
+                        SELECT id,?,?,?,?,?,? FROM uteexpress.shipments WHERE order_id=?
+                        """, defect.equals("attempt") ? 2 : 1, defect.equals("source_version") ? 1L : 2L,
+                        defect.equals("actor") ? other : shipper, "No answer", "PROOF",
+                        defect.equals("time") ? java.sql.Timestamp.from(pickup.toInstant().minusSeconds(1)) : pickup, order);
+            }
+            lifecycle.verifyShipmentOnlyOperation(order, 4L, 2L, DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE);
+        }), ErrorCode.CONFLICT);
+        assertThat(state()).isEqualTo(before);
+    }
+
+    @ParameterizedTest @EnumSource(DeliveryAttemptOperation.class)
+    void repeatedVerifyUsesOriginalVersionsAndWritesNothing(DeliveryAttemptOperation operation) {
+        shipping();
+        if (operation == DeliveryAttemptOperation.RETRY_DELIVERY) reportFirstFailure();
+        long sv = shipmentVersion();
+        coordinate(operation, 4L, sv); events.clear();
+        var before = state();
+        tx.executeWithoutResult(s -> {
+            lifecycle.verifyShipmentOnlyOperation(order, 4L, sv, operation);
+            lifecycle.verifyShipmentOnlyOperation(order, 4L, sv, operation);
+        });
+        rejects(() -> tx.executeWithoutResult(s -> lifecycle.verifyShipmentOnlyOperation(order, 5L, sv, operation)), ErrorCode.CONFLICT);
+        rejects(() -> tx.executeWithoutResult(s -> lifecycle.verifyShipmentOnlyOperation(order, 4L, sv + 1, operation)), ErrorCode.CONFLICT);
+        assertThat(state()).isEqualTo(before);
+        assertThat(events.stream(OrderStatusChangedEvent.class)).isEmpty();
+    }
+
+    private void reportFirstFailure() { deliveryAttempts.reportFailure(order, new DeliveryFailureRequest(4L, 2L, "No answer", "PROOF")); }
+    private void coordinate(DeliveryAttemptOperation operation, long ov, long sv) {
+        if (operation == DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE)
+            deliveryAttempts.reportFailure(order, new DeliveryFailureRequest(ov, sv, "No answer", "PROOF"));
+        else deliveryAttempts.retryDelivery(order, new RetryDeliveryRequest(ov, sv));
+    }
+    private void attemptProtocol(DeliveryAttemptOperation operation, long sv) {
+        lifecycle.prepareShipmentOnlyOperation(order, 4L, sv, operation);
+        mutateAttempt(operation, sv);
+        lifecycle.verifyShipmentOnlyOperation(order, 4L, sv, operation);
+    }
+    private void mutateAttempt(DeliveryAttemptOperation operation, long sv) {
+        if (operation == DeliveryAttemptOperation.REPORT_DELIVERY_FAILURE) attempts.reportFailure(order, sv, "No answer", "PROOF");
+        else attempts.retryDelivery(order, sv);
+    }
+    private List<Map<String, Object>> failureRows() {
+        return jdbc.queryForList("SELECT * FROM uteexpress.shipment_delivery_failures WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) ORDER BY attempt_number", order);
+    }
+    private List<Object> nonAttemptState() {
+        return List.of(jdbc.queryForList("SELECT * FROM uteexpress.orders WHERE id=?", order),
+                jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=? ORDER BY id", order),
+                jdbc.queryForList("SELECT * FROM uteexpress.order_status_history WHERE order_id=? ORDER BY id", order),
+                jdbc.queryForList("SELECT * FROM uteexpress.products WHERE id=?", product),
+                jdbc.queryForList("SELECT * FROM uteexpress.voucher_usages WHERE order_id=? ORDER BY id", order),
+                jdbc.queryForList("SELECT * FROM uteexpress.return_requests WHERE order_id=? ORDER BY id", order),
+                jdbc.queryForList("SELECT * FROM uteexpress.shipment_assignment_history WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) ORDER BY id", order));
     }
 
     @ParameterizedTest @EnumSource(value = OrderAction.class, names = {"PICK_UP", "START_SHIPPING", "DELIVER"})
@@ -1100,13 +1444,8 @@ class ShipperOrderLifecycleIT {
     private long historyCount() { return jdbc.queryForObject("SELECT count(*) FROM uteexpress.order_status_history WHERE order_id=?", Long.class, order); }
     private long auditCount() { return jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?)", Long.class, order); }
     private List<Object> state() {
-        return List.of(jdbc.queryForList("SELECT * FROM uteexpress.orders WHERE id=?", order),
-                jdbc.queryForList("SELECT * FROM uteexpress.shipments WHERE order_id=?", order),
-                jdbc.queryForList("SELECT * FROM uteexpress.payments WHERE order_id=? ORDER BY id", order),
-                jdbc.queryForList("SELECT * FROM uteexpress.order_status_history WHERE order_id=? ORDER BY id", order),
-                jdbc.queryForList("SELECT * FROM uteexpress.products WHERE id=?", product), shipmentAudits(),
-                jdbc.queryForList("SELECT * FROM uteexpress.voucher_usages WHERE order_id=? ORDER BY id", order),
-                jdbc.queryForList("SELECT * FROM uteexpress.shipment_assignment_history WHERE shipment_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) ORDER BY id", order));
+        return List.of(nonAttemptState(), jdbc.queryForList("SELECT * FROM uteexpress.shipments WHERE order_id=?", order),
+                shipmentAudits(), failureRows());
     }
     private List<Map<String, Object>> shipmentAudits() {
         return jdbc.queryForList("SELECT * FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=(SELECT id FROM uteexpress.shipments WHERE order_id=?) ORDER BY id", order);

@@ -16,6 +16,7 @@ import com.uteexpress.payment.service.PaymentService;
 import com.uteexpress.promotion.service.VoucherService;
 import com.uteexpress.security.CurrentUserProvider;
 import com.uteexpress.security.service.CurrentAccountIdProvider;
+import com.uteexpress.shipping.dto.DeliveryAttemptOperation;
 import java.math.BigDecimal;
 import java.time.Clock;
 import java.time.temporal.ChronoUnit;
@@ -58,7 +59,8 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
             com.uteexpress.shipping.service.ShipmentFulfillmentService shipments,
             com.uteexpress.payment.service.PaymentReadService paymentReads,
             com.uteexpress.governance.service.RoleGovernanceService roles,
-            com.uteexpress.governance.service.AuditLogService audit, ReturnOrderAuthority returnAuthority) {
+            com.uteexpress.governance.service.AuditLogService audit, ReturnOrderAuthority returnAuthority,
+            com.uteexpress.shipping.service.ShipmentAttemptService attempts) {
         super(orders, items, history, users, transactionManager, events, clock);
         this.orders = orders;
         this.accounts = accounts;
@@ -73,7 +75,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.vendorAuthority = vendorAuthority;
         this.shipments = shipments;
         this.returnAuthority = returnAuthority;
-        this.shipperAuthority = new ShipperOrderAuthority(orders, entityManager, shipments, paymentReads);
+        this.shipperAuthority = new ShipperOrderAuthority(orders, entityManager, shipments, paymentReads, attempts);
         this.opsAuthority = new OpsOrderAuthority(orders, items, entityManager, accounts, identities,
                 roles, inventory, vouchers, audit);
     }
@@ -173,6 +175,34 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     public com.uteexpress.order.dto.OrderStatusChangedEvent transition(
             com.uteexpress.order.dto.OrderTransitionCommand command) {
         return super.transition(command);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).SHIPPER.authority())")
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public void prepareShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation) {
+        requireShipmentOnlyOperation(orderId, expectedOrderVersion, expectedShipmentVersion, operation, false);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).SHIPPER.authority())")
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public void verifyShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation) {
+        requireShipmentOnlyOperation(orderId, expectedOrderVersion, expectedShipmentVersion, operation, true);
+    }
+
+    private void requireShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation, boolean completion) {
+        Long actor = accounts.currentAccountId().filter(id -> id > 0)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));
+        try {
+            shipperAuthority.requireShipmentOnlyOperation(orderId, expectedOrderVersion,
+                    expectedShipmentVersion, operation, completion, actor);
+        } catch (org.springframework.dao.OptimisticLockingFailureException | jakarta.persistence.OptimisticLockException ex) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
     }
 
     @Override protected Order loadForMutation(Long id) { return vendorAuthority.lockOwnedOrder(id); }

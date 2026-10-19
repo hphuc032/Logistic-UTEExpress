@@ -364,6 +364,18 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
                 ErrorCode.UNAUTHENTICATED));
     }
 
+    @Override
+    public void prepareShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, com.uteexpress.shipping.dto.DeliveryAttemptOperation operation) {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    @Override
+    public void verifyShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, com.uteexpress.shipping.dto.DeliveryAttemptOperation operation) {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
     /** Human paths require a persisted actor; this is not a system-actor validator. */
     private static Long requireHumanActor(Long actorId) {
         if (actorId == null || actorId <= 0) {
