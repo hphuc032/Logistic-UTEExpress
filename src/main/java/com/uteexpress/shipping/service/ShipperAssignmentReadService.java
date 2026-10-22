@@ -70,6 +70,25 @@ public class ShipperAssignmentReadService {
         if (counts.isEmpty()) throw new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND);
         return counts.getFirst();
     }
+    /** One scoped aggregate gives every card the same statement snapshot. */
+    @Transactional(readOnly = true)
+    public com.uteexpress.shipping.dto.ShipperDashboard dashboard() {
+        return jdbc().queryForObject("""
+                SELECT count(*) AS total,
+                    count(*) FILTER (WHERE status='ASSIGNED') AS assigned,
+                    count(*) FILTER (WHERE status='PICKED_UP') AS picked_up,
+                    count(*) FILTER (WHERE status='SHIPPING') AS shipping,
+                    count(*) FILTER (WHERE status='DELIVERED') AS delivered,
+                    count(*) FILTER (WHERE status='DELIVERY_FAILED') AS failed,
+                    count(*) FILTER (WHERE status='RETURNED_TO_SENDER') AS returned,
+                    count(*) FILTER (WHERE status='CANCELLED') AS cancelled
+                FROM uteexpress.shipments WHERE assigned_shipper_id=?
+                """, (rs, ignored) -> new com.uteexpress.shipping.dto.ShipperDashboard(
+                    rs.getLong("total"), rs.getLong("assigned"), rs.getLong("picked_up"),
+                    rs.getLong("shipping"), rs.getLong("delivered"), rs.getLong("failed"),
+                    rs.getLong("returned"), rs.getLong("cancelled")), actor());
+    }
+
     private long actor() {
         return currentAccount.currentAccountId().filter(id -> id > 0)
                 .orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));

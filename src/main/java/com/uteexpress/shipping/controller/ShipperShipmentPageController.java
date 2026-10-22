@@ -12,6 +12,11 @@ public class ShipperShipmentPageController {
     public ShipperShipmentPageController(ShipperAssignmentReadService assignments) {
         this.assignments = assignments;
     }
+    @GetMapping("/shipper/dashboard")
+    public String dashboard(Model model) {
+        model.addAttribute("dashboard", assignments.dashboard());
+        return "shipping/shipper/dashboard";
+    }
     @GetMapping("/shipper/shipments/view")
     public String list(Model model) {
         model.addAttribute("shipments", assignments.assigned());

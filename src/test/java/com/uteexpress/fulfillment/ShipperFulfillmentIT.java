@@ -35,6 +35,7 @@ class ShipperFulfillmentIT {
     @Autowired ShipperFulfillmentService fulfillment;
     @Autowired com.uteexpress.fulfillment.service.DeliveryAttemptCoordinator deliveryAttempts;
     @Autowired MockMvc mvc;
+    @Autowired com.uteexpress.shipping.service.ShipperAssignmentReadService shipperReads;
     @Autowired org.springframework.transaction.PlatformTransactionManager transactions;
     @Autowired com.uteexpress.order.service.OrderLifecycleService orderLifecycle;
     long orderId, shipper;
@@ -329,6 +330,78 @@ class ShipperFulfillmentIT {
                 """, Long.class, code, code, buyer, shop, status,
                 selection ? provider : null, selection ? "STANDARD" : null,
                 ready ? java.sql.Timestamp.from(java.time.Instant.now()) : null);
+    }
+
+    @Test void dashboardCountsCurrentShipmentsOnceAndScopesMixedRoleActor() throws Exception {
+        for (String status : List.of("PICKED_UP", "SHIPPING", "DELIVERED", "DELIVERED",
+                "DELIVERY_FAILED", "RETURNED_TO_SENDER", "CANCELLED")) {
+            long id=order(true,"CONFIRMED",true);
+            jdbc.update("""
+                    INSERT INTO uteexpress.shipments(order_id,provider_id,assigned_shipper_id,status,
+                        shipping_service_snapshot,fee_snapshot,attempt_count)
+                    VALUES (?,?,?,?,'STANDARD',15000,?)
+                    """,id,providerFor(id),shipper,status,status.equals("DELIVERY_FAILED") ? 2 : 0);
+        }
+        long foreign=insertUser("ACTIVE","SHIPPER");
+        long foreignOrder=order(true,"CONFIRMED",true);
+        jdbc.update("""
+                INSERT INTO uteexpress.shipments(order_id,provider_id,assigned_shipper_id,status,
+                    shipping_service_snapshot,fee_snapshot) VALUES (?,?,?,'DELIVERED','STANDARD',15000)
+                """,foreignOrder,providerFor(foreignOrder),foreign);
+        var d=shipperReads.dashboard();
+        assertThat(d.total()).isEqualTo(8);
+        assertThat(List.of(d.assigned(),d.pickedUp(),d.shipping(),d.delivered(),d.failed(),d.returnedToSender(),d.cancelled()))
+                .containsExactly(1L,1L,1L,2L,1L,1L,1L);
+        assertThat(d.successRate()).isEqualByComparingTo("66.7");
+        var mixed=new UteExpressPrincipal(shipper,"ship",null,0,List.of(
+                new SimpleGrantedAuthority("ROLE_SHIPPER"),new SimpleGrantedAuthority("ROLE_ADMIN")),true);
+        mvc.perform(get("/shipper/dashboard").with(user(mixed)).param("shipperId",Long.toString(foreign)))
+                .andExpect(status().isOk()).andExpect(view().name("shipping/shipper/dashboard"))
+                .andExpect(model().attribute("dashboard",d));
+        authenticate(foreign,"SHIPPER");
+        assertThat(shipperReads.dashboard().total()).isEqualTo(1);
+        assertThat(shipperReads.dashboard().successRate()).isEqualByComparingTo("100.0");
+    }
+
+    @Test void dashboardEmptyAndRolesAreGuardedWithoutWrites() throws Exception {
+        long empty=insertUser("ACTIVE","SHIPPER");
+        authenticate(empty,"SHIPPER");
+        assertThat(shipperReads.dashboard().total()).isZero();
+        assertThat(shipperReads.dashboard().successRate()).isNull();
+        var before=state();
+        mvc.perform(get("/shipper/dashboard").with(user(principal(empty,"SHIPPER"))))
+                .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("Chưa có kết quả")));
+        for(String role:List.of("ADMIN","MANAGER","USER","VENDOR")) {
+            authenticate(empty,role);
+            assertThatThrownBy(() -> shipperReads.dashboard()).isInstanceOf(org.springframework.security.access.AccessDeniedException.class);
+            mvc.perform(get("/shipper/dashboard").with(user(principal(empty,role)))).andExpect(status().isForbidden());
+        }
+        SecurityContextHolder.clearContext();
+        mvc.perform(get("/shipper/dashboard")).andExpect(status().isUnauthorized());
+        assertThat(state()).isEqualTo(before);
+    }
+
+    @Test void dashboardTracksRealFailureRetryAndDeliveryWithoutRewritingFacts() throws Exception {
+        assertThat(shipperReads.dashboard().assigned()).isEqualTo(1);
+        fulfillment.transition(orderId,OrderAction.PICK_UP,new FulfillmentRequest(0L,0L,null));
+        assertThat(shipperReads.dashboard().pickedUp()).isEqualTo(1);
+        fulfillment.transition(orderId,OrderAction.START_SHIPPING,new FulfillmentRequest(1L,1L,null));
+        deliveryAttempts.reportFailure(orderId,new com.uteexpress.fulfillment.dto.DeliveryFailureRequest(2L,2L,"No answer","DASH-POD"));
+        assertThat(shipperReads.dashboard().failed()).isEqualTo(1);
+        assertThat(shipperReads.dashboard().successRate()).isEqualByComparingTo("0.0");
+        deliveryAttempts.retryDelivery(orderId,new com.uteexpress.fulfillment.dto.RetryDeliveryRequest(2L,3L));
+        assertThat(shipperReads.dashboard().failed()).isZero();
+        assertThat(shipperReads.dashboard().shipping()).isEqualTo(1);
+        assertThat(shipperReads.dashboard().successRate()).isNull();
+        fulfillment.transition(orderId,OrderAction.DELIVER,new FulfillmentRequest(2L,4L,new BigDecimal("115000")));
+        var before=state();
+        var original=jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?",orderId);
+        assertThat(shipperReads.dashboard().delivered()).isEqualTo(1);
+        assertThat(shipperReads.dashboard().successRate()).isEqualByComparingTo("100.0");
+        mvc.perform(get("/shipper/dashboard").with(user(principal(shipper,"SHIPPER"))))
+                .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("100.0%")));
+        assertThat(state()).isEqualTo(before);
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?",orderId)).isEqualTo(original);
     }
 
     private long providerFor(long order) {
