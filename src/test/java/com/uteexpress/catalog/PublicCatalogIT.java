@@ -57,8 +57,12 @@ class PublicCatalogIT {
 
     @BeforeEach
     void cleanDatabase() {
-        jdbc.execute("TRUNCATE TABLE uteexpress.users, uteexpress.categories, uteexpress.shops, "
-                + "uteexpress.products RESTART IDENTITY CASCADE");
+        // Delete only this container's catalog fixtures; cascade truncation reaches the immutable refund ledger.
+        jdbc.update("DELETE FROM uteexpress.product_images");
+        jdbc.update("DELETE FROM uteexpress.products");
+        jdbc.update("DELETE FROM uteexpress.shops");
+        jdbc.update("DELETE FROM uteexpress.categories");
+        jdbc.update("DELETE FROM uteexpress.users");
     }
 
     @Test
