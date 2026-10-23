@@ -12,6 +12,7 @@ import com.uteexpress.shipping.dto.DeliveryAttemptOperation;
  * update timestamps, append history and publish the result only after commit.
  */
 public interface OrderLifecycleService {
+    com.uteexpress.payment.dto.RefundResult completeRefund(com.uteexpress.payment.dto.ManualRefundCommand command);
     /** Return mutations own an Order-first transaction and reject an existing transaction. */
     OrderStatusChangedEvent requestReturn(com.uteexpress.order.dto.RequestReturnCommand command);
     void approveReturn(com.uteexpress.order.dto.ReturnDecisionCommand command);

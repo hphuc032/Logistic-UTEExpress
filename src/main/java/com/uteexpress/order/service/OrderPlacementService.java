@@ -47,6 +47,8 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     private final ShipperOrderAuthority shipperAuthority;
     private final OpsOrderAuthority opsAuthority;
     private final ReturnOrderAuthority returnAuthority;
+    private final RefundOrderAuthority refundAuthority;
+    private final com.uteexpress.payment.service.ManualCodRefundService refundPayments;
     private final com.uteexpress.shipping.service.ShipmentFulfillmentService shipments;
 
     public OrderPlacementService(OrderRepository orders, OrderItemRepository items,
@@ -60,7 +62,8 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
             com.uteexpress.payment.service.PaymentReadService paymentReads,
             com.uteexpress.governance.service.RoleGovernanceService roles,
             com.uteexpress.governance.service.AuditLogService audit, ReturnOrderAuthority returnAuthority,
-            com.uteexpress.shipping.service.ShipmentAttemptService attempts) {
+            com.uteexpress.shipping.service.ShipmentAttemptService attempts,
+            RefundOrderAuthority refundAuthority, com.uteexpress.payment.service.ManualCodRefundService refundPayments) {
         super(orders, items, history, users, transactionManager, events, clock);
         this.orders = orders;
         this.accounts = accounts;
@@ -75,12 +78,22 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.vendorAuthority = vendorAuthority;
         this.shipments = shipments;
         this.returnAuthority = returnAuthority;
+        this.refundAuthority = refundAuthority;
+        this.refundPayments = refundPayments;
         this.shipperAuthority = new ShipperOrderAuthority(orders, entityManager, shipments, paymentReads, attempts);
         this.opsAuthority = new OpsOrderAuthority(orders, items, entityManager, accounts, identities,
                 roles, inventory, vouchers, audit);
     }
 
     @Override protected ReturnOrderAuthority returnAuthority() { return returnAuthority; }
+    @Override protected RefundOrderAuthority refundAuthority() { return refundAuthority; }
+    @Override protected com.uteexpress.payment.service.ManualCodRefundService refundPayments() { return refundPayments; }
+
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority())")
+    public com.uteexpress.payment.dto.RefundResult completeRefund(com.uteexpress.payment.dto.ManualRefundCommand command) {
+        return super.completeRefund(command);
+    }
 
     @Override
     @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).USER.authority(), "

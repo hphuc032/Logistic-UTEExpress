@@ -83,6 +83,46 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
         throw new ApplicationException(ErrorCode.ACCESS_DENIED);
     }
 
+    protected RefundOrderAuthority refundAuthority() { throw new ApplicationException(ErrorCode.ACCESS_DENIED); }
+    protected com.uteexpress.payment.service.ManualCodRefundService refundPayments() {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    @Override
+    public com.uteexpress.payment.dto.RefundResult completeRefund(com.uteexpress.payment.dto.ManualRefundCommand command) {
+        var payload = com.uteexpress.payment.service.ManualRefundPayload.from(command);
+        if (TransactionSynchronizationManager.isActualTransactionActive())
+            throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        var refundTransaction = new TransactionTemplate(transactions.getTransactionManager());
+        refundTransaction.setIsolationLevel(org.springframework.transaction.TransactionDefinition.ISOLATION_READ_COMMITTED);
+        try {
+            return refundTransaction.execute(tx -> {
+                if (!currentUser().authorities().contains("ROLE_ADMIN"))
+                    throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+                var payments = refundPayments(); var authority = refundAuthority();
+                payments.lockKey(payload);
+                // Immutable committed replay never acquires Order after Account.
+                if (payments.hasKey(payload)) {
+                    Long actor = authority.authorizeAdmin();
+                    return payments.replay(payload, actor).orElseThrow(() -> new ApplicationException(ErrorCode.CONFLICT));
+                }
+                var locked = authority.lock(command.orderId());
+                var cod = payments.lockCollectedCod(locked.order().getId(), locked.order().getGrandTotal());
+                Long actor = authority.authorizeAdmin();
+                var at = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+                authority.requireEligible(locked, payload.command(), at);
+                var result = payments.record(payload, cod, locked.request().getId(), actor, locked.request().getReceivedAt(), at);
+                persistValidatedTransition(locked.order(), OrderTransitionPolicy.requireTarget(locked.order().getStatus(),
+                        OrderAction.COMPLETE_REFUND), actor, at, "Admin attested full COD refund");
+                authority.audit(command.orderId(), command.expectedOrderVersion(), actor, result.refundId());
+                return result;
+            });
+        } catch (OptimisticLockingFailureException | OptimisticLockException
+                | org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+    }
+
     @Override
     public OrderStatusChangedEvent requestReturn(com.uteexpress.order.dto.RequestReturnCommand command) {
         ReturnOrderAuthority.validate(command);
@@ -288,8 +328,8 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
             throw new ApplicationException(
                     ErrorCode.INVALID_REQUEST);
         }
-        // Receipt always needs the dedicated two-version, persisted-evidence boundary.
-        if (command.action() == OrderAction.RECEIVE_RETURN)
+        // Receipt/refund always need their dedicated two-version, persisted-evidence boundaries.
+        if (command.action() == OrderAction.RECEIVE_RETURN || command.action() == OrderAction.COMPLETE_REFUND)
             throw new ApplicationException(ErrorCode.CONFLICT);
         try {
             return transactions.execute(tx -> {
