@@ -1,0 +1,13 @@
+# SHIP-04 — Shipper dashboard
+
+Based on develop 425dd6a, implementing the Master Task Board definition: assigned/shipping/delivered/failed counts and success-rate query, GET /shipper/dashboard. This is distinct from the earlier proposed return-to-sender flow. HP should confirm the task label and metric semantics during review; no return-to-sender mutation is included.
+
+One owner-scoped SQL aggregate over current Shipment assignment returns total, ASSIGNED, PICKED_UP, SHIPPING, DELIVERED, DELIVERY_FAILED, RETURNED_TO_SENDER and CANCELLED counts. Actor is CurrentAccountIdProvider, never request shipperId. Existing SHIPPER URL and service authorization apply, with no changes to shared SecurityConfig/LoginController. One statement provides a consistent snapshot for all cards. Existing assignment/status index supports scoping.
+
+The displayed success ratio is DELIVERED / (DELIVERED + current DELIVERY_FAILED), percent rounded to one decimal HALF_UP. No outcomes displays "Chưa có kết quả", not a misleading 0%. Each Shipment counts once regardless of attempt_count; retry leaves the outcome denominator while SHIPPING and re-enters on success/failure. UI explicitly labels this as current outcomes, not lifetime/per-attempt productivity or historical assignment. CANCELLED/RETURNED_TO_SENDER are shown separately. No date-range or historical attribution is invented. Changes in a buyer Return/Refund Order status do not rewrite Shipment delivery facts.
+
+No migration, financial query, Payment/Order/Inventory/Voucher mutation, new role, idempotency or locking protocol is introduced. PAY-02 reservation is unaffected. A link from existing Shipper assignment list makes the dashboard discoverable; dashboard links back to current shipments. No buyer address/phone or payment details are exposed.
+
+Verification: new cases in existing ShipperFulfillmentIT cover all persisted statuses, another shipper exclusion, mixed-role identity with forged shipperId query, empty/no-denominator, rounding, HTTP and service role denial, anonymous 401, rendered template and the real failure -> retry -> attempt-2 COD delivery path. State snapshots ensure dashboard reads do not alter fulfillment/Order facts. Initial focused run found one test-only expected redirect mismatch: anonymous correctly returns 401; assertion corrected without changing security behavior. The other 15 focused tests passed. Final full Java 21 PostgreSQL clean verify is running; actual result/head and exact-head CI will be recorded in the PR, not inferred from older results.
+
+Scope deliberately excludes failed-delivery physical receipt/return-to-sender, PAY-02, buyer RECEIVE_RETURN changes, WS-02 and Ops dashboard. Those require separate review/implementation. No automatic merge.

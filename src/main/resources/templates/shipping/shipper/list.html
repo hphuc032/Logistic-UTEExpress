@@ -3,6 +3,7 @@
 <head><title>Chuyến giao của tôi | UTEExpress</title></head>
 <body><section th:fragment="content" aria-label="Chuyến giao của tôi">
 <h1>Chuyến giao của tôi</h1>
+<a th:href="@{/shipper/dashboard}" class="btn btn-link px-0">Tổng quan giao hàng</a>
 <p th:if="${shipments.empty}">Bạn chưa có chuyến giao được phân công.</p>
 <table th:unless="${shipments.empty}" class="table">
 <thead><tr><th>Chuyến giao</th><th>Đơn hàng</th><th>Dịch vụ</th><th>Trạng thái</th></tr></thead>
