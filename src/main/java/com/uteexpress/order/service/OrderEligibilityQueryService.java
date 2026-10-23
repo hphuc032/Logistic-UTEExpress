@@ -1,11 +1,13 @@
 package com.uteexpress.order.service;
 
-/** TD -> QD review boundary; no persistence/query implementation in ORD-00. */
+/** TD -> QD advisory review query. Never authorizes a later write transaction. */
 public interface OrderEligibilityQueryService {
     /**
-     * Resolve the buyer via SEC-01 CurrentUserProvider. Check item belongs to that buyer's
-     * order and order is DELIVERED. QD separately enforces unique review/order_item.
-     * No caller-supplied buyer ID; unavailable or foreign items must not leak ownership.
+     * Resolve the buyer via SEC-01 CurrentAccountIdProvider and persisted USER/VENDOR
+     * eligibility. Missing/foreign/invalid item IDs return false; owned items return true
+     * only while their Order is DELIVERED. Missing authentication is UNAUTHENTICATED;
+     * inactive or non-buyer accounts are ACCESS_DENIED. No locks or side effects.
+     * Use OrderReviewWriteBoundary for writes. QD owns unique review/order_item.
      */
     boolean isCurrentBuyerEligibleToReview(Long orderItemId);
 }
