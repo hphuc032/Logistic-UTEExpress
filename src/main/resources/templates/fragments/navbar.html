@@ -46,6 +46,8 @@
                 <a class="btn btn-app-ghost" th:if="${buyerFeaturesAvailable}" th:href="@{/user/recently-viewed}" href="/user/recently-viewed">Đã xem</a>
                 <a class="navbar-text app-account-link" th:href="@{/user/profile}" href="/user/profile"
                    th:text="${navbarUser.displayUsername}">Tài khoản</a>
+                <a class="btn btn-app-ghost" th:href="@{/notifications}" href="/notifications"
+                   data-notification-status aria-live="polite">Thông báo</a>
                 <form method="post" th:action="@{/logout}">
                     <button class="btn btn-app-ghost w-100" type="submit">Đăng xuất</button>
                 </form>
