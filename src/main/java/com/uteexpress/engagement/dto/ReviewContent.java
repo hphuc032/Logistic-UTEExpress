@@ -7,8 +7,9 @@ import com.uteexpress.common.exception.ErrorCode;
 public record ReviewContent(int rating, String comment) {
     public ReviewContent {
         comment = comment == null ? null : comment.strip();
-        if (rating < 1 || rating > 5 || comment == null || comment.length() < 50
-                || comment.length() > 2000 || comment.indexOf('\0') >= 0)
+        if (rating < 1 || rating > 5 || comment == null || comment.codePointCount(0, comment.length()) < 50
+                || comment.codePointCount(0, comment.length()) > 2000 || comment.indexOf('\0') >= 0
+                || comment.codePoints().anyMatch(cp -> cp >= Character.MIN_SURROGATE && cp <= Character.MAX_SURROGATE))
             throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
     }
 }

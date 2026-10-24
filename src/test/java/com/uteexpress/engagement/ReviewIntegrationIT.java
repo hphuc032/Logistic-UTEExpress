@@ -39,6 +39,7 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@org.junit.jupiter.api.extension.ExtendWith(org.springframework.boot.test.system.OutputCaptureExtension.class)
 @SpringBootTest @AutoConfigureMockMvc @Testcontainers
 class ReviewIntegrationIT {
     @Container @ServiceConnection static final PostgreSQLContainer DB=new PostgreSQLContainer("postgres:17.6");
@@ -52,6 +53,7 @@ class ReviewIntegrationIT {
     @Autowired MockMvc mvc;
     @Autowired PlatformTransactionManager manager;
     @MockitoSpyBean ReviewWriter writer;
+    @MockitoSpyBean FileStorageService storage;
     @MockitoSpyBean com.uteexpress.order.service.ReturnOrderAuthority returnAuthority;
     long buyer,foreign,vendor,product,order,item,otherItem;
     String comment="Sản phẩm đã nhận đúng mô tả, chất lượng tốt và đóng gói cẩn thận.";
@@ -184,6 +186,47 @@ class ReviewIntegrationIT {
         };
         denied(() -> reviews.create(item,5,comment,invalid),ErrorCode.VALIDATION_FAILED);
         assertThat(count()).isZero();assertThat(files()).isEqualTo(before);
+    }
+    @ParameterizedTest @ValueSource(ints={49,50,2000,2001})
+    void emojiHttpValidationAndDatabaseCharacterCountAgree(int size) throws Exception {
+        String text="\uD83D\uDE00".repeat(size);
+        var request=post("/order-items/{id}/review",item).with(user(principal(buyer,"USER"))).with(csrf())
+                .contentType("application/json").content("{\"rating\":5,\"comment\":\""+text+"\"}");
+        if(size==50 || size==2000) {
+            mvc.perform(request).andExpect(status().isOk());
+            assertThat(jdbc.queryForObject("SELECT char_length(comment) FROM uteexpress.reviews WHERE order_item_id=?",Integer.class,item)).isEqualTo(size);
+            assertThat(jdbc.queryForObject("SELECT comment FROM uteexpress.reviews WHERE order_item_id=?",String.class,item)).isEqualTo(text);
+        } else {mvc.perform(request).andExpect(status().isBadRequest());assertThat(count()).isZero();}
+    }
+    @Test void cleanupFailureRecordsActionableInternalEventWithoutMaskingRollback(org.springframework.boot.test.system.CapturedOutput output) throws Exception {
+        var saved=new ArrayList<String>();
+        var target=(FileStorageService)org.springframework.test.util.AopTestUtils.getUltimateTargetObject(storage);
+        doAnswer(call -> {saved.add(call.getArgument(0));throw new StorageException(StorageException.Reason.IO_FAILURE);}).when(target).delete(anyString());
+        try {
+            denied(() -> reviews.create(item,5,comment,List.of(png(),new UploadContent(new byte[]{1,2},"bad.png","image/png"))),ErrorCode.VALIDATION_FAILED);
+            assertThat(count()).isZero();assertThat(saved).hasSize(1);
+            assertThat(output.getOut()+output.getErr()).contains("event=review_media_cleanup_failed","cleanup_id=","storage_key="+saved.getFirst(),"action=reconciliation_required");
+            assertThat(Files.exists(ROOT.resolve(saved.getFirst()))).isTrue();
+        } finally {
+            doCallRealMethod().when(target).delete(anyString());
+            for(String key:saved) storage.delete(key);
+        }
+    }
+    @Test void uncertainCompletionDefersCleanupAndCannotDeleteCommittedMedia(org.springframework.boot.test.system.CapturedOutput output) {
+        var target=(ReviewWriter)org.springframework.test.util.AopTestUtils.getUltimateTargetObject(writer);
+        doAnswer(call -> {
+            Object id=call.callRealMethod();
+            var callbacks=org.springframework.transaction.support.TransactionSynchronizationManager.getSynchronizations();
+            var cleanup=callbacks.stream().filter(c -> c.getClass().getEnclosingClass()==ReviewWriter.class).findFirst().orElseThrow();
+            // Inject only the uncertain completion status; real file writes and DB commit remain intact.
+            cleanup.afterCompletion(org.springframework.transaction.support.TransactionSynchronization.STATUS_UNKNOWN);
+            return id;
+        }).when(target).write(any(),any(),any());
+        reviews.create(item,5,comment,List.of(png()));
+        var view=publicReviews.list(product,0).getFirst();
+        assertThat(publicReviews.image(product,view.mediaIds().getFirst()).bytes()).isNotEmpty();
+        verify(storage,never()).delete(anyString());
+        assertThat(output.getOut()+output.getErr()).contains("event=review_media_cleanup_deferred","reason=transaction_outcome_unknown");
     }
     private long count(){return jdbc.queryForObject("SELECT count(*) FROM uteexpress.reviews WHERE order_item_id=?",Long.class,item);}
     private Map<String,Object> orderState(){return jdbc.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?",order);}

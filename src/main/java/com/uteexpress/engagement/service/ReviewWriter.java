@@ -26,11 +26,19 @@ public class ReviewWriter {
     public long write(ReviewableOrderItem facts,ReviewContent content,List<UploadContent> uploads) {
         ReviewImagePolicy.requireCount(uploads.size());
         var keys=new ArrayList<String>();
+        String cleanupId=UUID.randomUUID().toString();
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override public void afterCompletion(int status) {
-                if(status!=STATUS_COMMITTED) for(String key:keys) {
+                if(status==STATUS_UNKNOWN) {
+                    for(String key:keys) org.slf4j.LoggerFactory.getLogger(ReviewWriter.class).error(
+                            "event=review_media_cleanup_deferred cleanup_id={} storage_key={} transaction_status={} reason=transaction_outcome_unknown action=reconciliation_required",cleanupId,key,status);
+                    return; // The DB may have committed: never delete on an uncertain outcome.
+                }
+                if(status==STATUS_ROLLED_BACK) for(String key:keys) {
                     try {storage.delete(key);} catch(RuntimeException failure) {
-                        org.slf4j.LoggerFactory.getLogger(ReviewWriter.class).warn("Review rollback file cleanup failed; reconciliation required");
+                        org.slf4j.LoggerFactory.getLogger(ReviewWriter.class).error(
+                                "event=review_media_cleanup_failed cleanup_id={} storage_key={} transaction_status={} failure_type={} action=reconciliation_required",
+                                cleanupId,key,status,failure.getClass().getSimpleName());
                     }
                 }
             }

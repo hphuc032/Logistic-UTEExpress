@@ -5,6 +5,6 @@
 <p>Mỗi sản phẩm trong đơn được đánh giá một lần sau khi giao thành công.</p>
 <form method="post" enctype="multipart/form-data" th:action="@{/order-items/{id}/review(id=${itemId})}">
 <label for="rating">Số sao</label><select id="rating" name="rating" class="form-select" required><option th:each="n:${#numbers.sequence(1,5)}" th:value="${n}" th:text="${n}"></option></select>
-<label for="comment">Nội dung (50–2.000 ký tự)</label><textarea id="comment" name="comment" class="form-control" minlength="50" maxlength="2000" required></textarea>
+<label for="comment">Nội dung (50–2.000 ký tự Unicode)</label><textarea id="comment" name="comment" class="form-control" aria-describedby="review-length-help" required></textarea><p id="review-length-help">Giới hạn được kiểm tra trên máy chủ theo ký tự Unicode; một emoji đơn tính là một ký tự.</p>
 <label for="images">Tối đa 3 ảnh JPEG/PNG/WebP, mỗi ảnh tối đa 5 MB</label><input id="images" name="images" type="file" accept="image/jpeg,image/png,image/webp" multiple class="form-control">
 <button type="submit" class="btn btn-primary mt-3">Gửi đánh giá</button></form></section></body></html>

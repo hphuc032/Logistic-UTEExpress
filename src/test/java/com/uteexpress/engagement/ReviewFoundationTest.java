@@ -28,4 +28,15 @@ class ReviewFoundationTest {
         assertThatThrownBy(() -> ReviewImagePolicy.requireCount(-1)).isInstanceOf(ApplicationException.class);
         assertThat(ReviewImagePolicy.STORAGE.maxBytes()).isEqualTo(5L*1024*1024);
     }
+    @ParameterizedTest @ValueSource(ints={49,50,1999,2000,2001})
+    void unicodeCodePointBoundariesMatchPostgres(int count) {
+        String emoji="\uD83D\uDE00".repeat(count);
+        if(count>=50 && count<=2000) assertThat(new ReviewContent(5,"  "+emoji+"  ").comment()).isEqualTo(emoji);
+        else assertThatThrownBy(() -> new ReviewContent(5,emoji)).isInstanceOf(ApplicationException.class);
+    }
+    @Test void combiningMarksAreCodePointsAndMalformedSurrogatesAreRejected() {
+        assertThat(new ReviewContent(5,"e\u0301".repeat(25)).comment().codePointCount(0,50)).isEqualTo(50);
+        assertThatThrownBy(() -> new ReviewContent(5,"x".repeat(49)+(char)0xD800)).isInstanceOf(ApplicationException.class);
+        assertThatThrownBy(() -> new ReviewContent(5,"x".repeat(49)+(char)0xDC00)).isInstanceOf(ApplicationException.class);
+    }
 }
