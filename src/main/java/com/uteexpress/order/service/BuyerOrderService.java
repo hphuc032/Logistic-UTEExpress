@@ -61,7 +61,7 @@ public class BuyerOrderService {
         var lines = items.findByOrderIdOrderByIdAsc(order.getId()).stream()
                 .map(item -> new BuyerOrderDetail.Item(item.getProductId(), item.getProductNameSnapshot(),
                         item.getUnitPrice(), item.getDiscountSnapshot(), item.getFinalUnitPrice(),
-                        item.getQuantity(), item.getLineTotal())).toList();
+                        item.getQuantity(), item.getLineTotal(), item.getId())).toList();
         var timeline = history.findByOrderIdOrderByCreatedAtAscIdAsc(order.getId()).stream()
                 .map(entry -> new BuyerOrderDetail.TimelineEntry(entry.getFromStatus(), entry.getToStatus(),
                         entry.getCreatedAt())).toList();
