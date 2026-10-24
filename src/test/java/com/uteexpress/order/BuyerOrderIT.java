@@ -188,6 +188,7 @@ class BuyerOrderIT {
     }
 
     @Test void detailMapsSnapshotsMoneyAndOnlyPersistedTimeline() throws Exception {
+        var persistedItems = items.findByOrderIdOrderByIdAsc(owned.getId());
         mvc.perform(get("/orders/{id}", owned.getId()).with(user(principal(buyer, "USER"))).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.id").value(owned.getId()))
                 .andExpect(jsonPath("$.status").value("NEW"))
@@ -197,6 +198,8 @@ class BuyerOrderIT {
                 .andExpect(jsonPath("$.address.district").value("District"))
                 .andExpect(jsonPath("$.address.detail").value("Snapshot address"))
                 .andExpect(jsonPath("$.items.length()").value(2))
+                .andExpect(jsonPath("$.items[0].orderItemId").value(persistedItems.get(0).getId()))
+                .andExpect(jsonPath("$.items[1].orderItemId").value(persistedItems.get(1).getId()))
                 .andExpect(jsonPath("$.items[0].productId").value(902))
                 .andExpect(jsonPath("$.items[0].productNameSnapshot").value("Snapshot <script>"))
                 .andExpect(jsonPath("$.items[0].unitPrice").value(100000))
@@ -218,6 +221,31 @@ class BuyerOrderIT {
                 .andExpect(jsonPath("$.checkoutKey").doesNotExist()).andExpect(jsonPath("$.requestHash").doesNotExist())
                 .andExpect(jsonPath("$.version").doesNotExist()).andExpect(jsonPath("$.timeline[0].actorId").doesNotExist())
                 .andExpect(jsonPath("$.timeline[0].reason").doesNotExist());
+    }
+
+    @Test void detailItemQueryCountStaysConstantAsItemCountGrows() {
+        var snapshot = new CheckoutQuote.ItemSnapshot(902L, "Repeated product snapshot",
+                money("100000"), money("20000"), money("80000"), 2, money("160000"));
+        jdbc.update("DELETE FROM uteexpress.order_items WHERE order_id=?", owned.getId());
+        items.saveAndFlush(new OrderItem(owned.getId(), snapshot));
+        authenticate(buyer, "USER");
+        var statistics = emf.unwrap(SessionFactory.class).getStatistics();
+        for (int count : List.of(1, 8)) {
+            if (count > 1) {
+                items.saveAllAndFlush(java.util.stream.IntStream.range(1, count)
+                        .mapToObj(index -> new OrderItem(owned.getId(), snapshot)).toList());
+            }
+            var persistedIds = items.findByOrderIdOrderByIdAsc(owned.getId()).stream()
+                    .map(OrderItem::getId).toList();
+            statistics.clear();
+            var detail = buyerOrders.detail(owned.getId());
+            assertThat(detail.items()).hasSize(count);
+            assertThat(detail.items()).extracting(BuyerOrderDetail.Item::orderItemId)
+                    .containsExactlyElementsOf(persistedIds).doesNotHaveDuplicates();
+            assertThat(detail.items()).extracting(BuyerOrderDetail.Item::productId).containsOnly(902L);
+            // One scoped Order, one bulk item read, one history read, one payment read.
+            assertThat(statistics.getPrepareStatementCount()).isEqualTo(4);
+        }
     }
 
     @Test void htmlEscapesSnapshotsFormatsUtcAndVndAndShowsNoInventedPayment() throws Exception {
@@ -245,6 +273,8 @@ class BuyerOrderIT {
                     .andExpect(content().string(not(containsString("Snapshot address"))));
             if (type.equals("application/json")) {
                 response.andExpect(jsonPath("$.code").value("RESOURCE_NOT_FOUND"))
+                        .andExpect(jsonPath("$.items").doesNotExist())
+                        .andExpect(content().string(not(containsString("orderItemId"))))
                         .andExpect(jsonPath("$.message").value("Resource was not found."));
             } else {
                 response.andExpect(view().name("order/error"))
@@ -421,10 +451,12 @@ class BuyerOrderIT {
         carts.addProduct(new AddCartProductRequest(product, 2));
         var receipt = placement.placeOrder(new CheckoutRequest(UUID.randomUUID().toString(),
                 List.of(new CheckoutRequest.Item(product, 2)), address, provider, "STANDARD", CheckoutRequest.PaymentMethod.COD, null));
+        var persistedItem = items.findByOrderIdOrderByIdAsc(receipt.orderId()).getFirst();
         clearAuthentication();
         mvc.perform(get("/orders/{id}", receipt.orderId()).with(user(principal(buyer, "USER"))).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.orderCode").value(receipt.orderCode()))
                 .andExpect(jsonPath("$.grandTotal").value(267000))
+                .andExpect(jsonPath("$.items[0].orderItemId").value(persistedItem.getId()))
                 .andExpect(jsonPath("$.items[0].productNameSnapshot").value("Placed snapshot"))
                 .andExpect(jsonPath("$.address.detail").value("Placed address"))
                 .andExpect(jsonPath("$.timeline.length()").value(1))

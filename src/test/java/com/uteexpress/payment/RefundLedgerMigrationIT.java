@@ -28,7 +28,7 @@ class RefundLedgerMigrationIT {
             var checksums = jdbc.queryForList("SELECT version,checksum FROM uteexpress.flyway_schema_history WHERE version < '20261022090000' ORDER BY installed_rank");
             var latest = migration(db, null);
             var pending = Arrays.stream(latest.info().pending()).map(m -> m.getVersion().getVersion()).toList();
-            assertThat(pending).containsExactlyElementsOf(baseline.equals("receipt") ? List.of("20261018110000", "20261022090000") : baseline.equals("shipping") ? List.of("20261022090000") : List.of());
+            assertThat(pending).containsExactlyElementsOf(baseline.equals("receipt") ? List.of("20261018110000", "20261022090000", "20261023170000") : baseline.equals("shipping") ? List.of("20261022090000", "20261023170000") : List.of());
             assertThat(latest.migrate().migrationsExecuted).isEqualTo(pending.size());
             assertThat(latest.validateWithResult().validationSuccessful).isTrue();
             assertThat(latest.migrate().migrationsExecuted).isZero();

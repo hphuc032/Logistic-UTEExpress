@@ -34,7 +34,7 @@
                 <th scope="col">Giảm giá mỗi sản phẩm (₫)</th><th scope="col">Giá sau giảm (₫)</th>
                 <th scope="col">Số lượng</th><th scope="col">Thành tiền (₫)</th></tr></thead>
             <tbody><tr th:each="item : ${order.items}">
-                <th scope="row" th:text="${item.productNameSnapshot}" class="text-break"></th>
+                <th scope="row" class="text-break"><span th:text="${item.productNameSnapshot}"></span><a th:if="${order.status.name() == 'DELIVERED' and item.orderItemId != null}" th:href="@{/order-items/{id}/review(id=${item.orderItemId})}" class="d-block">Đánh giá sản phẩm</a></th>
                 <td th:text="${#numbers.formatDecimal(item.unitPrice, 0, 'POINT', 0, 'COMMA')}"></td>
                 <td th:text="${#numbers.formatDecimal(item.discountSnapshot, 0, 'POINT', 0, 'COMMA')}"></td>
                 <td th:text="${#numbers.formatDecimal(item.finalUnitPrice, 0, 'POINT', 0, 'COMMA')}"></td>

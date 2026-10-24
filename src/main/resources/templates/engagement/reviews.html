@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Đánh giá sản phẩm | UTEExpress</title></head>
+<body><section th:fragment="content"><h1>Đánh giá từ người mua</h1>
+<p th:if="${reviews.empty}">Chưa có đánh giá.</p>
+<article th:each="review:${reviews}" class="border rounded p-3 mb-3"><p><strong th:text="${review.rating + '/5 sao'}"></strong> · <time th:text="${review.createdAt}"></time></p>
+<p th:text="${review.comment}" style="white-space:pre-wrap"></p><img th:each="media:${review.mediaIds}" th:src="@{/products/{p}/reviews/media/{m}(p=${productId},m=${media})}" alt="Ảnh đánh giá từ người mua" loading="lazy" class="img-thumbnail" style="max-width:160px"></article>
+<nav aria-label="Phân trang đánh giá"><a th:if="${page > 0}" th:href="@{/products/{id}/reviews(id=${productId},page=${page - 1})}">Trang trước</a> <a th:if="${reviews.size() == 20 and page < 10000}" th:href="@{/products/{id}/reviews(id=${productId},page=${page + 1})}">Trang sau</a></nav>
+<a th:href="@{/products/{id}(id=${productId})}">Về sản phẩm</a></section></body></html>
