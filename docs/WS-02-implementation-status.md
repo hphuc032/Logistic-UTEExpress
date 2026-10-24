@@ -17,3 +17,11 @@ Remaining WS-02 work: authenticated handshake, CONNECT CSRF/origin, private user
 ## Verification
 
 Java 21 clean verify PASS (exit 0): 599 full unit/architecture tests and 12 targeted PostgreSQL tests, no failures/errors/skips. Command: `.\mvnw.cmd -q -Ppostgres-it '-Dit.test=NotificationIT,NotificationRecoveryIT,NotificationMigrationIT,NotificationSchedulerIT' clean verify`. Tests cover commit timing, rollback suppression, insert deduplication, projection hints, failed listeners, migration, recovery and scheduler. Earlier non-clean runs were superseded to remove artifacts from the previous REV-01 checkout. Full project PostgreSQL regression and real socket security tests remain required before ready-for-review.
+
+## Concurrent inserts and full regression — 2026-10-24
+
+Added two real PostgreSQL races for a shared dedup key. pg_blocking_pids confirms the second INSERT waits for the first transaction. With first-writer commit, the waiting duplicate creates no row/hint. With first-writer rollback, the waiting writer inserts and publishes exactly one committed row/hint. No hint is visible while the first transaction is uncommitted. Tests use bounded waits and verify the emitted IDs against persisted rows, not caller-supplied IDs.
+
+Full Java 21 `.\mvnw.cmd -q -Ppostgres-it clean verify` PASS, exit 0: 599 unit/architecture + 1,057 PostgreSQL tests (50 integration classes), total 1,656; zero failures/errors/skips/flakes, Failsafe timeout=false. The existing fork shutdown/Hikari closed-connection warnings occurred during teardown, without failed tests or a nonzero Maven exit. This run uses develop 1b3203d plus WS-02 foundation; pending REV-01 #57 is not included. No migration or production code changed in this update. git diff --check PASS.
+
+This closes the foundation's full PostgreSQL verification gap, not the remaining transport/security implementation. Keep Draft until the Security boundary, socket/client implementation and real socket acceptance tests are complete. DASH-02 dependencies exist on current develop, but Ops aggregation/audit viewer is a separate branch and must not be bundled into WS-02.

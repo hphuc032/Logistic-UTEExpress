@@ -14,6 +14,11 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.event.EventListener;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.jupiter.api.Timeout;
 import java.time.Instant;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -160,6 +165,82 @@ class NotificationIT {
         assertThat(hints.received.stream().filter(e -> e.recipientId().equals(owner)).toList()).hasSize(1);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE dedup_key=?",
                 Integer.class, key + ":rollback")).isZero();
+    }
+
+    @Test @Timeout(40) void concurrentDuplicatePublishesOnlyCommittedWinner() throws Exception {
+        raceDeduplicatedInsert(false);
+    }
+
+    @Test @Timeout(40) void rolledBackFirstInsertAllowsWaitingWriterToPublishOnce() throws Exception {
+        raceDeduplicatedInsert(true);
+    }
+
+    private void raceDeduplicatedInsert(boolean rollbackFirst) throws Exception {
+        Long owner = createUser();
+        String key = "concurrent-hint:" + owner;
+        var inserted = new CountDownLatch(1);
+        var releaseFirst = new CountDownLatch(1);
+        var secondStarted = new CountDownLatch(1);
+        var firstPid = new AtomicInteger();
+        var secondPid = new AtomicInteger();
+        var pool = Executors.newFixedThreadPool(2);
+        try {
+            var first = pool.submit(() -> {
+                var tx = new TransactionTemplate(transactionManager);
+                tx.setTimeout(20);
+                tx.executeWithoutResult(status -> {
+                    jdbc.execute("SET LOCAL lock_timeout = '15s'");
+                    firstPid.set(jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class));
+                    notifications.record(owner, null, "SYSTEM", "Race", "Safe content", key);
+                    inserted.countDown();
+                    await(releaseFirst);
+                    if (rollbackFirst) status.setRollbackOnly();
+                });
+            });
+            assertThat(inserted.await(10, TimeUnit.SECONDS)).isTrue();
+            var second = pool.submit(() -> {
+                var tx = new TransactionTemplate(transactionManager);
+                tx.setTimeout(20);
+                tx.executeWithoutResult(status -> {
+                    jdbc.execute("SET LOCAL lock_timeout = '15s'");
+                    secondPid.set(jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class));
+                    secondStarted.countDown();
+                    notifications.record(owner, null, "SYSTEM", "Race", "Safe content", key);
+                });
+            });
+            assertThat(secondStarted.await(10, TimeUnit.SECONDS)).isTrue();
+            long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(8);
+            boolean blocked = false;
+            while (System.nanoTime() < deadline) {
+                blocked = Boolean.TRUE.equals(jdbc.queryForObject(
+                        "SELECT ? = ANY(pg_blocking_pids(?))", Boolean.class, firstPid.get(), secondPid.get()));
+                if (blocked) break;
+                Thread.sleep(20);
+            }
+            assertThat(blocked).as("PostgreSQL confirms second insert waits for first transaction").isTrue();
+            assertThat(hints.received).noneMatch(e -> e.recipientId().equals(owner));
+            releaseFirst.countDown();
+            first.get(15, TimeUnit.SECONDS);
+            second.get(15, TimeUnit.SECONDS);
+            var rows = jdbc.query("SELECT id, recipient_id FROM uteexpress.notifications WHERE dedup_key=?",
+                    (rs, ignored) -> new NotificationCommitted(rs.getLong(1), rs.getLong(2)), key);
+            assertThat(rows).hasSize(1);
+            assertThat(hints.received.stream().filter(e -> e.recipientId().equals(owner)).toList())
+                    .containsExactlyElementsOf(rows);
+        } finally {
+            releaseFirst.countDown();
+            pool.shutdownNow();
+            assertThat(pool.awaitTermination(10, TimeUnit.SECONDS)).isTrue();
+        }
+    }
+
+    private static void await(CountDownLatch latch) {
+        try {
+            if (!latch.await(10, TimeUnit.SECONDS)) throw new IllegalStateException("Test latch timed out");
+        } catch (InterruptedException interrupted) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(interrupted);
+        }
     }
 
     private Long createUser() {
