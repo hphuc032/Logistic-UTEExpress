@@ -486,7 +486,10 @@ Read snapshots live in their owner's dto package and are internal projections, n
 | CheckoutQuote / ItemSnapshot / AddressSnapshot / OrderTotals | TD → caller | Immutable checkout snapshots; DB-compatible names, no entities |
 
 Review eligibility for RETURNED/REFUNDED orders is not granted by this boundary. Review
-visibility after a later return is an engagement policy for QD review. No query is implemented.
+visibility after a later return is an engagement policy for QD review. REV-01 implements
+the advisory query and a separate `OrderReviewWriteBoundary` transaction coordinator;
+see [REV-01 integration contract](REV-01-order-eligibility.md). QD Review writes must use
+that coordinator, not rely on a previously returned boolean.
 Inventory restore is not authorized by a shipping failure. Later cancellation code must
 lock the order and guard inventory_released_at; return restocking additionally uses the
 trusted ReturnRequest.restockable rule. No inventory business logic is supplied here.
