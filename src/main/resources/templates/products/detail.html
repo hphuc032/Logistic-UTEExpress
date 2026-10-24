@@ -24,6 +24,7 @@
         <div class="col-12 col-lg-5">
             <span class="app-eyebrow" th:text="${product.categoryName}">Danh mục</span>
             <h1 id="product-title" class="app-product-detail-title" th:text="${product.name}">Tên sản phẩm</h1>
+        <a th:href="@{/products/{id}/reviews(id=${product.id})}">Xem đánh giá từ người mua</a>
             <p th:if="${product.discountSnapshot.signum() > 0}" class="text-muted mb-1">
                 <del th:text="${#numbers.formatDecimal(product.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></del>
                 <span> · Giá khuyến mãi</span>
