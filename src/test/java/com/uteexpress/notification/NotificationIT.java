@@ -8,6 +8,12 @@ import com.uteexpress.order.dto.OrderStatus;
 import com.uteexpress.order.dto.OrderStatusChangedEvent;
 import com.uteexpress.security.authentication.UteExpressPrincipal;
 import java.util.List;
+import com.uteexpress.notification.dto.NotificationCommitted;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.event.EventListener;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.time.Instant;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -32,10 +38,19 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest @AutoConfigureMockMvc @Testcontainers
+@SpringBootTest @AutoConfigureMockMvc @Testcontainers @Import(NotificationIT.HintConfiguration.class)
 class NotificationIT {
     @Container @ServiceConnection
     static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17.6");
+    @TestConfiguration(proxyBeanMethods = false)
+    static class HintConfiguration {
+        @Bean HintCollector hintCollector() { return new HintCollector(); }
+    }
+    static class HintCollector {
+        final List<NotificationCommitted> received = new CopyOnWriteArrayList<>();
+        @EventListener public void receive(NotificationCommitted event) { received.add(event); }
+    }
+    @Autowired HintCollector hints;
     @Autowired JdbcTemplate jdbc;
     @Autowired NotificationService notifications;
     @Autowired OrderNotificationListener orderListener;
@@ -117,10 +132,34 @@ class NotificationIT {
                 Integer.class, order, owner)).isEqualTo(1);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id=? AND recipient_id=?",
                 Integer.class, order, stranger)).isZero();
+        var committedRows = jdbc.query("SELECT id, recipient_id FROM uteexpress.notifications WHERE order_id=?",
+                (rs, ignored) -> new NotificationCommitted(rs.getLong(1), rs.getLong(2)), order);
+        assertThat(hints.received.stream().filter(e -> committedRows.contains(e)).toList())
+                .containsExactlyInAnyOrderElementsOf(committedRows);
         jdbc.update("DELETE FROM uteexpress.order_status_history WHERE order_id=?", order);
         jdbc.update("DELETE FROM uteexpress.orders WHERE id=?", order);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id IS NULL AND recipient_id IN (?, ?)",
                 Integer.class, buyer, owner)).isEqualTo(2);
+    }
+
+    @Test void realtimeHintsFollowCommitAndNeverDuplicateOrEscapeRollback() {
+        Long owner = createUser();
+        String key = "committed-hint:" + owner;
+        new TransactionTemplate(transactionManager).executeWithoutResult(status -> {
+            notifications.record(owner, null, "SYSTEM", "Safe title", "Safe content", key);
+            notifications.record(owner, null, "SYSTEM", "Safe title", "Safe content", key);
+            assertThat(hints.received).noneMatch(e -> e.recipientId().equals(owner));
+        });
+        Long id = jdbc.queryForObject("SELECT id FROM uteexpress.notifications WHERE dedup_key=?", Long.class, key);
+        assertThat(hints.received.stream().filter(e -> e.recipientId().equals(owner)).toList())
+                .containsExactly(new NotificationCommitted(id, owner));
+        new TransactionTemplate(transactionManager).executeWithoutResult(status -> {
+            notifications.record(owner, null, "SYSTEM", "Safe title", "Safe content", key + ":rollback");
+            status.setRollbackOnly();
+        });
+        assertThat(hints.received.stream().filter(e -> e.recipientId().equals(owner)).toList()).hasSize(1);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE dedup_key=?",
+                Integer.class, key + ":rollback")).isZero();
     }
 
     private Long createUser() {
