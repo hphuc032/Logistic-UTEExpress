@@ -95,6 +95,7 @@ class VendorOrderIT {
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.version").value(0))
                 .andExpect(jsonPath("$.facts.items[1].quantity").value(2))
+                .andExpect(content().string(not(containsString("orderItemId"))))
                 .andExpect(jsonPath("$.facts.timeline.length()").value(1))
                 .andExpect(jsonPath("$.facts.payments[0].status").value("UNPAID"))
                 .andExpect(jsonPath("$.facts.requestHash").doesNotExist());

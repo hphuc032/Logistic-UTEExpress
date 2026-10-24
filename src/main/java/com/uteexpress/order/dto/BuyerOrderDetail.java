@@ -1,5 +1,6 @@
 package com.uteexpress.order.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.uteexpress.payment.dto.PaymentRecordView;
 import com.uteexpress.promotion.dto.VoucherApplication;
 import java.math.BigDecimal;
@@ -30,7 +31,15 @@ public record BuyerOrderDetail(Long id, String orderCode, Long shopId, OrderStat
             String district, String detail) { }
 
     public record Item(Long productId, String productNameSnapshot, BigDecimal unitPrice,
-            BigDecimal discountSnapshot, BigDecimal finalUnitPrice, int quantity, BigDecimal lineTotal) { }
+            BigDecimal discountSnapshot, BigDecimal finalUnitPrice, int quantity, BigDecimal lineTotal,
+            @JsonInclude(JsonInclude.Include.NON_NULL) Long orderItemId) {
+        /** Preserve the existing Vendor projection, which also uses this snapshot type. */
+        public Item(Long productId, String productNameSnapshot, BigDecimal unitPrice,
+                BigDecimal discountSnapshot, BigDecimal finalUnitPrice, int quantity, BigDecimal lineTotal) {
+            this(productId, productNameSnapshot, unitPrice, discountSnapshot, finalUnitPrice,
+                    quantity, lineTotal, null);
+        }
+    }
 
     /** Exactly one persisted history row; a null fromStatus denotes the recorded initial creation. */
     public record TimelineEntry(OrderStatus fromStatus, OrderStatus toStatus, Instant createdAt) { }
