@@ -43,6 +43,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class AuthenticationWebTest {
+    @MockitoBean com.uteexpress.governance.service.OpsDashboardReadService dashboardReports;
     @MockitoBean com.uteexpress.governance.service.ProductModerationService productModerationService;
     @MockitoBean com.uteexpress.governance.service.ShopModerationService shopModerationService;
     @MockitoBean com.uteexpress.catalog.service.ProductService productService;
@@ -84,6 +85,17 @@ class AuthenticationWebTest {
     @Autowired MockMvc mvc;
     @Autowired PasswordEncoder passwordEncoder;
     @Autowired JwtTokenService tokens;
+
+    @org.junit.jupiter.api.BeforeEach void reportingFixture() {
+        var window = com.uteexpress.governance.dto.OpsReportWindow.resolve(null, null,
+                java.time.Clock.fixed(java.time.Instant.parse("2026-10-25T00:00:00Z"), java.time.ZoneOffset.UTC));
+        var empty = new com.uteexpress.governance.dto.OpsDashboardMetrics.StateTotals(0, java.util.List.of());
+        var metrics = new com.uteexpress.governance.dto.OpsDashboardMetrics(window, null, empty, empty, empty, empty, 0);
+        com.uteexpress.governance.service.OpsDashboardReadService mock = org.springframework.test.util.AopTestUtils.getUltimateTargetObject(dashboardReports);
+        org.mockito.Mockito.doReturn(metrics).when(mock).admin(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any());
+        org.mockito.Mockito.doReturn(metrics).when(mock).manager(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any());
+    }
+
 
     @Test
     void loginPageRendersCsrfProtectedFormWithoutPrefilledPassword() throws Exception {
