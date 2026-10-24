@@ -4,5 +4,6 @@ import com.uteexpress.order.entity.OrderItem;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface OrderItemRepository extends JpaRepository<OrderItem, Long> {
+    java.util.Optional<OrderItem> findByIdAndOrderId(Long id, Long orderId);
     java.util.List<OrderItem> findByOrderIdOrderByIdAsc(Long orderId);
 }
