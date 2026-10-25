@@ -16,10 +16,11 @@ public class SocketInboundGuard implements ChannelInterceptor {
     private static final String SUBSCRIPTION = "uteexpress.socket.subscription";
     private static final Set<String> IDENTITY_HEADERS = Set.of("login", "passcode", "authorization", "cookie", "userid", "recipientid", "role", "roles", "user");
     private final SocketIdentityService identities;
+    private final SocketObservability observations;
     private final SocketConnections connections;
     private final XorCsrfChannelInterceptor csrf = new XorCsrfChannelInterceptor();
-    public SocketInboundGuard(SocketIdentityService identities, SocketConnections connections) {
-        this.identities = identities; this.connections = connections;
+    public SocketInboundGuard(SocketIdentityService identities, SocketConnections connections, SocketObservability observations) {
+        this.identities = identities; this.connections = connections; this.observations = observations;
     }
     @Override public Message<?> preSend(Message<?> message, MessageChannel channel) {
         var headers = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
@@ -52,6 +53,7 @@ public class SocketInboundGuard implements ChannelInterceptor {
             }
             return message;
         } catch (RuntimeException failure) {
+            observations.denied(SocketObservability.Reason.FRAME_DENIED, failure);
             connections.closeSession(headers.getSessionId());
             // Drop and close; do not let framework exception logging render untrusted native headers.
             return null;

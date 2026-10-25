@@ -55,6 +55,8 @@ class NotificationSocketIT {
     @Autowired JdbcTemplate jdbc;
     @Autowired JwtTokenService tokens;
     @Autowired JwtEncoder encoder;
+    @Autowired com.uteexpress.identity.service.IdentityAccountGovernanceService governance;
+    @Autowired com.uteexpress.notification.realtime.SocketObservability observations;
     @Autowired SocketIdentityService socketIdentities;
     @Autowired NotificationService notifications;
     @Autowired PlatformTransactionManager manager;
@@ -179,6 +181,26 @@ class NotificationSocketIT {
         assertHandshakeDenied("UTEEXPRESS_AUTH=" + jwt, origin());
     }
 
+    static java.util.stream.Stream<org.junit.jupiter.params.provider.Arguments> malformedClaims() {
+        return java.util.stream.Stream.of(
+            org.junit.jupiter.params.provider.Arguments.of("uteexpress:user:9223372036854775808",0L),
+            org.junit.jupiter.params.provider.Arguments.of("uteexpress:user:01",0L),
+            org.junit.jupiter.params.provider.Arguments.of("uteexpress:user:1",0.5d),
+            org.junit.jupiter.params.provider.Arguments.of("uteexpress:user:1",0.0d),
+            org.junit.jupiter.params.provider.Arguments.of("uteexpress:user:1","0"),
+            org.junit.jupiter.params.provider.Arguments.of("uteexpress:user:1",-1L),
+            org.junit.jupiter.params.provider.Arguments.of("uteexpress:user:1",new java.math.BigInteger("9223372036854775808")));
+    }
+    @ParameterizedTest @org.junit.jupiter.params.provider.MethodSource("malformedClaims")
+    void signedMalformedIdentityClaimsDenyThroughHttpAndSocket(String subject,Object version) throws Exception {
+        var claims = JwtClaimsSet.builder().subject(subject).issuer("uteexpress").audience(List.of("uteexpress-web"))
+                .issuedAt(clock.instant()).expiresAt(clock.instant().plusSeconds(120)).claim("tokenVersion",version).build();
+        String jwt = encoder.encode(JwtEncoderParameters.from(JwsHeader.with(MacAlgorithm.HS256).build(),claims)).getTokenValue();
+        assertThatThrownBy(() -> socketIdentities.authenticate(jwt)).isInstanceOf(RuntimeException.class);
+        assertThat(get("/notifications/realtime-session","UTEEXPRESS_AUTH="+jwt).statusCode()).isEqualTo(401);
+        assertHandshakeDenied("UTEEXPRESS_AUTH="+jwt,origin());
+    }
+
     @Test void vendorConfirmPublishesCommittedHistoryToBuyerOverRealSocket() throws Exception {
         var buyer = browser(account("USER")); var vendor = browser(account("VENDOR"));
         var socket = connected(buyer); subscribe(socket, buyer.account());
@@ -254,6 +276,43 @@ class NotificationSocketIT {
         for (int i = 0; i < 4; i++) connected(browser);
         var fifth = raw(browser.cookie, origin());
         assertThat(fifth.closed.await(8, TimeUnit.SECONDS)).isTrue();
+    }
+
+    @ParameterizedTest @ValueSource(booleans={true,false})
+    void multipleSessionsTimeOutAndCleanUpWhileGovernanceHoldsAccount(boolean commit) throws Exception {
+        var target = browser(account("USER"));
+        org.mockito.Mockito.doNothing().when(connections).sweep();
+        var sockets = new ArrayList<RawSocket>();
+        for (int i=0;i<4;i++) sockets.add(connected(target));
+        long before = observations.count(com.uteexpress.notification.realtime.SocketObservability.Reason.FRAME_DENIED);
+        long timeouts = observations.count(com.uteexpress.notification.realtime.SocketObservability.Reason.ACCOUNT_LOCK_UNAVAILABLE);
+        var held = new CountDownLatch(1); var release = new CountDownLatch(1);
+        var pool = Executors.newSingleThreadExecutor();
+        try {
+            var mutation = pool.submit(() -> new TransactionTemplate(manager).executeWithoutResult(status -> {
+                governance.setLocked(target.account.id,0L,true); // production Account lock and token revocation
+                held.countDown();
+                try { if (!release.await(16,TimeUnit.SECONDS)) throw new IllegalStateException("release timeout"); }
+                catch (InterruptedException interrupted) { Thread.currentThread().interrupt(); throw new IllegalStateException(interrupted); }
+                if (!commit) status.setRollbackOnly();
+            }));
+            assertThat(held.await(5,TimeUnit.SECONDS)).isTrue();
+            long started = System.nanoTime();
+            for (var socket : sockets) socket.send("SUBSCRIBE\nid:contended\ndestination:/user/queue/notifications\n\n\0");
+            for (var socket : sockets) assertThat(socket.closed.await(8,TimeUnit.SECONDS)).isTrue();
+            assertThat(Duration.ofNanos(System.nanoTime()-started)).isLessThan(Duration.ofSeconds(12));
+            assertThat(observations.count(com.uteexpress.notification.realtime.SocketObservability.Reason.FRAME_DENIED)-before).isGreaterThanOrEqualTo(4);
+            assertThat(observations.count(com.uteexpress.notification.realtime.SocketObservability.Reason.ACCOUNT_LOCK_UNAVAILABLE)-timeouts).isGreaterThanOrEqualTo(4);
+            assertThat(mutation.isDone()).isFalse(); // denial happened before governance released its lock
+            release.countDown(); mutation.get(5,TimeUnit.SECONDS);
+            for (var socket : sockets) assertThat(socket.frames.stream()).noneMatch(frame -> frame.startsWith("MESSAGE"));
+            if (commit) assertHandshakeDenied(target.cookie,origin());
+            else {
+                // All four slots must be reusable after timeout cleanup, not leaked by failed guards.
+                for (int i=0;i<4;i++) connected(target);
+            }
+            assertThat(jdbc.queryForObject("SHOW lock_timeout",String.class)).isEqualTo("0");
+        } finally { release.countDown(); pool.shutdownNow(); pool.awaitTermination(5,TimeUnit.SECONDS); }
     }
 
     private Account account(String role) {

@@ -24,22 +24,33 @@ public class SocketIdentityService {
     private final AccountIdentityService accounts;
     private final ObjectProvider<PlatformTransactionManager> managers;
     private final Clock clock;
+    private final ObjectProvider<org.springframework.jdbc.core.JdbcTemplate> jdbc;
 
     public SocketIdentityService(JwtDecoder decoder, JwtProperties properties,
             IdentityAuthenticationService identities, AccountIdentityService accounts,
-            ObjectProvider<PlatformTransactionManager> managers, Clock clock) {
+            ObjectProvider<PlatformTransactionManager> managers, Clock clock,
+            ObjectProvider<org.springframework.jdbc.core.JdbcTemplate> jdbc) {
         this.decoder = decoder; this.properties = properties; this.identities = identities;
-        this.accounts = accounts; this.managers = managers; this.clock = clock;
+        this.accounts = accounts; this.managers = managers; this.clock = clock; this.jdbc = jdbc;
     }
 
     public String cookieName() { return properties.cookieName(); }
 
     public SocketIdentity authenticate(String token) {
         var jwt = decoder.decode(token); // existing signature/issuer/audience/claims validators
-        var identity = new SocketIdentity(Long.valueOf(jwt.getSubject().substring("uteexpress:user:".length())),
-                ((Number) jwt.getClaim("tokenVersion")).longValue(),
-                identities.findByUserId(Long.valueOf(jwt.getSubject().substring("uteexpress:user:".length())))
-                        .orElseThrow(SocketIdentityService::denied).roleCodes(), jwt.getExpiresAt());
+        Object subject = jwt.getClaims().get("sub");
+        Object version = jwt.getClaims().get("tokenVersion");
+        // Validate exact types, canonical decimal syntax and signed-long range before parsing.
+        if (!(subject instanceof String text) || !text.matches("uteexpress:user:[1-9][0-9]{0,18}")) throw denied();
+        String digits = text.substring("uteexpress:user:".length());
+        if (digits.length() == 19 && digits.compareTo("9223372036854775807") > 0) throw denied();
+        if (!(version instanceof Byte || version instanceof Short || version instanceof Integer || version instanceof Long
+                || version instanceof java.math.BigInteger)) throw denied();
+        var exactVersion = new java.math.BigInteger(version.toString());
+        if (exactVersion.signum() < 0 || exactVersion.bitLength() > 63) throw denied();
+        long accountId = Long.parseLong(digits);
+        var identity = new SocketIdentity(accountId, exactVersion.longValueExact(),
+                identities.findByUserId(accountId).orElseThrow(SocketIdentityService::denied).roleCodes(), jwt.getExpiresAt());
         runIfCurrent(identity, () -> {});
         return identity;
     }
@@ -53,6 +64,10 @@ public class SocketIdentityService {
         tx.setIsolationLevel(TransactionDefinition.ISOLATION_READ_COMMITTED);
         tx.setTimeout(5);
         tx.executeWithoutResult(status -> {
+            // Transaction timeout alone need not bound time spent inside a JDBC lock wait.
+            // LOCAL settings end with this Account-only transaction, never leak through the pool.
+            jdbc.getObject().execute("SET LOCAL lock_timeout = '2000ms'");
+            jdbc.getObject().execute("SET LOCAL statement_timeout = '4000ms'");
             accounts.requireActiveAccountForUpdate(identity.accountId());
             var current = identities.findByUserId(identity.accountId()).orElseThrow(SocketIdentityService::denied);
             if (!current.active() || current.tokenVersion() != identity.tokenVersion()

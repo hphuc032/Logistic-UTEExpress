@@ -15,7 +15,8 @@ import org.springframework.web.socket.server.HandshakeInterceptor;
 public class SocketHandshake implements HandshakeInterceptor {
     public static final String IDENTITY = "uteexpress.socket.identity";
     private final SocketIdentityService identities;
-    public SocketHandshake(SocketIdentityService identities) { this.identities = identities; }
+    private final SocketObservability observations;
+    public SocketHandshake(SocketIdentityService identities, SocketObservability observations) { this.identities = identities; this.observations = observations; }
     @Override public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response,
             WebSocketHandler handler, Map<String, Object> attributes) {
         try {
@@ -30,6 +31,7 @@ public class SocketHandshake implements HandshakeInterceptor {
             attributes.put(IDENTITY, identity);
             return true;
         } catch (RuntimeException denied) {
+            observations.denied(SocketObservability.Reason.HANDSHAKE_DENIED, denied);
             response.setStatusCode(HttpStatus.FORBIDDEN);
             return false; // never log request headers, token or identity claims
         }

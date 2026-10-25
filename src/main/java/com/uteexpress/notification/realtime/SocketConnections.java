@@ -15,7 +15,8 @@ import org.springframework.web.socket.handler.*;
 public class SocketConnections {
     private final Map<String, WebSocketSession> sessions = new ConcurrentHashMap<>();
     private final SocketIdentityService identities;
-    public SocketConnections(SocketIdentityService identities) { this.identities = identities; }
+    private final SocketObservability observations;
+    public SocketConnections(SocketIdentityService identities, SocketObservability observations) { this.identities = identities; this.observations = observations; }
 
     public WebSocketHandler decorate(WebSocketHandler delegate) {
         return new WebSocketHandlerDecorator(delegate) {
@@ -25,7 +26,13 @@ public class SocketConnections {
                     standard.getNativeSession().getUserProperties().put("org.apache.tomcat.websocket.BLOCKING_SEND_TIMEOUT", 2000L);
                 }
                 var identity = (SocketIdentity) original.getAttributes().get(SocketHandshake.IDENTITY);
-                identities.runIfCurrent(identity, () -> {});
+                try { identities.runIfCurrent(identity, () -> {}); }
+                catch (RuntimeException denied) {
+                    observations.denied(SocketObservability.Reason.SETUP_DENIED, denied);
+                    try { original.close(CloseStatus.POLICY_VIOLATION); }
+                    catch (IOException ignored) { observations.rejected(SocketObservability.Reason.CLEANUP_FAILED); }
+                    return;
+                }
                 WebSocketSession guarded = new WebSocketSessionDecorator(
                         new ConcurrentWebSocketSessionDecorator(original, 2000, 32768)) {
                     @Override public void sendMessage(WebSocketMessage<?> message) throws IOException {
@@ -35,6 +42,7 @@ public class SocketConnections {
                                 catch (IOException failure) { throw new UncheckedIOException(failure); }
                             });
                         } catch (RuntimeException denied) {
+                            observations.denied(SocketObservability.Reason.DELIVERY_DENIED, denied);
                             closeSession(getId());
                             throw new IOException("Socket delivery unavailable");
                         }
@@ -42,7 +50,7 @@ public class SocketConnections {
                 };
                 synchronized (sessions) {
                     long own = sessions.values().stream().filter(s -> s.getAttributes().get(SocketHandshake.IDENTITY) instanceof SocketIdentity existing && identity.accountId().equals(existing.accountId())).count();
-                    if (sessions.size() >= 256 || own >= 4) { original.close(CloseStatus.POLICY_VIOLATION); return; }
+                    if (sessions.size() >= 256 || own >= 4) { observations.rejected(SocketObservability.Reason.SESSION_LIMIT); original.close(CloseStatus.POLICY_VIOLATION); return; }
                     sessions.put(original.getId(), guarded);
                 }
                 try { super.afterConnectionEstablished(guarded); }
@@ -57,13 +65,13 @@ public class SocketConnections {
     public void closeSession(String id) {
         if (id == null) return;
         var session = sessions.remove(id);
-        if (session != null) try { session.close(CloseStatus.POLICY_VIOLATION); } catch (IOException ignored) { /* already closed */ }
+        if (session != null) try { session.close(CloseStatus.POLICY_VIOLATION); } catch (IOException ignored) { observations.rejected(SocketObservability.Reason.CLEANUP_FAILED); }
     }
     @Scheduled(fixedDelayString = "${uteexpress.notifications.socket-sweep-ms:1000}")
     public void sweep() {
         sessions.forEach((id, session) -> {
             try { identities.runIfCurrent((SocketIdentity) session.getAttributes().get(SocketHandshake.IDENTITY), () -> {}); }
-            catch (RuntimeException revoked) { closeSession(id); }
+            catch (RuntimeException revoked) { observations.denied(SocketObservability.Reason.SWEEP_DENIED, revoked); closeSession(id); }
         });
     }
 }
