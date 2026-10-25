@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Doanh thu cửa hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section">
+<h1>Doanh thu cửa hàng</h1><p th:text="${revenue.shopName}"></p>
+<p>Múi giờ: <strong th:text="${revenue.timezone}"></strong>. Đơn vị: VND. Không bao gồm phí vận chuyển; đây không phải báo cáo tiền đã chuyển cho Vendor.</p>
+<a th:href="@{/vendor/orders}" class="btn btn-app-secondary">Đơn hàng bán</a>
+<form method="get" th:action="@{/vendor/dashboard}" class="row g-3 my-3">
+<div class="col-sm-5"><label for="from">Từ ngày (bao gồm)</label><input id="from" name="from" type="date" required class="form-control" th:value="${revenue.selected.period.from}"></div>
+<div class="col-sm-5"><label for="to">Đến ngày (không bao gồm)</label><input id="to" name="toExclusive" type="date" required class="form-control" th:value="${revenue.selected.period.toExclusive}"></div>
+<div class="col-sm-2 align-self-end"><button class="btn btn-app-primary">Xem</button></div>
+</form>
+<div class="table-responsive"><table class="table"><caption>Tiền hàng sau giảm giá. Refund ghi nhận theo thời điểm Admin xác nhận hoàn tất, không phải thời điểm ngân hàng chuyển tiền.</caption>
+<thead><tr><th scope="col">Chỉ số</th><th scope="col">Hôm nay</th><th scope="col">Tháng này</th><th scope="col">Khoảng đã chọn</th></tr></thead>
+<tbody>
+<tr th:each="key : ${ {'deliveredSales','collectedPayments','refunds','netVendorSales','commissionAccrued','commissionReversed','netCommission'} }">
+<th scope="row" th:text="${key == 'deliveredSales' ? 'Delivered Sales — Tiền hàng giao thành công' : key == 'collectedPayments' ? 'Collected Payments — Tiền hàng đã thu' : key == 'refunds' ? 'Refunds — Tiền hàng đã hoàn' : key == 'netVendorSales' ? 'Net Vendor Sales — Giao thành công trừ hoàn tiền' : key == 'commissionAccrued' ? 'Commission Accrued — Phí ghi nhận lúc giao' : key == 'commissionReversed' ? 'Commission Reversed — Phí đảo khi hoàn tiền' : 'Net Commission — Phí ghi nhận trừ phí đảo'}"></th>
+<td th:each="window : ${ {revenue.today,revenue.month,revenue.selected} }" th:with="amount=${window.metrics[key]}">
+<span th:if="${amount.complete()}" th:text="${#numbers.formatDecimal(amount.value,0,'POINT',0,'COMMA')}"></span>
+<span th:unless="${amount.complete()}" class="text-danger" th:text="|Chưa đủ dữ liệu (${amount.unknownEvents} sự kiện)|"></span></td></tr>
+<tr><th scope="row">Tổng đơn tạo trong kỳ</th><td th:each="w:${ {revenue.today,revenue.month,revenue.selected} }" th:text="${w.metrics.totalOrders}"></td></tr>
+<tr><th scope="row">Đơn giao trong kỳ</th><td th:each="w:${ {revenue.today,revenue.month,revenue.selected} }" th:text="${w.metrics.deliveredOrders}"></td></tr>
+<tr><th scope="row">Đơn hủy trong kỳ</th><td th:each="w:${ {revenue.today,revenue.month,revenue.selected} }" th:text="${w.metrics.cancelledOrders}"></td></tr>
+</tbody></table></div>
+<p>Delivered Sales và commission ghi nhận theo ngày giao; Collected Payments theo ngày thu. Net Vendor Sales = Delivered Sales − Refunds. Net Commission = Commission Accrued − Commission Reversed. Các kỳ có thể âm.</p>
+<p>Không thể xác định kỳ cho sự kiện thiếu timestamp: báo chưa đủ dữ liệu cho các kỳ liên quan của shop. Số đếm đơn chỉ gồm timestamp đã lưu.</p>
+<h2>Top sản phẩm theo số lượng giao ròng</h2><p>Giao thành công cộng vào kỳ giao; hàng nhận trả trừ vào kỳ RECEIVE_RETURN. Hoàn tiền không trừ số lượng lần nữa.</p>
+<p th:unless="${revenue.topProducts.complete()}" class="text-danger">Danh sách chưa đầy đủ do thiếu bằng chứng giao/nhận trả. Các dòng dưới đây chỉ gồm sự kiện xác định được.</p>
+<p th:if="${revenue.topProducts.products.empty}">Chưa có sự kiện sản phẩm xác định được trong kỳ.</p>
+<div class="table-responsive"><table class="table"><thead><tr><th scope="col">Sản phẩm (snapshot)</th><th scope="col">Đã giao</th><th scope="col">Đã nhận trả</th><th scope="col">Ròng</th></tr></thead>
+<tbody><tr th:each="p:${revenue.topProducts.products}"><th scope="row" th:text="${p.productNameSnapshot}"></th><td th:text="${p.deliveredQuantity}"></td><td th:text="${p.receivedReturnQuantity}"></td><td th:text="${p.netQuantity}"></td></tr></tbody></table></div>
+</section></body></html>
