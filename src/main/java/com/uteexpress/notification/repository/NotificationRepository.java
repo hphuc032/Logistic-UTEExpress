@@ -1,6 +1,7 @@
 package com.uteexpress.notification.repository;
 
 import com.uteexpress.notification.dto.NotificationView;
+import com.uteexpress.notification.dto.NotificationCommitted;
 import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.List;
@@ -45,16 +46,17 @@ public class NotificationRepository {
                 .addValue("at", Timestamp.from(at)));
     }
 
-    public void insert(Long recipientId, Long orderId, String type, String title,
+    public List<NotificationCommitted> insert(Long recipientId, Long orderId, String type, String title,
             String message, String dedupKey, Instant at) {
-        jdbc.getObject().update("""
+        return jdbc.getObject().query("""
                 INSERT INTO uteexpress.notifications
                     (recipient_id, order_id, type, title, message, dedup_key, created_at)
                 VALUES (:recipientId, :orderId, :type, :title, :message, :dedupKey, :at)
-                ON CONFLICT (dedup_key) DO NOTHING
+                ON CONFLICT (dedup_key) DO NOTHING RETURNING id, recipient_id
                 """, new MapSqlParameterSource("recipientId", recipientId).addValue("orderId", orderId)
                 .addValue("type", type).addValue("title", title).addValue("message", message)
-                .addValue("dedupKey", dedupKey).addValue("at", Timestamp.from(at)));
+                .addValue("dedupKey", dedupKey).addValue("at", Timestamp.from(at)),
+                (rs, ignored) -> new NotificationCommitted(rs.getLong("id"), rs.getLong("recipient_id")));
     }
 
     // Durable source: committed lifecycle history, never a client payload or an ID high-water mark.
@@ -85,8 +87,8 @@ public class NotificationRepository {
                 new MapSqlParameterSource("id", orderId), (rs, ignored) -> rs.getLong(1)).isEmpty();
     }
 
-    public int projectOrderHistory(Long orderId) {
-        return jdbc.getObject().update("""
+    public List<NotificationCommitted> projectOrderHistory(Long orderId) {
+        return jdbc.getObject().query("""
                 WITH source AS (
                 """ + HISTORY_RECIPIENTS + """
                     AND h.order_id=:orderId
@@ -97,8 +99,9 @@ public class NotificationRepository {
                 FROM source WHERE NOT EXISTS (
                     SELECT 1 FROM uteexpress.notifications n WHERE n.dedup_key=source.dedup_key)
                 ORDER BY history_id,recipient_id LIMIT 200
-                ON CONFLICT (dedup_key) DO NOTHING
-                """, new MapSqlParameterSource("orderId", orderId));
+                ON CONFLICT (dedup_key) DO NOTHING RETURNING id, recipient_id
+                """, new MapSqlParameterSource("orderId", orderId),
+                (rs, ignored) -> new NotificationCommitted(rs.getLong("id"), rs.getLong("recipient_id")));
     }
 
     private static Instant instant(Timestamp value) {
