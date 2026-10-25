@@ -1,0 +1,94 @@
+{
+  "reviewed_feature_sha": "1e608133708e322e5ab741cf50803381cf63bc49",
+  "integration_source_sha": "06c52928b98fc9d5df26b7f97d93a6a594f01896",
+  "develop_sha": "5b5164d",
+  "maven_exit_observed": 0,
+  "plans": [
+    {
+      "query": "METRICS_SQL shop=41 start=2025-12-31T17:00:00Z end=2026-01-01T17:00:00Z",
+      "planning_ms": 1.823,
+      "execution_ms": 10.658,
+      "root_shared_hits": 169
+    },
+    {
+      "query": "TOP_SQL shop=41 start=2025-12-31T17:00:00Z end=2026-01-01T17:00:00Z",
+      "planning_ms": 2.759,
+      "execution_ms": 11.293,
+      "root_shared_hits": 168
+    },
+    {
+      "query": "METRICS_SQL shop=41 start=2025-12-31T17:00:00Z end=2026-12-31T17:00:00Z",
+      "planning_ms": 2.473,
+      "execution_ms": 11.772,
+      "root_shared_hits": 169
+    },
+    {
+      "query": "TOP_SQL shop=41 start=2025-12-31T17:00:00Z end=2026-12-31T17:00:00Z",
+      "planning_ms": 1.778,
+      "execution_ms": 15.676,
+      "root_shared_hits": 207
+    }
+  ],
+  "groups": {
+    "surefire-reports": {
+      "classes": 2,
+      "tests": 20,
+      "reports": [
+        {
+          "suite": "com.uteexpress.ArchitectureTest",
+          "sha256": "380efc1381eb6996a0f50488b8529cc6c6edd34f0c460fe9f9a7cbc6191ea2bf",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "com.uteexpress.order.service.RevenueServiceTest",
+          "sha256": "95c6fd2e3964dd36238a9c24a992b7aa8b7f26a30049ea92415cf367088b419f",
+          "tests": 13,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    "failsafe-reports": {
+      "classes": 4,
+      "tests": 137,
+      "reports": [
+        {
+          "suite": "com.uteexpress.notification.NotificationSocketIT",
+          "sha256": "5d9850209a5f81f338a151da1f84b09f4e19ac787bab071839bd5ffd970296e3",
+          "tests": 29,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "com.uteexpress.order.ManualCodRefundIT",
+          "sha256": "b4fdedcb9529b361423558b07b114809aaf813faa77837436be0874e58a5c0d0",
+          "tests": 62,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "com.uteexpress.order.VendorRevenueIT",
+          "sha256": "bf351f1a2713387a3abb8a0dab327bfd94a66930f6f5cd2b15fdf27c78be8cd1",
+          "tests": 43,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "com.uteexpress.payment.RefundLedgerMigrationIT",
+          "sha256": "610b6343865e8388df668cb63c46a79534197c364b7bb19dde6d2bf98b14c798",
+          "tests": 3,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    }
+  }
+}
