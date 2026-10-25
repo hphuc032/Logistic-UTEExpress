@@ -21,6 +21,21 @@ public class NotificationController {
         return "notification/inbox";
     }
 
+    @GetMapping("/notifications/realtime-session")
+    @org.springframework.web.bind.annotation.ResponseBody
+    public org.springframework.http.ResponseEntity<java.util.Map<String, String>> realtimeSession(
+            org.springframework.security.web.csrf.CsrfToken csrf) {
+        return org.springframework.http.ResponseEntity.ok().cacheControl(org.springframework.http.CacheControl.noStore())
+                .body(java.util.Map.of("headerName", csrf.getHeaderName(), "token", csrf.getToken()));
+    }
+
+    @GetMapping("/notifications/inbox")
+    @org.springframework.web.bind.annotation.ResponseBody
+    public org.springframework.http.ResponseEntity<java.util.List<com.uteexpress.notification.dto.NotificationView>> inboxJson() {
+        return org.springframework.http.ResponseEntity.ok().cacheControl(org.springframework.http.CacheControl.noStore())
+                .body(notifications.inbox());
+    }
+
     @PostMapping("/notifications/{id}/read")
     public String markRead(@PathVariable Long id) {
         notifications.markRead(id);
