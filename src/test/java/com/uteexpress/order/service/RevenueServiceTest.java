@@ -95,4 +95,14 @@ class RevenueServiceTest {
         assertThat(metrics.netVendorSales().value()).isEqualByComparingTo("-90000");
         assertThat(metrics.netCommission().value()).isEqualByComparingTo("-9000");
     }
+    @Test void unknownCollectionDoesNotReplaceIndependentDeliveredSalesNetFormula() {
+        var metrics=new RevenueMetrics(new RevenueAmount(new BigDecimal("90000"),0),
+            new RevenueAmount(null,1),new RevenueAmount(new BigDecimal("10000"),0),
+            new RevenueAmount(new BigDecimal("9000"),0),new RevenueAmount(new BigDecimal("1000"),0),0,0,0);
+        assertThat(metrics.collectedPayments().complete()).isFalse();
+        assertThat(metrics.collectedPayments().value()).isNull();
+        assertThat(metrics.netVendorSales().complete()).isTrue();
+        assertThat(metrics.netVendorSales().value()).isEqualByComparingTo("80000");
+        assertThat(metrics.netCommission().value()).isEqualByComparingTo("8000");
+    }
 }

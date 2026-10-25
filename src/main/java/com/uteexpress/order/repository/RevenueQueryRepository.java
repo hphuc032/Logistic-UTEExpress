@@ -17,16 +17,19 @@ public class RevenueQueryRepository {
     // Public SQL constants also let PostgreSQL acceptance tests EXPLAIN the exact production query.
     public static final String EVIDENCE_SQL = """
             WITH scoped AS (SELECT * FROM uteexpress.orders WHERE shop_id=:shop),
-            payment_facts AS (
-                SELECT p.order_id, count(*) AS attempts,
-                    count(*) FILTER (WHERE p.status='PAID') AS paid_count,
-                    min(p.id) AS payment_id, min(p.amount) AS paid_amount,
-                    min(p.paid_at) AS paid_at,
-                    bool_and(p.method='COD' AND p.status='PAID' AND p.expired_at IS NULL) AS collected
+            payment_counts AS (
+                SELECT p.order_id, count(*) FILTER (WHERE p.status='PAID') AS paid_count
                 FROM uteexpress.payments p JOIN scoped o ON o.id=p.order_id GROUP BY p.order_id
+            ), payment_facts AS (
+                -- Count ALL PAID rows before validating their content. More than one
+                -- never selects an arbitrary winner, even if only one looks valid.
+                SELECT c.order_id,c.paid_count,p.id AS payment_id,p.amount AS paid_amount,p.paid_at,
+                    p.method='COD' AND p.expired_at IS NULL AS collected
+                FROM payment_counts c LEFT JOIN uteexpress.payments p
+                    ON p.order_id=c.order_id AND p.status='PAID' AND c.paid_count=1
             ), facts AS (
                 SELECT o.*, o.subtotal-o.discount_total AS goods,
-                    p.attempts, p.paid_count, p.payment_id, p.paid_amount, p.paid_at,
+                    p.paid_count, p.payment_id, p.paid_amount, p.paid_at,
                     COALESCE(o.subtotal>=0 AND o.discount_total BETWEEN 0 AND o.subtotal
                         AND o.shipping_fee>=0 AND o.grand_total=o.subtotal-o.discount_total+o.shipping_fee
                         AND o.subtotal=trunc(o.subtotal) AND o.discount_total=trunc(o.discount_total)
@@ -37,7 +40,7 @@ public class RevenueQueryRepository {
                         AND o.commission_amount=trunc(o.commission_amount)
                         AND o.commission_rate_snapshot BETWEEN 0 AND 100
                         AND o.commission_amount NOT IN ('NaN'::numeric,'Infinity'::numeric,'-Infinity'::numeric),false) AS commission_ok,
-                    COALESCE(p.attempts=1 AND p.paid_count=1 AND p.collected AND p.paid_at IS NOT NULL
+                    COALESCE(p.paid_count=1 AND p.collected AND p.paid_at IS NOT NULL
                         AND p.paid_amount=o.grand_total,false) AS payment_ok,
                     EXISTS(SELECT 1 FROM uteexpress.order_status_history h WHERE h.order_id=o.id
                         AND h.from_status='SHIPPING' AND h.to_status='DELIVERED' AND h.created_at=o.delivered_at) AS delivery_ok,

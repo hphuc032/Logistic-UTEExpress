@@ -58,7 +58,10 @@ class VendorRevenueIT {
     }
     @AfterEach void clear() { SecurityContextHolder.clearContext(); }
     @Test void equalValueOrdersAndMultipleItemsDoNotMultiplyMoneyAndHistoryIsRetained() {
-        long a=order(shop,DELIVERY,DELIVERY.minusSeconds(1)); order(shop,DELIVERY,DELIVERY.minusSeconds(1));
+        long a=order(shop,DELIVERY,DELIVERY.minusSeconds(1)); long b=order(shop,DELIVERY,DELIVERY.minusSeconds(1));
+        unsuccessfulPayment(a,1,Instant.parse("2026-01-01T00:00:00Z"));
+        unsuccessfulPayment(b,2,Instant.parse("2026-01-02T00:00:00Z"));
+        unsuccessfulPayment(b,3,Instant.parse("2026-01-03T00:00:00Z"));
         order(otherShop,DELIVERY,DELIVERY.minusSeconds(1));
         jdbc.update("UPDATE uteexpress.orders SET status='RETURN_REQUESTED' WHERE id=?",a);
         var result=revenue.dashboard(null,null); var m=result.month().metrics();
@@ -69,7 +72,10 @@ class VendorRevenueIT {
     @Test void independentCollectionDeliveryReceiptAndRefundPeriodsUseOriginalSnapshot() {
         Instant paid=Instant.parse("2026-12-31T16:59:59.999999Z");
         Instant delivered=Instant.parse("2026-12-31T17:00:00Z");
-        long id=order(shop,delivered,paid);
+        long id=order(shop,delivered,null);
+        poisonInitialUnpaidAttempt(id);
+        successfulPayment(id,paid);
+        unsuccessfulPayment(id,2,Instant.parse("2028-01-01T00:00:00Z"));
         receipt(id,Instant.parse("2027-02-01T00:00:00Z"));
         refund(id,Instant.parse("2027-03-01T00:00:00Z"));
         var december=period("2026-12-01","2027-01-01");
@@ -101,17 +107,20 @@ class VendorRevenueIT {
         jdbc.update("INSERT INTO uteexpress.commission_policies(rate_percent,effective_from,created_by) VALUES (99,'2027-01-01',?)",vendor);
         money(revenue.dashboard(null,null).month().metrics().commissionAccrued(),"0");
     }
-    @ParameterizedTest @ValueSource(strings={"commission","paymentAmount","missingPayment","missingPaidTime","deliveryHistory","deliveryTime","ambiguous","expired","online"})
+    @ParameterizedTest @ValueSource(strings={"commission","paymentAmount","missingPayment","onlyUnpaid","missingPaidTime","deliveryHistory","deliveryTime","expired","online"})
     void invalidEvidenceDoesNotBecomeACompleteZero(String stage) {
         long id=order(shop,DELIVERY,DELIVERY);
         switch(stage) {
             case "commission" -> jdbc.update("UPDATE uteexpress.orders SET commission_amount=9000.50 WHERE id=?",id);
             case "paymentAmount" -> jdbc.update("UPDATE uteexpress.payments SET amount=1 WHERE order_id=?",id);
             case "missingPayment" -> jdbc.update("DELETE FROM uteexpress.payments WHERE order_id=?",id);
+            case "onlyUnpaid" -> {
+                jdbc.update("UPDATE uteexpress.payments SET status='UNPAID' WHERE order_id=?",id);
+                unsuccessfulPayment(id,1,DELIVERY.minusSeconds(1));
+            }
             case "missingPaidTime" -> jdbc.update("UPDATE uteexpress.payments SET paid_at=NULL WHERE order_id=?",id);
             case "deliveryHistory" -> jdbc.update("DELETE FROM uteexpress.order_status_history WHERE order_id=?",id);
             case "deliveryTime" -> jdbc.update("UPDATE uteexpress.orders SET delivered_at=NULL WHERE id=?",id);
-            case "ambiguous" -> jdbc.update("INSERT INTO uteexpress.payments(order_id,method,status,amount,attempt_key) VALUES (?,'COD','UNPAID',105000,?)",id,UUID.randomUUID().toString());
             case "expired" -> jdbc.update("UPDATE uteexpress.payments SET expired_at=paid_at WHERE order_id=?",id);
             case "online" -> jdbc.update("UPDATE uteexpress.payments SET method='ONLINE' WHERE order_id=?",id);
         }
@@ -119,6 +128,92 @@ class VendorRevenueIT {
         assertThat(m.commissionAccrued().complete()).isFalse(); assertThat(m.commissionAccrued().value()).isNull();
         if(stage.equals("commission")) money(m.deliveredSales(),"90000");
         else { assertThat(m.deliveredSales().value()).isNull(); assertThat(m.netVendorSales().value()).isNull(); }
+        if(List.of("paymentAmount","missingPayment","onlyUnpaid","missingPaidTime","expired","online").contains(stage)) {
+            assertThat(m.collectedPayments().complete()).isFalse(); assertThat(m.collectedPayments().value()).isNull();
+        }
+    }
+    @ParameterizedTest @ValueSource(ints={1,3,7})
+    void unsuccessfulAttemptsBeforeOnePaidRowAreIgnoredWithoutMixingEvidence(int unsuccessfulCount) {
+        long id=order(shop,DELIVERY,null);
+        poisonInitialUnpaidAttempt(id);
+        for(int i=1;i<unsuccessfulCount;i++) unsuccessfulPayment(id,i+1,Instant.parse("2026-01-01T00:00:00Z").plusSeconds(i));
+        Instant paidAt=DELIVERY.minusSeconds(1);
+        long paid=successfulPayment(id,paidAt);
+        var facts=named.queryForMap(RevenueQueryRepository.EVIDENCE_SQL+
+            " SELECT payment_id,paid_amount,paid_at,paid_count,payment_ok FROM facts WHERE id=:orderId",
+            new MapSqlParameterSource("shop",shop).addValue("orderId",id));
+        assertThat(facts).containsEntry("payment_id",paid).containsEntry("paid_count",1L).containsEntry("payment_ok",true);
+        assertThat((BigDecimal)facts.get("paid_amount")).isEqualByComparingTo("105000");
+        assertThat(((Timestamp)facts.get("paid_at")).toInstant()).isEqualTo(paidAt);
+        assertThat(jdbc.queryForObject("SELECT min(id) FROM uteexpress.payments WHERE order_id=?",Long.class,id)).isLessThan(paid);
+        var result=revenue.dashboard(null,null); var m=result.month().metrics();
+        money(m.deliveredSales(),"90000"); money(m.collectedPayments(),"90000"); money(m.commissionAccrued(),"9000");
+        money(m.netVendorSales(),"90000"); money(m.netCommission(),"9000");
+        assertThat(result.topProducts().products()).extracting(RevenueSummary.Product::netQuantity).containsExactly(2L,1L);
+        assertThat(period("2026-01-01","2026-02-01").metrics().collectedPayments().value()).isEqualByComparingTo("0");
+    }
+    @Test void extraUnpaidAttemptAfterSuccessfulPaymentIsNotAmbiguous() {
+        long id=order(shop,DELIVERY,DELIVERY);
+        unsuccessfulPayment(id,1,Instant.parse("2026-01-01T00:00:00Z"));
+        var m=revenue.dashboard(null,null).month().metrics();
+        money(m.deliveredSales(),"90000"); money(m.collectedPayments(),"90000"); money(m.commissionAccrued(),"9000");
+        money(m.netVendorSales(),"90000");
+    }
+    @ParameterizedTest @ValueSource(strings={"COD","ONLINE"})
+    void databaseRejectsSecondPaidRecordEvenWhenItContradictsSuccessfulEvidence(String method) {
+        long id=order(shop,DELIVERY,DELIVERY);
+        assertThatThrownBy(() -> jdbc.update("""
+            INSERT INTO uteexpress.payments(order_id,method,status,amount,attempt_key,paid_at,expired_at)
+            VALUES (?,?,'PAID',1,?,?,?)
+            """,id,method,UUID.randomUUID().toString(),ts(DELIVERY.minusSeconds(100)),ts(DELIVERY)))
+            .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class)
+            .rootCause().isInstanceOfSatisfying(java.sql.SQLException.class,e -> {
+                assertThat(e.getSQLState()).isEqualTo("23505");
+                assertThat(e.getMessage()).contains("uq_payments_order_id_paid");
+            });
+        String index=jdbc.queryForObject("SELECT pg_get_indexdef('uteexpress.uq_payments_order_id_paid'::regclass)",String.class);
+        assertThat(index).contains("UNIQUE INDEX","order_id","WHERE","PAID");
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.payments WHERE order_id=? AND status='PAID'",Long.class,id)).isEqualTo(1);
+        money(revenue.dashboard(null,null).month().metrics().deliveredSales(),"90000");
+        // The production unique index is kept intact. paid_count=1 also gates the
+        // production join; no constraint-bypassing fixture fabricates a second row.
+    }
+    @Test void refundUsesExactSuccessfulIdAmongEarlierAndLaterUnsuccessfulAttempts() {
+        long id=order(shop,DELIVERY,null); poisonInitialUnpaidAttempt(id);
+        long paid=successfulPayment(id,DELIVERY);
+        unsuccessfulPayment(id,2,Instant.parse("2026-01-01T00:00:00Z"));
+        receipt(id,DELIVERY.plusSeconds(1)); refund(id,DELIVERY.plusSeconds(2));
+        assertThat(jdbc.queryForObject("SELECT payment_id FROM uteexpress.refunds WHERE order_id=?",Long.class,id)).isEqualTo(paid);
+        var m=revenue.dashboard(null,null).month().metrics();
+        money(m.deliveredSales(),"90000"); money(m.collectedPayments(),"90000"); money(m.refunds(),"90000");
+        money(m.commissionAccrued(),"9000"); money(m.commissionReversed(),"9000");
+        money(m.netVendorSales(),"0"); money(m.netCommission(),"0");
+    }
+    @ParameterizedTest @ValueSource(strings={"unpaidSameOrder","paidOtherOrder"})
+    void refundCannotAttributeAnUnsuccessfulOrForeignPayment(String source) {
+        long id=order(shop,DELIVERY,DELIVERY); receipt(id,DELIVERY.plusSeconds(1));
+        if(source.equals("unpaidSameOrder")) {
+            // Same amount/time as the success: only the payment ID/status differs.
+            // The composite FK allows this same-Order row, so the read must reject it.
+            long unpaid=jdbc.queryForObject("""
+                INSERT INTO uteexpress.payments(order_id,method,status,amount,attempt_key,paid_at)
+                VALUES (?,'COD','UNPAID',105000,?,?) RETURNING id
+                """,Long.class,id,UUID.randomUUID().toString(),ts(DELIVERY));
+            refundUsingPayment(id,DELIVERY.plusSeconds(2),0,unpaid);
+            var m=revenue.dashboard(null,null).month().metrics();
+            money(m.deliveredSales(),"90000"); money(m.collectedPayments(),"90000");
+            assertThat(m.refunds().value()).isNull(); assertThat(m.commissionReversed().value()).isNull();
+            assertThat(m.netVendorSales().complete()).isFalse(); assertThat(m.netCommission().complete()).isFalse();
+        } else {
+            long other=order(otherShop,DELIVERY,DELIVERY);
+            long foreign=jdbc.queryForObject("SELECT id FROM uteexpress.payments WHERE order_id=? AND status='PAID'",Long.class,other);
+            assertThatThrownBy(() -> refundUsingPayment(id,DELIVERY.plusSeconds(2),0,foreign))
+                .isInstanceOf(org.springframework.dao.DataIntegrityViolationException.class)
+                .rootCause().isInstanceOfSatisfying(java.sql.SQLException.class,e -> {
+                    assertThat(e.getSQLState()).isEqualTo("23503"); assertThat(e.getMessage()).contains("fk_refunds_payment_order");
+                });
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.refunds WHERE order_id=?",Long.class,id)).isZero();
+        }
     }
     @ParameterizedTest @ValueSource(strings={"missingLedger","wrongAmount"})
     void unknownRefundIsNotAZeroAdjustment(String stage) {
@@ -260,6 +355,11 @@ class VendorRevenueIT {
             SELECT id,'COD','PAID',grand_total,order_code,delivered_at-interval '1 second' FROM uteexpress.orders WHERE order_code LIKE ?
             """,prefix+"%");
         jdbc.update("""
+            INSERT INTO uteexpress.payments(order_id,method,status,amount,attempt_key,paid_at,expired_at)
+            SELECT id,'ONLINE','UNPAID',1,'FAILED-'||order_code,delivered_at-interval '2 days',delivered_at-interval '1 day'
+            FROM uteexpress.orders WHERE order_code LIKE ?
+            """,prefix+"%");
+        jdbc.update("""
             INSERT INTO uteexpress.order_status_history(order_id,from_status,to_status,actor_id,created_at)
             SELECT id,'SHIPPING','DELIVERED',?,delivered_at FROM uteexpress.orders WHERE order_code LIKE ?
             """,vendor,prefix+"%");
@@ -277,7 +377,7 @@ class VendorRevenueIT {
         }
         for(String table:List.of("orders","payments","order_items","order_status_history","return_requests","refunds")) jdbc.execute("ANALYZE uteexpress."+table);
         var output=new StringBuilder(jdbc.queryForObject("SELECT version()",String.class))
-            .append("\nAdded representative fixture: 1200 Orders across 2 Shops, 3600 Items, 1200 Payments, 120 Receipts, 120 Refunds. No new indexes.\n")
+            .append("\nAdded representative fixture: 1200 Orders across 2 Shops, 3600 Items, 2400 Payments (1200 PAID + 1200 UNPAID), 120 Receipts, 120 Refunds. No new indexes.\n")
             .append("Fixture scope: 600 Orders in the selected Shop. Other tests may also have rows in this disposable database.\n");
         for(String table:List.of("orders","payments","order_items","order_status_history","return_requests","refunds"))
             output.append("database rows ").append(table).append('=').append(jdbc.queryForObject("SELECT count(*) FROM uteexpress."+table,Long.class)).append('\n');
@@ -331,15 +431,30 @@ class VendorRevenueIT {
     }
     private void refund(long id,Instant at) { refund(id,at,0); }
     private void refund(long id,Instant at,int amountDifference) {
+        long paid=jdbc.queryForObject("SELECT id FROM uteexpress.payments WHERE order_id=? AND status='PAID'",Long.class,id);
+        refundUsingPayment(id,at,amountDifference,paid);
+    }
+    private void refundUsingPayment(long id,Instant at,int amountDifference,long paymentId) {
         jdbc.update("""
             INSERT INTO uteexpress.refunds(order_id,payment_id,return_request_id,processed_by,operation,idempotency_key,schema_version,
                 expected_order_version,expected_return_request_version,canonical_payload,payload_sha256,amount,status,proof_reference,
                 server_timestamp,created_at,result_order_version,payment_paid_at,return_received_at)
             SELECT o.id,p.id,t.id,?,'PAY02_MANUAL_COD_REFUND_V1',?,1,0,0,decode('01','hex'),decode(repeat('00',32),'hex'),o.grand_total-?,
-                'SUCCEEDED','PROOF',?,?,1,p.paid_at,t.received_at FROM uteexpress.orders o JOIN uteexpress.payments p ON p.order_id=o.id
+                'SUCCEEDED','PROOF',?,?,1,p.paid_at,t.received_at FROM uteexpress.orders o JOIN uteexpress.payments p ON p.id=?
                 JOIN uteexpress.return_requests t ON t.order_id=o.id WHERE o.id=?
-            """,vendor,UUID.randomUUID().toString(),amountDifference,ts(at),ts(at),id);
+            """,vendor,UUID.randomUUID().toString(),amountDifference,ts(at),ts(at),paymentId,id);
         jdbc.update("UPDATE uteexpress.orders SET status='REFUNDED' WHERE id=?",id);
+    }
+    private long successfulPayment(long id,Instant paidAt) {
+        return jdbc.queryForObject("INSERT INTO uteexpress.payments(order_id,method,status,amount,attempt_key,paid_at) VALUES (?,'COD','PAID',105000,?,?) RETURNING id",
+            Long.class,id,UUID.randomUUID().toString(),ts(paidAt));
+    }
+    private void poisonInitialUnpaidAttempt(long id) {
+        jdbc.update("UPDATE uteexpress.payments SET method='ONLINE',amount=1,paid_at='2026-01-01',expired_at='2026-01-02' WHERE order_id=? AND status='UNPAID'",id);
+    }
+    private long unsuccessfulPayment(long id,int amount,Instant at) {
+        return jdbc.queryForObject("INSERT INTO uteexpress.payments(order_id,method,status,amount,attempt_key,paid_at,expired_at) VALUES (?,'ONLINE','UNPAID',?,?,?,?) RETURNING id",
+            Long.class,id,amount,UUID.randomUUID().toString(),ts(at),ts(at));
     }
     private static Timestamp ts(Instant at) { return at==null ? null:Timestamp.from(at); }
     private static void money(RevenueAmount amount,String value) { assertThat(amount.complete()).isTrue(); assertThat(amount.value()).isEqualByComparingTo(value); }

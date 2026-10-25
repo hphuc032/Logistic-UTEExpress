@@ -72,18 +72,39 @@ The current Order status is NOT used to remove a dated event: return/refund reta
 the sale. A missing delivery timestamp on a delivered/return/refund-state legacy row
 is instead a diagnostic, never a fabricated positive delivery event.
 
-Payment evidence is preaggregated per Order; exactly one COD PAID Payment with a
-non-null paid_at, no expiry, and amount equal to original grand_total is required.
-Extra attempts/ONLINE/amount mismatches are unsupported or ambiguous evidence, not a
-random choice of MAX(PAID). Current placement/collection/refund production supports
-COD; this dashboard does not introduce or assert an ONLINE success producer.
+HP's final payment-attribution policy allows zero or more unsuccessful UNPAID
+attempts. `payment_counts` counts **all** PAID rows per Order before validating any
+of them. `payment_facts` joins back to the PAID row only when `paid_count=1`;
+payment_id, paid_amount and paid_at are direct columns from that same row. The
+single PAID row must be COD, have expired_at IS NULL and non-null paid_at, and its
+amount must equal original grand_total. No independent MIN/MAX over attempts or
+bool_and across unsuccessful attempts is used. An unsuccessful attempt's method,
+amount, expiry and even a stray paid_at cannot invalidate or date a valid success.
 
-Refund validates same-Order Payment/receipt links, full amount matching grand_total,
+No PAID row, invalid successful evidence, or multiple PAID rows fails closed.
+Counting precedes content validation: an invalid second PAID cannot be filtered
+away to choose the valid-looking row. For zero or multiple PAID rows the join
+returns no successful fields; the existing undated/unknown handling applies.
+The production partial unique index `uq_payments_order_id_paid` already prevents
+multiple PAID rows per Order. Tests assert SQLSTATE 23505 and the index definition,
+rather than dropping/weakening it to fabricate an unreachable duplicate fixture.
+The SQL count guard independently avoids choosing a winner or multiplying money.
+Current placement/collection/refund production supports COD; this dashboard does
+not introduce or assert an ONLINE success producer. The schema has UNPAID/PAID
+statuses; failed/expired attempts remain UNPAID, not a fabricated FAILED status.
+
+Refund validates the exact successful Payment ID (not merely an arbitrary
+same-Order attempt), receipt links, full amount matching grand_total,
 original paid/received timestamp snapshots and chronological server_timestamp. It
 requires a complete APPROVED receipt with matching RECEIVE_RETURN history/actor.
 An Order marked REFUNDED with a missing ledger is unknown, not a zero refund. Receipt
 quantity requires received_at/by/reference, APPROVED and matching RETURNED history.
 There is one receipt per whole Order; all original item quantities reverse once.
+The composite `fk_refunds_payment_order` rejects a Payment from a different Order
+(SQLSTATE 23503). It permits a same-Order UNPAID ID; the dashboard rejects that
+evidence even when its amount and paid_at match the successful Payment exactly.
+Refund fixture helpers explicitly select the unique PAID row, so retry attempts
+also cannot fan out the test ledger. No production Payment/Refund writer changes.
 
 Commission amount/rate must be finite, within stored bounds, and whole-VND where
 applicable. Valid NULL commission_policy_id and valid zero amount/rate are legitimate.
@@ -129,7 +150,8 @@ import RevenueService without resolving its own dependency graph.
 ## PostgreSQL plans and limits
 
 VendorRevenueIT runs the exact production SQL after warm-up using PostgreSQL 17.6,
-adding 1,200 Orders across two Shops, 3,600 Items, 1,200 Payments and 120 whole
+adding 1,200 Orders across two Shops, 3,600 Items, 2,400 Payments (1,200 PAID and
+1,200 unsuccessful UNPAID attempts) and 120 whole
 receipts/refunds. The selected Shop owns 600 of those Orders. Sparse one-day and
 dense one-year windows are measured with EXPLAIN (ANALYZE, BUFFERS); actual total
 table counts, server version, bindings, times and plans are recorded separately.
@@ -145,6 +167,32 @@ coordination with QD. These local timings are not a hardware-independent SLA.
 
 ## Verification
 
+### HP-approved payment attribution fix (PR #60)
+
+The payment-attempt correction changes only the Order-owned read query and its
+tests/documentation. No lifecycle, authorization, commission policy, migration,
+index or shared module changes are included. Regression cases exercise:
+
+| Evidence/case | Expected result |
+| --- | --- |
+| One or 3/7 unsuccessful attempts, then one valid COD PAID | Complete money, each Order counted once; success ID/amount/time asserted directly |
+| Extra UNPAID after PAID | Complete money; no arbitrary earlier/later attempt wins |
+| Equal-valued, multi-item Orders with retries | Both Orders count; neither money nor commission fans out |
+| Zero PAID (missing Payment or only UNPAID attempts) | Unavailable collection/delivery money, never a complete zero |
+| PAID ONLINE, expired, missing paid_at or wrong amount | Unavailable successful evidence |
+| Second PAID, COD or contradictory ONLINE/expired/amount/time | Unique index rejects with SQLSTATE 23505; original successful evidence remains intact |
+| Refund links exact valid success among earlier/later attempts | Merchandise refund and original commission reversal valid, once |
+| Refund links same-Order UNPAID with identical amount/paid_at | Refund/reversal and derived totals unavailable; delivery/collection remain complete |
+| Refund links a different Order's PAID | Composite FK rejects with SQLSTATE 23503; no refund inserted |
+| Collection December, delivery January, receipt February, refund March with retries | Each independent event keeps its own period; no rewrite of January sales |
+| Invalid/unknown evidence | Null value with diagnostics propagates through affected derived totals |
+
+Focused verification of the final test source: 20 unit/architecture tests and
+43 PostgreSQL tests, failures=0, errors=0, skips=0, Maven exit=0. Relevant regression,
+full clean verification and regenerated plans are recorded below.
+
+### Commands and results
+
 Java 21.0.12.1, Maven Wrapper 3.9.11, Testcontainers PostgreSQL 17.6.
 
 ```powershell
@@ -154,55 +202,61 @@ $env:JAVA_HOME='C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot'
 .\mvnw.cmd -B --no-transfer-progress -Ppostgres-it clean verify
 ```
 
-Focused verification: 19 unit/architecture + 31 PostgreSQL tests, zero failures,
-errors or skips, exit 0. Relevant regression: 19 unit/architecture + 416 PostgreSQL
-tests, zero failures/errors/skips, exit 0. After those runs, only additional acceptance
-assertions/tests and more detailed EXPLAIN metadata were added; full clean verification
-on that final source is recorded below before delivery. Do not sum overlapping reruns.
+Verification on the HP-approved payment-attribution source (Java 21.0.12.1,
+Maven Wrapper 3.9.11, PostgreSQL 17.6):
 
-Initial compile caught a wrong Shop DTO accessor; fixed to the actual shopName contract.
-The first focused run passed 19 unit/architecture tests but had 2 fixture errors among
-25 PostgreSQL tests (0 failures/skips): quantity changed without matching line_total,
-and SUSPENDED Shop lacked moderation_reason. Fixtures were corrected; no constraint,
-production owner guard or applied migration was weakened.
+| Run / scope | Classes | Tests | Failures | Errors | Skips | Maven exit |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Focused unit/architecture | 2 | 20 | 0 | 0 | 0 | 0 |
+| Focused PostgreSQL | 1 | 43 | 0 | 0 | 0 | 0 |
+| Relevant unit/architecture | 2 | 20 | 0 | 0 | 0 | 0 |
+| Relevant PostgreSQL regression | 8 | 428 | 0 | 0 | 0 | 0 |
+| Full clean Surefire | 68 | 637 | 0 | 0 | 0 | 0 |
+| Full clean PostgreSQL Failsafe | 54 | 1,152 | 0 | 0 | 0 | 0 |
+| Full clean total | 122 | 1,789 | 0 | 0 | 0 | 0 |
 
-Final Java 21 clean verify completed successfully, Maven exit 0:
+Focused/regression reruns overlap with the full run and must not be added to it.
+DASH-01 subsets in the full total: RevenueServiceTest 13, VendorRevenueIT 43.
+Surefire XML reports flakes=0; Failsafe summary reports flakes=0, timeout=false.
+All three commands exited 0; compile/package passed within full clean verify
+(total Maven time 07:50 min). No production/test source changed after this run;
+only documentation and captured plan artifacts were finalized afterwards.
 
-| Scope | Classes | Tests | Failures | Errors | Skips |
-| --- | ---: | ---: | ---: | ---: | ---: |
-| Full Surefire | 68 | 636 | 0 | 0 | 0 |
-| Full PostgreSQL Failsafe | 54 | 1,143 | 0 | 0 | 0 |
-| Total | 122 | 1,779 | 0 | 0 | 0 |
-| DASH-01 unit subset | 1 | 12 | 0 | 0 | 0 |
-| DASH-01 PostgreSQL subset | 1 | 34 | 0 | 0 | 0 |
+The first fix-focused run passed 20 unit/architecture + 42 PostgreSQL tests.
+One more only-UNPAID case and extra equal-value/multi-item retry assertions were
+then added; focused, relevant and full runs above all verify that final source.
+No failing test run or constraint relaxation was needed for this correction.
+Original implementation verification remains in Git history and is superseded
+by these source-specific results.
 
-The DASH-01 subsets are already included in the full total. Failsafe records
-flakes=0, timeout=false. Compile and package phases passed within clean verify.
-Logs remain local in .work-dash01-focused.log, .work-dash01-regression.log and
-.work-dash01-full.log; raw XML is in target/surefire-reports and target/failsafe-reports.
-Full source verification preceded the final documentation/plan capture only; no
-production/test source changed after this successful full run.
+Logs remain local in .work-dash01-attribution-focused.log,
+.work-dash01-attribution-regression.log and .work-dash01-attribution-full.log;
+raw XML is in target/surefire-reports and target/failsafe-reports.
 
-Full-run teardown emitted PostgreSQL connection-refused/Hikari pool diagnostics and
-"Surefire is going to kill self fork JVM" after System.exit(0). The root cause was
-not investigated or suppressed in this task. These diagnostics did not produce a
-test error, Failsafe timeout or nonzero Maven exit. Mockito dynamic-agent/CDS and
-AuthenticationProvider configuration warnings also remain. Expected Review cleanup
-ERROR logs are generated by existing fault-injection tests; restricted media keys
-are not copied into these public documentation artifacts.
+Full-run teardown again emitted PostgreSQL connection-refused/closed-connection
+Hikari diagnostics and "Surefire is going to kill self fork JVM" after
+System.exit(0). These did not produce a test error, Failsafe timeout or nonzero
+Maven exit. Their infrastructure root cause was not investigated or suppressed
+in this scoped fix. Mockito dynamic-agent/CDS and AuthenticationProvider warnings
+also remain. Expected constraint/rollback fault-injection logs are not test
+failures; restricted media keys from other tests are not published here.
 
-Captured EXPLAIN results from the final full run (warm queries, selected Shop=37):
+Captured EXPLAIN (ANALYZE, BUFFERS) results from this full run after warm-up,
+using the exact new production SQL (selected Shop=41):
 
 | Query/window | Planning ms | Execution ms | Root shared buffer hits |
 | --- | ---: | ---: | ---: |
-| Metrics / one day | 0.486 | 3.903 | 100 |
-| Top products / one day | 0.590 | 2.187 | 99 |
-| Metrics / one year | 0.478 | 3.067 | 100 |
-| Top products / one year | 0.410 | 4.786 | 138 |
+| Metrics / one day | 1.103 | 4.554 | 169 |
+| Top products / one day | 0.507 | 2.797 | 168 |
+| Metrics / one year | 0.546 | 3.767 | 169 |
+| Top products / one year | 0.675 | 5.279 | 207 |
 
-Actual disposable DB population at capture: 1,216 Orders, 1,216 Payments, 3,632 Items,
-1,338 history rows, 123 ReturnRequests and 122 Refunds, including other tests' fixtures.
-No new index is proposed on the strength of this small measured fixture.
+Actual disposable DB population at capture: 1,219 Orders, 2,423 Payments,
+3,638 Items, 1,343 history rows, 125 ReturnRequests and 123 Refunds, including other
+tests' fixtures. The added representative data includes one failed/UNPAID attempt
+per PAID Order. Both plan and SQL artifacts are regenerated from the full run's
+VendorRevenueIT, without substituting a simplified query. No new index is proposed
+on the strength of this small measured fixture; timings are local observations.
 
 MockMvc verifies rendered HTML, escaped snapshots, JSON formula/completeness fields,
 role/anonymous/forged-filter denial and unavailable UI. No browser screenshot or

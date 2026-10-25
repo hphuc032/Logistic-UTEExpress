@@ -1,385 +1,421 @@
 PostgreSQL 17.6 (Debian 17.6-2.pgdg13+1) on x86_64-pc-linux-gnu, compiled by gcc (Debian 14.2.0-19) 14.2.0, 64-bit
-Added representative fixture: 1200 Orders across 2 Shops, 3600 Items, 1200 Payments, 120 Receipts, 120 Refunds. No new indexes.
+Added representative fixture: 1200 Orders across 2 Shops, 3600 Items, 2400 Payments (1200 PAID + 1200 UNPAID), 120 Receipts, 120 Refunds. No new indexes.
 Fixture scope: 600 Orders in the selected Shop. Other tests may also have rows in this disposable database.
-database rows orders=1216
-database rows payments=1216
-database rows order_items=3632
-database rows order_status_history=1338
-database rows return_requests=123
-database rows refunds=122
+database rows orders=1219
+database rows payments=2423
+database rows order_items=3638
+database rows order_status_history=1343
+database rows return_requests=125
+database rows refunds=123
 
-query=METRICS_SQL shop=37 start=2025-12-31T17:00:00Z end=2026-01-01T17:00:00Z
-Aggregate  (cost=10297.54..10297.55 rows=1 width=224) (actual time=3.822..3.825 rows=1 loops=1)
-  Buffers: shared hit=100
+query=METRICS_SQL shop=41 start=2025-12-31T17:00:00Z end=2026-01-01T17:00:00Z
+Aggregate  (cost=20407.88..20407.89 rows=1 width=224) (actual time=4.467..4.471 rows=1 loops=1)
+  Buffers: shared hit=169
   CTE scoped
-    ->  Seq Scan on orders  (cost=0.00..59.20 rows=600 width=585) (actual time=0.005..0.141 rows=600 loops=1)
-          Filter: (shop_id = '37'::bigint)
-          Rows Removed by Filter: 616
+    ->  Seq Scan on orders  (cost=0.00..59.24 rows=600 width=585) (actual time=0.006..0.175 rows=600 loops=1)
+          Filter: (shop_id = '41'::bigint)
+          Rows Removed by Filter: 619
           Buffers: shared hit=44
   CTE facts
-    ->  Hash Left Join  (cost=103.49..10134.91 rows=600 width=5307) (actual time=1.545..2.540 rows=600 loops=1)
-          Hash Cond: (o.id = t.order_id)
-          Buffers: shared hit=96
-          ->  Hash Left Join  (cost=97.72..111.31 rows=600 width=5255) (actual time=1.058..1.270 rows=600 loops=1)
-                Hash Cond: (o.id = p.order_id)
-                Buffers: shared hit=65
-                ->  CTE Scan on scoped o  (cost=0.00..12.00 rows=600 width=5190) (actual time=0.007..0.054 rows=600 loops=1)
-                      Buffers: shared hit=2
-                ->  Hash  (cost=90.22..90.22 rows=600 width=73) (actual time=1.049..1.050 rows=600 loops=1)
-                      Buckets: 1024  Batches: 1  Memory Usage: 60kB
-                      Buffers: shared hit=63
-                      ->  Subquery Scan on p  (cost=78.22..90.22 rows=600 width=73) (actual time=0.875..0.966 rows=600 loops=1)
-                            Buffers: shared hit=63
-                            ->  HashAggregate  (cost=78.22..84.22 rows=600 width=73) (actual time=0.875..0.932 rows=600 loops=1)
+    ->  Hash Right Join  (cost=184.36..20194.90 rows=1193 width=5273) (actual time=2.053..3.288 rows=600 loops=1)
+          Hash Cond: (c.order_id = o.id)
+          Buffers: shared hit=165
+          ->  Hash Right Join  (cost=157.47..238.94 rows=1193 width=39) (actual time=0.757..1.092 rows=600 loops=1)
+                Hash Cond: (p.order_id = c.order_id)
+                Join Filter: (c.paid_count = 1)
+                Buffers: shared hit=90
+                ->  Seq Scan on payments p  (cost=0.00..75.29 rows=1219 width=43) (actual time=0.003..0.167 rows=1219 loops=1)
+                      Filter: ((status)::text = 'PAID'::text)
+                      Rows Removed by Filter: 1204
+                      Buffers: shared hit=45
+                ->  Hash  (cost=142.55..142.55 rows=1193 width=16) (actual time=0.709..0.710 rows=600 loops=1)
+                      Buckets: 2048  Batches: 1  Memory Usage: 45kB
+                      Buffers: shared hit=45
+                      ->  Subquery Scan on c  (cost=118.69..142.55 rows=1193 width=16) (actual time=0.574..0.646 rows=600 loops=1)
+                            Buffers: shared hit=45
+                            ->  HashAggregate  (cost=118.69..130.62 rows=1193 width=16) (actual time=0.574..0.614 rows=600 loops=1)
                                   Group Key: p_1.order_id
-                                  Batches: 1  Memory Usage: 169kB
-                                  Buffers: shared hit=63
-                                  ->  Hash Join  (cost=19.50..63.22 rows=600 width=47) (actual time=0.600..0.766 rows=600 loops=1)
+                                  Batches: 1  Memory Usage: 129kB
+                                  Buffers: shared hit=45
+                                  ->  Hash Join  (cost=19.50..109.75 rows=1193 width=13) (actual time=0.096..0.400 rows=1200 loops=1)
                                         Hash Cond: (p_1.order_id = o_1.id)
-                                        Buffers: shared hit=63
-                                        ->  Seq Scan on payments p_1  (cost=0.00..33.16 rows=1216 width=47) (actual time=0.002..0.060 rows=1216 loops=1)
-                                              Buffers: shared hit=21
-                                        ->  Hash  (cost=12.00..12.00 rows=600 width=8) (actual time=0.595..0.595 rows=600 loops=1)
+                                        Buffers: shared hit=45
+                                        ->  Seq Scan on payments p_1  (cost=0.00..69.23 rows=2423 width=13) (actual time=0.006..0.118 rows=2423 loops=1)
+                                              Buffers: shared hit=45
+                                        ->  Hash  (cost=12.00..12.00 rows=600 width=8) (actual time=0.078..0.079 rows=600 loops=1)
                                               Buckets: 1024  Batches: 1  Memory Usage: 32kB
-                                              Buffers: shared hit=42
-                                              ->  CTE Scan on scoped o_1  (cost=0.00..12.00 rows=600 width=8) (actual time=0.000..0.556 rows=600 loops=1)
-                                                    Buffers: shared hit=42
-          ->  Hash  (cost=4.23..4.23 rows=123 width=47) (actual time=0.033..0.033 rows=123 loops=1)
-                Buckets: 1024  Batches: 1  Memory Usage: 19kB
-                Buffers: shared hit=3
-                ->  Seq Scan on return_requests t  (cost=0.00..4.23 rows=123 width=47) (actual time=0.007..0.017 rows=123 loops=1)
-                      Buffers: shared hit=3
+                                              ->  CTE Scan on scoped o_1  (cost=0.00..12.00 rows=600 width=8) (actual time=0.000..0.031 rows=600 loops=1)
+          ->  Hash  (cost=19.40..19.40 rows=600 width=5229) (actual time=0.932..0.932 rows=600 loops=1)
+                Buckets: 1024  Batches: 1  Memory Usage: 176kB
+                Buffers: shared hit=47
+                ->  Hash Left Join  (cost=5.81..19.40 rows=600 width=5229) (actual time=0.042..0.637 rows=600 loops=1)
+                      Hash Cond: (o.id = t.order_id)
+                      Buffers: shared hit=47
+                      ->  CTE Scan on scoped o  (cost=0.00..12.00 rows=600 width=5190) (actual time=0.006..0.480 rows=600 loops=1)
+                            Buffers: shared hit=44
+                      ->  Hash  (cost=4.25..4.25 rows=125 width=47) (actual time=0.034..0.034 rows=125 loops=1)
+                            Buckets: 1024  Batches: 1  Memory Usage: 19kB
+                            Buffers: shared hit=3
+                            ->  Seq Scan on return_requests t  (cost=0.00..4.25 rows=125 width=47) (actual time=0.002..0.013 rows=125 loops=1)
+                                  Buffers: shared hit=3
           SubPlan 3
-            ->  Seq Scan on order_status_history h  (cost=0.00..34.07 rows=1105 width=16) (actual time=0.007..0.120 rows=1216 loops=1)
+            ->  Seq Scan on order_status_history h  (cost=0.00..34.14 rows=1106 width=16) (actual time=0.005..0.132 rows=1219 loops=1)
                   Filter: (((from_status)::text = 'SHIPPING'::text) AND ((to_status)::text = 'DELIVERED'::text))
-                  Rows Removed by Filter: 122
+                  Rows Removed by Filter: 124
                   Buffers: shared hit=14
           SubPlan 5
-            ->  Seq Scan on order_status_history h_1  (cost=0.00..34.07 rows=11 width=24) (actual time=0.004..0.055 rows=122 loops=1)
+            ->  Seq Scan on order_status_history h_1  (cost=0.00..34.14 rows=11 width=24) (actual time=0.004..0.067 rows=124 loops=1)
                   Filter: (((from_status)::text = 'RETURN_REQUESTED'::text) AND ((to_status)::text = 'RETURNED'::text))
-                  Rows Removed by Filter: 1216
+                  Rows Removed by Filter: 1219
                   Buffers: shared hit=14
   InitPlan 7
-    ->  Aggregate  (cost=15.00..15.01 rows=1 width=8) (actual time=0.052..0.052 rows=1 loops=1)
-          ->  CTE Scan on scoped  (cost=0.00..15.00 rows=1 width=0) (actual time=0.030..0.050 rows=1 loops=1)
+    ->  Aggregate  (cost=15.00..15.01 rows=1 width=8) (actual time=0.057..0.057 rows=1 loops=1)
+          ->  CTE Scan on scoped  (cost=0.00..15.00 rows=1 width=0) (actual time=0.031..0.053 rows=1 loops=1)
                 Filter: ((created_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (created_at < '2026-01-01 17:00:00+00'::timestamp with time zone))
                 Rows Removed by Filter: 599
   InitPlan 8
-    ->  Aggregate  (cost=15.00..15.01 rows=1 width=8) (actual time=0.045..0.045 rows=1 loops=1)
-          ->  CTE Scan on scoped scoped_1  (cost=0.00..15.00 rows=1 width=0) (actual time=0.026..0.044 rows=1 loops=1)
+    ->  Aggregate  (cost=15.00..15.01 rows=1 width=8) (actual time=0.048..0.048 rows=1 loops=1)
+          ->  CTE Scan on scoped scoped_1  (cost=0.00..15.00 rows=1 width=0) (actual time=0.028..0.047 rows=1 loops=1)
                 Filter: ((delivered_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-01-01 17:00:00+00'::timestamp with time zone))
                 Rows Removed by Filter: 599
   InitPlan 9
-    ->  Aggregate  (cost=15.00..15.01 rows=1 width=8) (actual time=0.043..0.043 rows=1 loops=1)
-          ->  CTE Scan on scoped scoped_2  (cost=0.00..15.00 rows=1 width=0) (actual time=0.042..0.042 rows=0 loops=1)
+    ->  Aggregate  (cost=15.00..15.01 rows=1 width=8) (actual time=0.041..0.041 rows=1 loops=1)
+          ->  CTE Scan on scoped scoped_2  (cost=0.00..15.00 rows=1 width=0) (actual time=0.039..0.039 rows=0 loops=1)
                 Filter: ((cancelled_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (cancelled_at < '2026-01-01 17:00:00+00'::timestamp with time zone))
                 Rows Removed by Filter: 600
-  ->  Append  (cost=0.00..57.98 rows=8 width=87) (actual time=2.652..3.677 rows=2 loops=1)
-        Buffers: shared hit=100
-        ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..18.01 rows=1 width=87) (actual time=2.652..3.416 rows=1 loops=1)
-              Buffers: shared hit=96
-              ->  CTE Scan on facts  (cost=0.00..18.00 rows=1 width=87) (actual time=2.651..3.415 rows=1 loops=1)
+  ->  Append  (cost=0.00..108.44 rows=5 width=87) (actual time=3.248..4.299 rows=2 loops=1)
+        Buffers: shared hit=169
+        ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..35.80 rows=1 width=87) (actual time=3.248..4.089 rows=1 loops=1)
+              Buffers: shared hit=165
+              ->  CTE Scan on facts  (cost=0.00..35.79 rows=1 width=87) (actual time=3.247..4.089 rows=1 loops=1)
                     Filter: (((delivered_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-01-01 17:00:00+00'::timestamp with time zone)) OR ((delivered_at IS NULL) AND ((status)::text = ANY ('{DELIVERED,RETURN_REQUESTED,RETURNED,REFUNDED}'::text[]))))
                     Rows Removed by Filter: 599
-                    Buffers: shared hit=96
-        ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..19.56 rows=6 width=87) (actual time=0.041..0.068 rows=1 loops=1)
-              ->  CTE Scan on facts facts_1  (cost=0.00..19.50 rows=6 width=87) (actual time=0.041..0.068 rows=1 loops=1)
+                    Buffers: shared hit=165
+        ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..38.80 rows=3 width=87) (actual time=0.044..0.068 rows=1 loops=1)
+              ->  CTE Scan on facts facts_1  (cost=0.00..38.77 rows=3 width=87) (actual time=0.044..0.068 rows=1 loops=1)
                     Filter: (((paid_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (paid_at < '2026-01-01 17:00:00+00'::timestamp with time zone)) OR ((paid_at IS NULL) AND ((paid_count > 0) OR (delivered_at IS NOT NULL) OR ((status)::text = ANY ('{DELIVERED,RETURN_REQUESTED,RETURNED,REFUNDED}'::text[])))))
                     Rows Removed by Filter: 599
-        ->  Subquery Scan on "*SELECT* 3"  (cost=6.75..20.37 rows=1 width=87) (actual time=0.192..0.192 rows=0 loops=1)
+        ->  Subquery Scan on "*SELECT* 3"  (cost=6.77..33.81 rows=1 width=87) (actual time=0.139..0.140 rows=0 loops=1)
               Buffers: shared hit=4
-              ->  Hash Left Join  (cost=6.75..20.36 rows=1 width=87) (actual time=0.192..0.192 rows=0 loops=1)
+              ->  Hash Left Join  (cost=6.77..33.80 rows=1 width=87) (actual time=0.139..0.139 rows=0 loops=1)
                     Hash Cond: (f.id = r.order_id)
                     Filter: ((((r.status)::text = 'SUCCEEDED'::text) AND (((r.server_timestamp >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (r.server_timestamp < '2026-01-01 17:00:00+00'::timestamp with time zone)) OR (r.server_timestamp IS NULL))) OR ((r.id IS NULL) AND ((f.status)::text = 'REFUNDED'::text)))
                     Rows Removed by Filter: 600
                     Buffers: shared hit=4
-                    ->  CTE Scan on facts f  (cost=0.00..12.00 rows=600 width=620) (actual time=0.000..0.024 rows=600 loops=1)
-                    ->  Hash  (cost=5.22..5.22 rows=122 width=100) (actual time=0.090..0.091 rows=122 loops=1)
+                    ->  CTE Scan on facts f  (cost=0.00..23.86 rows=1193 width=620) (actual time=0.000..0.023 rows=600 loops=1)
+                    ->  Hash  (cost=5.23..5.23 rows=123 width=100) (actual time=0.045..0.045 rows=123 loops=1)
                           Buckets: 1024  Batches: 1  Memory Usage: 26kB
                           Buffers: shared hit=4
-                          ->  Seq Scan on refunds r  (cost=0.00..5.22 rows=122 width=100) (actual time=0.006..0.024 rows=122 loops=1)
+                          ->  Seq Scan on refunds r  (cost=0.00..5.23 rows=123 width=100) (actual time=0.004..0.018 rows=123 loops=1)
                                 Buffers: shared hit=4
 Planning:
   Buffers: shared hit=14
-Planning Time: 0.486 ms
-Execution Time: 3.903 ms
+Planning Time: 1.103 ms
+Execution Time: 4.554 ms
 
-query=TOP_SQL shop=37 start=2025-12-31T17:00:00Z end=2026-01-01T17:00:00Z
-Sort  (cost=10245.92..10245.93 rows=3 width=144) (actual time=2.131..2.134 rows=1 loops=1)
+query=TOP_SQL shop=41 start=2025-12-31T17:00:00Z end=2026-01-01T17:00:00Z
+Sort  (cost=20340.04..20340.05 rows=3 width=144) (actual time=2.738..2.741 rows=1 loops=1)
   Sort Key: (sum(((item_events_1.sign)::bigint * item_events_1.quantity))) DESC, item_events_1.product_id
   Sort Method: quicksort  Memory: 25kB
-  Buffers: shared hit=99
+  Buffers: shared hit=168
   CTE scoped
-    ->  Seq Scan on orders  (cost=0.00..59.20 rows=600 width=585) (actual time=0.005..0.093 rows=600 loops=1)
-          Filter: (shop_id = '37'::bigint)
-          Rows Removed by Filter: 616
+    ->  Seq Scan on orders  (cost=0.00..59.24 rows=600 width=585) (actual time=0.005..0.101 rows=600 loops=1)
+          Filter: (shop_id = '41'::bigint)
+          Rows Removed by Filter: 619
           Buffers: shared hit=44
   CTE facts
-    ->  Hash Left Join  (cost=103.49..10134.91 rows=600 width=5307) (actual time=0.834..1.695 rows=600 loops=1)
-          Hash Cond: (o.id = t.order_id)
-          Buffers: shared hit=96
-          ->  Hash Left Join  (cost=97.72..111.31 rows=600 width=5255) (actual time=0.592..0.771 rows=600 loops=1)
-                Hash Cond: (o.id = p.order_id)
-                Buffers: shared hit=65
-                ->  CTE Scan on scoped o  (cost=0.00..12.00 rows=600 width=5190) (actual time=0.005..0.041 rows=600 loops=1)
-                      Buffers: shared hit=2
-                ->  Hash  (cost=90.22..90.22 rows=600 width=73) (actual time=0.585..0.586 rows=600 loops=1)
-                      Buckets: 1024  Batches: 1  Memory Usage: 60kB
-                      Buffers: shared hit=63
-                      ->  Subquery Scan on p  (cost=78.22..90.22 rows=600 width=73) (actual time=0.452..0.538 rows=600 loops=1)
-                            Buffers: shared hit=63
-                            ->  HashAggregate  (cost=78.22..84.22 rows=600 width=73) (actual time=0.452..0.505 rows=600 loops=1)
+    ->  Hash Right Join  (cost=184.36..20194.90 rows=1193 width=5273) (actual time=1.251..2.281 rows=600 loops=1)
+          Hash Cond: (c.order_id = o.id)
+          Buffers: shared hit=165
+          ->  Hash Right Join  (cost=157.47..238.94 rows=1193 width=39) (actual time=0.572..0.852 rows=600 loops=1)
+                Hash Cond: (p.order_id = c.order_id)
+                Join Filter: (c.paid_count = 1)
+                Buffers: shared hit=90
+                ->  Seq Scan on payments p  (cost=0.00..75.29 rows=1219 width=43) (actual time=0.002..0.133 rows=1219 loops=1)
+                      Filter: ((status)::text = 'PAID'::text)
+                      Rows Removed by Filter: 1204
+                      Buffers: shared hit=45
+                ->  Hash  (cost=142.55..142.55 rows=1193 width=16) (actual time=0.566..0.567 rows=600 loops=1)
+                      Buckets: 2048  Batches: 1  Memory Usage: 45kB
+                      Buffers: shared hit=45
+                      ->  Subquery Scan on c  (cost=118.69..142.55 rows=1193 width=16) (actual time=0.463..0.531 rows=600 loops=1)
+                            Buffers: shared hit=45
+                            ->  HashAggregate  (cost=118.69..130.62 rows=1193 width=16) (actual time=0.463..0.502 rows=600 loops=1)
                                   Group Key: p_1.order_id
-                                  Batches: 1  Memory Usage: 169kB
-                                  Buffers: shared hit=63
-                                  ->  Hash Join  (cost=19.50..63.22 rows=600 width=47) (actual time=0.183..0.343 rows=600 loops=1)
+                                  Batches: 1  Memory Usage: 129kB
+                                  Buffers: shared hit=45
+                                  ->  Hash Join  (cost=19.50..109.75 rows=1193 width=13) (actual time=0.074..0.350 rows=1200 loops=1)
                                         Hash Cond: (p_1.order_id = o_1.id)
-                                        Buffers: shared hit=63
-                                        ->  Seq Scan on payments p_1  (cost=0.00..33.16 rows=1216 width=47) (actual time=0.001..0.055 rows=1216 loops=1)
-                                              Buffers: shared hit=21
-                                        ->  Hash  (cost=12.00..12.00 rows=600 width=8) (actual time=0.179..0.179 rows=600 loops=1)
+                                        Buffers: shared hit=45
+                                        ->  Seq Scan on payments p_1  (cost=0.00..69.23 rows=2423 width=13) (actual time=0.001..0.090 rows=2423 loops=1)
+                                              Buffers: shared hit=45
+                                        ->  Hash  (cost=12.00..12.00 rows=600 width=8) (actual time=0.062..0.062 rows=600 loops=1)
                                               Buckets: 1024  Batches: 1  Memory Usage: 32kB
-                                              Buffers: shared hit=42
-                                              ->  CTE Scan on scoped o_1  (cost=0.00..12.00 rows=600 width=8) (actual time=0.000..0.144 rows=600 loops=1)
-                                                    Buffers: shared hit=42
-          ->  Hash  (cost=4.23..4.23 rows=123 width=47) (actual time=0.026..0.026 rows=123 loops=1)
-                Buckets: 1024  Batches: 1  Memory Usage: 19kB
-                Buffers: shared hit=3
-                ->  Seq Scan on return_requests t  (cost=0.00..4.23 rows=123 width=47) (actual time=0.002..0.014 rows=123 loops=1)
-                      Buffers: shared hit=3
+                                              ->  CTE Scan on scoped o_1  (cost=0.00..12.00 rows=600 width=8) (actual time=0.000..0.028 rows=600 loops=1)
+          ->  Hash  (cost=19.40..19.40 rows=600 width=5229) (actual time=0.429..0.429 rows=600 loops=1)
+                Buckets: 1024  Batches: 1  Memory Usage: 176kB
+                Buffers: shared hit=47
+                ->  Hash Left Join  (cost=5.81..19.40 rows=600 width=5229) (actual time=0.028..0.287 rows=600 loops=1)
+                      Hash Cond: (o.id = t.order_id)
+                      Buffers: shared hit=47
+                      ->  CTE Scan on scoped o  (cost=0.00..12.00 rows=600 width=5190) (actual time=0.005..0.151 rows=600 loops=1)
+                            Buffers: shared hit=44
+                      ->  Hash  (cost=4.25..4.25 rows=125 width=47) (actual time=0.022..0.022 rows=125 loops=1)
+                            Buckets: 1024  Batches: 1  Memory Usage: 19kB
+                            Buffers: shared hit=3
+                            ->  Seq Scan on return_requests t  (cost=0.00..4.25 rows=125 width=47) (actual time=0.002..0.011 rows=125 loops=1)
+                                  Buffers: shared hit=3
           SubPlan 3
-            ->  Seq Scan on order_status_history h  (cost=0.00..34.07 rows=1105 width=16) (actual time=0.002..0.111 rows=1216 loops=1)
+            ->  Seq Scan on order_status_history h  (cost=0.00..34.14 rows=1106 width=16) (actual time=0.002..0.110 rows=1219 loops=1)
                   Filter: (((from_status)::text = 'SHIPPING'::text) AND ((to_status)::text = 'DELIVERED'::text))
-                  Rows Removed by Filter: 122
+                  Rows Removed by Filter: 124
                   Buffers: shared hit=14
           SubPlan 5
-            ->  Seq Scan on order_status_history h_1  (cost=0.00..34.07 rows=11 width=24) (actual time=0.002..0.055 rows=122 loops=1)
+            ->  Seq Scan on order_status_history h_1  (cost=0.00..34.14 rows=11 width=24) (actual time=0.003..0.054 rows=124 loops=1)
                   Filter: (((from_status)::text = 'RETURN_REQUESTED'::text) AND ((to_status)::text = 'RETURNED'::text))
-                  Rows Removed by Filter: 1216
+                  Rows Removed by Filter: 1219
                   Buffers: shared hit=14
   CTE item_events
-    ->  Nested Loop Left Join  (cost=0.28..51.29 rows=6 width=38) (actual time=1.580..2.120 rows=3 loops=1)
-          Buffers: shared hit=99
-          ->  Append  (cost=0.00..34.53 rows=2 width=21) (actual time=1.575..2.113 rows=1 loops=1)
-                Buffers: shared hit=96
-                ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..18.01 rows=1 width=21) (actual time=1.574..2.034 rows=1 loops=1)
-                      Buffers: shared hit=96
-                      ->  CTE Scan on facts f  (cost=0.00..18.00 rows=1 width=21) (actual time=1.574..2.034 rows=1 loops=1)
+    ->  Nested Loop Left Join  (cost=0.28..85.38 rows=6 width=38) (actual time=2.105..2.726 rows=3 loops=1)
+          Buffers: shared hit=168
+          ->  Append  (cost=0.00..68.63 rows=2 width=21) (actual time=2.101..2.721 rows=1 loops=1)
+                Buffers: shared hit=165
+                ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..35.80 rows=1 width=21) (actual time=2.101..2.629 rows=1 loops=1)
+                      Buffers: shared hit=165
+                      ->  CTE Scan on facts f  (cost=0.00..35.79 rows=1 width=21) (actual time=2.101..2.629 rows=1 loops=1)
                             Filter: (((delivered_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-01-01 17:00:00+00'::timestamp with time zone)) OR ((delivered_at IS NULL) AND ((status)::text = ANY ('{DELIVERED,RETURN_REQUESTED,RETURNED,REFUNDED}'::text[]))))
                             Rows Removed by Filter: 599
-                            Buffers: shared hit=96
-                ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..16.51 rows=1 width=21) (actual time=0.078..0.078 rows=0 loops=1)
-                      ->  CTE Scan on facts f_1  (cost=0.00..16.50 rows=1 width=21) (actual time=0.078..0.078 rows=0 loops=1)
+                            Buffers: shared hit=165
+                ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..32.82 rows=1 width=21) (actual time=0.091..0.091 rows=0 loops=1)
+                      ->  CTE Scan on facts f_1  (cost=0.00..32.81 rows=1 width=21) (actual time=0.091..0.091 rows=0 loops=1)
                             Filter: (((received_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (received_at < '2026-01-01 17:00:00+00'::timestamp with time zone)) OR ((received_at IS NULL) AND ((status)::text = ANY ('{RETURNED,REFUNDED}'::text[]))))
                             Rows Removed by Filter: 600
-          ->  Index Scan using ix_order_items_order_id on order_items i  (cost=0.28..8.33 rows=3 width=41) (actual time=0.004..0.005 rows=3 loops=1)
+          ->  Index Scan using ix_order_items_order_id on order_items i  (cost=0.28..8.33 rows=3 width=41) (actual time=0.003..0.003 rows=3 loops=1)
                 Index Cond: (order_id = "*SELECT* 1".id)
                 Buffers: shared hit=3
-  ->  Nested Loop Left Join  (cost=0.45..0.50 rows=3 width=144) (actual time=2.130..2.130 rows=1 loops=1)
-        Buffers: shared hit=99
-        ->  Aggregate  (cost=0.14..0.15 rows=1 width=8) (actual time=2.122..2.122 rows=1 loops=1)
-              Buffers: shared hit=99
-              ->  CTE Scan on item_events  (cost=0.00..0.12 rows=6 width=1) (actual time=1.581..2.120 rows=3 loops=1)
-                    Buffers: shared hit=99
-        ->  Limit  (cost=0.32..0.33 rows=3 width=136) (actual time=0.007..0.008 rows=1 loops=1)
-              ->  Sort  (cost=0.32..0.33 rows=3 width=136) (actual time=0.007..0.007 rows=1 loops=1)
+  ->  Nested Loop Left Join  (cost=0.45..0.50 rows=3 width=144) (actual time=2.737..2.737 rows=1 loops=1)
+        Buffers: shared hit=168
+        ->  Aggregate  (cost=0.14..0.15 rows=1 width=8) (actual time=2.728..2.728 rows=1 loops=1)
+              Buffers: shared hit=168
+              ->  CTE Scan on item_events  (cost=0.00..0.12 rows=6 width=1) (actual time=2.106..2.727 rows=3 loops=1)
+                    Buffers: shared hit=168
+        ->  Limit  (cost=0.32..0.33 rows=3 width=136) (actual time=0.008..0.008 rows=1 loops=1)
+              ->  Sort  (cost=0.32..0.33 rows=3 width=136) (actual time=0.008..0.008 rows=1 loops=1)
                     Sort Key: (sum(((item_events_1.sign)::bigint * item_events_1.quantity))) DESC, item_events_1.product_id
                     Sort Method: quicksort  Memory: 25kB
                     ->  GroupAggregate  (cost=0.14..0.29 rows=3 width=136) (actual time=0.006..0.006 rows=1 loops=1)
                           Group Key: item_events_1.product_id
-                          ->  Sort  (cost=0.14..0.15 rows=3 width=540) (actual time=0.002..0.002 rows=3 loops=1)
+                          ->  Sort  (cost=0.14..0.15 rows=3 width=540) (actual time=0.002..0.003 rows=3 loops=1)
                                 Sort Key: item_events_1.product_id, item_events_1.item_id DESC
                                 Sort Method: quicksort  Memory: 25kB
                                 ->  CTE Scan on item_events item_events_1  (cost=0.00..0.12 rows=3 width=540) (actual time=0.000..0.001 rows=3 loops=1)
                                       Filter: valid
 Planning:
   Buffers: shared hit=10
-Planning Time: 0.590 ms
-Execution Time: 2.187 ms
+Planning Time: 0.507 ms
+Execution Time: 2.797 ms
 
-query=METRICS_SQL shop=37 start=2025-12-31T17:00:00Z end=2026-12-31T17:00:00Z
-Aggregate  (cost=10390.05..10390.06 rows=1 width=224) (actual time=3.003..3.006 rows=1 loops=1)
-  Buffers: shared hit=100
+query=METRICS_SQL shop=41 start=2025-12-31T17:00:00Z end=2026-12-31T17:00:00Z
+Aggregate  (cost=20664.61..20664.62 rows=1 width=224) (actual time=3.700..3.703 rows=1 loops=1)
+  Buffers: shared hit=169
   CTE scoped
-    ->  Seq Scan on orders  (cost=0.00..59.20 rows=600 width=585) (actual time=0.005..0.084 rows=600 loops=1)
-          Filter: (shop_id = '37'::bigint)
-          Rows Removed by Filter: 616
+    ->  Seq Scan on orders  (cost=0.00..59.24 rows=600 width=585) (actual time=0.004..0.087 rows=600 loops=1)
+          Filter: (shop_id = '41'::bigint)
+          Rows Removed by Filter: 619
           Buffers: shared hit=44
   CTE facts
-    ->  Hash Left Join  (cost=103.49..10134.91 rows=600 width=5307) (actual time=0.861..1.761 rows=600 loops=1)
-          Hash Cond: (o.id = t.order_id)
-          Buffers: shared hit=96
-          ->  Hash Left Join  (cost=97.72..111.31 rows=600 width=5255) (actual time=0.600..0.799 rows=600 loops=1)
-                Hash Cond: (o.id = p.order_id)
-                Buffers: shared hit=65
-                ->  CTE Scan on scoped o  (cost=0.00..12.00 rows=600 width=5190) (actual time=0.005..0.043 rows=600 loops=1)
-                      Buffers: shared hit=2
-                ->  Hash  (cost=90.22..90.22 rows=600 width=73) (actual time=0.593..0.593 rows=600 loops=1)
-                      Buckets: 1024  Batches: 1  Memory Usage: 60kB
-                      Buffers: shared hit=63
-                      ->  Subquery Scan on p  (cost=78.22..90.22 rows=600 width=73) (actual time=0.446..0.534 rows=600 loops=1)
-                            Buffers: shared hit=63
-                            ->  HashAggregate  (cost=78.22..84.22 rows=600 width=73) (actual time=0.444..0.501 rows=600 loops=1)
+    ->  Hash Right Join  (cost=184.36..20194.90 rows=1193 width=5273) (actual time=1.254..2.328 rows=600 loops=1)
+          Hash Cond: (c.order_id = o.id)
+          Buffers: shared hit=165
+          ->  Hash Right Join  (cost=157.47..238.94 rows=1193 width=39) (actual time=0.575..0.861 rows=600 loops=1)
+                Hash Cond: (p.order_id = c.order_id)
+                Join Filter: (c.paid_count = 1)
+                Buffers: shared hit=90
+                ->  Seq Scan on payments p  (cost=0.00..75.29 rows=1219 width=43) (actual time=0.002..0.138 rows=1219 loops=1)
+                      Filter: ((status)::text = 'PAID'::text)
+                      Rows Removed by Filter: 1204
+                      Buffers: shared hit=45
+                ->  Hash  (cost=142.55..142.55 rows=1193 width=16) (actual time=0.569..0.570 rows=600 loops=1)
+                      Buckets: 2048  Batches: 1  Memory Usage: 45kB
+                      Buffers: shared hit=45
+                      ->  Subquery Scan on c  (cost=118.69..142.55 rows=1193 width=16) (actual time=0.466..0.534 rows=600 loops=1)
+                            Buffers: shared hit=45
+                            ->  HashAggregate  (cost=118.69..130.62 rows=1193 width=16) (actual time=0.466..0.504 rows=600 loops=1)
                                   Group Key: p_1.order_id
-                                  Batches: 1  Memory Usage: 169kB
-                                  Buffers: shared hit=63
-                                  ->  Hash Join  (cost=19.50..63.22 rows=600 width=47) (actual time=0.174..0.333 rows=600 loops=1)
+                                  Batches: 1  Memory Usage: 129kB
+                                  Buffers: shared hit=45
+                                  ->  Hash Join  (cost=19.50..109.75 rows=1193 width=13) (actual time=0.069..0.348 rows=1200 loops=1)
                                         Hash Cond: (p_1.order_id = o_1.id)
-                                        Buffers: shared hit=63
-                                        ->  Seq Scan on payments p_1  (cost=0.00..33.16 rows=1216 width=47) (actual time=0.001..0.053 rows=1216 loops=1)
-                                              Buffers: shared hit=21
-                                        ->  Hash  (cost=12.00..12.00 rows=600 width=8) (actual time=0.170..0.170 rows=600 loops=1)
+                                        Buffers: shared hit=45
+                                        ->  Seq Scan on payments p_1  (cost=0.00..69.23 rows=2423 width=13) (actual time=0.003..0.093 rows=2423 loops=1)
+                                              Buffers: shared hit=45
+                                        ->  Hash  (cost=12.00..12.00 rows=600 width=8) (actual time=0.062..0.063 rows=600 loops=1)
                                               Buckets: 1024  Batches: 1  Memory Usage: 32kB
-                                              Buffers: shared hit=42
-                                              ->  CTE Scan on scoped o_1  (cost=0.00..12.00 rows=600 width=8) (actual time=0.000..0.134 rows=600 loops=1)
-                                                    Buffers: shared hit=42
-          ->  Hash  (cost=4.23..4.23 rows=123 width=47) (actual time=0.022..0.022 rows=123 loops=1)
-                Buckets: 1024  Batches: 1  Memory Usage: 19kB
-                Buffers: shared hit=3
-                ->  Seq Scan on return_requests t  (cost=0.00..4.23 rows=123 width=47) (actual time=0.002..0.012 rows=123 loops=1)
-                      Buffers: shared hit=3
+                                              ->  CTE Scan on scoped o_1  (cost=0.00..12.00 rows=600 width=8) (actual time=0.000..0.028 rows=600 loops=1)
+          ->  Hash  (cost=19.40..19.40 rows=600 width=5229) (actual time=0.435..0.436 rows=600 loops=1)
+                Buckets: 1024  Batches: 1  Memory Usage: 176kB
+                Buffers: shared hit=47
+                ->  Hash Left Join  (cost=5.81..19.40 rows=600 width=5229) (actual time=0.028..0.295 rows=600 loops=1)
+                      Hash Cond: (o.id = t.order_id)
+                      Buffers: shared hit=47
+                      ->  CTE Scan on scoped o  (cost=0.00..12.00 rows=600 width=5190) (actual time=0.004..0.135 rows=600 loops=1)
+                            Buffers: shared hit=44
+                      ->  Hash  (cost=4.25..4.25 rows=125 width=47) (actual time=0.022..0.022 rows=125 loops=1)
+                            Buckets: 1024  Batches: 1  Memory Usage: 19kB
+                            Buffers: shared hit=3
+                            ->  Seq Scan on return_requests t  (cost=0.00..4.25 rows=125 width=47) (actual time=0.002..0.011 rows=125 loops=1)
+                                  Buffers: shared hit=3
           SubPlan 3
-            ->  Seq Scan on order_status_history h  (cost=0.00..34.07 rows=1105 width=16) (actual time=0.002..0.124 rows=1216 loops=1)
+            ->  Seq Scan on order_status_history h  (cost=0.00..34.14 rows=1106 width=16) (actual time=0.002..0.109 rows=1219 loops=1)
                   Filter: (((from_status)::text = 'SHIPPING'::text) AND ((to_status)::text = 'DELIVERED'::text))
-                  Rows Removed by Filter: 122
+                  Rows Removed by Filter: 124
                   Buffers: shared hit=14
           SubPlan 5
-            ->  Seq Scan on order_status_history h_1  (cost=0.00..34.07 rows=11 width=24) (actual time=0.003..0.054 rows=122 loops=1)
+            ->  Seq Scan on order_status_history h_1  (cost=0.00..34.14 rows=11 width=24) (actual time=0.003..0.055 rows=124 loops=1)
                   Filter: (((from_status)::text = 'RETURN_REQUESTED'::text) AND ((to_status)::text = 'RETURNED'::text))
-                  Rows Removed by Filter: 1216
+                  Rows Removed by Filter: 1219
                   Buffers: shared hit=14
   InitPlan 7
-    ->  Aggregate  (cost=16.48..16.49 rows=1 width=8) (actual time=0.075..0.076 rows=1 loops=1)
-          ->  CTE Scan on scoped  (cost=0.00..15.00 rows=592 width=0) (actual time=0.000..0.057 rows=600 loops=1)
+    ->  Aggregate  (cost=16.48..16.49 rows=1 width=8) (actual time=0.090..0.090 rows=1 loops=1)
+          ->  CTE Scan on scoped  (cost=0.00..15.00 rows=591 width=0) (actual time=0.001..0.070 rows=600 loops=1)
                 Filter: ((created_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (created_at < '2026-12-31 17:00:00+00'::timestamp with time zone))
   InitPlan 8
-    ->  Aggregate  (cost=16.46..16.48 rows=1 width=8) (actual time=0.075..0.075 rows=1 loops=1)
-          ->  CTE Scan on scoped scoped_1  (cost=0.00..15.00 rows=586 width=0) (actual time=0.000..0.053 rows=600 loops=1)
+    ->  Aggregate  (cost=16.46..16.47 rows=1 width=8) (actual time=0.081..0.081 rows=1 loops=1)
+          ->  CTE Scan on scoped scoped_1  (cost=0.00..15.00 rows=585 width=0) (actual time=0.000..0.063 rows=600 loops=1)
                 Filter: ((delivered_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-12-31 17:00:00+00'::timestamp with time zone))
   InitPlan 9
-    ->  Aggregate  (cost=15.00..15.01 rows=1 width=8) (actual time=0.041..0.041 rows=1 loops=1)
-          ->  CTE Scan on scoped scoped_2  (cost=0.00..15.00 rows=1 width=0) (actual time=0.040..0.040 rows=0 loops=1)
+    ->  Aggregate  (cost=15.00..15.01 rows=1 width=8) (actual time=0.050..0.050 rows=1 loops=1)
+          ->  CTE Scan on scoped scoped_2  (cost=0.00..15.00 rows=1 width=0) (actual time=0.049..0.049 rows=0 loops=1)
                 Filter: ((cancelled_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (cancelled_at < '2026-12-31 17:00:00+00'::timestamp with time zone))
                 Rows Removed by Filter: 600
-  ->  Append  (cost=0.00..88.85 rows=1182 width=87) (actual time=0.864..2.512 rows=1260 loops=1)
-        Buffers: shared hit=100
-        ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..23.86 rows=586 width=87) (actual time=0.864..2.187 rows=600 loops=1)
-              Buffers: shared hit=96
-              ->  CTE Scan on facts  (cost=0.00..18.00 rows=586 width=87) (actual time=0.864..2.145 rows=600 loops=1)
+  ->  Append  (cost=0.00..187.14 rows=3507 width=87) (actual time=1.257..3.132 rows=1260 loops=1)
+        Buffers: shared hit=169
+        ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..47.49 rows=1170 width=87) (actual time=1.257..2.782 rows=600 loops=1)
+              Buffers: shared hit=165
+              ->  CTE Scan on facts  (cost=0.00..35.79 rows=1170 width=87) (actual time=1.257..2.740 rows=600 loops=1)
                     Filter: (((delivered_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-12-31 17:00:00+00'::timestamp with time zone)) OR ((delivered_at IS NULL) AND ((status)::text = ANY ('{DELIVERED,RETURN_REQUESTED,RETURNED,REFUNDED}'::text[]))))
-                    Buffers: shared hit=96
-        ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..19.56 rows=6 width=87) (actual time=0.001..0.125 rows=600 loops=1)
-              ->  CTE Scan on facts facts_1  (cost=0.00..19.50 rows=6 width=87) (actual time=0.001..0.093 rows=600 loops=1)
+                    Buffers: shared hit=165
+        ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..50.50 rows=1173 width=87) (actual time=0.002..0.148 rows=600 loops=1)
+              ->  CTE Scan on facts facts_1  (cost=0.00..38.77 rows=1173 width=87) (actual time=0.001..0.115 rows=600 loops=1)
                     Filter: (((paid_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (paid_at < '2026-12-31 17:00:00+00'::timestamp with time zone)) OR ((paid_at IS NULL) AND ((paid_count > 0) OR (delivered_at IS NOT NULL) OR ((status)::text = ANY ('{DELIVERED,RETURN_REQUESTED,RETURNED,REFUNDED}'::text[])))))
-        ->  Subquery Scan on "*SELECT* 3"  (cost=6.75..39.52 rows=590 width=87) (actual time=0.040..0.141 rows=60 loops=1)
+        ->  Subquery Scan on "*SELECT* 3"  (cost=6.77..71.61 rows=1164 width=87) (actual time=0.035..0.141 rows=60 loops=1)
               Buffers: shared hit=4
-              ->  Hash Left Join  (cost=6.75..33.62 rows=590 width=87) (actual time=0.040..0.137 rows=60 loops=1)
+              ->  Hash Left Join  (cost=6.77..59.97 rows=1164 width=87) (actual time=0.035..0.136 rows=60 loops=1)
                     Hash Cond: (f.id = r.order_id)
                     Filter: ((((r.status)::text = 'SUCCEEDED'::text) AND (((r.server_timestamp >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (r.server_timestamp < '2026-12-31 17:00:00+00'::timestamp with time zone)) OR (r.server_timestamp IS NULL))) OR ((r.id IS NULL) AND ((f.status)::text = 'REFUNDED'::text)))
                     Rows Removed by Filter: 540
                     Buffers: shared hit=4
-                    ->  CTE Scan on facts f  (cost=0.00..12.00 rows=600 width=620) (actual time=0.000..0.023 rows=600 loops=1)
-                    ->  Hash  (cost=5.22..5.22 rows=122 width=100) (actual time=0.029..0.029 rows=122 loops=1)
+                    ->  CTE Scan on facts f  (cost=0.00..23.86 rows=1193 width=620) (actual time=0.000..0.025 rows=600 loops=1)
+                    ->  Hash  (cost=5.23..5.23 rows=123 width=100) (actual time=0.029..0.029 rows=123 loops=1)
                           Buckets: 1024  Batches: 1  Memory Usage: 26kB
                           Buffers: shared hit=4
-                          ->  Seq Scan on refunds r  (cost=0.00..5.22 rows=122 width=100) (actual time=0.004..0.016 rows=122 loops=1)
+                          ->  Seq Scan on refunds r  (cost=0.00..5.23 rows=123 width=100) (actual time=0.004..0.016 rows=123 loops=1)
                                 Buffers: shared hit=4
 Planning:
   Buffers: shared hit=14
-Planning Time: 0.478 ms
-Execution Time: 3.067 ms
+Planning Time: 0.546 ms
+Execution Time: 3.767 ms
 
-query=TOP_SQL shop=37 start=2025-12-31T17:00:00Z end=2026-12-31T17:00:00Z
-Sort  (cost=10726.53..10726.56 rows=10 width=144) (actual time=4.725..4.728 rows=1 loops=1)
+query=TOP_SQL shop=41 start=2025-12-31T17:00:00Z end=2026-12-31T17:00:00Z
+Sort  (cost=21201.34..21201.36 rows=10 width=144) (actual time=5.204..5.208 rows=1 loops=1)
   Sort Key: (sum(((item_events_1.sign)::bigint * item_events_1.quantity))) DESC, item_events_1.product_id
   Sort Method: quicksort  Memory: 25kB
-  Buffers: shared hit=138
+  Buffers: shared hit=207
   CTE scoped
-    ->  Seq Scan on orders  (cost=0.00..59.20 rows=600 width=585) (actual time=0.004..0.091 rows=600 loops=1)
-          Filter: (shop_id = '37'::bigint)
-          Rows Removed by Filter: 616
+    ->  Seq Scan on orders  (cost=0.00..59.24 rows=600 width=585) (actual time=0.007..0.125 rows=600 loops=1)
+          Filter: (shop_id = '41'::bigint)
+          Rows Removed by Filter: 619
           Buffers: shared hit=44
   CTE facts
-    ->  Hash Left Join  (cost=103.49..10134.91 rows=600 width=5307) (actual time=0.854..1.725 rows=600 loops=1)
-          Hash Cond: (o.id = t.order_id)
-          Buffers: shared hit=96
-          ->  Hash Left Join  (cost=97.72..111.31 rows=600 width=5255) (actual time=0.615..0.794 rows=600 loops=1)
-                Hash Cond: (o.id = p.order_id)
-                Buffers: shared hit=65
-                ->  CTE Scan on scoped o  (cost=0.00..12.00 rows=600 width=5190) (actual time=0.005..0.042 rows=600 loops=1)
-                      Buffers: shared hit=2
-                ->  Hash  (cost=90.22..90.22 rows=600 width=73) (actual time=0.608..0.609 rows=600 loops=1)
-                      Buckets: 1024  Batches: 1  Memory Usage: 60kB
-                      Buffers: shared hit=63
-                      ->  Subquery Scan on p  (cost=78.22..90.22 rows=600 width=73) (actual time=0.473..0.559 rows=600 loops=1)
-                            Buffers: shared hit=63
-                            ->  HashAggregate  (cost=78.22..84.22 rows=600 width=73) (actual time=0.472..0.527 rows=600 loops=1)
+    ->  Hash Right Join  (cost=184.36..20194.90 rows=1193 width=5273) (actual time=1.320..2.396 rows=600 loops=1)
+          Hash Cond: (c.order_id = o.id)
+          Buffers: shared hit=165
+          ->  Hash Right Join  (cost=157.47..238.94 rows=1193 width=39) (actual time=0.582..0.880 rows=600 loops=1)
+                Hash Cond: (p.order_id = c.order_id)
+                Join Filter: (c.paid_count = 1)
+                Buffers: shared hit=90
+                ->  Seq Scan on payments p  (cost=0.00..75.29 rows=1219 width=43) (actual time=0.002..0.148 rows=1219 loops=1)
+                      Filter: ((status)::text = 'PAID'::text)
+                      Rows Removed by Filter: 1204
+                      Buffers: shared hit=45
+                ->  Hash  (cost=142.55..142.55 rows=1193 width=16) (actual time=0.575..0.576 rows=600 loops=1)
+                      Buckets: 2048  Batches: 1  Memory Usage: 45kB
+                      Buffers: shared hit=45
+                      ->  Subquery Scan on c  (cost=118.69..142.55 rows=1193 width=16) (actual time=0.471..0.540 rows=600 loops=1)
+                            Buffers: shared hit=45
+                            ->  HashAggregate  (cost=118.69..130.62 rows=1193 width=16) (actual time=0.471..0.510 rows=600 loops=1)
                                   Group Key: p_1.order_id
-                                  Batches: 1  Memory Usage: 169kB
-                                  Buffers: shared hit=63
-                                  ->  Hash Join  (cost=19.50..63.22 rows=600 width=47) (actual time=0.181..0.338 rows=600 loops=1)
+                                  Batches: 1  Memory Usage: 129kB
+                                  Buffers: shared hit=45
+                                  ->  Hash Join  (cost=19.50..109.75 rows=1193 width=13) (actual time=0.070..0.357 rows=1200 loops=1)
                                         Hash Cond: (p_1.order_id = o_1.id)
-                                        Buffers: shared hit=63
-                                        ->  Seq Scan on payments p_1  (cost=0.00..33.16 rows=1216 width=47) (actual time=0.001..0.051 rows=1216 loops=1)
-                                              Buffers: shared hit=21
-                                        ->  Hash  (cost=12.00..12.00 rows=600 width=8) (actual time=0.177..0.177 rows=600 loops=1)
+                                        Buffers: shared hit=45
+                                        ->  Seq Scan on payments p_1  (cost=0.00..69.23 rows=2423 width=13) (actual time=0.003..0.101 rows=2423 loops=1)
+                                              Buffers: shared hit=45
+                                        ->  Hash  (cost=12.00..12.00 rows=600 width=8) (actual time=0.064..0.064 rows=600 loops=1)
                                               Buckets: 1024  Batches: 1  Memory Usage: 32kB
-                                              Buffers: shared hit=42
-                                              ->  CTE Scan on scoped o_1  (cost=0.00..12.00 rows=600 width=8) (actual time=0.000..0.142 rows=600 loops=1)
-                                                    Buffers: shared hit=42
-          ->  Hash  (cost=4.23..4.23 rows=123 width=47) (actual time=0.022..0.022 rows=123 loops=1)
-                Buckets: 1024  Batches: 1  Memory Usage: 19kB
-                Buffers: shared hit=3
-                ->  Seq Scan on return_requests t  (cost=0.00..4.23 rows=123 width=47) (actual time=0.003..0.012 rows=123 loops=1)
-                      Buffers: shared hit=3
+                                              ->  CTE Scan on scoped o_1  (cost=0.00..12.00 rows=600 width=8) (actual time=0.000..0.030 rows=600 loops=1)
+          ->  Hash  (cost=19.40..19.40 rows=600 width=5229) (actual time=0.477..0.478 rows=600 loops=1)
+                Buckets: 1024  Batches: 1  Memory Usage: 176kB
+                Buffers: shared hit=47
+                ->  Hash Left Join  (cost=5.81..19.40 rows=600 width=5229) (actual time=0.048..0.333 rows=600 loops=1)
+                      Hash Cond: (o.id = t.order_id)
+                      Buffers: shared hit=47
+                      ->  CTE Scan on scoped o  (cost=0.00..12.00 rows=600 width=5190) (actual time=0.007..0.179 rows=600 loops=1)
+                            Buffers: shared hit=44
+                      ->  Hash  (cost=4.25..4.25 rows=125 width=47) (actual time=0.039..0.039 rows=125 loops=1)
+                            Buckets: 1024  Batches: 1  Memory Usage: 19kB
+                            Buffers: shared hit=3
+                            ->  Seq Scan on return_requests t  (cost=0.00..4.25 rows=125 width=47) (actual time=0.003..0.013 rows=125 loops=1)
+                                  Buffers: shared hit=3
           SubPlan 3
-            ->  Seq Scan on order_status_history h  (cost=0.00..34.07 rows=1105 width=16) (actual time=0.002..0.109 rows=1216 loops=1)
+            ->  Seq Scan on order_status_history h  (cost=0.00..34.14 rows=1106 width=16) (actual time=0.002..0.139 rows=1219 loops=1)
                   Filter: (((from_status)::text = 'SHIPPING'::text) AND ((to_status)::text = 'DELIVERED'::text))
-                  Rows Removed by Filter: 122
+                  Rows Removed by Filter: 124
                   Buffers: shared hit=14
           SubPlan 5
-            ->  Seq Scan on order_status_history h_1  (cost=0.00..34.07 rows=11 width=24) (actual time=0.004..0.055 rows=122 loops=1)
+            ->  Seq Scan on order_status_history h_1  (cost=0.00..34.14 rows=11 width=24) (actual time=0.004..0.055 rows=124 loops=1)
                   Filter: (((from_status)::text = 'RETURN_REQUESTED'::text) AND ((to_status)::text = 'RETURNED'::text))
-                  Rows Removed by Filter: 1216
+                  Rows Removed by Filter: 1219
                   Buffers: shared hit=14
   CTE item_events
-    ->  Hash Left Join  (cost=123.72..235.57 rows=3498 width=38) (actual time=1.479..3.185 rows=1980 loops=1)
+    ->  Hash Left Join  (cost=123.85..345.28 rows=6909 width=38) (actual time=1.914..3.809 rows=1980 loops=1)
           Hash Cond: ("*SELECT* 1".id = i.order_id)
-          Buffers: shared hit=138
-          ->  Append  (cost=0.00..52.07 rows=1171 width=21) (actual time=0.857..2.329 rows=660 loops=1)
-                Buffers: shared hit=96
-                ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..23.86 rows=586 width=21) (actual time=0.857..2.206 rows=600 loops=1)
-                      Buffers: shared hit=96
-                      ->  CTE Scan on facts f  (cost=0.00..18.00 rows=586 width=21) (actual time=0.857..2.168 rows=600 loops=1)
+          Buffers: shared hit=207
+          ->  Append  (cost=0.00..103.32 rows=2315 width=21) (actual time=1.323..2.973 rows=660 loops=1)
+                Buffers: shared hit=165
+                ->  Subquery Scan on "*SELECT* 1"  (cost=0.00..47.49 rows=1170 width=21) (actual time=1.323..2.837 rows=600 loops=1)
+                      Buffers: shared hit=165
+                      ->  CTE Scan on facts f  (cost=0.00..35.79 rows=1170 width=21) (actual time=1.322..2.799 rows=600 loops=1)
                             Filter: (((delivered_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (delivered_at < '2026-12-31 17:00:00+00'::timestamp with time zone)) OR ((delivered_at IS NULL) AND ((status)::text = ANY ('{DELIVERED,RETURN_REQUESTED,RETURNED,REFUNDED}'::text[]))))
-                            Buffers: shared hit=96
-                ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..22.35 rows=585 width=21) (actual time=0.004..0.090 rows=60 loops=1)
-                      ->  CTE Scan on facts f_1  (cost=0.00..16.50 rows=585 width=21) (actual time=0.004..0.086 rows=60 loops=1)
+                            Buffers: shared hit=165
+                ->  Subquery Scan on "*SELECT* 2"  (cost=0.00..44.26 rows=1145 width=21) (actual time=0.003..0.102 rows=60 loops=1)
+                      ->  CTE Scan on facts f_1  (cost=0.00..32.81 rows=1145 width=21) (actual time=0.003..0.099 rows=60 loops=1)
                             Filter: (((received_at >= '2025-12-31 17:00:00+00'::timestamp with time zone) AND (received_at < '2026-12-31 17:00:00+00'::timestamp with time zone)) OR ((received_at IS NULL) AND ((status)::text = ANY ('{RETURNED,REFUNDED}'::text[]))))
                             Rows Removed by Filter: 540
-          ->  Hash  (cost=78.32..78.32 rows=3632 width=41) (actual time=0.620..0.620 rows=3632 loops=1)
-                Buckets: 4096  Batches: 1  Memory Usage: 316kB
+          ->  Hash  (cost=78.38..78.38 rows=3638 width=41) (actual time=0.587..0.587 rows=3638 loops=1)
+                Buckets: 4096  Batches: 1  Memory Usage: 317kB
                 Buffers: shared hit=42
-                ->  Seq Scan on order_items i  (cost=0.00..78.32 rows=3632 width=41) (actual time=0.002..0.221 rows=3632 loops=1)
+                ->  Seq Scan on order_items i  (cost=0.00..78.38 rows=3638 width=41) (actual time=0.004..0.231 rows=3638 loops=1)
                       Buffers: shared hit=42
-  ->  Nested Loop Left Join  (cost=296.55..296.68 rows=10 width=144) (actual time=4.723..4.724 rows=1 loops=1)
-        Buffers: shared hit=138
-        ->  Aggregate  (cost=78.71..78.72 rows=1 width=8) (actual time=3.529..3.530 rows=1 loops=1)
-              Buffers: shared hit=138
-              ->  CTE Scan on item_events  (cost=0.00..69.96 rows=3498 width=1) (actual time=1.480..3.433 rows=1980 loops=1)
-                    Buffers: shared hit=138
-        ->  Limit  (cost=217.84..217.87 rows=10 width=136) (actual time=1.192..1.193 rows=1 loops=1)
-              ->  Sort  (cost=217.84..217.91 rows=29 width=136) (actual time=1.192..1.192 rows=1 loops=1)
+  ->  Nested Loop Left Join  (cost=601.62..601.75 rows=10 width=144) (actual time=5.202..5.203 rows=1 loops=1)
+        Buffers: shared hit=207
+        ->  Aggregate  (cost=155.45..155.46 rows=1 width=8) (actual time=4.191..4.191 rows=1 loops=1)
+              Buffers: shared hit=207
+              ->  CTE Scan on item_events  (cost=0.00..138.18 rows=6909 width=1) (actual time=1.914..4.064 rows=1980 loops=1)
+                    Buffers: shared hit=207
+        ->  Limit  (cost=446.17..446.19 rows=10 width=136) (actual time=1.010..1.010 rows=1 loops=1)
+              ->  Sort  (cost=446.17..446.25 rows=33 width=136) (actual time=1.010..1.010 rows=1 loops=1)
                     Sort Key: (sum(((item_events_1.sign)::bigint * item_events_1.quantity))) DESC, item_events_1.product_id
                     Sort Method: quicksort  Memory: 25kB
-                    ->  GroupAggregate  (cost=164.16..217.21 rows=29 width=136) (actual time=1.190..1.190 rows=1 loops=1)
+                    ->  GroupAggregate  (cost=341.17..445.45 rows=33 width=136) (actual time=1.008..1.008 rows=1 loops=1)
                           Group Key: item_events_1.product_id
-                          ->  Sort  (cost=164.16..168.54 rows=1749 width=540) (actual time=0.703..0.755 rows=1980 loops=1)
+                          ->  Sort  (cost=341.17..349.81 rows=3454 width=540) (actual time=0.701..0.750 rows=1980 loops=1)
                                 Sort Key: item_events_1.product_id, item_events_1.item_id DESC
                                 Sort Method: quicksort  Memory: 157kB
-                                ->  CTE Scan on item_events item_events_1  (cost=0.00..69.96 rows=1749 width=540) (actual time=0.000..0.122 rows=1980 loops=1)
+                                ->  CTE Scan on item_events item_events_1  (cost=0.00..138.18 rows=3454 width=540) (actual time=0.001..0.140 rows=1980 loops=1)
                                       Filter: valid
 Planning:
   Buffers: shared hit=10
-Planning Time: 0.410 ms
-Execution Time: 4.786 ms
+Planning Time: 0.675 ms
+Execution Time: 5.279 ms
