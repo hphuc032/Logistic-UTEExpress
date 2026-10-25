@@ -8,6 +8,17 @@ import com.uteexpress.order.dto.OrderStatus;
 import com.uteexpress.order.dto.OrderStatusChangedEvent;
 import com.uteexpress.security.authentication.UteExpressPrincipal;
 import java.util.List;
+import com.uteexpress.notification.dto.NotificationCommitted;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.context.event.EventListener;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import org.junit.jupiter.api.Timeout;
 import java.time.Instant;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
@@ -32,10 +43,19 @@ import static org.springframework.security.test.web.servlet.request.SecurityMock
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest @AutoConfigureMockMvc @Testcontainers
+@SpringBootTest @AutoConfigureMockMvc @Testcontainers @Import(NotificationIT.HintConfiguration.class)
 class NotificationIT {
     @Container @ServiceConnection
     static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17.6");
+    @TestConfiguration(proxyBeanMethods = false)
+    static class HintConfiguration {
+        @Bean HintCollector hintCollector() { return new HintCollector(); }
+    }
+    static class HintCollector {
+        final List<NotificationCommitted> received = new CopyOnWriteArrayList<>();
+        @EventListener public void receive(NotificationCommitted event) { received.add(event); }
+    }
+    @Autowired HintCollector hints;
     @Autowired JdbcTemplate jdbc;
     @Autowired NotificationService notifications;
     @Autowired OrderNotificationListener orderListener;
@@ -117,10 +137,110 @@ class NotificationIT {
                 Integer.class, order, owner)).isEqualTo(1);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id=? AND recipient_id=?",
                 Integer.class, order, stranger)).isZero();
+        var committedRows = jdbc.query("SELECT id, recipient_id FROM uteexpress.notifications WHERE order_id=?",
+                (rs, ignored) -> new NotificationCommitted(rs.getLong(1), rs.getLong(2)), order);
+        assertThat(hints.received.stream().filter(e -> committedRows.contains(e)).toList())
+                .containsExactlyInAnyOrderElementsOf(committedRows);
         jdbc.update("DELETE FROM uteexpress.order_status_history WHERE order_id=?", order);
         jdbc.update("DELETE FROM uteexpress.orders WHERE id=?", order);
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id IS NULL AND recipient_id IN (?, ?)",
                 Integer.class, buyer, owner)).isEqualTo(2);
+    }
+
+    @Test void realtimeHintsFollowCommitAndNeverDuplicateOrEscapeRollback() {
+        Long owner = createUser();
+        String key = "committed-hint:" + owner;
+        new TransactionTemplate(transactionManager).executeWithoutResult(status -> {
+            notifications.record(owner, null, "SYSTEM", "Safe title", "Safe content", key);
+            notifications.record(owner, null, "SYSTEM", "Safe title", "Safe content", key);
+            assertThat(hints.received).noneMatch(e -> e.recipientId().equals(owner));
+        });
+        Long id = jdbc.queryForObject("SELECT id FROM uteexpress.notifications WHERE dedup_key=?", Long.class, key);
+        assertThat(hints.received.stream().filter(e -> e.recipientId().equals(owner)).toList())
+                .containsExactly(new NotificationCommitted(id, owner));
+        new TransactionTemplate(transactionManager).executeWithoutResult(status -> {
+            notifications.record(owner, null, "SYSTEM", "Safe title", "Safe content", key + ":rollback");
+            status.setRollbackOnly();
+        });
+        assertThat(hints.received.stream().filter(e -> e.recipientId().equals(owner)).toList()).hasSize(1);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE dedup_key=?",
+                Integer.class, key + ":rollback")).isZero();
+    }
+
+    @Test @Timeout(40) void concurrentDuplicatePublishesOnlyCommittedWinner() throws Exception {
+        raceDeduplicatedInsert(false);
+    }
+
+    @Test @Timeout(40) void rolledBackFirstInsertAllowsWaitingWriterToPublishOnce() throws Exception {
+        raceDeduplicatedInsert(true);
+    }
+
+    private void raceDeduplicatedInsert(boolean rollbackFirst) throws Exception {
+        Long owner = createUser();
+        String key = "concurrent-hint:" + owner;
+        var inserted = new CountDownLatch(1);
+        var releaseFirst = new CountDownLatch(1);
+        var secondStarted = new CountDownLatch(1);
+        var firstPid = new AtomicInteger();
+        var secondPid = new AtomicInteger();
+        var pool = Executors.newFixedThreadPool(2);
+        try {
+            var first = pool.submit(() -> {
+                var tx = new TransactionTemplate(transactionManager);
+                tx.setTimeout(20);
+                tx.executeWithoutResult(status -> {
+                    jdbc.execute("SET LOCAL lock_timeout = '15s'");
+                    firstPid.set(jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class));
+                    notifications.record(owner, null, "SYSTEM", "Race", "Safe content", key);
+                    inserted.countDown();
+                    await(releaseFirst);
+                    if (rollbackFirst) status.setRollbackOnly();
+                });
+            });
+            assertThat(inserted.await(10, TimeUnit.SECONDS)).isTrue();
+            var second = pool.submit(() -> {
+                var tx = new TransactionTemplate(transactionManager);
+                tx.setTimeout(20);
+                tx.executeWithoutResult(status -> {
+                    jdbc.execute("SET LOCAL lock_timeout = '15s'");
+                    secondPid.set(jdbc.queryForObject("SELECT pg_backend_pid()", Integer.class));
+                    secondStarted.countDown();
+                    notifications.record(owner, null, "SYSTEM", "Race", "Safe content", key);
+                });
+            });
+            assertThat(secondStarted.await(10, TimeUnit.SECONDS)).isTrue();
+            long deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(8);
+            boolean blocked = false;
+            while (System.nanoTime() < deadline) {
+                blocked = Boolean.TRUE.equals(jdbc.queryForObject(
+                        "SELECT ? = ANY(pg_blocking_pids(?))", Boolean.class, firstPid.get(), secondPid.get()));
+                if (blocked) break;
+                Thread.sleep(20);
+            }
+            assertThat(blocked).as("PostgreSQL confirms second insert waits for first transaction").isTrue();
+            assertThat(hints.received).noneMatch(e -> e.recipientId().equals(owner));
+            releaseFirst.countDown();
+            first.get(15, TimeUnit.SECONDS);
+            second.get(15, TimeUnit.SECONDS);
+            var rows = jdbc.query("SELECT id, recipient_id FROM uteexpress.notifications WHERE dedup_key=?",
+                    (rs, ignored) -> new NotificationCommitted(rs.getLong(1), rs.getLong(2)), key);
+            assertThat(rows).hasSize(1);
+            assertThat(hints.received.stream().filter(e -> e.recipientId().equals(owner)).toList())
+                    .containsExactlyElementsOf(rows);
+        } finally {
+            releaseFirst.countDown();
+            pool.shutdownNow();
+            assertThat(pool.awaitTermination(10, TimeUnit.SECONDS)).isTrue();
+        }
+    }
+
+    private static void await(CountDownLatch latch) {
+        try {
+            if (!latch.await(10, TimeUnit.SECONDS)) throw new IllegalStateException("Test latch timed out");
+        } catch (InterruptedException interrupted) {
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException(interrupted);
+        }
     }
 
     private Long createUser() {

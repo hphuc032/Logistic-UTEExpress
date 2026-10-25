@@ -27,6 +27,15 @@ jobs:
           java-version: '21'
           cache: maven
 
+      - name: Set up Node for notification client tests
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Notification client tests
+        run: node --test src/test/js/notifications.test.cjs
+
       - name: Maven test
         run: sh ./mvnw --batch-mode --no-transfer-progress test
 

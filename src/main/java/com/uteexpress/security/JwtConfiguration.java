@@ -67,18 +67,22 @@ public class JwtConfiguration {
     }
 
     private static boolean validRequiredClaims(Jwt jwt, Clock clock, JwtProperties properties) {
-        String subject = jwt.getSubject();
+        Object rawSubject = jwt.getClaims().get("sub");
+        String subject = rawSubject instanceof String value ? value : null;
         Instant issuedAt = jwt.getIssuedAt();
         Instant expiresAt = jwt.getExpiresAt();
         Object tokenVersion = jwt.getClaims().get("tokenVersion");
         return subject != null
-                && subject.matches("uteexpress:user:[1-9][0-9]*")
+                && subject.matches("uteexpress:user:[1-9][0-9]{0,18}")
+                && (subject.length() < "uteexpress:user:".length() + 19
+                    || subject.substring("uteexpress:user:".length()).compareTo("9223372036854775807") <= 0)
                 && issuedAt != null
                 && expiresAt != null
                 && !issuedAt.isAfter(clock.instant().plus(properties.clockSkew()))
-                && tokenVersion instanceof Number number
-                && number.longValue() >= 0
-                && number.doubleValue() == number.longValue()
+                && (tokenVersion instanceof Byte || tokenVersion instanceof Short || tokenVersion instanceof Integer
+                    || tokenVersion instanceof Long || tokenVersion instanceof java.math.BigInteger)
+                && new java.math.BigInteger(tokenVersion.toString()).signum() >= 0
+                && new java.math.BigInteger(tokenVersion.toString()).bitLength() <= 63
                 && jwt.getAudience() != null
                 && jwt.getAudience().equals(List.of(properties.audience()));
     }
