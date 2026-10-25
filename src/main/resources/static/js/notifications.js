@@ -3,24 +3,32 @@
     "use strict";
     const badge = document.querySelector("[data-notification-status]");
     if (!badge || !window.WebSocket) return;
-    let socket, retry, heartbeat, lastInbound = 0, stopped = false, delay = 1000, connected = false, buffer = "", refreshRunning = false;
+    let socket, retry, heartbeat, lastInbound = 0, stopped = false, delay = 1000, connected = false, buffer = "", refreshRunning = false, refreshPending = false;
     const frame = (command, headers = {}) => command + "\n" + Object.entries(headers)
         .map(([key, value]) => key + ":" + value).join("\n") + "\n\n\0";
     async function recover() {
-        if (refreshRunning || stopped) return;
+        if (stopped) return;
+        if (refreshRunning) { refreshPending = true; return; }
         refreshRunning = true;
         try {
             const response = await fetch("/notifications/inbox", {credentials: "same-origin", cache: "no-store"});
             if (response.status === 401 || response.status === 403) { stop(); return; }
             if (!response.ok) return;
             const items = await response.json();
+            if (stopped) return;
             const unread = items.filter(item => item.readAt === null).length;
             badge.textContent = unread ? "Thông báo (" + unread + "+)" : "Thông báo";
         } catch (_) { /* Durable inbox remains available by navigation. */ }
-        finally { refreshRunning = false; }
+        finally {
+            refreshRunning = false;
+            if (refreshPending && !stopped) {
+                refreshPending = false;
+                recover(); // Coalesce hints received during fetch/body parsing into one trailing read.
+            }
+        }
     }
     function stop() {
-        stopped = true; clearTimeout(retry); clearInterval(heartbeat);
+        stopped = true; refreshPending = false; clearTimeout(retry); clearInterval(heartbeat);
         if (socket) socket.close();
     }
     async function open() {
