@@ -16,12 +16,14 @@ public class NotificationService {
     private final NotificationRepository notifications;
     private final CurrentAccountIdProvider accounts;
     private final Clock clock;
+    private final NotificationCommitPublisher hints;
 
     public NotificationService(NotificationRepository notifications,
-            CurrentAccountIdProvider accounts, Clock clock) {
+            CurrentAccountIdProvider accounts, Clock clock, NotificationCommitPublisher hints) {
         this.notifications = notifications;
         this.accounts = accounts;
         this.clock = clock;
+        this.hints = hints;
     }
 
     @Transactional(readOnly = true)
@@ -50,7 +52,7 @@ public class NotificationService {
                 || title.length() > 160 || message.length() > 1000 || dedupKey.length() > 255) {
             throw new ApplicationException(ErrorCode.INVALID_REQUEST);
         }
-        notifications.insert(recipientId, orderId, type, title, message, dedupKey, clock.instant());
+        notifications.insert(recipientId, orderId, type, title, message, dedupKey, clock.instant()).forEach(hints::register);
     }
 
     private Long accountId() {
