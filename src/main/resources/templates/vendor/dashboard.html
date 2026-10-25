@@ -13,8 +13,8 @@
 <div class="table-responsive"><table class="table"><caption>Tiền hàng sau giảm giá. Refund ghi nhận theo thời điểm Admin xác nhận hoàn tất, không phải thời điểm ngân hàng chuyển tiền.</caption>
 <thead><tr><th scope="col">Chỉ số</th><th scope="col">Hôm nay</th><th scope="col">Tháng này</th><th scope="col">Khoảng đã chọn</th></tr></thead>
 <tbody>
-<tr th:each="key : ${ {'deliveredSales','collectedPayments','refunds','netVendorSales','commissionAccrued','commissionReversed','netCommission'} }">
-<th scope="row" th:text="${key == 'deliveredSales' ? 'Delivered Sales — Tiền hàng giao thành công' : key == 'collectedPayments' ? 'Collected Payments — Tiền hàng đã thu' : key == 'refunds' ? 'Refunds — Tiền hàng đã hoàn' : key == 'netVendorSales' ? 'Net Vendor Sales — Giao thành công trừ hoàn tiền' : key == 'commissionAccrued' ? 'Commission Accrued — Phí ghi nhận lúc giao' : key == 'commissionReversed' ? 'Commission Reversed — Phí đảo khi hoàn tiền' : 'Net Commission — Phí ghi nhận trừ phí đảo'}"></th>
+<tr th:each="key : ${ {'deliveredSales','collectedPayments','refunds','netVendorSales','netCollectedRevenue','commissionAccrued','commissionReversed','netCommission','netRevenueAfterCommission'} }">
+<th scope="row" th:text="${key == 'deliveredSales' ? 'Delivered Sales — Tiền hàng giao thành công' : key == 'collectedPayments' ? 'Collected Payments — Tiền hàng đã thu' : key == 'refunds' ? 'Refunds — Tiền hàng đã hoàn' : key == 'netVendorSales' ? 'Net Vendor Sales — Giao thành công trừ hoàn tiền' : key == 'netCollectedRevenue' ? 'Net Collected Revenue — Tiền hàng đã thu trừ hoàn tiền' : key == 'commissionAccrued' ? 'Commission Accrued — Phí ghi nhận lúc giao' : key == 'commissionReversed' ? 'Commission Reversed — Phí đảo khi hoàn tiền' : key == 'netCommission' ? 'Net Commission — Phí ghi nhận trừ phí đảo' : 'Net Revenue After Commission — Thu ròng trừ phí ròng'}"></th>
 <td th:each="window : ${ {revenue.today,revenue.month,revenue.selected} }" th:with="amount=${window.metrics[key]}">
 <span th:if="${amount.complete()}" th:text="${#numbers.formatDecimal(amount.value,0,'POINT',0,'COMMA')}"></span>
 <span th:unless="${amount.complete()}" class="text-danger" th:text="|Chưa đủ dữ liệu (${amount.unknownEvents} sự kiện)|"></span></td></tr>
@@ -23,6 +23,7 @@
 <tr><th scope="row">Đơn hủy trong kỳ</th><td th:each="w:${ {revenue.today,revenue.month,revenue.selected} }" th:text="${w.metrics.cancelledOrders}"></td></tr>
 </tbody></table></div>
 <p>Delivered Sales và commission ghi nhận theo ngày giao; Collected Payments theo ngày thu. Net Vendor Sales = Delivered Sales − Refunds. Net Commission = Commission Accrued − Commission Reversed. Các kỳ có thể âm.</p>
+<p>Net Collected Revenue = Collected Payments − Refunds. Net Revenue After Commission = Net Collected Revenue − Net Commission. Hai chỉ số dùng các thành phần trong cùng kỳ báo cáo; không phân bổ lại vào kỳ bán và không bao gồm phí vận chuyển.</p>
 <p>Không thể xác định kỳ cho sự kiện thiếu timestamp: báo chưa đủ dữ liệu cho các kỳ liên quan của shop. Số đếm đơn chỉ gồm timestamp đã lưu.</p>
 <h2>Top sản phẩm theo số lượng giao ròng</h2><p>Giao thành công cộng vào kỳ giao; hàng nhận trả trừ vào kỳ RECEIVE_RETURN. Hoàn tiền không trừ số lượng lần nữa.</p>
 <p th:unless="${revenue.topProducts.complete()}" class="text-danger">Danh sách chưa đầy đủ do thiếu bằng chứng giao/nhận trả. Các dòng dưới đây chỉ gồm sự kiện xác định được.</p>

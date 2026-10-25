@@ -1,6 +1,6 @@
 # DASH-01 Vendor revenue dashboard
 
-Owner TD; technical reviewer QD; business/security approver HP. Base develop
+Owner TD; technical reviewer QD; business/security approver HP. Initial implementation base develop
 `bce7ff09e2a91af4c86ac23aeedf0d5a802adc33`. The task reads the Master Project Plan
 (D2, G, H, I7, M2, T45) and QD technical contract
 [`6abaadf2efe0b635127ce91e1ee1432d0d46dc55`](https://github.com/hphuc032/Logistic-UTEExpress/blob/6abaadf2efe0b635127ce91e1ee1432d0d46dc55/docs/DASH-01-QD-read-contract-review.md).
@@ -45,9 +45,11 @@ voucher discount is not subtracted twice. Shipping is never Vendor earnings.
 | Collected Payments | Valid COD PAID evidence, paid_at | goods (Payment amount excludes its matching shipping component in this view) |
 | Refunds | SUCCEEDED full COD ledger, server_timestamp | refund.amount - original Order.shipping_fee |
 | Net Vendor Sales | Components in this reporting period | Delivered Sales - Refunds |
+| Net Collected Revenue | Collection/refund components in this reporting period | Collected Payments - Refunds |
 | Commission Accrued | Delivery event | original stored commission |
 | Commission Reversed | Successful refund event | original stored commission |
 | Net Commission | Components in this period | accrued - reversed |
+| Net Revenue After Commission | Collection/refund/commission components in this reporting period | Net Collected Revenue - Net Commission |
 | Total Orders | Order.created_at | count |
 | Delivered Orders | Order.delivered_at | count of persisted timestamps |
 | Cancelled Orders | Order.cancelled_at | count of persisted timestamps |
@@ -63,6 +65,97 @@ For example, goods 90,000, shipping 15,000, commission 9,000: delivery contribut
 90,000 sales and 9,000 commission; later full cash refund of 105,000 contributes
 90,000 merchandise refund and 9,000 commission reversal in its own period. Collected
 Payments remains a separate 90,000 collection in the original paid_at period.
+
+## HP final business delta — Master Plan I7
+
+Delta baseline: `da96b215de8bb987870463b6d9d36521ce590f08`, synchronized with develop
+`5b5164dd29ba5465ffefe19d431da7b70e41357a`. Existing financial rules are preserved.
+
+The Master Project Plan I7 requires merchandise collected after discount/refunds,
+excluding shipping, grouped by collection/refund times, and a separate amount after
+commission. HP's final delta adds two derived RevenueMetrics properties to each
+today/month/selected window, exposed additively in JSON and directly in the HTML table:
+
+- `netCollectedRevenue = collectedPayments - refunds`.
+- `netRevenueAfterCommission = netCollectedRevenue - netCommission`.
+
+These reuse the existing RevenueAmount.subtract operation with exact BigDecimal
+arithmetic. They add no SQL, queries, constructor inputs or persisted evidence.
+Existing Net Vendor Sales remains delivery-based and Net Commission remains
+accrued minus reversed. Authorization, REPEATABLE_READ snapshot, event timestamps,
+UTC half-open reporting periods, Order/refund grain and shipping exclusion stay intact.
+
+An unknown collection or refund makes both new metrics unavailable. An unknown
+commission makes only the after-commission result unavailable when collection/refund
+are complete. Values remain null with `complete=false`; diagnostics sum source
+unknownEvents, so the same underlying event can affect more than one component.
+Known zero remains zero. Negative cash or commission is never clamped; subtracting
+negative Net Commission increases the after-commission amount without inventing a payout.
+
+For collection 90,000 in December, delivery/commission 9,000 in January and a full
+merchandise refund 90,000/commission reversal 9,000 in March:
+
+| Period | Collected Payments | Refunds | Net Commission | Net Collected Revenue | Net Revenue After Commission |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| December | 90,000 | 0 | 0 | 90,000 | 90,000 |
+| January | 0 | 0 | 9,000 | 0 | -9,000 |
+| February (receipt only) | 0 | 0 | 0 | 0 | 0 |
+| March | 0 | 90,000 | -9,000 | -90,000 | -81,000 |
+
+The sales period is not rewritten and the 15,000 shipping portion contributes to
+neither metric. Period tests use a collection immediately before the local year
+boundary and delivery immediately after it, with unsuccessful attempts dated in
+other periods; only the validated successful Payment dates collection.
+
+The delta changes only RevenueMetrics, the Vendor template, Order unit/PostgreSQL
+tests and this documentation. Focused and full verification evidence for this
+delta is recorded separately from the historical payment-attribution run below.
+
+Acceptance tests cover exact values above the floating-point integer boundary,
+known zero/refund zero, refund exceeding collection, signed commission, incomplete
+collection/refund/accrual/reversal, and invalid persisted payment/refund/commission
+evidence. PostgreSQL + MockMvc assert JSON fields and rendered table cells for all
+three windows, including negative and unavailable values. Multi-item/equal-valued
+Orders and repeated payment attempts keep the expected totals; reading both new
+properties leaves analytical statement counts unchanged.
+
+### I7 delta verification — 2026-10-26
+
+Independently executed with Java 21.0.12.1, Maven Wrapper 3.9.11 and real
+Testcontainers PostgreSQL 17.6:
+
+```powershell
+$env:JAVA_HOME='C:\Program Files\Eclipse Adoptium\jdk-21.0.12.101-hotspot'
+.\mvnw.cmd -B --no-transfer-progress -Ppostgres-it '-Dtest=RevenueServiceTest,ArchitectureTest' '-Dit.test=VendorRevenueIT' verify
+.\mvnw.cmd -B --no-transfer-progress -Ppostgres-it clean verify
+node --test src/test/js/notifications.test.cjs
+```
+
+| Run / scope | Classes | Tests | Failures | Errors | Skips | Flakes | Exit |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| Focused unit/architecture | 2 | 30 | 0 | 0 | 0 | 0 | 0 |
+| Focused PostgreSQL | 1 | 46 | 0 | 0 | 0 | 0 | 0 |
+| Full clean Surefire | 71 | 675 | 0 | 0 | 0 | 0 | 0 |
+| Full clean PostgreSQL Failsafe | 55 | 1,187 | 0 | 0 | 0 | 0 | 0 |
+| Full Maven total | 126 | 1,862 | 0 | 0 | 0 | 0 | 0 |
+
+Focused/full Failsafe summaries both report timeout=false. Full clean verify took
+08:12 min and includes compile/package. Focused tests overlap the full run. Included
+DASH-01 subsets are RevenueServiceTest 23 and VendorRevenueIT 46. Supplemental Node
+22.11.0 tests: 12 passed, 0 failed/skipped/cancelled, exit 0; client code is unchanged.
+
+No production/test source changed after full clean verify; only this documentation
+was finalized. Generated production SQL remains byte-identical to the tracked SQL
+artifact, so EXPLAIN SQL/plans are not replaced with unrelated new measurements.
+No tests were disabled or skipped. Existing Hikari closed/refused-connection teardown
+diagnostics and slow fork shutdown after System.exit(0) occurred; test XML still has
+zero errors/failures/flakes and no Failsafe timeout, with Maven exit 0.
+
+Local logs: .work-dash01-i7-focused.log, .work-dash01-i7-full.log and
+.work-dash01-i7-node.log. Raw current XML: target/surefire-reports and
+target/failsafe-reports. Exact-head CI is checked after push and recorded on PR #60.
+This delta is ready for QD scoped review; no final business acceptance, PR merge or
+DASH-01 COMPLETED status is implied.
 
 ## Trusted evidence and completeness
 
@@ -165,7 +258,7 @@ Diagnosing undated legacy evidence means work can grow with a Shop's history eve
 for a sparse window. Larger production distributions need fresh plans before index
 coordination with QD. These local timings are not a hardware-independent SLA.
 
-## Verification
+## Historical payment-attribution verification (before the I7 delta)
 
 ### HP-approved payment attribution fix (PR #60)
 

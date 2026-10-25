@@ -13,6 +13,7 @@ import java.time.*;
 import java.util.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.support.StaticListableBeanFactory;
 import org.springframework.transaction.*;
@@ -86,6 +87,10 @@ class RevenueServiceTest {
         var metrics=new RevenueMetrics(zero,zero,unknown,zero,unknown,0,0,0);
         assertThat(unknown.value()).isNull(); assertThat(unknown.complete()).isFalse();
         assertThat(metrics.netVendorSales().value()).isNull(); assertThat(metrics.netCommission().value()).isNull();
+        assertThat(metrics.netCollectedRevenue().value()).isNull();
+        assertThat(metrics.netRevenueAfterCommission().value()).isNull();
+        assertThat(metrics.netCollectedRevenue().unknownEvents()).isEqualTo(1);
+        assertThat(metrics.netRevenueAfterCommission().unknownEvents()).isEqualTo(2);
         assertThat(zero.value()).isEqualByComparingTo("0"); assertThat(zero.complete()).isTrue();
     }
     @Test void adjustmentsCanProduceNegativePeriodTotals() {
@@ -94,6 +99,8 @@ class RevenueServiceTest {
             new RevenueAmount(new BigDecimal("9000"),0),0,0,0);
         assertThat(metrics.netVendorSales().value()).isEqualByComparingTo("-90000");
         assertThat(metrics.netCommission().value()).isEqualByComparingTo("-9000");
+        assertThat(metrics.netCollectedRevenue().value()).isEqualByComparingTo("-90000");
+        assertThat(metrics.netRevenueAfterCommission().value()).isEqualByComparingTo("-81000");
     }
     @Test void unknownCollectionDoesNotReplaceIndependentDeliveredSalesNetFormula() {
         var metrics=new RevenueMetrics(new RevenueAmount(new BigDecimal("90000"),0),
@@ -104,5 +111,44 @@ class RevenueServiceTest {
         assertThat(metrics.netVendorSales().complete()).isTrue();
         assertThat(metrics.netVendorSales().value()).isEqualByComparingTo("80000");
         assertThat(metrics.netCommission().value()).isEqualByComparingTo("8000");
+        assertThat(metrics.netCollectedRevenue().complete()).isFalse();
+        assertThat(metrics.netCollectedRevenue().value()).isNull();
+        assertThat(metrics.netRevenueAfterCommission().complete()).isFalse();
+        assertThat(metrics.netRevenueAfterCommission().value()).isNull();
     }
+    @ParameterizedTest @CsvSource({
+        "90000,10000,9000,1000,80000,72000",
+        "90000,0,9000,0,90000,81000",
+        "10000,90000,0,9000,-80000,-71000",
+        "10000,0,0,9000,10000,19000",
+        "0,0,0,0,0,0",
+        "9007199254740993,1,2,0,9007199254740992,9007199254740990"
+    })
+    void cashDerivedMetricsPreserveExactValuesAndSignedCommission(String collected,String refunded,
+            String accrued,String reversed,String expectedCollected,String expectedAfterCommission) {
+        var metrics=new RevenueMetrics(new RevenueAmount(new BigDecimal("12345"),0),
+            known(collected),known(refunded),known(accrued),known(reversed),0,0,0);
+        assertThat(metrics.netCollectedRevenue().complete()).isTrue();
+        assertThat(metrics.netCollectedRevenue().value()).isEqualByComparingTo(expectedCollected);
+        assertThat(metrics.netRevenueAfterCommission().complete()).isTrue();
+        assertThat(metrics.netRevenueAfterCommission().value()).isEqualByComparingTo(expectedAfterCommission);
+    }
+    @ParameterizedTest @ValueSource(strings={"collection","refund","accrued","reversed"})
+    void unavailableCashOrCommissionPropagatesOnlyToDependentMetrics(String source) {
+        var unknown=new RevenueAmount(new BigDecimal("999"),1);
+        var metrics=new RevenueMetrics(known("90000"),source.equals("collection") ? unknown:known("90000"),
+            source.equals("refund") ? unknown:known("10000"),source.equals("accrued") ? unknown:known("9000"),
+            source.equals("reversed") ? unknown:known("1000"),0,0,0);
+        if(source.equals("collection") || source.equals("refund")) {
+            assertThat(metrics.netCollectedRevenue().complete()).isFalse();
+            assertThat(metrics.netCollectedRevenue().value()).isNull();
+        } else {
+            assertThat(metrics.netCollectedRevenue().complete()).isTrue();
+            assertThat(metrics.netCollectedRevenue().value()).isEqualByComparingTo("80000");
+        }
+        assertThat(metrics.netRevenueAfterCommission().complete()).isFalse();
+        assertThat(metrics.netRevenueAfterCommission().value()).isNull();
+        assertThat(metrics.netRevenueAfterCommission().unknownEvents()).isEqualTo(1);
+    }
+    private static RevenueAmount known(String value) { return new RevenueAmount(new BigDecimal(value),0); }
 }

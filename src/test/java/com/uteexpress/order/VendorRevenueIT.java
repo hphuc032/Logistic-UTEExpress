@@ -67,6 +67,7 @@ class VendorRevenueIT {
         var result=revenue.dashboard(null,null); var m=result.month().metrics();
         money(m.deliveredSales(),"180000"); money(m.collectedPayments(),"180000"); money(m.commissionAccrued(),"18000");
         money(m.netVendorSales(),"180000"); assertThat(m.deliveredOrders()).isEqualTo(2);
+        money(m.netCollectedRevenue(),"180000"); money(m.netRevenueAfterCommission(),"162000");
         assertThat(result.topProducts().products()).extracting(RevenueSummary.Product::netQuantity).containsExactly(4L,2L);
     }
     @Test void independentCollectionDeliveryReceiptAndRefundPeriodsUseOriginalSnapshot() {
@@ -80,15 +81,19 @@ class VendorRevenueIT {
         refund(id,Instant.parse("2027-03-01T00:00:00Z"));
         var december=period("2026-12-01","2027-01-01");
         money(december.metrics().collectedPayments(),"90000"); money(december.metrics().deliveredSales(),"0");
+        money(december.metrics().netCollectedRevenue(),"90000"); money(december.metrics().netRevenueAfterCommission(),"90000");
         var january=period("2027-01-01","2027-02-01");
         money(january.metrics().deliveredSales(),"90000"); money(january.metrics().collectedPayments(),"0");
         money(january.metrics().commissionAccrued(),"9000");
+        money(january.metrics().netCollectedRevenue(),"0"); money(january.metrics().netRevenueAfterCommission(),"-9000");
         var feb=revenue.dashboard(LocalDate.of(2027,2,1),LocalDate.of(2027,3,1));
         money(feb.selected().metrics().refunds(),"0");
+        money(feb.selected().metrics().netCollectedRevenue(),"0"); money(feb.selected().metrics().netRevenueAfterCommission(),"0");
         assertThat(feb.topProducts().products()).extracting(RevenueSummary.Product::netQuantity).containsExactly(-1L,-2L);
         var march=revenue.dashboard(LocalDate.of(2027,3,1),LocalDate.of(2027,4,1));
         money(march.selected().metrics().refunds(),"90000"); money(march.selected().metrics().commissionReversed(),"9000");
         money(march.selected().metrics().netVendorSales(),"-90000"); money(march.selected().metrics().netCommission(),"-9000");
+        money(march.selected().metrics().netCollectedRevenue(),"-90000"); money(march.selected().metrics().netRevenueAfterCommission(),"-81000");
         assertThat(march.topProducts().products()).isEmpty();
         money(period("2027-01-01","2027-02-01").metrics().deliveredSales(),"90000");
     }
@@ -97,6 +102,7 @@ class VendorRevenueIT {
         var result=revenue.dashboard(null,null); var m=result.month().metrics();
         money(m.deliveredSales(),"90000"); money(m.collectedPayments(),"90000"); money(m.refunds(),"90000");
         money(m.netVendorSales(),"0"); money(m.netCommission(),"0");
+        money(m.netCollectedRevenue(),"0"); money(m.netRevenueAfterCommission(),"0");
         assertThat(result.topProducts().products()).allSatisfy(p -> assertThat(p.netQuantity()).isZero());
         assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.payments WHERE order_id=?",String.class,id)).isEqualTo("PAID");
     }
@@ -106,6 +112,7 @@ class VendorRevenueIT {
         var first=revenue.dashboard(null,null); money(first.month().metrics().commissionAccrued(),"0");
         jdbc.update("INSERT INTO uteexpress.commission_policies(rate_percent,effective_from,created_by) VALUES (99,'2027-01-01',?)",vendor);
         money(revenue.dashboard(null,null).month().metrics().commissionAccrued(),"0");
+        money(revenue.dashboard(null,null).month().metrics().netRevenueAfterCommission(),"90000");
     }
     @ParameterizedTest @ValueSource(strings={"commission","paymentAmount","missingPayment","onlyUnpaid","missingPaidTime","deliveryHistory","deliveryTime","expired","online"})
     void invalidEvidenceDoesNotBecomeACompleteZero(String stage) {
@@ -130,7 +137,9 @@ class VendorRevenueIT {
         else { assertThat(m.deliveredSales().value()).isNull(); assertThat(m.netVendorSales().value()).isNull(); }
         if(List.of("paymentAmount","missingPayment","onlyUnpaid","missingPaidTime","expired","online").contains(stage)) {
             assertThat(m.collectedPayments().complete()).isFalse(); assertThat(m.collectedPayments().value()).isNull();
-        }
+            assertThat(m.netCollectedRevenue().complete()).isFalse(); assertThat(m.netCollectedRevenue().value()).isNull();
+        } else money(m.netCollectedRevenue(),"90000");
+        assertThat(m.netRevenueAfterCommission().complete()).isFalse(); assertThat(m.netRevenueAfterCommission().value()).isNull();
     }
     @ParameterizedTest @ValueSource(ints={1,3,7})
     void unsuccessfulAttemptsBeforeOnePaidRowAreIgnoredWithoutMixingEvidence(int unsuccessfulCount) {
@@ -149,6 +158,7 @@ class VendorRevenueIT {
         var result=revenue.dashboard(null,null); var m=result.month().metrics();
         money(m.deliveredSales(),"90000"); money(m.collectedPayments(),"90000"); money(m.commissionAccrued(),"9000");
         money(m.netVendorSales(),"90000"); money(m.netCommission(),"9000");
+        money(m.netCollectedRevenue(),"90000"); money(m.netRevenueAfterCommission(),"81000");
         assertThat(result.topProducts().products()).extracting(RevenueSummary.Product::netQuantity).containsExactly(2L,1L);
         assertThat(period("2026-01-01","2026-02-01").metrics().collectedPayments().value()).isEqualByComparingTo("0");
     }
@@ -282,10 +292,20 @@ class VendorRevenueIT {
         order(shop,DELIVERY,DELIVERY);
         mvc.perform(get("/vendor/dashboard").with(user(principal(vendor,"VENDOR"))).accept("text/html"))
             .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("Snapshot &lt;script&gt;")))
-            .andExpect(content().string(org.hamcrest.Matchers.containsString("Net Vendor Sales")));
-        mvc.perform(get("/vendor/dashboard").with(user(principal(vendor,"VENDOR"))).accept("application/json"))
+            .andExpect(content().string(org.hamcrest.Matchers.containsString("Net Vendor Sales")))
+            .andExpect(result -> assertThat(metricCells(result,"Net Collected Revenue")).containsExactly("90.000","90.000","90.000"))
+            .andExpect(result -> assertThat(metricCells(result,"Net Revenue After Commission")).containsExactly("81.000","81.000","81.000"));
+        var json=mvc.perform(get("/vendor/dashboard").with(user(principal(vendor,"VENDOR"))).accept("application/json"))
             .andExpect(status().isOk()).andExpect(jsonPath("$.month.metrics.netVendorSales.value").value(90000))
             .andExpect(jsonPath("$.month.metrics.deliveredSales.complete").value(true));
+        for(String window:List.of("today","month","selected")) {
+            json.andExpect(jsonPath("$."+window+".metrics.netCollectedRevenue.value").value(90000))
+                .andExpect(jsonPath("$."+window+".metrics.netCollectedRevenue.complete").value(true))
+                .andExpect(jsonPath("$."+window+".metrics.netCollectedRevenue.unknownEvents").value(0))
+                .andExpect(jsonPath("$."+window+".metrics.netRevenueAfterCommission.value").value(81000))
+                .andExpect(jsonPath("$."+window+".metrics.netRevenueAfterCommission.complete").value(true))
+                .andExpect(jsonPath("$."+window+".metrics.netRevenueAfterCommission.unknownEvents").value(0));
+        }
         for(String field:List.of("shopId","amount","ownerId")) mvc.perform(get("/vendor/dashboard").param(field,Long.toString(otherShop))
             .with(user(principal(vendor,"VENDOR"))).accept("application/json")).andExpect(status().isBadRequest());
         for(String role:List.of("USER","MANAGER","ADMIN","SHIPPER")) mvc.perform(get("/vendor/dashboard")
@@ -314,13 +334,53 @@ class VendorRevenueIT {
             assertThatThrownBy(() -> revenue.dashboard(null,null)).isInstanceOf(ApplicationException.class);
         } finally { pool.shutdownNow(); }
     }
-    @Test void unavailableTotalsAreExplicitInHtmlAndJson() throws Exception {
+    @Test void signedCashAndCommissionDeltasAreVisibleInCustomPeriodJsonAndHtml() throws Exception {
+        long id=order(shop,DELIVERY,Instant.parse("2026-12-31T16:59:59.999999Z"));
+        receipt(id,Instant.parse("2027-02-01T00:00:00Z")); refund(id,Instant.parse("2027-03-01T00:00:00Z"));
+        mvc.perform(get("/vendor/dashboard").param("from","2027-03-01").param("toExclusive","2027-04-01")
+                .with(user(principal(vendor,"VENDOR"))).accept("application/json"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.month.metrics.netVendorSales.value").value(90000))
+            .andExpect(jsonPath("$.month.metrics.netCollectedRevenue.value").value(0))
+            .andExpect(jsonPath("$.month.metrics.netRevenueAfterCommission.value").value(-9000))
+            .andExpect(jsonPath("$.selected.metrics.netCollectedRevenue.value").value(-90000))
+            .andExpect(jsonPath("$.selected.metrics.netCommission.value").value(-9000))
+            .andExpect(jsonPath("$.selected.metrics.netRevenueAfterCommission.value").value(-81000))
+            .andExpect(jsonPath("$.selected.metrics.netRevenueAfterCommission.complete").value(true));
+        mvc.perform(get("/vendor/dashboard").param("from","2027-03-01").param("toExclusive","2027-04-01")
+                .with(user(principal(vendor,"VENDOR"))).accept("text/html"))
+            .andExpect(status().isOk())
+            .andExpect(result -> assertThat(metricCells(result,"Net Collected Revenue")).containsExactly("0","0","-90.000"))
+            .andExpect(result -> assertThat(metricCells(result,"Net Revenue After Commission")).containsExactly("-9.000","-9.000","-81.000"));
+    }
+    @ParameterizedTest @ValueSource(strings={"payment","commission","refund"})
+    void unavailableTotalsAreExplicitInHtmlAndJson(String evidence) throws Exception {
         long id=order(shop,DELIVERY,DELIVERY);
-        jdbc.update("UPDATE uteexpress.payments SET paid_at=NULL WHERE order_id=?",id);
-        mvc.perform(get("/vendor/dashboard").with(user(principal(vendor,"VENDOR"))).accept("text/html"))
-            .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("Chưa đủ dữ liệu")));
-        mvc.perform(get("/vendor/dashboard").with(user(principal(vendor,"VENDOR"))).accept("application/json"))
-            .andExpect(status().isOk()).andExpect(jsonPath("$.month.metrics.deliveredSales.complete").value(false))
+        switch(evidence) {
+            case "payment" -> jdbc.update("UPDATE uteexpress.payments SET paid_at=NULL WHERE order_id=?",id);
+            case "commission" -> jdbc.update("UPDATE uteexpress.orders SET commission_amount=9000.50 WHERE id=?",id);
+            case "refund" -> { receipt(id,DELIVERY.plusSeconds(1)); refund(id,DELIVERY.plusSeconds(2),1); }
+        }
+        var html=mvc.perform(get("/vendor/dashboard").with(user(principal(vendor,"VENDOR"))).accept("text/html"))
+            .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("Chưa đủ dữ liệu")))
+            .andExpect(result -> assertThat(metricCells(result,"Net Revenue After Commission"))
+                .allSatisfy(value -> assertThat(value).startsWith("Chưa đủ dữ liệu")));
+        var json=mvc.perform(get("/vendor/dashboard").with(user(principal(vendor,"VENDOR"))).accept("application/json"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.month.metrics.netRevenueAfterCommission.complete").value(false))
+            .andExpect(jsonPath("$.month.metrics.netRevenueAfterCommission.value").isEmpty())
+            .andExpect(jsonPath("$.month.metrics.netRevenueAfterCommission.unknownEvents").value(evidence.equals("commission") ? 1:2));
+        if(evidence.equals("commission")) {
+            json.andExpect(jsonPath("$.month.metrics.netCollectedRevenue.complete").value(true))
+                .andExpect(jsonPath("$.month.metrics.netCollectedRevenue.value").value(90000));
+            html.andExpect(result -> assertThat(metricCells(result,"Net Collected Revenue")).containsExactly("90.000","90.000","90.000"));
+        } else {
+            json.andExpect(jsonPath("$.month.metrics.netCollectedRevenue.complete").value(false))
+                .andExpect(jsonPath("$.month.metrics.netCollectedRevenue.value").isEmpty());
+            html.andExpect(result -> assertThat(metricCells(result,"Net Collected Revenue"))
+                .allSatisfy(value -> assertThat(value).startsWith("Chưa đủ dữ liệu")));
+        }
+        if(evidence.equals("payment")) json.andExpect(jsonPath("$.month.metrics.deliveredSales.complete").value(false))
             .andExpect(jsonPath("$.month.metrics.deliveredSales.value").isEmpty())
             .andExpect(jsonPath("$.month.metrics.deliveredSales.unknownEvents").value(1));
     }
@@ -329,7 +389,10 @@ class VendorRevenueIT {
         for(int count:List.of(2,12)) {
             if(count>2) for(int i=2;i<count;i++) item(id,product,1,1);
             clearInvocations(named);
-            revenue.dashboard(LocalDate.of(2027,1,1),LocalDate.of(2027,1,3));
+            var result=revenue.dashboard(LocalDate.of(2027,1,1),LocalDate.of(2027,1,3));
+            for(var window:List.of(result.today(),result.month(),result.selected())) {
+                money(window.metrics().netCollectedRevenue(),"90000"); money(window.metrics().netRevenueAfterCommission(),"81000");
+            }
             verify(named,times(3)).queryForObject(eq(RevenueQueryRepository.METRICS_SQL),any(SqlParameterSource.class),any(RowMapper.class));
             verify(named,times(1)).query(eq(RevenueQueryRepository.TOP_SQL),any(SqlParameterSource.class),any(ResultSetExtractor.class));
         }
@@ -457,6 +520,18 @@ class VendorRevenueIT {
             Long.class,id,amount,UUID.randomUUID().toString(),ts(at),ts(at));
     }
     private static Timestamp ts(Instant at) { return at==null ? null:Timestamp.from(at); }
+    private static List<String> metricCells(org.springframework.test.web.servlet.MvcResult result,String label) throws Exception {
+        String html=result.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8);
+        var row=java.util.regex.Pattern.compile("(?s)<tr\\b[^>]*>\\s*<th\\b[^>]*>"+
+            java.util.regex.Pattern.quote(label)+"[^<]*</th>(.*?)</tr>").matcher(html);
+        assertThat(row.find()).as("Rendered metric row: %s",label).isTrue();
+        var cells=java.util.regex.Pattern.compile("(?s)<td\\b[^>]*>(.*?)</td>").matcher(row.group(1));
+        var values=new ArrayList<String>();
+        while(cells.find()) values.add(cells.group(1).replaceAll("<[^>]*>","").trim());
+        assertThat(values).hasSize(3);
+        assertThat(row.find()).as("Metric has one row: %s",label).isFalse();
+        return values;
+    }
     private static void money(RevenueAmount amount,String value) { assertThat(amount.complete()).isTrue(); assertThat(amount.value()).isEqualByComparingTo(value); }
     private static UteExpressPrincipal principal(long id,String role) { return new UteExpressPrincipal(id,"not-an-id",null,0L,List.of(new SimpleGrantedAuthority("ROLE_"+role)),true); }
     private static void auth(long id) { var p=principal(id,"VENDOR"); SecurityContextHolder.getContext().setAuthentication(UsernamePasswordAuthenticationToken.authenticated(p,null,p.getAuthorities())); }

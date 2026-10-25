@@ -7,4 +7,8 @@ public record RevenueMetrics(RevenueAmount deliveredSales, RevenueAmount collect
     public RevenueAmount netVendorSales() { return deliveredSales.subtract(refunds); }
     @com.fasterxml.jackson.annotation.JsonProperty
     public RevenueAmount netCommission() { return commissionAccrued.subtract(commissionReversed); }
+    @com.fasterxml.jackson.annotation.JsonProperty
+    public RevenueAmount netCollectedRevenue() { return collectedPayments.subtract(refunds); }
+    @com.fasterxml.jackson.annotation.JsonProperty
+    public RevenueAmount netRevenueAfterCommission() { return netCollectedRevenue().subtract(netCommission()); }
 }
