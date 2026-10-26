@@ -14,15 +14,21 @@ import org.springframework.transaction.support.TransactionTemplate;
 public class NotificationProjectionService {
     private static final Logger LOG = LoggerFactory.getLogger(NotificationProjectionService.class);
     private final NotificationRepository repository;
+    private final NotificationCommitPublisher hints;
     private final ObjectProvider<PlatformTransactionManager> managers;
-    public NotificationProjectionService(NotificationRepository repository, ObjectProvider<PlatformTransactionManager> managers) {
-        this.repository = repository; this.managers = managers;
+    public NotificationProjectionService(NotificationRepository repository, ObjectProvider<PlatformTransactionManager> managers, NotificationCommitPublisher hints) {
+        this.repository = repository; this.managers = managers; this.hints = hints;
     }
     public int projectOrder(Long orderId) {
         if (orderId == null || orderId <= 0) throw new IllegalArgumentException("Positive Order ID required");
         var tx = new TransactionTemplate(managers.getObject());
         tx.setPropagationBehavior(TransactionDefinition.PROPAGATION_REQUIRES_NEW);
-        return tx.execute(status -> repository.lockProjectionOrder(orderId) ? repository.projectOrderHistory(orderId) : 0);
+        return tx.execute(status -> {
+            if (!repository.lockProjectionOrder(orderId)) return 0;
+            var inserted = repository.projectOrderHistory(orderId);
+            inserted.forEach(hints::register);
+            return inserted.size();
+        });
     }
     public int reconcileBatch() {
         int inserted = 0;
