@@ -27,4 +27,22 @@ This is local evidence, not a trusted-runner signature, production/clean-machine
 python -B -m unittest discover -s scripts/qa/tests -v
 ```
 
-15 tests PASS using isolated temporary fixtures. Tests cover count/secret sanitization, required-suite omission, empty/malformed/entity XML, contradictory counts, duplicate suites, skip/flaky/rerun/timeout/incomplete summaries, invalid Node results, command order, failed-run stale-PASS removal, preserved failure logs, changed revision/dirty source and safe CLI errors. These are QA-tool tests, not Java/PostgreSQL business tests. A parser-only check against the real 9f81a66 final-head XML also confirms compatibility; that reuses existing artifacts and is not another full-suite run. No production tests or constraints are weakened.
+15 tests PASS using isolated temporary fixtures. Tests cover count/secret sanitization, required-suite omission, empty/malformed/entity XML, contradictory counts, duplicate suites, skip/flaky/rerun/timeout/incomplete summaries, invalid Node results, command order, failed-run stale-PASS removal, preserved failure logs, changed revision/dirty source and safe CLI errors. These are QA-tool tests, not Java/PostgreSQL business tests. The original parser-only check against real 9f81a66 XML reused artifacts and was not a new full-suite run. A fresh end-to-end execution is now recorded below. No production tests or constraints are weakened.
+
+
+## Fresh end-to-end verification on frozen review candidate
+
+Runner source revision: c0922db0175e98a74c873a25585fdbc069d83f31 (tooling branch synchronized with develop e6d94c5). The runner Python source SHA-256 is 5ce1f478ef4b1dcfd62d73f924482d5203231bfe5b67c11d1a7c9f8fab845d8b; the final commit adds evidence/docs only. Target source is frozen PR #59 HEAD 9d63e5af59b5c6fc79a7b21fe087d621aa42df1f, not the tooling branch's business source. It remains a review candidate, not an accepted/merged release.
+
+```powershell
+$env:JAVA_HOME='C:\Program Files\Java\jdk-21'
+python -B scripts/qa/verify_operations.py --checkout "C:\path\to\frozen-dash02-checkout"
+```
+
+The actual CLI ran both fixed commands and published evidence itself, exit0: **682 unit/architecture + 1,241 PostgreSQL = 1,923 PASS**, no failures/errors/skips/flaky cases, Failsafe timeout=false. **12 Node tests PASS**, fail/cancelled/skipped/todo=0. Target Git HEAD and clean working tree were rechecked successfully. This is a fresh runner execution, not imported XML from the prior manual run, and must not be added to that overlapping total.
+
+The exact generated JSON is copied to QA-03-runner-e2e-evidence.json (SHA-256 c7722afbaca1495c4fd399144162db3312d0dffe672ed51a9fc98f9344faa49c). Raw local maven.log and node.log stay ignored under the target checkout's target/qa-03. Existing container/Hikari/fork teardown diagnostics are preserved locally; successful exit/XML status is not a claim that infrastructure warnings were diagnosed.
+
+Three additional real CLI smoke checks on disposable Git fixtures passed: dirty checkout rejected without test execution; missing WS-02 checkout removes stale evidence then rejects before commands; non-root checkout rejected. These supplement the 15 automated tool tests and are not business-suite cases. No target source or production module was edited.
+
+Tooling is ready for HP/TD review after exact-head CI. This does not complete INT-02 or QA-03, approve/merge PR #59, deploy monitoring, or change any reviewer/branch-protection gate.
