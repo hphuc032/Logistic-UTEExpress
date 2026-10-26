@@ -1,0 +1,46 @@
+{
+  "baseline": "da96b215de8bb987870463b6d9d36521ce590f08",
+  "reviewed_head": "0bff248835574386dcf285163cbcc99b63362c53",
+  "scope": "I7 derived revenue metrics static delta and independent focused tests",
+  "maven_exit_observed": 0,
+  "groups": {
+    "surefire-reports": {
+      "classes": 2,
+      "tests": 30,
+      "reports": [
+        {
+          "suite": "com.uteexpress.ArchitectureTest",
+          "sha256": "bf4360756bee4e69b0635ac5dea668d6d7a02b7b384a4e8a7bb2cc8f43ea9574",
+          "tests": 7,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        },
+        {
+          "suite": "com.uteexpress.order.service.RevenueServiceTest",
+          "sha256": "f02966eda86893e8f843c7c60c9d370a59f62ed4d24ec03e852140b95bdfc2e8",
+          "tests": 23,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    },
+    "failsafe-reports": {
+      "classes": 1,
+      "tests": 46,
+      "reports": [
+        {
+          "suite": "com.uteexpress.order.VendorRevenueIT",
+          "sha256": "6c8cf4b6f1d4f5fccfa24f4737f7aec219a7d208a843f7b008835c98123d04a4",
+          "tests": 46,
+          "failures": 0,
+          "errors": 0,
+          "skipped": 0
+        }
+      ]
+    }
+  },
+  "failsafe_timeout": false,
+  "flakes": 0
+}
