@@ -22,6 +22,7 @@
         </nav>
         <section aria-label="Tổng quan khu vực làm việc">
             <div th:replace="~{fragments/components :: pageHeader(${dashboard.title}, ${dashboard.description})}"></div>
+            <p th:if="${dashboard.dashboardPath == '/admin/dashboard'}"><a class="btn btn-app-primary" th:href="@{/admin/dashboard/revenue}">Báo cáo tài chính Admin</a></p>
             <section th:if="${metrics != null}" aria-label="Số liệu vận hành" class="mb-4">
                 <form method="get" th:action="@{${dashboard.dashboardPath}}" class="row g-2 align-items-end mb-3">
                     <div class="col-12 col-md-3"><label for="from" class="form-label">Từ ngày</label><input id="from" name="from" type="date" class="form-control" th:value="${metrics.window.from}" required></div>

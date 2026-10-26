@@ -1,8 +1,8 @@
 package com.uteexpress.order;
 
 import com.uteexpress.common.exception.*;
-import com.uteexpress.order.dto.*;
-import com.uteexpress.order.repository.RevenueQueryRepository;
+import com.uteexpress.reporting.dto.*;
+import com.uteexpress.reporting.service.RevenueProjectionService;
 import com.uteexpress.order.service.RevenueService;
 import com.uteexpress.security.authentication.UteExpressPrincipal;
 import java.math.BigDecimal;
@@ -45,7 +45,7 @@ class VendorRevenueIT {
     @Autowired RevenueService revenue;
     @Autowired MockMvc mvc;
     @Autowired PlatformTransactionManager manager;
-    @MockitoSpyBean RevenueQueryRepository repository;
+    @MockitoSpyBean RevenueProjectionService repository;
     @MockitoSpyBean NamedParameterJdbcTemplate named;
     long vendor,otherVendor,buyer,shop,otherShop,product,secondProduct;
     static final Instant DELIVERY=Instant.parse("2027-01-01T01:00:00Z");
@@ -148,7 +148,7 @@ class VendorRevenueIT {
         for(int i=1;i<unsuccessfulCount;i++) unsuccessfulPayment(id,i+1,Instant.parse("2026-01-01T00:00:00Z").plusSeconds(i));
         Instant paidAt=DELIVERY.minusSeconds(1);
         long paid=successfulPayment(id,paidAt);
-        var facts=named.queryForMap(RevenueQueryRepository.EVIDENCE_SQL+
+        var facts=named.queryForMap(RevenueProjectionService.EVIDENCE_SQL+
             " SELECT payment_id,paid_amount,paid_at,paid_count,payment_ok FROM facts WHERE id=:orderId",
             new MapSqlParameterSource("shop",shop).addValue("orderId",id));
         assertThat(facts).containsEntry("payment_id",paid).containsEntry("paid_count",1L).containsEntry("payment_ok",true);
@@ -316,7 +316,7 @@ class VendorRevenueIT {
     }
     @Test void snapshotSurvivesConcurrentFinancialChangeAndRevocationButNextRequestIsDenied() throws Exception {
         long id=order(shop,DELIVERY,DELIVERY); var calls=new AtomicInteger(); var pool=Executors.newSingleThreadExecutor();
-        var target=(RevenueQueryRepository)org.springframework.test.util.AopTestUtils.getUltimateTargetObject(repository);
+        var target=(RevenueProjectionService)org.springframework.test.util.AopTestUtils.getUltimateTargetObject(repository);
         doAnswer(call -> {
             assertThat(jdbc.queryForObject("SHOW transaction_isolation",String.class)).isEqualTo("repeatable read");
             assertThat(jdbc.queryForObject("SHOW transaction_read_only",String.class)).isEqualTo("on");
@@ -393,8 +393,8 @@ class VendorRevenueIT {
             for(var window:List.of(result.today(),result.month(),result.selected())) {
                 money(window.metrics().netCollectedRevenue(),"90000"); money(window.metrics().netRevenueAfterCommission(),"81000");
             }
-            verify(named,times(3)).queryForObject(eq(RevenueQueryRepository.METRICS_SQL),any(SqlParameterSource.class),any(RowMapper.class));
-            verify(named,times(1)).query(eq(RevenueQueryRepository.TOP_SQL),any(SqlParameterSource.class),any(ResultSetExtractor.class));
+            verify(named,times(3)).queryForObject(eq(RevenueProjectionService.METRICS_SQL),any(SqlParameterSource.class),any(RowMapper.class));
+            verify(named,times(1)).query(eq(RevenueProjectionService.TOP_SQL),any(SqlParameterSource.class),any(ResultSetExtractor.class));
         }
     }
     @Test void outerTransactionIsRejectedAndRolledBackEvidenceIsNotReported() {
@@ -446,18 +446,18 @@ class VendorRevenueIT {
             output.append("database rows ").append(table).append('=').append(jdbc.queryForObject("SELECT count(*) FROM uteexpress."+table,Long.class)).append('\n');
         for(var window:List.of(new RevenuePeriod(LocalDate.of(2026,1,1),LocalDate.of(2026,1,2)),
                 new RevenuePeriod(LocalDate.of(2026,1,1),LocalDate.of(2027,1,1)))) {
-            var args=RevenueQueryRepository.parameters(shop,window);
-            for(String sql:List.of(RevenueQueryRepository.METRICS_SQL,RevenueQueryRepository.TOP_SQL)) {
+            var args=RevenueProjectionService.parameters(shop,window);
+            for(String sql:List.of(RevenueProjectionService.METRICS_SQL,RevenueProjectionService.TOP_SQL)) {
                 named.queryForList(sql,args); // warm-up
                 var plan=named.queryForList("EXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT) "+sql,args,String.class);
-                output.append("\nquery=").append(sql.equals(RevenueQueryRepository.METRICS_SQL) ? "METRICS_SQL":"TOP_SQL")
+                output.append("\nquery=").append(sql.equals(RevenueProjectionService.METRICS_SQL) ? "METRICS_SQL":"TOP_SQL")
                     .append(" shop=").append(shop).append(" start=").append(window.start()).append(" end=").append(window.end()).append('\n')
                     .append(String.join("\n",plan)).append('\n');
                 assertThat(String.join("\n",plan)).contains("Execution Time","Buffers:");
             }
         }
         Files.writeString(Path.of("target/dash01-explain.txt"),output.toString());
-        Files.writeString(Path.of("target/dash01-explain-queries.sql"),RevenueQueryRepository.METRICS_SQL+";\n"+RevenueQueryRepository.TOP_SQL+";\n");
+        Files.writeString(Path.of("target/dash01-explain-queries.sql"),RevenueProjectionService.METRICS_SQL+";\n"+RevenueProjectionService.TOP_SQL+";\n");
         System.out.println("DASH-01 EXPLAIN evidence: target/dash01-explain.txt");
     }
     private RevenueSummary.Window period(String from,String to) { return revenue.dashboard(LocalDate.parse(from),LocalDate.parse(to)).selected(); }

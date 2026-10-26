@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Tài chính Admin | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section">
+<h1>Báo cáo tài chính Admin</h1><p th:text="${revenue.shopId == null ? 'Phạm vi: toàn hệ thống' : 'Phạm vi: Shop ID ' + revenue.shopId}"></p>
+<p>Múi giờ <strong th:text="${revenue.timezone}"></strong>. Đơn vị VND; tiền hàng sau giảm giá, không bao gồm phí vận chuyển. Đây không phải tiền đã chuyển cho Vendor.</p>
+<a class="btn btn-app-secondary" th:href="@{/admin/dashboard}">Vận hành / Tài khoản / Audit</a>
+<form method="get" th:action="@{/admin/dashboard/revenue}" class="row g-3 my-3">
+<div class="col-sm-3"><label for="from">Từ ngày (bao gồm)</label><input id="from" name="from" type="date" class="form-control" required th:value="${revenue.selected.period.from}"></div>
+<div class="col-sm-3"><label for="toExclusive">Đến trước ngày</label><input id="toExclusive" name="toExclusive" type="date" class="form-control" required th:value="${revenue.selected.period.toExclusive}"></div>
+<div class="col-sm-3"><label for="shopId">Shop ID (trống: toàn hệ thống)</label><input id="shopId" name="shopId" type="number" min="1" step="1" class="form-control" th:value="${revenue.shopId}"></div>
+<div class="col-sm-3 align-self-end"><button type="submit" class="btn btn-app-primary">Lọc tài chính</button></div>
+</form><p>Tối đa 366 ngày, biên ngày theo Asia/Ho_Chi_Minh; mặc định tháng hiện tại.</p>
+<div class="table-responsive"><table class="table"><caption>Các thành phần giữ đúng kỳ phát sinh. Ngày thu tiền, ngày giao và ngày Admin ghi nhận refund có thể khác nhau.</caption>
+<thead><tr><th scope="col">Chỉ số</th><th scope="col">Hôm nay</th><th scope="col">Tháng này</th><th scope="col">Khoảng đã chọn</th></tr></thead><tbody>
+<tr th:each="key : ${ {'deliveredSales','collectedPayments','refunds','netCollectedRevenue','netCommission','netRevenueAfterCommission'} }">
+<th scope="row" th:text="${key == 'deliveredSales' ? 'Delivered Sales — Tiền hàng giao thành công' : key == 'collectedPayments' ? 'Collected Payments — Tiền hàng đã thu' : key == 'refunds' ? 'Refunds — Tiền hàng đã hoàn' : key == 'netCollectedRevenue' ? 'Net Collected Revenue — Thu trừ hoàn' : key == 'netCommission' ? 'Net Commission — Phí trừ phí đảo' : 'Net Revenue After Commission — Thu ròng trừ phí ròng'}"></th>
+<td th:each="window : ${ {revenue.today,revenue.month,revenue.selected} }" th:with="amount=${window.metrics[key]}">
+<span th:if="${amount.complete()}" th:text="${#numbers.formatDecimal(amount.value,0,'POINT',0,'COMMA')}"></span>
+<span th:unless="${amount.complete()}" class="text-danger" th:text="|Chưa đủ dữ liệu (${amount.unknownEvents} chẩn đoán thành phần)|"></span></td></tr>
+</tbody></table></div>
+<p>Delivered Sales và commission theo ngày giao; Collected Payments theo ngày thu; Refunds và commission đảo theo thời điểm refund SUCCEEDED. Không viết lại kỳ bán cũ.</p>
+<p>Net Collected Revenue = Collected Payments − Refunds. Net Commission = Commission Accrued − Commission Reversed. Net Revenue After Commission = Net Collected Revenue − Net Commission. Giá trị âm và số 0 hợp lệ được giữ nguyên.</p>
+<p>Thiếu evidence/timestamp hoặc snapshot không xác định sẽ báo chưa đủ dữ liệu, không thay thành 0. Diagnostics cộng theo thành phần, không phải số Order duy nhất.</p>
+</section></body></html>
