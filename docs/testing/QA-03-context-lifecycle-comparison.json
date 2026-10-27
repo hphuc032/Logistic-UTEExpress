@@ -1,0 +1,21 @@
+{
+  "baseline": {
+    "source_sha": "798535b32ff81a011f34cfa01bbeb2d2dd0cb981",
+    "log_sha256": "08d5231ca4aee024ac477947c03faaade0394598f4792d1c447734945770dac4",
+    "hikari_closed_connection_warnings": 492,
+    "connection_refused_occurrences": 219,
+    "forced_fork_shutdown_occurrences": 1,
+    "adder_threads_in_dump": 16,
+    "shutdown_waits_in_hikari": true
+  },
+  "candidate": {
+    "source_sha": "47dd298d37988be345e025c7008b3038bda6fa65",
+    "runner_sha": "b71534fb5eb70d94642f6f8804ff2d0f9b0de392",
+    "log_sha256": "b08fb67e4a7920501edb28e4fff905006d461966b5199d20bb37d204610d5064",
+    "hikari_closed_connection_warnings": 0,
+    "connection_refused_occurrences": 0,
+    "forced_fork_shutdown_occurrences": 0,
+    "failsafe_dump_files": 0
+  },
+  "classification": "Observed log occurrence counts from one full run per revision, not distinct incidents or a production reliability guarantee."
+}
