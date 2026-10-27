@@ -1,0 +1,3 @@
+# Preserve exact evidence/probe bytes so recorded SHA-256 values survive checkout.
+*.json -text
+*.py.txt -text
