@@ -51,7 +51,7 @@ No self transition or other edge is allowed, including NEW directly to DELIVERED
 | Action / edge | Actor | Required server-verified conditions |
 | --- | --- | --- |
 | CONFIRM: NEW → CONFIRMED | Vendor | Owns shop; COD valid or online payment PAID with matching total; account/shop unrestricted |
-| CANCEL_NEW: NEW → CANCELLED | Buyer | Owns order; still unconfirmed |
+| CANCEL_NEW: NEW → CANCELLED | Buyer (USER for Q02-F05 endpoint) | Owns order; still unconfirmed; matching expectedOrderVersion |
 | CANCEL_NEW: NEW → CANCELLED | Vendor / Ops | Owns shop or permitted Ops scope; nonblank reason |
 | EXPIRE_PAYMENT: NEW → CANCELLED | System | Online payment expired and unpaid; verify all attempts, no successful PAID attempt |
 | PICK_UP: CONFIRMED → PICKED_UP | Assigned shipper | Current assignment exists; vendor ready_at exists; order not cancelled |
@@ -89,6 +89,43 @@ Actions with **no OrderStatus transition**:
 - Assign/reassign shipper: modify Shipment only.
 - Vendor approves return: ReturnRequest APPROVED; order stays RETURN_REQUESTED.
 - Delivery failure/retry: modify shipment/attempts; order stays SHIPPING.
+
+### Q02-F05 HP-approved Buyer cancellation
+
+HP approved this production correction in the QA-02 task. POST
+`/buyer/orders/{orderId}/cancel` requires authenticated USER authority, current persisted
+active USER eligibility and Order ownership. This endpoint is USER-only; the broader
+USER/VENDOR Buyer policy above still applies to existing reads/return operations.
+It does not grant VENDOR-only actors access to the Buyer cancellation route.
+
+Request placement decision: follow existing JSON command DTO conventions with the
+minimal body `{"expectedOrderVersion":0}`. HP supplied the field and left its placement
+open; this implementation selects JSON body, with no query/header alternative, form
+handler, actor/reason/status/payment/quantity fields or client money. Missing/null/
+negative versions and unknown JSON fields reject. Query parameters cannot override
+the body. Success returns HTTP 200 `{"result":"OK"}` using the existing mutation convention.
+Existing global authentication, CSRF and controller/lifecycle/authority method guards
+remain active; SecurityConfig is unchanged.
+
+Dedicated `OrderLifecycleService.cancelForBuyer` rejects an existing outer transaction,
+then owns a transaction locking/refreshing Buyer-scoped Order before the active Account.
+It rechecks persisted USER authority, NEW state, expected version and absent release/
+cancel/delivery markers. Foreign/missing Order is 404 before state/version disclosure;
+stale, non-NEW and duplicate cancellation is 409. No VendorOrderAuthority or Shop
+ownership path authorizes a Buyer purchase. Expected version plus the Order row lock
+serializes competing requests; replay never restores twice and is a conflict, not a
+new idempotency ledger or successful self transition.
+
+After authorization the lifecycle reuses the existing Order-internal cancellation
+release effect (`OpsOrderAuthority.release`: inventory quantities/marker and voucher
+release only, no Ops authorization/audit). This delegates to the mandatory inventory
+and voucher services; restoration logic is not duplicated. The sole lifecycle writer
+changes Order/history and prepares the inbox in the same transaction. Persistence or
+pre-commit failure rolls back stock/quota/history/inbox together. Committed lifecycle
+events/private socket hints occur only after commit. Payment is neither read as new
+authority nor rewritten: COD UNPAID evidence, money/commission/discount/item snapshots
+and existing cart remain unchanged; no refund, Shipping operation, migration or new
+financial query/formula is introduced. Vendor cancellation and RTS keep their paths.
 
 ### ORD-03 vendor implementation
 
