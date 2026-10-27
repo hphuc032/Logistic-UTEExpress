@@ -24,7 +24,7 @@ uteexpress:
       cookie-secure: false
       secret-base64: VVRFRXhwcmVzcy10ZXN0LW9ubHktc2VjcmV0LWtleS0zMi1ieXRlcyE=
     otp:
-      ttl: PT10M
+      ttl: PT5M
       resend-cooldown: PT1M
       max-attempts: 5
       pepper-base64: VVRFRXhwcmVzcy1BVVRILTAzLXRlc3Qtb25seS1wZXBwZXIta2V5IQ==
