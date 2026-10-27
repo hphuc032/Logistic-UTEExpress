@@ -74,10 +74,14 @@ uteexpress:
       cookie-secure: ${JWT_COOKIE_SECURE:true}
       secret-base64: ${JWT_SECRET_BASE64}
     otp:
-      ttl: PT10M
+      ttl: PT5M
       resend-cooldown: PT1M
       max-attempts: 5
       pepper-base64: ${OTP_PEPPER_BASE64}
+    otp-request-limit:
+      window: PT1M
+      max-requests: 20
+      max-clients: 10000
   mail:
     from: ${MAIL_FROM}
   storage:

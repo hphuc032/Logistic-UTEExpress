@@ -13,14 +13,14 @@ public record OtpProperties(
         String pepperBase64) {
 
     public OtpProperties {
-        if (ttl == null || ttl.isZero() || ttl.isNegative()) {
-            throw new IllegalStateException("OTP TTL must be positive");
+        if (ttl == null || ttl.isZero() || ttl.isNegative() || ttl.compareTo(Duration.ofMinutes(5)) > 0) {
+            throw new IllegalStateException("OTP TTL must be positive and no longer than five minutes");
         }
-        if (resendCooldown == null || resendCooldown.isNegative()) {
-            throw new IllegalStateException("OTP resend cooldown must not be negative");
+        if (resendCooldown == null || resendCooldown.compareTo(Duration.ofSeconds(60)) < 0) {
+            throw new IllegalStateException("OTP resend cooldown must be at least sixty seconds");
         }
-        if (maxAttempts <= 0) {
-            throw new IllegalStateException("OTP maximum attempts must be positive");
+        if (maxAttempts <= 0 || maxAttempts > 5) {
+            throw new IllegalStateException("OTP maximum attempts must be between one and five");
         }
         if (pepperBase64 == null || pepperBase64.isBlank()) {
             throw new IllegalStateException("OTP_PEPPER_BASE64 must be configured");
