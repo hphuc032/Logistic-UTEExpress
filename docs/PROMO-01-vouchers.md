@@ -459,3 +459,15 @@ PROMO-02/PROMO-03, return/refund implementation or unrelated production change.
 Evidence under ignored target/: promo-01-release-focused.log,
 promo-01-release-full.log, promo-01-release-verification.json and fresh
 Surefire/Failsafe reports. Generated target/** remains excluded from source control.
+
+## INT-02 physical-return integration
+
+The original `releaseForCancellation` still accepts only NEW/CONFIRMED cancellation.
+After an authorized exhausted-delivery receipt, the dedicated MANDATORY
+`releaseForCancelledUndeliveredOrder` requires persisted CANCELLED, no delivered_at,
+and a nonnull inventory_released_at equal to cancelled_at. It reuses the same usage
+release implementation and leaves pricing/discount snapshots unchanged. The lifecycle
+flush precedes this check, and stock, receipt, history, notification and quota effects
+share the transaction. A delivered buyer return never satisfies this guard and does
+not regain voucher quota. INT-02 regression evidence is recorded separately from the
+historical PROMO-01 counts above.

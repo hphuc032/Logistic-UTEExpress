@@ -49,8 +49,8 @@ class ReturnReceiptMigrationIT {
             var latest = migration(db, null);
             var pendingVersions = Arrays.stream(latest.info().pending()).map(info -> info.getVersion().getVersion()).toList();
             assertThat(pendingVersions).containsExactlyElementsOf(phase1
-                    ? List.of("20261018090000", "20261018110000", "20261022090000", "20261023170000")
-                    : baseline.equals("receipt") ? List.of("20261018110000", "20261022090000", "20261023170000") : List.of());
+                    ? List.of("20261018090000", "20261018110000", "20261022090000", "20261023170000", "20261027100000")
+                    : baseline.equals("receipt") ? List.of("20261018110000", "20261022090000", "20261023170000", "20261027100000") : List.of());
             assertThat(latest.migrate().migrationsExecuted).isEqualTo(pendingVersions.size());
             assertThat(latest.validateWithResult().validationSuccessful).isTrue();
             assertThat(latest.info().pending()).isEmpty();

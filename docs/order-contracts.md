@@ -607,4 +607,36 @@ no payment attempts, secrets or inferred historical state are created by reads.
 See [PAY-01 completion report](PAY-01-completion-report.md) for implementation,
 verification evidence and remaining SHIP-02 responsibilities.
 
+## INT-02: exhausted delivery and inbox transaction
+
+`confirmReturnToSender` is the dedicated Ops ADMIN/MANAGER boundary for a physically
+received shipment after two recorded delivery failures. It requires the original
+Order/Shipment versions and a nonblank receipt reference; actor and time are server
+derived. Locks remain Order -> Shipment -> Payment, followed by persisted Ops-account
+authorization. Exactly one COD UNPAID payment with the original Order amount is
+required and is never rewritten. A first failure, stale/foreign command or inconsistent
+payment cannot cancel an Order or release stock.
+
+Within one transaction the boundary records immutable physical-receipt evidence,
+marks Shipment RETURNED_TO_SENDER, restores persisted OrderItem inventory once,
+uses the sole lifecycle writer for SHIPPING -> CANCELLED, releases voucher quota
+once, and writes inbox notifications. Failure rolls everything back. Matching original
+versions, actor and canonical receipt reference replay the committed result; changed
+payloads conflict. Receipt evidence is append-only, uniquely tied to one Order and
+Shipment, and does not establish external proof that goods were physically received:
+the authorized Ops actor must make that attestation in the existing detail page.
+The original NEW/CONFIRMED cancellation and quota guards remain unchanged.
+
+HP explicitly authorized the I8 transaction correction in this INT-02 chat.
+After Order/history flush, internal `OrderTransitionPrepared` synchronously invokes
+a MANDATORY notification writer in the same business transaction. Persistence failure
+fails the lifecycle operation. The existing `OrderStatusChangedEvent` and private
+notification hints still publish only after commit; no socket delivery is promised on
+rollback. Reconciliation remains a deduplicated repair path for legacy gaps, not the
+transactional guarantee for new writes. Initial NEW history remains excluded by the
+existing recipient contract. WS JWT/Origin/CSRF/recipient policies are unchanged.
+
+See the four `docs/testing/INT-02-*.md` documents for current source identities,
+Master Plan comparison, concurrency/rollback evidence and review limitations.
+
 Required commands: `.\mvnw.cmd test`, `.\mvnw.cmd package`, `git diff --check`.

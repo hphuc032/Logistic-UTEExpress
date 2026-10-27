@@ -205,6 +205,13 @@ public class Order {
         inventoryReleasedAt = Objects.requireNonNull(at);
     }
 
+    /** Only the guarded physical-return lifecycle uses this marker while SHIPPING. */
+    public void releaseInventoryAfterFailedDelivery(Instant at) {
+        if (status != OrderStatus.SHIPPING || deliveredAt != null || cancelledAt != null || inventoryReleasedAt != null)
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        inventoryReleasedAt = Objects.requireNonNull(at);
+    }
+
     public void applyValidatedTransition(OrderStatus target, Instant at, String reason) {
         Objects.requireNonNull(target);
         Objects.requireNonNull(at);

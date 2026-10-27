@@ -181,7 +181,7 @@ class OrderDomainCoreTest {
 
     @Test void legalTransitionWritesExactlyOneHistoryAndDispatchesAfterCommit() {
         doAnswer(invocation -> {
-            assertThat(manager.committed).isEqualTo(1);
+            assertThat(manager.committed).isEqualTo(invocation.getArgument(0) instanceof OrderStatusChangedEvent ? 1 : 0);
             return null;
         }).when(events).publishEvent(any(Object.class));
         var event = lifecycle.transition(cancel());
@@ -212,18 +212,18 @@ class OrderDomainCoreTest {
     @Test void outerRollbackDoesNotDispatchEvent() {
         new TransactionTemplate(manager).executeWithoutResult(tx -> {
             lifecycle.transition(cancel());
-            verifyNoInteractions(events);
+            verify(events, never()).publishEvent(any(OrderStatusChangedEvent.class));
             tx.setRollbackOnly();
         });
         assertThat(manager.rolledBack).isEqualTo(1);
         assertThat(manager.committed).isZero();
-        verifyNoInteractions(events);
+        verify(events, never()).publishEvent(any(OrderStatusChangedEvent.class));
     }
 
     @Test void joinedTransactionWaitsForOuterCommit() {
         new TransactionTemplate(manager).executeWithoutResult(tx -> {
             lifecycle.transition(cancel());
-            verifyNoInteractions(events);
+            verify(events, never()).publishEvent(any(OrderStatusChangedEvent.class));
         });
         verify(events).publishEvent(any(OrderStatusChangedEvent.class));
         assertThat(manager.committed).isEqualTo(1);

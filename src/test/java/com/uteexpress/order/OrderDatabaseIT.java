@@ -46,6 +46,7 @@ class OrderDatabaseIT {
     Long buyer;
     Long commissionPolicy;
     final List<Object> events = new ArrayList<>();
+    final List<OrderTransitionPrepared> prepared = new ArrayList<>();
     static final Instant NOW = Instant.parse("2026-09-23T00:00:00Z");
 
     @BeforeEach void setup() {
@@ -83,7 +84,10 @@ class OrderDatabaseIT {
                         return Optional.of(new CurrentUser("opaque", Set.of(), Set.of()));
                     }
                 },
-                transactionManager, events::add, Clock.fixed(NOW, ZoneOffset.UTC)) {
+                transactionManager, event -> {
+                    if (event instanceof OrderTransitionPrepared fact) prepared.add(fact);
+                    else events.add(event);
+                }, Clock.fixed(NOW, ZoneOffset.UTC)) {
             @Override protected Long authorizeCreation(CurrentUser user, CheckoutQuote quote) { return buyer; }
             @Override protected Authorization authorize(CurrentUser user, Order order, OrderTransitionCommand command) {
                 return new Authorization(actor, "Approved test guard");
@@ -186,8 +190,10 @@ class OrderDatabaseIT {
         assertThat(payments.findById(payment.getId()).orElseThrow().getAmount()).isEqualByComparingTo("22.00");
         assertThat(items.findAll().getFirst().getLineTotal()).isEqualByComparingTo("20.00");
         assertThat(history.findAll().getFirst().getFromStatus()).isNull();
+        assertThat(prepared).isEmpty(); // NEW keeps its existing no-notification policy.
         new TransactionTemplate(transactionManager).executeWithoutResult(tx -> {
             lifecycle(buyer).transition(confirm(order));
+            assertThat(prepared).containsExactly(new OrderTransitionPrepared(order.getId()));
             assertThat(events).isEmpty();
         });
         Order stored = orders.findById(order.getId()).orElseThrow();
@@ -199,6 +205,7 @@ class OrderDatabaseIT {
         assertThat(stored.getShippingFee()).isEqualByComparingTo("5");
         assertThat(history.count()).isEqualTo(2);
         assertThat(events).hasSize(1);
+        assertThat(events.getFirst()).isInstanceOf(OrderStatusChangedEvent.class);
         history.saveAndFlush(new OrderStatusHistory(order.getId(), OrderStatus.CONFIRMED,
                 OrderStatus.CANCELLED, null, NOW, "System actor"));
         assertThat(history.findAll()).anyMatch(row -> row.getActorId() == null);
@@ -209,8 +216,11 @@ class OrderDatabaseIT {
         assertThatThrownBy(() -> lifecycle(Long.MAX_VALUE).transition(confirm(order)))
                 .isInstanceOf(DataIntegrityViolationException.class);
         assertUnchanged(order);
+        assertThat(prepared).isEmpty(); // History failure occurs before the internal fact.
         new TransactionTemplate(transactionManager).executeWithoutResult(tx -> {
             lifecycle(buyer).transition(confirm(order));
+            assertThat(prepared).containsExactly(new OrderTransitionPrepared(order.getId()));
+            assertThat(events).isEmpty(); // Internal preparation is not committed delivery.
             tx.setRollbackOnly();
         });
         assertUnchanged(order);

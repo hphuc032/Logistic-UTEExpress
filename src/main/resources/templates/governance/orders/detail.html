@@ -53,4 +53,15 @@
             <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
         </form>
     </section>
+    <section th:if="${order.facts.status == 'SHIPPING' and order.shipment != null and order.shipment.status == 'DELIVERY_FAILED' and order.shipment.attemptCount == 2 and order.shipment.maxAttempts == 2}">
+        <h2>Xác nhận hàng đã trả về shop</h2>
+        <p>Chỉ xác nhận khi shop đã thực tế nhận lại toàn bộ hàng sau hai lần giao thất bại. Đây là xác nhận nhận hàng của Ops; không phải báo thất bại hoặc yêu cầu hoàn tiền.</p>
+        <form method="post" th:action="@{/{ops}/orders/{id}/return-to-sender(ops=${ops},id=${order.facts.id})}">
+            <input type="hidden" name="expectedOrderVersion" th:value="${order.version}">
+            <input type="hidden" name="expectedShipmentVersion" th:value="${order.shipment.version}">
+            <label for="return-receipt" class="form-label">Tham chiếu chứng từ nhận toàn bộ hàng</label>
+            <input id="return-receipt" class="form-control" name="receiptReference" maxlength="255" required>
+            <button type="submit" class="btn btn-warning mt-2">Xác nhận đã nhận toàn bộ hàng về shop</button>
+        </form>
+    </section>
 </section></body></html>
