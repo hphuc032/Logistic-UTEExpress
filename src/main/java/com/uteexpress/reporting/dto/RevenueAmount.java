@@ -1,4 +1,4 @@
-package com.uteexpress.order.dto;
+package com.uteexpress.reporting.dto;
 
 import java.math.BigDecimal;
 

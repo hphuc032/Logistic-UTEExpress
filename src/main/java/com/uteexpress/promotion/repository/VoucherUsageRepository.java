@@ -26,7 +26,7 @@ public interface VoucherUsageRepository extends JpaRepository<VoucherUsage, Long
     @QueryHints(@QueryHint(name = "org.hibernate.flushMode", value = "COMMIT"))
     @Query(value = """
             SELECT buyer_id AS "buyerId", voucher_id AS "voucherId", discount_total AS "discountTotal",
-                   status, delivered_at AS "deliveredAt"
+                   status, delivered_at AS "deliveredAt", inventory_released_at AS "inventoryReleasedAt", cancelled_at AS "cancelledAt"
             FROM uteexpress.orders WHERE id = :orderId FOR UPDATE
             """, nativeQuery = true)
     Optional<CancellationOrderFacts> lockCancellationOrderFacts(Long orderId);
@@ -37,5 +37,7 @@ public interface VoucherUsageRepository extends JpaRepository<VoucherUsage, Long
         BigDecimal getDiscountTotal();
         String getStatus();
         Instant getDeliveredAt();
+        Instant getInventoryReleasedAt();
+        Instant getCancelledAt();
     }
 }

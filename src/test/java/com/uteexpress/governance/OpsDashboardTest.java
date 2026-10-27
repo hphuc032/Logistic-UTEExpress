@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
 class OpsDashboardTest {
+    @MockitoBean com.uteexpress.governance.service.OpsDashboardReadService dashboardReports;
     @MockitoBean com.uteexpress.governance.service.ProductModerationService productModerationService;
     @MockitoBean com.uteexpress.governance.service.ShopModerationService shopModerationService;
     @MockitoBean com.uteexpress.catalog.service.ProductService productService;
@@ -66,6 +67,16 @@ class OpsDashboardTest {
     @Autowired MockMvc mvc;
     @Autowired OpsDashboardService dashboards;
 
+    @org.junit.jupiter.api.BeforeEach void reportingFixture() {
+        var window = com.uteexpress.governance.dto.OpsReportWindow.resolve(null, null,
+                java.time.Clock.fixed(java.time.Instant.parse("2026-10-25T00:00:00Z"), java.time.ZoneOffset.UTC));
+        var empty = new com.uteexpress.governance.dto.OpsDashboardMetrics.StateTotals(0, java.util.List.of());
+        var metrics = new com.uteexpress.governance.dto.OpsDashboardMetrics(window, null, empty, empty, empty, empty, 0);
+        com.uteexpress.governance.service.OpsDashboardReadService mock = org.springframework.test.util.AopTestUtils.getUltimateTargetObject(dashboardReports);
+        org.mockito.Mockito.doReturn(metrics).when(mock).admin(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any());
+        org.mockito.Mockito.doReturn(metrics).when(mock).manager(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any());
+    }
+
     @Test
     void guestCannotOpenEitherDashboard() throws Exception {
         for (String path : new String[]{"/admin/dashboard", "/manager/dashboard"}) {
@@ -88,15 +99,15 @@ class OpsDashboardTest {
     }
 
     @Test
-    void adminPageUsesSharedLayoutAndHonestEmptyState() throws Exception {
+    void adminPageUsesSharedLayoutWithMetricsAndAuditNavigation() throws Exception {
         mvc.perform(get("/admin/dashboard").with(user("ops").roles("ADMIN")))
                 .andExpect(status().isOk()).andExpect(view().name("governance/dashboard"))
                 .andExpect(content().string(containsString("Quản trị hệ thống")))
                 .andExpect(content().string(containsString("Nhật ký quản trị")))
-                .andExpect(content().string(containsString("Chưa có dữ liệu tổng quan")))
+                .andExpect(content().string(containsString("Không có đơn phù hợp.")))
                 .andExpect(content().string(containsString("id=\"main-navigation\"")))
                 .andExpect(content().string(containsString("id=\"site-footer\"")))
-                .andExpect(content().string(not(containsString("href=\"/admin/audit-logs\""))))
+                .andExpect(content().string(containsString("href=\"/admin/audit-logs\"")))
                 .andDo(result -> savePreview("admin", result.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8)));
     }
 

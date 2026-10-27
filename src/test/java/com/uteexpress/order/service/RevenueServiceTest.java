@@ -3,8 +3,8 @@ package com.uteexpress.order.service;
 import com.uteexpress.common.exception.*;
 import com.uteexpress.identity.dto.AuthAccountSnapshot;
 import com.uteexpress.identity.service.IdentityAuthenticationService;
-import com.uteexpress.order.dto.*;
-import com.uteexpress.order.repository.RevenueQueryRepository;
+import com.uteexpress.reporting.dto.*;
+import com.uteexpress.reporting.service.RevenueProjectionService;
 import com.uteexpress.security.service.CurrentAccountIdProvider;
 import com.uteexpress.shop.dto.VendorShopData;
 import com.uteexpress.shop.service.VendorShopQueryService;
@@ -23,14 +23,14 @@ import static org.mockito.Mockito.*;
 import static org.mockito.ArgumentMatchers.*;
 
 class RevenueServiceTest {
-    final RevenueQueryRepository queries=mock(RevenueQueryRepository.class);
+    final RevenueProjectionService queries=mock(RevenueProjectionService.class);
     final PlatformTransactionManager manager=mock(PlatformTransactionManager.class);
     final CurrentAccountIdProvider current=mock(CurrentAccountIdProvider.class);
     final IdentityAuthenticationService identities=mock(IdentityAuthenticationService.class);
     final VendorShopQueryService shops=mock(VendorShopQueryService.class);
     final Clock clock=mock(Clock.class);
     final StaticListableBeanFactory beans=new StaticListableBeanFactory(Map.of("queries",queries,"manager",manager));
-    final RevenueService service=new RevenueService(beans.getBeanProvider(RevenueQueryRepository.class),
+    final RevenueService service=new RevenueService(beans.getBeanProvider(RevenueProjectionService.class),
         beans.getBeanProvider(PlatformTransactionManager.class),current,identities,shops,clock);
     @BeforeEach void setup() {
         when(clock.instant()).thenReturn(Instant.parse("2026-12-31T17:00:00Z"));

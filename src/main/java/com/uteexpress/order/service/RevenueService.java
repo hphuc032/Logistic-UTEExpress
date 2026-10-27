@@ -2,8 +2,8 @@ package com.uteexpress.order.service;
 
 import com.uteexpress.common.exception.*;
 import com.uteexpress.identity.service.IdentityAuthenticationService;
-import com.uteexpress.order.dto.*;
-import com.uteexpress.order.repository.RevenueQueryRepository;
+import com.uteexpress.reporting.dto.*;
+import com.uteexpress.reporting.service.RevenueProjectionService;
 import com.uteexpress.security.service.CurrentAccountIdProvider;
 import com.uteexpress.shop.service.VendorShopQueryService;
 import java.time.*;
@@ -16,13 +16,13 @@ import org.springframework.transaction.support.*;
 @Service
 @PreAuthorize("hasAuthority('ROLE_VENDOR')")
 public class RevenueService {
-    private final ObjectProvider<RevenueQueryRepository> queries;
+    private final ObjectProvider<RevenueProjectionService> queries;
     private final ObjectProvider<PlatformTransactionManager> managers;
     private final CurrentAccountIdProvider current;
     private final IdentityAuthenticationService identities;
     private final VendorShopQueryService shops;
     private final Clock clock;
-    public RevenueService(ObjectProvider<RevenueQueryRepository> queries, ObjectProvider<PlatformTransactionManager> managers,
+    public RevenueService(ObjectProvider<RevenueProjectionService> queries, ObjectProvider<PlatformTransactionManager> managers,
             CurrentAccountIdProvider current, IdentityAuthenticationService identities, VendorShopQueryService shops, Clock clock) {
         this.queries=queries; this.managers=managers; this.current=current;
         this.identities=identities; this.shops=shops; this.clock=clock;

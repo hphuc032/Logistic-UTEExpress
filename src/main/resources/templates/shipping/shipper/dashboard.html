@@ -14,9 +14,9 @@
 <dt class="col-sm-8">Giao thất bại</dt><dd class="col-sm-4" th:text="${dashboard.failed}">0</dd>
 <dt class="col-sm-8">Đã trả về người gửi</dt><dd class="col-sm-4" th:text="${dashboard.returnedToSender}">0</dd>
 <dt class="col-sm-8">Đã hủy</dt><dd class="col-sm-4" th:text="${dashboard.cancelled}">0</dd>
-<dt class="col-sm-8">Tỷ lệ thành công theo kết quả hiện tại</dt>
+<dt class="col-sm-8">Tỷ lệ giao thành công trên chuyến đã kết thúc</dt>
 <dd class="col-sm-4"><span th:if="${dashboard.successRate() != null}" th:text="${dashboard.successRate() + '%'}"></span><span th:if="${dashboard.successRate() == null}">Chưa có kết quả</span></dd>
 </dl>
-<p class="text-muted">Tỷ lệ = chuyến đã giao / (chuyến đã giao + chuyến đang giao thất bại). Mỗi chuyến tính một lần; chuyến đang thử lại chưa tính vào kết quả. Đây không phải tỷ lệ theo từng lần giao hoặc lịch sử phân công.</p>
+<p class="text-muted">Tỷ lệ = chuyến đã giao / (chuyến đã giao + chuyến đã trả về người gửi). Tính toàn bộ kết quả đã ghi nhận của các chuyến hiện được phân công cho bạn. Chờ lấy, đang giao, giao thất bại chưa trả hàng và hủy trước giao không thuộc mẫu số. Giao thành công sau retry vẫn là một chuyến thành công; đây không phải tỷ lệ theo từng lần thử, kỳ ngày tùy chọn hoặc lịch sử phân công.</p>
 <a class="btn btn-primary" th:href="@{/shipper/shipments/view}">Xem chuyến giao</a>
 </section></body></html>

@@ -16,25 +16,59 @@
                 <li class="nav-item" th:if="${dashboard.dashboardPath == '/admin/dashboard'}"><a class="nav-link link-light" th:href="@{/admin/shops}">Duyệt cửa hàng</a></li>
                 <li class="nav-item"><a class="nav-link link-light" th:href="@{${#strings.replace(dashboard.dashboardPath, '/dashboard', '/products')}}">Kiểm duyệt sản phẩm</a></li>
                 <li class="nav-item"><a class="nav-link link-light" th:href="@{${#strings.replace(dashboard.dashboardPath, '/dashboard', '/shops/moderation')}}">Kiểm duyệt cửa hàng</a></li>
+                <li class="nav-item" th:if="${dashboard.dashboardPath == '/admin/dashboard'}"><a class="nav-link link-light" th:href="@{/admin/audit-logs}">Nhật ký quản trị</a></li>
                 <li class="nav-item"><a class="nav-link link-light" th:href="@{/}">Về trang chủ</a></li>
             </ul>
         </nav>
         <section aria-label="Tổng quan khu vực làm việc">
             <div th:replace="~{fragments/components :: pageHeader(${dashboard.title}, ${dashboard.description})}"></div>
+            <p th:if="${dashboard.dashboardPath == '/admin/dashboard'}"><a class="btn btn-app-primary" th:href="@{/admin/dashboard/revenue}">Báo cáo tài chính Admin</a></p>
+            <section th:if="${metrics != null}" aria-label="Số liệu vận hành" class="mb-4">
+                <form method="get" th:action="@{${dashboard.dashboardPath}}" class="row g-2 align-items-end mb-3">
+                    <div class="col-12 col-md-3"><label for="from" class="form-label">Từ ngày</label><input id="from" name="from" type="date" class="form-control" th:value="${metrics.window.from}" required></div>
+                    <div class="col-12 col-md-3"><label for="to" class="form-label">Đến hết ngày</label><input id="to" name="to" type="date" class="form-control" th:value="${metrics.window.to}" required></div>
+                    <div class="col-12 col-md-3"><label for="shopId" class="form-label">Shop ID (để trống: toàn hệ thống)</label><input id="shopId" name="shopId" type="number" min="1" step="1" class="form-control" th:value="${metrics.shopId}"></div>
+                    <div class="col-12 col-md-3"><button class="btn btn-app-primary" type="submit">Lọc số liệu</button></div>
+                </form>
+                <p class="small text-muted">Múi giờ <span th:text="${metrics.window.timezone}"></span>. Tối đa 366 ngày; mặc định 30 ngày gần nhất. Các nhóm thể hiện trạng thái hiện tại của bản ghi được tạo trong kỳ, không phải số lần chuyển trạng thái.</p>
+                <div class="row g-3">
+                    <article class="col-12 col-lg-4"><div class="card h-100"><div class="card-body">
+                        <h2 class="h5">Đơn tạo trong kỳ</h2><p class="fs-3" th:text="${metrics.orders.total}">0</p>
+                        <p th:if="${metrics.orders.states.empty}">Không có đơn phù hợp.</p>
+                        <ul><li th:each="state : ${metrics.orders.states}"><span th:text="${state.status}"></span>: <strong th:text="${state.count}"></strong></li></ul>
+                    </div></div></article>
+                    <article class="col-12 col-lg-4"><div class="card h-100"><div class="card-body">
+                        <h2 class="h5">Shipment tạo trong kỳ</h2><p class="fs-3" th:text="${metrics.shipments.total}">0</p>
+                        <p th:if="${metrics.shipments.states.empty}">Không có shipment phù hợp.</p>
+                        <ul><li th:each="state : ${metrics.shipments.states}"><span th:text="${state.status}"></span>: <strong th:text="${state.count}"></strong></li></ul>
+                    </div></div></article>
+                    <article class="col-12 col-lg-4"><div class="card h-100"><div class="card-body">
+                        <h2 class="h5">Shop tạo trong kỳ</h2><p class="fs-3" th:text="${metrics.shops.total}">0</p>
+                        <p th:if="${metrics.shops.states.empty}">Không có shop phù hợp.</p>
+                        <ul><li th:each="state : ${metrics.shops.states}"><span th:text="${state.status}"></span>: <strong th:text="${state.count}"></strong></li></ul>
+                    </div></div></article>
+                </div>
+                <article class="card mt-3" th:if="${dashboard.dashboardPath == '/admin/dashboard' and metrics.accounts != null}"><div class="card-body">
+                    <h2 class="h5">Tài khoản tạo trong kỳ (toàn hệ thống)</h2><p class="fs-3" th:text="${metrics.accounts.total}">0</p>
+                    <p class="small text-muted">Chỉ dành cho Admin; nhóm này không áp dụng bộ lọc Shop ID.</p>
+                    <ul><li th:each="state : ${metrics.accounts.states}"><span th:text="${state.status}"></span>: <strong th:text="${state.count}"></strong></li></ul>
+                </div></article>
+                <div class="card mt-3"><div class="card-body"><h2 class="h5">Refund SUCCEEDED ghi nhận trong kỳ</h2>
+                    <p class="fs-3" th:text="${metrics.succeededRefunds}">0</p>
+                    <p class="small text-muted mb-0">Đếm theo thời điểm Admin ghi nhận hoàn tiền thành công. Không phải doanh thu hoặc giá trị tiền hoàn.</p>
+                </div></div>
+            </section>
             <div class="row g-3">
                 <div class="col-12 col-xl-6" th:each="capability : ${dashboard.capabilities}">
                     <article class="card h-100">
                         <div class="card-body">
                             <h2 class="h5" th:text="${capability.title}">Chức năng</h2>
                             <p th:text="${capability.description}">Mô tả</p>
-                            <span class="app-status-badge status-warning">Sắp có</span>
                         </div>
                     </article>
                 </div>
             </div>
-            <div class="mt-4" th:replace="~{fragments/components :: emptyState(
-                'Chưa có dữ liệu tổng quan',
-                'Số liệu sẽ xuất hiện khi các chức năng vận hành được đưa vào sử dụng.')}"></div>
+
         </section>
     </div>
 </th:block>

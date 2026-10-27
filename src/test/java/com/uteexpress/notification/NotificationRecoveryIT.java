@@ -22,15 +22,26 @@ import org.testcontainers.postgresql.PostgreSQLContainer;
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest @Testcontainers
+@org.springframework.context.annotation.Import(NotificationRecoveryIT.Recording.class)
 class NotificationRecoveryIT {
+    @org.springframework.boot.test.context.TestConfiguration(proxyBeanMethods=false)
+    static class Recording {
+        @org.springframework.context.annotation.Bean Signals signals() { return new Signals(); }
+    }
+    static class Signals {
+        final List<com.uteexpress.notification.dto.NotificationCommitted> values=new java.util.concurrent.CopyOnWriteArrayList<>();
+        @org.springframework.context.event.EventListener
+        void receive(com.uteexpress.notification.dto.NotificationCommitted event) { values.add(event); }
+    }
     @Container @ServiceConnection static final PostgreSQLContainer POSTGRES = new PostgreSQLContainer("postgres:17.6");
     @Autowired JdbcTemplate jdbc;
     @Autowired NotificationProjectionService projection;
     @Autowired OrderLifecycleService lifecycle;
     @Autowired PlatformTransactionManager manager;
+    @Autowired Signals signals;
     long buyer, owner, order;
     @BeforeEach void setup() {
-        buyer=account("USER"); owner=account("VENDOR"); order=createOrder(buyer,owner); auth(owner);
+        buyer=account("USER"); owner=account("VENDOR"); order=createOrder(buyer,owner); auth(owner); signals.values.clear();
     }
     private long createOrder(long buyerId,long ownerId) {
         long shop=jdbc.queryForObject("INSERT INTO uteexpress.shops(owner_id,name,slug,pickup_address,status) VALUES (?,'Recovery shop',?,'Pickup','APPROVED') RETURNING id",Long.class,ownerId,UUID.randomUUID().toString());
@@ -46,20 +57,37 @@ class NotificationRecoveryIT {
     }
     @AfterEach void clear() { SecurityContextHolder.clearContext(); }
 
-    @Test void notificationFailureDoesNotFailCommittedOrderAndReconciliationRecovers() {
+    @Test void notificationFailureRollsBackBusinessHistoryAndRetryCommitsInboxAtomically() {
         jdbc.execute("ALTER TABLE uteexpress.notifications ADD CONSTRAINT notice_fail CHECK (order_id <> "+order+") NOT VALID");
         try {
-            var event=lifecycle.transition(new OrderTransitionCommand(order,OrderStatus.NEW,0L,OrderAction.CONFIRM,null));
-            assertThat(event.toStatus()).isEqualTo(OrderStatus.CONFIRMED);
+            assertThatThrownBy(() -> lifecycle.transition(new OrderTransitionCommand(order,OrderStatus.NEW,0L,OrderAction.CONFIRM,null)))
+                    .isInstanceOf(RuntimeException.class);
             assertThat(count()).isZero();
-            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?",String.class,order)).isEqualTo("CONFIRMED");
+            assertThat(signals.values).isEmpty();
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?",String.class,order)).isEqualTo("NEW");
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.order_status_history WHERE order_id=? AND from_status IS NOT NULL",Long.class,order)).isZero();
         } finally { jdbc.execute("ALTER TABLE uteexpress.notifications DROP CONSTRAINT notice_fail"); }
-        projection.reconcileBatch();
+        var event=lifecycle.transition(new OrderTransitionCommand(order,OrderStatus.NEW,0L,OrderAction.CONFIRM,null));
+        assertThat(event.toStatus()).isEqualTo(OrderStatus.CONFIRMED);
         assertThat(count()).isEqualTo(2);
+        assertThat(signals.values).hasSize(2);
         assertThat(projection.projectOrder(order)).isZero();
         assertThat(jdbc.queryForList("SELECT recipient_id FROM uteexpress.notifications WHERE order_id=? ORDER BY recipient_id",Long.class,order)).containsExactlyInAnyOrder(buyer,owner);
         assertThat(jdbc.queryForList("SELECT message FROM uteexpress.notifications WHERE order_id=?",String.class,order))
                 .allSatisfy(message -> assertThat(message).contains("CONFIRMED").doesNotContain("0900000000","Street","hash"));
+    }
+
+    @Test void inboxJoinsBusinessTransactionAndOuterRollbackRemovesAllRows() {
+        new TransactionTemplate(manager).executeWithoutResult(tx -> {
+            lifecycle.transition(new OrderTransitionCommand(order,OrderStatus.NEW,0L,OrderAction.CONFIRM,null));
+            assertThat(count()).isEqualTo(2);
+            assertThat(signals.values).isEmpty();
+            tx.setRollbackOnly();
+        });
+        assertThat(count()).isZero();
+        assertThat(signals.values).isEmpty();
+        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?",String.class,order)).isEqualTo("NEW");
+        assertThat(projection.projectOrder(order)).isZero();
     }
 
     @Test void failedBusinessTransitionLeavesNoNotificationSource() {
@@ -92,7 +120,9 @@ class NotificationRecoveryIT {
             var pending=pool.submit(()->{
                 auth(owner);
                 try { new TransactionTemplate(manager).executeWithoutResult(s->{
-                    lifecycle.transition(new OrderTransitionCommand(order,OrderStatus.NEW,0L,OrderAction.CONFIRM,null));
+                    // Legacy/imported history still needs recovery; new lifecycle writes are atomic.
+                    jdbc.update("UPDATE uteexpress.orders SET status='CONFIRMED' WHERE id=?",order);
+                    history("NEW","CONFIRMED");
                     low.set(jdbc.queryForObject("SELECT max(id) FROM uteexpress.order_status_history WHERE order_id=?",Long.class,order));
                     inserted.countDown();
                     try { assertThat(release.await(15,TimeUnit.SECONDS)).isTrue(); }
@@ -106,7 +136,7 @@ class NotificationRecoveryIT {
             assertThat(high).isGreaterThan(low.get());
             assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications WHERE order_id=?",Integer.class,otherOrder)).isEqualTo(2);
             projection.reconcileBatch(); assertThat(count()).isZero(); // Lower history is uncommitted.
-            release.countDown(); pending.get(15,TimeUnit.SECONDS); // Lower-ID Order commits; its callback fails.
+            release.countDown(); pending.get(15,TimeUnit.SECONDS); // Legacy lower-ID history commits without a lifecycle callback.
             assertThat(count()).isZero();
         } finally {
             release.countDown(); pool.shutdownNow(); jdbc.execute("ALTER TABLE uteexpress.notifications DROP CONSTRAINT notice_late_fail");

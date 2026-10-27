@@ -219,6 +219,70 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
         throw new ApplicationException(ErrorCode.ACCESS_DENIED);
     }
 
+    protected com.uteexpress.shipping.service.ReturnToSenderService returnToSenderShipments() {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    protected com.uteexpress.payment.service.PaymentReadService returnToSenderPayments() {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    protected void releaseReturnedInventory(Order order, Instant at) { throw new ApplicationException(ErrorCode.ACCESS_DENIED); }
+    protected void releaseCancelledVoucher(Order order) { throw new ApplicationException(ErrorCode.ACCESS_DENIED); }
+
+    @Override
+    public com.uteexpress.order.dto.ReturnToSenderResult confirmReturnToSender(com.uteexpress.order.dto.ReturnToSenderCommand command) {
+        if (command == null || command.orderId() == null || command.orderId() <= 0
+                || command.expectedOrderVersion() == null || command.expectedOrderVersion() < 0 || command.expectedOrderVersion() == Long.MAX_VALUE
+                || command.expectedShipmentVersion() == null || command.expectedShipmentVersion() < 0 || command.expectedShipmentVersion() == Long.MAX_VALUE
+                || command.receiptReference() == null || command.receiptReference().isBlank() || command.receiptReference().length() > 255
+                || command.receiptReference().indexOf(0) >= 0
+                || command.receiptReference().codePoints().anyMatch(c -> c >= 0xD800 && c <= 0xDFFF))
+            throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        String reference = command.receiptReference().strip();
+        if (TransactionSynchronizationManager.isActualTransactionActive()) throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        try {
+            return transactions.execute(tx -> {
+                var user = currentUser();
+                if (!user.authorities().contains("ROLE_ADMIN") && !user.authorities().contains("ROLE_MANAGER"))
+                    throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+                Order order = loadForOpsMutation(command.orderId());
+                var shipping = returnToSenderShipments();
+                var shipment = shipping.lock(order.getId());
+                returnToSenderPayments().requireUncollectedCodForReturnToSender(order.getId(),order.getGrandTotal());
+                Long actor = requireHumanActor(authorizeOps(order));
+                var previous = shipping.receipt(order.getId());
+                if (previous.isPresent()) {
+                    var receipt = previous.get();
+                    if (!receipt.actorId().equals(actor) || !receipt.reference().equals(reference)
+                            || receipt.originalOrderVersion() != command.expectedOrderVersion()
+                            || receipt.originalShipmentVersion() != command.expectedShipmentVersion()
+                            || !receipt.shipmentId().equals(shipment.shipmentId()) || order.getStatus() != OrderStatus.CANCELLED
+                            || shipment.status() != com.uteexpress.shipping.dto.ShipmentStatus.RETURNED_TO_SENDER
+                            || order.getVersion() != receipt.originalOrderVersion()+1 || shipment.version() != receipt.originalShipmentVersion()+1
+                            || !receipt.receivedAt().equals(order.getInventoryReleasedAt()) || !receipt.receivedAt().equals(order.getCancelledAt()))
+                        throw new ApplicationException(ErrorCode.CONFLICT);
+                    return new com.uteexpress.order.dto.ReturnToSenderResult(order.getId(),shipment.shipmentId(),OrderStatus.CANCELLED,
+                            order.getVersion(),shipment.version(),true);
+                }
+                if (order.getStatus() != OrderStatus.SHIPPING || !order.getVersion().equals(command.expectedOrderVersion())
+                        || shipment.version() != command.expectedShipmentVersion() || order.getDeliveredAt() != null
+                        || order.getCancelledAt() != null || order.getInventoryReleasedAt() != null)
+                    throw new ApplicationException(ErrorCode.CONFLICT);
+                Instant at = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+                shipping.receive(shipment,order.getVersion(),actor,reference,at);
+                releaseReturnedInventory(order,at);
+                persistValidatedTransition(order,OrderTransitionPolicy.requireTarget(order.getStatus(),OrderAction.CANCEL_FAILED_DELIVERY),
+                        actor,at,"Ops attested physical return after exhausted delivery");
+                releaseCancelledVoucher(order);
+                return new com.uteexpress.order.dto.ReturnToSenderResult(order.getId(),shipment.shipmentId(),OrderStatus.CANCELLED,
+                        order.getVersion(),shipment.version()+1,false);
+            });
+        } catch (OptimisticLockingFailureException | OptimisticLockException | org.springframework.dao.DataIntegrityViolationException failure) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+    }
+
     protected void auditOpsCancellation(Order order, OrderStatus from, Long originalVersion,
             Long actor, com.uteexpress.order.dto.OpsCancellationReason reason) {
         throw new ApplicationException(ErrorCode.ACCESS_DENIED);
@@ -380,6 +444,7 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
         order.applyValidatedTransition(to, at, reason);
         orders.saveAndFlush(order);
         history.saveAndFlush(new OrderStatusHistory(order.getId(), from, to, actorId, at, reason));
+        events.publishEvent(new com.uteexpress.order.dto.OrderTransitionPrepared(order.getId()));
         var event = new OrderStatusChangedEvent(UUID.randomUUID(), order.getId(), from, to, actorId, at, reason);
         TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
             @Override public void afterCommit() { events.publishEvent(event); }

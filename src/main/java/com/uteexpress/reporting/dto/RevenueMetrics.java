@@ -1,4 +1,4 @@
-package com.uteexpress.order.dto;
+package com.uteexpress.reporting.dto;
 
 public record RevenueMetrics(RevenueAmount deliveredSales, RevenueAmount collectedPayments,
         RevenueAmount refunds, RevenueAmount commissionAccrued, RevenueAmount commissionReversed,

@@ -388,7 +388,7 @@ class ShipperFulfillmentIT {
         fulfillment.transition(orderId,OrderAction.START_SHIPPING,new FulfillmentRequest(1L,1L,null));
         deliveryAttempts.reportFailure(orderId,new com.uteexpress.fulfillment.dto.DeliveryFailureRequest(2L,2L,"No answer","DASH-POD"));
         assertThat(shipperReads.dashboard().failed()).isEqualTo(1);
-        assertThat(shipperReads.dashboard().successRate()).isEqualByComparingTo("0.0");
+        assertThat(shipperReads.dashboard().successRate()).isNull();
         deliveryAttempts.retryDelivery(orderId,new com.uteexpress.fulfillment.dto.RetryDeliveryRequest(2L,3L));
         assertThat(shipperReads.dashboard().failed()).isZero();
         assertThat(shipperReads.dashboard().shipping()).isEqualTo(1);
