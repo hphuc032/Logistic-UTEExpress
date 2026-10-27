@@ -2,6 +2,8 @@ package com.uteexpress.integration;
 
 import jakarta.servlet.http.Cookie;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -41,7 +43,7 @@ class Int02CommerceFlowIT {
     @Autowired PasswordEncoder passwords;
 
     @ParameterizedTest(name = "integrated checkout outcome={0}")
-    @ValueSource(strings = {"DIRECT", "RETRY", "RETURN_TO_SENDER"})
+    @ValueSource(strings = {"DIRECT", "RETRY", "RETURN_TO_SENDER", "BUYER_CANCEL"})
     void realJwtCheckoutDeliveryReviewReturnAndRefundPreserveOneOrdersEvidence(String scenario) throws Exception {
         boolean retry = !scenario.equals("DIRECT");
         Account buyer = account("USER"), vendor = account("VENDOR"), admin = account("ADMIN");
@@ -69,6 +71,8 @@ class Int02CommerceFlowIT {
         json("/user/checkout/place-order", buyerJwt, checkout).andExpect(status().isCreated())
                 .andExpect(jsonPath("$.status").value("NEW")).andExpect(jsonPath("$.replayed").value(false));
         long order = jdbc.queryForObject("SELECT id FROM uteexpress.orders WHERE buyer_id=?", Long.class, buyer.id());
+        LocalDate financialDay = jdbc.queryForObject("SELECT created_at FROM uteexpress.orders WHERE id=?",
+                java.sql.Timestamp.class, order).toInstant().atZone(ZoneId.of("Asia/Ho_Chi_Minh")).toLocalDate();
         var orderSnapshot = immutableOrder(order);
         var itemsSnapshot = rows("order_items", order);
         assertThat(jdbc.queryForObject("SELECT stock FROM uteexpress.products WHERE id=?", Integer.class, f.product())).isEqualTo(8);
@@ -80,11 +84,35 @@ class Int02CommerceFlowIT {
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.cart_items WHERE id=? AND NOT selected", Integer.class, unselected)).isOne();
         assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.cart_items ci JOIN uteexpress.carts c ON c.id=ci.cart_id WHERE c.user_id=?", Integer.class, buyer.id())).isOne();
         var created = state(order);
+        financialMetrics(vendorJwt, adminJwt, order, financialDay, 0, 0, 0, 0);
         json("/user/checkout/place-order", buyerJwt, checkout).andExpect(status().isOk())
                 .andExpect(jsonPath("$.orderId").value(order)).andExpect(jsonPath("$.replayed").value(true));
         assertThat(state(order)).isEqualTo(created);
         mvc.perform(get("/orders/{id}", order).cookie(strangerJwt).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
+
+        if (scenario.equals("BUYER_CANCEL")) {
+            var unpaid = rows("payments", order);
+            json("/buyer/orders/" + order + "/cancel", strangerJwt, "{\"expectedOrderVersion\":0}")
+                    .andExpect(status().isNotFound());
+            assertThat(state(order)).isEqualTo(created);
+            json("/buyer/orders/" + order + "/cancel", buyerJwt, "{\"expectedOrderVersion\":0}")
+                    .andExpect(status().isOk()).andExpect(jsonPath("$.result").value("OK"));
+            var cancelled = state(order);
+            json("/buyer/orders/" + order + "/cancel", buyerJwt, "{\"expectedOrderVersion\":0}")
+                    .andExpect(status().isConflict());
+            assertThat(state(order)).isEqualTo(cancelled);
+            assertThat(jdbc.queryForObject("SELECT stock FROM uteexpress.products WHERE id=?", Integer.class, f.product())).isEqualTo(10);
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.voucher_usages WHERE order_id=?", String.class, order)).isEqualTo("RELEASED");
+            assertThat(rows("payments", order)).isEqualTo(unpaid);
+            assertThat(rows("refunds", order)).isEmpty();
+            assertThat(rows("order_items", order)).isEqualTo(itemsSnapshot);
+            assertThat(immutableOrder(order)).isEqualTo(orderSnapshot);
+            assertThat(jdbc.queryForList("SELECT to_status FROM uteexpress.order_status_history WHERE order_id=? ORDER BY id", String.class, order))
+                    .containsExactly("NEW", "CANCELLED");
+            financialMetrics(vendorJwt, adminJwt, order, financialDay, 0, 0, 0, 0);
+            return;
+        }
 
         json("/vendor/orders/" + order + "/confirm", vendorJwt, "{\"expectedVersion\":0}").andExpect(status().isOk());
         json("/vendor/orders/" + order + "/ready", vendorJwt, "{\"expectedVersion\":%d}".formatted(version(order))).andExpect(status().isOk());
@@ -112,6 +140,7 @@ class Int02CommerceFlowIT {
                     .andExpect(status().isOk());
             var unpaid = rows("payments",order);
             assertThat(jdbc.queryForObject("SELECT stock FROM uteexpress.products WHERE id=?",Integer.class,f.product())).isEqualTo(8);
+            financialMetrics(vendorJwt, adminJwt, order, financialDay, 0, 0, 0, 0);
             String physicalReceipt = fulfillment(order,null).replace("}",",\"receiptReference\":\"INT02-TEST-PHYSICAL-RECEIPT\"}");
             json("/admin/orders/"+order+"/return-to-sender",adminJwt,physicalReceipt).andExpect(status().isOk())
                     .andExpect(jsonPath("$.status").value("CANCELLED")).andExpect(jsonPath("$.replayed").value(false));
@@ -127,6 +156,7 @@ class Int02CommerceFlowIT {
             assertThat(rows("shipment_return_receipts",order)).hasSize(1);
             assertThat(rows("order_items",order)).isEqualTo(itemsSnapshot);
             assertThat(immutableOrder(order)).isEqualTo(orderSnapshot);
+            financialMetrics(vendorJwt, adminJwt, order, financialDay, 0, 0, 0, 0);
             return;
         }
         var beforeWrongCod = state(order);
@@ -139,6 +169,8 @@ class Int02CommerceFlowIT {
         assertThat(paid).hasSize(1);
         assertThat(paid.getFirst()).containsEntry("status", "PAID");
         money(paid.getFirst(), "amount", "185000");
+        // Dashboard merchandise is 170000, excluding the 15000 shipping fee.
+        financialMetrics(vendorJwt, adminJwt, order, financialDay, 170000, 170000, 0, 11900);
         long item = ((Number) itemsSnapshot.getFirst().get("id")).longValue();
         String comment = "<script>unsafeReview()</script> Sản phẩm đã giao đúng, nội dung đánh giá đủ dài để kiểm thử tích hợp.";
         String review = "{\"rating\":5,\"comment\":\"" + comment + "\"}";
@@ -161,6 +193,8 @@ class Int02CommerceFlowIT {
                 .andExpect(status().isOk());
         var receipt = rows("return_requests", order);
         var deliveredShipment = rows("shipments", order);
+        // Receipt alone must not fabricate a refund or reverse collected revenue/commission.
+        financialMetrics(vendorJwt, adminJwt, order, financialDay, 170000, 170000, 0, 11900);
         String refund = "{\"expectedOrderVersion\":%d,\"expectedReturnRequestVersion\":%d,\"proofReference\":\"INT02-TEST-PROOF\"}"
                 .formatted(version(order), requestVersion(order));
         String key = UUID.randomUUID().toString();
@@ -170,6 +204,7 @@ class Int02CommerceFlowIT {
         refund(order, buyerJwt, key, refund).andExpect(status().isForbidden());
         refund(order, adminJwt, key, refund).andExpect(status().isOk())
                 .andExpect(jsonPath("$.refundAmount").value(185000)).andExpect(jsonPath("$.replay").value(false));
+        financialMetrics(vendorJwt, adminJwt, order, financialDay, 170000, 170000, 170000, 0);
         var refunded = state(order);
         refund(order, adminJwt, key, refund).andExpect(status().isOk()).andExpect(jsonPath("$.replay").value(true));
         refund(order, adminJwt, key, refund.replace("INT02-TEST-PROOF", "CHANGED-TEST-PROOF"))
@@ -193,6 +228,7 @@ class Int02CommerceFlowIT {
         assertThat(jdbc.queryForList("SELECT DISTINCT recipient_id FROM uteexpress.notifications WHERE order_id=?", Long.class, order))
                 .containsExactlyInAnyOrder(buyer.id(), vendor.id());
         assertThat(rows("notifications", order)).hasSize(14);
+        financialMetrics(vendorJwt, adminJwt, order, financialDay, 170000, 170000, 170000, 0);
         mvc.perform(get("/notifications/inbox").cookie(strangerJwt)).andExpect(status().isOk()).andExpect(jsonPath("$").isEmpty());
         mvc.perform(get("/notifications/inbox").cookie(buyerJwt)).andExpect(status().isOk()).andExpect(jsonPath("$.length()").value(7));
         mvc.perform(get("/orders/{id}", order).cookie(buyerJwt).accept(MediaType.TEXT_HTML))
@@ -200,6 +236,29 @@ class Int02CommerceFlowIT {
         // Already-written Reviews stay PUBLIC after a subsequent Return/Refund under current HP policy.
         mvc.perform(get("/products/{id}/reviews", f.product())).andExpect(status().isOk())
                 .andExpect(content().string(containsString("unsafeReview()")));
+    }
+
+    private void financialMetrics(Cookie vendorJwt, Cookie adminJwt, long order, LocalDate day,
+            int delivered, int collected, int refunded, int commission) throws Exception {
+        long shop = jdbc.queryForObject("SELECT shop_id FROM uteexpress.orders WHERE id=?", Long.class, order);
+        Map<String, Integer> expected = Map.of(
+                "deliveredSales", delivered, "collectedPayments", collected, "refunds", refunded,
+                "netCollectedRevenue", collected - refunded, "netCommission", commission,
+                "netRevenueAfterCommission", collected - refunded - commission);
+        for (String route : List.of("/vendor/dashboard", "/admin/dashboard/revenue/metrics")) {
+            var request = get(route).cookie(route.startsWith("/vendor") ? vendorJwt : adminJwt)
+                    .param("from", day.toString()).param("toExclusive", day.plusDays(2).toString())
+                    .accept(MediaType.APPLICATION_JSON);
+            if (route.startsWith("/admin")) request.param("shopId", Long.toString(shop));
+            var response = mvc.perform(request).andExpect(status().isOk());
+            for (var metric : expected.entrySet()) {
+                String path = "$.selected.metrics." + metric.getKey();
+                response.andExpect(jsonPath(path + ".complete").value(true))
+                        .andExpect(jsonPath(path + ".unknownEvents").value(0))
+                        .andExpect(jsonPath(path + ".value")
+                                .value(org.hamcrest.Matchers.comparesEqualTo(BigDecimal.valueOf(metric.getValue())), BigDecimal.class));
+            }
+        }
     }
 
     private ResultActions json(String path, Cookie jwt, String body) throws Exception {

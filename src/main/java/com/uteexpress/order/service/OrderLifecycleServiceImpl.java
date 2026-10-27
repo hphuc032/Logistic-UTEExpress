@@ -78,6 +78,36 @@ public class OrderLifecycleServiceImpl implements OrderLifecycleService {
 
     protected void beforeValidatedTransition(Order order, OrderTransitionCommand command, Instant at) { }
 
+    protected BuyerCancellationAuthority buyerCancellationAuthority() {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    protected void releaseForBuyerCancellation(Order order, Instant at) {
+        throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+    }
+
+    @Override
+    public OrderStatusChangedEvent cancelForBuyer(com.uteexpress.order.dto.BuyerCancellationCommand command) {
+        BuyerCancellationAuthority.validate(command);
+        if(TransactionSynchronizationManager.isActualTransactionActive())
+            throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        try {
+            return transactions.execute(tx -> {
+                var authority=buyerCancellationAuthority();
+                var locked=authority.lock(command.orderId());
+                authority.requireCancellable(locked,command.expectedOrderVersion());
+                var at=clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+                releaseForBuyerCancellation(locked.order(),at);
+                return persistValidatedTransition(locked.order(),
+                        OrderTransitionPolicy.requireTarget(locked.order().getStatus(),OrderAction.CANCEL_NEW),
+                        locked.actorId(),at,null);
+            });
+        } catch(OptimisticLockingFailureException | OptimisticLockException
+                | org.springframework.dao.DataIntegrityViolationException failure) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+    }
+
     /** Return integration stays separate from vendor cancellation effects. */
     protected ReturnOrderAuthority returnAuthority() {
         throw new ApplicationException(ErrorCode.ACCESS_DENIED);
