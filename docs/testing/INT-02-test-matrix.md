@@ -1,40 +1,49 @@
 # INT-02 requirement-to-evidence matrix
 
-Source: Master Plan Task Board INT-02, A6/J/L/M/N; source hash/location and frozen SHAs in the integration report. PASS below means executed automated coverage on the frozen source, not group approval, complete P0/P1 acceptance or every possible edge case. Final machine evidence is linked in the manifest.
+Plan Task Board INT-02, I/I5–I8/L/M/N and final Q&A; actual file/hash in the report.
+Frozen executable source `e6bc22decc20118015b48eae21a60e59abf49646`; latest approved develop 663fc915 integrated.
+PASS means executed automation, not TD approval, release or manual browser acceptance.
+Test IDs below retain the Plan's exact meanings; T48 is migration, not a generic E2E label.
 
-| ID | Requirement | Integration scenario | Test/evidence | Result | Notes |
-|---|---|---|---|---|---|
-| A01 / T01–04 | Registration/OTP | Pending account, normalized duplicate, purpose/latest/attempt/expiry/reuse | AuthRegistrationIT, Auth03EmailVerificationIT | PASS | Mail boundary exercised with test mail infrastructure; no real SMTP delivery claim |
-| A02 / T05–07 | Authentication/fresh JWT | Bad/inactive login, signature/expiry/version/logout/reset, current roles | Auth02AuthenticationIT, Auth04PasswordResetIT, JwtTokenServiceTest, JwtAuthenticationFilterTest | PASS | Project 401/403 conventions preserved |
-| A03 / T09–11 | Account ownership | Profile/avatar/address ID swapping, dangerous fields, concurrent default address | User01ProfileIT, User02AddressIT, SecurityHardeningIT | PASS | Real PostgreSQL and real JWT cases |
-| A04 / T08/T40/T41 | Authorization/CSRF | Role+ownership+state; Admin/Manager separation, unsafe no-CSRF, last Admin | SecurityFoundationTest, SecurityHardeningIT, AccountGovernanceIT, RoleGovernanceIT | PASS | No SecurityConfig weakening |
-| B01 / T12–19 | Catalog/Shop/cart | Approve shop, owner product/media, visibility/sort/filter, persisted cart | ShopApprovalIT, VendorProductIT, PublicCatalogIT, ProductDiscoveryIT, CartActionsIT, CartDatabaseIT | PASS | Controlled public visibility and bound query inputs |
-| B02 / T20–22 | Trusted checkout | Foreign address/cart, one-shop rule, forged owner/money/state | CheckoutQuoteIT, PlaceOrderIT, CheckoutFlowIT | PASS | Reject/ignore per actual JSON/form contract, not invented HTTP codes |
-| B03 / T22/T26 | Combined pricing | Promotion → subtotal → voucher → shipping → commission snapshot | Int02CommerceFlowIT (both variants), ProductPromotionIT, VoucherCheckoutIT | PASS | 180,000 − 10,000 + 15,000; commission 11,900 |
-| B04 / T23/T27 | Inventory/quota concurrency | Last stock/voucher; same buyer/key duplicate; overlap schedules | PlaceOrderIT.concurrentCompetingBuyersCannotOversell, VoucherCheckoutIT concurrent cases, ProductPromotionIT overlap cases | PASS | Actual PostgreSQL workers/locks; not Mockito-only |
-| B05 / T24/T25 | Atomic placement/replay | Rollback after effects; same payload replay, changed key payload conflict | PlaceOrderIT, VoucherCheckoutIT rollback cases; Int02CommerceFlowIT | PASS | Unselected cart rows and immutable snapshots survive |
-| B06 / T28–31 | Order lifecycle authority | Foreign Buyer/Vendor; illegal/stale transition; cancel release once | BuyerOrderIT, VendorOrderIT, OpsOrderCancellationIT, OrderContractTest | PASS | Existing lifecycle remains sole authority |
-| C01 / T32/T43 | Assignment/delivery | Actual checkout facts → assignment → assigned Shipper → full COD | Int02CommerceFlowIT, ShipmentAssignmentIT, ShipperFulfillmentIT, ShipperOrderLifecycleIT | PASS | Foreign shipper 404; wrong-COD complete rollback |
-| C02 / T44 | Failure/retry safety | First failure and retry do not transition Order; second delivery collects once; exhaustion blocks third retry | Int02CommerceFlowIT retry variant, ShipmentFulfillmentIT.failedDeliveryRetryAndExhaustionPreserveOrderAndImmutableEvidence, ShipperOrderLifecycleIT | PASS for implemented slice | Not return-to-sender completion |
-| C03 / T44 | Exhausted physical return | Confirm goods returned, close failed Shipment and release stock through lifecycle | Source path inventory: ShipmentAttemptService / Order lifecycle; F03 | BLOCKED | Enum/read support does not implement a write path |
-| C04 | Lock ordering/governance | Multi-role Vendor/Shipper/Ops; revocation first/last; real waiting and rollback | ShipperOrderLifecycleIT / ShipmentFulfillmentIT / OperationsCancellationIT | PASS | pg_blocking_pids, separate transactions, bounded waits |
-| D01 / T35 | Return eligibility | Own DELIVERED Order, original 168h window, one request, decision and attested receipt | ReturnManagementIT, ReturnReceiptMigrationIT; Int02CommerceFlowIT | PASS | Reject outer transaction, Order-first locks, immutable receipt |
-| D02 / T38 | Refund integrity | Full collected COD, ADMIN, original receipt, replay and changed payload denial | ManualCodRefundIT, RefundLedgerMigrationIT, Int02CommerceFlowIT | PASS | Ledger UPDATE/DELETE/TRUNCATE protected; Payment history preserved |
-| D03 | Refund concurrency/rollback | Advisory/Order waits, actor restrictions, fault stages; only one ledger | ManualCodRefundIT.concurrentRefundsShowRealAdvisoryOrOrderWaitAndCommittedEffects and everyFlushedStageRollsBackAndDoesNotReserveKey | PASS | Snapshot assertions and independent commit visibility |
-| E01 / T36/T37 | Review creation | Eligible Buyer/item/product, one Review, revoked/foreign/invalid state | ReviewIntegrationIT, OrderEligibilityIT; Int02CommerceFlowIT | PASS | Review written inside owner Order boundary |
-| E02 | Review-vs-Return | Both schedules serialize at Order, rollback compensation | ReviewIntegrationIT.realReviewAndReturnSerializeAtOrderInBothSchedules, OrderEligibilityIT | PASS | Actual writer/Return and PostgreSQL blocking |
-| E03 / T08/T36 | Review media/XSS | Invalid MIME/content/count/size; public/hidden media; rollback/UNKNOWN cleanup | ReviewIntegrationIT, ReviewFoundationTest, LocalFileStorageServiceTest | PASS | No automatic orphan deletion; operational reconciliation remains |
-| E04 / T39 | Engagement | Favorite dedup and bounded recent history | EngagementIT | PASS | Separate from financial/fulfillment mutation |
-| F01 / T46 | Private STOMP | Valid JWT/Origin/masked CONNECT CSRF; deny foreign subscription, forged SEND/identity | NotificationSocketIT | PASS | Real JDK socket/embedded Tomcat, not just MockMvc |
-| F02 / T47 | Socket freshness | Expiry, real logout/lock/role revoke, idle and outbound denial, Account contention | NotificationSocketIT, SocketIdentityServiceTest | PASS | Single-instance only |
-| F03 / T47 | Commit/recovery/dedup | Committed recipient routing, no hint on rollback/duplicate; reconnect durable inbox | NotificationIT, NotificationRecoveryIT, NotificationSchedulerIT, NotificationSocketIT, Node client tests | PASS for current contract | I8 projection-timing deviation F04 requires HP decision |
-| G01 / T45 | Vendor revenue | Sales/collection/refund/commission/product rank/timezone/unknown evidence | #60 source contract read, not integrated | BLOCKED | PR test claims are not evidence for this checkout |
-| G02 / T45 | Ops aggregates/audit | Admin/Manager scope, filters, audit privacy and financial slice | OpsDashboardTest covers existing shell only; #59 contract read | BLOCKED | No pending PR copied/merged; #59 Phase 1 omits financial reporting |
-| G03 / T45 | Shipper dashboard definition | Current delivered/failed/returned counts vs terminal-outcome formula | ShipperFulfillmentIT dashboard tests + compiled DTO probe | CONTRACT MISMATCH | F02: 66.7% actual vs 40.0% Plan for discriminating dataset |
-| H01 / T48 | PostgreSQL schema | Fresh/upgrade migrations, validate, second migrate, named constraints/evidence immutability | DatabaseBaselineIT, ShipmentAttemptMigrationIT, ReturnReceiptMigrationIT, RefundLedgerMigrationIT, ReviewFoundationMigrationIT, NotificationMigrationIT | PASS | PostgreSQL 17.6, Hibernate validate; no H2 |
-| H02 / T49 | Deployment | Missing ENV / persistence across restart / secret/log retention | Configuration unit tests only; no deployment exercise | NOT RUN in full | No clean-machine or production sign-off |
-| H03 / T50 | Human acceptance | Register → delivery → review; 375/768/desktop browser demo | Automated Login→refund new flow + existing auth/UI tests | PARTIAL | Manual browser/responsive/SMTP acceptance not run |
-| H04 / T33/T34 | Conditional P2 VNPAY | Signed callbacks, retry/late gateway refund | Not current INT-02 required scope | DEFERRED | No fabricated gateway result |
-| H05 | Mid-project acceptance | Whole P0/P1 integrated plus owner review | Findings/pending PR inventory | BLOCKED | Green Maven is necessary, insufficient |
+| Plan ID / requirement | Actual suites / scenario | Result and boundary |
+|---|---|---|
+| T01–07 auth/activation/reset | AuthRegistrationIT, Auth03EmailVerificationIT, Auth02AuthenticationIT, Auth04PasswordResetIT; JWT tests | PASS; test mail, no real SMTP claim |
+| T08–11 ownership/account | User01ProfileIT, User02AddressIT, SecurityHardeningIT, SecurityFoundationTest | PASS; principal/IDOR/CSRF |
+| T12–19 Shop/catalog/cart | ShopApprovalIT, VendorProductIT, PublicCatalogIT, ProductDiscoveryIT, CartActionsIT, CartDatabaseIT | PASS; visibility and persisted owner cart |
+| T20 foreign address/cart | CheckoutQuoteIT, PlaceOrderIT, CheckoutFlowIT | PASS; server buyer scope |
+| T21 multiple Shops/invalid shipping | CheckoutQuoteIT, PlaceOrderIT | PASS; no silent split or mutation |
+| T22 browser money tampering | CheckoutQuoteIT, PlaceOrderIT, Int02CommerceFlowIT | PASS; server snapshots/commission |
+| T23 last stock concurrency | PlaceOrderIT.concurrentCompetingBuyersCannotOversell | PASS; real PG locks, no negative stock |
+| T24 placement rollback | PlaceOrderIT, VoucherCheckoutIT | PASS; stock/cart/voucher/Order/Payment/history atomic |
+| T25 checkout replay | PlaceOrderIT, Int02CommerceFlowIT | PASS; one Order, changed payload conflicts |
+| T26–27 voucher/promo | VoucherCheckoutIT, ProductPromotionIT | PASS; quota and overlap concurrency |
+| T28–29 Buyer/Vendor Order ownership | BuyerOrderIT, VendorOrderIT, Int02CommerceFlowIT | PASS; foreign read/mutation denied |
+| T30 illegal states | OrderContractTest, ShipperOrderLifecycleIT, ShipperFulfillmentIT | PASS; lifecycle sole authority |
+| T31 valid cancel releases once | OpsOrderCancellationIT, OperationsCancellationIT, ReturnToSenderIT | PASS; normal post-pickup cancel still denied, dedicated T44 receipt required |
+| T32 exact COD atomicity | CodPaymentIT, ShipperFulfillmentIT, Int02CommerceFlowIT | PASS; wrong amount rolls back, Payment/Shipment/Order commit together |
+| T33–34 VNPAY P2 | Outside required current scope | DEFERRED; no gateway proof invented |
+| T35 return eligibility/receipt | ReturnManagementIT, ReturnReceiptMigrationIT, Int02CommerceFlowIT | PASS; own delivered, 7-day window, one request |
+| T36 review input/media | ReviewIntegrationIT, ReviewFoundationTest, LocalFileStorageServiceTest | PASS; escaped text, validation, restricted cleanup |
+| T37 purchased item eligibility | ReviewIntegrationIT, OrderEligibilityIT | PASS; duplicate/foreign/not-delivered denied; Review/Return race |
+| T38 full COD refund authorization/DB | ManualCodRefundIT, RefundLedgerMigrationIT, Int02CommerceFlowIT | PASS; Manager denied, receipt, amount, immutable replay and rollback |
+| T39 favorites/recent | EngagementIT | PASS; dedup and bounded history |
+| T40–41 roles/governance | AccountGovernanceIT, RoleGovernanceIT, SecurityHardeningIT, CommissionPolicyIT | PASS; role/owner/last-Admin/commission/audit |
+| T42 category/shipping configuration | CategoryIT, ShippingConfigIT | PASS; used-category/rate/provider guards |
+| T43 assignment/ownership | ShipmentAssignmentIT, ShipperOrderLifecycleIT | PASS; current account/assignee and pickup restrictions |
+| T44 failure/retry/physical return | ShipmentFulfillmentIT, ReturnToSenderIT (16), Int02CommerceFlowIT RETURN_TO_SENDER | PASS; Order remains SHIPPING until Ops actual receipt; stock/quota once, replay, concurrency commit/rollback |
+| T45 Vendor financial | VendorRevenueIT (46), RevenueServiceTest | PASS; payment/refund periods, original commission, unknown evidence, current Shop |
+| T45 Admin financial | AdminRevenueIT (26) | PASS; global/Shop parity, no item fanout, exact successful Payment and Admin-only |
+| T45 Ops/audit | OpsDashboardReadIT (28), OpsReportFilterTest | PASS; local dates, snapshot, filters/page/privacy, immutable reads |
+| T45 Shipper terminal success | ReturnToSenderIT real metric paths; ShipperFulfillmentIT | PASS; 2/(2+3)=40.0, retry counts one, empty NULL, foreign excluded |
+| T46 private STOMP authorization | NotificationSocketIT (29) | PASS; real socket, Origin/CSRF/destination/JWT controls |
+| T47 transaction/offline/logout | NotificationRecoveryIT (7), NotificationIT, NotificationSchedulerIT, NotificationSocketIT, Node tests | PASS; same-TX inbox, no rollback hint, recovery/dedup, expiry/logout/lock/revocation |
+| T48 fresh DB/migrations/constraints | DatabaseBaselineIT, ShipmentAttemptMigrationIT, ReturnReceiptMigrationIT, RefundLedgerMigrationIT, ReviewFoundationMigrationIT, NotificationMigrationIT, ReturnToSenderMigrationIT (2) | PASS; PG17.6/Hibernate, populated upgrade, old checksums/data, append-only receipt and repeat migrate 0 |
+| T49 operational deployment | Int02HttpEnvironmentIT (5) plus existing config tests | PARTIAL; real isolated startup/HTTP PASS; full missing-ENV/upload restart/production deployment NOT RUN, QA-03/REL |
+| T50 whole human E2E/three widths | Int02CommerceFlowIT (3), Int02HttpEnvironmentIT; auth suites | Automated paths PASS; manual browser 375/768/1440 NOT RUN due Computer Use policy; UI-02 S5/QA/release follow-up |
+| INT-02 technical review gate | All current mandatory suites and F01–F04 resolutions | TECHNICALLY READY — PENDING TD REVIEW; not completed/released |
 
-Regression cases that pause production spies still call real writers/locks. Existing suites' concurrency assertions were inspected; the final full execution supplies current evidence, not prior PR counts. No skips/disabled assertions were added.
+Final clean gate: 682 unit/architecture + 1268 PostgreSQL = 1950 Java;
+12 Node separately; 15 external QA tooling tests separately. Zero failures/errors/skips/
+flaky-rerun markers; Failsafe timeout=false. No overlapping baseline/focused runs summed.
+Concurrency instrumentation invokes real production writers, records actual backend PIDs
+and checks pg_blocking_pids; it does not choose a winner using sleeps.

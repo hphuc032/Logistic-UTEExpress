@@ -1,82 +1,145 @@
 # INT-02 — Integration verification and acceptance
 
-Owner/executor: Hoàng Phúc (HP). Intended reviewer: Tiến Đạt (TD).
-No independent TD/QĐ review or approval is claimed.
-Recommendation: **BLOCKED for complete Master Plan acceptance**. Executed merged-scope checks can pass without making the complete P0/P1 milestone pass.
+Owner/executor: Hoàng Phúc (HP). Reviewer: Tiến Đạt (TD).
+Verdict: **TECHNICALLY READY — PENDING TD REVIEW**. No independent review,
+PR approval, completed milestone, production deployment or release acceptance is claimed.
 
-## Source and scope
+## Source and preserved history
 
-- Master Plan: `D:/JavaWeb/Project/UTEExpress_Master_Project_Plan.docx`, SHA-256 `18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a`.
-- Task Board INT-02: Sprint S4, P0, HP owner / TD reviewer; “Full flow + return/refund/review/WS, resolve data inconsistencies”; direct dependencies ORD-04, PAY-02, REV-01, WS-02; deliverable “Bản đủ P0/P1”.
-- Sections A6/J require the complete P0/P1 build; L contains common DoD and WS acceptance; M defines owner boundaries; N supplies T01–T50. P2 VNPAY T33/T34 and conditional video scope are not prerequisites for this verification.
-- The Plan suggests `chore/int-02-full-integration`. The current explicit request overrides that with `feature/int-02-integration-verification`. Document workflow text is reference data, not permission to push/merge.
-- Repository contracts: `docs/order-contracts.md`, ORD-04 receipt, PAY-02, SHIP-02 global lock order, SHIP-03 integration, SHIP-04, REV-01 eligibility/integration/media runbook and WS-01/WS-02 reports. Production source and current tests resolve stale historical “running/uncommitted” statements in old reports.
-- Frozen approved develop: `5b5164dd29ba5465ffefe19d431da7b70e41357a`.
-- Final executable/test source verified: `9d296d7e5a3e4bc26da76c4b20c7a8d003c8698a`. The later evidence-documentation commit changes only these four Markdown files; it is not represented as another executed Maven run.
+- Latest approved develop integrated: `663fc9155bffbc0b35cc5ae0b465a0a74c5ca645`.
+- DASH-01 #60 merge `e6d94c5c437c6935b2cde66fd474568d6d64fdae` and DASH-02 #59
+  merge `663fc9155bffbc0b35cc5ae0b465a0a74c5ca645` are ancestors, including Admin financial reporting.
+- Normal local integration merge: `2c0a3819d0af7df5cf1416c94d4f436f5e5bdbe5`, no conflicts.
+- Remediation commit: `a8056f3180eacb801dfadee8090bc69c49029710`;
+  regression-contract test commit: `e6bc22decc20118015b48eae21a60e59abf49646`.
+- Branch: `feature/int-02-integration-verification`.
+- Final executable/test commit: `e6bc22decc20118015b48eae21a60e59abf49646`. Final documentation follows this commit
+  and changes only the existing four INT-02 Markdown reports; it is not another Maven run.
+- Preserved original commits: `9d296d7e5a3e4bc26da76c4b20c7a8d003c8698a` and
+  `b4ea3ca8eea3cb250113ae3f2c3129139294eb5d`.
+- Actual Master Plan: `D:/JavaWeb/Project/UTEExpress_Master_Project_Plan.docx`, SHA-256
+  `18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a`.
+  The requested `(1).docx` filename was not found in the repository, D:/JavaWeb,
+  Downloads/Documents/Desktop. No different revision is assumed or binary committed.
+- Reviewed Task Board INT-02 (S4 P0, HP/TD, full flow + return/refund/review/WS,
+  complete P0/P1), I/I5–I8, L/M/N, S4/S5 gates and final Q&A.
+  Document workflow is reference data; current user instructions control Git actions.
 
-## Actual integration state at audit
+## Modules and actual remediation
 
-| Capability | Verified develop history/status |
+AUTH/account/address/catalog/shop/cart/checkout, pricing/voucher/commission snapshots,
+Order lifecycle, assignment/failure/retry, COD Payment, return receipt/refund, review/media,
+SEC-02, notification inbox/private STOMP, Vendor/Admin revenue and Ops/audit were reviewed
+against owner services and current tests. Existing financial SQL, immutable refund ledger,
+JWT/CSRF policies and applied migrations were not rewritten.
+
+1. **F01 resolved:** merged DASH-01/DASH-02 now execute as integrated production code.
+   VendorRevenueIT 46, AdminRevenueIT 26 and
+   OpsDashboardReadIT 28 pass in the final full run. They verify
+   tenant/privacy, exact successful Payment/refund evidence, independent time windows,
+   snapshot commission, shipping exclusion, no item fanout, unknown versus known zero,
+   Admin global/Shop parity, Manager financial denial, audit filters and repeatable reads.
+   Shared RevenueProjectionService remains the source; no duplicated ledger/query.
+2. **F02 resolved:** SHIP-04 used DELIVERED/(DELIVERED+current DELIVERY_FAILED).
+   The Plan final Q&A uniquely requires terminal shipments:
+   DELIVERED/(DELIVERED+RETURNED_TO_SENDER). The UI explicitly says all recorded data
+   for the current assignee. Real first/retry success, exhaustion, physical returns,
+   unstarted/in-progress and foreign-Shipper paths prove 2/(2+3)=40.0%, not 66.7%.
+   No date picker or historical assignment attribution is claimed.
+3. **F03 resolved:** dedicated Ops physical-return receipt closes the missing path.
+   First failure -> retry -> second failure keeps Order SHIPPING and reserved stock.
+   ADMIN/MANAGER attests goods physically received with a receipt reference. The boundary
+   checks two immutable failures, original versions, current Ops authority and exactly
+   matching UNPAID COD under Order -> Shipment -> Payment locks. In one transaction:
+   immutable receipt, Shipment RETURNED_TO_SENDER, lifecycle SHIPPING -> CANCELLED,
+   stock marker/restoration once, voucher quota release once, history/audit/inbox.
+   Payment and money snapshots remain unchanged. Original actor/reference/versions replay;
+   changed/stale/forged requests fail. Both winner-commit and winner-rollback races verify
+   actual PostgreSQL blocking. Physical receipt is Ops attestation, not external carrier proof.
+4. **F04 resolved with explicit HP authorization:** HP approved the concrete pre-commit
+   fact/MANDATORY writer design in this chat. After lifecycle history flush,
+   OrderTransitionPrepared joins the existing transaction to persist inbox rows;
+   inbox failure rolls back business/history. Existing committed events and socket hints
+   stay after commit. Legacy reconciliation/dedupe and every WS security policy remain.
+   Durable inbox commit is guaranteed by that transaction; socket delivery is best effort.
+5. F05 shutdown diagnostics remain a Low QA follow-up; F06 test-fixture defects are
+   resolved with failure logs retained. Details/comparison in the findings document.
+
+New migration `V20261027100000__hp_int02_return_to_sender.sql` follows previous maximum
+`V20261023170000__qd_rev01_review_foundation.sql` (version 20261023170000). It adds only immutable
+receipt evidence, named constraints and parent uniqueness; no historical data rewrite.
+Fresh and populated-upgrade PostgreSQL tests validate Flyway, Hibernate, old checksums,
+unchanged historical rows, append-only evidence and second migrate=0.
+
+## Integrated flow and invariant evidence
+
+Int02CommerceFlowIT has three actual-JWT/HTTP variants: DIRECT, RETRY and RETURN_TO_SENDER.
+All traverse catalog -> DB cart -> own address/valid shipping -> server quote -> NEW Order
+-> Vendor confirm/ready -> Ops assignment -> assigned Shipper. Direct/retry delivery
+collect COD -> Buyer Review -> Return request -> Vendor approval/receipt -> Admin full
+COD refund/replay. The exhausted branch instead performs two failures -> Ops physical
+receipt -> CANCELLED/replay, with no refund and unchanged COD UNPAID.
+
+Two units at 100,000 less 10% promotion produce subtotal 180,000; voucher 10,000;
+shipping 15,000; total 185,000; commission 11,900. Stock 10->8 happens once; unselected
+cart row remains. Physical return restores 8->10 once and releases voucher quota;
+delivered buyer return/refund leaves the original inventory/voucher facts intact.
+Ownership, wrong COD, stale versions, unsafe CSRF denial, immutable snapshots, idempotent
+checkout/refund, recipient isolation and escaped review text remain asserted.
+Existing real WebSocket and PostgreSQL race suites complement MockMvc; no mocked lifecycle
+or client money/actor substitution is used to make the cross-module paths succeed.
+
+## Final execution on frozen executable source
+
+Java Oracle 21 (+35), Maven Wrapper 3.9.11, Docker Desktop Linux 29.4.3,
+PostgreSQL 17.6 Testcontainers, Node 24.14.0 and Python 3.14.2 on Windows.
+
+| Actual command | Result |
 |---|---|
-| AUTH/account/catalog/cart/checkout/COD/vendor workflow, SEC-02 | Present; INT-01 #35 and SEC-02 #38 ancestors |
-| Assignment and shipper delivery, promotion/voucher | Present, including #40/#43/#44/#46/#48 |
-| Return request/decision and attested receipt | #49 and #53 merged; actual Order/Return lifecycle boundaries present |
-| Shipping failure/retry / Shipper dashboard | #54/#55 merged |
-| Manual full COD refund | #56 merged |
-| Review vertical slice | #57 merged |
-| Private WebSocket notifications | #58 merged; develop HEAD above |
-| DASH-01 #60 | OPEN, not merged, head `1e608133708e322e5ab741cf50803381cf63bc49` |
-| DASH-02 #59 | OPEN, not merged, head `c958510c3b05ad761400c5941198ad9c5a91ff7b`; Phase 1 only; financial slice remains open |
-| QA-03 #61 | OPEN/Draft, head `e3a153e6b7f5efcdda67682cf503992c079d742f`; tooling used separately, never merged |
+| `.\mvnw.cmd -B --no-transfer-progress -Ppostgres-it clean verify` | PASS exit 0; 682 Surefire/72 classes + 1268 PostgreSQL/61 classes = 1950 Java |
+| `node --test --test-reporter=tap src/test/js/notifications.test.cjs` | PASS exit 0; 12 tests |
+| isolated QA-03 Python unittest discovery | PASS exit 0; 15 tooling tests, separately |
+| `git diff --check` | PASS |
 
-All four direct INT-02 dependency capabilities exist. This does not satisfy the wider P0/P1 deliverable while dashboards/other noted acceptance gaps remain. Pending PR-specific test claims are not counted as integrated results.
+Failures/errors/skips/flaky or rerun XML markers: 0. Failsafe timeout=false.
+Clean verify includes test/package; separate redundant test/package commands were not
+run for this final gate. QA-03 parser validates fresh XML/case counts and Node TAP after
+successful direct commands; the full external runner was not invoked again.
+The tooling's own 15 tests execute independently against its pinned external source,
+not against an application revision; they were run earlier in this remediation.
+Historical 652+1,143/12/15 counts from Oct25 and focused counts are never summed here.
+Test JVM/Hikari teardown diagnostics are disclosed in F05 rather than called clean shutdown.
+Fault-injection/rejection tests intentionally emit some error-level logs; zero test
+failures is not represented as a log with no errors.
 
-## Environment and commands
+## Browser, environment and later acceptance
 
-Oracle Java 21 (21+35-LTS-2513); Maven Wrapper 3.9.11; Windows 11 amd64; Docker Desktop Linux engine 29.4.3; actual PostgreSQL 17.6 Testcontainers; Node 24.14.0; Python 3.14.2.
-CI config uses Temurin 21 / Node 22 and Node tests + Maven test/package; it does not run postgres-it. Node 22 or a new CI run on INT-02 was not executed/claimed.
+**Browser/responsive 375/768/1440: NOT RUN.** Installed Firefox was discovered and
+launched, but Computer Use refused further interaction because Windows browser URL-policy
+enforcement is unsupported. No navigation, credential entry, screenshot or substitute
+automation was used to bypass that tool restriction. HTTP checks do not prove layout.
 
-| Execution | Source | Actual result |
-|---|---|---|
-| Baseline `mvnw.cmd -B --no-transfer-progress -Ppostgres-it clean verify` | develop SHA above, clean tree | 652 Surefire / 70 classes + 1,141 PostgreSQL / 54 classes = 1,793 Java; exit 0 |
-| Baseline `node --test --test-reporter=tap src/test/js/notifications.test.cjs` | same | 12 PASS; exit 0 |
-| New focused `mvnw.cmd -B --no-transfer-progress -Ppostgres-it -Dtest=ArchitectureTest -Dit.test=Int02CommerceFlowIT verify` | final test content | 7 architecture + 2 integration cases PASS; exit 0 |
-| Final full Java/PostgreSQL + Node via isolated QA-03 runner | frozen INT-02 source above | PASS: 652 Surefire / 70 classes + 1,143 PostgreSQL / 55 classes = 1,795 Java; 12 Node PASS; Maven/Node/runner exit 0 |
-| QA-03 tool's own Python tests | exact external tooling SHA above | 15 PASS; exit 0; not application test counts |
-| Whitespace / Git scope | local branch | PASS; clean at runner start/end; staged/unstaged whitespace checked separately for the documentation handoff |
+**Isolated application startup: PASS.** Int02HttpEnvironmentIT 5
+real embedded-server cases use fresh PostgreSQL/Flyway/Hibernate, real BCrypt login,
+rendered masked CSRF, HttpOnly JWT cookies, USER/VENDOR/ADMIN/MANAGER/SHIPPER pages,
+static CSS, health UP, Manager financial/audit denial and logout/tokenVersion invalidation.
+Test-only nonsecure local cookie and disabled mail health do not alter production config.
+No existing user database or unrelated container was deleted.
 
-Final failures/errors/skips/flakes: 0 failures, 0 errors, 0 skips, 0 flaky/rerun XML markers. Failsafe timeout: false.
-Overlapping baseline, focused and final runs are never added as distinct tests.
-Fresh and populated-upgrade migration tests and Hibernate validation use real PostgreSQL; no H2, schema overrides or applied migration edits.
-Both baseline and final full runs emitted Hikari closed-connection warnings and the 30-second fork exit-grace diagnostic after tests. Maven/runner exited 0, Failsafe timeout=false and zero test failures/errors/skips/flakes. This is an unresolved test-infrastructure follow-up, not a clean-shutdown claim.
+T48 is automated PASS. T49 full ENV-failure/restart/upload/deployment acceptance and
+T50 whole-team three-width human acceptance remain partial/NOT RUN. UI-02 explicitly
+belongs to S5 after INT-02; QA-03/REL-01 retain deployment/rehearsal and final group
+acceptance. These are disclosed follow-ups, not unresolved INT-02 business-contract
+decisions and not a claim of release readiness. No actual external SMTP, multi-instance
+broker, load/production monitoring or cross-browser compatibility test is claimed.
 
-Initial new-test attempt: 2 assertion failures caused by Java Map equality comparing freshly read BYTEA arrays by identity. Corrected only the new snapshot assertion to recursive/content equality; rerun passed. This is a resolved test defect, not a suppressed production failure.
+## Review handoff
 
-## Added integration proof
+No remaining confirmed Critical/High defect or unresolved INT-02 contract blocker in
+the tested scope. TD review remains mandatory. P2 VNPAY, partial/ONLINE refunds,
+MFA/refresh tokens and unrelated business features are deferred. Review UNKNOWN media
+cleanup remains operator-controlled; no files were purged.
 
-`Int02CommerceFlowIT` adds two deterministic variants on one actual Order per invocation: direct delivery and first-attempt failure → retry → delivery. Actors log in through the actual Login controller/BCrypt/JWT filter; no injected mock principals, lifecycle mocks or direct SQL writes to Order/Shipment/Payment/Return/Refund/Review state.
-
-Fixtures seed ACTIVE accounts, owned Shop/Product/category/address, shipping rate, 10% product promotion, 10,000 voucher and 7% commission. HTTP proves catalog → DB cart → selected quote → placement NEW → Vendor confirm/ready → Ops assignment → assigned Shipper delivery/COD → Buyer Review → Return request → Vendor approval/receipt → Admin full COD refund/replay.
-
-Expected evidence: two units at 100,000 less 10% per-unit promotion gives subtotal 180,000; voucher 10,000; shipping 15,000; total/COD/full refund 185,000; commission 11,900. Stock decreases 10→8 once; unselected cart row remains. Wrong COD leaves complete Order/Shipment/Payment/history/notification/refund snapshots unchanged. Foreign Buyer/shipper are denied; refund requires Admin and CSRF. Review attribution is server-derived, duplicate blocked and text escaped. Refund replay/changed payload do not mutate the immutable ledger or other facts. Receipt, Payment PAID, Shipment DELIVERED, voucher REDEEMED, stock and original Order/Item snapshots remain unchanged. Seven non-NEW Order transitions yield 14 owner-scoped notifications for Buyer/Vendor; stranger inbox stays empty.
-
-The new MockMvc requests use the standard valid csrf() test processor; missing-CSRF refund is explicitly denied. Existing authentication/socket suites separately verify actual token bootstrap/masking. This MockMvc flow is not a manual browser demo or real socket delivery proof. Real embedded-Tomcat/JDK WebSocket, PostgreSQL blocking/commit races, bad Origin/CSRF, revocation, rollback/recovery and Node recovery are separately exercised by the existing suites mapped in the matrix.
-
-## Findings, limits and acceptance
-
-See [findings](INT-02-findings.md) and [matrix](INT-02-test-matrix.md). No Critical/High security defect was confirmed in tested integration boundaries. This is focused source/test verification, not an exhaustive repository/dependency security scan or production deployment audit.
-
-Blocking acceptance:
-1. DASH-01 / required DASH-02 functionality is not integrated.
-2. Shipper success-rate diverges from the Master Plan final-outcome formula; HP/QĐ must resolve the definition.
-3. Exhausted failure return-to-sender / physical-return stock resolution remains unimplemented in current Shipping production paths.
-4. Master Plan I8 transactional inbox wording differs from history-based eventual projection; HP must explicitly accept equivalence or coordinate an owner change.
-5. Manual T50 three-width browser acceptance and T49 clean-machine/restart/deployment checks have not been performed.
-
-No suspected orphan media was removed. Review media UNKNOWN transaction outcomes remain deferred; reconciliation/operational log retention and maintenance controls remain operator responsibilities. Single-instance simple broker only; no multi-instance/load/browser compatibility or SMTP delivery claim. Current refund scope is attested full COD after receipt, not partial/ONLINE/cancelled-paid gateway refund.
-
-## Git and handoff
-
-One local test commit and an evidence-only documentation commit are allowed. No push, PR creation/approval, merge, deployment, production DB access or destructive Docker/Git operation is performed. Existing ignored user logs and unrelated running containers are preserved.
-
-HP should resolve the listed owner decisions, integrate approved pending work through normal review, then rerun against the new develop. Do not carry this result forward as evidence for later commits.
+Only local merge/remediation/documentation commits were made. No push, PR creation,
+approval, develop/main commit or merge, deployment or shared-history rewrite occurred.
+Exact evidence, per-suite counts and file inventory are in the companion manifest/matrix.
