@@ -181,6 +181,26 @@ class ReturnToSenderIT {
         assertThat(stock()).isEqualTo(10);
     }
 
+    @Test void inboxFailureRollsBackPhysicalReceiptAndReleaseThenRetryAndReplayWriteOnlyOnce() {
+        exhaust(); var command=command(); var before=state(); auth(admin,"ADMIN");
+        jdbc.execute("ALTER TABLE uteexpress.notifications ADD CONSTRAINT qa02_rts_inbox_fail CHECK (order_id <> "+order+") NOT VALID");
+        try {
+            assertThatThrownBy(() -> lifecycle.confirmReturnToSender(command))
+                    .isInstanceOfSatisfying(ApplicationException.class,
+                            failure -> assertThat(failure.errorCode()).isEqualTo(ErrorCode.CONFLICT));
+        } finally { jdbc.execute("ALTER TABLE uteexpress.notifications DROP CONSTRAINT qa02_rts_inbox_fail"); }
+        assertThat(state()).isEqualTo(before);
+        assertThat(rows("shipment_return_receipts")).isEmpty();
+        assertThat(rows("refunds")).isEmpty();
+        assertThat(lifecycle.confirmReturnToSender(command).replayed()).isFalse();
+        assertThat(stock()).isEqualTo(10);
+        assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.voucher_usages WHERE order_id=?",String.class,order)).isEqualTo("RELEASED");
+        var committed=state();
+        assertThat(lifecycle.confirmReturnToSender(command).replayed()).isTrue();
+        assertThat(state()).isEqualTo(committed);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.notifications n JOIN uteexpress.order_status_history h ON n.dedup_key=concat('order-history:',h.id,':',n.recipient_id) WHERE h.order_id=? AND h.to_status='CANCELLED'",Integer.class,order)).isEqualTo(2);
+    }
+
     @Test void successfulReceiptIsImmutableAndOuterTransactionIsRejected() {
         exhaust(); auth(admin,"ADMIN"); var c=command();
         new TransactionTemplate(transactions).executeWithoutResult(tx ->

@@ -47,6 +47,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     private final ShipperOrderAuthority shipperAuthority;
     private final OpsOrderAuthority opsAuthority;
     private final ReturnOrderAuthority returnAuthority;
+    private final BuyerCancellationAuthority buyerCancellation;
     private final RefundOrderAuthority refundAuthority;
     private final com.uteexpress.payment.service.ManualCodRefundService refundPayments;
     private final com.uteexpress.shipping.service.ShipmentFulfillmentService shipments;
@@ -66,7 +67,8 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
             com.uteexpress.governance.service.AuditLogService audit, ReturnOrderAuthority returnAuthority,
             com.uteexpress.shipping.service.ShipmentAttemptService attempts,
             RefundOrderAuthority refundAuthority, com.uteexpress.payment.service.ManualCodRefundService refundPayments,
-            com.uteexpress.shipping.service.ReturnToSenderService senderReturns) {
+            com.uteexpress.shipping.service.ReturnToSenderService senderReturns,
+            BuyerCancellationAuthority buyerCancellation) {
         super(orders, items, history, users, transactionManager, events, clock);
         this.orders = orders;
         this.accounts = accounts;
@@ -83,6 +85,7 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         this.senderReturns = senderReturns;
         this.senderReturnPayments = paymentReads;
         this.returnAuthority = returnAuthority;
+        this.buyerCancellation = buyerCancellation;
         this.refundAuthority = refundAuthority;
         this.refundPayments = refundPayments;
         this.shipperAuthority = new ShipperOrderAuthority(orders, entityManager, shipments, paymentReads, attempts);
@@ -91,6 +94,18 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     }
 
     @Override protected ReturnOrderAuthority returnAuthority() { return returnAuthority; }
+    @Override protected BuyerCancellationAuthority buyerCancellationAuthority() { return buyerCancellation; }
+    @Override protected void releaseForBuyerCancellation(Order order, java.time.Instant at) {
+        // Reuse existing Order-internal inventory/marker/voucher effects; no Ops authorization or audit.
+        opsAuthority.release(order,at);
+    }
+
+    @Override
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).USER.authority())")
+    public com.uteexpress.order.dto.OrderStatusChangedEvent cancelForBuyer(
+            com.uteexpress.order.dto.BuyerCancellationCommand command) {
+        return super.cancelForBuyer(command);
+    }
     @Override protected com.uteexpress.shipping.service.ReturnToSenderService returnToSenderShipments() { return senderReturns; }
     @Override protected com.uteexpress.payment.service.PaymentReadService returnToSenderPayments() { return senderReturnPayments; }
     @Override protected void releaseReturnedInventory(Order order, java.time.Instant at) { opsAuthority.releaseInventory(order,at); }
