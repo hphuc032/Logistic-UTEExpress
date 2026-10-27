@@ -1,0 +1,135 @@
+WITH scoped AS (SELECT * FROM uteexpress.orders WHERE shop_id=:shop),
+payment_counts AS (
+    SELECT p.order_id, count(*) FILTER (WHERE p.status='PAID') AS paid_count
+    FROM uteexpress.payments p JOIN scoped o ON o.id=p.order_id GROUP BY p.order_id
+), payment_facts AS (
+    -- Count ALL PAID rows before validating their content. More than one
+    -- never selects an arbitrary winner, even if only one looks valid.
+    SELECT c.order_id,c.paid_count,p.id AS payment_id,p.amount AS paid_amount,p.paid_at,
+        p.method='COD' AND p.expired_at IS NULL AS collected
+    FROM payment_counts c LEFT JOIN uteexpress.payments p
+        ON p.order_id=c.order_id AND p.status='PAID' AND c.paid_count=1
+), facts AS (
+    SELECT o.*, o.subtotal-o.discount_total AS goods,
+        p.paid_count, p.payment_id, p.paid_amount, p.paid_at,
+        COALESCE(o.subtotal>=0 AND o.discount_total BETWEEN 0 AND o.subtotal
+            AND o.shipping_fee>=0 AND o.grand_total=o.subtotal-o.discount_total+o.shipping_fee
+            AND o.subtotal=trunc(o.subtotal) AND o.discount_total=trunc(o.discount_total)
+            AND o.shipping_fee=trunc(o.shipping_fee) AND o.grand_total=trunc(o.grand_total)
+            AND o.subtotal NOT IN ('NaN'::numeric,'Infinity'::numeric,'-Infinity'::numeric)
+            AND o.grand_total NOT IN ('NaN'::numeric,'Infinity'::numeric,'-Infinity'::numeric),false) AS money_ok,
+        COALESCE(o.commission_amount>=0 AND o.commission_amount<=o.subtotal-o.discount_total
+            AND o.commission_amount=trunc(o.commission_amount)
+            AND o.commission_rate_snapshot BETWEEN 0 AND 100
+            AND o.commission_amount NOT IN ('NaN'::numeric,'Infinity'::numeric,'-Infinity'::numeric),false) AS commission_ok,
+        COALESCE(p.paid_count=1 AND p.collected AND p.paid_at IS NOT NULL
+            AND p.paid_amount=o.grand_total,false) AS payment_ok,
+        EXISTS(SELECT 1 FROM uteexpress.order_status_history h WHERE h.order_id=o.id
+            AND h.from_status='SHIPPING' AND h.to_status='DELIVERED' AND h.created_at=o.delivered_at) AS delivery_ok,
+        t.id AS receipt_id, t.received_at,
+        COALESCE(t.status='APPROVED' AND t.received_by>0 AND btrim(t.receipt_reference)<>''
+            AND t.received_at IS NOT NULL AND EXISTS(
+                SELECT 1 FROM uteexpress.order_status_history h WHERE h.order_id=o.id
+                AND h.from_status='RETURN_REQUESTED' AND h.to_status='RETURNED'
+                AND h.created_at=t.received_at AND h.actor_id=t.received_by),false) AS receipt_ok
+    FROM scoped o LEFT JOIN payment_facts p ON p.order_id=o.id
+    LEFT JOIN uteexpress.return_requests t ON t.order_id=o.id
+)
+, events AS (
+    SELECT 'delivery' AS kind, goods AS amount, commission_amount AS commission,
+        money_ok AND payment_ok AND delivery_ok AS valid, commission_ok,
+        delivered_at IS NOT NULL AS dated
+    FROM facts WHERE delivered_at>=:start AND delivered_at<:end
+        OR delivered_at IS NULL AND status IN ('DELIVERED','RETURN_REQUESTED','RETURNED','REFUNDED')
+    UNION ALL
+    SELECT 'collection',goods,commission_amount,money_ok AND payment_ok,commission_ok,paid_at IS NOT NULL
+    FROM facts WHERE paid_at>=:start AND paid_at<:end
+        OR paid_at IS NULL AND (paid_count>0 OR delivered_at IS NOT NULL
+            OR status IN ('DELIVERED','RETURN_REQUESTED','RETURNED','REFUNDED'))
+    UNION ALL
+    SELECT 'refund',r.amount-f.shipping_fee,f.commission_amount,
+        f.money_ok AND f.payment_ok AND f.receipt_ok
+        AND r.operation='PAY02_MANUAL_COD_REFUND_V1' AND r.amount=f.grand_total
+        AND r.payment_id=f.payment_id AND r.return_request_id=f.receipt_id
+        AND r.payment_paid_at=f.paid_at AND r.return_received_at=f.received_at
+        AND r.server_timestamp>=f.paid_at AND r.server_timestamp>=f.received_at,
+        f.commission_ok,r.server_timestamp IS NOT NULL
+    FROM facts f LEFT JOIN uteexpress.refunds r ON r.order_id=f.id
+    WHERE r.status='SUCCEEDED' AND (r.server_timestamp>=:start AND r.server_timestamp<:end OR r.server_timestamp IS NULL)
+        OR r.id IS NULL AND f.status='REFUNDED'
+)
+SELECT
+    COALESCE(sum(amount) FILTER (WHERE kind='delivery' AND valid AND dated),0) AS delivered,
+    count(*) FILTER (WHERE kind='delivery' AND NOT COALESCE(valid AND dated,false)) AS delivered_unknown,
+    COALESCE(sum(amount) FILTER (WHERE kind='collection' AND valid AND dated),0) AS collected,
+    count(*) FILTER (WHERE kind='collection' AND NOT COALESCE(valid AND dated,false)) AS collected_unknown,
+    COALESCE(sum(amount) FILTER (WHERE kind='refund' AND valid AND dated),0) AS refunded,
+    count(*) FILTER (WHERE kind='refund' AND NOT COALESCE(valid AND dated,false)) AS refunded_unknown,
+    COALESCE(sum(commission) FILTER (WHERE kind='delivery' AND valid AND dated AND commission_ok),0) AS accrued,
+    count(*) FILTER (WHERE kind='delivery' AND NOT COALESCE(valid AND dated AND commission_ok,false)) AS accrued_unknown,
+    COALESCE(sum(commission) FILTER (WHERE kind='refund' AND valid AND dated AND commission_ok),0) AS reversed,
+    count(*) FILTER (WHERE kind='refund' AND NOT COALESCE(valid AND dated AND commission_ok,false)) AS reversed_unknown,
+    (SELECT count(*) FROM scoped WHERE created_at>=:start AND created_at<:end) AS total_orders,
+    (SELECT count(*) FROM scoped WHERE delivered_at>=:start AND delivered_at<:end) AS delivered_orders,
+    (SELECT count(*) FROM scoped WHERE cancelled_at>=:start AND cancelled_at<:end) AS cancelled_orders
+FROM events
+;
+WITH scoped AS (SELECT * FROM uteexpress.orders WHERE shop_id=:shop),
+payment_counts AS (
+    SELECT p.order_id, count(*) FILTER (WHERE p.status='PAID') AS paid_count
+    FROM uteexpress.payments p JOIN scoped o ON o.id=p.order_id GROUP BY p.order_id
+), payment_facts AS (
+    -- Count ALL PAID rows before validating their content. More than one
+    -- never selects an arbitrary winner, even if only one looks valid.
+    SELECT c.order_id,c.paid_count,p.id AS payment_id,p.amount AS paid_amount,p.paid_at,
+        p.method='COD' AND p.expired_at IS NULL AS collected
+    FROM payment_counts c LEFT JOIN uteexpress.payments p
+        ON p.order_id=c.order_id AND p.status='PAID' AND c.paid_count=1
+), facts AS (
+    SELECT o.*, o.subtotal-o.discount_total AS goods,
+        p.paid_count, p.payment_id, p.paid_amount, p.paid_at,
+        COALESCE(o.subtotal>=0 AND o.discount_total BETWEEN 0 AND o.subtotal
+            AND o.shipping_fee>=0 AND o.grand_total=o.subtotal-o.discount_total+o.shipping_fee
+            AND o.subtotal=trunc(o.subtotal) AND o.discount_total=trunc(o.discount_total)
+            AND o.shipping_fee=trunc(o.shipping_fee) AND o.grand_total=trunc(o.grand_total)
+            AND o.subtotal NOT IN ('NaN'::numeric,'Infinity'::numeric,'-Infinity'::numeric)
+            AND o.grand_total NOT IN ('NaN'::numeric,'Infinity'::numeric,'-Infinity'::numeric),false) AS money_ok,
+        COALESCE(o.commission_amount>=0 AND o.commission_amount<=o.subtotal-o.discount_total
+            AND o.commission_amount=trunc(o.commission_amount)
+            AND o.commission_rate_snapshot BETWEEN 0 AND 100
+            AND o.commission_amount NOT IN ('NaN'::numeric,'Infinity'::numeric,'-Infinity'::numeric),false) AS commission_ok,
+        COALESCE(p.paid_count=1 AND p.collected AND p.paid_at IS NOT NULL
+            AND p.paid_amount=o.grand_total,false) AS payment_ok,
+        EXISTS(SELECT 1 FROM uteexpress.order_status_history h WHERE h.order_id=o.id
+            AND h.from_status='SHIPPING' AND h.to_status='DELIVERED' AND h.created_at=o.delivered_at) AS delivery_ok,
+        t.id AS receipt_id, t.received_at,
+        COALESCE(t.status='APPROVED' AND t.received_by>0 AND btrim(t.receipt_reference)<>''
+            AND t.received_at IS NOT NULL AND EXISTS(
+                SELECT 1 FROM uteexpress.order_status_history h WHERE h.order_id=o.id
+                AND h.from_status='RETURN_REQUESTED' AND h.to_status='RETURNED'
+                AND h.created_at=t.received_at AND h.actor_id=t.received_by),false) AS receipt_ok
+    FROM scoped o LEFT JOIN payment_facts p ON p.order_id=o.id
+    LEFT JOIN uteexpress.return_requests t ON t.order_id=o.id
+)
+, quantity_events AS (
+    SELECT f.id, f.delivered_at AS at, 1 AS sign, f.delivery_ok AND f.payment_ok AND f.money_ok AS valid
+    FROM facts f WHERE delivered_at>=:start AND delivered_at<:end
+        OR delivered_at IS NULL AND status IN ('DELIVERED','RETURN_REQUESTED','RETURNED','REFUNDED')
+    UNION ALL
+    SELECT f.id,f.received_at,-1,f.receipt_ok FROM facts f
+    WHERE received_at>=:start AND received_at<:end
+        OR received_at IS NULL AND status IN ('RETURNED','REFUNDED')
+), item_events AS (
+    SELECT i.product_id,i.product_name_snapshot,i.id AS item_id,i.quantity,q.sign,
+        COALESCE(q.valid AND q.at IS NOT NULL AND i.quantity>0 AND i.product_id>0,false) AS valid
+    FROM quantity_events q LEFT JOIN uteexpress.order_items i ON i.order_id=q.id
+), ranked AS (
+    SELECT product_id, (array_agg(product_name_snapshot ORDER BY item_id DESC))[1] AS name,
+        COALESCE(sum(quantity::bigint) FILTER (WHERE sign=1),0) AS delivered,
+        COALESCE(sum(quantity::bigint) FILTER (WHERE sign=-1),0) AS returned,
+        sum(sign::bigint*quantity) AS net
+    FROM item_events WHERE valid GROUP BY product_id
+    ORDER BY net DESC,product_id ASC LIMIT 10
+), diagnostics AS (SELECT count(*) FILTER (WHERE NOT valid) AS unknown FROM item_events)
+SELECT r.*,d.unknown FROM diagnostics d LEFT JOIN ranked r ON true ORDER BY r.net DESC,r.product_id ASC
+;
