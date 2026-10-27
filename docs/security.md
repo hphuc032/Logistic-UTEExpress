@@ -146,6 +146,8 @@ uteexpress.security.otp-request-limit are 20 requests per minute per socket peer
 429 ErrorResponse and Retry-After before controller/database/mail work. Changing an
 identifier/purpose/route or spoofing Forwarded/X-Forwarded-For does not create a new
 budget. Per-account issuance cooldown and per-token attempts still use database locks.
+The route matcher uses MVC-compatible parsed path segments, so percent-encoded route
+characters cannot bypass the same budget; application context paths are respected.
 
 The limiter is bounded and atomic in one application instance. Saturation fails closed
 without evicting active counters; expired windows are reclaimed. Restart resets its

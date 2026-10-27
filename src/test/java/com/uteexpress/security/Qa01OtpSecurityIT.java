@@ -135,6 +135,16 @@ class Qa01OtpSecurityIT {
         assertThat(countTokens()).isEqualTo(tokens);verifyNoInteractions(mail);
     }
 
+    @Test void encodedRouteSegmentsCannotBypassTheSharedAdmissionBudget() throws Exception {
+        String ip=ip(); long tokens=countTokens();
+        for(int i=0;i<3;i++) submit(post("/forgot-password").param("email","unknown@example.test"),ip,true)
+                .andExpect(status().is3xxRedirection());
+        for(String route:new String[]{"/%66orgot-password","/forgot%2Dpassword","/%72egister","/%76erify-otp","/%76erify-otp/resend","/%72eset-password"})
+            submit(post(java.net.URI.create(route)).param("email","unknown@example.test"),ip,true)
+                    .andExpect(status().isTooManyRequests());
+        assertThat(countTokens()).isEqualTo(tokens);verifyNoInteractions(mail);
+    }
+
     @ParameterizedTest @EnumSource(OtpPurpose.class)
     void mailFailureDoesNotExposeOtpOrSensitiveExceptionTextInApplicationLogsOrResponses(OtpPurpose purpose) throws Exception {
         var user=account(purpose); String syntheticSecret="qa01-sensitive-mail-failure-"+CODE;
