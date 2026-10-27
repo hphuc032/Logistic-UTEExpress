@@ -1,7 +1,7 @@
 package com.uteexpress.order.controller;
 
 import com.uteexpress.common.exception.*;
-import com.uteexpress.order.dto.RevenueSummary;
+import com.uteexpress.reporting.dto.RevenueSummary;
 import com.uteexpress.order.service.RevenueService;
 import java.time.LocalDate;
 import java.util.Map;

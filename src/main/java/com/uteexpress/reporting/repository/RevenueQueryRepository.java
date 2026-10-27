@@ -1,6 +1,6 @@
-package com.uteexpress.order.repository;
+package com.uteexpress.reporting.repository;
 
-import com.uteexpress.order.dto.*;
+import com.uteexpress.reporting.dto.*;
 import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -8,7 +8,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.jdbc.core.namedparam.*;
 import org.springframework.stereotype.Repository;
 
-/** TD-owned read projections. Each stream stays at its own grain; no lifecycle writes or locks. */
+/** Shared DASH-01/DASH-02 read projections. Each stream stays at its own grain; no lifecycle writes or locks. */
 @Repository
 public class RevenueQueryRepository {
     private final ObjectProvider<NamedParameterJdbcTemplate> jdbc;
@@ -118,8 +118,10 @@ public class RevenueQueryRepository {
             SELECT r.*,d.unknown FROM diagnostics d LEFT JOIN ranked r ON true ORDER BY r.net DESC,r.product_id ASC
             """;
 
-    public RevenueMetrics metrics(long shop, RevenuePeriod period) {
-        return jdbc.getObject().queryForObject(METRICS_SQL, parameters(shop, period), (r,n) ->
+    public static final String GLOBAL_METRICS_SQL = METRICS_SQL.replace("WHERE shop_id=:shop", "");
+    public RevenueMetrics metrics(RevenueScope scope, RevenuePeriod period) {
+        String sql = scope.kind() == RevenueScope.Kind.ALL_SHOPS ? GLOBAL_METRICS_SQL : METRICS_SQL;
+        return jdbc.getObject().queryForObject(sql, parameters(scope.shopId() == null ? 0 : scope.shopId(), period), (r,n) ->
             new RevenueMetrics(amount(r.getBigDecimal("delivered"),r.getLong("delivered_unknown")),
                 amount(r.getBigDecimal("collected"),r.getLong("collected_unknown")),
                 amount(r.getBigDecimal("refunded"),r.getLong("refunded_unknown")),
