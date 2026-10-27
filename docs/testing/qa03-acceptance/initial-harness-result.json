@@ -1,0 +1,14 @@
+{
+  "scope": "Local disposable-process rehearsal only; not clean-host, browser or production acceptance",
+  "source_sha": "e88685213d3af20729d2e78c56568f44e0a2922c",
+  "created_utc": "2026-10-27T18:21:41.828589+00:00",
+  "steps": {},
+  "cleanup": {},
+  "jar_sha256": "713f49b84f62bf27dedfeeb2e4c3511b4bb6e2f3835da41f3b379070c10dc67e",
+  "status": "FAIL",
+  "failure_code": "MISSING_ENV_NOT_FAIL_CLOSED",
+  "log_hashes": {
+    "missing-env.log": "53071677efe0b6973fcccf508a625af5ab6e4d06257078e87cf1acb18acd7295"
+  },
+  "script_sha256": "a5eea7a8cf05237b4d8b509ff99866a50d3963a99828bc8be6370d3f552f876c"
+}

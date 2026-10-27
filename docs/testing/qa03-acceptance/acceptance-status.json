@@ -1,0 +1,102 @@
+{
+  "source_sha": "e88685213d3af20729d2e78c56568f44e0a2922c",
+  "report_date": "2026-10-28",
+  "overall": "BLOCKED",
+  "whole_qa03_completed": false,
+  "automated_java_tests": 1989,
+  "automated_node_tests": 12,
+  "automated_failure_error_skip_counts": 0,
+  "gates": [
+    {
+      "gate": "Assignment",
+      "status": "PASS",
+      "scope": "automated",
+      "owner": "QD"
+    },
+    {
+      "gate": "Failure/Retry/RTS",
+      "status": "PASS",
+      "scope": "automated",
+      "owner": "QD/TD"
+    },
+    {
+      "gate": "WebSocket/inbox",
+      "status": "PASS",
+      "scope": "automated single-instance",
+      "owner": "QD/HP"
+    },
+    {
+      "gate": "Review",
+      "status": "PASS",
+      "scope": "automated",
+      "owner": "QD/TD"
+    },
+    {
+      "gate": "Migration/clean DB boot",
+      "status": "PASS",
+      "scope": "automated + local packaged JAR",
+      "owner": "QD"
+    },
+    {
+      "gate": "Required ENV cleared",
+      "status": "PASS",
+      "scope": "one local scenario",
+      "owner": "QD"
+    },
+    {
+      "gate": "HTTP upload/process restart",
+      "status": "PASS",
+      "scope": "local synthetic",
+      "owner": "QD"
+    },
+    {
+      "gate": "DB backup/restore",
+      "status": "PASS",
+      "scope": "local synthetic, DB only",
+      "owner": "QD"
+    },
+    {
+      "gate": "Category hard-delete FK",
+      "status": "PASS",
+      "scope": "local restored synthetic DB",
+      "owner": "QD"
+    },
+    {
+      "gate": "Complete demo seed",
+      "status": "NOT RUN",
+      "scope": "T48 full manifest",
+      "owner": "HP/TD/QD"
+    },
+    {
+      "gate": "Browser/manual Ops + responsive",
+      "status": "NOT RUN",
+      "scope": "T50/UI-02",
+      "owner": "QD/HP"
+    },
+    {
+      "gate": "Manager commission limits",
+      "status": "BLOCKED",
+      "scope": "scope decision required",
+      "owner": "HP/QD/TD"
+    },
+    {
+      "gate": "Shared integration acceptance",
+      "status": "BLOCKED",
+      "scope": "owner confirmation required",
+      "owner": "HP"
+    },
+    {
+      "gate": "Clean-host/production controls",
+      "status": "NOT RUN",
+      "scope": "REL-01",
+      "owner": "QD/HP"
+    },
+    {
+      "gate": "Off-host DB + uploads recovery",
+      "status": "NOT RUN",
+      "scope": "REL-01",
+      "owner": "QD/operator"
+    }
+  ],
+  "status_note": "PASS is limited to stated execution scope; release follow-ups are separately reported, not automatic new circular prerequisites."
+}

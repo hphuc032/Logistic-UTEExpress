@@ -1,0 +1,48 @@
+{
+  "scope": "Local disposable-process rehearsal only; not clean-host, browser or production acceptance",
+  "source_sha": "e88685213d3af20729d2e78c56568f44e0a2922c",
+  "created_utc": "2026-10-27T18:22:30.404717+00:00",
+  "steps": {
+    "missing_env": {
+      "status": "PASS",
+      "exit_code": 1,
+      "scenario": "Required app ENV variables cleared; startup denied at first missing configuration",
+      "required_env_names_seen": [
+        "MAIL_HOST"
+      ]
+    },
+    "clean_db_startup": {
+      "status": "PASS",
+      "successful_migrations": 28,
+      "health": "UP",
+      "fixture": "Isolated PostgreSQL 17.6; synthetic identity inserted after empty-database migration, not full demo seed"
+    },
+    "upload_restart": {
+      "status": "PASS",
+      "transport": "Real HTTP login + CSRF multipart avatar upload + authenticated read",
+      "restart": "Local Java process terminated and restarted with same DB and external upload directory",
+      "bytes": 74,
+      "content_sha256": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865",
+      "different_process": true
+    },
+    "database_backup_restore": {
+      "status": "PASS",
+      "method": "pg_dump custom format -> new database -> pg_restore --exit-on-error",
+      "app_tables": 34,
+      "row_fingerprint_sha256": "ae066d83df9436b5a9b34f94f500f2c847ecdc08eac3940919faa535888f7f8c",
+      "dump_sha256": "5efce5b8d8dd073f5141ec3f38fabd47a96f5cde81698ac8d05b0fcad134ced8",
+      "limit": "Disposable local DB only; no clean-host/off-host recovery, upload backup or production RPO/RTO claim"
+    }
+  },
+  "cleanup": {
+    "owned_container_removed": true
+  },
+  "jar_sha256": "713f49b84f62bf27dedfeeb2e4c3511b4bb6e2f3835da41f3b379070c10dc67e",
+  "status": "PASS",
+  "log_hashes": {
+    "first-start.log": "cb4d4cc6ca13f3636265390002cefcb593b73388fb087e901ba7e03389d91522",
+    "missing-env.log": "10df488d0f2cd7d37595dbb93141d709039784c6c1a5be55aa457c4e13b81323",
+    "second-start.log": "8dbd78fcb328ce6b35def258e99393837f236b218c5f91b6fe25e40d2e1041f6"
+  },
+  "script_sha256": "e317b8858727b63826fc09b122d12c2b1a1068bf2bce0c4560391dd3429fdc7b"
+}
