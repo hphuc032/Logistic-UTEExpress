@@ -69,3 +69,27 @@ Severity below describes integration/acceptance impact. No Critical/High securit
 T49 full deployment/restart/upload retention and T50 manual 375/768/desktop demo were not run. Real external SMTP, production log ingestion/alerts, backup/ACL/proxy settings, load and multi-instance broker behavior are unverified. These are stated limits, not invented vulnerabilities. Review orphan handling remains a restricted maintenance/drain/recheck procedure; no files were automatically removed. Attested full COD refunds do not prove partial/ONLINE/cancelled-paid gateway flows.
 
 No owner production business rule, migration, CSRF/JWT policy, financial formula or QA CI was changed. Findings remain reviewable proposals; no remote issue/PR comment was posted.
+
+## Remediation review — 2026-10-27 (supersedes historical dependency status)
+
+Approved develop `663fc9155bffbc0b35cc5ae0b465a0a74c5ca645` was merged normally at `2c0a3819d0af7df5cf1416c94d4f436f5e5bdbe5`; #60 and #59 are integrated, including Admin financial reporting. F01 is no longer a missing-merge blocker; fresh integration verification is pending. Earlier counts remain historical.
+
+The available Master Plan is the original unnumbered DOCX at the previously recorded path/hash. A file named `UTEExpress_Master_Project_Plan(1).docx` was not found in the repository, D:/JavaWeb or the user's Downloads/Documents/Desktop. No different revision is silently assumed.
+
+### Concrete correction design
+
+- F02: the Plan's final Q&A uniquely defines terminal shipment success as DELIVERED / (DELIVERED + RETURNED_TO_SENDER), not per-attempt success, current failures or all assignments. Correct the existing calculation and explicitly label the existing all-history/current-assignee view; do not invent historical assignment attribution or silently claim a selectable period. Verify actual first-success, retry-success, exhausted, returned, pending, in-progress, empty and foreign-shipper datasets.
+- F03: add a dedicated `OrderLifecycleService.confirmReturnToSender` entry point and narrow Ops HTTP/form command containing only original Order/Shipment versions and a nonblank receipt reference. ADMIN/MANAGER confirm that all goods were physically received by the Shop; this is an auditable Ops attestation, not independent carrier proof. Lock Order -> Shipment -> Payment -> persisted Ops Account -> ascending Products -> Voucher/usage. Require SHIPPING, failed attempt 2/max 2 and both immutable failure records, no delivery, no prior inventory release, exactly matching UNPAID COD. Record an immutable, unique receipt with original versions/actor/reference/time in a new migration; set Shipment RETURNED_TO_SENDER and use the existing lifecycle CANCEL_FAILED_DELIVERY edge to CANCELLED; restore inventory/release pre-delivery voucher once. Preserve Payment unchanged. Same original versions/reference/actor replays after current Ops authorization; changed/stale commands conflict. Reject paid/online/missing/ambiguous Payment instead of inventing refund behavior. Whole operation rolls back on failure. No applied migration or ledger invariant changes.
+- F04 proposed contract correction (REQUIRES HP AUTHORIZATION before production implementation): retain the existing after-commit `OrderStatusChangedEvent` for current consumers, introduce a separate internal pre-commit lifecycle fact after Order/history flush, and let a MANDATORY notification writer join that same transaction. Reuse the history-derived recipients/dedupe insert and existing after-commit hint publisher. Any inbox-write failure rolls back the business write; business rollback leaves neither history nor inbox nor socket hint. Existing reconciliation stays for legacy committed history/recovery, and the after-commit listener becomes a harmless deduplicating retry. No Order -> Notification dependency cycle, new broker, security exemption or second notification system. Add actual PostgreSQL atomicity/rollback/concurrency tests and keep socket revocation/Origin/CSRF tests.
+
+### Notification comparison
+
+| Criterion | Master Plan I8 | Current production | Risk | Proposed correction |
+|---|---|---|---|---|
+| Inbox persistence | Same business transaction | After-commit history projection in REQUIRES_NEW | Committed business result may temporarily have no inbox row | MANDATORY pre-commit history projection; failure rolls back business |
+| Socket dispatch | Only after commit | After projection transaction commits | Already protected; hints remain best effort | Retain existing after-commit hint registration |
+| Business rollback | No successful notification | No committed history/source, no hint | Existing behavior is safe | Preserve same-transaction rollback and test it |
+| Offline recovery | Stored inbox | Durable history plus eventually persisted inbox | Requires working reconciliation/backlog processing before row exists | Inbox guaranteed on commit, history recovery retained for legacy |
+| Dedup/privacy | ID-based display, own recipient | Unique history+recipient and private STOMP/inbox | No demonstrated tenant leak | Reuse existing dedupe, authority and WS security unchanged |
+
+Until the proposed transaction-contract change is explicitly authorized, F04 remains unresolved and its tested recovery guarantees must not be relabelled as same-transaction persistence. Independent dashboard/metric/browser/environment work continues.

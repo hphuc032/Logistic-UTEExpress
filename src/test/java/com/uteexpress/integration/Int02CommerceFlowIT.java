@@ -40,9 +40,10 @@ class Int02CommerceFlowIT {
     @Autowired JdbcTemplate jdbc;
     @Autowired PasswordEncoder passwords;
 
-    @ParameterizedTest(name = "checkout through full COD refund; first-attempt failure={0}")
-    @ValueSource(booleans = {false, true})
-    void realJwtCheckoutDeliveryReviewReturnAndRefundPreserveOneOrdersEvidence(boolean retry) throws Exception {
+    @ParameterizedTest(name = "integrated checkout outcome={0}")
+    @ValueSource(strings = {"DIRECT", "RETRY", "RETURN_TO_SENDER"})
+    void realJwtCheckoutDeliveryReviewReturnAndRefundPreserveOneOrdersEvidence(String scenario) throws Exception {
+        boolean retry = !scenario.equals("DIRECT");
         Account buyer = account("USER"), vendor = account("VENDOR"), admin = account("ADMIN");
         Account shipper = account("SHIPPER"), foreignShipper = account("SHIPPER"), stranger = account("USER");
         Cookie buyerJwt = login(buyer), vendorJwt = login(vendor), adminJwt = login(admin);
@@ -104,6 +105,29 @@ class Int02CommerceFlowIT {
             assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.orders WHERE id=?", String.class, order)).isEqualTo("SHIPPING");
             json("/shipper/orders/" + order + "/retry", shipperJwt, fulfillment(order, null)).andExpect(status().isOk());
             assertThat(version(order)).isEqualTo(originalOrderVersion);
+        }
+        if (scenario.equals("RETURN_TO_SENDER")) {
+            json("/shipper/orders/" + order + "/delivery-failed", shipperJwt,
+                    fulfillment(order,null).replace("}",",\"failureReason\":\"Second failure\",\"evidenceReference\":\"INT02-SECOND-ATTEMPT\"}"))
+                    .andExpect(status().isOk());
+            var unpaid = rows("payments",order);
+            assertThat(jdbc.queryForObject("SELECT stock FROM uteexpress.products WHERE id=?",Integer.class,f.product())).isEqualTo(8);
+            String physicalReceipt = fulfillment(order,null).replace("}",",\"receiptReference\":\"INT02-TEST-PHYSICAL-RECEIPT\"}");
+            json("/admin/orders/"+order+"/return-to-sender",adminJwt,physicalReceipt).andExpect(status().isOk())
+                    .andExpect(jsonPath("$.status").value("CANCELLED")).andExpect(jsonPath("$.replayed").value(false));
+            var cancelled = state(order);
+            json("/admin/orders/"+order+"/return-to-sender",adminJwt,physicalReceipt).andExpect(status().isOk())
+                    .andExpect(jsonPath("$.replayed").value(true));
+            assertThat(state(order)).isEqualTo(cancelled);
+            assertThat(jdbc.queryForObject("SELECT stock FROM uteexpress.products WHERE id=?",Integer.class,f.product())).isEqualTo(10);
+            assertThat(jdbc.queryForObject("SELECT status FROM uteexpress.voucher_usages WHERE order_id=?",String.class,order)).isEqualTo("RELEASED");
+            assertThat(rows("shipments",order).getFirst()).containsEntry("status","RETURNED_TO_SENDER");
+            assertThat(rows("payments",order)).isEqualTo(unpaid);
+            assertThat(rows("refunds",order)).isEmpty();
+            assertThat(rows("shipment_return_receipts",order)).hasSize(1);
+            assertThat(rows("order_items",order)).isEqualTo(itemsSnapshot);
+            assertThat(immutableOrder(order)).isEqualTo(orderSnapshot);
+            return;
         }
         var beforeWrongCod = state(order);
         json("/shipper/orders/" + order + "/delivered", shipperJwt, fulfillment(order, "1"))

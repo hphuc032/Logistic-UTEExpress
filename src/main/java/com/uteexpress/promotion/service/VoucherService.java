@@ -99,6 +99,22 @@ public class VoucherService {
                 .orElseThrow(() -> new ApplicationException(ErrorCode.CONFLICT));
         if (!("NEW".equals(order.getStatus()) || "CONFIRMED".equals(order.getStatus()))
                 || order.getDeliveredAt() != null) throw new ApplicationException(ErrorCode.CONFLICT);
+        releaseUsage(orderId, order);
+    }
+
+    /** After the lifecycle has flushed a CANCELLED undelivered Order and its inventory-release marker. */
+    @Transactional(propagation = Propagation.MANDATORY)
+    @org.springframework.security.access.prepost.PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority(), T(com.uteexpress.security.RoleCode).MANAGER.authority())")
+    public void releaseForCancelledUndeliveredOrder(Long orderId) {
+        var order = usages.lockCancellationOrderFacts(orderId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.CONFLICT));
+        if (!"CANCELLED".equals(order.getStatus()) || order.getDeliveredAt() != null
+                || order.getInventoryReleasedAt() == null || !order.getInventoryReleasedAt().equals(order.getCancelledAt()))
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        releaseUsage(orderId, order);
+    }
+
+    private void releaseUsage(Long orderId, VoucherUsageRepository.CancellationOrderFacts order) {
         var recorded = usages.findByOrderId(orderId);
         if (order.getVoucherId() == null && recorded.isEmpty()) return; // Legacy/no-voucher: no invented history.
         if (order.getVoucherId() == null || recorded.isEmpty()) throw new ApplicationException(ErrorCode.CONFLICT);

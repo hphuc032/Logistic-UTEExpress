@@ -98,12 +98,21 @@ final class OpsOrderAuthority {
     }
 
     void release(Order order, Instant at) {
+        releaseInventory(order,at);
+        vouchers.releaseForCancellation(order.getId());
+    }
+
+    void releaseInventory(Order order, Instant at) {
         if (order.getInventoryReleasedAt() != null) throw conflict();
         inventory.restore(items.findByOrderIdOrderByIdAsc(order.getId()).stream()
                 .map(item -> new StockQuantity(item.getProductId(), item.getQuantity())).toList());
-        order.releaseInventory(at);
+        if (order.getStatus() == OrderStatus.SHIPPING) order.releaseInventoryAfterFailedDelivery(at);
+        else order.releaseInventory(at);
         // System-wide Ops needs no vendor-owned Shop authorization or mutable Shop eligibility.
-        vouchers.releaseForCancellation(order.getId());
+    }
+
+    void releaseCancelledVoucher(Order order) {
+        vouchers.releaseForCancelledUndeliveredOrder(order.getId());
     }
 
     void appendAudit(Order order, OrderStatus from, Long originalVersion, Long actor, OpsCancellationReason reason) {
