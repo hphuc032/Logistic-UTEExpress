@@ -52,4 +52,17 @@ Tooling is ready for HP/TD review after exact-head CI. This does not complete IN
 
 The runner now embeds runner_sha, runner_script_sha256, tested_source_sha (and legacy tested_revision), actual command exit codes, per-suite/summary hashes, raw-local-log hashes and derived test counts in the generated manifest itself. It requires clean runner and target checkouts and checks both again before publication; changing either the runner revision or its Python file aborts without PASS evidence. No log contents are published. Manifest manifest_schema_version is 2. Legacy frozen-#59 evidence above remains historical and is not replaced by a claim that its SHA was current develop.
 
-17 automated tool tests PASS, including runner revision/file mutation during execution and provenance/log-hash assertions. Fresh execution against exact current develop will be recorded after completion on a separate clean target checkout. Tooling completion still requires TD scoped review/GitHub approval and HP decision; whole QA-03 acceptance remains dependent on INT-02 and the Ops acceptance matrix.
+17 automated tool tests PASS, including runner revision/file mutation during execution and provenance/log-hash assertions. Fresh execution on clean develop 798535b is recorded below; the previous frozen-#59 manifest remains historical. Tooling completion still requires TD scoped review/GitHub approval and HP decision; whole QA-03 acceptance remains dependent on INT-02 and the Ops acceptance matrix.
+
+
+## HP-requested final develop execution — 2026-10-27
+
+- Actual runner SHA: 1180ed4a7a598773cf566c8df5d8c68ed1dd9892.
+- Actual tested source SHA: 798535b32ff81a011f34cfa01bbeb2d2dd0cb981, clean detached develop checkout including merged DASH-02 and INT-02 #62.
+- Generated schema-v2 manifest: QA-03-develop-e2e-evidence.json; SHA-256 33dab1830894cbd6d273ac9e518b62363953ff027a3dc691c0ed6ca3732b12ca.
+- **682 unit/architecture (72 classes) + 1,268 PostgreSQL (61 classes) = 1,950 PASS**, zero failures/errors/skips/flaky cases, Failsafe timeout=false and flakes=0, Maven exit0. **12 Node PASS**, fail/cancelled/skipped/todo=0, Node exit0. Runner CLI exit0.
+- Runner and target Git revisions/clean trees were checked automatically before publication. Script, per-suite, Failsafe summary and local raw-log hashes are embedded; the two raw-log hashes were independently recomputed after completion. Hashes describe actual on-disk bytes, including platform line endings, not normalized Git blobs.
+- Raw logs remain ignored under the target's target/qa-03. Existing Testcontainers/Hikari/fork termination-after-System.exit(0) diagnostics did not produce failure/timeout/nonzero exit; this does not diagnose or suppress them.
+- **17 tool unit tests PASS**. An initial new hash assertion compared LF fixture text with Windows CRLF bytes; the fixture was corrected to compare the actual file bytes, matching the intended raw-log hash contract. No guard or evidence acceptance condition was weakened.
+
+The final PR commit adds docs/evidence only after this immutable runner implementation commit. The runner source hash remains identical; the manifest intentionally records the commit actually executed, not a self-referential later documentation commit. Exact-head CI is checked separately for the final PR HEAD. TD must confirm final scoped review and submit GitHub APPROVED; HP owns merge permission and QA-03 tooling completion. **The whole QA-03 task is not declared complete**: INT-02 acceptance and Assignment/Failure/WS/Review/Migration/clean-DB Ops acceptance remain separate gates.
