@@ -1,0 +1,103 @@
+# QA-03 preparation — reproducible local evidence runner
+
+QD-owned tooling only. No production Java, applied migration, financial formula, JWT/CSRF/Origin, Order/Payment/Shipping logic or existing feature HEAD is changed. This prepares QA-03; INT-02/group acceptance is still required before calling QA-03 complete.
+
+## Usage
+
+Python 3.11+ standard library, Java 21/JAVA_HOME, Maven Wrapper, Docker engine and Node (the project CI uses Node 22). No pip packages. The target checkout must contain WS-02, its client tests and the existing Ops/review/migration suites; an old develop without WS-02 fails before tests are run. No feature is merged automatically.
+
+```powershell
+python -B scripts/qa/verify_operations.py --plan
+python -B scripts/qa/verify_operations.py --checkout "C:\path\to\approved-checkout"
+```
+
+Without --checkout it verifies this repository. --plan only prints the fixed commands/coverage requirements; it is not a successful test run. The runner can live in a separate tooling checkout while testing an approved/frozen feature or integration checkout. It never checks out, rewrites or commits target source.
+
+Preflight checks Java 21, Node >=18 and a responding Docker engine (15-second bounds); Node 22 remains the CI choice. Maven has a 30-minute local command budget and Node tests a two-minute budget; a timeout prevents evidence publication. The runner rejects dirty/untracked source, remembers the exact Git revision, runs Maven `-q -Ppostgres-it clean verify` followed by Node `--test --test-reporter=tap`, then rechecks clean source and the unchanged revision before publishing. Maven clean prevents stale reports from a prior branch. An existing evidence JSON is removed at invocation start, so a failed attempt cannot leave an old PASS artifact looking current. Nonzero process exit, missing/duplicate/malformed/empty suites, skip/failure/error/flaky/rerun cases, missing required Ops suites, inconsistent Failsafe summary, timeout and empty/failed/skipped Node summaries prevent publication.
+
+`target/qa-03/operations-evidence.json` contains source SHA, UTC collection time, per-suite counts/hashes and exit/summary information. Raw maven.log/node.log are kept alongside for local diagnosis and remain ignored by Git. Raw XML properties, env values, testcase text, exception payloads and request details do not enter the JSON. The CLI does not echo private exception text. Do not upload raw local logs without review. Output remains within the target checkout.
+
+Required coverage includes baseline/fresh DB, shipment assignment/attempt migration, full Shipper flow, real WebSocket, notification recovery, real Review writer and Review migration. Architecture checks and all other suites produced by full clean verify also contribute. Counts are derived, never hardcoded to a previously reported total. Larger required acceptance matrices can be agreed with HP/TD separately; passing this tool is not proof that every business scenario exists.
+
+This is local evidence, not a trusted-runner signature, production/clean-machine deployment sign-off, multi-instance/load claim, GitHub approval or branch protection override. Environment/dependency provenance is not cryptographically attested. Review and release gates remain independent.
+
+## Tool verification
+
+```powershell
+python -B -m unittest discover -s scripts/qa/tests -v
+```
+
+15 tests PASS using isolated temporary fixtures. Tests cover count/secret sanitization, required-suite omission, empty/malformed/entity XML, contradictory counts, duplicate suites, skip/flaky/rerun/timeout/incomplete summaries, invalid Node results, command order, failed-run stale-PASS removal, preserved failure logs, changed revision/dirty source and safe CLI errors. These are QA-tool tests, not Java/PostgreSQL business tests. The original parser-only check against real 9f81a66 XML reused artifacts and was not a new full-suite run. A fresh end-to-end execution is now recorded below. No production tests or constraints are weakened.
+
+
+## Fresh end-to-end verification on frozen review candidate
+
+Runner source revision: c0922db0175e98a74c873a25585fdbc069d83f31 (tooling branch synchronized with develop e6d94c5). The runner Python source SHA-256 is 5ce1f478ef4b1dcfd62d73f924482d5203231bfe5b67c11d1a7c9f8fab845d8b; the final commit adds evidence/docs only. Target source is frozen PR #59 HEAD 9d63e5af59b5c6fc79a7b21fe087d621aa42df1f, not the tooling branch's business source. It remains a review candidate, not an accepted/merged release.
+
+```powershell
+$env:JAVA_HOME='C:\Program Files\Java\jdk-21'
+python -B scripts/qa/verify_operations.py --checkout "C:\path\to\frozen-dash02-checkout"
+```
+
+The actual CLI ran both fixed commands and published evidence itself, exit0: **682 unit/architecture + 1,241 PostgreSQL = 1,923 PASS**, no failures/errors/skips/flaky cases, Failsafe timeout=false. **12 Node tests PASS**, fail/cancelled/skipped/todo=0. Target Git HEAD and clean working tree were rechecked successfully. This is a fresh runner execution, not imported XML from the prior manual run, and must not be added to that overlapping total.
+
+The exact generated JSON is copied to QA-03-runner-e2e-evidence.json (SHA-256 c7722afbaca1495c4fd399144162db3312d0dffe672ed51a9fc98f9344faa49c). Raw local maven.log and node.log stay ignored under the target checkout's target/qa-03. Existing container/Hikari/fork teardown diagnostics are preserved locally; successful exit/XML status is not a claim that infrastructure warnings were diagnosed.
+
+Three additional real CLI smoke checks on disposable Git fixtures passed: dirty checkout rejected without test execution; missing WS-02 checkout removes stale evidence then rejects before commands; non-root checkout rejected. These supplement the 15 automated tool tests and are not business-suite cases. No target source or production module was edited.
+
+Tooling is ready for HP/TD review after exact-head CI. This does not complete INT-02 or QA-03, approve/merge PR #59, deploy monitoring, or change any reviewer/branch-protection gate.
+
+
+## HP final tooling follow-up — manifest v2
+
+The runner now embeds runner_sha, runner_script_sha256, tested_source_sha (and legacy tested_revision), actual command exit codes, per-suite/summary hashes, raw-local-log hashes and derived test counts in the generated manifest itself. It requires clean runner and target checkouts and checks both again before publication; changing either the runner revision or its Python file aborts without PASS evidence. No log contents are published. Manifest manifest_schema_version is 2. Legacy frozen-#59 evidence above remains historical and is not replaced by a claim that its SHA was current develop.
+
+17 automated tool tests PASS, including runner revision/file mutation during execution and provenance/log-hash assertions. Fresh execution on clean develop 798535b is recorded below; the previous frozen-#59 manifest remains historical. Tooling completion still requires TD scoped review/GitHub approval and HP decision; whole QA-03 acceptance remains dependent on INT-02 and the Ops acceptance matrix.
+
+
+## HP-requested final develop execution — 2026-10-27
+
+- Actual runner SHA: 1180ed4a7a598773cf566c8df5d8c68ed1dd9892.
+- Actual tested source SHA: 798535b32ff81a011f34cfa01bbeb2d2dd0cb981, clean detached develop checkout including merged DASH-02 and INT-02 #62.
+- Generated schema-v2 manifest: QA-03-develop-e2e-evidence.json; SHA-256 33dab1830894cbd6d273ac9e518b62363953ff027a3dc691c0ed6ca3732b12ca.
+- **682 unit/architecture (72 classes) + 1,268 PostgreSQL (61 classes) = 1,950 PASS**, zero failures/errors/skips/flaky cases, Failsafe timeout=false and flakes=0, Maven exit0. **12 Node PASS**, fail/cancelled/skipped/todo=0, Node exit0. Runner CLI exit0.
+- Runner and target Git revisions/clean trees were checked automatically before publication. Script, per-suite, Failsafe summary and local raw-log hashes are embedded; the two raw-log hashes were independently recomputed after completion. Hashes describe actual on-disk bytes, including platform line endings, not normalized Git blobs.
+- Raw logs remain ignored under the target's target/qa-03. Existing Testcontainers/Hikari/fork termination-after-System.exit(0) diagnostics did not produce failure/timeout/nonzero exit; this does not diagnose or suppress them.
+- **17 tool unit tests PASS**. An initial new hash assertion compared LF fixture text with Windows CRLF bytes; the fixture was corrected to compare the actual file bytes, matching the intended raw-log hash contract. No guard or evidence acceptance condition was weakened.
+
+The final PR commit adds docs/evidence only after this immutable runner implementation commit. The runner source hash remains identical; the manifest intentionally records the commit actually executed, not a self-referential later documentation commit. Exact-head CI is checked separately for the final PR HEAD. TD must confirm final scoped review and submit GitHub APPROVED; HP owns merge permission and QA-03 tooling completion. **The whole QA-03 task is not declared complete**: INT-02 acceptance and Assignment/Failure/WS/Review/Migration/clean-DB Ops acceptance remain separate gates.
+
+## Current develop execution after #63/#64 — 2026-10-28
+
+This section supersedes earlier execution sections for the current source; their
+manifests remain historical evidence for their stated revisions.
+
+- Synchronized runner implementation: `6e1460b24a71b984ee055a7ffa5901bef73e07c9`.
+- Actual clean tested develop: `d2f722d4075999b418e3092ccc75de3c49ec9e57`, including
+  accepted Buyer cancellation #63 and test-context cleanup #64.
+- Generated v2 manifest: [QA-03-develop-20261028-evidence.json](QA-03-develop-20261028-evidence.json).
+- **686 unit/architecture (73 classes) + 1,303 PostgreSQL (62 classes) = 1,989 PASS**,
+  zero failures/errors/skips. Maven exit 0, timeout false. **12 Node PASS**, zero
+  failures/cancelled/skipped/todo, Node and runner CLI exit 0.
+- **17 tooling unit tests PASS** after sync. Runner Python and tooling workflow
+  are unchanged from the previously reviewed implementation; merge imports current
+  develop, and the final documentation commit records the fresh run only.
+- Runner and target revisions/clean checkouts were rechecked by the runner before
+  publication. Local raw-log and runner-script hashes were independently recomputed
+  and matched the manifest. Suite names/counts exactly match the accepted #64
+  full-run inventory; no suite was dropped or count reduced.
+- BuyerCancellationIT 33, ReturnToSenderIT 17, NotificationIT 6,
+  NotificationRecoveryIT 7, NotificationSchedulerIT 1, NotificationSocketIT 29,
+  OpsDashboardReadIT 28, and ShipmentAssignmentIT 6 all passed in this full run.
+- No observed closed-connection, connection-refused or forced-fork-shutdown
+  diagnostic occurrences; no Failsafe dump generated. This is an observed local
+  result, not a guarantee for parallel/shared-container lifecycles or production.
+- No production/schema/security/lifecycle or transaction-isolation changes were
+  made in this tooling update. Raw logs remain ignored under the tested checkout.
+
+Final PR HEAD includes documentation/evidence after the runner commit actually
+executed; exact-head CI and renewed reviewer acceptance must be checked separately.
+Prior approval applies to its original HEAD, not automatically to this sync.
+HP owns final acceptance and merge. This remains **QA-03 tooling**, not whole QA-03
+completion or REL-01 deployment acceptance. The remaining manual/browser, clean-host
+ENV/upload/backup and operational gates in the Ops reports are not marked PASS.
