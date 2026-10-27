@@ -66,3 +66,38 @@ The runner now embeds runner_sha, runner_script_sha256, tested_source_sha (and l
 - **17 tool unit tests PASS**. An initial new hash assertion compared LF fixture text with Windows CRLF bytes; the fixture was corrected to compare the actual file bytes, matching the intended raw-log hash contract. No guard or evidence acceptance condition was weakened.
 
 The final PR commit adds docs/evidence only after this immutable runner implementation commit. The runner source hash remains identical; the manifest intentionally records the commit actually executed, not a self-referential later documentation commit. Exact-head CI is checked separately for the final PR HEAD. TD must confirm final scoped review and submit GitHub APPROVED; HP owns merge permission and QA-03 tooling completion. **The whole QA-03 task is not declared complete**: INT-02 acceptance and Assignment/Failure/WS/Review/Migration/clean-DB Ops acceptance remain separate gates.
+
+## Current develop execution after #63/#64 — 2026-10-28
+
+This section supersedes earlier execution sections for the current source; their
+manifests remain historical evidence for their stated revisions.
+
+- Synchronized runner implementation: `6e1460b24a71b984ee055a7ffa5901bef73e07c9`.
+- Actual clean tested develop: `d2f722d4075999b418e3092ccc75de3c49ec9e57`, including
+  accepted Buyer cancellation #63 and test-context cleanup #64.
+- Generated v2 manifest: [QA-03-develop-20261028-evidence.json](QA-03-develop-20261028-evidence.json).
+- **686 unit/architecture (73 classes) + 1,303 PostgreSQL (62 classes) = 1,989 PASS**,
+  zero failures/errors/skips. Maven exit 0, timeout false. **12 Node PASS**, zero
+  failures/cancelled/skipped/todo, Node and runner CLI exit 0.
+- **17 tooling unit tests PASS** after sync. Runner Python and tooling workflow
+  are unchanged from the previously reviewed implementation; merge imports current
+  develop, and the final documentation commit records the fresh run only.
+- Runner and target revisions/clean checkouts were rechecked by the runner before
+  publication. Local raw-log and runner-script hashes were independently recomputed
+  and matched the manifest. Suite names/counts exactly match the accepted #64
+  full-run inventory; no suite was dropped or count reduced.
+- BuyerCancellationIT 33, ReturnToSenderIT 17, NotificationIT 6,
+  NotificationRecoveryIT 7, NotificationSchedulerIT 1, NotificationSocketIT 29,
+  OpsDashboardReadIT 28, and ShipmentAssignmentIT 6 all passed in this full run.
+- No observed closed-connection, connection-refused or forced-fork-shutdown
+  diagnostic occurrences; no Failsafe dump generated. This is an observed local
+  result, not a guarantee for parallel/shared-container lifecycles or production.
+- No production/schema/security/lifecycle or transaction-isolation changes were
+  made in this tooling update. Raw logs remain ignored under the tested checkout.
+
+Final PR HEAD includes documentation/evidence after the runner commit actually
+executed; exact-head CI and renewed reviewer acceptance must be checked separately.
+Prior approval applies to its original HEAD, not automatically to this sync.
+HP owns final acceptance and merge. This remains **QA-03 tooling**, not whole QA-03
+completion or REL-01 deployment acceptance. The remaining manual/browser, clean-host
+ENV/upload/backup and operational gates in the Ops reports are not marked PASS.
