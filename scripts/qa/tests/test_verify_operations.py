@@ -28,6 +28,9 @@ class EvidenceTests(unittest.TestCase):
         self.original_preflight = qa.preflight
         self.preflight_patch.start()
         self.addCleanup(self.preflight_patch.stop)
+        self.runner_patch = patch.object(qa,"runner_identity",return_value="b"*40)
+        self.runner_patch.start()
+        self.addCleanup(self.runner_patch.stop)
 
     def suite(self, folder, name):
         path = self.root / "target" / folder / ("TEST-" + name + ".xml")
@@ -112,6 +115,12 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(calls[0][-4:],["-q","-Ppostgres-it","clean","verify"])
         self.assertEqual(calls[1][0],"node")
         self.assertEqual(result["node"]["tests"],12)
+        self.assertEqual(result["tested_source_sha"],REV)
+        self.assertEqual(result["tested_revision"],REV)
+        self.assertEqual(result["runner_sha"],"b"*40)
+        self.assertEqual(result["manifest_schema_version"],2)
+        self.assertEqual(len(result["runner_script_sha256"]),64)
+        self.assertEqual(result["log_sha256"]["node"],qa.hashlib.sha256((self.root/"target/qa-03/node.log").read_bytes()).hexdigest())
         self.assertTrue((self.root/"target/qa-03/operations-evidence.json").is_file())
         self.assertTrue((self.root/"target/qa-03/maven.log").is_file())
 
@@ -153,6 +162,24 @@ class EvidenceTests(unittest.TestCase):
         with patch.object(qa.subprocess,"run",side_effect=values) as command:
             self.original_preflight()
         self.assertEqual(command.call_count,3)
+
+    def test_runner_revision_change_prevents_publication(self):
+        with patch.object(qa,"git_identity",return_value=REV), patch.object(qa,"runner_identity",side_effect=["b"*40,"c"*40]), patch.object(qa,"execute",side_effect=self.fake_execute), contextlib.redirect_stdout(io.StringIO()):
+            with self.assertRaises(qa.EvidenceError): qa.run(self.root)
+        self.assertFalse((self.root/"target/qa-03/operations-evidence.json").exists())
+
+    def test_runner_file_change_prevents_publication(self):
+        actual_hash=qa.sha256_file
+        reads=0
+        def digest(path):
+            nonlocal reads
+            if path == Path(qa.__file__).resolve():
+                reads+=1
+                return "a"*64 if reads==1 else "b"*64
+            return actual_hash(path)
+        with patch.object(qa,"git_identity",return_value=REV), patch.object(qa,"sha256_file",side_effect=digest), patch.object(qa,"execute",side_effect=self.fake_execute), contextlib.redirect_stdout(io.StringIO()):
+            with self.assertRaises(qa.EvidenceError): qa.run(self.root)
+        self.assertFalse((self.root/"target/qa-03/operations-evidence.json").exists())
 
     def test_cli_failure_never_echoes_private_exception(self):
         stderr=io.StringIO()

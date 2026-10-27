@@ -154,11 +154,22 @@ def preflight():
         raise EvidenceError("Docker engine unavailable")
 
 
+def runner_identity():
+    return git_identity(Path(__file__).resolve().parents[2])
+
+
+def sha256_file(path):
+    with path.open("rb") as stream:
+        return hashlib.file_digest(stream, "sha256").hexdigest()
+
+
 def run(root):
     output = evidence_dir(root)
     destination = output / "operations-evidence.json"
     destination.unlink(missing_ok=True)  # stale PASS must not survive a failed new invocation
     revision = git_identity(root)
+    runner_revision = runner_identity()
+    runner_hash = sha256_file(Path(__file__).resolve())
     if not (root / "src/test/js/notifications.test.cjs").is_file():
         raise EvidenceError("WS-02 client tests missing; use an approved integration/merged checkout")
     preflight()
@@ -174,8 +185,15 @@ def run(root):
             client = node_counts(logs / "node.log")
             result = collect(root, revision)
             result["node"] = client
+            result["manifest_schema_version"] = 2
+            result["tested_source_sha"] = revision  # keep tested_revision for older consumers
+            result["runner_sha"] = runner_revision
+            result["runner_script_sha256"] = runner_hash
+            result["log_sha256"] = {name: sha256_file(logs / (name + ".log")) for name in ("maven", "node")}
             if git_identity(root) != revision:
                 raise EvidenceError("Source changed while collecting reports")
+            if runner_identity() != runner_revision or sha256_file(Path(__file__).resolve()) != runner_hash:
+                raise EvidenceError("Runner changed during verification")
             # No environment properties, raw testcase outputs or exception details enter the JSON.
             output.mkdir(parents=True, exist_ok=True)
             staging = destination.with_suffix(".tmp")

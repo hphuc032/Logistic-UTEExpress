@@ -46,3 +46,10 @@ The exact generated JSON is copied to QA-03-runner-e2e-evidence.json (SHA-256 c7
 Three additional real CLI smoke checks on disposable Git fixtures passed: dirty checkout rejected without test execution; missing WS-02 checkout removes stale evidence then rejects before commands; non-root checkout rejected. These supplement the 15 automated tool tests and are not business-suite cases. No target source or production module was edited.
 
 Tooling is ready for HP/TD review after exact-head CI. This does not complete INT-02 or QA-03, approve/merge PR #59, deploy monitoring, or change any reviewer/branch-protection gate.
+
+
+## HP final tooling follow-up — manifest v2
+
+The runner now embeds runner_sha, runner_script_sha256, tested_source_sha (and legacy tested_revision), actual command exit codes, per-suite/summary hashes, raw-local-log hashes and derived test counts in the generated manifest itself. It requires clean runner and target checkouts and checks both again before publication; changing either the runner revision or its Python file aborts without PASS evidence. No log contents are published. Manifest manifest_schema_version is 2. Legacy frozen-#59 evidence above remains historical and is not replaced by a claim that its SHA was current develop.
+
+17 automated tool tests PASS, including runner revision/file mutation during execution and provenance/log-hash assertions. Fresh execution against exact current develop will be recorded after completion on a separate clean target checkout. Tooling completion still requires TD scoped review/GitHub approval and HP decision; whole QA-03 acceptance remains dependent on INT-02 and the Ops acceptance matrix.
