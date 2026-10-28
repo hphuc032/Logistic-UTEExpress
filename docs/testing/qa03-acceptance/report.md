@@ -1,8 +1,9 @@
 # QA-03 Ops acceptance report — 2026-10-28
 
 **Conclusion: BLOCKED for whole QA-03 completion.** Automated Ops regression and
-local operational probes PASS. Browser/manual sign-off, the integrated demo seed
-and unresolved scope decisions below still need evidence or an explicit HP decision.
+local operational probes PASS. Browser/manual sign-off and the integrated demo seed still need execution evidence.
+HP has now decided the Manager commission scope and accepted the shared automated
+INT-02 baseline; those decisions are recorded below without implying full QA-03 completion.
 This packet is ready for scoped review; it is not a declaration of QA-03 COMPLETED.
 
 ## Frozen source and actual execution
@@ -109,12 +110,15 @@ See [findings and gates](findings.md) for the actionable list. In particular:
 2. **HP + TD + QD:** provide/run the complete ordered demo seed on an empty DB and
    rerun without reset/duplicate effects. Migrations/reference roles and synthetic
    test fixtures pass, but full SEED_MANIFEST stages 2–11 are not accepted here.
-3. **HP policy, QD implementation, TD pricing review:** resolve ADMIN-06 Manager
-   commission limits. Current safe denial of all Manager writes is tested. It does
-   not demonstrate the planned limited-write workflow; a defined contract or an
-   explicit scope decision is needed before closing that criterion.
-4. **HP:** confirm final INT-02/QA gate acceptance; merging integration code and
-   resolving Q02-F05 is not evidence that all manual/global QA criteria passed.
+3. **ADMIN-06 / T41c — DEFERRED / ACCEPTED SCOPE EXCEPTION for current QA-03:** HP
+   has decided Manager commission writes remain DENY ALL for this gate. This is not a
+   limited-write PASS and does not complete ADMIN-06 limited-write functionality.
+   Keep the policy/limited-write follow-up open for a separately approved contract,
+   with HP policy, TD pricing review and QD implementation/security review.
+4. **Shared INT-02/QA baseline — ACCEPTED, scope-limited:** HP accepts automated
+   integration baseline SHA `e88685213d3af20729d2e78c56568f44e0a2922c`, based on merged
+   INT-02 and source-bound regression evidence. This does not imply browser/manual Ops,
+   responsive, full demo seed or other global acceptance criteria have passed.
 
 Clean-host provisioning, production ENV/TLS/cookie/storage ACL checks, off-host
 backup with uploads, restore/recovery objectives, production log/alert deployment,
@@ -124,6 +128,7 @@ that would create a QA-03 -> REL-01 -> QA-03 cycle. HP must confirm scope and ev
 ownership at the acceptance gate. No deployment or release/tag was performed.
 
 To mark QA-03 COMPLETED: retain valid automated evidence on the accepted source;
-resolve/waive with rationale every in-scope gap; record manual Ops sign-off and full
-seed evidence; attach owner decisions for shared gates; then obtain TD scoped review
-and HP final acceptance. Until then the overall result remains BLOCKED.
+resolve or explicitly accept each in-scope gap with rationale; record manual Ops
+sign-off and full seed evidence; retain HP's scope-limited Manager deny-all exception
+and accepted INT-02 automated baseline decision; then obtain TD scoped review and HP
+final acceptance. Until then the overall result remains BLOCKED.
