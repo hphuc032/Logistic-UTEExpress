@@ -87,7 +87,7 @@ product edit. This does not add cross-process recovery to the shared module.
 
 ## Completed combined verification and retained finding
 
-Combined source `1d8f923b77f4dc747b4a72874b61364f33abcf36`: full clean verify **690 unit +1,388 PostgreSQL =2,078 PASS**, zero failures/errors/skips, exit0/no timeout. Complete Node33 and tooling17 PASS. The approved runner separately records Notifications12, which overlap Node33. All143 suite report hashes and raw full logs were rechecked; the seed JAR checksum is unchanged after verify completed. These runs are distinct from exact #70 independent690+205 and TD-reported2073; do not add overlapping tests or relabel their sources.
+Combined source `1d8f923b77f4dc747b4a72874b61364f33abcf36`: full clean verify **690 unit +1,388 PostgreSQL =2,078 PASS**, zero failures/errors/skips, exit0/no timeout. Complete Node33 and tooling17 PASS. The approved runner separately records Notifications12, which overlap Node33. All139 suite report hashes and raw full logs were rechecked; the seed JAR checksum is unchanged after verify completed. These runs are distinct from exact #70 independent690+205 and TD-reported2073; do not add overlapping tests or relabel their sources.
 
 Combined run `run-d671ae0ae88e` PASS:15 Orders,3 refunds, existing returned ledger hash unchanged, independent TD fixture invocations1/2 and shared checkpoint rerun preserve all34-table fingerprints. Complete global money720000/550000/25200 and deliberate global collection-unavailable diagnostics pass. Own disposable container removed.
 
