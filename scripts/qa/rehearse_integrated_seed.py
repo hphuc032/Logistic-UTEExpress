@@ -44,14 +44,23 @@ class Client:
         try:
             with self.opener.open(request,timeout=20) as response: status=response.status; body=response.read()
         except urllib.error.HTTPError as error: status=error.code; body=error.read()
-        self.seed.http.append({'method':'POST' if data is not None else 'GET','path':path,'status':status})
+        event={'method':'POST' if data is not None else 'GET','path':path,'status':status}
+        if status not in allowed:
+            try:
+                detail=json.loads(body);event['error_code']=detail.get('code');event['violation_fields']=[v.get('field') for v in detail.get('violations',[])]
+            except (ValueError,TypeError):pass
+            (self.seed.out/'last-http-response.private').write_bytes(body)
+        self.seed.http.append(event)
         require(status in allowed,'HTTP_'+str(status)+'_'+path)
         return body
     def token(self):
         page=self.call('/login').decode(); match=re.search(r'name="_csrf"[^>]*value="([^"]+)"',page)
         require(match is not None,'CSRF_FIELD_MISSING'); return match.group(1)
     def form(self,path,values):
-        return self.call(path,urllib.parse.urlencode(dict(values,_csrf=self.token())).encode(),{'Content-Type':'application/x-www-form-urlencoded'})
+        body=self.call(path,urllib.parse.urlencode(dict(values,_csrf=self.token())).encode(),{'Content-Type':'application/x-www-form-urlencoded'})
+        if path.startswith('/vendor/vouchers') or path.endswith('/promotions'):
+            (self.seed.out/('form-'+str(len(self.seed.http))+'.private.html')).write_bytes(body)
+        return body
     def json(self,path,values,extra=None):
         headers={'Content-Type':'application/json','Accept':'application/json','X-XSRF-TOKEN':self.token()}; headers.update(extra or {})
         body=self.call(path,json.dumps(values).encode(),headers)
@@ -164,6 +173,8 @@ class Seed:
         for vendor,code,value in ((self.vendor_a,'QA03_VOUCHER_A',10000),(self.vendor_b,'QA03_VOUCHER_B',5000)):
             vendor.form('/vendor/vouchers',dict(window,code=code,type='FIXED',value=value,minSubtotal=0,totalLimit=100,perUserLimit=30))
         self.vendor_a.form('/vendor/products/'+str(self.state['products'][0])+'/promotions',dict(window,name='QA03 Promotion',discountPercent=10))
+        require(self.one('SELECT count(*) FROM uteexpress.vouchers')==2,'FOUNDATION_VOUCHER_MISSING')
+        require(self.one('SELECT count(*) FROM uteexpress.promotions')==1,'FOUNDATION_PROMOTION_MISSING')
         self.result['steps']['foundation']={'status':'PASS','registered_and_OTP_verified_accounts':10,'shops':{'approved':2,'pending':1,'rejected':1},'products':14,'images':14,'password_hashing':'Real registration/identity PasswordEncoder; password from process ENV'}
     def fulfillment(self,order,**extra):
         ov=self.version('orders',order);sv=self.one('SELECT version FROM uteexpress.shipments WHERE order_id='+str(order));return dict(expectedOrderVersion=ov,expectedShipmentVersion=sv,**extra)
@@ -239,9 +250,9 @@ class Seed:
         return {'status':'PASS','order_states':expected,'constraint_and_business_checks':list(queries),'role_passwords_reset':False}
     def seed_once(self):
         if self.state['complete']:return self.validate()
-        self.fixtures();self.orders();self.state['complete']=True
+        self.fixtures();self.orders();result=self.validate();self.state['complete']=True
         (self.out/'seed-state.private.json').write_text(json.dumps(self.state,indent=2),encoding='utf-8')
-        return self.validate()
+        return result
     def run(self):
         try:
             self.start();self.result['steps']['first_seed']=self.seed_once()
