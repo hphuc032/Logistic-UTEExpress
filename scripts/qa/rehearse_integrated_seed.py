@@ -1,6 +1,6 @@
 """Explicit disposable QA rehearsal, never a production seed or browser acceptance."""
 import argparse, base64, datetime as dt, email, email.utils, hashlib, http.cookiejar
-import json, os, pathlib, re, secrets, socket, socketserver, struct, subprocess
+import json, os, pathlib, re, secrets, socket, socketserver, struct, subprocess, shutil
 import threading, time, urllib.error, urllib.parse, urllib.request, uuid, zipfile, zlib
 
 class SeedError(Exception): pass
@@ -74,11 +74,16 @@ class Client:
         self.form('/login',{'identifier':name,'password':self.seed.password}); self.call('/user/profile')
 
 class Seed:
-    def __init__(self,root,out,password):
+    def __init__(self,root,out,password,include_refunds=False):
+        self.include_refunds=include_refunds; self.refund_fixtures_loaded=False
+        self.db='qa02_refund_seed' if include_refunds else 'postgres'
         self.root=root; self.out=out; self.password=password; self.name='qa03-seed-'+uuid.uuid4().hex[:10]
         self.env=os.environ.copy(); self.flags=getattr(subprocess,'CREATE_NO_WINDOW',0)
         self.created=False; self.app=None; self.log=None; self.http=[]; self.state={'actors':{},'products':[],'orders':{},'complete':False}
         self.source=self.git('rev-parse','HEAD'); self.result={'source_sha':self.source,'demo_opt_in':True,'application_profiles':['local','demo'],'scope':'Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance','steps':{},'http_trace':self.http,'bootstrap_exception':'Only initial ADMIN role membership is bootstrapped on the newly registered, OTP-verified fictional account in the owned empty QA DB. All other business writes use real HTTP/service boundaries.'}
+        if include_refunds:
+            self.result['bootstrap_exception']='Shared fixtures use real HTTP with initial ADMIN role bootstrap. The TD-owned test-classpath module additionally sets up fictional identity/catalog fixtures and synthetic persisted ONLINE PAID prerequisites in this same owned disposable DB. This is not gateway verification or a production PAID writer.'
+            self.result['combined_rerun_scope']='Shared module: same-process completed checkpoint validation. TD refund module: two independent application invocations. Both must preserve the full combined database fingerprint.'
     def git(self,*args): return subprocess.check_output(['git',*args],cwd=self.root,text=True).strip()
     def command(self,args,data=None,env=None,timeout=60):
         p=subprocess.run(args,input=data,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env or self.env,timeout=timeout,creationflags=self.flags)
@@ -87,7 +92,7 @@ class Seed:
         return p.stdout
     def sql(self,query):
         require(query.lstrip().upper().startswith(('SELECT','SHOW')),'READ_ONLY_SQL_REQUIRED')
-        return self.command(['docker','exec',self.name,'psql','-X','-A','-t','-v','ON_ERROR_STOP=1','-U','postgres','-d','postgres','-c',query]).decode().strip()
+        return self.command(['docker','exec',self.name,'psql','-X','-A','-t','-v','ON_ERROR_STOP=1','-U','postgres','-d',self.db,'-c',query]).decode().strip()
     def one(self,query):
         value=self.sql(query); require(bool(value),'FIXTURE_NOT_FOUND'); return int(value)
     def version(self,table,key):
@@ -105,7 +110,7 @@ class Seed:
         mail=socketserver.ThreadingTCPServer(('127.0.0.1',0),MailHandler); mail.daemon_threads=True; mail.codes={}; mail.mail_lock=threading.Lock(); self.mail=mail
         threading.Thread(target=mail.serve_forever,daemon=True).start()
         env=self.env.copy(); env['POSTGRES_PASSWORD']=secrets.token_urlsafe(32)
-        self.command(['docker','run','-d','--name',self.name,'--label','uteexpress.qa03=disposable','-e','POSTGRES_PASSWORD','-p','127.0.0.1::5432','postgres:17.6'],env=env);self.created=True
+        self.command(['docker','run','-d','--name',self.name,'--label','uteexpress.qa03=disposable','-e','POSTGRES_PASSWORD','-e','POSTGRES_DB='+self.db,'-p','127.0.0.1::5432','postgres:17.6'],env=env);self.created=True
         for _ in range(45):
             p=subprocess.run(['docker','exec',self.name,'pg_isready','-U','postgres'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,creationflags=self.flags)
             if p.returncode==0:break
@@ -119,8 +124,9 @@ class Seed:
         env={key:value for key,value in self.env.items() if key.upper() in os_keys}
         self.result['isolated_app_environment']=True
         self.result['ignored_parent_override_names']=[key for key in ('SPRING_DATASOURCE_URL','SPRING_CONFIG_LOCATION','SPRING_APPLICATION_JSON') if key in self.env]
-        env.update(DB_URL='jdbc:postgresql://127.0.0.1:'+str(port)+'/postgres',DB_USERNAME='postgres',DB_PASSWORD=db_password,JWT_SECRET_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),OTP_PEPPER_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),JWT_COOKIE_SECURE='false',MAIL_HOST='127.0.0.1',MAIL_PORT=str(mail.server_address[1]),MAIL_FROM='seed@example.test',MAIL_SMTP_AUTH='false',MAIL_STARTTLS='false',UPLOAD_DIR=str(self.out/'uploads'))
+        env.update(DB_URL='jdbc:postgresql://127.0.0.1:'+str(port)+'/'+self.db,DB_USERNAME='postgres',DB_PASSWORD=db_password,JWT_SECRET_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),OTP_PEPPER_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),JWT_COOKIE_SECURE='false',MAIL_HOST='127.0.0.1',MAIL_PORT=str(mail.server_address[1]),MAIL_FROM='seed@example.test',MAIL_SMTP_AUTH='false',MAIL_STARTTLS='false',UPLOAD_DIR=str(self.out/'uploads'))
         java=pathlib.Path(os.environ.get('JAVA_HOME',''))/'bin/java.exe'; require(java.is_file(),'JDK21_REQUIRED')
+        self.app_env=env.copy(); self.java=java
         self.log=(self.out/'app.private.log').open('wb')
         self.app=subprocess.Popen([str(java),'-Duser.timezone=UTC','-jar',str(self.jar),'--spring.profiles.active=local,demo','--spring.config.location=classpath:/application.yml','--spring.datasource.url='+env['DB_URL'],'--spring.datasource.username=postgres','--server.address=127.0.0.1','--server.port='+str(webport),'--management.health.mail.enabled=false'],cwd=self.root,env=env,stdout=self.log,stderr=subprocess.STDOUT,creationflags=self.flags)
         for _ in range(120):
@@ -146,7 +152,7 @@ class Seed:
         keys=('admin','manager','shipper_a','shipper_b','buyer_a','buyer_b','vendor_a','vendor_b','pending','rejected')
         clients={k:self.register(k) for k in keys};admin_id=self.state['actors']['admin']['id']
         require(self.one("SELECT count(*) FROM uteexpress.user_roles ur JOIN uteexpress.roles r ON r.id=ur.role_id WHERE r.code='ADMIN'")==0,'NOT_AN_EMPTY_OWNED_ADMIN_FIXTURE')
-        self.command(['docker','exec',self.name,'psql','-X','-v','ON_ERROR_STOP=1','-U','postgres','-d','postgres','-c',"INSERT INTO uteexpress.user_roles(user_id,role_id) SELECT "+str(admin_id)+",id FROM uteexpress.roles WHERE code='ADMIN'"])
+        self.command(['docker','exec',self.name,'psql','-X','-v','ON_ERROR_STOP=1','-U','postgres','-d',self.db,'-c',"INSERT INTO uteexpress.user_roles(user_id,role_id) SELECT "+str(admin_id)+",id FROM uteexpress.roles WHERE code='ADMIN'"])
         admin=self.actor('admin');self.admin=admin
         for key,role in (('manager','MANAGER'),('shipper_a','SHIPPER'),('shipper_b','SHIPPER')):
             uid=self.state['actors'][key]['id'];admin.form('/admin/accounts/'+str(uid)+'/roles/'+role+'/grant',{'version':self.version('users',uid)})
@@ -251,7 +257,19 @@ class Seed:
         queries={
             'all_constraints_validated':"SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace WHERE n.nspname='uteexpress' AND NOT c.convalidated",
             'payment_amount_matches_order':'SELECT count(*) FROM uteexpress.payments p JOIN uteexpress.orders o ON o.id=p.order_id WHERE p.amount<>o.grand_total',
-            'refund_bound_to_paid_order':'SELECT count(*) FROM uteexpress.refunds r JOIN uteexpress.payments p ON p.id=r.payment_id JOIN uteexpress.orders o ON o.id=r.order_id WHERE p.order_id<>o.id OR p.status<>\'PAID\' OR r.amount<>p.amount OR r.amount<>o.grand_total OR o.status<>\'REFUNDED\'',
+            'refund_bound_to_paid_order':"""SELECT count(*) FROM uteexpress.refunds r JOIN uteexpress.payments p ON p.id=r.payment_id JOIN uteexpress.orders o ON o.id=r.order_id
+                LEFT JOIN uteexpress.return_requests t ON t.id=r.return_request_id
+                WHERE p.order_id<>o.id OR p.status<>'PAID' OR r.amount<>p.amount OR r.amount<>o.grand_total
+                OR NOT CASE WHEN r.operation='PAY02_MANUAL_COD_REFUND_V1' THEN
+                    o.status='REFUNDED' AND t.id IS NOT NULL AND t.order_id=o.id AND t.status='APPROVED'
+                    AND r.return_received_at=t.received_at AND r.order_cancelled_at IS NULL
+                    AND r.result_order_version=r.expected_order_version+1
+                WHEN r.operation='PAY02_CANCELLED_PAID_REFUND_V1' THEN
+                    o.status='CANCELLED' AND r.return_request_id IS NULL AND r.return_received_at IS NULL
+                    AND r.expected_return_request_version IS NULL AND r.order_cancelled_at=o.cancelled_at
+                    AND r.payment_paid_at<=r.order_cancelled_at AND r.order_cancelled_at<=r.server_timestamp
+                    AND r.result_order_version=r.expected_order_version
+                ELSE false END IS TRUE""",
             'one_default_address':'SELECT count(*) FROM (SELECT user_id FROM uteexpress.addresses WHERE is_default GROUP BY user_id HAVING count(*)>1) s',
             'nonnegative_stock':'SELECT count(*) FROM uteexpress.products WHERE stock<0',
             'history_matches_current_order':"SELECT count(*) FROM uteexpress.orders o JOIN (SELECT DISTINCT ON(order_id) order_id,to_status FROM uteexpress.order_status_history ORDER BY order_id,id DESC) h ON h.order_id=o.id WHERE o.status<>h.to_status",
@@ -262,16 +280,47 @@ class Seed:
         require(self.one('SELECT stock FROM uteexpress.products WHERE id='+str(self.state['products'][0]))==38,'STOCK_RESERVATION_RELEASE_MISMATCH')
         require(self.one('SELECT count(*) FROM uteexpress.reviews')==2,'REVIEW_COUNT_MISMATCH')
         require(self.one('SELECT count(*) FROM uteexpress.review_media')==2,'REVIEW_MEDIA_MISMATCH')
-        require(self.one('SELECT count(*) FROM uteexpress.refunds')==1,'REFUND_COUNT_MISMATCH')
+        require(self.one('SELECT count(*) FROM uteexpress.refunds')==(3 if self.refund_fixtures_loaded else 1),'REFUND_COUNT_MISMATCH')
         require(self.one('SELECT count(*) FROM uteexpress.shipment_return_receipts')==1,'RTS_RECEIPT_COUNT_MISMATCH')
         require(self.one('SELECT count(*) FROM uteexpress.notifications')>0,'DURABLE_INBOX_MISSING')
         day=self.sql("SELECT (min(created_at) AT TIME ZONE 'Asia/Ho_Chi_Minh')::date FROM uteexpress.orders")
         end=(dt.date.fromisoformat(day)+dt.timedelta(days=2)).isoformat();params=urllib.parse.urlencode({'from':day,'toExclusive':end})
         money={'deliveredSales':340000,'collectedPayments':340000,'refunds':170000,'netCollectedRevenue':170000,'netCommission':11900,'netRevenueAfterCommission':158100}
         for actor,path in ((self.vendor_a,'/vendor/dashboard'),(self.admin,'/admin/dashboard/revenue/metrics')):
-            report=json.loads(actor.call(path+'?'+params,headers={'Accept':'application/json'}))['selected']['metrics']
+            scope_params=params
+            if self.refund_fixtures_loaded and actor is self.admin:scope_params+='&shopId='+str(self.state['vendor_a_shop'])
+            report=json.loads(actor.call(path+'?'+scope_params,headers={'Accept':'application/json'}))['selected']['metrics']
             for metric,value in money.items():require(report[metric]['complete'] and report[metric]['unknownEvents']==0 and report[metric]['value']==value,'FINANCIAL_METRIC_'+metric)
-        return {'status':'PASS','order_states':expected,'constraint_and_business_checks':list(queries),'financial_expected_and_actual':money,'financial_scope':'Vendor A and Admin global, same-period synthetic dataset, shipping excluded','role_passwords_reset':False}
+        return {'status':'PASS','order_states':expected,'constraint_and_business_checks':list(queries),'financial_expected_and_actual':money,'financial_scope':'Vendor A and Admin Shop A filter when combined (otherwise Admin global), same-period synthetic dataset, shipping excluded','role_passwords_reset':False}
+    def refund_fixture_process(self,number):
+        # TD-owned test-classpath fixture; synthetic PAID setup is explicit and never a production writer.
+        source=self.root/'target/test-classes/qa02/seed'
+        require(source.is_dir(),'BUILD_QA02_REFUND_FIXTURE_FIRST')
+        classes=self.out/'qa02-test-classes'
+        if not classes.exists():shutil.copytree(source,classes/'qa02/seed')
+        env=self.app_env.copy();env.update(QA02_DISPOSABLE_SEED_CONFIRM='YES',QA02_REFUND_DEMO_PASSWORD=self.password)
+        args=[str(self.java),'-Duser.timezone=UTC','-Dloader.path='+str(classes),'-Dloader.main=qa02.seed.RefundAcceptanceSeed','-cp',str(self.jar),'org.springframework.boot.loader.launch.PropertiesLauncher','--spring.profiles.active=local,demo','--spring.config.location=classpath:/application.yml','--server.address=127.0.0.1','--server.port=0','--management.health.mail.enabled=false','--uteexpress.demo.shipping.enabled=false','--uteexpress.demo.catalog.enabled=false']
+        log=self.out/('qa02-refund-'+str(number)+'.private.log')
+        with log.open('wb') as output:
+            process=subprocess.run(args,cwd=self.root,env=env,stdout=output,stderr=subprocess.STDOUT,timeout=180,creationflags=self.flags)
+        require(process.returncode==0,'QA02_FIXTURE_PROCESS_FAILED_'+str(number))
+        lines=log.read_text(encoding='utf-8',errors='replace').splitlines()
+        result=json.loads(next(line.split('=',1)[1] for line in lines if line.startswith('QA02_REFUND_SEED_RESULT=')))
+        require(all(value=='PASS' for value in result['negativeChecks'].values()),'QA02_NEGATIVE_CHECK_NOT_PASS')
+        return {'status':'PASS','application_exit_code':process.returncode,'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest(),'result':result}
+    def existing_returned_refund_digest(self):
+        value=self.sql('SELECT row_to_json(r)::text FROM uteexpress.refunds r WHERE r.order_id='+str(self.oid('REFUNDED')))
+        require(bool(value),'ORIGINAL_RETURNED_REFUND_MISSING');return hashlib.sha256(value.encode()).hexdigest()
+    def validate_combined_finance(self):
+        day=self.sql("SELECT (min(created_at) AT TIME ZONE 'Asia/Ho_Chi_Minh')::date FROM uteexpress.orders")
+        end=(dt.date.fromisoformat(day)+dt.timedelta(days=2)).isoformat()
+        report=json.loads(self.admin.call('/admin/dashboard/revenue/metrics?'+urllib.parse.urlencode({'from':day,'toExclusive':end}),headers={'Accept':'application/json'}))['selected']['metrics']
+        expected={'deliveredSales':720000,'refunds':550000,'netCommission':25200}
+        for metric,value in expected.items():require(report[metric]['complete'] and report[metric]['value']==value,'COMBINED_FINANCE_'+metric)
+        # TD deliberately includes a PAID NEW ONLINE negative fixture. Global collection must fail closed.
+        for metric in ['collectedPayments','netCollectedRevenue','netRevenueAfterCommission']:
+            require(not report[metric]['complete'] and report[metric]['value'] is None and report[metric]['unknownEvents']==1,'COMBINED_AMBIGUITY_'+metric)
+        return {'status':'PASS','complete_metrics':expected,'unavailable_metrics':['collectedPayments','netCollectedRevenue','netRevenueAfterCommission'],'reason':'One deliberately invalid-for-revenue PAID NEW ONLINE fixture; unknownEvents=1, value=null, not silently excluded'}
     def seed_once(self):
         if self.state['complete']:return self.validate()
         self.fixtures();self.orders();result=self.validate();self.state['complete']=True
@@ -280,15 +329,27 @@ class Seed:
     def run(self):
         try:
             self.start();self.result['steps']['first_seed']=self.seed_once()
+            if self.include_refunds:
+                old_digest=self.existing_returned_refund_digest()
+                self.result['steps']['qa02_first_process']=self.refund_fixture_process(1)
+                self.refund_fixtures_loaded=True
+                self.result['steps']['combined_first_validation']=self.validate()
+                self.result['steps']['combined_finance']=self.validate_combined_finance()
+                require(self.existing_returned_refund_digest()==old_digest,'OLD_RETURNED_LEDGER_CHANGED')
+                self.result['old_returned_refund_preserved_sha256']=old_digest
             # Deliberate legitimate edit proves the rerun does not reset mutable product data.
             pid=self.state['products'][0]
             self.vendor_a.form('/vendor/products/'+str(pid)+'/update',dict(name='QA03 Preserved live edit',description='Edited after seeding',price=100000,stock=38,categoryId=self.state['category_a'],version=self.version('products',pid)))
             require(self.sql('SELECT name FROM uteexpress.products WHERE id='+str(pid))=='QA03 Preserved live edit','LIVE_EDIT_NOT_APPLIED')
-            before=self.fingerprint();writes=sum(e['method']=='POST' for e in self.http);self.result['steps']['second_seed']=self.seed_once();after=self.fingerprint()
+            before=self.fingerprint();writes=sum(e['method']=='POST' for e in self.http)
+            if self.include_refunds:self.result['steps']['qa02_second_process']=self.refund_fixture_process(2)
+            self.result['steps']['second_seed']=self.seed_once()
+            if self.include_refunds:self.result['steps']['combined_finance_second']=self.validate_combined_finance()
+            after=self.fingerprint()
             require(before==after,'RERUN_CHANGED_BUSINESS_DATA');require(sum(e['method']=='POST' for e in self.http)==writes,'RERUN_REPLAYED_HTTP_MUTATIONS')
             self.result['steps']['idempotency']={'status':'PASS','complete_business_fingerprint_unchanged':True,'preserved_live_product_edit':True,'second_seed_http_writes':0,'before':before,'after':after,'policy':'Manifest-backed validate-and-preserve rerun; incomplete/missing fixtures fail closed, never reset statuses/passwords/stock'}
             self.result['fixture_ids']={'orders':self.state['orders'],'products':self.state['products'],'actors':{k:v['id'] for k,v in self.state['actors'].items()}}
-            self.result['dump_sha256']=hashlib.sha256(self.command(['docker','exec',self.name,'pg_dump','-U','postgres','-d','postgres','-Fc'])).hexdigest()
+            self.result['dump_sha256']=hashlib.sha256(self.command(['docker','exec',self.name,'pg_dump','-U','postgres','-d',self.db,'-Fc'])).hexdigest()
             require(self.git('rev-parse','HEAD')==self.source and not self.git('status','--porcelain'),'SOURCE_CHANGED_DURING_REHEARSAL');self.result['status']='PASS'
         except Exception as error:
             self.result.update(status='FAIL',failure_code=str(error) if isinstance(error,SeedError) else type(error).__name__)
@@ -307,8 +368,8 @@ class Seed:
         return 0 if self.result['status']=='PASS' else 1
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--checkout',type=pathlib.Path,default=pathlib.Path.cwd());parser.add_argument('--disposable-demo',action='store_true',required=True,help='Explicitly opt in to fictional demo on a newly owned disposable DB');args=parser.parse_args();root=args.checkout.resolve()
-    password=os.environ.get('QA03_DEMO_PASSWORD','');require(len(password)>=12,'QA03_DEMO_PASSWORD_REQUIRED')
+    parser=argparse.ArgumentParser();parser.add_argument('--checkout',type=pathlib.Path,default=pathlib.Path.cwd());parser.add_argument('--include-qa02-refunds',action='store_true',help='Run TD test-classpath synthetic PAID fixture twice in the same owned DB');parser.add_argument('--disposable-demo',action='store_true',required=True,help='Explicitly opt in to fictional demo on a newly owned disposable DB');args=parser.parse_args();root=args.checkout.resolve()
+    password=os.environ.get('QA03_DEMO_PASSWORD','');require(len(password)>=(16 if args.include_qa02_refunds else 12),'QA03_DEMO_PASSWORD_REQUIRED')
     out=root/'.work/qa03-integrated-seed'/('run-'+uuid.uuid4().hex[:12]);out.mkdir(parents=True)
-    return Seed(root,out,password).run()
+    return Seed(root,out,password,args.include_qa02_refunds).run()
 if __name__=='__main__':raise SystemExit(main())
