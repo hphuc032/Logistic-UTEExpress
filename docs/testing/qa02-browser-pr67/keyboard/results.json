@@ -1,0 +1,885 @@
+{
+  "sha": "c5901c326ff92fee0fde0f8a4c66633a003cfc81",
+  "started": "2026-10-28T06:01:17.087Z",
+  "cases": [
+    {
+      "id": "B-KEYBOARD",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "role": "BUYER",
+      "steps": "Use Tab from document through cancellation, Enter to dismiss confirm, Space to accept, Tab after reload",
+      "expected": "Keyboard can reach control; visible focus; native dialog closes without trap; focus returns on dismissal; new document navigation remains operable",
+      "started": "2026-10-28T06:01:33.821Z",
+      "actual": "Tab reached action; focused/unfocused style comparison verifies visual change; Enter dismissed; Space accepted; focus returned on dismissal and reset to BODY on successful document reload; subsequent Tab works",
+      "tabs": [
+        {
+          "tag": "A",
+          "name": "UTEExpress - Trang chủ",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "Trang chủ",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "Sản phẩm",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "Cửa hàng",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "Giỏ hàng",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "Đơn hàng",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "Địa chỉ",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "Yêu thích",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "Đã xem",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "qa67_buyer_f5e097",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "Thông báo",
+          "cancel": false
+        },
+        {
+          "tag": "BUTTON",
+          "name": "Đăng xuất",
+          "cancel": false
+        },
+        {
+          "tag": "A",
+          "name": "Đơn hàng của tôi",
+          "cancel": false
+        },
+        {
+          "tag": "BUTTON",
+          "name": "Hủy đơn hàng",
+          "cancel": true
+        }
+      ],
+      "unfocused": {
+        "outlineStyle": "none",
+        "outlineWidth": "0px",
+        "boxShadow": "none",
+        "borderColor": "rgb(120, 131, 145)",
+        "backgroundColor": "rgba(255, 255, 255, 0.537)",
+        "focusVisible": false
+      },
+      "focus": {
+        "outlineStyle": "none",
+        "outlineWidth": "0px",
+        "boxShadow": "none",
+        "borderColor": "rgb(11, 37, 64)",
+        "backgroundColor": "rgb(248, 250, 252)",
+        "focusVisible": true
+      },
+      "activeAfterNavigation": "BODY",
+      "afterTab": {
+        "tag": "A",
+        "name": "Chuyển đến nội dung chính"
+      },
+      "screenshots": [
+        "screenshots/B-keyboard-unfocused.png",
+        "screenshots/B-keyboard-focus.png"
+      ],
+      "status": "PASS",
+      "finished": "2026-10-28T06:01:35.884Z",
+      "http": [
+        {
+          "method": "GET",
+          "path": "/js/buyer-cancellation.js",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/buyer/orders/1/cancel",
+          "status": 200
+        }
+      ]
+    }
+  ],
+  "environment": {
+    "runId": "f5e09747-10a7-4770-9675-f0ac85d8310a",
+    "scope": "Loopback-only disposable PostgreSQL; synthetic accounts; real packaged Spring application and Chromium; no mocked success responses",
+    "jarSha256": "4f8ef60791b2c9737911217471fd7fb34dfbc8f2659b06db7a80d14812efc6f6",
+    "database": "PostgreSQL 17.6 / qa67 / disposable",
+    "container": "qa02-pr67-browser-f5e09747",
+    "databasePort": "58763",
+    "base": "http://127.0.0.1:58767",
+    "migrations": {
+      "applied": 27,
+      "success": true,
+      "latest": "20261027100000"
+    },
+    "browser": "Chromium 140.0.7339.16",
+    "playwright": "1.55.0",
+    "cleanup": "Owned disposable application processes stopped; owned ephemeral database container removed"
+  },
+  "events": [
+    {
+      "time": "2026-10-28T06:01:28.552Z",
+      "test": "SETUP",
+      "kind": "server-ready",
+      "port": 58767,
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:31.307Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/login",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:31.321Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:31.322Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:31.477Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:31.479Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.057Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "POST",
+      "path": "/login",
+      "http": 302
+    },
+    {
+      "time": "2026-10-28T06:01:32.110Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.114Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.115Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.124Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.149Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.150Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/notifications.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.168Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/realtime-session",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.199Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/login",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.208Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.209Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.311Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/inbox",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.347Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.375Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.654Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "POST",
+      "path": "/login",
+      "http": 302
+    },
+    {
+      "time": "2026-10-28T06:01:32.670Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.673Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.674Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.681Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.681Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.707Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/notifications.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.720Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/realtime-session",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.753Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/login",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.761Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.762Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.784Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/inbox",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.915Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:32.942Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.221Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "POST",
+      "path": "/login",
+      "http": 302
+    },
+    {
+      "time": "2026-10-28T06:01:33.235Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.239Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.239Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.247Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.247Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.271Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/notifications.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.281Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/realtime-session",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.318Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/login",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.326Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.327Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.340Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/inbox",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.470Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.499Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.769Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "POST",
+      "path": "/login",
+      "http": 302
+    },
+    {
+      "time": "2026-10-28T06:01:33.782Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.786Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.786Z",
+      "test": "SETUP",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.793Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.794Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.795Z",
+      "test": "SETUP",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/notifications.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.829Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/realtime-session",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.859Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/orders",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.862Z",
+      "test": "B-KEYBOARD",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.863Z",
+      "test": "B-KEYBOARD",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.869Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.872Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:33.873Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/notifications.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.139Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/realtime-session",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.140Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/inbox",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.140Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/inbox",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.263Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "POST",
+      "path": "/user/cart/items",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.453Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "POST",
+      "path": "/user/checkout/place-order",
+      "http": 201
+    },
+    {
+      "time": "2026-10-28T06:01:34.644Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/orders/1",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.648Z",
+      "test": "B-KEYBOARD",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.649Z",
+      "test": "B-KEYBOARD",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.657Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.658Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/buyer-cancellation.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.658Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.667Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/notifications.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.677Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/realtime-session",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:34.760Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/inbox",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.278Z",
+      "test": "B-KEYBOARD",
+      "kind": "focus-style-comparison",
+      "unfocused": {
+        "outlineStyle": "none",
+        "outlineWidth": "0px",
+        "boxShadow": "none",
+        "borderColor": "rgb(120, 131, 145)",
+        "backgroundColor": "rgba(255, 255, 255, 0.537)",
+        "focusVisible": false
+      },
+      "focus": {
+        "outlineStyle": "none",
+        "outlineWidth": "0px",
+        "boxShadow": "none",
+        "borderColor": "rgb(11, 37, 64)",
+        "backgroundColor": "rgb(248, 250, 252)",
+        "focusVisible": true
+      }
+    },
+    {
+      "time": "2026-10-28T06:01:35.380Z",
+      "test": "B-KEYBOARD",
+      "kind": "native-dialog",
+      "type": "confirm",
+      "message": "Bạn có chắc muốn hủy đơn hàng này?",
+      "decision": "dismiss"
+    },
+    {
+      "time": "2026-10-28T06:01:35.517Z",
+      "test": "B-KEYBOARD",
+      "kind": "native-dialog",
+      "type": "confirm",
+      "message": "Bạn có chắc muốn hủy đơn hàng này?",
+      "decision": "accept"
+    },
+    {
+      "time": "2026-10-28T06:01:35.599Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "POST",
+      "path": "/buyer/orders/1/cancel",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.607Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/inbox",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.608Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/inbox",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.625Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/orders/1",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.629Z",
+      "test": "B-KEYBOARD",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.630Z",
+      "test": "B-KEYBOARD",
+      "kind": "external-resource",
+      "host": "cdn.jsdelivr.net",
+      "path": "/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.636Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/css/app.css",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.637Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/app.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.637Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/js/notifications.js",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.648Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/realtime-session",
+      "http": 200
+    },
+    {
+      "time": "2026-10-28T06:01:35.704Z",
+      "test": "B-KEYBOARD",
+      "kind": "response",
+      "method": "GET",
+      "path": "/notifications/inbox",
+      "http": 200
+    }
+  ],
+  "finished": "2026-10-28T06:01:38.305Z",
+  "totals": {
+    "PASS": 1
+  },
+  "processExitCode": 0
+}

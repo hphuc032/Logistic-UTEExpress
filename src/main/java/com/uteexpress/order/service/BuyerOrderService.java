@@ -2,13 +2,18 @@ package com.uteexpress.order.service;
 
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
+import com.uteexpress.identity.service.IdentityAuthenticationService;
 import com.uteexpress.order.dto.BuyerOrderDetail;
 import com.uteexpress.order.dto.BuyerOrderPage;
+import com.uteexpress.order.dto.BuyerOrderPageDetail;
 import com.uteexpress.order.dto.BuyerOrderSummary;
+import com.uteexpress.order.dto.OrderStatus;
+import com.uteexpress.order.entity.Order;
 import com.uteexpress.order.repository.OrderItemRepository;
 import com.uteexpress.order.repository.OrderRepository;
 import com.uteexpress.order.repository.OrderStatusHistoryRepository;
 import com.uteexpress.payment.service.PaymentReadService;
+import com.uteexpress.security.CurrentUserProvider;
 import com.uteexpress.security.service.CurrentAccountIdProvider;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -28,14 +33,19 @@ public class BuyerOrderService {
     private final OrderStatusHistoryRepository history;
     private final PaymentReadService payments;
     private final CurrentAccountIdProvider accounts;
+    private final CurrentUserProvider currentUsers;
+    private final IdentityAuthenticationService identities;
 
     public BuyerOrderService(OrderRepository orders, OrderItemRepository items,
-            OrderStatusHistoryRepository history, PaymentReadService payments, CurrentAccountIdProvider accounts) {
+            OrderStatusHistoryRepository history, PaymentReadService payments, CurrentAccountIdProvider accounts,
+            CurrentUserProvider currentUsers, IdentityAuthenticationService identities) {
         this.orders = orders;
         this.items = items;
         this.history = history;
         this.payments = payments;
         this.accounts = accounts;
+        this.currentUsers = currentUsers;
+        this.identities = identities;
     }
 
     public BuyerOrderPage list(int page, int size) {
@@ -54,10 +64,33 @@ public class BuyerOrderService {
     }
 
     public BuyerOrderDetail detail(Long id) {
+        return detail(ownedOrder(id, buyerId()));
+    }
+
+    public BuyerOrderPageDetail pageDetail(Long id) {
         Long buyer = buyerId();
+        var order = ownedOrder(id, buyer);
+        Long cancellationVersion = null;
+        // One read snapshot supplies the displayed state and original persisted version.
+        // Read eligibility is advisory; no write lock or cancellation effects belong here.
+        if (order.getStatus() == OrderStatus.NEW && order.getInventoryReleasedAt() == null
+                && order.getCancelledAt() == null && order.getDeliveredAt() == null
+                && order.getVersion() != null && order.getVersion() >= 0
+                && currentUsers.currentUser().filter(user -> user.authorities().contains("ROLE_USER")).isPresent()
+                && identities.findByUserId(buyer).filter(account -> account.active()
+                        && account.roleCodes().contains("USER")).isPresent()) {
+            cancellationVersion = order.getVersion();
+        }
+        return new BuyerOrderPageDetail(detail(order), cancellationVersion);
+    }
+
+    private Order ownedOrder(Long id, Long buyer) {
         if (id == null || id <= 0) throw notFound();
         // Never perform a global order lookup. Children are read only after this ownership check.
-        var order = orders.findByIdAndBuyerId(id, buyer).orElseThrow(BuyerOrderService::notFound);
+        return orders.findByIdAndBuyerId(id, buyer).orElseThrow(BuyerOrderService::notFound);
+    }
+
+    private BuyerOrderDetail detail(Order order) {
         var lines = items.findByOrderIdOrderByIdAsc(order.getId()).stream()
                 .map(item -> new BuyerOrderDetail.Item(item.getProductId(), item.getProductNameSnapshot(),
                         item.getUnitPrice(), item.getDiscountSnapshot(), item.getFinalUnitPrice(),

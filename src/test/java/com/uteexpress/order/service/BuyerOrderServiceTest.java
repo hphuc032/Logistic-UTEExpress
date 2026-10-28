@@ -2,10 +2,12 @@ package com.uteexpress.order.service;
 
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
+import com.uteexpress.identity.service.IdentityAuthenticationService;
 import com.uteexpress.order.repository.OrderItemRepository;
 import com.uteexpress.order.repository.OrderRepository;
 import com.uteexpress.order.repository.OrderStatusHistoryRepository;
 import com.uteexpress.payment.service.PaymentReadService;
+import com.uteexpress.security.CurrentUserProvider;
 import com.uteexpress.security.service.CurrentAccountIdProvider;
 import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +23,9 @@ class BuyerOrderServiceTest {
     final OrderStatusHistoryRepository history = mock(OrderStatusHistoryRepository.class);
     final PaymentReadService payments = mock(PaymentReadService.class);
     final CurrentAccountIdProvider accounts = mock(CurrentAccountIdProvider.class);
-    final BuyerOrderService service = new BuyerOrderService(orders, items, history, payments, accounts);
+    final CurrentUserProvider currentUsers = mock(CurrentUserProvider.class);
+    final IdentityAuthenticationService identities = mock(IdentityAuthenticationService.class);
+    final BuyerOrderService service = new BuyerOrderService(orders, items, history, payments, accounts, currentUsers, identities);
 
     @BeforeEach void buyer() { when(accounts.currentAccountId()).thenReturn(Optional.of(7L)); }
 

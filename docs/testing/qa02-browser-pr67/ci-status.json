@@ -1,0 +1,124 @@
+{
+  "verifiedAt": "2026-10-28T05:57:08.222Z",
+  "pr": {
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/67",
+    "state": "open",
+    "merged": false,
+    "head_sha": "c5901c326ff92fee0fde0f8a4c66633a003cfc81",
+    "base_sha": "72558c7dba1b69e847e5c87f9d580732ab1b185a",
+    "head": "fix/qa02-buyer-cancel-ui",
+    "base": "develop"
+  },
+  "runs": [
+    {
+      "id": 40636380768,
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 134,
+      "jobs_url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/actions/runs/40636380768/jobs",
+      "logs_url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/actions/runs/40636380768/logs",
+      "workflow_id": 362365352
+    }
+  ],
+  "jobs": [
+    {
+      "id": 122644197120,
+      "name": "Maven test and package",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 40636380768,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Checkout source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Set up Java 21",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Set up Node for notification client tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Notification and Buyer cancellation client tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Maven test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Maven package",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Post Set up Node for notification client tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Post Set up Java 21",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Post Checkout source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        }
+      ]
+    }
+  ],
+  "checkoutVerification": {
+    "checkedUtc": "2026-10-28T06:12:57.615075+00:00",
+    "actualCheckoutCommit": "6dbe1516ffac8a95b584e270cbbce935b69956e3",
+    "browserTestedCommit": "c5901c326ff92fee0fde0f8a4c66633a003cfc81",
+    "actualCheckoutTree": "34cf743c4a89d5db39237584e2ece704bda0577b",
+    "browserSourceTree": "34cf743c4a89d5db39237584e2ece704bda0577b",
+    "fileDiff": [],
+    "classification": "Successful CI on identical Git tree; not direct exact-commit checkout",
+    "commands": [
+      "git fetch origin refs/pull/67/merge",
+      "git rev-parse 'FETCH_HEAD^{tree}'",
+      "git rev-parse 'HEAD^{tree}'",
+      "git diff --name-only HEAD FETCH_HEAD"
+    ],
+    "commandExitCodes": [
+      0,
+      0,
+      0,
+      0
+    ],
+    "jobLogEvidence": "ci-checkout-excerpt.txt"
+  }
+}

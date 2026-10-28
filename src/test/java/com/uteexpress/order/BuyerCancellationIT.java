@@ -29,7 +29,9 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.csrf.CsrfToken;
 import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.util.AopTestUtils;
 import org.springframework.test.web.servlet.*;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -96,6 +98,90 @@ class BuyerCancellationIT {
         signals.clear(); clearInvocations(vendorAuthority,broker,publisher,guardSpy);
     }
     @AfterEach void clear() { SecurityContextHolder.clearContext(); }
+
+    // csrf() helpers replace the shared filter's repository; restore production cookie behavior first.
+    @Test @DirtiesContext(methodMode=DirtiesContext.MethodMode.BEFORE_METHOD)
+    void buyerPageSuppliesPersistedVersionAndRealMaskedCsrfForExistingEndpoint() throws Exception {
+        var before=state();
+        Cookie jwt=new Cookie("UTEEXPRESS_AUTH",tokens.issue(principal(buyer,"USER")));
+        var page=mvc.perform(get("/orders/{id}",order).cookie(jwt).accept("text/html"))
+                .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("data-buyer-cancellation")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("data-cancel-url=\""+path()+"\"")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("data-cancel-version=\"0\"")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("/js/buyer-cancellation.js")))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("data-cancel-button disabled"))).andReturn();
+        assertThat(state()).isEqualTo(before); noDispatch();
+        CsrfToken csrf=(CsrfToken)page.getRequest().getAttribute("_csrf");
+        Cookie cookie=page.getResponse().getCookie("XSRF-TOKEN");
+        assertThat(cookie).isNotNull();
+        assertThat(page.getResponse().getContentAsString()).contains("data-csrf-header=\""+csrf.getHeaderName()+"\"",
+                "data-csrf-token=\""+csrf.getToken()+"\"");
+        // Actual GET-issued cookie + rendered masked token; no test csrf() post-processor.
+        mvc.perform(post(path()).cookie(jwt,cookie).header(csrf.getHeaderName(),csrf.getToken())
+                .contentType("application/json").content(body(0))).andExpect(status().isOk());
+        assertCancelledOnce();
+        var committed=state();
+        mvc.perform(post(path()).cookie(jwt,cookie).header(csrf.getHeaderName(),csrf.getToken())
+                .contentType("application/json").content(body(0))).andExpect(status().isConflict());
+        assertThat(state()).isEqualTo(committed);
+        mvc.perform(get("/orders/{id}",order).cookie(jwt).accept("text/html"))
+                .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.not(
+                        org.hamcrest.Matchers.containsString("data-buyer-cancellation"))))
+                .andExpect(content().string(org.hamcrest.Matchers.containsString("CANCELLED")));
+        // Public JSON contracts remain unchanged; action data belongs to the HTML model only.
+        mvc.perform(get("/orders/{id}",order).cookie(jwt).accept("application/json"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.cancellationVersion").doesNotExist())
+                .andExpect(jsonPath("$.expectedOrderVersion").doesNotExist());
+    }
+
+    @ParameterizedTest @ValueSource(strings={"CONFIRMED","PICKED_UP","SHIPPING","DELIVERED","CANCELLED","RETURN_REQUESTED","RETURNED","REFUNDED"})
+    void nonNewBuyerPagesNeverRenderCancellationControl(String status) throws Exception {
+        jdbc.update("UPDATE uteexpress.orders SET status=? WHERE id=?",status,order);
+        var before=state();
+        mvc.perform(get("/orders/{id}",order).with(user(principal(buyer,"USER"))).accept("text/html"))
+                .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.not(
+                        org.hamcrest.Matchers.containsString("data-buyer-cancellation"))));
+        assertThat(state()).isEqualTo(before); noDispatch();
+    }
+
+    @ParameterizedTest @ValueSource(strings={"principal","persistedRole","locked","released","cancelled","delivered"})
+    void restrictedBuyerPagesNeverRenderCancellationControl(String restriction) throws Exception {
+        String role=restriction.equals("principal")?"VENDOR":"USER";
+        if(restriction.equals("persistedRole")) jdbc.update("DELETE FROM uteexpress.user_roles WHERE user_id=?",buyer);
+        if(restriction.equals("locked")) jdbc.update("UPDATE uteexpress.users SET status='LOCKED' WHERE id=?",buyer);
+        if(restriction.equals("released")) jdbc.update("UPDATE uteexpress.orders SET inventory_released_at=CURRENT_TIMESTAMP WHERE id=?",order);
+        if(restriction.equals("cancelled")) jdbc.update("UPDATE uteexpress.orders SET cancelled_at=CURRENT_TIMESTAMP WHERE id=?",order);
+        if(restriction.equals("delivered")) jdbc.update("UPDATE uteexpress.orders SET delivered_at=CURRENT_TIMESTAMP WHERE id=?",order);
+        var before=state();
+        mvc.perform(get("/orders/{id}",order).with(user(principal(buyer,role))).accept("text/html"))
+                .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.not(
+                        org.hamcrest.Matchers.containsString("data-buyer-cancellation"))));
+        assertThat(state()).isEqualTo(before); noDispatch();
+    }
+
+    @Test void foreignOrMissingBuyerPagesCannotExposeActionOrVersion() throws Exception {
+        for(long id:List.of(order,Long.MAX_VALUE))
+            mvc.perform(get("/orders/{id}",id).with(user(principal(stranger,"USER"))).accept("text/html"))
+                    .andExpect(status().isNotFound()).andExpect(content().string(org.hamcrest.Matchers.not(
+                            org.hamcrest.Matchers.containsString("data-buyer-cancellation"))))
+                    .andExpect(content().string(org.hamcrest.Matchers.not(org.hamcrest.Matchers.containsString("data-cancel-version"))));
+        noDispatch();
+    }
+
+    @Test void pageVersionReflectsPersistedValueAndDoesNotAuthorizeStaleOrCsrfFreeCommand() throws Exception {
+        jdbc.update("UPDATE uteexpress.orders SET version=7 WHERE id=?",order);
+        mvc.perform(get("/orders/{id}",order).with(user(principal(buyer,"USER"))).accept("text/html"))
+                .andExpect(status().isOk()).andExpect(content().string(org.hamcrest.Matchers.containsString("data-cancel-version=\"7\"")));
+        var before=state();
+        request(body(0)).andExpect(status().isConflict());
+        mvc.perform(post(path()).with(user(principal(buyer,"USER"))).contentType("application/json").content(body(7)))
+                .andExpect(status().isForbidden());
+        assertThat(state()).isEqualTo(before); noDispatch();
+        request(body(7)).andExpect(status().isOk());
+        assertThat(row()).containsEntry("status","CANCELLED").containsEntry("version",8L);
+        assertThat(stocks()).containsExactly(10,20);
+        assertThat(rows("voucher_usages").getFirst()).containsEntry("status","RELEASED");
+    }
 
     @Test void realJwtUserCancelsOwnedNewOrderAndPreservesPaymentMoneyAndItemSnapshots() throws Exception {
         var money=immutableOrder(); var items=rows("order_items"); var payment=rows("payments");
