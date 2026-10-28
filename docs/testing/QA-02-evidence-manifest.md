@@ -76,3 +76,60 @@ Teardown diagnostics remain: 484 closed-connection lines and
 Reports/JSON record the exact tested source above. A subsequent documentation-only
 publication commit has a separate final PR HEAD; it does not replace the tested SHA
 or imply another full run or exact-head CI. No push/PR/merge occurred.
+
+## PR #67 browser acceptance evidence — 2026-10-28
+
+This is a separate execution bound to source
+`c5901c326ff92fee0fde0f8a4c66633a003cfc81`; earlier source/run evidence above remains
+historical and is not reused as proof for the PR browser results.
+
+- [Browser acceptance report](QA-02-browser-acceptance-PR67.md).
+- [Browser evidence manifest, source hashes and artifact SHA-256 values](QA-02-browser-acceptance-PR67-evidence.json).
+- [Actual main browser results](qa02-browser-pr67/main/results.json),
+  [sanitized network events](qa02-browser-pr67/main/browser-network.jsonl),
+  [server events](qa02-browser-pr67/main/server-events.txt).
+- [Focused keyboard recheck](qa02-browser-pr67/keyboard/results.json), which overlaps
+  B-KEYBOARD and is not summed into distinct case counts.
+- [PR-associated CI snapshot](qa02-browser-pr67/ci-status.json):
+  [CI run 40636380768](https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40636380768)
+  completed/success. The [checkout log](qa02-browser-pr67/ci-checkout-excerpt.txt)
+  shows synthetic merge `6dbe1516ffac8a95b584e270cbbce935b69956e3`, not literal HEAD.
+  Both Git trees equal `34cf743c4a89d5db39237584e2ece704bda0577b` (no file diff).
+  Identical-tree CI succeeded; direct exact-commit CI is not claimed. This is
+  independent of the local browser run on the literal expected HEAD.
+
+Final main: **22 PASS / 0 FAIL / 3 NOT RUN**, process exit 0, timeout=false;
+Chromium 140.0.7339.16, Playwright 1.55.0, real application/CSRF/login and disposable
+PostgreSQL 17.6. Thirty-four main and two focused screenshots are under
+`qa02-browser-pr67/`. Earlier failed harness attempts are retained with explanations
+and are not added to the final counts. No private credential/session traces are exported.
+
+**Initial execution blockers (superseded by final TD attestation below)**: native confirmation visual checks, its actual physical keyboard interaction
+and audible screen-reader checks require a connected desktop. The report records the
+success-reload BODY focus behavior for TD/HP assessment. No production/test source was
+modified, no new full Java regression is claimed, and no commit/push/merge occurred.
+QA-02 remains IN PROGRESS pending HP acceptance.
+
+## TD final manual acceptance and documentation publication — 2026-10-28
+
+See the [final browser report](QA-02-browser-acceptance-PR67.md),
+[manual observations/history](qa02-browser-pr67/manual-observations.json) and
+[source-bound manifest](QA-02-browser-acceptance-PR67-evidence.json).
+
+TD’s final Windows Chrome observations substantiate the two previously NOT VERIFIED
+cases. Current mandatory PR acceptance: **25 PASS / 0 FAIL**, comprising **22 automated + 3 TD-attested manual** cases. Original automation remains **22 PASS / 0 FAIL /
+3 NOT RUN** in unchanged raw records; all **36 automated screenshots** are preserved.
+The focused keyboard recheck overlaps existing coverage and is not counted twice.
+
+TD confirms native visuals at 375/768/1440, Tab/visible focus, Enter opening the dialog,
+Esc dismissing without cancellation, Tab/Shift+Tab/focus behavior and no keyboard trap.
+Narrator reads the Cancel Order button, Vietnamese prompt/OK/Cancel, and order status
+when navigating. These are explicit TD attestations, not new agent-run browser tests.
+Versions/exact time, Space behavior, exact post-success focused element and automatic
+announcement timing remain unrecorded; no native screenshot files were supplied or invented.
+
+The executable tested source remains `c5901c326ff92fee0fde0f8a4c66633a003cfc81`.
+Only documentation/evidence is being published; publication HEAD and CI must be verified
+after push, with the standard synthetic merge checkout/source-tree qualification retained.
+**Ready for HP review only after publication-head CI succeeds.** No merge is authorized;
+QA-02 remains IN PROGRESS. The separate local manual application is left running.

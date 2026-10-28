@@ -106,7 +106,10 @@ focused run. This publication run is focused validation, not a newly claimed ful
 Mockito/JDK agent/CDS, authentication-provider and deliberate fault-injection diagnostics
 are retained in raw local logs; no test or warning was weakened/suppressed.
 
-## Remaining manual browser checks — NOT RUN
+## Manual browser checklist at PR publication — historical
+
+This list records the publication-time state. The real-browser execution update below
+supersedes overlapping NOT RUN entries; it does not change the historical test results.
 
 Use fictional owner/foreign/role fixtures and capture source SHA, expected/actual,
 dataset and redacted screenshots at **375/768/1440** widths.
@@ -127,3 +130,57 @@ dataset and redacted screenshots at **375/768/1440** widths.
 Manual and HP acceptance are not claimed. This PR addresses Q02-A01's missing UI;
 Q02-F05's accepted backend fix remains resolved. Other QA-02 scope/evidence gates are
 outside this UI change. No PR merge or QA-02 COMPLETED declaration is authorized.
+
+## PR #67 real browser execution — 2026-10-28
+
+Exact tested source: `c5901c326ff92fee0fde0f8a4c66633a003cfc81`.
+See the [browser acceptance report](QA-02-browser-acceptance-PR67.md) and
+[source-bound evidence manifest](QA-02-browser-acceptance-PR67-evidence.json).
+
+Real Chromium 140.0.7339.16 / Playwright 1.55.0 ran against the packaged application,
+normal local security configuration and disposable PostgreSQL 17.6 synthetic fixtures.
+Final main result: **22 PASS, 0 FAIL, 3 NOT RUN**; exit 0, no final timeout. A focused
+keyboard recheck passed and overlaps the main count. Thirty-six screenshots, actual
+HTTP/transport observations, database effects and sanitized server events are retained.
+This is distinct from the VM frontend tests and prior Java/PostgreSQL regression.
+
+Responsive page/action/pending/error layouts, genuine CSRF and expired/revoked-session
+rejection/recovery, ownership and role checks, actual Vendor confirmation, replay/two-tab
+conflicts, double-click and offline/in-flight/lost-response reconciliation were executed.
+Inventory/voucher release, history/inbox and immutable COD/financial snapshots were
+verified in PostgreSQL. Earlier harness failures and their corrections remain recorded.
+
+Native dialog visuals at all three widths, physical keyboard traversal inside the native
+dialog and audible screen-reader announcements are **NOT RUN**. Page focus returns to
+the control on dismissal; successful full reload resets focus to BODY, then Tab reaches
+the skip-to-main link. Native/assistive-technology acceptance of that behavior remains
+for TD/HP. The older JavaScript-disabled and generic server-error checklist items were
+not newly executed by this run; they are not inferred from other tests.
+
+**Initial execution decision: BLOCKED** pending desktop observations; superseded by TD’s final confirmation below. QA-02 remains IN PROGRESS;
+HP acceptance is not claimed. Only documentation/evidence changed; nothing was committed,
+pushed or merged during this browser task.
+
+## TD final manual acceptance and documentation publication — 2026-10-28
+
+See the [final browser report](QA-02-browser-acceptance-PR67.md),
+[manual observations/history](qa02-browser-pr67/manual-observations.json) and
+[source-bound manifest](QA-02-browser-acceptance-PR67-evidence.json).
+
+TD’s final Windows Chrome observations substantiate the two previously NOT VERIFIED
+cases. Current mandatory PR acceptance: **25 PASS / 0 FAIL**, comprising **22 automated + 3 TD-attested manual** cases. Original automation remains **22 PASS / 0 FAIL /
+3 NOT RUN** in unchanged raw records; all **36 automated screenshots** are preserved.
+The focused keyboard recheck overlaps existing coverage and is not counted twice.
+
+TD confirms native visuals at 375/768/1440, Tab/visible focus, Enter opening the dialog,
+Esc dismissing without cancellation, Tab/Shift+Tab/focus behavior and no keyboard trap.
+Narrator reads the Cancel Order button, Vietnamese prompt/OK/Cancel, and order status
+when navigating. These are explicit TD attestations, not new agent-run browser tests.
+Versions/exact time, Space behavior, exact post-success focused element and automatic
+announcement timing remain unrecorded; no native screenshot files were supplied or invented.
+
+The executable tested source remains `c5901c326ff92fee0fde0f8a4c66633a003cfc81`.
+Only documentation/evidence is being published; publication HEAD and CI must be verified
+after push, with the standard synthetic merge checkout/source-tree qualification retained.
+**Ready for HP review only after publication-head CI succeeds.** No merge is authorized;
+QA-02 remains IN PROGRESS. The separate local manual application is left running.
