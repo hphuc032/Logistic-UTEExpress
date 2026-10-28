@@ -220,3 +220,35 @@ by QA-01. The approved develop imports are excluded from this QA-01-only list.
 No push, remote PR/comment/approval, merge into develop/main, production deployment or user-file/DB deletion.
 Browser/manual SMTP/proxy TLS/ACL/restart/load/multi-instance acceptance remains outside
 this executed local QA-01 scope. Current recommendation: technically ready, pending QĐ.
+
+## Portable evidence and post-review synchronization
+
+The initial local-only handoff above is historical. PR #66 has since been published;
+QĐ's COMMENTED review at89600fd reports independent scoped878 Java/PostgreSQL +12
+Node PASS and requires a final sync/CI/delta-review gate before final approval.
+
+- Latest synced develop: `e88685213d3af20729d2e78c56568f44e0a2922c`.
+- Normal merge commit: `f76c3bb2f3cdb266e3430f4f98436d2b9740489e`, behind0, no conflicts.
+- Delta from89600fd: seven added QA-03 tooling/workflow/evidence files only.
+- Application/test/POM/existing CI objects remain exactly the four IDs listed above.
+- Imported `scripts/qa/verify_operations.py` SHA-256:
+  `4005a275ed21d1d657f9f8c5cb0ad663f83be08074fe66cb10926d494a21036f`, identical to
+  the approved runner used for the2023-case run.
+- Fresh post-sync commands: `python -B -m unittest discover -s scripts/qa/tests -v`
+  (17 PASS, exit0), and Node TAP command above (12 PASS, exit0), at f76c3bb.
+  Private logs: `.work/qa01/final-sync/runner-tool-tests-permitted.log` and `node.log`.
+  The sandbox-only attempt failed creating temp fixtures (17 cases/34 setup-cleanup
+  errors); its separate log is retained, not counted as passing application evidence.
+- `git diff --check`: PASS. No fresh full PostgreSQL rerun or relabelled source SHA
+  is claimed; final CI runs on the published descendant and is linked in PR #66.
+
+Portable artifact: [QA-01-runner-evidence.json](QA-01-runner-evidence.json).
+SHA-256: `43175396d5e7b7929191e2a2de90f55ab3583e4d5c079eb558ad25d33e5a7ed7`.
+This is a byte-for-byte copy of the generated schema-v2 manifest, not transcribed
+counts. Its source remains3c4fb55, runner remains b71534f,2023 Java +12 Node, exits0,
+timeout=false. Only identities, suite counts/hashes and provenance are included;
+raw log/XML contents, system properties and credential values are absent. The raw
+files' availability to QĐ is not implied by publishing their metadata/hashes.
+
+The follow-up commit changes these two reports and adds only this sanitized JSON.
+Final QĐ approval and HP merge decision remain independent, pending gates.

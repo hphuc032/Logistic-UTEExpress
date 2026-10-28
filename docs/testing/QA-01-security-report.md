@@ -2,6 +2,8 @@
 
 Owner/executor: Hoàng Phúc (HP). Intended reviewer: Quốc Đạt (QĐ).
 Recommendation: **TECHNICALLY READY — PENDING QĐ REVIEW**.
+Publication/sync follow-up is recorded at the end; the initial local handoff below
+remains historical evidence for its stated source.
 No independent QĐ acceptance review, approved PR, CI acceptance, merge, completed milestone or
 production security/release sign-off is claimed.
 
@@ -190,3 +192,33 @@ QĐ must review this security change/report. HP retains merge authorization afte
 and review gates; the task is not marked COMPLETED. Only local QA-01 commits were made;
 no push, PR creation/approval, merge into develop/main, applied migration edit, security weakening,
 production deployment or user database/file deletion occurred.
+
+## PR #66 — QĐ scoped review and final sync (2026-10-28)
+
+PR: https://github.com/hphuc032/Logistic-UTEExpress/pull/66, targeting develop.
+QĐ independently reviewed `89600fd15775672d667a600cbf1d3d634bb482b4` and recorded
+[scoped technical PASS](https://github.com/hphuc032/Logistic-UTEExpress/pull/66#pullrequestreview-5677736966):
+878 distinct Java/PostgreSQL +12 Node PASS, with no new confirmed Critical/High
+blocker in the reviewed scope. This is not an independent full2023-case rerun,
+verification of HP's private raw files, a dependency SCA result or final APPROVED.
+
+To close GATE-QA01-SYNC, approved develop
+`e88685213d3af20729d2e78c56568f44e0a2922c` was normally merged at
+`f76c3bb2f3cdb266e3430f4f98436d2b9740489e`, without conflicts, rebase or force push.
+Behind count became0. The seven imported files are approved QA-03 tooling, its
+workflow and evidence/docs. `src/main`, `src/test`, `pom.xml` and the existing
+`.github/workflows/ci.yml` retain exactly the Git objects recorded above and reviewed
+by QĐ. The imported runner script SHA-256 also matches the previously executed runner.
+
+Post-sync checks at f76c3bb: runner self-tests17/17 and Node12/12 PASS; diff check
+PASS. The first sandboxed tooling attempt could not create its temporary fixtures;
+the permitted rerun passed with unchanged tests. No new full PostgreSQL run is claimed
+on this merge SHA: the2023-case evidence remains bound to3c4fb55 and input equality
+is explicit. Final-head CI and final delta-review status are recorded in the PR;
+the documentation/evidence commit after this merge does not change executable inputs.
+
+[Portable runner evidence](QA-01-runner-evidence.json) is the exact sanitized,
+tool-generated schema-v2 manifest from that full run. It contains counts, source/
+runner identities and hashes, with no raw logs, XML properties or credentials.
+Raw artifacts stay local. Final QĐ APPROVED and HP merge authorization remain pending;
+QA-01 is not marked COMPLETED and this PR is not merged.
