@@ -3,7 +3,9 @@
 PASS means the stated scope only. NOT RUN is missing execution evidence; BLOCKED
 means a decision/dependency prevents acceptance. No production failure is hidden
 by a PASS from another level. FAIL is retained for the initial harness attempt,
-classified separately from the corrected application probes.
+classified separately from the corrected application probes. ACCEPTED denotes a
+scope-limited HP decision. DEFERRED / ACCEPTED SCOPE EXCEPTION is not an executed
+limited-write PASS; the current Manager DENY ALL behavior remains unchanged.
 
 | Gate / Master ID | Dataset and expected result | Actual evidence | Status |
 |---|---|---|---|
@@ -30,7 +32,7 @@ classified separately from the corrected application probes.
 | Responsive / T50, UI-02 | 375/768/1440, visible/usable controls and messages | HTTP HTML checks do not prove layout | NOT RUN — HP/QD |
 | Clean-host / REL-01 | Provision from README, ENV, migrate+seed, restart/storage permissions, health | Current Windows developer workstation only | NOT RUN — REL-01 |
 | Shared INT-02/QA acceptance | Recorded owner acceptance for the shared automated integration baseline | HP accepts automated integration baseline SHA `e88685213d3af20729d2e78c56568f44e0a2922c`; browser/manual and global criteria remain separate | ACCEPTED — automated baseline only; no implied manual/browser acceptance |
-| Whole QA-03 | All in-scope gates have evidence/explicit accepted exceptions and reviewer sign-off | Automated and local checks pass; gaps remain above | BLOCKED |
+| Whole QA-03 | All in-scope gates have evidence/explicit accepted exceptions and reviewer sign-off | Automated/local checks pass; Manager limited-write is deferred and automated baseline accepted | BLOCKED — Q03-G01 and Q03-G02; manual/browser and full seed remain NOT RUN |
 
 ## Manual Ops execution plan (all steps currently NOT RUN)
 

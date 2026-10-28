@@ -15,9 +15,10 @@ not an independent security audit or a claim that missing acceptance evidence pa
 | Q03-R03 | Production observability/media reconciliation; NOT RUN | QD + HP/operator | Exercise safe logging/alerts and operator-controlled review-media reconciliation; never delete referenced or uncertain in-flight files. Existing runbook/events are not proof of deployed monitoring. |
 
 Q03-R01–R03 are separately reported release follow-ups, not silently invented
-circular prerequisites for QA-03. HP must decide which operational criteria belong
-to the current QA-03 gate; the report already remains BLOCKED by G01/G02 and scope
-confirmation. No requirement may be silently waived because automated tests pass.
+circular prerequisites for QA-03. Current QA-03 completion remains BLOCKED by
+Q03-G01 and Q03-G02 only: Q03-S01 is deferred under the accepted scope exception,
+and Q03-G03 is accepted for the automated baseline only. Release follow-ups remain
+NOT RUN separately; no manual/browser or seed PASS is inferred.
 
 ## Previously raised findings
 

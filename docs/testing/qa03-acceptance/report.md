@@ -5,6 +5,9 @@ local operational probes PASS. Browser/manual sign-off and the integrated demo s
 HP has now decided the Manager commission scope and accepted the shared automated
 INT-02 baseline; those decisions are recorded below without implying full QA-03 completion.
 This packet is ready for scoped review; it is not a declaration of QA-03 COMPLETED.
+The remaining completion blockers are **Q03-G01 and Q03-G02 only**. The structured
+`acceptance-status.json` records the same scope-limited decisions as this report,
+checklist and findings; neither decision converts unexecuted manual/seed gates to PASS.
 
 ## Frozen source and actual execution
 

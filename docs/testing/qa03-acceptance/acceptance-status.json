@@ -75,15 +75,21 @@
     },
     {
       "gate": "Manager commission limits",
-      "status": "BLOCKED",
-      "scope": "scope decision required",
-      "owner": "HP/QD/TD"
+      "status": "DEFERRED / ACCEPTED SCOPE EXCEPTION",
+      "scope": "Current QA-03: Manager commission writes remain DENY ALL; limited-write is not PASS",
+      "owner": "HP/QD/TD",
+      "decision_owner": "HP",
+      "limited_write_pass": false,
+      "follow_up": "ADMIN-06 limited-write needs a separately approved policy and implementation/security review"
     },
     {
       "gate": "Shared integration acceptance",
-      "status": "BLOCKED",
-      "scope": "owner confirmation required",
-      "owner": "HP"
+      "status": "ACCEPTED",
+      "scope": "Shared INT-02 automated integration baseline only; no browser/manual acceptance",
+      "owner": "HP",
+      "decision_owner": "HP",
+      "accepted_source_sha": "e88685213d3af20729d2e78c56568f44e0a2922c",
+      "manual_browser_accepted": false
     },
     {
       "gate": "Clean-host/production controls",
@@ -98,5 +104,9 @@
       "owner": "QD/operator"
     }
   ],
-  "status_note": "PASS is limited to stated execution scope. Manager commission limited-write is DEFERRED / ACCEPTED SCOPE EXCEPTION (deny-all remains; not PASS). Shared INT-02 automated baseline is ACCEPTED at e88685213d3af20729d2e78c56568f44e0a2922c only. Whole QA-03 remains BLOCKED by browser/manual Ops and complete demo seed. Release follow-ups are separate and not automatic circular prerequisites."
+  "status_note": "PASS is limited to stated execution scope. Manager commission limited-write is DEFERRED / ACCEPTED SCOPE EXCEPTION (deny-all remains; not PASS). Shared INT-02 automated baseline is ACCEPTED at e88685213d3af20729d2e78c56568f44e0a2922c only. Whole QA-03 remains BLOCKED by browser/manual Ops and complete demo seed. Release follow-ups are separate and not automatic circular prerequisites.",
+  "remaining_completion_blockers": [
+    "Q03-G01",
+    "Q03-G02"
+  ]
 }
