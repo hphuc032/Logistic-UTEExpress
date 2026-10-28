@@ -1,0 +1,9 @@
+{
+  "runner_source_sha": "ff83d5494d4db25533c62b120fbf86fc574de22c",
+  "application_full_regression_source_sha": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+  "jar_sha256": "544c6c2ab0854d6fef4c2d9ee0bafe5743e267a800c579770196c7c68e75a3b0",
+  "application_test_pom_objects_unchanged": true,
+  "python_tooling_tests": 20,
+  "python_tooling_exit": 0,
+  "tooling_log_sha256": "0741cc04e4c4c9cf965fc5c7b0d801fc3109919160473c7b61ed6dc30c239718"
+}

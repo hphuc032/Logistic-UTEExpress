@@ -1,0 +1,28 @@
+{
+  "reviewed_pr70_head": "688884cd33f4b2f4dc62f5d33a4c4002e9146660",
+  "tested_combined_source_sha": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+  "app_test_pom_git_objects": {
+    "src/main": "26d2bafb92b90c0b7ab1c53beee32e3100c28273",
+    "src/test": "7371d7711e83bf39a384020105f2fe8f6118d3c7",
+    "pom.xml": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f"
+  },
+  "combined_java_total": 2078,
+  "xml_reports": 139,
+  "seed_attempts": {
+    "first": "FAIL retained",
+    "second": "PASS observed"
+  },
+  "qa02": "IN PROGRESS",
+  "qa03": "BLOCKED",
+  "json_sha256": {
+    "acceptance-status.json": "0a6ded09a248fed27779e9ffbbcb1fef70906e3cd376213c447bd3d6ab77555b",
+    "combined-build-provenance.json": "66adc38ce1ea85a7d8ce9d467ae743ed1d64c54fbaeb1536e076c29022649f82",
+    "combined-first-fail-result.json": "de43b6ff511d36837315ed4ebc9892f6aa8d7b539d47f9c3d0d59c2eb11009b8",
+    "combined-full-run-manifest.json": "fcd3774e148c4f16e6aab9ec481a2fc6c272fba40cb754bb3e1c61bc0fa3030c",
+    "combined-pass-result.json": "e34510602009251b2391422adc12aaf03b528eca4b2d483b9098f69acc29681d",
+    "combined-second-attempt-observations.json": "8d70c5e2e57400faf34c04c8f1977ce932452561d6e5bf34b2aafce4b04c3142",
+    "first-failure-diagnostics.json": "c57713984aa571b0a523f60685858bce636c45af8d64987dd33a88809f8f26c2",
+    "independent-pr70-evidence.json": "b74452925ae4145097674e20e7f22979901b852facf06708775143fc6058a311",
+    "supplemental-test-evidence.json": "08d14213c9e6ac63073878aae6d1db908ff968105efbd2e42ffecd7d4d9aa4c9"
+  }
+}

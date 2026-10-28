@@ -1,0 +1,21 @@
+{
+  "master_plan_sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+  "tested_source_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+  "xml_report_count": 139,
+  "json_sha256": {
+    "acceptance-status.json": "5f1aa7ad5254f5c1d07b466d9aa52b914f2fff70cd9e2d457322fa29269eac97",
+    "browser-runtime-retry.json": "2a7cdea663e519f5bf3fa3813628611e4ad6ee8c2ab947e0024bccf07d9b8db2",
+    "build-provenance.json": "d0e4c66157d449f88e81542476bf14397e3e1d043930b3fffed3aa977068b7bf",
+    "clock-fixed-pass-result.json": "d6df3106f655579630152ef31cb9c9d190f7926629e1a24cd9c08cb4a9856250",
+    "finding-disposition.json": "6543c927cdc3c314624dffea5285090744073f0c1e6648e36a5d87e05ff446bb",
+    "full-run-manifest.json": "c482256914b289e5d430dcdb0cf646a6b6fc57a145b4e37147d889957323ebe0",
+    "pre-fix-diagnostic-build-proof.json": "5d9ba978dba87b62ae2ef834237b05bde185b34df54543db80ce790ca2e94d35",
+    "predicate-verification.json": "3e3f32e0f8207e929922e662b9730bae425091462e80575fdf17a89ec2c3ea25",
+    "reproduced-fail-result.json": "d5f7323cd2557b1be163638bbc4031d7ca185f34409c75e2cd73fcedf26b0246",
+    "root-cause.json": "6aa0a0bad3fef6d4882922cc9b2faa4a33db32f83391e1e325adfcd68f9beba5",
+    "supplemental-tests.json": "bcb94dc9dc48237eb9afdd9a3f0e5ae62b50f9e1500b99f50e96101703bdb9d6",
+    "td-published-review.json": "8912592d4836057c3beac0d6239655d953fc501279813c490d7a980a5603cdc1"
+  },
+  "current_finding_status": "OPEN",
+  "current_finding_severity": "Medium"
+}

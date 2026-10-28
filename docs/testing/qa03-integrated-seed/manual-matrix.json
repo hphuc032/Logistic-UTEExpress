@@ -1,0 +1,251 @@
+{
+  "scope": "Manual browser/responsive Ops acceptance; HTTP and automated tests do not substitute this matrix",
+  "source_sha": null,
+  "dataset_source_sha": null,
+  "browser_version": null,
+  "executor": null,
+  "status": "BLOCKED",
+  "reason": "Computer Use kernel assets initialization fails with Windows os error 3. No viewport execution or screenshot was possible.",
+  "cases": [
+    {
+      "case": "assignment-reassignment",
+      "viewport_width_px": 375,
+      "role": "ADMIN/MANAGER",
+      "expected": "Assignment succeeds before pickup; stale/foreign/ineligible paths preserve state",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "assignment-reassignment",
+      "viewport_width_px": 768,
+      "role": "ADMIN/MANAGER",
+      "expected": "Assignment succeeds before pickup; stale/foreign/ineligible paths preserve state",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "assignment-reassignment",
+      "viewport_width_px": 1440,
+      "role": "ADMIN/MANAGER",
+      "expected": "Assignment succeeds before pickup; stale/foreign/ineligible paths preserve state",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "failure-retry",
+      "viewport_width_px": 375,
+      "role": "SHIPPER",
+      "expected": "Failure 1, retry 2 and failure 2; no retry 3, readable evidence/errors",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "failure-retry",
+      "viewport_width_px": 768,
+      "role": "SHIPPER",
+      "expected": "Failure 1, retry 2 and failure 2; no retry 3, readable evidence/errors",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "failure-retry",
+      "viewport_width_px": 1440,
+      "role": "SHIPPER",
+      "expected": "Failure 1, retry 2 and failure 2; no retry 3, readable evidence/errors",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "attempt2-delivery",
+      "viewport_width_px": 375,
+      "role": "SHIPPER",
+      "expected": "Delivery attempt 2 with exact COD succeeds once",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "attempt2-delivery",
+      "viewport_width_px": 768,
+      "role": "SHIPPER",
+      "expected": "Delivery attempt 2 with exact COD succeeds once",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "attempt2-delivery",
+      "viewport_width_px": 1440,
+      "role": "SHIPPER",
+      "expected": "Delivery attempt 2 with exact COD succeeds once",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "return-to-sender",
+      "viewport_width_px": 375,
+      "role": "ADMIN",
+      "expected": "Trusted receipt and replay, no buyer-return/refund crossover",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "return-to-sender",
+      "viewport_width_px": 768,
+      "role": "ADMIN",
+      "expected": "Trusted receipt and replay, no buyer-return/refund crossover",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "return-to-sender",
+      "viewport_width_px": 1440,
+      "role": "ADMIN",
+      "expected": "Trusted receipt and replay, no buyer-return/refund crossover",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "notification-two-sessions",
+      "viewport_width_px": 375,
+      "role": "BUYER A/B + VENDOR",
+      "expected": "Vendor confirm reaches only persisted Buyer; offline/reconnect/read/logout work",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "notification-two-sessions",
+      "viewport_width_px": 768,
+      "role": "BUYER A/B + VENDOR",
+      "expected": "Vendor confirm reaches only persisted Buyer; offline/reconnect/read/logout work",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "notification-two-sessions",
+      "viewport_width_px": 1440,
+      "role": "BUYER A/B + VENDOR",
+      "expected": "Vendor confirm reaches only persisted Buyer; offline/reconnect/read/logout work",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "review-media",
+      "viewport_width_px": 375,
+      "role": "BUYER + public",
+      "expected": "Owned delivered item, validation/duplicate/foreign errors, public media after Return",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "review-media",
+      "viewport_width_px": 768,
+      "role": "BUYER + public",
+      "expected": "Owned delivered item, validation/duplicate/foreign errors, public media after Return",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "review-media",
+      "viewport_width_px": 1440,
+      "role": "BUYER + public",
+      "expected": "Owned delivered item, validation/duplicate/foreign errors, public media after Return",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "admin-financial-scope",
+      "viewport_width_px": 375,
+      "role": "ADMIN/MANAGER",
+      "expected": "Admin metrics usable; Manager cannot access private finance",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "admin-financial-scope",
+      "viewport_width_px": 768,
+      "role": "ADMIN/MANAGER",
+      "expected": "Admin metrics usable; Manager cannot access private finance",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "admin-financial-scope",
+      "viewport_width_px": 1440,
+      "role": "ADMIN/MANAGER",
+      "expected": "Admin metrics usable; Manager cannot access private finance",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "full-user-journey",
+      "viewport_width_px": 375,
+      "role": "BUYER/VENDOR/SHIPPER/ADMIN",
+      "expected": "Register, catalog, cart, checkout, delivery and review controls usable",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "full-user-journey",
+      "viewport_width_px": 768,
+      "role": "BUYER/VENDOR/SHIPPER/ADMIN",
+      "expected": "Register, catalog, cart, checkout, delivery and review controls usable",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    },
+    {
+      "case": "full-user-journey",
+      "viewport_width_px": 1440,
+      "role": "BUYER/VENDOR/SHIPPER/ADMIN",
+      "expected": "Register, catalog, cart, checkout, delivery and review controls usable",
+      "status": "NOT RUN",
+      "actual": null,
+      "screenshot": null,
+      "finding": "Q03-G01-RUNTIME"
+    }
+  ]
+}

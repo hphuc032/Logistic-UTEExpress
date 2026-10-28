@@ -1,0 +1,137 @@
+{
+  "sourceSha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+  "startedUtc": "2026-10-28T16:19:02.011083+00:00",
+  "finishedUtc": "2026-10-28T16:20:36.246184+00:00",
+  "fullRegression": false,
+  "exitCode": 0,
+  "timeout": false,
+  "surefire": {
+    "totals": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "rerunOrFlake": 0
+    },
+    "suites": [
+      {
+        "suite": "com.uteexpress.ArchitectureTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "3d77f4310c1da009d4f9332d19978fd17dede094fa5f0438c3f4ee768b0c4bee",
+        "rerunOrFlake": 0
+      },
+      {
+        "suite": "com.uteexpress.payment.service.CancelledPaidRefundPayloadTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "df206cfe9e60657c482cc1ce6a2fd887929484be1b009f3b3bcb4c27cf1a9c77",
+        "rerunOrFlake": 0
+      }
+    ]
+  },
+  "failsafe": {
+    "totals": {
+      "tests": 205,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "rerunOrFlake": 0
+    },
+    "suites": [
+      {
+        "suite": "com.uteexpress.governance.AdminRevenueIT",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "695ba566ba2a69cf930048ccd6d30a535fec4d689fb478414af507932fd9589d",
+        "rerunOrFlake": 0
+      },
+      {
+        "suite": "com.uteexpress.order.CancelledPaidRefundIT",
+        "tests": 61,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "ba62f9ad81d0ea934b19716519f2b65b4ee920a3fb842a7d12632a0ecbd5cf23",
+        "rerunOrFlake": 0
+      },
+      {
+        "suite": "com.uteexpress.order.ManualCodRefundIT",
+        "tests": 62,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "536959542134c57db25eabd0b15488ebea887b51d543b7afec49be7a3d5ea8d9",
+        "rerunOrFlake": 0
+      },
+      {
+        "suite": "com.uteexpress.order.ReturnReceiptMigrationIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "1eb2c37d70338f63e8102221bfda3aa63720f58c1f66344ca17fcad7e70a340f",
+        "rerunOrFlake": 0
+      },
+      {
+        "suite": "com.uteexpress.order.VendorRevenueIT",
+        "tests": 46,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "62f3e96fed59602f61c1fcf2925d1b4cf512990011424ca9d244ccf397846a1d",
+        "rerunOrFlake": 0
+      },
+      {
+        "suite": "com.uteexpress.payment.CancelledPaidRefundMigrationIT",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "e0b04ac6929d2e49f1a828e8673db76197ab1ef7c56a51e2bcdb8521f9a84acf",
+        "rerunOrFlake": 0
+      },
+      {
+        "suite": "com.uteexpress.payment.RefundLedgerMigrationIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "5e80adfde9ea193f8256db5fb2ceec540682875bc5eefff7b930c92ec78093a0",
+        "rerunOrFlake": 0
+      },
+      {
+        "suite": "com.uteexpress.shipping.ReturnToSenderMigrationIT",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "ce1d267c155e6f622d1eda1cfedafbb618ba930389b413b55b563c713716ed3e",
+        "rerunOrFlake": 0
+      }
+    ]
+  },
+  "failsafeTimeout": "false",
+  "sourceUnchanged": true,
+  "logSha256": "127f90afca1893185e47a1288eaa8ab38bc6ffce4d8f4d55b69ff2458b514889",
+  "runId": null,
+  "runIdAvailability": "No run ID recorded in the focused test receipt; exact source, UTC interval and artifact hashes are retained",
+  "commandArgv": [
+    "mvnw.cmd",
+    "-B",
+    "--no-transfer-progress",
+    "-Ppostgres-it",
+    "-Dtest=ArchitectureTest,CancelledPaidRefundPayloadTest",
+    "-Dit.test=CancelledPaidRefundIT,ManualCodRefundIT,CancelledPaidRefundMigrationIT,RefundLedgerMigrationIT,ReturnReceiptMigrationIT,ReturnToSenderMigrationIT,VendorRevenueIT,AdminRevenueIT",
+    "verify"
+  ],
+  "originalReceiptSha256": "7695e5fddb835595e3df10d21eb083204642d8e869ba8b5078124e9efae6c5d5",
+  "rawXmlAndLogsIncluded": false,
+  "scope": "Focused 11 unit + 205 PostgreSQL; not a new full regression"
+}

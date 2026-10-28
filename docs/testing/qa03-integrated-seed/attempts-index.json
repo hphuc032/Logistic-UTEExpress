@@ -1,0 +1,77 @@
+{
+  "note": "Historical attempts remain distinct; failures are not PASS or new production findings without diagnosis. Final accepted candidate is identified separately.",
+  "attempts": [
+    {
+      "attempt": "run-147639dd39c5",
+      "source_sha": "0b21e0cbe283ba7627726ba9147761980c69115b",
+      "status": "FAIL",
+      "failure_code": "HTTP_400_/user/checkout/quote",
+      "owned_container_removed": true,
+      "scope": "Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance"
+    },
+    {
+      "attempt": "run-5618aa965427",
+      "source_sha": "1682db541a88ded660da57d726df8df307294607",
+      "status": "FAIL",
+      "failure_code": "FOUNDATION_VOUCHER_MISSING",
+      "owned_container_removed": true,
+      "scope": "Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance"
+    },
+    {
+      "attempt": "run-ff23cd2083a9",
+      "source_sha": "ed64615e80c6c8b0a2b68e21c05f00108410e894",
+      "status": "FAIL",
+      "failure_code": "APPLICATION_START_FAILED",
+      "owned_container_removed": true,
+      "scope": "Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance"
+    },
+    {
+      "attempt": "run-037bbd565707",
+      "source_sha": "19b122123fee0218e5b865643f7fd0aab8e9c477",
+      "status": "PASS",
+      "failure_code": null,
+      "owned_container_removed": true,
+      "scope": "Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance"
+    },
+    {
+      "attempt": "run-0544599ba161",
+      "source_sha": "e43abeff1d9c7700b90dd16add4215bc8496047c",
+      "status": "FAIL",
+      "failure_code": "HTTP_400_/vendor/orders/5/return/approve",
+      "owned_container_removed": true,
+      "scope": "Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance"
+    },
+    {
+      "attempt": "run-1d8fcaf98287",
+      "source_sha": "c858a5b4268a489d3b8c9c3777856ec0f6a6d2e9",
+      "status": "PASS",
+      "failure_code": null,
+      "owned_container_removed": true,
+      "scope": "Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance"
+    },
+    {
+      "attempt": "run-6929b82e605a",
+      "source_sha": "9a45a17a25188ba6e591c25ed782acdb7d003437",
+      "status": "PASS",
+      "failure_code": null,
+      "owned_container_removed": true,
+      "scope": "Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance"
+    },
+    {
+      "attempt": "run-8b7450e32a91",
+      "source_sha": "dbd1ebbb8d271c3dc009c3f186e81eaea82ec65c",
+      "status": "PASS",
+      "failure_code": null,
+      "owned_container_removed": true,
+      "scope": "Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance"
+    },
+    {
+      "attempt": "run-d56832065ec0",
+      "source_sha": "0d9c29eb5eeb654e5fe8597950f158eb7a4de9d6",
+      "status": "PASS",
+      "failure_code": null,
+      "owned_container_removed": true,
+      "scope": "Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance"
+    }
+  ]
+}
