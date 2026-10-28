@@ -81,3 +81,7 @@ attempt is counted as PASS. The header-binding production fix is a separate PR.
 ## Current execution candidate
 
 Runner source `dbd1ebbb8d271c3dc009c3f186e81eaea82ec65c`, application built from `8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5`, integrated develop `fa48cb69cef92276f0dddf0d2bd396eee098f2f3`. Application/test/POM Git objects are identical between runner and built source. Process exit 0, no timeout, owned container removed. See exact-byte `rehearsal-result.json` and `execution-manifest.json`; evidence files are subsequent documentation only. Full regression on the built source is tracked separately in PR #68.
+
+## Completed application regression
+
+The same built application source `8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5` completed full Java 21/PostgreSQL clean verify: 686 unit +1,325 PostgreSQL =**2,011 PASS**, 0 failures/errors/skips, no timeout, exit 0. The final JAR still matches the seed artifact checksum. Every 136 suite XML hashes and the Failsafe summary hash were independently rechecked. Runner Notifications Node12 PASS; the supplemental complete Node run is33 PASS including those12, not45. Seventeen runner unit tests also PASS. This full run belongs to the built source, not a new run on later documentation commits.
