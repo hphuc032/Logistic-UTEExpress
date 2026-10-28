@@ -8,3 +8,7 @@
 | Q03-G01 | NOT RUN / environment BLOCKED | QD + HP/UI | Computer Use kernel initialization fails; no current Ops screenshots/manual responsive evidence. |
 
 No Critical/High finding in independently reviewed database scope. This is not a complete security/business audit. #68/#70 dependency merges and TD/HP acceptance remain pending. Manager limited-write stays deferred/accepted exception (DENY ALL); PAY03/VNPAY deferred, release follow-ups NOT RUN.
+
+## TD investigation disposition update
+
+Q70-S01 remains **OPEN / Medium**. TD reports candidate d06320f passing controlled Java Clock -2s verification (11unit+205PG); the original historical predicate remains unproven. See [canonical current disposition](../qa03-refund-diagnostics/finding-disposition.json). Retain candidate and all historical evidence. HP review, authorized integration and new exact-head regression remain required; no approval/merge/Final Acceptance implied.

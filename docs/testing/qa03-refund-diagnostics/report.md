@@ -73,3 +73,35 @@ and source identities remain available in the earlier packet and new reproductio
 ## Completed candidate execution
 
 Actual tested source `d06320f43cb54f79db1bc17df3eb36da3fc71ceb`: **690 unit +1,388 PostgreSQL =2,078 PASS**, all139 XML report hashes and raw full logs checked, exit0/no timeout, zero failures/errors/skips. Complete Node33 and tooling20 PASS; the runner Notifications12 overlap Node33. Matching artifact combined seed first/rerun PASS on15Orders,3refunds, all34-table fingerprints equal. Both independent TD child invocations exit0 and all cancelled/PAID timing predicates are valid, with paid_at=payment_created_at. Staged fixture bytecode matches the compiled fix. Original returned-COD ledger digest is preserved. Resources cleaned up. Final publication is documentation only; CI after push is tracked separately. This does not erase pre-fix failures or imply post-merge verification.
+
+## Current disposition — TD independent investigation update (2026-10-28)
+
+**Q70-S01 remains OPEN / Medium.** Candidate validation is not finding closure.
+TD reports independent pre-fix reproduction with external Java Clock skew -2s at
+ff83d54 (CONFLICT at lockPaid:46), and candidate d06320f passing under the same
+skew, including independent-process rerun. Reported focused scope:11 unit +205
+PostgreSQL PASS, both refund operations, immutable evidence, inventory/voucher
+and34-table fingerprints preserved. This is TD-reported evidence relayed by the
+user, not another QD run; raw controlled-skew manifest/branch has been requested.
+
+The mechanism is confirmed for controlled/new reproductions: mixed PostgreSQL
+transaction-start time and Java Clock can produce paid_at>cancelled_at. The
+ORIGINAL historical failure predicate was not captured, so its exact root cause
+remains UNPROVEN. No previous FAIL or unknown-predicate record is rewritten.
+Source-time execution JSON may say candidate verified/pending review; canonical
+current finding state is [finding-disposition.json](finding-disposition.json).
+
+Historical TD packet ed29202 was separately verified (8 published checksums) and
+imported unchanged as documentation only. It describes exported tree bd0644ba,
+not the new skew experiment and not this publication HEAD. Its stale #69 IDs,
+9/10-Order proposal and source-identity override are historical/reference only.
+Current QD implementation already has operation-specific15-Order/3-refund
+acceptance and retains its real Git HEAD/clean-checkout checks. The reference
+adapter was NOT executed, installed or adopted as another seed runner.
+
+HP must review the candidate and define remaining requirements; authorized
+dependency integration and fresh exact-head regression remain ahead. No new
+local Java/PostgreSQL run is performed for these documentation-only changes.
+Existing full2078/Node33/tooling20 evidence stays bound to source d06320f.
+Production guard and all executable Git objects are unchanged. QA02 IN PROGRESS,
+QA03 BLOCKED, HP Final Acceptance PENDING, PAY03/VNPAY DEFERRED. No approval/merge.

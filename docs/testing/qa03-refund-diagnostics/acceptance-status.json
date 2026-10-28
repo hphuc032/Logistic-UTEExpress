@@ -1,6 +1,6 @@
 {
   "tested_source_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
-  "Q70-S01": "FIX CANDIDATE VERIFIED / PENDING TD REVIEW AND ADOPTION",
+  "Q70-S01": "OPEN",
   "original_pr70_head_unchanged": "688884cd33f4b2f4dc62f5d33a4c4002e9146660",
   "production_guard_changes": false,
   "root_cause": "Synthetic test fixture uses mismatched DB/JVM timestamp sources; confirmed paid_at after cancelled_at.",
@@ -14,12 +14,17 @@
     "same-process shared checkpoint scope"
   ],
   "pending_reviews": [
-    "TD test-only fix adoption/review",
-    "HP final acceptance",
-    "dependency merges and integrated source verification"
+    "HP candidate review and remaining acceptance requirements",
+    "Coordinated TD adoption/integration",
+    "Authorized dependency integration then fresh exact-head regression"
   ],
   "qa02": "IN PROGRESS",
   "qa03": "BLOCKED",
   "ready_for_hp_final_acceptance": false,
-  "approved_or_merged_by_qd": false
+  "approved_or_merged_by_qd": false,
+  "Q70-S01_severity": "Medium",
+  "candidate_validation": "Retained candidate; QD verification completed and TD independent validation reported, not closure",
+  "td_controlled_skew_evidence": "User-relayed report; raw manifest requested, not independently verified",
+  "canonical_finding_disposition": "finding-disposition.json",
+  "hp_final_acceptance": "PENDING"
 }

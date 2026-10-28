@@ -54,5 +54,15 @@
     "report": "../qa03-refund-diagnostics/report.md",
     "finding": "Q70-S01 fix candidate verified; pending TD review/adoption",
     "overall": "BLOCKED acceptance"
+  },
+  "current_finding_disposition": {
+    "finding": "Q70-S01",
+    "status": "OPEN",
+    "severity": "Medium",
+    "candidate": "retained and validated; not accepted/closed",
+    "reference": "../qa03-refund-diagnostics/finding-disposition.json",
+    "td_new_evidence": "reported controlled-skew validation; raw manifest requested",
+    "authorized_integration_regression": "NOT RUN; dependencies remain unmerged",
+    "hp_final_acceptance": "PENDING"
   }
 }

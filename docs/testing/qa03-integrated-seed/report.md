@@ -93,3 +93,7 @@ Historical executions above retain their original source identities. Latest comb
 ## Subsequent diagnosed clock-fixture update
 
 Historical source identities and FAIL artifacts above remain unchanged. New reproduction proves paid_at after cancelled_at in the synthetic fixture; test-only candidate fix and new2078 Java/PostgreSQL +33Node +20tooling verification are documented in [diagnostic follow-up](../qa03-refund-diagnostics/report.md). Q70-S01 is fix-candidate verified, pending TD review/adoption; no production guard was relaxed, no GitHub approval/merge or whole QA completion is implied.
+
+## TD investigation disposition update
+
+Q70-S01 remains **OPEN / Medium**. TD reports candidate d06320f passing controlled Java Clock -2s verification (11unit+205PG); the original historical predicate remains unproven. See [canonical current disposition](../qa03-refund-diagnostics/finding-disposition.json). Retain candidate and all historical evidence. HP review, authorized integration and new exact-head regression remain required; no approval/merge/Final Acceptance implied.

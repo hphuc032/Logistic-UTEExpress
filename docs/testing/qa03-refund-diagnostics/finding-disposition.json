@@ -1,0 +1,51 @@
+{
+  "finding": "Q70-S01",
+  "severity": "Medium",
+  "status": "OPEN",
+  "candidate_status": "RETAINED / VALIDATED, not accepted or closed",
+  "candidate_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+  "historical_conflict": {
+    "exact_predicate": "NOT CAPTURED",
+    "exact_root_cause": "UNPROVEN",
+    "note": "Controlled reproductions do not retrospectively establish the original failure predicate."
+  },
+  "qd_reproduction": {
+    "source_sha": "ff83d5494d4db25533c62b120fbf86fc574de22c",
+    "evidence": "reproduced-fail-result.json",
+    "mechanism": "Captured synthetic paid_at after cancelled_at; mixed DB/JVM timestamp sources",
+    "verification": "QD source-bound artifacts verified"
+  },
+  "td_independent_update": {
+    "source": "TD investigation update relayed by user on 2026-10-28",
+    "pre_fix_sha": "ff83d5494d4db25533c62b120fbf86fc574de22c",
+    "candidate_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+    "external_java_clock_skew_seconds": -2,
+    "reported_unit_tests": 11,
+    "reported_postgresql_tests": 205,
+    "reported_outcome": "Pre-fix CONFLICT at lockPaid:46; candidate PASS under same skew including independent-process rerun; both refund operations and 34-table fingerprints PASS",
+    "raw_manifest_reference": null,
+    "raw_artifacts_independently_verified_by_qd": false,
+    "artifact_status": "REQUESTED; do not substitute historical exported-tree packet"
+  },
+  "historical_td_packet": {
+    "original_commit": "ed29202cc072e763d011189cd00ac613d564d237",
+    "imported_documentation_commit": "a4f88ec",
+    "tested_tree": "bd0644ba373c5273a09e8af4898300dc4bdd8680",
+    "identity_kind": "exported Git tree, not a tested publication commit",
+    "published_file_checksums_verified": 8,
+    "controlled_skew_update_in_packet": false
+  },
+  "production_guard_unchanged": true,
+  "guard_git_blob": "485ee89c75c3b69073f8d8a053c5b0696e57164b",
+  "next_steps": [
+    "HP review candidate and specify remaining acceptance requirements",
+    "Retain candidate/history; TD review/adoption/integration remains coordinated, not implied",
+    "Fresh exact-head integrated regression after authorized dependency integration",
+    "HP Final Acceptance remains pending"
+  ],
+  "qa02": "IN PROGRESS",
+  "qa03": "BLOCKED",
+  "hp_final_acceptance": "PENDING",
+  "PAY03_VNPAY": "DEFERRED",
+  "approval_or_merge_implied": false
+}
