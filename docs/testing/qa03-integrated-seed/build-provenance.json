@@ -1,0 +1,13 @@
+{
+  "built_source_sha": "8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5",
+  "rehearsal_source_sha": "dbd1ebbb8d271c3dc009c3f186e81eaea82ec65c",
+  "identical_git_objects": {
+    "src/main": "d2a1c87c3dc8ac1c41aafd5fba257f59e6500d5b",
+    "src/test": "a1e754ecad8223b5731f95ab910f910ec3013590",
+    "pom.xml": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f"
+  },
+  "jar_sha256": "fb5846ae509cd92904a26aa7518e6fe7094537ce449a00a545733c0ba1023109",
+  "build_state": "Maven package completed, failsafe integration tests executing; full verify not yet complete",
+  "source_clean": true,
+  "runner_clean": true
+}

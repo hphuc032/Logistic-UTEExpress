@@ -1,0 +1,15 @@
+{
+  "runner_source_sha": "dbd1ebbb8d271c3dc009c3f186e81eaea82ec65c",
+  "application_built_source_sha": "8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5",
+  "base_develop_sha": "fa48cb69cef92276f0dddf0d2bd396eee098f2f3",
+  "runner_exit_code": 0,
+  "timed_out": false,
+  "finished_normally": true,
+  "status": "PASS",
+  "scope": "Local disposable integrated dataset rehearsal; pending TD/HP acceptance, not manual/browser or production deployment",
+  "result_sha256": "2151f27e7a50639cf622eecc090f5eed56cfc5f1d170dffa8bbe21e9b1fc1cb8",
+  "script_sha256": "606ca9c942ff8922db63962f2095ef9278da931e08d61650f56862f61b2c4739",
+  "jar_sha256": "fb5846ae509cd92904a26aa7518e6fe7094537ce449a00a545733c0ba1023109",
+  "app_log_sha256": "5091c014a92e5d91de85d68fecc326fc80b9d2ddb6f5286dbfaf397d9aad477b",
+  "whole_qa03_completed": false
+}
