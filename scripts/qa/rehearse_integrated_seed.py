@@ -292,6 +292,33 @@ class Seed:
             report=json.loads(actor.call(path+'?'+scope_params,headers={'Accept':'application/json'}))['selected']['metrics']
             for metric,value in money.items():require(report[metric]['complete'] and report[metric]['unknownEvents']==0 and report[metric]['value']==value,'FINANCIAL_METRIC_'+metric)
         return {'status':'PASS','order_states':expected,'constraint_and_business_checks':list(queries),'financial_expected_and_actual':money,'financial_scope':'Vendor A and Admin Shop A filter when combined (otherwise Admin global), same-period synthetic dataset, shipping excluded','role_passwords_reset':False}
+    def refund_process_diagnostics(self,number,log,exit_code,timed_out=False):
+        # Explicit allowlist: never publish provider/proof values, credentials, cookies or log bodies.
+        diagnostic={'invocation':number,'application_exit_code':exit_code,'timed_out':timed_out,
+                    'captured_after_process_exit':True,'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest()}
+        try:
+            diagnostic['persisted_facts']=json.loads(self.sql("""
+                SELECT coalesce(json_agg(row_to_json(f) ORDER BY f.order_id),'[]'::json) FROM (
+                  SELECT o.id AS order_id,p.id AS payment_id,o.status AS order_status,o.version AS order_version,
+                    o.created_at AS order_created_at,o.cancelled_at,o.inventory_released_at,o.grand_total,
+                    p.method,p.status AS payment_status,p.amount,p.created_at AS payment_created_at,
+                    p.paid_at,p.expired_at,
+                    p.amount=o.grand_total AS amount_matches,
+                    p.paid_at>=p.created_at AS paid_not_before_creation,
+                    p.paid_at<=o.cancelled_at AS paid_not_after_cancellation,
+                    p.expired_at IS NULL AS not_expired,
+                    (p.provider_reference IS NOT NULL AND length(trim(p.provider_reference))>0) AS provider_reference_present,
+                    (SELECT count(*) FROM uteexpress.payments q WHERE q.order_id=o.id AND q.status='PAID') AS paid_count,
+                    EXISTS(SELECT 1 FROM uteexpress.refunds r WHERE r.order_id=o.id) AS refund_exists
+                  FROM uteexpress.orders o JOIN uteexpress.payments p ON p.order_id=o.id
+                  JOIN uteexpress.users u ON u.id=o.buyer_id
+                  WHERE u.normalized_username='qa02_refund_buyer' ORDER BY o.id,p.id LIMIT 100
+                ) f
+                """))
+            diagnostic['capture_status']='CAPTURED'
+        except Exception as error:
+            diagnostic.update(capture_status='UNAVAILABLE',capture_error_type=type(error).__name__)
+        return diagnostic
     def refund_fixture_process(self,number):
         # TD-owned test-classpath fixture; synthetic PAID setup is explicit and never a production writer.
         source=self.root/'target/test-classes/qa02/seed'
@@ -301,13 +328,19 @@ class Seed:
         env=self.app_env.copy();env.update(QA02_DISPOSABLE_SEED_CONFIRM='YES',QA02_REFUND_DEMO_PASSWORD=self.password)
         args=[str(self.java),'-Duser.timezone=UTC','-Dloader.path='+str(classes),'-Dloader.main=qa02.seed.RefundAcceptanceSeed','-cp',str(self.jar),'org.springframework.boot.loader.launch.PropertiesLauncher','--spring.profiles.active=local,demo','--spring.config.location=classpath:/application.yml','--server.address=127.0.0.1','--server.port=0','--management.health.mail.enabled=false','--uteexpress.demo.shipping.enabled=false','--uteexpress.demo.catalog.enabled=false']
         log=self.out/('qa02-refund-'+str(number)+'.private.log')
-        with log.open('wb') as output:
-            process=subprocess.run(args,cwd=self.root,env=env,stdout=output,stderr=subprocess.STDOUT,timeout=180,creationflags=self.flags)
+        try:
+            with log.open('wb') as output:
+                process=subprocess.run(args,cwd=self.root,env=env,stdout=output,stderr=subprocess.STDOUT,timeout=180,creationflags=self.flags)
+        except subprocess.TimeoutExpired:
+            self.result.setdefault('refund_fixture_failures',[]).append(self.refund_process_diagnostics(number,log,None,True))
+            raise
+        diagnostics=self.refund_process_diagnostics(number,log,process.returncode)
+        if process.returncode!=0:self.result.setdefault('refund_fixture_failures',[]).append(diagnostics)
         require(process.returncode==0,'QA02_FIXTURE_PROCESS_FAILED_'+str(number))
         lines=log.read_text(encoding='utf-8',errors='replace').splitlines()
         result=json.loads(next(line.split('=',1)[1] for line in lines if line.startswith('QA02_REFUND_SEED_RESULT=')))
         require(all(value=='PASS' for value in result['negativeChecks'].values()),'QA02_NEGATIVE_CHECK_NOT_PASS')
-        return {'status':'PASS','application_exit_code':process.returncode,'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest(),'result':result}
+        return {'status':'PASS','application_exit_code':process.returncode,'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest(),'result':result,'persisted_diagnostics':diagnostics}
     def existing_returned_refund_digest(self):
         value=self.sql('SELECT row_to_json(r)::text FROM uteexpress.refunds r WHERE r.order_id='+str(self.oid('REFUNDED')))
         require(bool(value),'ORIGINAL_RETURNED_REFUND_MISSING');return hashlib.sha256(value.encode()).hexdigest()
