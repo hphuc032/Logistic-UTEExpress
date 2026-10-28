@@ -16,23 +16,29 @@
     "verification": "QD source-bound artifacts verified"
   },
   "td_independent_update": {
-    "source": "TD investigation update relayed by user on 2026-10-28",
+    "source": "TD published sanitized investigation packet at PR71 c0b2f769e4af5b34b7711829284a776776adc409",
     "pre_fix_sha": "ff83d5494d4db25533c62b120fbf86fc574de22c",
     "candidate_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
     "external_java_clock_skew_seconds": -2,
     "reported_unit_tests": 11,
     "reported_postgresql_tests": 205,
     "reported_outcome": "Pre-fix CONFLICT at lockPaid:46; candidate PASS under same skew including independent-process rerun; both refund operations and 34-table fingerprints PASS",
-    "raw_manifest_reference": null,
+    "raw_manifest_reference": "https://github.com/hphuc032/Logistic-UTEExpress/blob/c0b2f769e4af5b34b7711829284a776776adc409/docs/testing/qa02-q70-s01-investigation/publication-manifest.json",
     "raw_artifacts_independently_verified_by_qd": false,
-    "artifact_status": "TD will verify and publish a public manifest/link; retain as reported until then",
-    "publication_status": "LOCAL ONLY / NOT PUBLISHED",
+    "artifact_status": "8 published manifest hashes and 9 SHA256SUMS entries/source/run consistency checked; private raw logs/XML not rehashed or rerun",
+    "publication_status": "PUBLISHED / QD SCOPED ARTIFACT REVIEW PASS",
     "reported_td_local_paths": [
       ".work/qa02-q70s01-investigation/REPORT.md",
       ".work/qa02-q70s01-investigation/evidence/checksums.json"
     ],
     "local_paths_accessible_in_qd_workspace": false,
-    "explicitly_not_controlled_skew_evidence": "PR #71"
+    "published_pr71_head": "c0b2f769e4af5b34b7711829284a776776adc409",
+    "publication_artifacts_verified_by_qd": true,
+    "prior_pr71_exclusion": {
+      "head": "ed29202cc072e763d011189cd00ac613d564d237",
+      "reason": "Historical export packet only; new controlled evidence added at c0b2f76"
+    },
+    "review_receipt": "td-published-review.json"
   },
   "historical_td_packet": {
     "original_commit": "ed29202cc072e763d011189cd00ac613d564d237",

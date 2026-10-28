@@ -61,8 +61,9 @@
     "severity": "Medium",
     "candidate": "retained and validated; not accepted/closed",
     "reference": "../qa03-refund-diagnostics/finding-disposition.json",
-    "td_new_evidence": "reported controlled-skew validation; raw manifest requested",
+    "td_new_evidence": "Published PR71 c0b2f76; QD scoped published artifact/source consistency PASS; raw private logs/XML not rehashed/rerun",
     "authorized_integration_regression": "NOT RUN; dependencies remain unmerged",
-    "hp_final_acceptance": "PENDING"
+    "hp_final_acceptance": "PENDING",
+    "published_review_reference": "../qa03-refund-diagnostics/td-published-review.json"
   }
 }

@@ -24,7 +24,8 @@
   "approved_or_merged_by_qd": false,
   "Q70-S01_severity": "Medium",
   "candidate_validation": "Retained candidate; QD verification completed and TD independent validation reported, not closure",
-  "td_controlled_skew_evidence": "LOCAL ONLY / NOT PUBLISHED; user-relayed TD results, not QD raw verification; PR71 excluded",
+  "td_controlled_skew_evidence": "Published at PR71 c0b2f76; scoped artifact/source consistency PASS; private raw XML/logs not independently rehashed or rerun",
   "canonical_finding_disposition": "finding-disposition.json",
-  "hp_final_acceptance": "PENDING"
+  "hp_final_acceptance": "PENDING",
+  "td_evidence_review_reference": "td-published-review.json"
 }

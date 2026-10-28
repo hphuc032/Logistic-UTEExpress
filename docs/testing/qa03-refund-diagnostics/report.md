@@ -106,7 +106,9 @@ Existing full2078/Node33/tooling20 evidence stays bound to source d06320f.
 Production guard and all executable Git objects are unchanged. QA02 IN PROGRESS,
 QA03 BLOCKED, HP Final Acceptance PENDING, PAY03/VNPAY DEFERRED. No approval/merge.
 
-### TD publication clarification
+### TD publication clarification — historical before c0b2f76
+
+This paragraph records the prior local-only state and is superseded by the published-evidence review below.
 
 TD confirms the -2s experiment evidence remains local at
 `.work/qa02-q70s01-investigation/REPORT.md` and
@@ -116,3 +118,40 @@ remain NOT independently verified by QD and NOT published. TD will provide a
 public manifest/link after verification. **Do not use PR #71 as evidence for this
 new experiment.** The imported historical review packet retains only its original
 exported-tree scope. Q70-S01 remains OPEN / Medium; no closure/approval/merge.
+
+## Published TD investigation review — 2026-10-29
+
+PR71 exact HEAD c0b2f769e4af5b34b7711829284a776776adc409 now contains the NEW
+controlled-skew investigation packet. Prior exclusion/local-only statements applied
+to old HEAD ed29202 and are superseded for this new directory. The original exported
+combined tree bd0644 remains a separate historical experiment, not the skew source.
+
+QD scoped artifact/source consistency review PASS:8 publication-manifest hashes,
+9 SHA256SUMS entries (including the manifest), exact reference diff ff83d54->d06320f,
+source identities, run IDs/UTC intervals and totals checked. Natural pre-fix PASS,
+controlled pre-fix FAIL/exit1 and natural/controlled candidate PASS are distinct.
+Candidate child invocations exit0 and preserve all34-table fingerprints/live edit.
+Their staged fixture hashes match QD's retained before/after hashes; published
+production guard class hash matches QD's compiled guard. No implementation imported.
+
+Focused11unit+205PG metadata has consistent suite totals, zero failure/error/skip/
+rerun markers, candidate source unchanged, process timeout=false. Failsafe timeout
+is the raw XML string "false" and is normalized explicitly in the review receipt;
+original bytes are preserved. Focused run ID is NOT RECORDED; no ID invented.
+Controlled wrapper-level timeout is NOT RECORDED; child timedOut=false is preserved
+without promoting it to a wrapper-level assertion. UTC intervals within each run
+are valid; overlaps across independent experiments are not treated as the same run.
+
+CI #148/run40731274701 SUCCESS is associated with publication c0b2f76. Its application/
+test/POM objects match develop fa48cb6; it is publication Maven/Node CI, NOT candidate
+PostgreSQL evidence. The declared686 Maven/33Node CI scope is separate from TD's
+local11+205 candidate investigation and QD's historical2078 full candidate run.
+Private original XML/logs/results remain hash references; QD did NOT re-execute or
+recompute their unpublished bytes. Reference Clock config is nonexecuting .txt.
+
+No Critical/High blocker identified in this scoped published-evidence consistency
+review. This does not close Q70-S01: **OPEN / Medium** remains canonical. The exact
+original historical CONFLICT predicate/root cause is still UNPROVEN. HP candidate
+review/disposition, authorized dependency integration and fresh exact-head integrated
+regression remain pending. QA02 IN PROGRESS, QA03 BLOCKED, no approval/merge/Final
+Acceptance; PAY03/VNPAY DEFERRED. See td-published-review.json for machine-read checks.

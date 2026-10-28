@@ -97,3 +97,7 @@ Historical source identities and FAIL artifacts above remain unchanged. New repr
 ## TD investigation disposition update
 
 Q70-S01 remains **OPEN / Medium**. TD reports candidate d06320f passing controlled Java Clock -2s verification (11unit+205PG); the original historical predicate remains unproven. See [canonical current disposition](../qa03-refund-diagnostics/finding-disposition.json). Retain candidate and all historical evidence. HP review, authorized integration and new exact-head regression remain required; no approval/merge/Final Acceptance implied.
+
+## Published investigation review (2026-10-29)
+
+PR71 c0b2f76 now contains controlled-skew evidence. QD checked8manifest/9SHA256SUMS hashes, four run/source/time records,11unit+205PG totals and exact candidate diff: scoped artifact/source consistency PASS. No new QD PostgreSQL run or unpublished raw-log verification is claimed. Q70-S01 remains **OPEN / Medium**, original historical predicate unproven, HP disposition/integration regression pending. See [review receipt](../qa03-refund-diagnostics/td-published-review.json).
