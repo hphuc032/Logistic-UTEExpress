@@ -42,6 +42,18 @@ public class RefundLedgerRepository {
                 schema, orderVersion, requestVersion, canonical, digest, amount, proof, Timestamp.from(at),
                 Timestamp.from(at), orderVersion + 1, Timestamp.from(paidAt), Timestamp.from(receivedAt));
     }
+    public RefundLedger insertCancelledPaid(long orderId, long paymentId, long actor, String operation,
+            String key, int schema, long orderVersion, byte[] canonical, byte[] digest,
+            BigDecimal amount, String proof, Instant at, Instant paidAt, Instant cancelledAt) {
+        return jdbc().queryForObject("""
+                INSERT INTO uteexpress.refunds(order_id,payment_id,processed_by,operation,idempotency_key,
+                    schema_version,expected_order_version,canonical_payload,payload_sha256,amount,status,
+                    proof_reference,server_timestamp,created_at,result_order_version,payment_paid_at,order_cancelled_at)
+                VALUES (?,?,?,?,?,?,?,?,?,?,'SUCCEEDED',?,?,?,?,?,?) RETURNING *
+                """, RefundLedgerRepository::row, orderId,paymentId,actor,operation,key,schema,orderVersion,
+                canonical,digest,amount,proof,Timestamp.from(at),Timestamp.from(at),orderVersion,
+                Timestamp.from(paidAt),Timestamp.from(cancelledAt));
+    }
     private static RefundLedger row(ResultSet rs, int ignored) throws SQLException {
         return new RefundLedger(rs.getLong("id"), rs.getLong("order_id"), rs.getLong("processed_by"),
                 rs.getString("operation"), rs.getString("idempotency_key"), rs.getBytes("canonical_payload"),

@@ -24,9 +24,20 @@ public class RevenueQueryRepository {
                 -- Count ALL PAID rows before validating their content. More than one
                 -- never selects an arbitrary winner, even if only one looks valid.
                 SELECT c.order_id,c.paid_count,p.id AS payment_id,p.amount AS paid_amount,p.paid_at,
-                    p.method='COD' AND p.expired_at IS NULL AS collected
+                    p.method='COD' AND p.expired_at IS NULL AS collected,
+                    p.method AS paid_method,p.provider_reference,p.expired_at,p.created_at AS payment_created_at
                 FROM payment_counts c LEFT JOIN uteexpress.payments p
                     ON p.order_id=c.order_id AND p.status='PAID' AND c.paid_count=1
+            ), cancellations AS (
+                SELECT o.id,COALESCE(o.status='CANCELLED' AND o.delivered_at IS NULL
+                    AND o.cancelled_at IS NOT NULL AND o.inventory_released_at=o.cancelled_at
+                    AND NOT EXISTS(SELECT 1 FROM uteexpress.return_requests t WHERE t.order_id=o.id)
+                    AND NOT EXISTS(SELECT 1 FROM uteexpress.order_status_history h
+                        WHERE h.order_id=o.id AND h.to_status='DELIVERED')
+                    AND EXISTS(SELECT 1 FROM uteexpress.order_status_history h WHERE h.order_id=o.id
+                        AND h.from_status IN ('NEW','CONFIRMED','SHIPPING') AND h.to_status='CANCELLED'
+                        AND h.actor_id>0 AND h.created_at=o.cancelled_at),false) AS cancellation_ok
+                FROM scoped o
             ), facts AS (
                 SELECT o.*, o.subtotal-o.discount_total AS goods,
                     p.paid_count, p.payment_id, p.paid_amount, p.paid_at,
@@ -40,8 +51,13 @@ public class RevenueQueryRepository {
                         AND o.commission_amount=trunc(o.commission_amount)
                         AND o.commission_rate_snapshot BETWEEN 0 AND 100
                         AND o.commission_amount NOT IN ('NaN'::numeric,'Infinity'::numeric,'-Infinity'::numeric),false) AS commission_ok,
-                    COALESCE(p.paid_count=1 AND p.collected AND p.paid_at IS NOT NULL
+                    COALESCE(p.paid_count=1 AND (p.collected OR
+                        p.paid_method='ONLINE' AND p.expired_at IS NULL AND p.provider_reference ~ '[^[:space:]]'
+                            AND p.paid_at>=p.payment_created_at
+                            AND c.cancellation_ok AND p.paid_at BETWEEN o.created_at AND o.cancelled_at)
+                        AND p.paid_at IS NOT NULL
                         AND p.paid_amount=o.grand_total,false) AS payment_ok,
+                    c.cancellation_ok,
                     EXISTS(SELECT 1 FROM uteexpress.order_status_history h WHERE h.order_id=o.id
                         AND h.from_status='SHIPPING' AND h.to_status='DELIVERED' AND h.created_at=o.delivered_at) AS delivery_ok,
                     t.id AS receipt_id, t.received_at,
@@ -51,6 +67,7 @@ public class RevenueQueryRepository {
                             AND h.from_status='RETURN_REQUESTED' AND h.to_status='RETURNED'
                             AND h.created_at=t.received_at AND h.actor_id=t.received_by),false) AS receipt_ok
                 FROM scoped o LEFT JOIN payment_facts p ON p.order_id=o.id
+                JOIN cancellations c ON c.id=o.id
                 LEFT JOIN uteexpress.return_requests t ON t.order_id=o.id
             )
             """;
@@ -67,13 +84,21 @@ public class RevenueQueryRepository {
                     OR paid_at IS NULL AND (paid_count>0 OR delivered_at IS NOT NULL
                         OR status IN ('DELIVERED','RETURN_REQUESTED','RETURNED','REFUNDED'))
                 UNION ALL
-                SELECT 'refund',r.amount-f.shipping_fee,f.commission_amount,
-                    f.money_ok AND f.payment_ok AND f.receipt_ok
-                    AND r.operation='PAY02_MANUAL_COD_REFUND_V1' AND r.amount=f.grand_total
-                    AND r.payment_id=f.payment_id AND r.return_request_id=f.receipt_id
-                    AND r.payment_paid_at=f.paid_at AND r.return_received_at=f.received_at
-                    AND r.server_timestamp>=f.paid_at AND r.server_timestamp>=f.received_at,
-                    f.commission_ok,r.server_timestamp IS NOT NULL
+                SELECT 'refund',r.amount-f.shipping_fee,
+                    CASE WHEN r.operation='PAY02_CANCELLED_PAID_REFUND_V1' THEN 0 ELSE f.commission_amount END,
+                    f.money_ok AND f.payment_ok AND r.amount=f.grand_total
+                    AND r.payment_id=f.payment_id AND r.payment_paid_at=f.paid_at
+                    AND r.server_timestamp>=f.paid_at AND (
+                        r.operation='PAY02_MANUAL_COD_REFUND_V1' AND f.receipt_ok
+                        AND r.return_request_id=f.receipt_id AND r.return_received_at=f.received_at
+                        AND r.server_timestamp>=f.received_at
+                        OR r.operation='PAY02_CANCELLED_PAID_REFUND_V1' AND f.cancellation_ok
+                        AND r.return_request_id IS NULL AND r.return_received_at IS NULL
+                        AND r.expected_return_request_version IS NULL AND r.order_cancelled_at=f.cancelled_at
+                        AND r.payment_paid_at BETWEEN f.created_at AND f.cancelled_at
+                        AND r.server_timestamp>=f.cancelled_at),
+                    CASE WHEN r.operation='PAY02_CANCELLED_PAID_REFUND_V1' THEN true ELSE f.commission_ok END,
+                    r.server_timestamp IS NOT NULL
                 FROM facts f LEFT JOIN uteexpress.refunds r ON r.order_id=f.id
                 WHERE r.status='SUCCEEDED' AND (r.server_timestamp>=:start AND r.server_timestamp<:end OR r.server_timestamp IS NULL)
                     OR r.id IS NULL AND f.status='REFUNDED'
