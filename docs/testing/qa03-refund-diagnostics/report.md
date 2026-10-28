@@ -105,3 +105,14 @@ local Java/PostgreSQL run is performed for these documentation-only changes.
 Existing full2078/Node33/tooling20 evidence stays bound to source d06320f.
 Production guard and all executable Git objects are unchanged. QA02 IN PROGRESS,
 QA03 BLOCKED, HP Final Acceptance PENDING, PAY03/VNPAY DEFERRED. No approval/merge.
+
+### TD publication clarification
+
+TD confirms the -2s experiment evidence remains local at
+`.work/qa02-q70s01-investigation/REPORT.md` and
+`.work/qa02-q70s01-investigation/evidence/checksums.json`. These exact paths were
+not present in QD's workspace checkouts. Raw controlled-skew results/checksums
+remain NOT independently verified by QD and NOT published. TD will provide a
+public manifest/link after verification. **Do not use PR #71 as evidence for this
+new experiment.** The imported historical review packet retains only its original
+exported-tree scope. Q70-S01 remains OPEN / Medium; no closure/approval/merge.

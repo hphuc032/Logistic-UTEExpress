@@ -25,7 +25,14 @@
     "reported_outcome": "Pre-fix CONFLICT at lockPaid:46; candidate PASS under same skew including independent-process rerun; both refund operations and 34-table fingerprints PASS",
     "raw_manifest_reference": null,
     "raw_artifacts_independently_verified_by_qd": false,
-    "artifact_status": "REQUESTED; do not substitute historical exported-tree packet"
+    "artifact_status": "TD will verify and publish a public manifest/link; retain as reported until then",
+    "publication_status": "LOCAL ONLY / NOT PUBLISHED",
+    "reported_td_local_paths": [
+      ".work/qa02-q70s01-investigation/REPORT.md",
+      ".work/qa02-q70s01-investigation/evidence/checksums.json"
+    ],
+    "local_paths_accessible_in_qd_workspace": false,
+    "explicitly_not_controlled_skew_evidence": "PR #71"
   },
   "historical_td_packet": {
     "original_commit": "ed29202cc072e763d011189cd00ac613d564d237",
