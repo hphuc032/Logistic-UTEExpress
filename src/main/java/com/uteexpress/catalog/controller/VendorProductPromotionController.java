@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.servlet.support.ExtendedServletRequestDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +25,10 @@ public class VendorProductPromotionController {
     public VendorProductPromotionController(ProductPromotionManagementService management) { this.management = management; }
     @InitBinder("promotionForm")
     void fields(WebDataBinder binder) {
+        // Form fields come from request parameters; transport headers are not business input.
+        if (binder instanceof ExtendedServletRequestDataBinder servletBinder) {
+            servletBinder.setHeaderPredicate(header -> false);
+        }
         binder.setAllowedFields("name", "discountPercent", "startsAt", "endsAt", "active", "version");
     }
     @InitBinder("disableForm")
