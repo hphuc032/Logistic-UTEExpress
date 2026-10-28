@@ -46,7 +46,9 @@ public class BuyerOrderController {
 
     @GetMapping(value = "/{id}", produces = MediaType.TEXT_HTML_VALUE)
     String detailPage(@PathVariable Long id, Model model) {
-        model.addAttribute("order", orders.detail(id));
+        var page = orders.pageDetail(id);
+        model.addAttribute("order", page.order());
+        model.addAttribute("cancellationVersion", page.cancellationVersion());
         return "order/detail";
     }
 

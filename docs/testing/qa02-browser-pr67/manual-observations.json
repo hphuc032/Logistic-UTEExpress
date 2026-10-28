@@ -1,0 +1,281 @@
+{
+  "schema": "qa02-pr67-td-manual-observations-v2",
+  "provenance": "TD statements supplied in this conversation; these are not observations made by the automation agent.",
+  "recordedAtUtc": "2026-10-28T06:57:20.335196+00:00",
+  "executionDate": "2026-10-28",
+  "executionTime": null,
+  "executionTimeZone": "Vietnam UTC+07",
+  "environment": {
+    "applicationUrl": "http://127.0.0.1:21607/orders/4",
+    "browser": "Google Chrome",
+    "operatingSystem": "Windows",
+    "windowsVersion": null,
+    "chromeFullVersion": null,
+    "narratorVersion": null,
+    "buyer": "qa67_buyer_484708",
+    "orderId": 4,
+    "statusDuringConfirmationTests": "NEW",
+    "sourceSha": "c5901c326ff92fee0fde0f8a4c66633a003cfc81",
+    "jarSha256": "4f8ef60791b2c9737911217471fd7fb34dfbc8f2659b06db7a80d14812efc6f6"
+  },
+  "sourceVerification": {
+    "sourceHeadVerified": true,
+    "remotePrHeadVerified": true,
+    "runningOwnedApplicationProcessVerified": true,
+    "currentJarMatchesTestedPackage": true,
+    "healthHttp": 200,
+    "order4DatabaseObservation": {
+      "owner": "qa67_buyer_484708",
+      "status": "CANCELLED",
+      "version": 1
+    },
+    "limitation": "The later database snapshot corroborates a committed cancellation, not manual focus/reload behavior or spoken announcements. Exact desktop software versions and test time were not recorded."
+  },
+  "screenshots": {
+    "tdStatement": "Screenshots were captured in the ChatGPT conversation; local repository screenshot paths are not yet available.",
+    "localPaths": [],
+    "agentIndependentlyInspectedNativeDialogImages": false,
+    "automatedScreenshotsPreserved": 36,
+    "limitation": "The existing 36 automated screenshots do not contain native dialog chrome and are not relabeled as manual screenshots."
+  },
+  "cases": [
+    {
+      "id": "A-DIALOG-VISUAL",
+      "status": "PASS",
+      "basis": "TD-attested manual observations; image capture reported by TD, native image files unavailable in this worktree.",
+      "observations": [
+        {
+          "viewportWidth": 375,
+          "actual": "Native confirmation dialog appeared with readable Vietnamese text and visible OK/Cancel buttons.",
+          "tdResult": "PASS"
+        },
+        {
+          "viewportWidth": 768,
+          "actual": "Native confirmation dialog appeared with readable Vietnamese text and visible OK/Cancel buttons.",
+          "tdResult": "PASS"
+        },
+        {
+          "viewportWidth": 1440,
+          "actual": "Native confirmation dialog appeared with readable Vietnamese text and visible OK/Cancel buttons.",
+          "tdResult": "PASS"
+        }
+      ],
+      "limits": "Screenshot confirmation is reported by TD, not independently inspected or archived as a new repository artifact."
+    },
+    {
+      "id": "B-NATIVE-DIALOG",
+      "status": "PASS",
+      "reported": "TD confirms all remaining manual checks passed.",
+      "observations": {
+        "tab": "PASS: Tab navigation and visible focus.",
+        "shiftTab": "PASS: Tab/Shift+Tab navigation and focus behavior.",
+        "enter": "PASS: Enter opens confirmation.",
+        "space": null,
+        "escape": "PASS: Esc dismisses confirmation without cancelling the NEW order.",
+        "focusBehavior": "PASS, TD-attested; exact focused DOM element after dismissal was not separately recorded.",
+        "focusAfterSuccessfulCancellation": null,
+        "keyboardTrap": "No keyboard trap observed."
+      },
+      "remainingAction": "No mandatory PR browser blocker remains. Specific Space behavior and exact post-success focus target remain unrecorded; no claim is added for them.",
+      "basis": "Explicit TD final attestation of native Chrome keyboard/navigation/focus checks."
+    },
+    {
+      "id": "B-SCREENREADER",
+      "status": "PASS",
+      "reported": "TD confirms the manual Windows Narrator test was completed successfully.",
+      "subchecks": [
+        {
+          "criterion": "Cancel Order button spoken",
+          "status": "PASS",
+          "actual": "Windows Narrator reads the Cancel Order button.",
+          "basis": "TD final confirmation."
+        },
+        {
+          "criterion": "Native confirmation prompt and controls spoken",
+          "status": "PASS",
+          "actual": "Narrator audibly announced \"Bạn có chắc muốn hủy đơn hàng này?\" and OK/Cancel choices.",
+          "basis": "Explicit TD confirmation retained."
+        },
+        {
+          "criterion": "Persisted order status readable through page navigation",
+          "status": "PASS",
+          "actual": "Narrator can read the order status when navigating the page.",
+          "basis": "TD final confirmation."
+        },
+        {
+          "criterion": "Exact help text, automatic pending/error/success announcement wording/timing",
+          "status": "NOT VERIFIED",
+          "actual": null,
+          "mandatoryForFinalAttestedScope": false
+        }
+      ],
+      "remainingAction": "Mandatory attested screen-reader scope is satisfied. Unrecorded automatic announcement timing/help wording is not inferred.",
+      "basis": "Explicit TD final attestation: Cancel Order button spoken, native message/choices spoken and order status readable by navigation."
+    }
+  ],
+  "manualSuccessfulCancellationReload": "NOT VERIFIED: TD did not independently document its manual behavior; automated evidence remains separate.",
+  "consolidatedCounts": {
+    "PASS": 25,
+    "FAIL": 0,
+    "NOT VERIFIED": 0,
+    "total": 25
+  },
+  "originalAutomationCountsPreserved": {
+    "PASS": 22,
+    "FAIL": 0,
+    "NOT RUN": 3
+  },
+  "counting": "22 automated cases plus three TD-attested manual cases = 25 original cases. The focused keyboard rerun overlaps B-KEYBOARD and is not added.",
+  "decision": "MANDATORY MANUAL ACCEPTANCE SATISFIED; PUBLICATION CI PENDING",
+  "qa02Status": "IN PROGRESS",
+  "publication": "TD authorized documentation/evidence-only commit and push to existing PR #67. Publication-head CI is a separate gate; no merge or QA-02 completion.",
+  "finalConfirmationRecordedAtUtc": "2026-10-28T07:03:17.268878+00:00",
+  "reconciliationHistory": [
+    {
+      "assessment": "23 PASS / 0 FAIL / 2 NOT VERIFIED before TD final confirmation",
+      "record": {
+        "schema": "qa02-pr67-td-manual-observations-v1",
+        "provenance": "TD statements supplied in this conversation; these are not observations made by the automation agent.",
+        "recordedAtUtc": "2026-10-28T06:57:20.335196+00:00",
+        "executionDate": "2026-10-28",
+        "executionTime": null,
+        "executionTimeZone": "Vietnam UTC+07",
+        "environment": {
+          "applicationUrl": "http://127.0.0.1:21607/orders/4",
+          "browser": "Google Chrome",
+          "operatingSystem": "Windows",
+          "windowsVersion": null,
+          "chromeFullVersion": null,
+          "narratorVersion": null,
+          "buyer": "qa67_buyer_484708",
+          "orderId": 4,
+          "statusDuringConfirmationTests": "NEW",
+          "sourceSha": "c5901c326ff92fee0fde0f8a4c66633a003cfc81",
+          "jarSha256": "4f8ef60791b2c9737911217471fd7fb34dfbc8f2659b06db7a80d14812efc6f6"
+        },
+        "sourceVerification": {
+          "sourceHeadVerified": true,
+          "remotePrHeadVerified": true,
+          "runningOwnedApplicationProcessVerified": true,
+          "currentJarMatchesTestedPackage": true,
+          "healthHttp": 200,
+          "order4DatabaseObservation": {
+            "owner": "qa67_buyer_484708",
+            "status": "CANCELLED",
+            "version": 1
+          },
+          "limitation": "The later database snapshot corroborates a committed cancellation, not manual focus/reload behavior or spoken announcements. Exact desktop software versions and test time were not recorded."
+        },
+        "screenshots": {
+          "tdStatement": "Screenshots were captured in the ChatGPT conversation; local repository screenshot paths are not yet available.",
+          "localPaths": [],
+          "agentIndependentlyInspectedNativeDialogImages": false,
+          "automatedScreenshotsPreserved": 36,
+          "limitation": "The existing 36 automated screenshots do not contain native dialog chrome and are not relabeled as manual screenshots."
+        },
+        "cases": [
+          {
+            "id": "A-DIALOG-VISUAL",
+            "status": "PASS",
+            "basis": "TD-attested manual observations; image capture reported by TD, native image files unavailable in this worktree.",
+            "observations": [
+              {
+                "viewportWidth": 375,
+                "actual": "Native confirmation dialog appeared with readable Vietnamese text and visible OK/Cancel buttons.",
+                "tdResult": "PASS"
+              },
+              {
+                "viewportWidth": 768,
+                "actual": "Native confirmation dialog appeared with readable Vietnamese text and visible OK/Cancel buttons.",
+                "tdResult": "PASS"
+              },
+              {
+                "viewportWidth": 1440,
+                "actual": "Native confirmation dialog appeared with readable Vietnamese text and visible OK/Cancel buttons.",
+                "tdResult": "PASS"
+              }
+            ],
+            "limits": "Screenshot confirmation is reported by TD, not independently inspected or archived as a new repository artifact."
+          },
+          {
+            "id": "B-NATIVE-DIALOG",
+            "status": "NOT VERIFIED",
+            "reported": "TD reports completing the keyboard checks.",
+            "observations": {
+              "tab": null,
+              "shiftTab": null,
+              "enter": null,
+              "space": null,
+              "escape": null,
+              "focusAfterDismissal": null,
+              "focusAfterSuccessfulCancellation": null,
+              "keyboardTrap": null
+            },
+            "remainingAction": "Record the actual native Tab/Shift+Tab/Enter/Esc outcomes, absence of a keyboard trap and focus return after dismissal. Do not infer these from the general completion report or Playwright dialog API."
+          },
+          {
+            "id": "B-SCREENREADER",
+            "status": "NOT VERIFIED",
+            "reported": "TD confirms the manual Windows Narrator test was completed successfully.",
+            "subchecks": [
+              {
+                "criterion": "Native confirmation prompt and controls audibly announced",
+                "status": "PASS",
+                "actual": "Narrator audibly announced the Vietnamese confirmation message \"Bạn có chắc muốn hủy đơn hàng này?\" and the OK/Cancel buttons.",
+                "basis": "Explicit TD confirmation."
+              },
+              {
+                "criterion": "Page cancellation button/help spoken",
+                "status": "NOT VERIFIED",
+                "actual": null
+              },
+              {
+                "criterion": "Dynamic pending/error/result feedback or reloaded outcome spoken",
+                "status": "NOT VERIFIED",
+                "actual": null
+              }
+            ],
+            "remainingAction": "The confirmed native prompt/controls subcheck is PASS. Unrecorded page labels and changing feedback remain NOT VERIFIED; the broader original screen-reader case is only partially substantiated."
+          }
+        ],
+        "manualSuccessfulCancellationReload": "NOT VERIFIED: TD did not independently document its manual behavior; automated evidence remains separate.",
+        "consolidatedCounts": {
+          "PASS": 23,
+          "FAIL": 0,
+          "NOT VERIFIED": 2,
+          "total": 25
+        },
+        "originalAutomationCountsPreserved": {
+          "PASS": 22,
+          "FAIL": 0,
+          "NOT RUN": 3
+        },
+        "counting": "The native Narrator prompt/controls is a passing subcheck, not an additional original case. The keyboard recheck overlaps B-KEYBOARD. No counts are double-counted.",
+        "decision": "BLOCKED",
+        "qa02Status": "IN PROGRESS",
+        "publication": "Withheld: mandatory observations and native screenshot artifacts remain incomplete. No commit/push/merge performed."
+      }
+    }
+  ],
+  "finalTdConfirmation": {
+    "provenance": "TD final manual confirmation in this conversation; the agent did not observe native Chrome controls/audio.",
+    "statement": "TD confirms all remaining manual browser acceptance checks were executed successfully on Windows Chrome.",
+    "observations": [
+      "Native confirmation visuals at 375/768/1440px: PASS.",
+      "Keyboard Tab navigation and visible focus: PASS.",
+      "Enter opens confirmation: PASS.",
+      "Esc dismisses confirmation without cancelling the NEW order: PASS.",
+      "Tab/Shift+Tab navigation and focus behavior: PASS.",
+      "No keyboard trap observed.",
+      "Windows Narrator reads the Cancel Order button: PASS.",
+      "Narrator reads the confirmation message and OK/Cancel choices: PASS.",
+      "Narrator can read the order status when navigating the page: PASS."
+    ]
+  },
+  "limitations": [
+    "Windows, full Chrome and Narrator versions and exact execution time were not recorded.",
+    "Native screenshots were reported in conversation; no native screenshot files/local paths have been supplied or invented.",
+    "Manual Space-key behavior, exact post-success focus target and automatic live announcement timing were not individually recorded.",
+    "Original automation and TD attestations are different evidence sources."
+  ]
+}
