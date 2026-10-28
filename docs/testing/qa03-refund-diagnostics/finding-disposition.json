@@ -60,5 +60,19 @@
   "qa03": "BLOCKED",
   "hp_final_acceptance": "PENDING",
   "PAY03_VNPAY": "DEFERRED",
-  "approval_or_merge_implied": false
+  "approval_or_merge_implied": false,
+  "hp_integration_validation_authorization": {
+    "source": "User-relayed HP decision on 2026-10-29",
+    "scope": "Candidate accepted for integration validation only",
+    "finding_stays_open": true,
+    "merge_or_final_acceptance_authorized": false
+  },
+  "fresh_integration_validation": {
+    "source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+    "report": "../qa03-hp-integration-validation/report.md",
+    "execution": "PASS",
+    "td_source_acknowledgement": "PENDING",
+    "recommendation": "ACCEPTED RISK proposal only; HP decision pending",
+    "not_postmerge_develop": true
+  }
 }

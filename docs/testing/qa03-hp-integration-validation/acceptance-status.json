@@ -1,0 +1,20 @@
+{
+  "tested_source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+  "hp_authorization": "User-relayed HP decision: integration validation only",
+  "integration_validation_execution": "PASS",
+  "ready_for_hp_scoped_integration_disposition_review": true,
+  "ready_for_whole_qa_final_acceptance": false,
+  "finding": "Q70-S01",
+  "severity": "Medium",
+  "finding_status": "OPEN",
+  "recommended_disposition": "ACCEPTED RISK (proposal only, not applied)",
+  "td_source_acknowledgement": "REQUESTED / NO NEW OWNER ACK RECORDED",
+  "dependencies_github_merged": false,
+  "postmerge_develop_verification": "NOT RUN / dependencies unmerged",
+  "qa02": "IN PROGRESS",
+  "qa03": "BLOCKED",
+  "G01": "NOT RUN / BLOCKED",
+  "hp_final_acceptance": "PENDING",
+  "PAY03_VNPAY": "DEFERRED",
+  "approved_or_closed_or_merged_by_qd": false
+}

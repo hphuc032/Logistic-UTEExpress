@@ -1,0 +1,16 @@
+{
+  "tested_source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+  "node": {
+    "tests": 33,
+    "pass": 33,
+    "exit_code": 0,
+    "log_sha256": "48d926d879a47a8452ebbcb1a9f1eb03b1cec060f4c0ccf2b6be595dfd92a49a"
+  },
+  "tooling": {
+    "tests": 23,
+    "pass": 23,
+    "exit_code": 0,
+    "log_sha256": "18eeb9dfb0d23966a654cf472cc14113bda31382b8dc59104c21333a82f59d97"
+  },
+  "overlap_note": "Complete Node33 includes runner Notifications12; repeated suites/source runs are not summed."
+}

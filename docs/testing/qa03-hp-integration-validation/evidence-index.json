@@ -1,0 +1,19 @@
+{
+  "tested_source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+  "master_plan_sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+  "finding_status": "OPEN",
+  "recommended_disposition_not_applied": "ACCEPTED RISK",
+  "files_sha256": {
+    ".gitattributes": "b0d7fe396a43bff47fef8b077ca598998059b01f2f1545f27cac5b076bbf89d2",
+    "acceptance-status.json": "dab5b10cd54a2ca5091cbefb672b9f019127fc067967cef93f786eef8736249d",
+    "build-provenance.json": "f3a0cada1d9ac472698d63cc57bff1074c233f676f24a786fcc4e56bc8f1becb",
+    "composition.json": "b47ab32cc0bad82b5f003a043f355f36eddef35c2d97956603e39fa65d2ca902",
+    "controlled-seed-result.json": "e1dffefdd23f1f4075a155dc4cf97ed45fb2b8fc893944313b3a6dbee079b7b8",
+    "full-run-manifest.json": "c90024ffa31ef0e1bd2357d2dfc623f3e3beb8475753a0f68836caf4c3362231",
+    "normal-seed-result.json": "0b343bf3cec9e84ed003023f74d1d3549c5e9c0b9a8a903dfe1cbcd37fe9eb43",
+    "report.md": "2e6bb52b1c30fe94cd840cf5e8215e505e82c1acb4d32d4d7c1365acd2715eb6",
+    "residual-risk-proposal.json": "52d62703f06a9e2140cc72052d14a4fae2a807538cf01cc5dca0499045eac5ca",
+    "run-crosschecks.json": "6b948a6db8555013c88702b4fad6acdc39698caaafff4df9501a3411c8252b4f",
+    "supplemental-tests.json": "0e4e7d4b45781d0fcadfde8c27dad02d8ea9bb20bdad1c2e836ad7e85086525b"
+  }
+}
