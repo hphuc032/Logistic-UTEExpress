@@ -56,5 +56,20 @@ Computer Use runtime; no screenshot/viewport claim is made. The seed candidate u
 this fix; its evidence must be reviewed independently and rerun on the accepted
 source as required. QA-03 overall is not marked COMPLETED.
 
-Subsequent commits only add this report/evidence. No applied migration or external
-dependency was changed; final exact-head CI is a separate PR check.
+## Integrated develop re-verification
+
+After merging develop `fa48cb69cef92276f0dddf0d2bd396eee098f2f3`, fresh full
+runner execution on `8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5` finished normally:
+**2,011 Java/PostgreSQL tests PASS**, zero failures/errors/skips, exit codes 0,
+no timeout. See [integrated-full-run-manifest.json](integrated-full-run-manifest.json).
+The approved runner's 12 Notifications Node tests PASS; supplemental complete
+Notifications + Buyer cancellation run is **33/33 PASS**, including those same 12
+(do not add them). Seventeen runner unit tests also PASS on this source.
+The prior 1,994 result remains historical evidence of a1da102, not this new run.
+All raw log checksums were recomputed before publication. Raw output stays local.
+
+The integrated seed candidate uses the identical built application/test/POM Git
+objects and records its own runner source in PR #69. It is not browser evidence.
+Final documentation commits do not change tested application or test objects.
+Exact-head GitHub CI is recorded separately after push. No applied migration or
+external dependency was changed.
