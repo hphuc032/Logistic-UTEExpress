@@ -114,11 +114,15 @@ class Seed:
         port=int(self.command(['docker','port',self.name,'5432/tcp']).decode().strip().rsplit(':',1)[1])
         with socket.socket() as sock:sock.bind(('127.0.0.1',0)); webport=sock.getsockname()[1]
         self.base='http://127.0.0.1:'+str(webport)
-        for key in ('SPRING_APPLICATION_JSON','SPRING_PROFILES_ACTIVE','JAVA_TOOL_OPTIONS','JDK_JAVA_OPTIONS','_JAVA_OPTIONS'):env.pop(key,None)
-        env.update(DB_URL='jdbc:postgresql://127.0.0.1:'+str(port)+'/postgres',DB_USERNAME='postgres',DB_PASSWORD=env['POSTGRES_PASSWORD'],JWT_SECRET_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),OTP_PEPPER_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),JWT_COOKIE_SECURE='false',MAIL_HOST='127.0.0.1',MAIL_PORT=str(mail.server_address[1]),MAIL_FROM='seed@example.test',MAIL_SMTP_AUTH='false',MAIL_STARTTLS='false',UPLOAD_DIR=str(self.out/'uploads'))
+        db_password=env['POSTGRES_PASSWORD']
+        os_keys={'SYSTEMROOT','WINDIR','COMSPEC','PATH','PATHEXT','TEMP','TMP','USERPROFILE','HOMEDRIVE','HOMEPATH','LOCALAPPDATA','APPDATA','PROGRAMFILES','PROGRAMW6432','COMMONPROGRAMFILES','JAVA_HOME'}
+        env={key:value for key,value in self.env.items() if key.upper() in os_keys}
+        self.result['isolated_app_environment']=True
+        self.result['ignored_parent_override_names']=[key for key in ('SPRING_DATASOURCE_URL','SPRING_CONFIG_LOCATION','SPRING_APPLICATION_JSON') if key in self.env]
+        env.update(DB_URL='jdbc:postgresql://127.0.0.1:'+str(port)+'/postgres',DB_USERNAME='postgres',DB_PASSWORD=db_password,JWT_SECRET_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),OTP_PEPPER_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),JWT_COOKIE_SECURE='false',MAIL_HOST='127.0.0.1',MAIL_PORT=str(mail.server_address[1]),MAIL_FROM='seed@example.test',MAIL_SMTP_AUTH='false',MAIL_STARTTLS='false',UPLOAD_DIR=str(self.out/'uploads'))
         java=pathlib.Path(os.environ.get('JAVA_HOME',''))/'bin/java.exe'; require(java.is_file(),'JDK21_REQUIRED')
         self.log=(self.out/'app.private.log').open('wb')
-        self.app=subprocess.Popen([str(java),'-Duser.timezone=UTC','-jar',str(self.jar),'--spring.profiles.active=local','--server.address=127.0.0.1','--server.port='+str(webport),'--management.health.mail.enabled=false'],cwd=self.root,env=env,stdout=self.log,stderr=subprocess.STDOUT,creationflags=self.flags)
+        self.app=subprocess.Popen([str(java),'-Duser.timezone=UTC','-jar',str(self.jar),'--spring.profiles.active=local','--spring.config.location=classpath:/application.yml','--spring.datasource.url='+env['DB_URL'],'--spring.datasource.username=postgres','--server.address=127.0.0.1','--server.port='+str(webport),'--management.health.mail.enabled=false'],cwd=self.root,env=env,stdout=self.log,stderr=subprocess.STDOUT,creationflags=self.flags)
         for _ in range(120):
             require(self.app.poll() is None,'APPLICATION_START_FAILED')
             try:
