@@ -1,0 +1,115 @@
+"""Disposable local Ops rehearsal. Synthetic credentials/data only; no production access."""
+import base64, datetime, hashlib, http.cookiejar, json, os, pathlib, re, secrets, socket, struct, subprocess, time, urllib.request, urllib.parse, urllib.error, uuid, zlib
+ROOT=pathlib.Path(__file__).resolve().parents[1]
+OUT=ROOT/'.work/qa03-ops'/('run-'+uuid.uuid4().hex[:12]);OUT.mkdir(parents=True)
+JAVA=pathlib.Path('C:/Program Files/Java/jdk-21/bin/java.exe')
+JAR=ROOT/'target/uteexpress-0.1.0-SNAPSHOT.jar'
+NAME='qa03-ops-'+uuid.uuid4().hex[:12]
+ENV_KEYS=('DB_URL','DB_USERNAME','DB_PASSWORD','JWT_SECRET_BASE64','OTP_PEPPER_BASE64','MAIL_HOST','MAIL_PORT','MAIL_USERNAME','MAIL_PASSWORD','MAIL_FROM','MAIL_SMTP_AUTH','MAIL_STARTTLS','UPLOAD_DIR','SPRING_PROFILES_ACTIVE','SPRING_APPLICATION_JSON','JAVA_TOOL_OPTIONS','JDK_JAVA_OPTIONS','_JAVA_OPTIONS')
+env=os.environ.copy()
+for key in ENV_KEYS: env.pop(key,None)
+result={'scope':'Local disposable-process rehearsal only; not clean-host, browser or production acceptance','source_sha':subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip(),'created_utc':datetime.datetime.now(datetime.timezone.utc).isoformat(),'steps':{},'cleanup':{}}
+app=None;handles=[];container=False;password=secrets.token_urlsafe(24)
+flags=getattr(subprocess,'CREATE_NO_WINDOW',0)
+def command(args,input=None,timeout=40,custom_env=None):
+ p=subprocess.run(args,input=input,stdout=subprocess.PIPE,stderr=subprocess.PIPE,timeout=timeout,env=custom_env or env,creationflags=flags)
+ if p.returncode: raise RuntimeError('LOCAL_COMMAND_FAILED')
+ return p.stdout
+
+def sql(query,database='postgres'):
+ return command(['docker','exec',NAME,'psql','-X','-A','-t','-v','ON_ERROR_STOP=1','-U','postgres','-d',database,'-c',query]).decode().strip()
+def free_port():
+ with socket.socket() as s:s.bind(('127.0.0.1',0));return s.getsockname()[1]
+def stop():
+ global app
+ if app and app.poll() is None:
+  app.terminate()
+  try:app.wait(timeout=20)
+  except subprocess.TimeoutExpired:app.kill();app.wait(timeout=10)
+def start(label,appenv,port):
+ global app
+ f=(OUT/(label+'.log')).open('wb');handles.append(f)
+ app=subprocess.Popen([str(JAVA),'-Duser.timezone=UTC','-jar',str(JAR),'--spring.profiles.active=local','--server.address=127.0.0.1','--server.port='+str(port),'--management.health.mail.enabled=false'],cwd=ROOT,env=appenv,stdout=f,stderr=subprocess.STDOUT,creationflags=flags)
+ for _ in range(120):
+  if app.poll() is not None:raise RuntimeError('LOCAL_APP_START_FAILED')
+  try:
+   with urllib.request.urlopen('http://127.0.0.1:'+str(port)+'/actuator/health',timeout=2) as r:
+    if r.status==200 and b'UP' in r.read():return app.pid
+  except (OSError,urllib.error.HTTPError):pass
+  time.sleep(1)
+ raise RuntimeError('LOCAL_APP_START_TIMEOUT')
+def opener():return urllib.request.build_opener(urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar()))
+def csrf(text):
+ m=re.search(r'name="_csrf"[^>]*value="([^"]+)"',text)
+ if not m:raise RuntimeError('CSRF_TOKEN_NOT_FOUND')
+ return m.group(1)
+def request(client,url,data=None,headers=None):
+ with client.open(urllib.request.Request(url,data=data,headers=headers or {}),timeout=15) as r:return r.status,r.read()
+def login(base,username,login_password):
+ client=opener();_,page=request(client,base+'/login');token=csrf(page.decode())
+ form=urllib.parse.urlencode({'identifier':username,'password':login_password,'_csrf':token}).encode()
+ request(client,base+'/login',form,{'Content-Type':'application/x-www-form-urlencoded'})
+ status,profile=request(client,base+'/user/profile')
+ if status!=200 or b'name="_csrf"' not in profile:raise RuntimeError('SYNTHETIC_LOGIN_FAILED')
+ return client,csrf(profile.decode())
+def png():
+ def chunk(t,d):return struct.pack('!I',len(d))+t+d+struct.pack('!I',zlib.crc32(t+d)&0xffffffff)
+ return b'\x89PNG\r\n\x1a\n'+chunk(b'IHDR',struct.pack('!2I5B',2,2,8,2,0,0,0))+chunk(b'IDAT',zlib.compress(b'\x00'+b'\xff\x00\x00'*2+b'\x00'+b'\x00\xff\x00'*2))+chunk(b'IEND',b'')
+def fingerprint(database):
+ tables=sql("SELECT tablename FROM pg_tables WHERE schemaname='uteexpress' ORDER BY tablename",database).splitlines();rows=[]
+ for t in tables:
+  if not re.fullmatch('[a-z_][a-z_0-9]*',t):raise RuntimeError('UNSAFE_FIXTURE_TABLE')
+  rows.append(sql("SELECT '"+t+"',count(*),md5(coalesce(string_agg(md5(row_to_json(t)::text),'' ORDER BY md5(row_to_json(t)::text)),'')) FROM uteexpress.\""+t+"\" t",database))
+ return len(tables),hashlib.sha256('\n'.join(rows).encode()).hexdigest()
+try:
+ if not JAR.is_file():raise RuntimeError('PACKAGED_JAR_MISSING')
+ result['jar_sha256']=hashlib.sha256(JAR.read_bytes()).hexdigest()
+ f=(OUT/'missing-env.log').open('wb');handles.append(f)
+ p=subprocess.run([str(JAVA),'-Duser.timezone=UTC','-jar',str(JAR),'--spring.profiles.active=local','--server.address=127.0.0.1','--server.port=0'],cwd=ROOT,env=env,stdout=f,stderr=subprocess.STDOUT,timeout=100,creationflags=flags);f.flush()
+ raw=(OUT/'missing-env.log').read_text(errors='replace')
+ if p.returncode==0 or not any(x in raw for x in ('DB_URL','DB_USERNAME','DB_PASSWORD','MAIL_HOST','MAIL_FROM','JWT_SECRET_BASE64','OTP_PEPPER_BASE64')):raise RuntimeError('MISSING_ENV_NOT_FAIL_CLOSED')
+ result['steps']['missing_env']={'status':'PASS','exit_code':p.returncode,'scenario':'Required app ENV variables cleared; startup denied at first missing configuration','required_env_names_seen':[k for k in ('DB_URL','DB_USERNAME','DB_PASSWORD','MAIL_HOST','MAIL_FROM','JWT_SECRET_BASE64','OTP_PEPPER_BASE64') if k in raw]}
+ db_env=env.copy();db_env['POSTGRES_PASSWORD']=password
+ command(['docker','run','-d','--name',NAME,'--label','uteexpress.qa03=disposable','-e','POSTGRES_PASSWORD','-p','127.0.0.1::5432','postgres:17.6'],custom_env=db_env);container=True
+ for _ in range(45):
+  ready=subprocess.run(['docker','exec',NAME,'pg_isready','-U','postgres'],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,creationflags=flags)
+  if ready.returncode==0:break
+  time.sleep(1)
+ else:raise RuntimeError('DISPOSABLE_DATABASE_NOT_READY')
+ dbport=int(command(['docker','port',NAME,'5432/tcp']).decode().strip().rsplit(':',1)[1]);port=free_port()
+ appenv=env.copy();appenv.update(DB_URL='jdbc:postgresql://127.0.0.1:'+str(dbport)+'/postgres',DB_USERNAME='postgres',DB_PASSWORD=password,JWT_SECRET_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),OTP_PEPPER_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),MAIL_HOST='127.0.0.1',MAIL_PORT='2525',MAIL_FROM='qa03@example.test',MAIL_SMTP_AUTH='false',MAIL_STARTTLS='false',JWT_COOKIE_SECURE='false',UPLOAD_DIR=str(OUT/'uploads'))
+ first=start('first-start',appenv,port);base='http://127.0.0.1:'+str(port)
+ migrations=int(sql('SELECT count(*) FROM uteexpress.flyway_schema_history WHERE success'))
+ if migrations<1:raise RuntimeError('CLEAN_MIGRATIONS_MISSING')
+ result['steps']['clean_db_startup']={'status':'PASS','successful_migrations':migrations,'health':'UP','fixture':'Isolated PostgreSQL 17.6; synthetic identity inserted after empty-database migration, not full demo seed'}
+ username='qa03ops_'+uuid.uuid4().hex[:10];login_password=secrets.token_urlsafe(24)
+ sql('CREATE EXTENSION IF NOT EXISTS pgcrypto')
+ sql("WITH u AS (INSERT INTO uteexpress.users(email,normalized_email,username,normalized_username,password_hash,status,email_verified_at) VALUES ('"+username+"@example.test','"+username+"@example.test','"+username+"','"+username+"',crypt('"+login_password+"',gen_salt('bf',10)),'ACTIVE',CURRENT_TIMESTAMP) RETURNING id) INSERT INTO uteexpress.user_roles(user_id,role_id) SELECT u.id,r.id FROM u CROSS JOIN uteexpress.roles r WHERE r.code='USER'")
+ client,token=login(base,username,login_password);boundary='qa03'+uuid.uuid4().hex
+ body=(('--'+boundary+'\r\nContent-Disposition: form-data; name="_csrf"\r\n\r\n'+token+'\r\n--'+boundary+'\r\nContent-Disposition: form-data; name="avatar"; filename="fixture.png"\r\nContent-Type: image/png\r\n\r\n').encode()+png()+('\r\n--'+boundary+'--\r\n').encode())
+ request(client,base+'/user/avatar',body,{'Content-Type':'multipart/form-data; boundary='+boundary})
+ status,avatar=request(client,base+'/user/avatar')
+ if status!=200 or not avatar.startswith(b'\x89PNG'):raise RuntimeError('UPLOAD_NOT_PERSISTED')
+ digest=hashlib.sha256(avatar).hexdigest();stop();second=start('second-start',appenv,port)
+ client,_=login(base,username,login_password);status,reloaded=request(client,base+'/user/avatar')
+ if first==second or status!=200 or hashlib.sha256(reloaded).hexdigest()!=digest:raise RuntimeError('UPLOAD_RESTART_MISMATCH')
+ result['steps']['upload_restart']={'status':'PASS','transport':'Real HTTP login + CSRF multipart avatar upload + authenticated read','restart':'Local Java process terminated and restarted with same DB and external upload directory','bytes':len(reloaded),'content_sha256':digest,'different_process':True}
+ stop();before=fingerprint('postgres');dump=command(['docker','exec',NAME,'pg_dump','-U','postgres','-d','postgres','-Fc'],timeout=60);(OUT/'synthetic-db.dump').write_bytes(dump)
+ command(['docker','exec',NAME,'createdb','-U','postgres','qa03_restore'])
+ command(['docker','exec','-i',NAME,'pg_restore','-U','postgres','-d','qa03_restore','--exit-on-error'],input=dump,timeout=60)
+ after=fingerprint('qa03_restore')
+ if before!=after:raise RuntimeError('RESTORE_DATA_MISMATCH')
+ result['steps']['database_backup_restore']={'status':'PASS','method':'pg_dump custom format -> new database -> pg_restore --exit-on-error','app_tables':before[0],'row_fingerprint_sha256':before[1],'dump_sha256':hashlib.sha256(dump).hexdigest(),'limit':'Disposable local DB only; no clean-host/off-host recovery, upload backup or production RPO/RTO claim'}
+ result['status']='PASS'
+except Exception as exc:
+ result['status']='FAIL';result['failure_code']=str(exc) if isinstance(exc,RuntimeError) else type(exc).__name__
+finally:
+ stop()
+ if container:
+  c=subprocess.run(['docker','rm','-f',NAME],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,creationflags=flags);result['cleanup']['owned_container_removed']=c.returncode==0
+ for h in handles:h.close()
+ result['log_hashes']={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in OUT.glob('*.log')}
+ result['script_sha256']=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
+ (OUT/'result.json').write_text(json.dumps(result,indent=2)+'\n',encoding='utf-8')
+ print(json.dumps(result,indent=2));print('LOCAL_REPORT='+str(OUT/'result.json'))
+raise SystemExit(0 if result['status']=='PASS' else 1)
