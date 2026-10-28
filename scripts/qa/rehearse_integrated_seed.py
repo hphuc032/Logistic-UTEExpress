@@ -1,7 +1,7 @@
 """Explicit disposable QA rehearsal, never a production seed or browser acceptance."""
 import argparse, base64, datetime as dt, email, email.utils, hashlib, http.cookiejar
 import json, os, pathlib, re, secrets, socket, socketserver, struct, subprocess
-import threading, time, urllib.error, urllib.parse, urllib.request, uuid, zlib
+import threading, time, urllib.error, urllib.parse, urllib.request, uuid, zipfile, zlib
 
 class SeedError(Exception): pass
 
@@ -88,6 +88,10 @@ class Seed:
         require(not self.git('status','--porcelain'),'CHECKOUT_NOT_CLEAN')
         self.jar=self.root/'target/uteexpress-0.1.0-SNAPSHOT.jar'; require(self.jar.is_file(),'PACKAGE_SOURCE_FIRST')
         self.result['jar_sha256']=hashlib.sha256(self.jar.read_bytes()).hexdigest()
+        with zipfile.ZipFile(self.jar) as jar:
+            prefix='BOOT-INF/classes/com/uteexpress/'
+            stale=[n for n in jar.namelist() if n.startswith(prefix) and n.endswith('.class') and not (self.root/'src/main/java/com/uteexpress'/(n[len(prefix):].split('$',1)[0].removesuffix('.class')+'.java')).is_file()]
+        require(not stale,'STALE_CLASSES_RUN_CLEAN_PACKAGE')
         mail=socketserver.ThreadingTCPServer(('127.0.0.1',0),MailHandler); mail.daemon_threads=True; mail.codes={}; mail.mail_lock=threading.Lock(); self.mail=mail
         threading.Thread(target=mail.serve_forever,daemon=True).start()
         env=self.env.copy(); env['POSTGRES_PASSWORD']=secrets.token_urlsafe(32)
