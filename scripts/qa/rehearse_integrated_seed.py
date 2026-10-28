@@ -186,7 +186,7 @@ class Seed:
         self.result['steps']['foundation']={'status':'PASS','registered_and_OTP_verified_accounts':10,'shops':{'approved':2,'pending':1,'rejected':1},'products':14,'public_products':12,'nonpublic_products':2,'images':14,'password_hashing':'Real registration/identity PasswordEncoder; password from process ENV'}
     def fulfillment(self,order,**extra):
         ov=self.version('orders',order);sv=self.one('SELECT version FROM uteexpress.shipments WHERE order_id='+str(order));return dict(expectedOrderVersion=ov,expectedShipmentVersion=sv,**extra)
-    def return_versions(self,order):return dict(expectedOrderVersion=self.version('orders',order),expectedReturnRequestVersion=self.one('SELECT version FROM uteexpress.return_requests WHERE order_id='+str(order)))
+    def return_versions(self,order):return dict(expectedVersion=self.version('orders',order),expectedRequestVersion=self.one('SELECT version FROM uteexpress.return_requests WHERE order_id='+str(order)))
     def orders(self):
         for scenario in ('NEW','ASSIGNED','SHIPPING','DELIVERED','REFUNDED','FAILED','RTS','BUYER_CANCEL','OTHER_SHOP_NEW'):
             other=scenario=='OTHER_SHOP_NEW';buyer=self.buyer_b if other else self.buyer;vendor=self.vendor_b if other else self.vendor_a
@@ -221,7 +221,7 @@ class Seed:
                 buyer.json('/orders/'+str(order)+'/return',{'expectedVersion':self.version('orders',order),'reason':'Fictional full return'})
                 vendor.json('/vendor/orders/'+str(order)+'/return/approve',self.return_versions(order))
                 vendor.json('/vendor/orders/'+str(order)+'/return/receive',dict(self.return_versions(order),receiptReference='QA03-FICTIONAL-BUYER-RECEIPT'))
-                request=dict(self.return_versions(order),proofReference='QA03-FICTIONAL-NOT-REAL-MONEY');headers={'Idempotency-Key':'qa03-refund-one'}
+                request=dict(expectedOrderVersion=self.version('orders',order),expectedReturnRequestVersion=self.one('SELECT version FROM uteexpress.return_requests WHERE order_id='+str(order)),proofReference='QA03-FICTIONAL-NOT-REAL-MONEY');headers={'Idempotency-Key':'qa03-refund-one'}
                 self.admin.json('/admin/orders/'+str(order)+'/refunds',request,headers)
                 require(self.admin.json('/admin/orders/'+str(order)+'/refunds',request,headers)['replay'],'REFUND_REPLAY_MISMATCH')
         for client,pid in ((self.buyer,self.state['products'][0]),(self.buyer_b,self.state['products'][10])):
@@ -245,7 +245,7 @@ class Seed:
         queries={
             'all_constraints_validated':"SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace WHERE n.nspname='uteexpress' AND NOT c.convalidated",
             'payment_amount_matches_order':'SELECT count(*) FROM uteexpress.payments p JOIN uteexpress.orders o ON o.id=p.order_id WHERE p.amount<>o.grand_total',
-            'refund_bound_to_paid_order':'SELECT count(*) FROM uteexpress.refunds r JOIN uteexpress.payments p ON p.id=r.payment_id JOIN uteexpress.orders o ON o.id=r.order_id WHERE p.order_id<>o.id OR p.status<>\'PAID\' OR r.amount>p.amount OR o.status<>\'REFUNDED\'',
+            'refund_bound_to_paid_order':'SELECT count(*) FROM uteexpress.refunds r JOIN uteexpress.payments p ON p.id=r.payment_id JOIN uteexpress.orders o ON o.id=r.order_id WHERE p.order_id<>o.id OR p.status<>\'PAID\' OR r.amount<>p.amount OR r.amount<>o.grand_total OR o.status<>\'REFUNDED\'',
             'one_default_address':'SELECT count(*) FROM (SELECT user_id FROM uteexpress.addresses WHERE is_default GROUP BY user_id HAVING count(*)>1) s',
             'nonnegative_stock':'SELECT count(*) FROM uteexpress.products WHERE stock<0'}
         for code,query in queries.items():require(self.one(query)==0,'INVARIANT_'+code)
