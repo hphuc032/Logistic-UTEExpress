@@ -74,6 +74,35 @@ CANCELLED is terminal for fulfillment; REFUNDED is terminal. DELIVERED ends fulf
 unless its one valid return flow starts. Cancellation refunds, if applicable, are a separate
 payment concern and do not add a CANCELLED → REFUNDED order edge.
 
+### QA-02 cancelled-paid financial completion
+
+HP's QA-02 scope decision includes manual full refund of a valid persisted PAID
+Payment when cancellation preceded delivery. The local implementation and evidence
+are documented in [QA-02 cancelled-paid refund](testing/QA-02-cancelled-paid-refund.md).
+VNPAY Sandbox and callbacks remain deferred to PAY-03.
+
+`POST /admin/orders/{orderId}/refunds/cancelled-paid` requires authenticated ADMIN,
+standard CSRF, exactly one `Idempotency-Key`, and JSON containing only
+`expectedOrderVersion` and `proofReference`. Current persisted ACTIVE ADMIN
+authority is retained through commit. Amount, Payment ID, actor and status are
+server-derived; the full positive whole-VND grand total must equal one valid PAID
+Payment. ONLINE evidence also requires a persisted nonblank provider reference.
+Both payment creation and collection must precede the evidenced cancellation.
+
+Require CANCELLED, the expected version, no delivery marker/history or return,
+matching cancellation history and the existing once-only inventory-release marker.
+The ledger records a distinct `PAY02_CANCELLED_PAID_REFUND_V1` immutable SUCCEEDED
+operation with a cancellation snapshot and no ReturnRequest. Order status/version,
+Payment PAID state, financial snapshots, stock, vouchers and Shipping remain
+unchanged. Ledger and audit are atomic; the financial event is after commit only.
+This produces no second cancellation history or lifecycle notification.
+
+Exact replay requires the original ADMIN, operation, key and canonical payload;
+current authority is checked again. Conflicting requests return 409, absent Orders
+404, unauthorized actors 401/403, and invalid proof/body/key 400. Existing returned-
+COD refund behavior and canonical encoding are preserved. No payment gateway call,
+callback simulation or new production PAID writer is introduced.
+
 In ORD-01, each transition must validate the command (including nonnegative version),
 resolve actor, load and lock/version-check authoritative order and dependent evidence,
 check current status and every guard, then atomically apply status/timestamps and append
