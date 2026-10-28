@@ -78,7 +78,7 @@ class Seed:
         self.root=root; self.out=out; self.password=password; self.name='qa03-seed-'+uuid.uuid4().hex[:10]
         self.env=os.environ.copy(); self.flags=getattr(subprocess,'CREATE_NO_WINDOW',0)
         self.created=False; self.app=None; self.log=None; self.http=[]; self.state={'actors':{},'products':[],'orders':{},'complete':False}
-        self.source=self.git('rev-parse','HEAD'); self.result={'source_sha':self.source,'scope':'Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance','steps':{},'http_trace':self.http,'bootstrap_exception':'Only initial ADMIN role membership is bootstrapped on the newly registered, OTP-verified fictional account in the owned empty QA DB. All other business writes use real HTTP/service boundaries.'}
+        self.source=self.git('rev-parse','HEAD'); self.result={'source_sha':self.source,'demo_opt_in':True,'application_profiles':['local','demo'],'scope':'Full integrated fictional demo dataset on disposable local DB; not browser, clean-host or production acceptance','steps':{},'http_trace':self.http,'bootstrap_exception':'Only initial ADMIN role membership is bootstrapped on the newly registered, OTP-verified fictional account in the owned empty QA DB. All other business writes use real HTTP/service boundaries.'}
     def git(self,*args): return subprocess.check_output(['git',*args],cwd=self.root,text=True).strip()
     def command(self,args,data=None,env=None,timeout=60):
         p=subprocess.run(args,input=data,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env or self.env,timeout=timeout,creationflags=self.flags)
@@ -122,7 +122,7 @@ class Seed:
         env.update(DB_URL='jdbc:postgresql://127.0.0.1:'+str(port)+'/postgres',DB_USERNAME='postgres',DB_PASSWORD=db_password,JWT_SECRET_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),OTP_PEPPER_BASE64=base64.b64encode(secrets.token_bytes(32)).decode(),JWT_COOKIE_SECURE='false',MAIL_HOST='127.0.0.1',MAIL_PORT=str(mail.server_address[1]),MAIL_FROM='seed@example.test',MAIL_SMTP_AUTH='false',MAIL_STARTTLS='false',UPLOAD_DIR=str(self.out/'uploads'))
         java=pathlib.Path(os.environ.get('JAVA_HOME',''))/'bin/java.exe'; require(java.is_file(),'JDK21_REQUIRED')
         self.log=(self.out/'app.private.log').open('wb')
-        self.app=subprocess.Popen([str(java),'-Duser.timezone=UTC','-jar',str(self.jar),'--spring.profiles.active=local','--spring.config.location=classpath:/application.yml','--spring.datasource.url='+env['DB_URL'],'--spring.datasource.username=postgres','--server.address=127.0.0.1','--server.port='+str(webport),'--management.health.mail.enabled=false'],cwd=self.root,env=env,stdout=self.log,stderr=subprocess.STDOUT,creationflags=self.flags)
+        self.app=subprocess.Popen([str(java),'-Duser.timezone=UTC','-jar',str(self.jar),'--spring.profiles.active=local,demo','--spring.config.location=classpath:/application.yml','--spring.datasource.url='+env['DB_URL'],'--spring.datasource.username=postgres','--server.address=127.0.0.1','--server.port='+str(webport),'--management.health.mail.enabled=false'],cwd=self.root,env=env,stdout=self.log,stderr=subprocess.STDOUT,creationflags=self.flags)
         for _ in range(120):
             require(self.app.poll() is None,'APPLICATION_START_FAILED')
             try:
@@ -230,10 +230,10 @@ class Seed:
                 require(self.admin.json('/admin/orders/'+str(order)+'/refunds',request,headers)['replay'],'REFUND_REPLAY_MISMATCH')
         for client,pid in ((self.buyer,self.state['products'][0]),(self.buyer_b,self.state['products'][10])):
             client.form('/user/favorites/'+str(pid),{});client.call('/products/'+str(pid))
-        for pid in (self.state['products'][1],self.state['products'][10]):
+        for selected,pid in ((True,self.state['products'][1]),(False,self.state['products'][10])):
             self.buyer.json('/user/cart/items',{'productId':pid,'quantity':1})
             iid=self.one('SELECT ci.id FROM uteexpress.cart_items ci JOIN uteexpress.carts c ON c.id=ci.cart_id WHERE c.user_id='+str(self.state['actors']['buyer_a']['id'])+' AND ci.product_id='+str(pid))
-            self.buyer.json('/user/cart/items/'+str(iid)+'/selection',{'selected':False})
+            self.buyer.json('/user/cart/items/'+str(iid)+'/selection',{'selected':selected})
     def fingerprint(self):
         rows=[];counts={}
         for table in self.sql("SELECT tablename FROM pg_tables WHERE schemaname='uteexpress' ORDER BY tablename").splitlines():
@@ -241,6 +241,8 @@ class Seed:
             row=self.sql('SELECT count(*),md5(coalesce(string_agg(md5(row_to_json(t)::text),\'\' ORDER BY md5(row_to_json(t)::text)),\'\')) FROM uteexpress."'+table+'" t');count,digest=row.split('|');counts[table]=int(count);rows.append(table+'|'+row)
         return {'counts':counts,'row_fingerprint_sha256':hashlib.sha256('\n'.join(rows).encode()).hexdigest()}
     def validate(self):
+        require(self.one('SELECT count(DISTINCT selected) FROM uteexpress.cart_items')==2,'CART_SELECTION_FIXTURES_MISSING')
+        require(self.sql("SELECT string_agg(code,',' ORDER BY code) FROM uteexpress.roles")=='ADMIN,MANAGER,SHIPPER,USER,VENDOR','ROLE_MANIFEST_MISMATCH')
         require(len(self.state['orders'])==9 and len(self.state['products'])==14,'SEED_STATE_INCOMPLETE')
         expected={'NEW':'NEW','ASSIGNED':'CONFIRMED','SHIPPING':'SHIPPING','DELIVERED':'DELIVERED','REFUNDED':'REFUNDED','FAILED':'SHIPPING','RTS':'CANCELLED','BUYER_CANCEL':'CANCELLED','OTHER_SHOP_NEW':'NEW'}
         for key,status in expected.items():
@@ -305,7 +307,7 @@ class Seed:
         return 0 if self.result['status']=='PASS' else 1
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--checkout',type=pathlib.Path,default=pathlib.Path.cwd());args=parser.parse_args();root=args.checkout.resolve()
+    parser=argparse.ArgumentParser();parser.add_argument('--checkout',type=pathlib.Path,default=pathlib.Path.cwd());parser.add_argument('--disposable-demo',action='store_true',required=True,help='Explicitly opt in to fictional demo on a newly owned disposable DB');args=parser.parse_args();root=args.checkout.resolve()
     password=os.environ.get('QA03_DEMO_PASSWORD','');require(len(password)>=12,'QA03_DEMO_PASSWORD_REQUIRED')
     out=root/'.work/qa03-integrated-seed'/('run-'+uuid.uuid4().hex[:12]);out.mkdir(parents=True)
     return Seed(root,out,password).run()
