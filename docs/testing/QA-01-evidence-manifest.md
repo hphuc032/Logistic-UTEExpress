@@ -227,7 +227,7 @@ The initial local-only handoff above is historical. PR #66 has since been publis
 QĐ's COMMENTED review at89600fd reports independent scoped878 Java/PostgreSQL +12
 Node PASS and requires a final sync/CI/delta-review gate before final approval.
 
-- Latest synced develop: `e88685213d3af20729d2e78c56568f44e0a2922c`.
+- Synced develop at the f76c3bb checkpoint: `e88685213d3af20729d2e78c56568f44e0a2922c`.
 - Normal merge commit: `f76c3bb2f3cdb266e3430f4f98436d2b9740489e`, behind0, no conflicts.
 - Delta from89600fd: seven added QA-03 tooling/workflow/evidence files only.
 - Application/test/POM/existing CI objects remain exactly the four IDs listed above.
@@ -252,3 +252,18 @@ files' availability to QĐ is not implied by publishing their metadata/hashes.
 
 The follow-up commit changes these two reports and adds only this sanitized JSON.
 Final QĐ approval and HP merge decision remain independent, pending gates.
+
+Develop then advanced to `72558c7dba1b69e847e5c87f9d580732ab1b185a` (PR #65);
+normal merge `a12de4a6d30686ab62553a5f7bcc251ec9f10fa7` imports only12 QA-03 docs/
+evidence files. Behind became0 again, and all four executable input objects plus
+the runner script hash remain identical. No additional application test run is
+claimed for this documentation-only import; exact final-head CI is linked in PR #66.
+
+Portable-byte correction: at1cd6f63 Git's text auto-normalization stored the JSON as
+LF (blob SHA-256 `d3de60202382b4746e7b4b8fa3048da27d79db7d7cb951b0fcf206cd5a930cca`),
+while the original tool-generated file/checksum above uses CRLF. The final follow-up
+adds `docs/testing/.gitattributes`, affecting only `/QA-01-runner-evidence.json`,
+and restages the exact original bytes as `-text`. Parsed JSON data/provenance is
+identical; the Git blob and working copy must both hash to43175396...e5a7ed7 above.
+Raw logs stay private. This is an evidence transport correction, not a new test
+execution or source/security change.
