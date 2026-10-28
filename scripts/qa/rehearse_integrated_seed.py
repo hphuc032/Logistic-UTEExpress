@@ -247,7 +247,11 @@ class Seed:
             'payment_amount_matches_order':'SELECT count(*) FROM uteexpress.payments p JOIN uteexpress.orders o ON o.id=p.order_id WHERE p.amount<>o.grand_total',
             'refund_bound_to_paid_order':'SELECT count(*) FROM uteexpress.refunds r JOIN uteexpress.payments p ON p.id=r.payment_id JOIN uteexpress.orders o ON o.id=r.order_id WHERE p.order_id<>o.id OR p.status<>\'PAID\' OR r.amount<>p.amount OR r.amount<>o.grand_total OR o.status<>\'REFUNDED\'',
             'one_default_address':'SELECT count(*) FROM (SELECT user_id FROM uteexpress.addresses WHERE is_default GROUP BY user_id HAVING count(*)>1) s',
-            'nonnegative_stock':'SELECT count(*) FROM uteexpress.products WHERE stock<0'}
+            'nonnegative_stock':'SELECT count(*) FROM uteexpress.products WHERE stock<0',
+            'history_matches_current_order':"SELECT count(*) FROM uteexpress.orders o JOIN (SELECT DISTINCT ON(order_id) order_id,to_status FROM uteexpress.order_status_history ORDER BY order_id,id DESC) h ON h.order_id=o.id WHERE o.status<>h.to_status",
+            'item_totals_match_snapshot':'SELECT count(*) FROM uteexpress.orders o JOIN (SELECT order_id,sum(line_total) total FROM uteexpress.order_items GROUP BY order_id) i ON i.order_id=o.id WHERE o.subtotal<>i.total',
+            'voucher_total_quota':"SELECT count(*) FROM (SELECT v.id FROM uteexpress.vouchers v JOIN uteexpress.voucher_usages u ON u.voucher_id=v.id WHERE u.status<>'RELEASED' GROUP BY v.id,v.total_limit HAVING count(*)>v.total_limit) q",
+            'voucher_user_quota':"SELECT count(*) FROM (SELECT v.id,u.user_id FROM uteexpress.vouchers v JOIN uteexpress.voucher_usages u ON u.voucher_id=v.id WHERE u.status<>'RELEASED' GROUP BY v.id,u.user_id,v.per_user_limit HAVING count(*)>v.per_user_limit) q"}
         for code,query in queries.items():require(self.one(query)==0,'INVARIANT_'+code)
         require(self.one('SELECT stock FROM uteexpress.products WHERE id='+str(self.state['products'][0]))==38,'STOCK_RESERVATION_RELEASE_MISMATCH')
         require(self.one('SELECT count(*) FROM uteexpress.reviews')==2,'REVIEW_COUNT_MISMATCH')
@@ -255,7 +259,13 @@ class Seed:
         require(self.one('SELECT count(*) FROM uteexpress.refunds')==1,'REFUND_COUNT_MISMATCH')
         require(self.one('SELECT count(*) FROM uteexpress.shipment_return_receipts')==1,'RTS_RECEIPT_COUNT_MISMATCH')
         require(self.one('SELECT count(*) FROM uteexpress.notifications')>0,'DURABLE_INBOX_MISSING')
-        return {'status':'PASS','order_states':expected,'constraint_and_business_checks':list(queries),'role_passwords_reset':False}
+        day=self.sql("SELECT (min(created_at) AT TIME ZONE 'Asia/Ho_Chi_Minh')::date FROM uteexpress.orders")
+        end=(dt.date.fromisoformat(day)+dt.timedelta(days=2)).isoformat();params=urllib.parse.urlencode({'from':day,'toExclusive':end})
+        money={'deliveredSales':340000,'collectedPayments':340000,'refunds':170000,'netCollectedRevenue':170000,'netCommission':11900,'netRevenueAfterCommission':158100}
+        for actor,path in ((self.vendor_a,'/vendor/dashboard'),(self.admin,'/admin/dashboard/revenue/metrics')):
+            report=json.loads(actor.call(path+'?'+params,headers={'Accept':'application/json'}))['selected']['metrics']
+            for metric,value in money.items():require(report[metric]['complete'] and report[metric]['unknownEvents']==0 and report[metric]['value']==value,'FINANCIAL_METRIC_'+metric)
+        return {'status':'PASS','order_states':expected,'constraint_and_business_checks':list(queries),'financial_expected_and_actual':money,'financial_scope':'Vendor A and Admin global, same-period synthetic dataset, shipping excluded','role_passwords_reset':False}
     def seed_once(self):
         if self.state['complete']:return self.validate()
         self.fixtures();self.orders();result=self.validate();self.state['complete']=True
@@ -268,8 +278,8 @@ class Seed:
             pid=self.state['products'][0]
             self.vendor_a.form('/vendor/products/'+str(pid)+'/update',dict(name='QA03 Preserved live edit',description='Edited after seeding',price=100000,stock=38,categoryId=self.state['category_a'],version=self.version('products',pid)))
             require(self.sql('SELECT name FROM uteexpress.products WHERE id='+str(pid))=='QA03 Preserved live edit','LIVE_EDIT_NOT_APPLIED')
-            before=self.fingerprint();requests=len(self.http);self.result['steps']['second_seed']=self.seed_once();after=self.fingerprint()
-            require(before==after,'RERUN_CHANGED_BUSINESS_DATA');require(len(self.http)==requests,'RERUN_REPLAYED_HTTP_MUTATIONS')
+            before=self.fingerprint();writes=sum(e['method']=='POST' for e in self.http);self.result['steps']['second_seed']=self.seed_once();after=self.fingerprint()
+            require(before==after,'RERUN_CHANGED_BUSINESS_DATA');require(sum(e['method']=='POST' for e in self.http)==writes,'RERUN_REPLAYED_HTTP_MUTATIONS')
             self.result['steps']['idempotency']={'status':'PASS','complete_business_fingerprint_unchanged':True,'preserved_live_product_edit':True,'second_seed_http_writes':0,'before':before,'after':after,'policy':'Manifest-backed validate-and-preserve rerun; incomplete/missing fixtures fail closed, never reset statuses/passwords/stock'}
             self.result['fixture_ids']={'orders':self.state['orders'],'products':self.state['products'],'actors':{k:v['id'] for k,v in self.state['actors'].items()}}
             self.result['dump_sha256']=hashlib.sha256(self.command(['docker','exec',self.name,'pg_dump','-U','postgres','-d','postgres','-Fc'])).hexdigest()
