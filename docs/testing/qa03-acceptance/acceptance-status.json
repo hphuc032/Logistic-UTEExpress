@@ -98,5 +98,5 @@
       "owner": "QD/operator"
     }
   ],
-  "status_note": "PASS is limited to stated execution scope; release follow-ups are separately reported, not automatic new circular prerequisites."
+  "status_note": "PASS is limited to stated execution scope. Manager commission limited-write is DEFERRED / ACCEPTED SCOPE EXCEPTION (deny-all remains; not PASS). Shared INT-02 automated baseline is ACCEPTED at e88685213d3af20729d2e78c56568f44e0a2922c only. Whole QA-03 remains BLOCKED by browser/manual Ops and complete demo seed. Release follow-ups are separate and not automatic circular prerequisites."
 }
