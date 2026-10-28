@@ -43,5 +43,10 @@
       "item": "Production logging and alerting acceptance",
       "status": "NOT RUN"
     }
-  ]
+  ],
+  "current_combined_update": {
+    "source_sha": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+    "report": "../qa70-qd-review/report.md",
+    "status": "BLOCKED acceptance; execution PASS observed with Q70-S01 OPEN"
+  }
 }

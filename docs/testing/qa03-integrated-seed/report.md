@@ -85,3 +85,7 @@ Runner source `dbd1ebbb8d271c3dc009c3f186e81eaea82ec65c`, application built from
 ## Completed application regression
 
 The same built application source `8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5` completed full Java 21/PostgreSQL clean verify: 686 unit +1,325 PostgreSQL =**2,011 PASS**, 0 failures/errors/skips, no timeout, exit 0. The final JAR still matches the seed artifact checksum. Every 136 suite XML hashes and the Failsafe summary hash were independently rechecked. Runner Notifications Node12 PASS; the supplemental complete Node run is33 PASS including those12, not45. Seventeen runner unit tests also PASS. This full run belongs to the built source, not a new run on later documentation commits.
+
+## Subsequent combined #70 update
+
+Historical executions above retain their original source identities. Latest combined execution, operation-specific assertions and the retained initial failure are recorded in [QD review report](../qa70-qd-review/report.md). Use --disposable-demo --include-qa02-refunds for the optional combined mode. It executes the TD test-classpath module with explicitly synthetic PAID data; it does not add a production payment writer or VNPAY verification. Shared acceptance remains pending HP bootstrap/checkpoint decisions and open findingQ70-S01.
