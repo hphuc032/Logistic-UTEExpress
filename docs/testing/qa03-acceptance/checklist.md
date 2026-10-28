@@ -14,7 +14,7 @@ classified separately from the corrected application probes.
 | Role scope / T40 | Non-Ops/foreign roles cannot mutate; non-Admin cannot read private financial data | Assignment, fulfillment, AdminRevenueIT, five-role HTTP journeys; see method mapping | PASS tested matrix, not complete security audit |
 | Admin protection / T41a | Last active admin, self-lock, stale/unauthorized writes denied; audit rollback | AccountGovernanceIT 3, RoleGovernanceIT 6 | PASS automated |
 | Manager commission deny / T41b | Current contract denies all Manager writes | CommissionPolicyIT 3 | PASS current deny policy |
-| Manager limited-write workflow / ADMIN-06, T41c | Concrete configured limit and within/over-limit behavior | No approved limit or limited-write implementation found | BLOCKED — HP/QD/TD |
+| Manager limited-write workflow / ADMIN-06, T41c | Concrete configured limit and within/over-limit behavior | HP decision: Manager commission writes remain DENY ALL for current QA-03; no numeric limit invented | DEFERRED / ACCEPTED SCOPE EXCEPTION — NOT PASS; follow-up remains open |
 | Category/config / T42 | Invalid/duplicate fee/rate/provider denied; used category cannot hard-delete | CategoryIT 8, ShippingConfigIT 9; restored synthetic DB FK 23503 probe | PASS stated automated/local scope |
 | Dashboard / T45 | Known multi-shop facts, no item/payment fanout; correct periods, refund/commission and legacy behavior | OpsDashboardReadIT 28, AdminRevenueIT 26, VendorRevenueIT 46, fulfillment dashboard assertions | PASS automated |
 | Socket security / T46 | Missing/invalid JWT, Origin/CSRF, foreign destination denied; revocation/expiry enforced | NotificationSocketIT 29 including malformed claims and lock contention | PASS automated, single-instance |
@@ -29,7 +29,7 @@ classified separately from the corrected application probes.
 | Browser/manual Ops / T50 Ops subset | Actual form/JSON UX, multi-tab notification, review/public media and negative role paths | No current manually signed browser run or screenshots | NOT RUN — QD/HP |
 | Responsive / T50, UI-02 | 375/768/1440, visible/usable controls and messages | HTTP HTML checks do not prove layout | NOT RUN — HP/QD |
 | Clean-host / REL-01 | Provision from README, ENV, migrate+seed, restart/storage permissions, health | Current Windows developer workstation only | NOT RUN — REL-01 |
-| Shared INT-02/QA acceptance | Recorded owner acceptance for all shared criteria on accepted source | Code merges known; full gate sign-off not established by this packet | BLOCKED pending HP decision |
+| Shared INT-02/QA acceptance | Recorded owner acceptance for the shared automated integration baseline | HP accepts automated integration baseline SHA `e88685213d3af20729d2e78c56568f44e0a2922c`; browser/manual and global criteria remain separate | ACCEPTED — automated baseline only; no implied manual/browser acceptance |
 | Whole QA-03 | All in-scope gates have evidence/explicit accepted exceptions and reviewer sign-off | Automated and local checks pass; gaps remain above | BLOCKED |
 
 ## Manual Ops execution plan (all steps currently NOT RUN)
