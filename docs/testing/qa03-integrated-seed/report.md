@@ -89,3 +89,7 @@ The same built application source `8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5` com
 ## Subsequent combined #70 update
 
 Historical executions above retain their original source identities. Latest combined execution, operation-specific assertions and the retained initial failure are recorded in [QD review report](../qa70-qd-review/report.md). Use --disposable-demo --include-qa02-refunds for the optional combined mode. It executes the TD test-classpath module with explicitly synthetic PAID data; it does not add a production payment writer or VNPAY verification. Shared acceptance remains pending HP bootstrap/checkpoint decisions and open findingQ70-S01.
+
+## Subsequent diagnosed clock-fixture update
+
+Historical source identities and FAIL artifacts above remain unchanged. New reproduction proves paid_at after cancelled_at in the synthetic fixture; test-only candidate fix and new2078 Java/PostgreSQL +33Node +20tooling verification are documented in [diagnostic follow-up](../qa03-refund-diagnostics/report.md). Q70-S01 is fix-candidate verified, pending TD review/adoption; no production guard was relaxed, no GitHub approval/merge or whole QA completion is implied.

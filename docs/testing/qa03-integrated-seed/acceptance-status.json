@@ -48,5 +48,11 @@
     "source_sha": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
     "report": "../qa70-qd-review/report.md",
     "status": "BLOCKED acceptance; execution PASS observed with Q70-S01 OPEN"
+  },
+  "latest_diagnostic_update": {
+    "source_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+    "report": "../qa03-refund-diagnostics/report.md",
+    "finding": "Q70-S01 fix candidate verified; pending TD review/adoption",
+    "overall": "BLOCKED acceptance"
   }
 }

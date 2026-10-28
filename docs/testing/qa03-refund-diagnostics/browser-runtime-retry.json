@@ -1,0 +1,11 @@
+{
+  "client_date": "2026-10-28",
+  "gate": "Q03-G01",
+  "entry_point": "node_repl @oai/sky initialization",
+  "result": "BLOCKED before UI access",
+  "error": "failed to write kernel assets: The system cannot find the path specified. (os error 3)",
+  "screenshots": 0,
+  "manual_viewports_executed": [],
+  "manual_acceptance": "NOT RUN",
+  "scope": "Actual retry of the supported runtime, not evidence of an application UI defect"
+}
