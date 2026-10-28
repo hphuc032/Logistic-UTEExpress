@@ -70,7 +70,8 @@ class Client:
         for key,value in values.items(): body.extend(('--'+boundary+'\r\nContent-Disposition: form-data; name="'+key+'"\r\n\r\n'+str(value)+'\r\n').encode())
         body.extend(('--'+boundary+'\r\nContent-Disposition: form-data; name="'+field+'"; filename="fixture.png"\r\nContent-Type: image/png\r\n\r\n').encode()); body.extend(image()); body.extend(('\r\n--'+boundary+'--\r\n').encode())
         return self.call(path,bytes(body),{'Content-Type':'multipart/form-data; boundary='+boundary})
-    def login(self,name): self.form('/login',{'identifier':name,'password':self.seed.password})
+    def login(self,name):
+        self.form('/login',{'identifier':name,'password':self.seed.password}); self.call('/user/profile')
 
 class Seed:
     def __init__(self,root,out,password):
@@ -173,9 +174,16 @@ class Seed:
         for vendor,code,value in ((self.vendor_a,'QA03_VOUCHER_A',10000),(self.vendor_b,'QA03_VOUCHER_B',5000)):
             vendor.form('/vendor/vouchers',dict(window,code=code,type='FIXED',value=value,minSubtotal=0,totalLimit=100,perUserLimit=30))
         self.vendor_a.form('/vendor/products/'+str(self.state['products'][0])+'/promotions',dict(window,name='QA03 Promotion',discountPercent=10))
+        require(self.one('SELECT count(*) FROM uteexpress.product_images')==14,'PRODUCT_IMAGES_MISSING')
+        for key,expected in (('vendor_a','APPROVED'),('vendor_b','APPROVED'),('pending','PENDING'),('rejected','REJECTED')):
+            require(self.sql('SELECT status FROM uteexpress.shops WHERE id='+str(self.state[key+'_shop']))==expected,'SHOP_STATE_'+key)
+        guest=Client(self)
+        for index,pid in enumerate(self.state['products']):
+            guest.call('/products/'+str(pid),allowed=(200,404))
+            require(self.http[-1]['status']==(200 if index<12 else 404),'PUBLIC_PRODUCT_VISIBILITY')
         require(self.one('SELECT count(*) FROM uteexpress.vouchers')==2,'FOUNDATION_VOUCHER_MISSING')
         require(self.one('SELECT count(*) FROM uteexpress.promotions')==1,'FOUNDATION_PROMOTION_MISSING')
-        self.result['steps']['foundation']={'status':'PASS','registered_and_OTP_verified_accounts':10,'shops':{'approved':2,'pending':1,'rejected':1},'products':14,'images':14,'password_hashing':'Real registration/identity PasswordEncoder; password from process ENV'}
+        self.result['steps']['foundation']={'status':'PASS','registered_and_OTP_verified_accounts':10,'shops':{'approved':2,'pending':1,'rejected':1},'products':14,'public_products':12,'nonpublic_products':2,'images':14,'password_hashing':'Real registration/identity PasswordEncoder; password from process ENV'}
     def fulfillment(self,order,**extra):
         ov=self.version('orders',order);sv=self.one('SELECT version FROM uteexpress.shipments WHERE order_id='+str(order));return dict(expectedOrderVersion=ov,expectedShipmentVersion=sv,**extra)
     def return_versions(self,order):return dict(expectedOrderVersion=self.version('orders',order),expectedReturnRequestVersion=self.one('SELECT version FROM uteexpress.return_requests WHERE order_id='+str(order)))
@@ -259,6 +267,7 @@ class Seed:
             # Deliberate legitimate edit proves the rerun does not reset mutable product data.
             pid=self.state['products'][0]
             self.vendor_a.form('/vendor/products/'+str(pid)+'/update',dict(name='QA03 Preserved live edit',description='Edited after seeding',price=100000,stock=38,categoryId=self.state['category_a'],version=self.version('products',pid)))
+            require(self.sql('SELECT name FROM uteexpress.products WHERE id='+str(pid))=='QA03 Preserved live edit','LIVE_EDIT_NOT_APPLIED')
             before=self.fingerprint();requests=len(self.http);self.result['steps']['second_seed']=self.seed_once();after=self.fingerprint()
             require(before==after,'RERUN_CHANGED_BUSINESS_DATA');require(len(self.http)==requests,'RERUN_REPLAYED_HTTP_MUTATIONS')
             self.result['steps']['idempotency']={'status':'PASS','complete_business_fingerprint_unchanged':True,'preserved_live_product_edit':True,'second_seed_http_writes':0,'before':before,'after':after,'policy':'Manifest-backed validate-and-preserve rerun; incomplete/missing fixtures fail closed, never reset statuses/passwords/stock'}
