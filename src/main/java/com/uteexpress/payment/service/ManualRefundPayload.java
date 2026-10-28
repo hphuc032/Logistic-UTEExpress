@@ -73,7 +73,7 @@ public final class ManualRefundPayload {
         }
     }
 
-    private static String requireText(String value) {
+    static String requireText(String value) {
         if (value == null || value.isBlank() || value.indexOf('\0') >= 0) throw invalid();
         utf8(value); // Reject malformed UTF-16 rather than silently replacing it during hashing.
         return value;
@@ -93,7 +93,7 @@ public final class ManualRefundPayload {
         }
     }
 
-    private static byte[] encodeStrings(String... values) {
+    static byte[] encodeStrings(String... values) {
         try (var bytes = new ByteArrayOutputStream(); var out = new DataOutputStream(bytes)) {
             for (String value : values) writeText(out, value);
             return bytes.toByteArray();
@@ -102,7 +102,7 @@ public final class ManualRefundPayload {
         }
     }
 
-    private static void writeText(DataOutputStream out, String value) throws IOException {
+    static void writeText(DataOutputStream out, String value) throws IOException {
         byte[] encoded = utf8(value);
         out.writeInt(encoded.length);
         out.write(encoded);
@@ -121,7 +121,7 @@ public final class ManualRefundPayload {
         }
     }
 
-    private static byte[] digest(byte[] value) {
+    static byte[] digest(byte[] value) {
         try {
             return MessageDigest.getInstance("SHA-256").digest(value);
         } catch (NoSuchAlgorithmException impossible) {
