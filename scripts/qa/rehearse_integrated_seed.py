@@ -74,7 +74,9 @@ class Client:
         self.form('/login',{'identifier':name,'password':self.seed.password}); self.call('/user/profile')
 
 class Seed:
-    def __init__(self,root,out,password,include_refunds=False):
+    def __init__(self,root,out,password,include_refunds=False,refund_clock_skew_seconds=0):
+        self.refund_clock_skew_seconds=refund_clock_skew_seconds
+        require(refund_clock_skew_seconds in (0,-2) and (refund_clock_skew_seconds==0 or include_refunds),'INVALID_REFUND_CLOCK_MODE')
         self.include_refunds=include_refunds; self.refund_fixtures_loaded=False
         self.db='qa02_refund_seed' if include_refunds else 'postgres'
         self.root=root; self.out=out; self.password=password; self.name='qa03-seed-'+uuid.uuid4().hex[:10]
@@ -84,6 +86,7 @@ class Seed:
         if include_refunds:
             self.result['bootstrap_exception']='Shared fixtures use real HTTP with initial ADMIN role bootstrap. The TD-owned test-classpath module additionally sets up fictional identity/catalog fixtures and synthetic persisted ONLINE PAID prerequisites in this same owned disposable DB. This is not gateway verification or a production PAID writer.'
             self.result['combined_rerun_scope']='Shared module: same-process completed checkpoint validation. TD refund module: two independent application invocations. Both must preserve the full combined database fingerprint.'
+        self.result.update(run_id=self.out.name,started_at_utc=dt.datetime.now(dt.timezone.utc).isoformat(),refund_clock_skew_seconds=refund_clock_skew_seconds,clock_scope='TD fixture child only; primary shared HTTP application uses unmodified Clock',wrapper_timed_out=False)
     def git(self,*args): return subprocess.check_output(['git',*args],cwd=self.root,text=True).strip()
     def command(self,args,data=None,env=None,timeout=60):
         p=subprocess.run(args,input=data,stdout=subprocess.PIPE,stderr=subprocess.PIPE,env=env or self.env,timeout=timeout,creationflags=self.flags)
@@ -325,8 +328,15 @@ class Seed:
         require(source.is_dir(),'BUILD_QA02_REFUND_FIXTURE_FIRST')
         classes=self.out/'qa02-test-classes'
         if not classes.exists():shutil.copytree(source,classes/'qa02/seed')
+        clock_mode=getattr(self,'refund_clock_skew_seconds',0)
+        if clock_mode:
+            clock=self.root/'target/test-classes/qa02/investigation/ClockSkewConfiguration.class'
+            require(clock.is_file(),'BUILD_CONTROLLED_CLOCK_FIXTURE_FIRST')
+            target=classes/'qa02/investigation/ClockSkewConfiguration.class';target.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copyfile(clock,target)
         env=self.app_env.copy();env.update(QA02_DISPOSABLE_SEED_CONFIRM='YES',QA02_REFUND_DEMO_PASSWORD=self.password)
         args=[str(self.java),'-Duser.timezone=UTC','-Dloader.path='+str(classes),'-Dloader.main=qa02.seed.RefundAcceptanceSeed','-cp',str(self.jar),'org.springframework.boot.loader.launch.PropertiesLauncher','--spring.profiles.active=local,demo','--spring.config.location=classpath:/application.yml','--server.address=127.0.0.1','--server.port=0','--management.health.mail.enabled=false','--uteexpress.demo.shipping.enabled=false','--uteexpress.demo.catalog.enabled=false']
+        if clock_mode:args.append('--spring.main.sources=qa02.investigation.ClockSkewConfiguration')
         log=self.out/('qa02-refund-'+str(number)+'.private.log')
         try:
             with log.open('wb') as output:
@@ -338,6 +348,11 @@ class Seed:
         if process.returncode!=0:self.result.setdefault('refund_fixture_failures',[]).append(diagnostics)
         require(process.returncode==0,'QA02_FIXTURE_PROCESS_FAILED_'+str(number))
         lines=log.read_text(encoding='utf-8',errors='replace').splitlines()
+        clock_confirmed='Q70_CONTROLLED_CLOCK_OFFSET_SECONDS=-2' in lines
+        if clock_mode:require(clock_confirmed,'CONTROLLED_CLOCK_MARKER_MISSING')
+        else:require(not clock_confirmed,'UNEXPECTED_CONTROLLED_CLOCK')
+        diagnostics['clock_skew_seconds']=clock_mode
+        diagnostics['controlled_clock_marker_confirmed']=clock_confirmed
         result=json.loads(next(line.split('=',1)[1] for line in lines if line.startswith('QA02_REFUND_SEED_RESULT=')))
         require(all(value=='PASS' for value in result['negativeChecks'].values()),'QA02_NEGATIVE_CHECK_NOT_PASS')
         return {'status':'PASS','application_exit_code':process.returncode,'log_sha256':hashlib.sha256(log.read_bytes()).hexdigest(),'result':result,'persisted_diagnostics':diagnostics}
@@ -385,7 +400,7 @@ class Seed:
             self.result['dump_sha256']=hashlib.sha256(self.command(['docker','exec',self.name,'pg_dump','-U','postgres','-d',self.db,'-Fc'])).hexdigest()
             require(self.git('rev-parse','HEAD')==self.source and not self.git('status','--porcelain'),'SOURCE_CHANGED_DURING_REHEARSAL');self.result['status']='PASS'
         except Exception as error:
-            self.result.update(status='FAIL',failure_code=str(error) if isinstance(error,SeedError) else type(error).__name__)
+            self.result.update(status='FAIL',failure_code=str(error) if isinstance(error,SeedError) else type(error).__name__,wrapper_timed_out=isinstance(error,(subprocess.TimeoutExpired,TimeoutError)))
         finally:
             if self.app and self.app.poll() is None:
                 self.app.terminate()
@@ -396,13 +411,15 @@ class Seed:
             if self.created:self.result['owned_container_removed']=subprocess.run(['docker','rm','-f',self.name],stdout=subprocess.DEVNULL,stderr=subprocess.DEVNULL,creationflags=self.flags).returncode==0
             self.result['script_sha256']=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
             if (self.out/'app.private.log').exists():self.result['app_log_sha256']=hashlib.sha256((self.out/'app.private.log').read_bytes()).hexdigest()
+            self.result.update(finished_at_utc=dt.datetime.now(dt.timezone.utc).isoformat(),wrapper_exit_code=0 if self.result.get('status')=='PASS' else 1)
             (self.out/'result.json').write_text(json.dumps(self.result,indent=2)+'\n',encoding='utf-8')
             print(json.dumps({k:v for k,v in self.result.items() if k!='http_trace'},indent=2));print('LOCAL_EVIDENCE='+str(self.out/'result.json'))
         return 0 if self.result['status']=='PASS' else 1
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--checkout',type=pathlib.Path,default=pathlib.Path.cwd());parser.add_argument('--include-qa02-refunds',action='store_true',help='Run TD test-classpath synthetic PAID fixture twice in the same owned DB');parser.add_argument('--disposable-demo',action='store_true',required=True,help='Explicitly opt in to fictional demo on a newly owned disposable DB');args=parser.parse_args();root=args.checkout.resolve()
+    parser=argparse.ArgumentParser();parser.add_argument('--checkout',type=pathlib.Path,default=pathlib.Path.cwd());parser.add_argument('--refund-clock-skew-seconds',type=int,choices=[0,-2],default=0,help='Explicit controlled test Clock in TD subprocess only');parser.add_argument('--include-qa02-refunds',action='store_true',help='Run TD test-classpath synthetic PAID fixture twice in the same owned DB');parser.add_argument('--disposable-demo',action='store_true',required=True,help='Explicitly opt in to fictional demo on a newly owned disposable DB');args=parser.parse_args();root=args.checkout.resolve()
+    if args.refund_clock_skew_seconds and not args.include_qa02_refunds:parser.error('controlled Clock requires --include-qa02-refunds')
     password=os.environ.get('QA03_DEMO_PASSWORD','');require(len(password)>=(16 if args.include_qa02_refunds else 12),'QA03_DEMO_PASSWORD_REQUIRED')
     out=root/'.work/qa03-integrated-seed'/('run-'+uuid.uuid4().hex[:12]);out.mkdir(parents=True)
-    return Seed(root,out,password,args.include_qa02_refunds).run()
+    return Seed(root,out,password,args.include_qa02_refunds,args.refund_clock_skew_seconds).run()
 if __name__=='__main__':raise SystemExit(main())

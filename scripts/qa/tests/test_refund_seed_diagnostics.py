@@ -66,6 +66,44 @@ class RefundDiagnosticTests(unittest.TestCase):
         self.assertIsNone(diagnostic['application_exit_code'])
         self.assertNotIn('PASS', json.dumps(self.runner.result))
 
+    def clock_fixture(self):
+        self.runner.refund_clock_skew_seconds = -2
+        target = self.root / 'target/test-classes/qa02/investigation/ClockSkewConfiguration.class'
+        target.parent.mkdir(parents=True)
+        target.write_bytes(b'fixture-bytecode')
+
+    def successful_child(self, marker):
+        def run(args, **kwargs):
+            self.assertIn('--spring.main.sources=qa02.investigation.ClockSkewConfiguration', args)
+            if marker:
+                kwargs['stdout'].write(b'Q70_CONTROLLED_CLOCK_OFFSET_SECONDS=-2\n')
+            kwargs['stdout'].write(b'QA02_REFUND_SEED_RESULT={"negativeChecks":{"fixture":"PASS"}}\n')
+            return subprocess.CompletedProcess(args, 0)
+        return run
+
+    def test_controlled_clock_cannot_claim_pass_without_activation_marker(self):
+        self.clock_fixture()
+        with patch.object(seed.subprocess, 'run', side_effect=self.successful_child(False)):
+            with self.assertRaisesRegex(seed.SeedError, '^CONTROLLED_CLOCK_MARKER_MISSING$'):
+                self.runner.refund_fixture_process(1)
+
+    def test_controlled_clock_is_child_scoped_and_activation_is_recorded(self):
+        self.clock_fixture()
+        with patch.object(seed.subprocess, 'run', side_effect=self.successful_child(True)):
+            result = self.runner.refund_fixture_process(1)
+        self.assertTrue(result['persisted_diagnostics']['controlled_clock_marker_confirmed'])
+        self.assertEqual(result['persisted_diagnostics']['clock_skew_seconds'], -2)
+        self.assertNotIn('SPRING_MAIN_SOURCES', self.runner.app_env)
+        self.assertTrue((self.runner.out / 'qa02-test-classes/qa02/investigation/ClockSkewConfiguration.class').is_file())
+
+    def test_clock_mode_without_refund_fixtures_fails_before_resource_creation(self):
+        with patch.object(sys, 'argv', ['seed', '--disposable-demo', '--refund-clock-skew-seconds=-2']):
+            with patch.object(seed, 'Seed') as constructor:
+                with self.assertRaises(SystemExit) as error:
+                    seed.main()
+        self.assertEqual(error.exception.code, 2)
+        constructor.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()
