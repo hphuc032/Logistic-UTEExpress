@@ -1,5 +1,7 @@
 # QA-01 security acceptance matrix
 
+Close-out disposition: **APPLICATION SECURITY REMEDIATION MERGED — ACCEPTED WITH DEFERRED GATES**. Application-control PASS below retains its source-bound test scope. Final QĐ review026a29d, HP decision and merged PR #66 are verified; no PASS is inferred for deferred/operational controls. Overall QA-01 is not COMPLETED.
+
 Master Plan H1–H8/K/L/M/N; source/hash and actual branch identities are in the report.
 Frozen executable source `6e93d44614b1574ab2d310bae9a54ae57c385893`. Custom Hx IDs below are traceability labels; Txx
 references retain the Plan's actual definitions, not invented test numbers.
@@ -53,8 +55,8 @@ coverage of every possible request. Source-only observations/tool runs are label
 | H7/I8-04 / T47 | Atomic inbox / commit-only hints / recovery | Order + Notification | NotificationRecoveryIT; NotificationSocketIT; NotificationIT; NotificationSchedulerIT; Node tests | Rollback no successful notification; offline inbox; dedupe | INT-02 MANDATORY writer and WS guarantees unchanged | PASS | final XML: NotificationRecoveryIT |
 | H6-SECRET-01 | Offline local secret review | Source/config and PR67 delta | Prior redacted inventory/ENV review plus current code-delta inspection | No live credential in reviewed matches | Prior9 synthetic fixture candidates; unchanged security config; no new secret found in inspected runtime delta; no fresh full-history scan | PASS (bounded review) | Historical7aa74a2 manifest and current Security Report |
 | H6-SAST-01 | Limited offline static scan | Production main source | Semgrep1.155.0 + scripts/security/qa01-semgrep.yml | Triage actual scanner output, not equate alerts with exploit | 7 rules;607 targets;5 SQL candidates safe;0 scanner errors | PASS (tool run/triage) | .work/qa01/20261029-final-sync/semgrep.json |
-| DEPENDENCY-01 | Dependency vulnerability database | Packaged resolved dependencies | Library inventory only | CVE/SCA report if scanner/database available | No usable local SCA database/scanner; no upgrade/no clean-CVE claim | NOT RUN | resolved-libraries.txt |
-| OPS/UI-01 / T49/T50 | Deployment/browser/SMTP/load acceptance | Proxy/TLS/ACLs/responsive/live network | Outside this local QA-01 execution | Separate QA/UI/REL acceptance | No production or manual browser acceptance claimed | NOT RUN / OUT OF SCOPE | limitations |
+| DEPENDENCY-01 | Dependency vulnerability database | Packaged resolved dependencies | Library inventory only | Source/tool/DB-bound dependency scan plus triage before production release | Execution NOT RUN; HP formally deferred the separate release gate, not vulnerability review itself; no clean-CVE claim | DEFERRED / NOT RUN | HP decision6487721811; current report follow-up table |
+| OPS/UI-01 / T49/T50 | Deployment/browser/SMTP/load acceptance | Proxy/TLS/ACLs/responsive/live network | Separate owner packets; not executed by QA-01 | Source/environment-bound QA/UI/REL acceptance | HP deferred operational checks to existing gates; wider evidence remains open; no deployed PASS | NOT RUN / DEFERRED TO EXISTING GATES | Current report follow-up table; Q03/REL/UI references |
 
 All six actors are covered by combinations of HTTP and applicable service tests:
 Guest/Foundation/auth; User/account/cart/Buyer; Vendor/Shop/Product/Order/revenue;
@@ -72,4 +74,4 @@ Fresh 2026-10-29 full gate: 694 unit/architecture + 1346 PostgreSQL = 2040 Java,
 separately (runner notification-only Node is an overlapping subset); zero failures/errors/skips/flaky-rerun markers; timeout=false. Actual XML
 case counts/digests and raw artifact references are in the evidence manifest.
 
-Prior QĐ approval applies to7aa74a2 only. The new source imports PR67 application/test/CI changes and was freshly verified; final delta review remains pending. Dependency and operational NOT RUN classifications/owners are in the current Security Report; no automatic formal deferral or COMPLETED claim.
+Final QĐ APPROVED applies to026a29d after the earlier7aa74a2 review. HP accepted application-security integration and formally deferred the remaining gates in [the recorded decision](https://github.com/hphuc032/Logistic-UTEExpress/pull/66#issuecomment-6487721811); PR #66 merged at b538dbc. The2040 Java run remains HP execution at6e93d44; QĐ independently ran33 Node/17 tooling at026a29d, not PostgreSQL. The current Security Report maps remaining gate owners/evidence; no overall COMPLETED or production sign-off is claimed.

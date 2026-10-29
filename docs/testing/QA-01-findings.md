@@ -1,5 +1,11 @@
 # QA-01 findings and residual verification
 
+## Current scoped disposition — 2026-10-29
+
+**APPLICATION SECURITY REMEDIATION MERGED — ACCEPTED WITH DEFERRED GATES**. Final QĐ [APPROVED on026a29d](https://github.com/hphuc032/Logistic-UTEExpress/pull/66#pullrequestreview-5692747388), [HP's application-scope acceptance/formal deferral](https://github.com/hphuc032/Logistic-UTEExpress/pull/66#issuecomment-6487721811), exact-head CI40814999100 SUCCESS and merge b538dbc are verified. These events do not delete findings, convert NOT RUN to PASS or complete overall QA-01. Finding severities, reproduction/root-cause history and RESOLVED/false-positive classifications below are retained.
+
+HP's available local evidence was revalidated, not rerun: portable checksum,139 suite XML hashes and9 private artifact hashes match. QĐ independently ran33 Node and17 tooling on026a29d and reviewed metadata; no new QĐ Java/PostgreSQL/full-suite execution is claimed.
+
 Initial baseline `798535b32ff81a011f34cfa01bbeb2d2dd0cb981`; original remediation tests at3c4fb55. Current fresh-tested source `6e93d44614b1574ab2d310bae9a54ae57c385893` after develop fa48cb69cef92276f0dddf0d2bd396eee098f2f3. Severity describes demonstrated
 impact, not a CVE/CVSS calculation. No account takeover, secret exfiltration or
 production exploitation is inferred merely from a failed policy assertion.
@@ -22,7 +28,7 @@ production exploitation is inferred merely from a failed policy assertion.
 - Risk: longer use of a leaked/intercepted code and unsafe overrides weakening policy.
 - Remediation: defaultPT5M, fail-closed property ceilings/floor; verify against the
   earlier of persisted expires_at and sent_at+currentTTL. No schema rewrite/backfill.
-- Status: **RESOLVED**, pending QĐ review.
+- Status: **RESOLVED**, application-scope remediation approved by QĐ at026a29d and merged in PR #66; remaining gates are separate.
 - Test evidence: Qa01OtpSecurityIT two purpose boundary +two legacy-row cases,
   OtpSecurityTest.unsafePolicyOverridesFailClosedInsteadOfExtendingTheOtpAttackWindow,
   existing AUTH-03/04 attempts/purpose/concurrent-consume tests, final clean full run.
@@ -43,7 +49,7 @@ production exploitation is inferred merely from a failed policy assertion.
 - Remediation: one synchronized bounded fixed-window budget over five POST routes,
   after CSRF; socket remoteAddr only; safe429+Retry-After; no active-counter eviction;
   expired reclamation and fail-closed capacity/configuration.
-- Status: **RESOLVED for this single-instance application boundary**, pending QĐ review.
+- Status: **RESOLVED for this single-instance application boundary**, application-scope remediation approved by QĐ at026a29d and merged in PR #66; remaining gates are separate.
 - Evidence: Qa01OtpSecurityIT four admission/no-side-effect cases and logging checks;
   OtpRequestRateLimiterTest 5 tests (concurrent cap,
   expiry rounding, capacity, clock rollback/unknown peers, invalid configuration);
@@ -99,7 +105,7 @@ production exploitation is inferred merely from a failed policy assertion.
 - Remediation: use native Spring Security7.1.1 POST PathPatternRequestMatcher with
   the same five exact routes. No manual URLDecoder/double decoding, broader permit,
   CSRF bypass, forwarding trust or firewall changes.
-- Status: **RESOLVED**, pending QĐ review.
+- Status: **RESOLVED**, application-scope remediation approved by QĐ at026a29d and merged in PR #66; remaining gates are separate.
 - Evidence: encodedRouteSegmentsCannotBypassTheSharedAdmissionBudget across encoded
   route letters/hyphen; OtpRequestLimitFilterTest (context-relative matching, safe
   methods and unrelated suffix/path exclusions); focused and final full gates. The
@@ -131,23 +137,15 @@ production exploitation is inferred merely from a failed policy assertion.
   network responses or an exhaustive account-enumeration side-channel assessment.
 
 No unresolved confirmed Critical/High QA-01 vulnerability in the tested scope.
-PR #66 is published. QĐ previously APPROVED7aa74a2; the new post-sync HEAD requires final delta review. No merge into develop/main or QA-01 completion is performed by this follow-up.
+PR #66 is now merged at b538dbc after QĐ APPROVED026a29d and HP scoped acceptance. Earlier7aa74a2 approval remains historical. This documentation follow-up performs no merge and does not mark overall QA-01 COMPLETED.
 
 
 ## 2026-10-29 current delta verdict and outstanding verification
 
-Fresh source `6e93d44614b1574ab2d310bae9a54ae57c385893`, synced develop `fa48cb69cef92276f0dddf0d2bd396eee098f2f3`; full 2040 Java +33 combined Node PASS, failures/errors/skips0. Independent QĐ approval at7aa74a2 remains historical, not an approval of this new merge or an independent rerun of HP's current full suite.
+Fresh source `6e93d44614b1574ab2d310bae9a54ae57c385893`, synced develop `fa48cb69cef92276f0dddf0d2bd396eee098f2f3`; full 2040 Java +33 combined Node PASS, failures/errors/skips0. The original7aa74a2 approval remains historical; subsequent QĐ approval on026a29d and HP merge are recorded above. QĐ did not rerun Java/PostgreSQL at026a29d.
 
 PR67 changes the owner-scoped cancellation page/read model and browser adapter. Existing server command locks/identity/state/version, safe CSRF token handling, foreign/missing/state/role guards and private WS/inbox contracts were exercised by the fresh suite. Security/Identity/Account/Notification Java package objects remain byte-identical; no new confirmed application vulnerability was identified in this follow-up. The earlier findings describe their original reproduction sources; fixes are preserved, not reimplemented.
 
-| Check | Status/classification | Owner / closure requirement |
-|---|---|---|
-| Application security regression, PostgreSQL locks/transactions and WS | PASS on the current tested source | HP evidence; QĐ must review the new delta/HEAD |
-| Dependency CVE/SCA | NOT RUN — verification gap; not a confirmed vulnerability or a clean-CVE result | HP/QĐ: run an available dependency scanner with a usable DB, or explicitly record scope/risk/owner/time-bound deferral. No such new deferral is authorized by this report |
-| Live SMTP and network timing uniformity | NOT RUN — deployment/live-service verification | HP/REL: verify the real mail path and approved response/timing expectations; generic HTTP contract tests are narrower |
-| Deployed HTTPS, proxy trust/NAT, cookie flags and storage ACLs | NOT RUN in a deployed environment | HP/REL: environment-specific acceptance. Unit/HTTP tests prove configured application behavior only |
-| Multi-instance/distributed abuse limits, load and restart behavior | NOT RUN — operational limitation | HP/REL: single-instance limiter resets on restart; agree deployment limits/acceptance separately |
-| Browser/manual Ops, full seed, backup/restore and release rehearsal | NOT rerun by QA-01 — separate QA/UI/REL ownership | Preserve each owner's exact-source evidence/scope decisions; importing PR67 browser evidence does not create new HP browser acceptance |
-| Dependency/operational formal acceptance or deferral | PENDING HP decision where required | NOT RUN is not converted to PASS, accepted risk or COMPLETED by this update |
+The [canonical follow-up gate table](QA-01-security-report.md#deferred-and-operational-follow-up-gates) now records the existing task/gate IDs, owner/reviewer, execution status, HP disposition, required evidence and production/release relation. Reuse QA-01/FR-38, AUTH-03/AUTH-04, UI-02/T50, Q03-G01/G02/R01/R02/R03 and REL-01/REL-02; no duplicate task ID or deadline is created.
 
-SCA is a verification gap, not a reported CVE. Operational NOT RUN items are not automatically new QA-01 code blockers and are not silently accepted either. HP/QĐ must record any required scope-limited acceptance or formal deferral; this report records none on their behalf. Actual deployed security, clean-CVE status, broad browser/QA-03 acceptance and QA-01 COMPLETED remain unclaimed.
+SCA remains a verification gap, not a reported CVE or a clean-CVE result. HP's existing [formal deferral](https://github.com/hphuc032/Logistic-UTEExpress/pull/66#issuecomment-6487721811) is now recorded: it permits application-scope integration and does not waive dependency review before production. Other operational checks remain NOT RUN and routed to their existing release gates, not PASS. Actual deployed security, broad browser/QA-03 acceptance and overall QA-01 COMPLETED remain unclaimed. No new risk acceptance, deadline or policy change is made by this close-out.
