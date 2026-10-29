@@ -1,0 +1,81 @@
+{
+  "session_status": "CLOSED",
+  "owned_container_removed": true,
+  "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+  "fixture_events": [
+    {
+      "setup": "new-order",
+      "id": 1,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 2,
+      "stage": "FAILED2",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 3,
+      "stage": "DELIVERED",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 4,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 5,
+      "stage": "FAILED2",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 6,
+      "stage": "DELIVERED",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 7,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 8,
+      "stage": "FAILED2",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 9,
+      "stage": "DELIVERED",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 10,
+      "stage": "FAILED2",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 11,
+      "stage": "FAILED2",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 12,
+      "stage": "FAILED2",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    }
+  ],
+  "finished_at_utc": "2026-10-29T07:12:23.950422+00:00",
+  "scope": "UI environment lifecycle only; browser case evidence separate"
+}

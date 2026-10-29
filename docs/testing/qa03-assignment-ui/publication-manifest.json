@@ -1,5 +1,6 @@
 {
   "tested_source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+  "supplemental_source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
   "master_plan_sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
   "files": [
     {
@@ -211,6 +212,82 @@
       "sha256": "d420780427cf7e7cd74871f3270a16aea91eea39c7950222788c64ffa259cebc"
     },
     {
+      "path": "browser-rts-contract/results.json",
+      "sha256": "3cba2c27e38673dc0fd671cc8441646ec9842186ac22d31102df91ec46f2eee5"
+    },
+    {
+      "path": "browser-rts-contract/rts-contract-replay-1440-different-denied.png",
+      "sha256": "f6c6f31bc4cf692ac65d93f9d8955c407b272fa93d54a723ae8b1270bb922779"
+    },
+    {
+      "path": "browser-rts-contract/rts-contract-replay-1440-same-replayed.png",
+      "sha256": "f7d1180cd0761edb69623cf56d77e3510c2651e6dced54a1793e53f1e4ebe920"
+    },
+    {
+      "path": "browser-rts-contract/rts-contract-replay-375-different-denied.png",
+      "sha256": "55268026a084b85740c6cc568a69fe22e237ce7c4a2af124dfd59e022b54b0c9"
+    },
+    {
+      "path": "browser-rts-contract/rts-contract-replay-375-same-replayed.png",
+      "sha256": "8969b4e48149eb135498ba2dd6bbf39b7a957b8ab0a72273811d1b199ec5f983"
+    },
+    {
+      "path": "browser-rts-contract/rts-contract-replay-768-different-denied.png",
+      "sha256": "c90140a8831c081bd952a77be95bc0fbaa6d1847abb6c2b5bd1f426775fd79fb"
+    },
+    {
+      "path": "browser-rts-contract/rts-contract-replay-768-same-replayed.png",
+      "sha256": "0c367d2cdc9f3f9c0f22011e038d8f9ee9a0f1336b43a4779d2de46029606cee"
+    },
+    {
+      "path": "browser-supplemental/dataset-manifest.json",
+      "sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0"
+    },
+    {
+      "path": "browser-supplemental/manager-assignment-1440-assigned.png",
+      "sha256": "bf4f226d18131822fb9e4bc48ce8abd467fcddf860faeace5713a92d3c31a343"
+    },
+    {
+      "path": "browser-supplemental/manager-assignment-375-assigned.png",
+      "sha256": "21210fc73c89eced8194fa4a9ae8be52fc92d64963dce73d9042844e3bc9de6a"
+    },
+    {
+      "path": "browser-supplemental/manager-assignment-768-assigned.png",
+      "sha256": "041031191111b10336cea3aa9b6c42fb580e9072e49634360995a65fbc4f0b11"
+    },
+    {
+      "path": "browser-supplemental/results.json",
+      "sha256": "140b6d3628c8a6c7670f480278b8652c7e01d714a2cf9af9459c1093b0193a41"
+    },
+    {
+      "path": "browser-supplemental/review-validation-duplicate-1440-denied.png",
+      "sha256": "d2c415c794e4de6f69001b953784d8d419b91d793f61c29380048c20e254e329"
+    },
+    {
+      "path": "browser-supplemental/review-validation-duplicate-375-denied.png",
+      "sha256": "373364f9fc2d7dc27ce1a3afd206faae2b8fb1c4514e09243e776bd776879939"
+    },
+    {
+      "path": "browser-supplemental/review-validation-duplicate-768-denied.png",
+      "sha256": "bef98cc5d6b8b39b0c803546be68eb8fe72f3e98ed2914c7b1172242080e60cf"
+    },
+    {
+      "path": "browser-supplemental/rts-stale-replay-1440-failure-0.png",
+      "sha256": "7bbd8f8b4a0a7a3ca64cdb314e133ac90fcdb4a4269aeab9f35e9a6f8b6b4491"
+    },
+    {
+      "path": "browser-supplemental/rts-stale-replay-375-failure-0.png",
+      "sha256": "88b62dbe9eaaa42fe9bc8e0d34a61b0090832cc7dfee0bf47852e6bae670c89d"
+    },
+    {
+      "path": "browser-supplemental/rts-stale-replay-768-failure-0.png",
+      "sha256": "b448db2d4914770fc0194595b008e2eef8460a7ac562b656bfa610e8d0b9bb5f"
+    },
+    {
+      "path": "browser-supplemental/session-result.json",
+      "sha256": "ef0f798136dfa5346a98dce61c30d2e90f6093ecdba08a4d2316fa9d33c2d82f"
+    },
+    {
       "path": "full-run-manifest.json",
       "sha256": "08b612ac4d25f595d36d9cc9e9ad9e61e8cea0cc03cb9a6fdedd62f273713e10"
     },
@@ -232,7 +309,11 @@
     },
     {
       "path": "README.md",
-      "sha256": "8f58cf0d72475958adfcb08f6cfb204299fd4b536c44134050a4c5c148a6a187"
+      "sha256": "cc7d5cdabf88b492208b90cb66c7a3756d14b1b8402f8fcff129445ad6a6b3f4"
+    },
+    {
+      "path": "supplemental-triage.json",
+      "sha256": "614eb1264744f2559d84a7b7606462376f9a021181e4e6b908c11f88185e0d9f"
     },
     {
       "path": "supplementary-results.json",

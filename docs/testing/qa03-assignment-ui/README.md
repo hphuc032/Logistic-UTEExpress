@@ -23,3 +23,8 @@ Fixture preparation uses real HTTP commands, except initial synthetic ADMIN role
 - node_repl/CUA initialization failed with kernel-assets os error3 despite one reset. Installed Chrome plus bundled Playwright was verified and used under explicit user authorization. Do not describe the runtime as still blocking all browser execution.
 
 QA03 remains **BLOCKED**: human/manual acceptance decision, candidate review/merge, PR70 merge then final #69 sync/regression/combined seed and HP bootstrap/checkpoint acceptance. Q70-S01 remains **OPEN / Medium**, disposition **ACCEPTED RISK — LIMITED**. No PR approval/merge or QA completion is implied.
+
+
+## Supplemental coverage
+
+On docs-only source59a1df3, identical application/test/build inputs to5538405 and identical JAR, another disposable dataset exercised Manager assign/reassign, Review invalid-short400/no-row and duplicate409/exactly-one-row at all3widths:6PASS. RTS same-payload replay was initially incorrectly expected to409 in the supplementary harness;3FAIL are retained verbatim. Existing ReturnToSenderIT explicitly requires idempotent same-payload replay. A separate3case browser run then verified same-payload302 with unchanged persisted facts AND different-payload409 with unchanged facts:3PASS. No production guard or prior assertion was edited. Supplemental coverage is not another full Java/PostgreSQL run, nor human manual acceptance. Dataset and owned cleanup receipt are included.

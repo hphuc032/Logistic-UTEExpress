@@ -1,0 +1,20 @@
+{
+  "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+  "application_test_build_inputs_equal_to": "55384056538968f9e54bb2fcf1f525272c60b157",
+  "verification": "git diff src,pom.xml,mvnw,mvnw.cmd,.mvn,scripts,.github empty; same JAR sha256",
+  "supplemental_attempt": {
+    "manager_ui": 3,
+    "review_validation_duplicate": 3,
+    "pass": 6,
+    "rts_wrong_expectation_fail": 3
+  },
+  "rts_authoritative_contract": "ReturnToSenderIT.opsReceiptCancelsReleasesExactlyOnceAndReplaysWithoutChangingMoney: same payload replays; different payload conflicts",
+  "corrected_rts_cases": 3,
+  "corrected_rts_pass": 3,
+  "no_production_change": true,
+  "no_manual_human_claim": true,
+  "evidence_driver_hashes": {
+    "g01-browser-supplemental.cjs": "10080bd8902c71ecef891669e8fdd3d64ec6285d4fb3f499b53c3bc46cc7100c",
+    "g01-browser-rts-contract.cjs": "50e91c40106d4b9609b1cedcc30c4a2816c8c108882373b1476ae9c69d765665"
+  }
+}
