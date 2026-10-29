@@ -1,0 +1,58 @@
+{
+  "qa03": "BLOCKED / NOT COMPLETED",
+  "master_plan_sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+  "client_date": "2026-10-29",
+  "priority": "QA03 only; DOC03 draft73 paused",
+  "q70_s01": "ACCEPTED RISK — LIMITED",
+  "gates": [
+    {
+      "id": "Q03-G01",
+      "status": "NOT RUN / BLOCKED",
+      "owner": "QD + HP/UI; named manual executor not yet confirmed",
+      "actual_cases": 0,
+      "planned_cases": 24,
+      "widths": [
+        375,
+        768,
+        1440
+      ],
+      "latest_runtime_attempt": "node_repl @oai/sky initialization failed before UI: kernel assets os error3",
+      "needed": "Restore supported runtime or named human browser tester; accepted source/dataset + actual screenshots/results; no unit/HTTP substitution"
+    },
+    {
+      "id": "Q03-G02",
+      "status": "Existing local validation PASS; final integrated-source execution NOT RUN / HP scope acceptance PENDING",
+      "owner": "QD execution, TD business review, HP final acceptance",
+      "order": [
+        68,
+        70,
+        69
+      ],
+      "dependencies": [
+        {
+          "pr": 68,
+          "head": "0bf7a4a2167c2513ebaf210696aff6ccbd66762b",
+          "qd_review": "PASS / review5693229218",
+          "ci": "SUCCESS / run40822787913",
+          "behind_at_check": 0,
+          "remaining": "HP final decision/reviewer approvals and merge"
+        },
+        {
+          "pr": 70,
+          "remaining": "After actual68 merge: TD sync/compatibility, QD migration/old ledger/constraints; HP merge decision"
+        },
+        {
+          "pr": 69,
+          "remaining": "After68+70 merges: QD sync, full Java/PG+Node/tooling+normal/-2s seed, independent TD process rerun,34-table fingerprints; TD review and HP bootstrap/checkpoint scope acceptance"
+        }
+      ]
+    }
+  ],
+  "qa02": "IN PROGRESS",
+  "hp_scope_decisions_pending": [
+    "Synthetic initial ADMIN bootstrap and synthetic PAID prerequisite scope",
+    "Shared checkpoint-backed same-process rerun scope; do not claim cross-process lost-checkpoint recovery"
+  ],
+  "release_followups": "Target-host/TLS/upload persistence/off-host restore/production observability NOT RUN, separate release scope",
+  "no_approval_merge_or_completion_by_qd": true
+}

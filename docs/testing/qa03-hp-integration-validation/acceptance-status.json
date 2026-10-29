@@ -13,12 +13,13 @@
   "postmerge_develop_verification": "NOT RUN / dependencies unmerged",
   "qa02": "IN PROGRESS",
   "qa03": "BLOCKED",
-  "G01": "NOT RUN / BLOCKED",
+  "G01": "NOT RUN/BLOCKED; runtime retry failed, manual executor needed",
   "hp_final_acceptance": "PENDING",
   "PAY03_VNPAY": "DEFERRED",
   "approved_or_closed_or_merged_by_qd": false,
   "td_confirmation_record": "td-confirmation.json",
   "hp_risk_disposition": "APPLIED / HP FINAL DECISION",
   "td_confirmation_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/70#issuecomment-6485644464",
-  "hp_decision_record": "hp-final-decision.json"
+  "hp_decision_record": "hp-final-decision.json",
+  "current_final_gate_record": "qa03-final-gates.json"
 }

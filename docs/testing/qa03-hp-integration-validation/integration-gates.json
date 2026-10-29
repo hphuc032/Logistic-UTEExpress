@@ -1,14 +1,14 @@
 {
   "decision": "hp-final-decision.json",
   "checked_pr_heads": {
-    "68": "c593352492184da2a9ca46ebea4a55b802ac6416",
+    "68": "0bf7a4a2167c2513ebaf210696aff6ccbd66762b",
     "70": "688884cd33f4b2f4dc62f5d33a4c4002e9146660"
   },
   "pr68": {
-    "exact_head_ci": "SUCCESS / GitHub Actions run40813357695",
+    "exact_head_ci": "SUCCESS run40822787913; behind0",
     "owner_review": "TD OWNER TECHNICAL SIGNOFF received via user; READY FOR HP MERGE DECISION in stated scope",
     "existing_http_evidence": "Positive form, CSRF, validation/ownership negative cases; source-bound historical evidence retained",
-    "hp_merge_decision": "PENDING / evidence publication gate",
+    "hp_merge_decision": "PENDING HP final decision, no remaining QD technical-review action",
     "owner_reported_tests": {
       "unit": 697,
       "postgresql": 1326,
@@ -18,7 +18,18 @@
       "exact_tested_source": "Needs source-bound manifest; do not infer from signoff HEAD alone"
     },
     "hp_review": "Scoped code review COMMENTED at exact c593352; final gate requires published source-bound evidence",
-    "hp_review_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/68#pullrequestreview-5692679850"
+    "hp_review_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/68#pullrequestreview-5692679850",
+    "qd_final_delta_review": "PASS at0bf7a4a / review5693229218",
+    "qd_independent_full_evidence": {
+      "tested_source": "8705e8a865736387c96007aee7eb813a58dd1911",
+      "publication": "ccf9f32",
+      "unit": 705,
+      "postgresql": 1352,
+      "java_total": 2057,
+      "node": 33,
+      "tooling": 17,
+      "new_head_input_equality": "0bf7a4a executable inputs identical; not a new run on0bf7a4a"
+    }
   },
   "pr70": {
     "exact_head_ci": "SUCCESS",
