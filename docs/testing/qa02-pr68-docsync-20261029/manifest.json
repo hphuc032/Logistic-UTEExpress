@@ -38,7 +38,7 @@
     "source": "8705e8a865736387c96007aee7eb813a58dd1911",
     "state": "COMMENTED",
     "technical_verdict": "PASS / scoped",
-    "new_head_compatibility_acknowledgment": "NOT OBSERVED; short supplemental ACK recommended, not a fabricated extension of original review"
+    "new_head_compatibility_acknowledgment": "PASS / COMMENTED at0bf7 in separate review5693229218; old full review remains8705"
   },
   "qd_packet_public_hashes_verified": 8,
   "qd_private_raw_rehashed_by_td": false,
@@ -80,17 +80,17 @@
       "2026-10-29T05:21:55.3649971Z [INFO] BUILD SUCCESS"
     ]
   },
-  "hp_final_acceptance": "PENDING",
+  "hp_final_acceptance": "PENDING - no approval or merge performed",
   "qa02": "IN PROGRESS",
   "qa03": "NOT COMPLETED",
   "q70_s01": "ACCEPTED RISK - LIMITED",
-  "publication_mode": "Separate evidence commit with new PR code HEAD as parent; PR source unchanged by docs packet",
+  "publication_mode": "Follow-up docs-only receipt commit, parent core evidence commit b777ff4; PR source0bf7 unchanged, core packet remains immutable.",
   "transport": "Shell fetch blocked by proxy. Hash-verified connector object transfer and normal local merge; remote update force=false with expected old SHA.",
   "files": [
     {
       "path": "docs/testing/QA-02-regression-report.md",
-      "bytes": 24757,
-      "sha256": "fe67bde376fbc2473a7ed4a697fec1922a678d93c19d015cbda8c6f959718829"
+      "bytes": 25037,
+      "sha256": "aa9cc63bd1382a6a0793de893c44b8ddf687731b2e24b0e4a3304d04413b89e7"
     },
     {
       "path": "docs/testing/qa02-pr68-docsync-20261029/.gitattributes",
@@ -104,13 +104,18 @@
     },
     {
       "path": "docs/testing/qa02-pr68-docsync-20261029/compatibility-report.md",
-      "bytes": 7504,
-      "sha256": "803b3d264f04a87796994394c60c77c072d0452b41434247a59d15c7a217f409"
+      "bytes": 7973,
+      "sha256": "4ff449860a75b72ed917427c0f2864185aad5ed3d45c339ff1032c36471f4cdb"
     },
     {
       "path": "docs/testing/qa02-pr68-docsync-20261029/input-equality.json",
       "bytes": 296295,
       "sha256": "5cd5b57cffc5fa6109da69ba55a7577b0bf6da49d264078cf7753d26e27ffc56"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-docsync-20261029/qd-docsync-review.json",
+      "bytes": 1777,
+      "sha256": "c375c58bed9cc0207697229c272e4b5f26bdabf616107d2d11b3d91e52a2886b"
     },
     {
       "path": "docs/testing/qa02-pr68-docsync-20261029/qd-original-review.json",
@@ -127,5 +132,18 @@
       "bytes": 5616,
       "sha256": "80e88200bb7c12fe34c1bdd1d496bcd89e20cc65a94c8857148a759a8fd50708"
     }
-  ]
+  ],
+  "supplemental_receipt_collected_utc": "2026-10-29T05:27:44.873403+00:00",
+  "core_evidence_commit": "b777ff4424c22a0f4bb428c4ece2fdbe3260e8f0",
+  "qd_new_head_review": {
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/68#pullrequestreview-5693229218",
+    "id": 5693229218,
+    "source": "0bf7a4a2167c2513ebaf210696aff6ccbd66762b",
+    "state": "COMMENTED",
+    "technical_verdict": "PASS / documentation-sync compatibility; no new PostgreSQL execution",
+    "author": "datcaq"
+  },
+  "handoff_status": "READY FOR HP FINAL ACCEPTANCE / MERGE DECISION - bounded PR68 technical scope",
+  "g01_manual_browser": "Separate gate BLOCKED per QD supported runtime initialization failure; not closed by these tests",
+  "input_proof_status_note": "The immutable input-equality snapshot predates review5693229218 and retains its then-pending review observation. Current review disposition is qd_new_head_review; input hashes and inheritance scope are unchanged."
 }
