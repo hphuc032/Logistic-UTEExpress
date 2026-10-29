@@ -53,6 +53,10 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
     private final com.uteexpress.shipping.service.ShipmentFulfillmentService shipments;
     private final com.uteexpress.shipping.service.ReturnToSenderService senderReturns;
     private final com.uteexpress.payment.service.PaymentReadService senderReturnPayments;
+    private com.uteexpress.payment.service.VnpayPaymentService vnpay;
+
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    public void setVnpay(com.uteexpress.payment.service.VnpayPaymentService vnpay) { this.vnpay = vnpay; }
 
     public OrderPlacementService(OrderRepository orders, OrderItemRepository items,
             OrderStatusHistoryRepository history, CurrentUserProvider users,
@@ -285,8 +289,8 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
             if (!existing.get().getRequestHash().equals(hash)) throw new ApplicationException(ErrorCode.CONFLICT);
             return result(existing.get(), true);
         }
-        // ONLINE remains outside this placement contract.
-        if (request.paymentMethod() != CheckoutRequest.PaymentMethod.COD) {
+        if (request.paymentMethod() != CheckoutRequest.PaymentMethod.COD
+                && (request.paymentMethod() != CheckoutRequest.PaymentMethod.ONLINE || vnpay == null)) {
             throw new ApplicationException(ErrorCode.INVALID_REQUEST);
         }
         var selected = carts.lockSelectedItemsForCheckout();
@@ -318,7 +322,11 @@ public class OrderPlacementService extends OrderLifecycleServiceImpl {
         inventory.decrease(selected.stream().map(line -> new StockQuantity(line.productId(), line.quantity())).toList());
         Order order = persistNew(buyer, "ORD-" + UUID.randomUUID(), key, hash, snapshot, checkoutAt);
         if (voucher != null) vouchers.recordUsage(voucher, order.getId());
-        payments.initializeCodForNewOrder(order.getId());
+        if (request.paymentMethod() == CheckoutRequest.PaymentMethod.COD) {
+            payments.initializeCodForNewOrder(order.getId());
+        } else {
+            vnpay.initializeForNewOrder(order.getId());
+        }
         carts.removeCheckedOutItems(selected);
         return result(order, false);
     }

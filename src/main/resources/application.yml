@@ -64,6 +64,12 @@ management:
     health:
       show-details: never
 uteexpress:
+  payment:
+    vnpay:
+      enabled: ${VNPAY_ENABLED:false}
+      tmn-code: ${VNPAY_TMN_CODE:${TMN_CODE:}}
+      hash-secret: ${VNPAY_HASH_SECRET:${HASH_SECRET:}}
+      return-url: ${VNPAY_RETURN_URL:https://uteexpress-web.onrender.com/payments/vnpay/return}
   security:
     jwt:
       issuer: uteexpress

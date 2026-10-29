@@ -11,6 +11,12 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface PaymentRepository extends JpaRepository<Payment, Long> {
+    // Resolve only scalar routing facts before taking the parent lock; never preload stale Payment entities.
+    @Query("select p.orderId from Payment p where p.attemptKey = :reference")
+    Optional<Long> findOrderIdByAttemptKey(@Param("reference") String reference);
+
+    boolean existsByProviderReference(String reference);
+
     java.util.List<Payment> findByOrderIdOrderByCreatedAtAscIdAsc(Long orderId);
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)

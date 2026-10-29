@@ -83,4 +83,28 @@ public class Payment {
         updatedAt = at;
     }
 
+    /** Called only by the verified IPN boundary while Order and Payment are locked. */
+    public void confirmVnpay(BigDecimal authoritativeAmount, String reference, Instant at) {
+        if (method != CheckoutRequest.PaymentMethod.ONLINE || status != PaymentStatus.UNPAID
+                || paidAt != null || expiredAt != null || providerReference != null
+                || reference == null || !reference.matches("VNPAY:[0-9]{1,19}") || at == null
+                || Money.requireAmount(amount).compareTo(Money.requireAmount(authoritativeAmount)) != 0) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+        providerReference = reference;
+        status = PaymentStatus.PAID;
+        paidAt = at;
+        updatedAt = at;
+    }
+
+    /** A verified final unsuccessful IPN closes this single sandbox attempt. */
+    public void closeVnpayAttempt(Instant at) {
+        if (method != CheckoutRequest.PaymentMethod.ONLINE || status != PaymentStatus.UNPAID
+                || paidAt != null || expiredAt != null || at == null) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+        expiredAt = at;
+        updatedAt = at;
+    }
+
 }

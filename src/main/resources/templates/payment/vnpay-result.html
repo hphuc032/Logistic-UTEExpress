@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Kết quả VNPAY Sandbox | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="vnpay-title">
+    <div class="app-surface p-3">
+        <h1 id="vnpay-title">Kết quả thanh toán VNPAY Sandbox</h1>
+        <p th:if="${result.state == 'INVALID'}" role="alert">Không thể xác minh thông tin trả về. Vui lòng đăng nhập và kiểm tra đơn hàng.</p>
+        <p th:if="${result.state == 'PAID'}" role="status">Thanh toán thành công. Hệ thống đã nhận và xác minh thông báo từ VNPAY.</p>
+        <div th:if="${result.state == 'WAITING'}" role="status">
+            <p>Đang chờ thông báo xác nhận từ VNPAY. Đơn hàng chưa được ghi nhận thanh toán thành công.</p>
+            <p>Nếu bạn đã hủy hoặc thanh toán không thành công, vui lòng kiểm tra lại trạng thái đơn hàng.</p>
+            <button class="btn btn-app-secondary" type="button" onclick="window.location.reload()">Kiểm tra lại kết quả</button>
+        </div>
+        <p th:if="${result.state == 'CLOSED'}" role="status">Lần thanh toán này không thành công hoặc đã kết thúc. Đơn hàng chưa được thanh toán.</p>
+        <p th:if="${result.state == 'UNAVAILABLE'}" role="alert">Liên kết thanh toán đã hết hạn hoặc đơn hàng không còn chấp nhận thanh toán. Vui lòng xem trạng thái đơn hàng.</p>
+        <a th:if="${result.valid}" class="btn btn-app-primary" th:href="@{/orders/{id}(id=${result.orderId})}">Xem đơn hàng</a>
+        <a class="btn btn-app-secondary" th:href="@{/orders}">Danh sách đơn hàng</a>
+    </div>
+</section></body></html>

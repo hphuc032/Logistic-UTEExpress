@@ -67,6 +67,8 @@ public class SecurityConfig {
                         // Rotate at successful login instead of deleting the browser's token on every restore.
                         .sessionAuthenticationStrategy(new org.springframework.security.web.authentication.session.NullAuthenticatedSessionStrategy()))
                 .authorizeHttpRequests(authorize -> authorize
+                        .requestMatchers(org.springframework.http.HttpMethod.GET,
+                                "/payments/vnpay/return", "/payments/vnpay/ipn").permitAll()
                         .requestMatchers(PUBLIC_ROUTES).permitAll()
                         .requestMatchers("/user/**").hasAnyAuthority(
                                 RoleCode.USER.authority(), RoleCode.VENDOR.authority())

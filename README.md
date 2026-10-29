@@ -55,6 +55,9 @@ Do not set `ddl-auto=update/create` or enable Flyway clean/baseline-on-migrate.
 
 ## Checks
 
+PAY-03 VNPAY Sandbox setup, Render callbacks and demo steps:
+[PAY-03 Sandbox guide](docs/PAY-03-vnpay-sandbox.md).
+
 ```powershell
 .\mvnw.cmd test
 .\mvnw.cmd package

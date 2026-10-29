@@ -70,13 +70,17 @@
                 <input type="hidden" name="addressId" th:value="${addressId}">
                 <input type="hidden" name="shippingProviderId" th:value="${quote.shippingProviderId}">
                 <input type="hidden" name="shippingServiceCode" th:value="${quote.shippingServiceSnapshot}">
-                <input type="hidden" name="paymentMethod" value="COD">
+                <label class="form-label" for="payment-method">Phương thức thanh toán</label>
+                <select id="payment-method" name="paymentMethod" class="form-select mb-3">
+                    <option value="COD">Thanh toán khi nhận hàng (COD)</option>
+                    <option th:if="${vnpayEnabled == true}" value="ONLINE">VNPAY Sandbox</option>
+                </select>
                 <input th:if="${quote.voucher != null}" type="hidden" name="voucherCode" th:value="${quote.voucher.code}">
                 <th:block th:each="item, iteration : ${quote.items}">
                     <input type="hidden" th:name="|items[${iteration.index}].productId|" th:value="${item.productId}">
                     <input type="hidden" th:name="|items[${iteration.index}].quantity|" th:value="${item.quantity}">
                 </th:block>
-                <p>Thanh toán khi nhận hàng (COD). Giá, phí vận chuyển và tồn kho được kiểm tra lại khi đặt hàng.</p>
+                <p>Giá, phí vận chuyển và tồn kho được kiểm tra lại khi đặt hàng.</p>
                 <button type="submit" class="btn btn-app-primary">Đặt hàng</button>
             </form>
         </section>

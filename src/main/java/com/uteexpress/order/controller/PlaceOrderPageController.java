@@ -27,7 +27,11 @@ public class PlaceOrderPageController {
     String place(@Valid @ModelAttribute("placeOrderForm") CheckoutRequest request, BindingResult binding,
             RedirectAttributes redirect) {
         if (binding.hasErrors()) throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
-        redirect.addFlashAttribute("placedOrder", placement.placeOrder(request));
+        var placed = placement.placeOrder(request);
+        if (request.paymentMethod() == CheckoutRequest.PaymentMethod.ONLINE) {
+            return "redirect:/orders/" + placed.orderId() + "/payments/vnpay";
+        }
+        redirect.addFlashAttribute("placedOrder", placed);
         return "redirect:/user/checkout/view";
     }
 

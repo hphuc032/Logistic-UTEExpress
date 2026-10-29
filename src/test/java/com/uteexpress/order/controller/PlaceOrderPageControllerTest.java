@@ -61,4 +61,15 @@ class PlaceOrderPageControllerTest {
         verify(placement).placeOrder(captor.capture());
         assertThat(captor.getValue().items()).containsExactly(new com.uteexpress.checkout.dto.CheckoutRequest.Item(10L, 2));
     }
+
+    @Test void onlinePlacementRedirectsToThePersistedOrderPaymentAttempt() throws Exception {
+        when(placement.placeOrder(any())).thenReturn(new PlaceOrderResult(
+                1L, "ORD-test", OrderStatus.NEW, new BigDecimal("267000.00"), Instant.EPOCH, false));
+        mvc.perform(post("/user/checkout/view/place-order")
+                .param("checkoutKey", "key").param("addressId", "2").param("shippingProviderId", "3")
+                .param("shippingServiceCode", "STANDARD").param("paymentMethod", "ONLINE")
+                .param("items[0].productId", "10").param("items[0].quantity", "2"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/orders/1/payments/vnpay"));
+    }
 }

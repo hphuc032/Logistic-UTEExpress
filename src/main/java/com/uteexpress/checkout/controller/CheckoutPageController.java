@@ -16,6 +16,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @RequestMapping("/user/checkout/view")
 public class CheckoutPageController {
     private final CheckoutQuoteService checkout;
+    @org.springframework.beans.factory.annotation.Value("${uteexpress.payment.vnpay.enabled:false}")
+    private boolean vnpayEnabled;
     public CheckoutPageController(CheckoutQuoteService checkout) { this.checkout = checkout; }
 
     @InitBinder("quoteForm")
@@ -23,6 +25,7 @@ public class CheckoutPageController {
 
     @GetMapping
     String view(@RequestParam(required = false) Long addressId, Model model) {
+        model.addAttribute("vnpayEnabled", vnpayEnabled);
         var addresses = checkout.addresses();
         model.addAttribute("addresses", addresses);
         Long chosen = addressId != null ? addressId : addresses.isEmpty() ? null : addresses.getFirst().id();
