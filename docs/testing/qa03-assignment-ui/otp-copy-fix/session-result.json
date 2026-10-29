@@ -1,0 +1,81 @@
+{
+  "session_status": "CLOSED",
+  "owned_container_removed": true,
+  "source_sha": "53fbf923009c1d9da2ae0c73440b6a6de14904e5",
+  "fixture_events": [
+    {
+      "setup": "new-order",
+      "id": 1,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 2,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 3,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 4,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 5,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 6,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 7,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 8,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 9,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 10,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 11,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 12,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    }
+  ],
+  "finished_at_utc": "2026-10-29T09:34:22.452261+00:00",
+  "scope": "UI environment lifecycle only; browser case evidence separate"
+}
