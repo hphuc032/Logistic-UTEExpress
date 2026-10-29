@@ -1,15 +1,15 @@
-# PROMO-03 findings and decisions
+# PROMO-03 findings / current disposition
 
-| ID | Type | Status | Evidence / action | Owner gate |
-|---|---|---|---|---|
-| PROMO03-C01 | Required contract slice | OPEN / BLOCKED | Plan PROMO-03 has both promotions and vouchers. HP requests Admin product-promotion expansion after TD/QĐ boundary agreement. Existing Vendor-only writer cannot be widened implicitly; proposed decisions in owner-handoff.md | TD business + QĐ adapter agreement, HP boundary acceptance; then separate implementation/testing |
-| PROMO03-D01 | Plan variance | HP DECISION RECORDED, implementation awaiting review | Manager limits in Plan replaced by explicit ADMIN-only management; MANAGER DENY ALL; no ADMIN-06 exception inheritance | TD/QĐ verify enforcement, HP final application acceptance |
-| PROMO03-D02 | Plan variance | HP DECISION RECORDED, implementation awaiting review | I7 used-voucher wording versus PROMO-01 code reconciled by HP: preserve current historical mutability, including RELEASED usage | TD validates used-rule and snapshot evidence |
-| PROMO03-R01 | Review gate | PENDING | PLATFORM implementation and evidence are HP-authored proposal, not independent TD/QĐ approval | TD service review; QĐ adapter/security/audit review; HP final acceptance |
-| PROMO03-E01 | Evidence limitation | NOT RUN | No new independent human/browser run, production deployment, live gateway/SMTP/SCA check claimed | QĐ can request interactive evidence; unrelated QA/release gates stay open |
+| ID | Current status | Evidence / owner gate |
+|---|---|---|
+| PROMO03-C01 | IMPLEMENTED under HP final direction; independent boundary review PENDING | Admin Product-scoped contract in contract-decision.md. Former implementation BLOCKED status is superseded by HP's direct completion instruction; no TD/QĐ approval is invented |
+| PROMO03-D01 | HP DECISION RECORDED | ADMIN only, Manager DENY; no ADMIN-06 exception inheritance |
+| PROMO03-D02 | HP DECISION RECORDED | Preserve PROMO-01 used/RELEASED-history monetary immutability; quota only increases, window/enabled editable |
+| PROMO03-R01 | OPEN — FINAL SOURCE REVIEW | Earlier scoped static review was67c7d54. New Product writer/facade/Shop guard/confirmation delta requires TD/QĐ formal review before protected merge |
+| PROMO03-E01 | Automated browser evidence ADDED; human/independent runtime NOT RUN | 33Chrome cases,3viewports with DB/log/screenshot evidence. Original raw evidence not independently verified by QĐ |
+| PROMO03-UX01 | IMPLEMENTED / AUTOMATED VERIFIED | Disable confirmation via GETpage; Cancel produces noPOST/DBchange. Promotion invalid focus/aria feedback verified. Low suggestions addressed without new security exemptions |
+| PROMO03-E02 | RESOLVED — TEST FIXTURE, history preserved | Original voucher full run had fixture Account/Voucher inversion; fixed buyer-first and fresh runPASS. No production lock weakening |
+| PROMO03-E03 | RESOLVED — NEW TEST SETUP | Wrong CheckoutRequest package and missing moderation reason in new fixtures corrected; new focused/full results source-bound |
+| PROMO03-E04 | RESOLVED — BROWSER HARNESS | Mobile menu not expanded and non-unique CSRF selector; failed attempts preserved. No production fix needed; final33PASS |
 
-No historical finding is closed by this branch. No claim of vulnerability-free software is made. No old QA-02/03, FR-10 Catalog finding or Q70-S01 disposition changes. PLATFORM writes reuse existing entity/checkout rules and preserve historical rows; final actual test results are in test-results.json and report.md.
-
-## Preserved failed attempt PROMO03-E02
-
-Initial full run on `61b55d4` ended with 1 PostgreSQL test error, 0 assertion failures: the synthetic lock-holder fixture reused Admin as buyer and inserted the buyer FK after Voucher, inventing an Account/Voucher inversion absent from actual checkout. Fixed in `cd3651f` using a distinct USER buyer and buyer-first holder lock. Production lock/authorization code is unchanged. The original failed receipt/log/JUnit reports are retained locally and hashed in test-results.json. Focused recheck and a fresh full configured suite passed on the corrected source; only that final clean run is the acceptance regression. Status: RESOLVED — TEST FIXTURE; not a production vulnerability claim.
+No Critical/High source finding is claimed independently validated here. Existing QA02/QA03/Q70-S01/FR10 findings and risk gates are unchanged. Earlier statuses and evidence are retained in history/voucher-67c7d54, not deleted or relabelled.

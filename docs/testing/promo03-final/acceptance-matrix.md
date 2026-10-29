@@ -1,25 +1,22 @@
-# PROMO-03 acceptance matrix
+# PROMO-03 current acceptance matrix
 
-All PASS below means local source-bound execution, not independent TD/QĐ review. Tested SHA and exact class/report hashes: test-results.json. No browser PASS is inferred from MockMvc.
+All runtime PASS below is local execution on15fb1dd, not independent owner approval. Original packet preserved in history/.
 
-| Contract | Evidence | Actual | Owner status |
-|---|---|---|---|
-| ADMIN list/detail/new/edit, PLATFORM only | PlatformVoucherManagementIT.adminListDetailNewAndEditRenderOnlyPlatformWithCsrfAndVersion | PASS | TD/QĐ review pending |
-| Create server scope/null shop/actor/canonical code/timezone/audit | createCanonicalizesAndDerivesScopeShopAndActorWithAtomicAudit | PASS | Review pending |
-| Cross-role route and direct service denial | everyRouteRejectsOtherRoles; methodSecurityRejectsDirectServiceInvocation | PASS | Review pending |
-| Persisted account status/role revocation, including stale cached JPA user after lock wait | stalePrincipalCannotAuthorizePersistedInactiveOrRevokedAdmin; accountLockWaitRechecksRevocationCommittedBeforeManagement | PASS | QĐ review pending |
-| Missing/invalid CSRF, forged scope/shop/creator/usage/amount/id | missingAndInvalidCsrfRejectEveryMutation; forgedFieldsCannotCreateOrUpdateOrDisable | PASS | QĐ review pending |
-| Invalid window/percentage/fixed money/quotas; duplicate canonical SHOP code | invalidDefinitionDoesNotPersist; duplicateAcrossShopScopeAndInvalidFixedAmountRejected | PASS | TD review pending |
-| Unused update, stale update/disable, idempotent current-version disable | unusedUpdateAndDisableRequireFreshVersionsAndAuditOnlyCommittedChanges | PASS | Review pending |
-| Used and RELEASED-history restrictions; immutable Orders/usages | usedRulesReuseExistingModelAndPreserveHistoricalRows | PASS | HP rule decision recorded; TD verification pending |
-| Cross-scope ID denial | shopResourceCannotBeManagedThroughPlatform | PASS | Review pending |
-| Audit failure rolls back all three management writes | auditFailureRollsBackCreateUpdateAndDisable (real PostgreSQL trigger) | PASS | QĐ review pending |
-| Voucher lock wait refresh sees newly committed usage | managementSeesUsageCommittedByCheckoutWhileWaitingForVoucherLock | PASS | TD review pending |
-| Real checkout transaction consumes quota while Admin update waits | VoucherCheckoutIT.realCheckoutQuotaTransactionSerializesAdminUpdateAndExposesNewUsageAfterWait | PASS | TD review pending |
-| Admin-created PLATFORM quote/place NEW, authoritative discount/commission, disable future use; immutable snapshots and cancellation release | VoucherCheckoutIT.adminCreatedPlatformVoucherUsesExistingCheckoutAndDisablePreservesSnapshotsAndCancellation | PASS | TD review pending |
-| Real JWT cookie + rendered CSRF create/update/disable | realJwtCookieAndRenderedCsrfTokensAuthorizeCreateEditAndDisableForms | PASS (HTTP/MockMvc) | QĐ review pending |
-| Existing SHOP and product pricing, Order/Payment/Refund ledger, cancellation release-once and no post-delivery quota restoration | Full configured PostgreSQL suite, notably VendorVoucherIT, ProductPromotionIT, VoucherCheckoutIT, ManualCodRefundIT, CancelledPaidRefundIT | PASS | Independent owner review pending |
-| Architecture/unit/JS regression; package | clean verify and four Node suites | PASS; counts in test-results.json | Independent review pending |
-| Admin product-promotion management | Plan and HP decision; proposed boundary in owner-handoff.md | BLOCKED — exact TD/QĐ boundary agreement required, NOT IMPLEMENTED | TD/QĐ/HP |
-| Interactive browser/human UI review | None in this task | NOT RUN | QĐ determines review evidence |
-| Final acceptance / PROMO-03 COMPLETED | No final owner approvals | NOT ACCEPTED / NOT COMPLETED | HP |
+| Contract | Actual evidence | Status |
+|---|---|---|
+|ADMIN list/create/update/disable PLATFORM|PlatformVoucherManagementIT55;VoucherCheckoutIT59|PASS — owner review pending|
+|ADMIN Product management/role denial/forgery/validation/version/target eligibility|AdminProductPromotionIT41|PASS — owner review pending|
+|Audit failure atomic rollback|AdminProductPromotionIT;PlatformVoucherManagementIT|PASS — owner review pending|
+|Current actor/Shop freshness after observed lock waits|PlatformVoucherManagementIT;AdminProductPromotionIT|PASS — owner review pending|
+|Product sentinel Admin/Vendor scheduling and checkout commit/rollback/snapshot|AdminProductPromotionIT;ProductPromotionIT59|PASS — owner review pending|
+|Used voucher REDEEMED/RELEASED rule and cancellation/refund compatibility|PlatformVoucherManagementIT;VoucherCheckoutIT;ManualCodRefundIT62;CancelledPaidRefundIT61|PASS — owner review pending|
+|Vendor SHOP/schedule compatibility|VendorVoucherIT73;ProductPromotionIT59|PASS — owner review pending|
+|Full configured Java/architecture/PostgreSQL/package|2226tests,0failure/error/skip;clean verify exit0|PASS — owner review pending|
+|JS regression|48/48existing tests PASS|PASS — owner review pending|
+|Browser mobile375/tablet768/desktop1440|11cases each=33PASS;browser/|PASS — owner review pending|
+|Confirmation Cancel/noPOST/noDBchange, CSRF redirect/flash, focus and containment|Chrome +PostgreSQL matched evidence|PASS — owner review pending|
+
+|Final-source TD/QĐ review/formal GitHub approval|Earlier opinions cover67c7d54only|PENDING|
+|HP merge direction|Direct human completion/merge instruction|AUTHORIZED; protection not bypassed|
+|Manual independent runtime/signature|Not executed in this task|NOT RUN|
+|QA02/03/Q70/release|No status mutation|UNCHANGED|

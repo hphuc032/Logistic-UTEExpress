@@ -1,0 +1,3104 @@
+{
+  "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+  "tree": "379b6beeb4586176e9a9e873680014359b70f859",
+  "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78",
+  "mode": "AUTOMATED CHROME; not independent human/owner review",
+  "startedUtc": "2026-10-29T19:45:36.717Z",
+  "cases": [
+    {
+      "id": "promotion-navigation-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:45:39.911Z",
+      "observations": {
+        "product": 1,
+        "csrfPresent": true
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1/new",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/dashboard",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/new",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-navigation-375.png",
+      "screenshotSha256": "0ad8bcef093a0f336f2b0068a5339cceac95989821dc401b503e5d3c90da9854",
+      "finishedUtc": "2026-10-29T19:45:45.014Z"
+    },
+    {
+      "id": "promotion-validation-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:45:45.017Z",
+      "observations": {
+        "validationVisible": true,
+        "focusOnInvalid": true
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-validation-375.png",
+      "screenshotSha256": "03037f18825fdea937c369a0e3880a32bb727b69cedb92849aad821c1889932a",
+      "finishedUtc": "2026-10-29T19:45:46.237Z"
+    },
+    {
+      "id": "promotion-create-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:45:46.238Z",
+      "observations": {
+        "promoId": 1,
+        "state": {
+          "active": true,
+          "version": 0,
+          "createdByIsActor": true,
+          "auditCount": 1
+        }
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1/1/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/1/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-create-375.png",
+      "screenshotSha256": "ea11aa0151cd369641534449ed6c5033cddf816feb637da2cca10a01277a7d0b",
+      "finishedUtc": "2026-10-29T19:45:47.603Z"
+    },
+    {
+      "id": "promotion-update-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:45:47.603Z",
+      "observations": {
+        "state": {
+          "active": true,
+          "version": 1,
+          "createdByIsActor": true,
+          "auditCount": 2
+        }
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1/1/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1/1/update",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/1/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-update-375.png",
+      "screenshotSha256": "07bd36e23ee94cdd36901958e2cbed926e91073c10bcefdd03e5dbcaefefb355",
+      "finishedUtc": "2026-10-29T19:45:49.243Z"
+    },
+    {
+      "id": "promotion-cancel-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:45:49.244Z",
+      "observations": {
+        "noPost": true,
+        "stateUnchanged": true,
+        "keyboardFocus": true,
+        "confirmationScreenshot": {
+          "path": "screenshots/promotion-confirmation-375.png",
+          "sha256": "cf0e20518d6f62c3ad0643a21483cbbbf8203b692950303fe7824614cddce271",
+          "route": "/admin/promotions/products/1/1/disable"
+        }
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/1/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-cancel-375.png",
+      "screenshotSha256": "a58d75a32bc2c53ecef1e82665e0cc1a423c06570ed766210c187564b50cb085",
+      "finishedUtc": "2026-10-29T19:45:52.241Z"
+    },
+    {
+      "id": "promotion-disable-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:45:52.243Z",
+      "observations": {
+        "state": {
+          "active": false,
+          "version": 2,
+          "createdByIsActor": true,
+          "auditCount": 3
+        }
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/1/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1/1/disable",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-disable-375.png",
+      "screenshotSha256": "de5cedcf87f315be282c2fc054e677b4f62a04d250086f54008cf5c90879b6dc",
+      "finishedUtc": "2026-10-29T19:45:54.249Z"
+    },
+    {
+      "id": "voucher-navigation-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:45:54.249Z",
+      "observations": {
+        "csrfPresent": true
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers/new",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/dashboard",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/new",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-navigation-375.png",
+      "screenshotSha256": "16cc2f98d306d00c0c6280be3e424b5f5d5b4a9c8e7c4b3e75af92b108a37473",
+      "finishedUtc": "2026-10-29T19:45:57.378Z"
+    },
+    {
+      "id": "voucher-create-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:45:57.379Z",
+      "observations": {
+        "voucherId": 1,
+        "state": {
+          "active": true,
+          "version": 0,
+          "createdByIsActor": true,
+          "auditCount": 1
+        }
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers/1/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/vouchers",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/1/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-create-375.png",
+      "screenshotSha256": "051fa495e2e0a9abee40314293e43fd41c59f1802ec0c060313cd4093c406588",
+      "finishedUtc": "2026-10-29T19:46:00.073Z"
+    },
+    {
+      "id": "voucher-update-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:46:00.074Z",
+      "observations": {
+        "state": {
+          "active": true,
+          "version": 1,
+          "createdByIsActor": true,
+          "auditCount": 2
+        }
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers/1/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/vouchers/1/update",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/1/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-update-375.png",
+      "screenshotSha256": "79294554ccc5c954696a85daf9f7c5408949f8807c5e8edfe6cac0dabd161d00",
+      "finishedUtc": "2026-10-29T19:46:01.586Z"
+    },
+    {
+      "id": "voucher-cancel-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:46:01.587Z",
+      "observations": {
+        "noPost": true,
+        "stateUnchanged": true,
+        "confirmationScreenshot": {
+          "path": "screenshots/voucher-confirmation-375.png",
+          "sha256": "8a10d210f52643db4b5e13356a9cc5f18f1478c1190c19ad198a8163b98e1f24",
+          "route": "/admin/vouchers/1/disable"
+        }
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/1/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-cancel-375.png",
+      "screenshotSha256": "e561656a62eb08cd21e36b3806968748c0c7709d49cb0b7f1a63eb3c91973d20",
+      "finishedUtc": "2026-10-29T19:46:04.441Z"
+    },
+    {
+      "id": "voucher-disable-375",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T19:46:04.442Z",
+      "observations": {
+        "state": {
+          "active": false,
+          "version": 2,
+          "createdByIsActor": true,
+          "auditCount": 3
+        }
+      },
+      "containment": {
+        "viewport": 375,
+        "scroll": 375
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/1/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/admin/vouchers/1/disable",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-disable-375.png",
+      "screenshotSha256": "5a4f4fffa59a323e0774aa5d83b3157da608cd4c990a11f953cdab4fd51c922a",
+      "finishedUtc": "2026-10-29T19:46:06.310Z"
+    },
+    {
+      "id": "promotion-navigation-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:08.398Z",
+      "observations": {
+        "product": 1,
+        "csrfPresent": true
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1/new",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/dashboard",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/new",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-navigation-768.png",
+      "screenshotSha256": "ed884dd5c93a5273b26c60fae9147c7214d8bb27772937d641d2a300725a499e",
+      "finishedUtc": "2026-10-29T19:46:13.027Z"
+    },
+    {
+      "id": "promotion-validation-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:13.028Z",
+      "observations": {
+        "validationVisible": true,
+        "focusOnInvalid": true
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-validation-768.png",
+      "screenshotSha256": "fd734b559f267f5774a360d79d61c8b7ed15c2d72f8b3576e348e34dbda3b726",
+      "finishedUtc": "2026-10-29T19:46:13.867Z"
+    },
+    {
+      "id": "promotion-create-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:13.868Z",
+      "observations": {
+        "promoId": 2,
+        "state": {
+          "active": true,
+          "version": 0,
+          "createdByIsActor": true,
+          "auditCount": 1
+        }
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1/2/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/2/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-create-768.png",
+      "screenshotSha256": "6e331181d3ae095c7662dc4e032579bbd751b5ba6ff1e6a79dd372b2ca98d12e",
+      "finishedUtc": "2026-10-29T19:46:15.084Z"
+    },
+    {
+      "id": "promotion-update-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:15.085Z",
+      "observations": {
+        "state": {
+          "active": true,
+          "version": 1,
+          "createdByIsActor": true,
+          "auditCount": 2
+        }
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1/2/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1/2/update",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/2/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-update-768.png",
+      "screenshotSha256": "fe91f6fbe4390060438aed17353c705f677c0113fb4f4af5b87dd3b0d64726f2",
+      "finishedUtc": "2026-10-29T19:46:16.474Z"
+    },
+    {
+      "id": "promotion-cancel-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:16.474Z",
+      "observations": {
+        "noPost": true,
+        "stateUnchanged": true,
+        "keyboardFocus": true,
+        "confirmationScreenshot": {
+          "path": "screenshots/promotion-confirmation-768.png",
+          "sha256": "6014e58f243ec8ba0bf651ca0acb20b638b8f0cce83d5cb0d0f0378b8d20ac5e",
+          "route": "/admin/promotions/products/1/2/disable"
+        }
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/2/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-cancel-768.png",
+      "screenshotSha256": "08a7cc984203f9eeb523941d9a0f4433a585c1a0f154764870fff49cec77bc97",
+      "finishedUtc": "2026-10-29T19:46:19.371Z"
+    },
+    {
+      "id": "promotion-disable-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:19.372Z",
+      "observations": {
+        "state": {
+          "active": false,
+          "version": 2,
+          "createdByIsActor": true,
+          "auditCount": 3
+        }
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/2/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1/2/disable",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-disable-768.png",
+      "screenshotSha256": "12aa900d00b1bd53e538c22299598b7592cd2f93db480c3083c69dcebefc1ca7",
+      "finishedUtc": "2026-10-29T19:46:21.222Z"
+    },
+    {
+      "id": "voucher-navigation-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:21.223Z",
+      "observations": {
+        "csrfPresent": true
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers/new",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/dashboard",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/new",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-navigation-768.png",
+      "screenshotSha256": "ecd4b8334b12b46f546a45758e6a5c99a1c1540c0fc071150942c7ddee158300",
+      "finishedUtc": "2026-10-29T19:46:24.174Z"
+    },
+    {
+      "id": "voucher-create-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:24.175Z",
+      "observations": {
+        "voucherId": 2,
+        "state": {
+          "active": true,
+          "version": 0,
+          "createdByIsActor": true,
+          "auditCount": 1
+        }
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers/2/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/vouchers",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/2/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-create-768.png",
+      "screenshotSha256": "963bb4ff9ec683aef50bb065031f35699cb537251d30aa9e915dc57ee7d63c63",
+      "finishedUtc": "2026-10-29T19:46:26.181Z"
+    },
+    {
+      "id": "voucher-update-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:26.182Z",
+      "observations": {
+        "state": {
+          "active": true,
+          "version": 1,
+          "createdByIsActor": true,
+          "auditCount": 2
+        }
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers/2/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/vouchers/2/update",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/2/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-update-768.png",
+      "screenshotSha256": "ee2b66502b89b124ff04166b158809f1b18672993ed1382f3b780ca1236e7479",
+      "finishedUtc": "2026-10-29T19:46:27.628Z"
+    },
+    {
+      "id": "voucher-cancel-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:27.629Z",
+      "observations": {
+        "noPost": true,
+        "stateUnchanged": true,
+        "confirmationScreenshot": {
+          "path": "screenshots/voucher-confirmation-768.png",
+          "sha256": "79cf6968d2089f032f1a693d1da3d6f1e8abd5d8a33b9696b212f69e4df8854d",
+          "route": "/admin/vouchers/2/disable"
+        }
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/2/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-cancel-768.png",
+      "screenshotSha256": "416496130dff1f72dd3204234fa4c4074bd751faf0eccbdf6cd802e375dc03b5",
+      "finishedUtc": "2026-10-29T19:46:30.493Z"
+    },
+    {
+      "id": "voucher-disable-768",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T19:46:30.494Z",
+      "observations": {
+        "state": {
+          "active": false,
+          "version": 2,
+          "createdByIsActor": true,
+          "auditCount": 3
+        }
+      },
+      "containment": {
+        "viewport": 768,
+        "scroll": 768
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/2/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/admin/vouchers/2/disable",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-disable-768.png",
+      "screenshotSha256": "5d71f9be690282eff289fba27ac357784ca5bb0fe78dd2e850bcaaec9d28f340",
+      "finishedUtc": "2026-10-29T19:46:32.307Z"
+    },
+    {
+      "id": "promotion-navigation-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:34.182Z",
+      "observations": {
+        "product": 1,
+        "csrfPresent": true
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1/new",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/dashboard",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/new",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-navigation-1440.png",
+      "screenshotSha256": "b3ace0a91948fab6000214ea34393a7b7447a9e8b4663853d41d0cf63d30c7e5",
+      "finishedUtc": "2026-10-29T19:46:37.867Z"
+    },
+    {
+      "id": "promotion-validation-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:37.868Z",
+      "observations": {
+        "validationVisible": true,
+        "focusOnInvalid": true
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-validation-1440.png",
+      "screenshotSha256": "8e4d30d0978269f824966782e67f16d3fa24cad10c65335e12976f07d490f0ca",
+      "finishedUtc": "2026-10-29T19:46:38.700Z"
+    },
+    {
+      "id": "promotion-create-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:38.702Z",
+      "observations": {
+        "promoId": 3,
+        "state": {
+          "active": true,
+          "version": 0,
+          "createdByIsActor": true,
+          "auditCount": 1
+        }
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1/3/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/3/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-create-1440.png",
+      "screenshotSha256": "f2b164d7a396e636b548a7278b59eaa919c4c6528f03563928901545a9e29d6c",
+      "finishedUtc": "2026-10-29T19:46:40.025Z"
+    },
+    {
+      "id": "promotion-update-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:40.025Z",
+      "observations": {
+        "state": {
+          "active": true,
+          "version": 1,
+          "createdByIsActor": true,
+          "auditCount": 2
+        }
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1/3/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1/3/update",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/3/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-update-1440.png",
+      "screenshotSha256": "25014af97febf79ed058c941b9a48dd3a522f8d9eef0d499d5f9f99851be2318",
+      "finishedUtc": "2026-10-29T19:46:41.495Z"
+    },
+    {
+      "id": "promotion-cancel-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:41.496Z",
+      "observations": {
+        "noPost": true,
+        "stateUnchanged": true,
+        "keyboardFocus": true,
+        "confirmationScreenshot": {
+          "path": "screenshots/promotion-confirmation-1440.png",
+          "sha256": "3aa8c5c51513851eaa6ad36c0b025d6506bb6e10726a0f050c08c1684b2badcd",
+          "route": "/admin/promotions/products/1/3/disable"
+        }
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/3/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-cancel-1440.png",
+      "screenshotSha256": "6ea738232ed99a6531b4c464645e4aff0991f9eda20f6d297b6ff38b5624c6f6",
+      "finishedUtc": "2026-10-29T19:46:44.335Z"
+    },
+    {
+      "id": "promotion-disable-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:44.336Z",
+      "observations": {
+        "state": {
+          "active": false,
+          "version": 2,
+          "createdByIsActor": true,
+          "auditCount": 3
+        }
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/promotions/products/1",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1/3/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/admin/promotions/products/1/3/disable",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/promotions/products/1",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/promotion-disable-1440.png",
+      "screenshotSha256": "909a069e0869b4383c607f7899252062c897901241a308a8e05f66bf0feffcc4",
+      "finishedUtc": "2026-10-29T19:46:46.191Z"
+    },
+    {
+      "id": "voucher-navigation-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:46.193Z",
+      "observations": {
+        "csrfPresent": true
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers/new",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/dashboard",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/new",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-navigation-1440.png",
+      "screenshotSha256": "0ed92fd49f2618321d0d8a6cc3e2fe5fcd362b87f247f978728b8348a59db453",
+      "finishedUtc": "2026-10-29T19:46:48.269Z"
+    },
+    {
+      "id": "voucher-create-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:48.270Z",
+      "observations": {
+        "voucherId": 3,
+        "state": {
+          "active": true,
+          "version": 0,
+          "createdByIsActor": true,
+          "auditCount": 1
+        }
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers/3/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/vouchers",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/3/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-create-1440.png",
+      "screenshotSha256": "665b94b29111e219b7a9983111b3b40a067fb202af149a77f7c403743cf50d14",
+      "finishedUtc": "2026-10-29T19:46:49.732Z"
+    },
+    {
+      "id": "voucher-update-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:49.732Z",
+      "observations": {
+        "state": {
+          "active": true,
+          "version": 1,
+          "createdByIsActor": true,
+          "auditCount": 2
+        }
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers/3/edit",
+      "network": [
+        {
+          "method": "POST",
+          "path": "/admin/vouchers/3/update",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/3/edit",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-update-1440.png",
+      "screenshotSha256": "acaf3e702b3e7d2e7f274c89bee65910bdd99990868b457057c457026be4586b",
+      "finishedUtc": "2026-10-29T19:46:51.100Z"
+    },
+    {
+      "id": "voucher-cancel-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:51.101Z",
+      "observations": {
+        "noPost": true,
+        "stateUnchanged": true,
+        "confirmationScreenshot": {
+          "path": "screenshots/voucher-confirmation-1440.png",
+          "sha256": "7bda1b54d1554be49b2b611141a1c4f76b4127c4ebff37751a1505f551545bee",
+          "route": "/admin/vouchers/3/disable"
+        }
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/3/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-cancel-1440.png",
+      "screenshotSha256": "d9e807933e0c735a253fbf9f6235d2969fc264f2e847a0e6aeea24960be11490",
+      "finishedUtc": "2026-10-29T19:46:53.857Z"
+    },
+    {
+      "id": "voucher-disable-1440",
+      "role": "ADMIN",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T19:46:53.857Z",
+      "observations": {
+        "state": {
+          "active": false,
+          "version": 2,
+          "createdByIsActor": true,
+          "auditCount": 3
+        }
+      },
+      "containment": {
+        "viewport": 1440,
+        "scroll": 1440
+      },
+      "status": "PASS",
+      "route": "/admin/vouchers",
+      "network": [
+        {
+          "method": "GET",
+          "path": "/admin/vouchers/3/disable",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        },
+        {
+          "method": "POST",
+          "path": "/admin/vouchers/3/disable",
+          "status": 302
+        },
+        {
+          "method": "GET",
+          "path": "/admin/vouchers",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/css/app.css",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/app.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/js/notifications.js",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/realtime-session",
+          "status": 200
+        },
+        {
+          "method": "GET",
+          "path": "/notifications/inbox",
+          "status": 200
+        }
+      ],
+      "events": [],
+      "screenshot": "screenshots/voucher-disable-1440.png",
+      "screenshotSha256": "4f9175619cef786e66121efb967f2e8c4ae1ecb6e029fe47dd587d8142040568",
+      "finishedUtc": "2026-10-29T19:46:55.608Z"
+    }
+  ],
+  "browser": "156.0.8078.48",
+  "finishedUtc": "2026-10-29T19:46:55.620Z"
+}
