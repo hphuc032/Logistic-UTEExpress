@@ -1,0 +1,87 @@
+{
+  "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+  "command": [
+    "mvnw.cmd",
+    "--batch-mode",
+    "--no-transfer-progress",
+    "-Ppostgres-it",
+    "-Dit.test=ShipmentAssignmentIT,ReturnToSenderIT,ShipperFulfillmentIT,ReviewIntegrationIT,NotificationSocketIT,NotificationRecoveryIT,OpsOrderCancellationIT,AdminRevenueIT",
+    "failsafe:integration-test",
+    "failsafe:verify"
+  ],
+  "started_utc": "2026-10-29T08:06:29.529116+00:00",
+  "finished_utc": "2026-10-29T08:08:50.230868+00:00",
+  "duration_seconds": 140.702,
+  "exit_code": 0,
+  "timed_out": false,
+  "log_sha256": "43ed59366f3535066fff6f3c1ce8d2bc169da56d932f8077afdcbcca3ecbf5ff",
+  "scope": "Eight targeted PostgreSQL classes, no additional unit run",
+  "reports": [
+    {
+      "suite": "com.uteexpress.engagement.ReviewIntegrationIT",
+      "tests": 25,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "f5c4656705b3d75a7239ed7eb623b2c9d66ec99a08502a73ec1617fccc8e134c"
+    },
+    {
+      "suite": "com.uteexpress.fulfillment.ShipperFulfillmentIT",
+      "tests": 16,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4f6b0ce8ac5977a91f9ada9841faa9eb5b468fa8242485863fae5e8ef85891ed"
+    },
+    {
+      "suite": "com.uteexpress.governance.AdminRevenueIT",
+      "tests": 26,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "4826a504e4f1cf011fd2c97e8c14a30658fec7447e88acdc95da92305ff5eef7"
+    },
+    {
+      "suite": "com.uteexpress.integration.ReturnToSenderIT",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "578fa6f3e8f57f06776c73405625829ca1193bce8434fe4c8e80344e5a393d26"
+    },
+    {
+      "suite": "com.uteexpress.notification.NotificationRecoveryIT",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ac225ffc68d505272a86c12d8d9ff4e0b7ba1b1e36c8e588c224306af59dbed7"
+    },
+    {
+      "suite": "com.uteexpress.notification.NotificationSocketIT",
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "d647fb5de4a63b3072265d9c1fdf71ae6e34f18d2a0c01fb0f1ec3461c427404"
+    },
+    {
+      "suite": "com.uteexpress.order.service.OpsOrderCancellationIT",
+      "tests": 60,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "fe8d88841496b167b6fa141160c1e540b51a30ad124ce61c9954d4fb2dc49aa6"
+    },
+    {
+      "suite": "com.uteexpress.shipping.ShipmentAssignmentIT",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "sha256": "ac54a793ed24f53dfa13122b3e0e83d8d56e0d42e0b682115f0821afcaf6b39a"
+    }
+  ],
+  "tests": 188,
+  "result": "PASS"
+}

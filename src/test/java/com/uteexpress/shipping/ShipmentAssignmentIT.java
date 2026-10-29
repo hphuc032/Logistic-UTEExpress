@@ -39,6 +39,96 @@ class ShipmentAssignmentIT {
 
     @AfterEach void clear() { SecurityContextHolder.clearContext(); }
 
+    @Test void competingAssignmentsWaitForOrderAndCreateOnlyOneShipment() throws Exception {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long manager = insertUser("ACTIVE", "MANAGER");
+        long first = insertUser("ACTIVE", "SHIPPER");
+        long second = insertUser("ACTIVE", "SHIPPER");
+        long id = order(true, "CONFIRMED", true);
+        String before = nonAssignmentFacts(id);
+        var outcomes = competeBehindOrderLock(id,
+                () -> assignmentOutcome(admin, "ADMIN", () -> assignments.assign(id, first, 0L)),
+                () -> assignmentOutcome(manager, "MANAGER", () -> assignments.assign(id, second, 0L)));
+        assertThat(outcomes).filteredOn(value -> value instanceof com.uteexpress.shipping.dto.ShipmentAssignment).hasSize(1);
+        assertThat(outcomes).filteredOn(value -> value == ErrorCode.CONFLICT).hasSize(1);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipments WHERE order_id=?", Long.class, id)).isEqualTo(1);
+        long shipment = jdbc.queryForObject("SELECT id FROM uteexpress.shipments WHERE order_id=?", Long.class, id);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_assignment_history WHERE shipment_id=?", Long.class, shipment)).isEqualTo(1);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=?", Long.class, shipment)).isEqualTo(1);
+        assertThat(nonAssignmentFacts(id)).isEqualTo(before);
+    }
+
+    @Test void competingReassignmentsUseOriginalVersionAndCommitOnlyOneChange() throws Exception {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long manager = insertUser("ACTIVE", "MANAGER");
+        long original = insertUser("ACTIVE", "SHIPPER");
+        long first = insertUser("ACTIVE", "SHIPPER");
+        long second = insertUser("ACTIVE", "SHIPPER");
+        long id = order(true, "CONFIRMED", true);
+        authenticate(admin, "ADMIN");
+        var assigned = assignments.assign(id, original, 0L);
+        String before = nonAssignmentFacts(id);
+        var outcomes = competeBehindOrderLock(id,
+                () -> assignmentOutcome(admin, "ADMIN", () -> assignments.reassign(id, first, assigned.version())),
+                () -> assignmentOutcome(manager, "MANAGER", () -> assignments.reassign(id, second, assigned.version())));
+        assertThat(outcomes).filteredOn(value -> value instanceof com.uteexpress.shipping.dto.ShipmentAssignment).hasSize(1);
+        assertThat(outcomes).filteredOn(value -> value == ErrorCode.CONFLICT).hasSize(1);
+        assertThat(jdbc.queryForObject("SELECT version FROM uteexpress.shipments WHERE id=?", Long.class, assigned.id())).isEqualTo(assigned.version() + 1);
+        assertThat(jdbc.queryForObject("SELECT assigned_shipper_id FROM uteexpress.shipments WHERE id=?", Long.class, assigned.id())).isIn(first, second);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.shipment_assignment_history WHERE shipment_id=?", Long.class, assigned.id())).isEqualTo(2);
+        assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='SHIPMENT' AND target_id=?", Long.class, assigned.id())).isEqualTo(2);
+        assertThat(nonAssignmentFacts(id)).isEqualTo(before);
+    }
+
+    private Object assignmentOutcome(long actor, String role, java.util.concurrent.Callable<?> operation) throws Exception {
+        authenticate(actor, role);
+        try { return operation.call(); }
+        catch (ApplicationException failure) { return failure.errorCode(); }
+        finally { SecurityContextHolder.clearContext(); }
+    }
+
+    private List<Object> competeBehindOrderLock(long id, java.util.concurrent.Callable<Object> first,
+            java.util.concurrent.Callable<Object> second) throws Exception {
+        var pool = java.util.concurrent.Executors.newFixedThreadPool(2);
+        try (var connection = jdbc.getDataSource().getConnection()) {
+            connection.setAutoCommit(false);
+            try (var statement = connection.prepareStatement("SELECT id FROM uteexpress.orders WHERE id=? FOR UPDATE")) {
+                statement.setLong(1, id);
+                try (var rows = statement.executeQuery()) { assertThat(rows.next()).isTrue(); }
+            }
+            var a = pool.submit(first);
+            var b = pool.submit(second);
+            try {
+                long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(10);
+                int waiting = 0;
+                while (System.nanoTime() < deadline) {
+                    waiting = jdbc.queryForObject("SELECT count(*) FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND query LIKE '%uteexpress.orders%'", Integer.class);
+                    if (waiting >= 2) break;
+                    Thread.sleep(10);
+                }
+                assertThat(waiting).as("both independent requests wait on the actual PostgreSQL Order lock").isGreaterThanOrEqualTo(2);
+            } finally { connection.rollback(); }
+            return List.of(a.get(15, java.util.concurrent.TimeUnit.SECONDS), b.get(15, java.util.concurrent.TimeUnit.SECONDS));
+        } finally {
+            pool.shutdownNow();
+            assertThat(pool.awaitTermination(10, java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+        }
+    }
+
+    private String nonAssignmentFacts(long id) {
+        return jdbc.queryForObject("""
+                SELECT json_build_object(
+                    'order',(SELECT row_to_json(o) FROM uteexpress.orders o WHERE id=?),
+                    'payments',(SELECT coalesce(json_agg(p ORDER BY p.id),'[]'::json) FROM uteexpress.payments p),
+                    'refunds',(SELECT coalesce(json_agg(r ORDER BY r.id),'[]'::json) FROM uteexpress.refunds r),
+                    'products',(SELECT coalesce(json_agg(p ORDER BY p.id),'[]'::json) FROM uteexpress.products p),
+                    'vouchers',(SELECT coalesce(json_agg(v ORDER BY v.id),'[]'::json) FROM uteexpress.voucher_usages v),
+                    'order_history',(SELECT coalesce(json_agg(h ORDER BY h.id),'[]'::json) FROM uteexpress.order_status_history h),
+                    'notifications',(SELECT coalesce(json_agg(n ORDER BY n.id),'[]'::json) FROM uteexpress.notifications n)
+                )::text
+                """, String.class, id);
+    }
+
     @Test void assignmentUsesPersistedOrderSelectionAndReassignmentAuditsWithoutChangingOrder() {
         long admin = insertUser("ACTIVE", "ADMIN");
         long first = insertUser("ACTIVE", "SHIPPER");
@@ -176,6 +266,44 @@ class ShipmentAssignmentIT {
                 .andExpect(status().isNotFound());
         authenticate(second, "SHIPPER");
         assertThat(shipperReads.detail(assigned.id()).shipperId()).isEqualTo(second);
+    }
+
+    @Test void opsHtmlOffersActiveAssignmentThenReassignmentWithoutChangingTheJsonAuthority() throws Exception {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long manager = insertUser("ACTIVE", "MANAGER");
+        long first = insertUser("ACTIVE", "SHIPPER");
+        long second = insertUser("ACTIVE", "SHIPPER");
+        long locked = insertUser("LOCKED", "SHIPPER");
+        long id = order(true, "CONFIRMED", true);
+        var page = mvc.perform(get("/admin/orders/{id}", id).accept("text/html")
+                        .with(user(principal(admin, "ADMIN"))))
+                .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content()
+                        .string(org.hamcrest.Matchers.containsString("data-shipment-assignment")))
+                .andReturn();
+        var choices = (java.util.List<?>) page.getModelAndView().getModel().get("assignmentShippers");
+        assertThat(choices).extracting("id").contains(first, second).doesNotContain(locked);
+        assertThat(page.getModelAndView().getModel().get("assignmentAction")).isEqualTo("/admin/orders/" + id + "/assign");
+        authenticate(admin, "ADMIN");
+        assignments.assign(id, first, 0L);
+        var next = mvc.perform(get("/manager/orders/{id}", id).accept("text/html")
+                        .with(user(principal(manager, "MANAGER"))))
+                .andExpect(status().isOk()).andReturn();
+        assertThat(next.getModelAndView().getModel().get("assignmentAction")).isEqualTo("/manager/orders/" + id + "/reassign");
+        assertThat(next.getModelAndView().getModel().get("assignmentVersionField")).isEqualTo("expectedShipmentVersion");
+        assertThat((java.util.List<?>) next.getModelAndView().getModel().get("assignmentShippers"))
+                .extracting("id").doesNotContain(first, locked).contains(second);
+        mvc.perform(get("/admin/orders/{id}", id).accept("text/html")
+                .with(user(principal(first, "SHIPPER")))).andExpect(status().isForbidden());
+    }
+
+    @Test void opsHtmlDoesNotOfferAssignmentForNewOrUnreadyOrders() throws Exception {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        for (long id : new long[]{order(true, "NEW", false), order(true, "CONFIRMED", false)}) {
+            var page = mvc.perform(get("/admin/orders/{id}", id).accept("text/html")
+                    .with(user(principal(admin, "ADMIN")))).andExpect(status().isOk()).andReturn();
+            assertThat(page.getModelAndView().getModel()).doesNotContainKey("assignmentAction");
+        }
     }
 
     private long insertUser(String status, String role) {

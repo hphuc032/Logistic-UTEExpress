@@ -1,0 +1,112 @@
+{
+  "browser": "155.0.8059.82",
+  "headless": true,
+  "mode": "Automated real browser UI; not human manual signoff",
+  "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+  "cases": [
+    {
+      "case": "local-upload-restart",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+      "started_utc": "2026-10-29T08:22:19.755Z",
+      "steps": [
+        {
+          "local_owned_app_restart": true,
+          "same_DB_and_UPLOAD_DIR": true,
+          "media_hash_before": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865",
+          "media_hash_after": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865",
+          "public_image_after_restart": true,
+          "widths": [
+            375,
+            768,
+            1440
+          ],
+          "order_review_facts_unchanged": true,
+          "target_host_TLS_offhost_restore": "NOT RUN"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-persistence\\local-upload-restart-375-before.png",
+          "sha256": "b852d3490b43f0e67f2198c22d9dc0250961d38323c677acab6d6019edeed07b",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-post70-persistence/local-upload-restart-375-before.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-persistence\\local-upload-restart-375-after-375.png",
+          "sha256": "b852d3490b43f0e67f2198c22d9dc0250961d38323c677acab6d6019edeed07b",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-post70-persistence/local-upload-restart-375-after-375.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-persistence\\local-upload-restart-375-after-768.png",
+          "sha256": "ae3b99e6400aa3242e7dfc5719c4f499023598fff65db905a104276522d2c8a5",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-post70-persistence/local-upload-restart-375-after-768.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-persistence\\local-upload-restart-375-after-1440.png",
+          "sha256": "b6972e052493fc9fb2283c7a96ff77f9519975dfd97bd34b67dc7f32a0f066c3",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser-post70-persistence/local-upload-restart-375-after-1440.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/order-items/10/review",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "buyer_a",
+          "route": "/order-items/10/review",
+          "status": 200
+        },
+        {
+          "actor": "buyer_a",
+          "route": "/products/1/reviews",
+          "status": 200
+        },
+        {
+          "actor": "PUBLIC",
+          "route": "/products/1/reviews",
+          "status": 200
+        },
+        {
+          "actor": "PUBLIC",
+          "route": "/products/1/reviews",
+          "status": 200
+        },
+        {
+          "actor": "PUBLIC",
+          "route": "/products/1/reviews",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T08:22:45.586Z"
+    }
+  ]
+}
