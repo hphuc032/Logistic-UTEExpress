@@ -94,3 +94,14 @@ Independent QĐ review and HP acceptance/merge are still required; UI-02 and the
 QA/release tasks are not marked COMPLETED. See the packet checklist and remaining
 limitations rather than interpreting old NOT RUN entries as current create-case
 status or interpreting new results as exhaustive CRUD/browser acceptance.
+
+## Review disposition / workflow-only delta — 2026-10-29
+
+HP explicitly accepts the disclosed manual-native-evidence limit for UI-02 only;
+QĐ'sb526fca official review remains COMMENTED / scoped read-back PASS. See
+[the report](UI-02-responsive-report.md). No historical artifact/hash is rewritten.
+The later workflow delta adds app.test.cjs to the existing CI Node command;
+local40 PASS, fresh CI execution pending publication and reported on PR74.
+Runtime/test source objects are unchanged; the workflow object intentionally
+differs from the immutable historical source-proof records. CI #169's33 tests
+are not relabelled as40 or assigned to a later publication HEAD.

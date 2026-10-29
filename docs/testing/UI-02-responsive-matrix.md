@@ -156,3 +156,12 @@ Independent QĐ review and HP acceptance/merge are still required; UI-02 and the
 QA/release tasks are not marked COMPLETED. See the packet checklist and remaining
 limitations rather than interpreting old NOT RUN entries as current create-case
 status or interpreting new results as exhaustive CRUD/browser acceptance.
+
+## Review disposition — 2026-10-29
+
+HP accepts the disclosed manual native-confirmation evidence limit for UI-02
+only. Sampled actions/widths above remain exactly as executed; no independent QĐ
+browser run or exhaustive matrix is added by this decision. QĐ'sb526fca review
+is COMMENTED / scoped read-back PASS, not APPROVED. CI now includes app.test.cjs
+with the existing suites (local40 PASS; new CI result on PR74). See
+[the report](UI-02-responsive-report.md) for the decision and unchanged QA/release boundaries.

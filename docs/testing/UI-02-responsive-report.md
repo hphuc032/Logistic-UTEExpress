@@ -188,3 +188,28 @@ Independent QĐ review and HP acceptance/merge are still required; UI-02 and the
 QA/release tasks are not marked COMPLETED. See the packet checklist and remaining
 limitations rather than interpreting old NOT RUN entries as current create-case
 status or interpreting new results as exhaustive CRUD/browser acceptance.
+
+## QĐ read-back, HP disposition and CI coverage correction — 2026-10-29
+
+QĐ (`datcaq`) submitted an official **COMMENTED** review at `b526fca`, with
+verdict **SCOPED EVIDENCE READ-BACK PASS**. QĐ read the published receipts and CI;
+QĐ did not independently re-execute the browser, DB queries or local Git hashes.
+This review is not APPROVED or full independent browser acceptance.
+
+HP explicitly chose **“HP chấp nhận giới hạn trong phạm vi UI-02”** in this chat
+on 2026-10-29: accept HP manual native Escape/Cancel/focus evidence with the
+recorded DOM/access/DB corroboration for UI-02 only. The lack of independent QĐ
+native-key re-execution, native-chrome capture and exhaustive action×viewport
+coverage remains disclosed. This decision does not replace QĐ approval, authorize
+merge, mark UI-02 complete or close any QA/release gate.
+
+The CI Node step now explicitly includes `src/test/js/app.test.cjs` alongside
+the existing notification/cancellation files. All **40 tests PASS locally** with
+the exact expanded command; zero failures/cancellations/skips. Only the step
+label and test-file list change; permissions, triggers, Node version, Maven gates,
+production source and test assertions remain intact. The original and follow-up
+evidence packets/hashes remain immutable. Their workflow-object proof describes
+the historical tested sources; the new CI-only delta is deliberately separate.
+Fresh publication HEAD, CI execution/counts and QĐ's next verdict are recorded
+on [PR #74](https://github.com/hphuc032/Logistic-UTEExpress/pull/74); until observed,
+the expanded CI execution is pending, not a reuse of CI #169's33-test result.

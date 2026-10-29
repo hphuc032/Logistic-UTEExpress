@@ -66,3 +66,13 @@ Independent QĐ review and HP acceptance/merge are still required; UI-02 and the
 QA/release tasks are not marked COMPLETED. See the packet checklist and remaining
 limitations rather than interpreting old NOT RUN entries as current create-case
 status or interpreting new results as exhaustive CRUD/browser acceptance.
+
+## Review disposition — 2026-10-29
+
+QĐ's official review atb526fca is COMMENTED / SCOPED EVIDENCE READ-BACK PASS,
+not APPROVED. HP explicitly accepted the disclosed manual-native-evidence limit
+for UI-02 only; independent re-execution is not retroactively claimed. The Node
+coverage gap is addressed by adding app.test.cjs to the existing CI command;
+local40 PASS, fresh CI execution pending publication. Historical findings and
+packet hashes stay unchanged. See [the scoped decision](UI-02-responsive-report.md#qđ-read-back-hp-disposition-and-ci-coverage-correction--2026-10-29)
+and PR74 for the final new-HEAD CI result and outstanding QĐ verdict.
