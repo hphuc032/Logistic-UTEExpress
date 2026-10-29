@@ -1,0 +1,75 @@
+{
+  "source": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "commands": [
+    {
+      "name": "Catalog shared UI Node",
+      "argv": [
+        "C:/Users/Phuc/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/bin/node.exe",
+        "--test",
+        "--test-reporter=tap",
+        "src/test/js/app.test.cjs"
+      ],
+      "startUtc": "2026-10-29T17:19:56.317618+00:00",
+      "endUtc": "2026-10-29T17:19:56.510371+00:00",
+      "exit": 0,
+      "logSha256": "36714ee437897cdcdd9db147010cf3744843a502bc8b091aeae84ffed9b34c31"
+    },
+    {
+      "name": "Focused Java unit MVC architecture",
+      "argv": [
+        "cmd.exe",
+        "/d",
+        "/c",
+        "mvnw.cmd",
+        "-B",
+        "--no-transfer-progress",
+        "-Dtest=ArchitectureTest,PublicCatalogServiceTest,PublicCatalogControllerTest,UiLayoutTest",
+        "test"
+      ],
+      "startUtc": "2026-10-29T17:19:56.523371+00:00",
+      "endUtc": "2026-10-29T17:20:47.125737+00:00",
+      "exit": 0,
+      "logSha256": "5ed0bdfbb217202dceafc0a26b51cf8b2e3a480d6c84d19f8d8a7310ca079afb"
+    }
+  ],
+  "Java": [
+    {
+      "name": "com.uteexpress.ArchitectureTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "fa0a9af19be2f4e75d39abb2492b33db6647736743ec2bee0bc0b251aba5cd8b"
+    },
+    {
+      "name": "com.uteexpress.catalog.service.PublicCatalogServiceTest",
+      "tests": 10,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "70ebcf0eba6b2fe37e8803b2aef282b727f9ab40f120b5e4f28a725b36e25692"
+    },
+    {
+      "name": "com.uteexpress.catalog.controller.PublicCatalogControllerTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "83f99fd304f85ccd3be935a435ab212f85a10b151bdd25bddde064818006fe2d"
+    },
+    {
+      "name": "com.uteexpress.ui.UiLayoutTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xmlSha256": "58d282f50643b3c76b1ebe6b773e63e52bc38695e8097120f7b03c3a7f6cf9e7"
+    }
+  ],
+  "Node": {
+    "tests": 7,
+    "pass": 7
+  },
+  "fullSuiteExecuted": false,
+  "rawOutsideRepository": true
+}

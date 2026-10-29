@@ -1,0 +1,1493 @@
+{
+  "mode": "AUTOMATED_BROWSER; HUMAN PENDING",
+  "source": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "jarSha256": "683a7dbf248c9e074e92aa14cdb4f81d21fdae00050b89402368679888ca68bf",
+  "startedUtc": "2026-10-29T17:12:59.814Z",
+  "browser": "156.0.8078.48",
+  "cases": [
+    {
+      "id": "CAT-HOME-375",
+      "title": "Home renders eligible multi-shop products",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:00.550Z",
+      "humanResult": null,
+      "observations": {
+        "cards": 12,
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        }
+      },
+      "status": "PASS",
+      "route": "/",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-HOME-375.png",
+      "screenshotSha256": "0537cb35d0a5305d8688e33accc5d0f1106a327b651b06748099fcacef534bc7",
+      "finishedUtc": "2026-10-29T17:13:02.666Z"
+    },
+    {
+      "id": "CAT-CATEGORY-375",
+      "title": "Active category lists eligible products",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:02.668Z",
+      "humanResult": null,
+      "observations": {
+        "cards": 12,
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        }
+      },
+      "status": "PASS",
+      "route": "/categories/demo-category",
+      "events": [],
+      "screenshot": "screenshots/CAT-CATEGORY-375.png",
+      "screenshotSha256": "cbcc6a6ec00fa9044f5a10740c7f4a2c6cf265db4c4ad36b56e07a1fde8e0db8",
+      "finishedUtc": "2026-10-29T17:13:03.711Z"
+    },
+    {
+      "id": "CAT-PRODUCT-375",
+      "title": "Public detail displays server product and image",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:03.712Z",
+      "humanResult": null,
+      "observations": {
+        "imageDecoded": true,
+        "price": "125000 VND",
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        }
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-PRODUCT-375.png",
+      "screenshotSha256": "bf1ab03845a313b2d95f5950469f65a9cc988230dec441792b1dd45d9a2da2c6",
+      "finishedUtc": "2026-10-29T17:13:04.526Z"
+    },
+    {
+      "id": "CAT-SHOPS-375",
+      "title": "Shop directory shows approved shops only",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:04.527Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        }
+      },
+      "status": "PASS",
+      "route": "/shops",
+      "events": [],
+      "screenshot": "screenshots/CAT-SHOPS-375.png",
+      "screenshotSha256": "25f399cca865d244773ae78565ab6db239dcd49111914ff01e2d21048f51d50a",
+      "finishedUtc": "2026-10-29T17:13:05.213Z"
+    },
+    {
+      "id": "CAT-SHOP-375",
+      "title": "Approved shop detail preserves shop-scoped products",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:05.213Z",
+      "humanResult": null,
+      "observations": {
+        "cards": 7,
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        }
+      },
+      "status": "PASS",
+      "route": "/shops/demo-shop",
+      "events": [],
+      "screenshot": "screenshots/CAT-SHOP-375.png",
+      "screenshotSha256": "c44f700f1fb02fb1ada760d1fb293f54f8ec21a194d590218061f5fb0d15b0b6",
+      "finishedUtc": "2026-10-29T17:13:06.131Z"
+    },
+    {
+      "id": "CAT-EMPTY-CATEGORY-375",
+      "title": "Active empty category has usable empty state",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:06.131Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        }
+      },
+      "status": "PASS",
+      "route": "/categories/fr10-empty",
+      "events": [],
+      "screenshot": "screenshots/CAT-EMPTY-CATEGORY-375.png",
+      "screenshotSha256": "b86aaeaff20392ddaabd9ae24f51ebc0b312524425581be6ba4ec66d6274860f",
+      "finishedUtc": "2026-10-29T17:13:06.819Z"
+    },
+    {
+      "id": "CAT-EMPTY-SHOP-375",
+      "title": "Approved empty shop has usable empty state",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:06.820Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        }
+      },
+      "status": "PASS",
+      "route": "/shops/fr10-empty-shop",
+      "events": [],
+      "screenshot": "screenshots/CAT-EMPTY-SHOP-375.png",
+      "screenshotSha256": "f4ab37bf488700a6d079760ee8a277cdc7e6a60965fbdcac7a16836cadc03e78",
+      "finishedUtc": "2026-10-29T17:13:07.471Z"
+    },
+    {
+      "id": "CAT-ZERO-STOCK-375",
+      "title": "Zero stock remains visible with honest availability",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:07.472Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        },
+        "stock": 0
+      },
+      "status": "PASS",
+      "route": "/products/2",
+      "events": [],
+      "screenshot": "screenshots/CAT-ZERO-STOCK-375.png",
+      "screenshotSha256": "604e1328eee9de16095a3ec690f5518d0d3fb344d7cb1f55b57f6fe4df55a14b",
+      "finishedUtc": "2026-10-29T17:13:08.114Z"
+    },
+    {
+      "id": "CAT-NONPUBLIC-PRODUCT-375",
+      "title": "Hidden moderated suspended inactive-category products fail closed",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:08.114Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404,
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/products/16",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-NONPUBLIC-PRODUCT-375.png",
+      "screenshotSha256": "a3761ea4731a067db2b3bdccd41c8dfa6bffbaab733e8b5f0c86acaaaa67718b",
+      "finishedUtc": "2026-10-29T17:13:10.434Z"
+    },
+    {
+      "id": "CAT-NONPUBLIC-SHOP-375",
+      "title": "Non-approved or unknown shops return safe 404",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:10.435Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404,
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/shops/fr10-unknown",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-NONPUBLIC-SHOP-375.png",
+      "screenshotSha256": "52580f3ea0fb07911189ba9faaaaf309db7a3c61769b92e99f962145a99d0922",
+      "finishedUtc": "2026-10-29T17:13:12.779Z"
+    },
+    {
+      "id": "CAT-NONPUBLIC-CATEGORY-375",
+      "title": "Inactive and unknown category fail closed",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:12.780Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/categories/fr10-unknown",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-NONPUBLIC-CATEGORY-375.png",
+      "screenshotSha256": "54ffe94d53a403717bdb9eb09174bd8f0d71e7d89561af5c85192f7c3b490f75",
+      "finishedUtc": "2026-10-29T17:13:13.992Z"
+    },
+    {
+      "id": "CAT-MEDIA-375",
+      "title": "Public image bytes and response headers match fixture",
+      "category": "http-browser-context",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:13.993Z",
+      "humanResult": null,
+      "observations": {
+        "imageSha256": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865",
+        "status": 200
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-MEDIA-375.png",
+      "screenshotSha256": "bf1ab03845a313b2d95f5950469f65a9cc988230dec441792b1dd45d9a2da2c6",
+      "finishedUtc": "2026-10-29T17:13:14.677Z"
+    },
+    {
+      "id": "CAT-MEDIA-FOREIGN-375",
+      "title": "Cross-product and nonpublic image access denied",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:14.677Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-MEDIA-FOREIGN-375.png",
+      "screenshotSha256": "bf1ab03845a313b2d95f5950469f65a9cc988230dec441792b1dd45d9a2da2c6",
+      "finishedUtc": "2026-10-29T17:13:15.376Z"
+    },
+    {
+      "id": "CAT-ESCAPING-375",
+      "title": "Vendor-controlled text is escaped rather than executed",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:15.376Z",
+      "humanResult": null,
+      "observations": {
+        "escaped": true,
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        }
+      },
+      "status": "PASS",
+      "route": "/products/17",
+      "events": [],
+      "screenshot": "screenshots/CAT-ESCAPING-375.png",
+      "screenshotSha256": "273e4b633be677e3fb0becf27d7b30b52635d10ef361948d55af2ee9825c9e48",
+      "finishedUtc": "2026-10-29T17:13:16.059Z"
+    },
+    {
+      "id": "CAT-NAVIGATION-375",
+      "title": "Home product category shop links complete browsing journey",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:16.060Z",
+      "humanResult": null,
+      "observations": {
+        "manualUrlEditing": false,
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        }
+      },
+      "status": "PASS",
+      "route": "/shops/demo-shop",
+      "events": [],
+      "screenshot": "screenshots/CAT-NAVIGATION-375.png",
+      "screenshotSha256": "c44f700f1fb02fb1ada760d1fb293f54f8ec21a194d590218061f5fb0d15b0b6",
+      "finishedUtc": "2026-10-29T17:13:17.468Z"
+    },
+    {
+      "id": "CAT-KEYBOARD-MENU-375",
+      "title": "Keyboard focus and responsive public navbar are operable",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:17.468Z",
+      "humanResult": null,
+      "status": "FAIL",
+      "failure": "Expected values to be strictly equal:\n\n'true' !== 'false'\n",
+      "route": "/",
+      "events": [],
+      "screenshot": "screenshots/CAT-KEYBOARD-MENU-375.png",
+      "screenshotSha256": "9e2e5ac12bfcf64076b3e9302a8b7cbe1a6b5547091fdcd78417fd514fd227bb",
+      "finishedUtc": "2026-10-29T17:13:18.783Z"
+    },
+    {
+      "id": "CAT-SAFE-ERROR-375",
+      "title": "Missing and malformed product IDs do not leak internals",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:18.784Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/products/0",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-SAFE-ERROR-375.png",
+      "screenshotSha256": "00118202757c91bcf55e30e300cd31724aaae37a44c407d98fbb4113a1bb8159",
+      "finishedUtc": "2026-10-29T17:13:19.985Z"
+    },
+    {
+      "id": "CAT-SECURITY-SMOKE-375",
+      "title": "Catalog is public while protected actions retain authentication and CSRF",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:13:19.986Z",
+      "humanResult": null,
+      "observations": {
+        "protectedGet": 401,
+        "unsafeWithoutCsrf": 403
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-SECURITY-SMOKE-375.png",
+      "screenshotSha256": "bf1ab03845a313b2d95f5950469f65a9cc988230dec441792b1dd45d9a2da2c6",
+      "finishedUtc": "2026-10-29T17:13:20.660Z"
+    },
+    {
+      "id": "CAT-HOME-768",
+      "title": "Home renders eligible multi-shop products",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:20.864Z",
+      "humanResult": null,
+      "observations": {
+        "cards": 12,
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        }
+      },
+      "status": "PASS",
+      "route": "/",
+      "events": [],
+      "screenshot": "screenshots/CAT-HOME-768.png",
+      "screenshotSha256": "719a892d0389fba5e475be16522415d74d0e0c2b1f8e93092e0ca24a59e35807",
+      "finishedUtc": "2026-10-29T17:13:22.194Z"
+    },
+    {
+      "id": "CAT-CATEGORY-768",
+      "title": "Active category lists eligible products",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:22.194Z",
+      "humanResult": null,
+      "observations": {
+        "cards": 12,
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        }
+      },
+      "status": "PASS",
+      "route": "/categories/demo-category",
+      "events": [],
+      "screenshot": "screenshots/CAT-CATEGORY-768.png",
+      "screenshotSha256": "95443e84f7752474af889c566609e1778993eea997e81e6b9cb19001863aee33",
+      "finishedUtc": "2026-10-29T17:13:23.027Z"
+    },
+    {
+      "id": "CAT-PRODUCT-768",
+      "title": "Public detail displays server product and image",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:23.028Z",
+      "humanResult": null,
+      "observations": {
+        "imageDecoded": true,
+        "price": "125000 VND",
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        }
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-PRODUCT-768.png",
+      "screenshotSha256": "07ad8f42b4552aa0a09a4eb1190f4808635c6a92bf236c50fae643d45bd4792a",
+      "finishedUtc": "2026-10-29T17:13:23.738Z"
+    },
+    {
+      "id": "CAT-SHOPS-768",
+      "title": "Shop directory shows approved shops only",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:23.739Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        }
+      },
+      "status": "PASS",
+      "route": "/shops",
+      "events": [],
+      "screenshot": "screenshots/CAT-SHOPS-768.png",
+      "screenshotSha256": "96a50e4407c3af162582eab750c1cb494e14260f59a0093ad44cce5d4e97c7bf",
+      "finishedUtc": "2026-10-29T17:13:24.382Z"
+    },
+    {
+      "id": "CAT-SHOP-768",
+      "title": "Approved shop detail preserves shop-scoped products",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:24.382Z",
+      "humanResult": null,
+      "observations": {
+        "cards": 7,
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        }
+      },
+      "status": "PASS",
+      "route": "/shops/demo-shop",
+      "events": [],
+      "screenshot": "screenshots/CAT-SHOP-768.png",
+      "screenshotSha256": "6b8c697cf8dd07ae0373942213340daa8130b3ce7fcd69fc79c20482b33f98ac",
+      "finishedUtc": "2026-10-29T17:13:25.195Z"
+    },
+    {
+      "id": "CAT-EMPTY-CATEGORY-768",
+      "title": "Active empty category has usable empty state",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:25.196Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        }
+      },
+      "status": "PASS",
+      "route": "/categories/fr10-empty",
+      "events": [],
+      "screenshot": "screenshots/CAT-EMPTY-CATEGORY-768.png",
+      "screenshotSha256": "391453b9a4d9fd300523313422e247097edea0f5fce38d638d2ca012d553556c",
+      "finishedUtc": "2026-10-29T17:13:25.903Z"
+    },
+    {
+      "id": "CAT-EMPTY-SHOP-768",
+      "title": "Approved empty shop has usable empty state",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:25.903Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        }
+      },
+      "status": "PASS",
+      "route": "/shops/fr10-empty-shop",
+      "events": [],
+      "screenshot": "screenshots/CAT-EMPTY-SHOP-768.png",
+      "screenshotSha256": "414dd288e9d37594e51b0279d671db71001e1414a1270adc643c101c222c203d",
+      "finishedUtc": "2026-10-29T17:13:26.594Z"
+    },
+    {
+      "id": "CAT-ZERO-STOCK-768",
+      "title": "Zero stock remains visible with honest availability",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:26.595Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        },
+        "stock": 0
+      },
+      "status": "PASS",
+      "route": "/products/2",
+      "events": [],
+      "screenshot": "screenshots/CAT-ZERO-STOCK-768.png",
+      "screenshotSha256": "3da9dc6fcb68046402c92fc2188bb1a53a2beb586e16b948bf1282e0efa42af4",
+      "finishedUtc": "2026-10-29T17:13:27.300Z"
+    },
+    {
+      "id": "CAT-NONPUBLIC-PRODUCT-768",
+      "title": "Hidden moderated suspended inactive-category products fail closed",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:27.300Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404,
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/products/16",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-NONPUBLIC-PRODUCT-768.png",
+      "screenshotSha256": "a69ff64c8e703a1aee4c413efbb11981c0dcc5758c5e7c89d8a80f02c38a93b7",
+      "finishedUtc": "2026-10-29T17:13:29.699Z"
+    },
+    {
+      "id": "CAT-NONPUBLIC-SHOP-768",
+      "title": "Non-approved or unknown shops return safe 404",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:29.700Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404,
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/shops/fr10-unknown",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-NONPUBLIC-SHOP-768.png",
+      "screenshotSha256": "f94b34161c7035106f27550e755bb58d12f0d4d1b3ca4a78228d3f983d41405f",
+      "finishedUtc": "2026-10-29T17:13:32.053Z"
+    },
+    {
+      "id": "CAT-NONPUBLIC-CATEGORY-768",
+      "title": "Inactive and unknown category fail closed",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:32.054Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/categories/fr10-unknown",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-NONPUBLIC-CATEGORY-768.png",
+      "screenshotSha256": "02518c960a3eea1e7c378b5375e4234b192b65924d54dcfdbabe599a49209bdc",
+      "finishedUtc": "2026-10-29T17:13:33.252Z"
+    },
+    {
+      "id": "CAT-MEDIA-768",
+      "title": "Public image bytes and response headers match fixture",
+      "category": "http-browser-context",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:33.253Z",
+      "humanResult": null,
+      "observations": {
+        "imageSha256": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865",
+        "status": 200
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-MEDIA-768.png",
+      "screenshotSha256": "07ad8f42b4552aa0a09a4eb1190f4808635c6a92bf236c50fae643d45bd4792a",
+      "finishedUtc": "2026-10-29T17:13:33.939Z"
+    },
+    {
+      "id": "CAT-MEDIA-FOREIGN-768",
+      "title": "Cross-product and nonpublic image access denied",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:33.940Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-MEDIA-FOREIGN-768.png",
+      "screenshotSha256": "07ad8f42b4552aa0a09a4eb1190f4808635c6a92bf236c50fae643d45bd4792a",
+      "finishedUtc": "2026-10-29T17:13:34.659Z"
+    },
+    {
+      "id": "CAT-ESCAPING-768",
+      "title": "Vendor-controlled text is escaped rather than executed",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:34.660Z",
+      "humanResult": null,
+      "observations": {
+        "escaped": true,
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        }
+      },
+      "status": "PASS",
+      "route": "/products/17",
+      "events": [],
+      "screenshot": "screenshots/CAT-ESCAPING-768.png",
+      "screenshotSha256": "81303180ff63f7dc91fc17de93da553fa3e8e21814013733176347514a25a9f3",
+      "finishedUtc": "2026-10-29T17:13:35.381Z"
+    },
+    {
+      "id": "CAT-NAVIGATION-768",
+      "title": "Home product category shop links complete browsing journey",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:35.382Z",
+      "humanResult": null,
+      "observations": {
+        "manualUrlEditing": false,
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        }
+      },
+      "status": "PASS",
+      "route": "/shops/demo-shop",
+      "events": [],
+      "screenshot": "screenshots/CAT-NAVIGATION-768.png",
+      "screenshotSha256": "6b8c697cf8dd07ae0373942213340daa8130b3ce7fcd69fc79c20482b33f98ac",
+      "finishedUtc": "2026-10-29T17:13:36.886Z"
+    },
+    {
+      "id": "CAT-KEYBOARD-MENU-768",
+      "title": "Keyboard focus and responsive public navbar are operable",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:36.886Z",
+      "humanResult": null,
+      "status": "FAIL",
+      "failure": "Expected values to be strictly equal:\n\n'true' !== 'false'\n",
+      "route": "/",
+      "events": [],
+      "screenshot": "screenshots/CAT-KEYBOARD-MENU-768.png",
+      "screenshotSha256": "44893c0a0744578bc9583c554fedb8dd9f8b74be30b0dd2a61931ee2e16edcf5",
+      "finishedUtc": "2026-10-29T17:13:38.278Z"
+    },
+    {
+      "id": "CAT-SAFE-ERROR-768",
+      "title": "Missing and malformed product IDs do not leak internals",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:38.279Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/products/0",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-SAFE-ERROR-768.png",
+      "screenshotSha256": "8b325e257a00ddb3ed8db1f37ad6f055cb9284792004c4b94f32051d05acf6d7",
+      "finishedUtc": "2026-10-29T17:13:39.530Z"
+    },
+    {
+      "id": "CAT-SECURITY-SMOKE-768",
+      "title": "Catalog is public while protected actions retain authentication and CSRF",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:13:39.533Z",
+      "humanResult": null,
+      "observations": {
+        "protectedGet": 401,
+        "unsafeWithoutCsrf": 403
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-SECURITY-SMOKE-768.png",
+      "screenshotSha256": "07ad8f42b4552aa0a09a4eb1190f4808635c6a92bf236c50fae643d45bd4792a",
+      "finishedUtc": "2026-10-29T17:13:40.201Z"
+    },
+    {
+      "id": "CAT-HOME-1440",
+      "title": "Home renders eligible multi-shop products",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:40.398Z",
+      "humanResult": null,
+      "observations": {
+        "cards": 12,
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/",
+      "events": [],
+      "screenshot": "screenshots/CAT-HOME-1440.png",
+      "screenshotSha256": "701fdd265bc094b545398dbd33ee41bf85156fa7b7b68a2db70fcec6c6f45b94",
+      "finishedUtc": "2026-10-29T17:13:41.763Z"
+    },
+    {
+      "id": "CAT-CATEGORY-1440",
+      "title": "Active category lists eligible products",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:41.764Z",
+      "humanResult": null,
+      "observations": {
+        "cards": 12,
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/categories/demo-category",
+      "events": [],
+      "screenshot": "screenshots/CAT-CATEGORY-1440.png",
+      "screenshotSha256": "f3e4f97e3c240948d60cbae653dc571ad3f7b4c93b218bd501c340eac4204df8",
+      "finishedUtc": "2026-10-29T17:13:42.559Z"
+    },
+    {
+      "id": "CAT-PRODUCT-1440",
+      "title": "Public detail displays server product and image",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:42.560Z",
+      "humanResult": null,
+      "observations": {
+        "imageDecoded": true,
+        "price": "125000 VND",
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-PRODUCT-1440.png",
+      "screenshotSha256": "d700b2e80682ed8c976c2072cf02f77cb8b75be8fee21b67e872902e5f96dc8b",
+      "finishedUtc": "2026-10-29T17:13:43.285Z"
+    },
+    {
+      "id": "CAT-SHOPS-1440",
+      "title": "Shop directory shows approved shops only",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:43.285Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/shops",
+      "events": [],
+      "screenshot": "screenshots/CAT-SHOPS-1440.png",
+      "screenshotSha256": "1f5d23f81cab009307dfc5570e3fa05e04bb2bbc39c321fb7d5b1a744026bc17",
+      "finishedUtc": "2026-10-29T17:13:43.989Z"
+    },
+    {
+      "id": "CAT-SHOP-1440",
+      "title": "Approved shop detail preserves shop-scoped products",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:43.990Z",
+      "humanResult": null,
+      "observations": {
+        "cards": 7,
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/shops/demo-shop",
+      "events": [],
+      "screenshot": "screenshots/CAT-SHOP-1440.png",
+      "screenshotSha256": "fcf3d61a234a8225115520e567113f30a9ee710c9abe7a56a8b6424aabc1119b",
+      "finishedUtc": "2026-10-29T17:13:44.860Z"
+    },
+    {
+      "id": "CAT-EMPTY-CATEGORY-1440",
+      "title": "Active empty category has usable empty state",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:44.861Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/categories/fr10-empty",
+      "events": [],
+      "screenshot": "screenshots/CAT-EMPTY-CATEGORY-1440.png",
+      "screenshotSha256": "60c0824c8a559ff4a75a349db3a81e99882ac46438f52c51014a59cbe40cec95",
+      "finishedUtc": "2026-10-29T17:13:45.529Z"
+    },
+    {
+      "id": "CAT-EMPTY-SHOP-1440",
+      "title": "Approved empty shop has usable empty state",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:45.530Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/shops/fr10-empty-shop",
+      "events": [],
+      "screenshot": "screenshots/CAT-EMPTY-SHOP-1440.png",
+      "screenshotSha256": "3ea2683f622dc6b0bece95216fdfb441423f1d4dccff33e9848b9a0b6f0321fb",
+      "finishedUtc": "2026-10-29T17:13:46.221Z"
+    },
+    {
+      "id": "CAT-ZERO-STOCK-1440",
+      "title": "Zero stock remains visible with honest availability",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:46.222Z",
+      "humanResult": null,
+      "observations": {
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        },
+        "stock": 0
+      },
+      "status": "PASS",
+      "route": "/products/2",
+      "events": [],
+      "screenshot": "screenshots/CAT-ZERO-STOCK-1440.png",
+      "screenshotSha256": "154c4040cc35109a995ee203c9e9c2406672be9f9eb4bc721255018948ed8453",
+      "finishedUtc": "2026-10-29T17:13:47.048Z"
+    },
+    {
+      "id": "CAT-NONPUBLIC-PRODUCT-1440",
+      "title": "Hidden moderated suspended inactive-category products fail closed",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:47.048Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404,
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/products/16",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-NONPUBLIC-PRODUCT-1440.png",
+      "screenshotSha256": "dd69c5867028f3417bc596f33a0549d3962d9712e1c1dafd49a53019636ea817",
+      "finishedUtc": "2026-10-29T17:13:49.460Z"
+    },
+    {
+      "id": "CAT-NONPUBLIC-SHOP-1440",
+      "title": "Non-approved or unknown shops return safe 404",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:49.461Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404,
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/shops/fr10-unknown",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-NONPUBLIC-SHOP-1440.png",
+      "screenshotSha256": "c920a067947f50eeafb9107e1a0b46902876471f84b16f764f883849c9ae6145",
+      "finishedUtc": "2026-10-29T17:13:51.836Z"
+    },
+    {
+      "id": "CAT-NONPUBLIC-CATEGORY-1440",
+      "title": "Inactive and unknown category fail closed",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:51.837Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/categories/fr10-unknown",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-NONPUBLIC-CATEGORY-1440.png",
+      "screenshotSha256": "34dcd3fcf724ae394255ffced9109d7ca2f15ae191434e73fc70ec2fae1afddf",
+      "finishedUtc": "2026-10-29T17:13:53.042Z"
+    },
+    {
+      "id": "CAT-MEDIA-1440",
+      "title": "Public image bytes and response headers match fixture",
+      "category": "http-browser-context",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:53.043Z",
+      "humanResult": null,
+      "observations": {
+        "imageSha256": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865",
+        "status": 200
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-MEDIA-1440.png",
+      "screenshotSha256": "d700b2e80682ed8c976c2072cf02f77cb8b75be8fee21b67e872902e5f96dc8b",
+      "finishedUtc": "2026-10-29T17:13:53.843Z"
+    },
+    {
+      "id": "CAT-MEDIA-FOREIGN-1440",
+      "title": "Cross-product and nonpublic image access denied",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:53.844Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-MEDIA-FOREIGN-1440.png",
+      "screenshotSha256": "d700b2e80682ed8c976c2072cf02f77cb8b75be8fee21b67e872902e5f96dc8b",
+      "finishedUtc": "2026-10-29T17:13:54.535Z"
+    },
+    {
+      "id": "CAT-ESCAPING-1440",
+      "title": "Vendor-controlled text is escaped rather than executed",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:54.535Z",
+      "humanResult": null,
+      "observations": {
+        "escaped": true,
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/products/17",
+      "events": [],
+      "screenshot": "screenshots/CAT-ESCAPING-1440.png",
+      "screenshotSha256": "38bc336192dd770e96189fbaaa266ed4dce9e8cd8fe61fb0ea26d69f0ba27015",
+      "finishedUtc": "2026-10-29T17:13:55.195Z"
+    },
+    {
+      "id": "CAT-NAVIGATION-1440",
+      "title": "Home product category shop links complete browsing journey",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:55.196Z",
+      "humanResult": null,
+      "observations": {
+        "manualUrlEditing": false,
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/shops/demo-shop",
+      "events": [],
+      "screenshot": "screenshots/CAT-NAVIGATION-1440.png",
+      "screenshotSha256": "fcf3d61a234a8225115520e567113f30a9ee710c9abe7a56a8b6424aabc1119b",
+      "finishedUtc": "2026-10-29T17:13:56.479Z"
+    },
+    {
+      "id": "CAT-KEYBOARD-MENU-1440",
+      "title": "Keyboard focus and responsive public navbar are operable",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:56.480Z",
+      "humanResult": null,
+      "observations": {
+        "focus": {
+          "tag": "A",
+          "text": "Chuyển đến nội dung chính",
+          "outline": "solid",
+          "shadow": "rgba(11, 37, 64, 0.12) 0px 16px 40px 0px"
+        },
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/",
+      "events": [],
+      "screenshot": "screenshots/CAT-KEYBOARD-MENU-1440.png",
+      "screenshotSha256": "92171a52f7e6b418a77374f3064951104d360493bc0b6843b2a247ee1bcb684a",
+      "finishedUtc": "2026-10-29T17:13:57.687Z"
+    },
+    {
+      "id": "CAT-SAFE-ERROR-1440",
+      "title": "Missing and malformed product IDs do not leak internals",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:57.688Z",
+      "humanResult": null,
+      "observations": {
+        "statuses": [
+          404,
+          404
+        ]
+      },
+      "status": "PASS",
+      "route": "/products/0",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        },
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-SAFE-ERROR-1440.png",
+      "screenshotSha256": "d55203409b5d37f302a92039c885456447578443a6eba226c9f6ac611001d131",
+      "finishedUtc": "2026-10-29T17:13:58.978Z"
+    },
+    {
+      "id": "CAT-SECURITY-SMOKE-1440",
+      "title": "Catalog is public while protected actions retain authentication and CSRF",
+      "category": "security-negative",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:13:58.982Z",
+      "humanResult": null,
+      "observations": {
+        "protectedGet": 401,
+        "unsafeWithoutCsrf": 403
+      },
+      "status": "PASS",
+      "route": "/products/1",
+      "events": [],
+      "screenshot": "screenshots/CAT-SECURITY-SMOKE-1440.png",
+      "screenshotSha256": "d700b2e80682ed8c976c2072cf02f77cb8b75be8fee21b67e872902e5f96dc8b",
+      "finishedUtc": "2026-10-29T17:13:59.731Z"
+    }
+  ],
+  "finishedUtc": "2026-10-29T17:14:00.059Z",
+  "summary": {
+    "PASS": 52,
+    "FAIL": 2,
+    "BLOCKED": 0,
+    "NOT RUN": 0
+  }
+}

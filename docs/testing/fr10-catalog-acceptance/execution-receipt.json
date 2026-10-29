@@ -1,0 +1,84 @@
+{
+  "source": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "tree": "797bf319420e7a82f5d2ff89859f998ae9117b35",
+  "attempts": [
+    {
+      "attempt": "baseline-1",
+      "summary": {
+        "PASS": 52,
+        "FAIL": 2,
+        "BLOCKED": 0,
+        "NOT RUN": 0
+      },
+      "startedUtc": "2026-10-29T17:12:59.814Z",
+      "finishedUtc": "2026-10-29T17:14:00.059Z",
+      "resultPath": "attempts/baseline-1/browser-results.json",
+      "receipt": "attempts/baseline-1/execution-receipt.json",
+      "sourceProof": "attempts/baseline-1/source-proof.json"
+    },
+    {
+      "attempt": "menu-recheck-2",
+      "summary": {
+        "PASS": 3,
+        "FAIL": 0,
+        "BLOCKED": 0,
+        "NOT RUN": 0
+      },
+      "startedUtc": "2026-10-29T17:16:57.702Z",
+      "finishedUtc": "2026-10-29T17:17:05.935Z",
+      "resultPath": "attempts/menu-recheck-2/browser-results.json",
+      "receipt": "attempts/menu-recheck-2/execution-receipt.json",
+      "sourceProof": "attempts/menu-recheck-2/source-proof.json"
+    },
+    {
+      "attempt": "empty-state-3",
+      "summary": {
+        "PASS": 0,
+        "FAIL": 12,
+        "BLOCKED": 0,
+        "NOT RUN": 0
+      },
+      "startedUtc": "2026-10-29T17:19:46.768Z",
+      "finishedUtc": "2026-10-29T17:19:59.811Z",
+      "resultPath": "attempts/empty-state-3/browser-results.json",
+      "receipt": "attempts/empty-state-3/execution-receipt.json",
+      "sourceProof": "attempts/empty-state-3/source-proof.json"
+    }
+  ],
+  "focusedRegression": "regression-results.json",
+  "buildOnly": {
+    "argv": [
+      "mvnw.cmd",
+      "-B",
+      "--no-transfer-progress",
+      "-DskipTests",
+      "package"
+    ],
+    "exit": 0,
+    "observedMavenDuration": "25.406 s",
+    "finishedUtcFromMaven": "2026-10-29T17:02:34Z",
+    "startedUtc": "NOT RECORDED for initial tool build",
+    "testsExecuted": false,
+    "log": "Original terminal tool output; no retroactive raw build-log claim"
+  },
+  "startupEnvironment": {
+    "Java": "Oracle JDK21+35, explicit executable",
+    "Maven": "Wrapper3.9.11, POM Enforcer passed",
+    "PostgreSQL": "17.6, unique named loopback container per attempt",
+    "Docker": "29.4.3 client/server",
+    "Node": "See actual per-attempt -v receipt",
+    "Chrome": "156.0.8078.48",
+    "Playwright": "1.62.1 bundled; no package install",
+    "JVMTimezone": "UTC",
+    "profiles": [
+      "local",
+      "demo"
+    ],
+    "mailHealth": "Disabled only in disposable catalog runtime, matching PublicCatalogIT; SMTP not tested",
+    "credentials": "Random per-run in memory; disabled demo owners have no login credentials"
+  },
+  "cleanup": "Each receipt verifies only its exact owned ID removed and own Java stopped. Docker Desktop was started and left running; no existing resources removed.",
+  "privateRaw": "Outside repository in OS temp. Per-attempt receipts list SHA256. No public raw app logs, config, database dump or credentials.",
+  "knownPreflight": "Initial Docker named-pipe connection failed; after Desktop startup both endpoints reported29.4.3. No DB/container used before readiness.",
+  "finalStatus": "FAIL — FR10-CAT-01; HUMAN PENDING"
+}

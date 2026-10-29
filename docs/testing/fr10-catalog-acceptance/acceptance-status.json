@@ -1,0 +1,44 @@
+{
+  "scope": "Master Plan FR-10 Catalog only; HP clarified scope",
+  "technical": "FAIL",
+  "human": "PENDING",
+  "humanAccepted": false,
+  "humanCases": 36,
+  "humanReviewer": null,
+  "humanTimestamp": null,
+  "humanSignature": null,
+  "uniqueFinalAutomation": {
+    "PASS": 54,
+    "FAIL": 12,
+    "BLOCKED": 0,
+    "NOT RUN": 0
+  },
+  "rawAutomation": {
+    "PASS": 55,
+    "FAIL": 14,
+    "BLOCKED": 0,
+    "NOT RUN": 0
+  },
+  "focusedJava": {
+    "tests": 30,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "Node": {
+    "tests": 7,
+    "pass": 7
+  },
+  "findings": {
+    "FR10-CAT-01": "OPEN / Medium / HP owner / TD reviewer",
+    "FR10-HAR-01": "Harness synchronization corrected; initial FAIL evidence retained"
+  },
+  "FR06_G02": "RECORDED ACCEPTED WITH DOCUMENTED LIMITATIONS per additive3ba76d3; direct decision/raw-review traceability pending",
+  "FR07_G02": "AUTHORIZED / NOT RUN; TD owner, QD support only; no execution by this task",
+  "G01Human": "PENDING, not altered",
+  "QA02": "IN PROGRESS, not altered",
+  "QA03": "NOT COMPLETED, not altered",
+  "releaseAccepted": false,
+  "productionChanged": false,
+  "noMergeOrApproval": true
+}

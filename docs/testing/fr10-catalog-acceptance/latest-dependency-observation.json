@@ -1,0 +1,46 @@
+{
+  "observedUtc": "2026-10-29T17:29:07.073513+00:00",
+  "PR69Head": "3ba76d3b30fc2e7631902338aee01590c4d7b411",
+  "PR69State": "OPEN/DRAFT",
+  "acceptanceRecord": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ba76d3b30fc2e7631902338aee01590c4d7b411/docs/testing/qa03-fr06-acceptance-20261030/acceptance-record.json",
+  "recordSha256": "1e5f57ab0eb8d2d1e88db7084c5127cf0b381a35369a705ab1569e3c447a8e97",
+  "gatesAsRecorded": {
+    "FR04": "ACCEPTED",
+    "FR05": "ACCEPTED WITH DOCUMENTED LIMITATION: historical Docker cleanup incomplete; FR06 does not replace it",
+    "FR06": "ACCEPTED WITH DOCUMENTED LIMITATIONS",
+    "FR07": "AUTHORIZED / NOT RUN; TD owner, QD support only",
+    "G01_human": "PENDING",
+    "QA03": "NOT COMPLETED",
+    "PR69": "DRAFT; no approval/merge",
+    "Q70_S01": "OPEN / Medium — ACCEPTED RISK — LIMITED"
+  },
+  "limitsAsRecorded": [
+    {
+      "id": "FR06-E01",
+      "status": "RETAINED / ACCEPTED WITH DOCUMENTED LIMITATIONS",
+      "scope": "Cleanup observer case-sensitive false stop, read-only exact-ID/name cleanup proof and separate remaining-mode observer correction; no normal seed retry or pinned guard change"
+    },
+    {
+      "id": "JAR_BINARY_EQUIVALENCE",
+      "status": "NOT VERIFIED",
+      "scope": "Source provenance and original QD JAR checksum do not prove byte-for-byte equivalence to another build/JAR"
+    },
+    {
+      "id": "SHARED_CHECKPOINT",
+      "status": "SAME-PROCESS ONLY",
+      "scope": "Shared validate-and-preserve checkpoint; no shared full cross-process/crash recovery claim"
+    },
+    {
+      "id": "LIVE_GATEWAY",
+      "status": "NOT VERIFIED",
+      "scope": "Synthetic PAID/manual attestation fixtures, not bank/gateway settlement verification"
+    },
+    {
+      "id": "TD_SEED_EXECUTION",
+      "status": "NOT RUN",
+      "scope": "QD-launched child JVMs are not TD-performed independent seed execution"
+    }
+  ],
+  "authorityLimit": "Additive QD-authored repository record reports HP decision and TD raw PASS; direct HP URL and TD raw-review URL/hash still pending. This task did not perform their review or new FR06/FR07 execution.",
+  "oldPendingLabels": "Preserved in execution-time snapshots; current workflow status read from additive3ba76d3 only."
+}
