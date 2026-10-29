@@ -73,9 +73,17 @@ a:hover {
 
 /* UI-02: contain long references and keep wide data inside named scroll regions. */
 .app-main .row > *,
-.app-main .d-flex > *,
 .app-navbar-actions {
     min-width: 0;
+}
+
+.app-main form.d-flex > .form-control {
+    flex: 1;
+    min-width: 0;
+}
+
+.app-main form.d-flex > .btn {
+    flex-shrink: 0;
 }
 
 .app-main input,
@@ -85,6 +93,7 @@ a:hover {
 }
 
 .table-responsive {
+    position: relative;
     max-width: 100%;
     min-width: 0;
 }
@@ -125,6 +134,10 @@ a:hover {
 }
 
 @media (max-width: 991.98px) {
+    .app-main .row.g-5 {
+        --bs-gutter-x: 1.5rem;
+    }
+
     .app-main .app-dashboard {
         grid-template-columns: minmax(0, 1fr);
     }
