@@ -1,0 +1,19 @@
+{
+  "source_sha": "8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5",
+  "command": [
+    "node",
+    "--test",
+    "src/test/js/notifications.test.cjs",
+    "src/test/js/buyer-cancellation.test.cjs"
+  ],
+  "tests": 33,
+  "pass": 33,
+  "fail": 0,
+  "cancelled": 0,
+  "skipped": 0,
+  "todo": 0,
+  "exit_code": 0,
+  "timed_out": false,
+  "log_sha256": "f6a1f81352c14e66db6b72dd84d9b03389298d48b0490c4b05b424feb42559ef",
+  "scope": "Includes the 12 notification tests; do not add overlapping runner Node count"
+}
