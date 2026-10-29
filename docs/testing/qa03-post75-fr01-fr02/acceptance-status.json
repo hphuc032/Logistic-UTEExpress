@@ -29,5 +29,46 @@
   },
   "QA03": "BLOCKED / NOT COMPLETE",
   "PR69": "DRAFT",
-  "approve_merge_forcepush": false
+  "approve_merge_forcepush": false,
+  "FR07": {
+    "status": "ACCEPTED WITH DOCUMENTED LIMITATIONS",
+    "hp_decision": "HP directly checked the original fr07-final-evidence.zip and issued the official decision: ACCEPTED WITH DOCUMENTED LIMITATIONS.",
+    "hp_decision_provenance": "Official HP decision relayed by the user; no signature or approval timestamp is recorded here.",
+    "acceptance_scope": "Only the executed finance assertions are accepted. Live payment gateway verification and production finance reconciliation are outside this acceptance scope.",
+    "verified_execution": {
+      "zip_sha256_and_crc": "PASS",
+      "zip_sha256": "PASS",
+      "zip_crc": "PASS",
+      "artifact_hashes_and_sizes": "48/48 MATCH",
+      "artifact_hashes": "48/48 MATCH",
+      "artifact_sizes": "48/48 MATCH",
+      "junit_xml": "10/10 valid",
+      "tests": "330/330 PASS; 0 failures, 0 errors, 0 skips",
+      "maven": "BUILD SUCCESS; exit 0",
+      "java": "21.0.12.1",
+      "jvm_timezone": "UTC",
+      "docker_before_after": "No new container remained"
+    },
+    "preservation": {
+      "original_evidence": "Original fr07-final-evidence.zip retained unchanged",
+      "sha256_and_crc_record": "Retained unchanged with the original evidence",
+      "execution_receipts": "Retained unchanged",
+      "findings": "Retained unchanged"
+    },
+    "documented_limitations": [
+      "JAR binary provenance/equivalence with the pinned source was not fully demonstrated.",
+      "Docker before/after does not demonstrate complete lifecycle cleanup.",
+      "Independent FR-07 execution was not performed.",
+      "No live payment gateway verification.",
+      "No production finance reconciliation."
+    ]
+  },
+  "project_status_snapshot": {
+    "QA02": "IN PROGRESS",
+    "QA03": "NOT COMPLETED",
+    "G01": "PENDING",
+    "Q70_S01": "OPEN / Medium / ACCEPTED RISK â€” LIMITED",
+    "PAY03": "DEFERRED",
+    "PAY-03": "DEFERRED"
+  }
 }
