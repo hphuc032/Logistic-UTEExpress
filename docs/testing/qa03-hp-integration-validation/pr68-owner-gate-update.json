@@ -1,0 +1,28 @@
+{
+  "pr": 68,
+  "reviewed_head": "c593352492184da2a9ca46ebea4a55b802ac6416",
+  "qd_scope": "Static delta and GitHub status/evidence availability; no new Java/PostgreSQL execution",
+  "files_changed_since_e79b760": [
+    "VendorProductPromotionController.java",
+    "VendorProductPromotionBindingTest.java",
+    "PromotionBrowserFormsIT.java"
+  ],
+  "delta": "disableForm binder rejects request headers as binding candidates, preserves version-only allowlist; tests add normal disable, CSRF/role/ownership, forged fields/header-version/stale regression",
+  "td_signoff": "User-relayed OWNER TECHNICAL SIGNOFF; local697+1326=2023 reported",
+  "ci": {
+    "status": "SUCCESS",
+    "run_id": 40813357695,
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40813357695"
+  },
+  "report_check": {
+    "path": "docs/testing/QA-02-PR68-gate-report.md",
+    "ref": "c593352492184da2a9ca46ebea4a55b802ac6416",
+    "http_status": 404
+  },
+  "handoff_gate": "Publish sanitized source-bound report/manifest/log hashes; distinguish old2011 on8bab8dd and new2023 run; HP decides acceptance",
+  "production_refund_guards_changed_by_delta": false,
+  "pr68_merged": false,
+  "finding": "Q70-S01 ACCEPTED RISK — LIMITED",
+  "qa02": "IN PROGRESS",
+  "qa03": "BLOCKED"
+}

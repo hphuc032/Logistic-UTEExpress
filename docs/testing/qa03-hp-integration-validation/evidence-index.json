@@ -10,16 +10,17 @@
     "composition.json": "b47ab32cc0bad82b5f003a043f355f36eddef35c2d97956603e39fa65d2ca902",
     "controlled-seed-result.json": "e1dffefdd23f1f4075a155dc4cf97ed45fb2b8fc893944313b3a6dbee079b7b8",
     "full-run-manifest.json": "c90024ffa31ef0e1bd2357d2dfc623f3e3beb8475753a0f68836caf4c3362231",
+    "hp-final-decision.json": "f3b3cb0526bc1b505783d2fd717d013d19249302c90050b646587a248e513cf0",
+    "integration-gates.json": "4dbc9cee63bb84261b93e565b76b8e76191eaf0437ad5d9e3de8215dcc15dfa7",
+    "manual-runtime-current-attempt.json": "6c9477cbfb326828a5e15411a19439c0241d2686bb50f25705365e5c2d207a98",
     "normal-seed-result.json": "0b343bf3cec9e84ed003023f74d1d3549c5e9c0b9a8a903dfe1cbcd37fe9eb43",
-    "report.md": "6c11a3b2ba24a1a31c854cbe417832a1e4ca7ee557c594b4fa41baca78fd408e",
+    "pr68-owner-gate-update.json": "c5a3d9c75a4db5a73e97cc4924f85885f6aba880bea1907a8ff9c0dfe1c0b50f",
+    "promo03-boundary-request.md": "e52257add562e4e2fef5cc543534e00f0db28f196379b47e1764692bef8399c5",
+    "qd-master-plan-gap-audit.md": "9d9d3175777985fc16f46d52b7f63038d8da1eb649d7158b9f0862f434d2fb87",
+    "report.md": "d0076138a2047a4030ebb8f765e770ca5cd62cbf65bd8704273c24c2d72c8622",
     "residual-risk-proposal.json": "f1b059dd12c43c00f1be4d94495de863a3064c01790293e502ec0b089793d8c1",
     "run-crosschecks.json": "6b948a6db8555013c88702b4fad6acdc39698caaafff4df9501a3411c8252b4f",
     "supplemental-tests.json": "0e4e7d4b45781d0fcadfde8c27dad02d8ea9bb20bdad1c2e836ad7e85086525b",
-    "td-confirmation.json": "e17f516322b99ac27bac73fbea1d890bbdc45b025124ef758c6a3565a6aaa2a5",
-    "integration-gates.json": "344a3b90c0e33dc942d15343362eefecbe965256ac59b9bf2c8fbfcea50cde6b",
-    "hp-final-decision.json": "f3b3cb0526bc1b505783d2fd717d013d19249302c90050b646587a248e513cf0",
-    "qd-master-plan-gap-audit.md": "9d9d3175777985fc16f46d52b7f63038d8da1eb649d7158b9f0862f434d2fb87",
-    "promo03-boundary-request.md": "e52257add562e4e2fef5cc543534e00f0db28f196379b47e1764692bef8399c5",
-    "manual-runtime-current-attempt.json": "6c9477cbfb326828a5e15411a19439c0241d2686bb50f25705365e5c2d207a98"
+    "td-confirmation.json": "e17f516322b99ac27bac73fbea1d890bbdc45b025124ef758c6a3565a6aaa2a5"
   }
 }

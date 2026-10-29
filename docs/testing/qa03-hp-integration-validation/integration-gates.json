@@ -1,14 +1,24 @@
 {
   "decision": "hp-final-decision.json",
   "checked_pr_heads": {
-    "68": "e79b760d1e48f0532e6cb132e76ffa44e53dbf78",
+    "68": "c593352492184da2a9ca46ebea4a55b802ac6416",
     "70": "688884cd33f4b2f4dc62f5d33a4c4002e9146660"
   },
   "pr68": {
-    "exact_head_ci": "SUCCESS",
-    "owner_review": "PENDING formal owner review",
+    "exact_head_ci": "SUCCESS / GitHub Actions run40813357695",
+    "owner_review": "TD OWNER TECHNICAL SIGNOFF received via user; READY FOR HP MERGE DECISION in stated scope",
     "existing_http_evidence": "Positive form, CSRF, validation/ownership negative cases; source-bound historical evidence retained",
-    "hp_merge_decision": "PENDING"
+    "hp_merge_decision": "PENDING / evidence publication gate",
+    "owner_reported_tests": {
+      "unit": 697,
+      "postgresql": 1326,
+      "total": 2023,
+      "claim": "TD reported local execution, not independently rerun by QD",
+      "published_report": "NOT AVAILABLE / GitHub contents endpoint HTTP404",
+      "exact_tested_source": "Needs source-bound manifest; do not infer from signoff HEAD alone"
+    },
+    "hp_review": "Scoped code review COMMENTED at exact c593352; final gate requires published source-bound evidence",
+    "hp_review_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/68#pullrequestreview-5692679850"
   },
   "pr70": {
     "exact_head_ci": "SUCCESS",
