@@ -1,0 +1,21 @@
+{
+  "source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "merge_ancestors_verified": {
+    "PR68": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+    "PR70": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "PR74": "6315cc3bf831a7c2c05a89c69d7b1a3f5a96c5bd",
+    "PR75": "a5620f1971d3b684d9b05d7444f5e90442404656"
+  },
+  "source_tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+  "source_diff_main_vs_develop": [],
+  "backup_ref": "backup/qa03-before-pr75-sync-19b7e4b",
+  "build_only": true,
+  "regression_execution": "NOT RUN locally in this stage",
+  "preflight_helper_sha256": "3b81d3d3e1a589fc169d816eaec7699b12e68828f977312ceb774ea8cd68a528",
+  "preflight_class_sha256": "d88d988df66a519ff56b6c87b4f8ad1d4ae7b4f2905906893c31d3f7d355b3b8",
+  "classpath_sha256": "a154ec6a750952f4e1e8e610975ea4be8eef7b326ab5c3ed78500f5a63d5a9b1",
+  "UTC_args_sha256": "7120d5f730648c7bab6ffdbb5917b204ee6126f164caa489c47da4336124d774",
+  "required_java_config": "-Duser.timezone=UTC; matches existing postgres-it profile",
+  "raw_logs": "Private .work only, hashes in command receipts; no credentials/argfiles/raw logs published",
+  "frozen_jar_sha256": "ef9f481607a55f5593a5245e1ee8f818433088bd16642c3018fa3c9c410821aa"
+}

@@ -1,0 +1,3955 @@
+{
+  "recorded_utc": "2026-10-29T13:24:54.420810+00:00",
+  "develop_sha": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "PR75_merge_sha": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "PR69_integrated_source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+  "merge_parents": [
+    "19b7e4bdc811b7c6059ce742eb35995830f23f6b",
+    "a5620f1971d3b684d9b05d7444f5e90442404656"
+  ],
+  "backup_ref": "backup/qa03-before-pr75-sync-19b7e4b",
+  "main_source_objects_match_develop": true,
+  "main_source_objects": [
+    {
+      "path": "src/main/java/com/uteexpress/UteExpressApplication.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f10495c3793992e8bd7d60757fb50c3d7892df2b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/controller/AddressController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f70ba02b06d16b6a04d9bab1ec88fdc13b8b665f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/controller/ProfileController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c59a7ec582fdeadf7097917706d30bb5fa70c085"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6b111eb836609452deca8b618f57b45ae1001511"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/dto/AddressData.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ec35a9206061d8ffbe243f7d3f2d2661346a277a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/dto/AddressForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5f56c5570371b948f7fc3dd01fa8a1c984265dd4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/dto/AddressView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7b35390dcd97684dbba70131dde4abb9474bc3e1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/dto/AvatarUpload.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4f263f07c97f1fb4a687a7e0d3e4e3cb6761878b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/dto/PasswordChangeForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f68f13ec94993c68bfbae9a5b84d1ef2653b7c12"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/dto/ProfileForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4055e7eb191fd4e87fdab8d8cf2c0c442b75c77f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/dto/ProfileView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "fc67f79de764198c7b21bf7c781f71f450fce8e7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "06dfed7aab26663a809a7c1f89625939fc2fc8d5"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/entity/Address.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d7841c805a17469a5d9c952dabdb21e13240e3db"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e9a1fab7d9d195143afe487feac5b86b083d809c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "00bf21d54675266f09b4f1589ea7532e8e79a72d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/repository/AddressRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "073bf853b67bead422f41f820cbda8160894c55a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5a419c8225d1eb3a9cdc53b0dfd7cd2e43353b48"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/service/AddressQueryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c368980d1717782f8d0cf6edb9412244ab1bc181"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/service/AddressService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5d08a33606033bda2c710bcd9090b98cc795ced4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/service/ProfileService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c9bc25ec3e38023613fc0ff7d53f178fe6e1ed92"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f64ce054bb6d1f5a523cdc4b72dea4ec0013f3a7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/controller/CartController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7b21d88939a134b23e2120ce5dc273b5e0a550cb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/controller/CartPageController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "183776a987c52df1f5befac41d3068e2488fef77"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a5bf84a001ee507b88bec16db42d74c7a626015f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/dto/AddCartProductRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1e038eede604ad14291a370d37abeec0f01a42d4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/dto/CartItemStatus.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a986eefd2cf7bb20ca2e94c6dbf9dde5746918c8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/dto/CartItemView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "131c604320771e776f0bc4d5fedb8aedbe071a25"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/dto/CartSelectionForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f5c6b3787d00a39462e23abab45133bf3094db52"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/dto/CartView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a5630ac68420508a316cb9f93734e9d4b97b2895"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/dto/SelectCartItemRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "308a27f33468ec8fd601eb75e6446f36ce4ab085"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/dto/UpdateCartQuantityRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "aa651e68e46dbd6ef497e0a321b3d64f2e60d5f1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "45ef0b7ca02d6354d1035d50ee6a9c4b5eaa463b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/entity/Cart.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4a237fdcd9c06addd4fb67a467dc6b8aa48e5082"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/entity/CartItem.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c6b82e79aa7104e2ab284bb9fcf445204730a94a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a7767d14aafff37b1dfb426905c07ace20121da3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "32184e2c4851c04881afa4d621e986e2181a5d4f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/repository/CartItemRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b5c31c24c17b24928501939740faf70d1e287523"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/repository/CartRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d4dcb145f81b8eba61e3e9b2436a71d2171de96b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0f9fdcd0a82b9e9f1ce5f21e3403007de4dc1f8e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/service/CartService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9a99e977094c232c517469f7bed0a8254e4b88dc"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/cart/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2fcab8150387d78f8b67b20f300af923fcbef3bd"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/controller/PublicCatalogController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "14a469367d91c8a6c2a86db58299c04419f2fba2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/controller/VendorProductController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2818cb95da98e14d515eb3e0d2c81661f4516fc9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/controller/VendorProductPromotionController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "09477da0a4361edfebd2e0e91e34235e01f23995"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ac3060b331a54d909ee383f96a601811cbc5f598"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/CartProductSnapshot.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "880623b26ef04c398b347512e9828aa9db5f455a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/ProductCard.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6c2070b9f351fb3175c5094765a13355cdac5388"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/ProductCreateRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "db8d5740c8ec1c2219554b54f64165dc99f1d938"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/ProductDetailView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "93c9341ff21df6d0ff6586b70f07e5483e87830d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/ProductImageView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "cd0c6b8b7dcce3d1ebdb25182d274933d3c6dc5a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/ProductSearchCriteria.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6c31a397280e856f8d921874af9741431650c313"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/ProductSearchPage.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6d8d2fcb2ed312d5f3e5d22e8174d695d8bca362"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/ProductSnapshot.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8a136fcefdbbf1bbb024b2d32a1737950480d795"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/ProductSort.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "08540238c1f617e2c090d08259f3a01795b232a3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/ProductUpdateRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "53c373dc93f973aef0705c4615e0e0f9e0020951"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/ProductView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2336772dfad5e4bb2ff9c4ac9b3e7b26dda9c659"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/PublicCategorySummary.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4dcff985e4f0b036cb97725b75c7d949d6e7fca2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/PublicCategoryView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c6c26d5623f51baaa5808399cc9d13ced8f6bdee"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/PublicHomeView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "cf3684a2f7a414495b4cb603677ba51228a5bb1c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/PublicShopSummary.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "26aef48c46188d2c058c7af889b528ca3dce2af7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/PublicShopView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "823ba7bff1801531e4429a1376740307061b562f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/StockQuantity.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "078c1bc8f02491cb98083800614a351fc534bf80"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "892109712c12744df1e329f0cd85146b80b2288f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/entity/Product.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ddc657e3dba862796359783ca4a5969d71ae849a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/entity/ProductImage.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4018fdb91e5eab39bcda72de2a377131c6d947af"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/entity/ProductStatus.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "eb018582f97aa7419b2845ec7c63064eadac6af7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "98094ae0a436147eea1aaec6992b94ef88bf8a81"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "aaf2dc1378d840a88472a22b5b4dbacab6b6c279"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/repository/CatalogReadRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "971155e56a246ed9d95e13539dcf09f0ce68f551"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/repository/ProductImageRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "69d5565670fb2fc3395856b6cbf1c5439b4839e4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/repository/ProductRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5281c930a434149ccfdc2983272cc1396285405a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ee93bdfa3c74532054f718c40aaac5c781865501"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/CatalogQueryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b09acbd518baa6d1ec6f1fe7eeec0b7ad37a19a2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/DatabaseCatalogQueryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a89531fe5dc6fa8a780fd651c4e6e69fd4b517fc"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/DatabaseInventoryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "af1bbef4f609c48616b7322b0b082f838ccab1b7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/InventoryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2a42417aea176f10e04bafc5b75ed982b30cf640"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/ProductDemoSeeder.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "04059d73ef9210bcedfefff9c90de2314e2d329e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/ProductModerationServiceImpl.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bb18b3fb9cd94b617b0ef2ef66832877aee98795"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/ProductPromotionManagementService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bd515ae651f6f5df0419b7a551bb756daa0d8ab4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/ProductService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0485384a7294a5002dae492e12233837ee86baf1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/PublicCatalogService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1a3244ec7051f684041495c9f2811f02e7ba84de"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "74b59b78052c397c4cf631162b8eed6242560939"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/controller/CheckoutController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8569b37d0a59a4f78e97f15037b7b25b4b6d006b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/controller/CheckoutPageController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "79fc2dc4b32c918224be52655963f7b52b71baf8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "47dd9ea4cd6ebcf53e57d4290159db1b8452eb38"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/dto/CheckoutPreview.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "74b08fdc4677dccd7736e7281fbc5d3db9fc3773"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/dto/CheckoutQuote.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b4d7c9a4eeae0b7ade59f2796a1278c25ddf1fd1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/dto/CheckoutRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "172bf2caa39f21eb7b155bf74f8f815d197d7a8e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/dto/Money.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "67128e3f6bafd93f57315ec5470a1bda0a3443e2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/dto/OrderTotals.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c613253d53d89b71e52bdb8e72ec0cfc3a7bbf89"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/dto/QuoteRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "97e98358d4fb710f5f8f12cc50013dcd9ee0740b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "de356d6a66cb8171e835d4374dd649f0b9df517a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "12ebe4f32352ab4898d72028b3b5915398bdccb7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a17e215331e24cb32661fcdb4df46ebd58d494b1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "14a3256a32524cabb6fde2e42af6e5d3877156bf"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/service/CheckoutQuoteService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4d15323f89322a291a3dd1f2c11bdea6ddfb96f9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/checkout/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "24f832390fa0e9e1cff66df5a5cc5044c6fe79c9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/config/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5bd0da8788fb2d5ddf979667a87efab8f30b7a98"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/controller/FoundationController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "915e70bb072dd616f7f62541ef5be67c4920873b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/dto/ErrorResponse.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9b359349e0ae747b60ba6588706f93ae1a3ca5d3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/dto/FoundationResponse.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d52a4cc2f297d3c8c7e1993559dc189dd3bdfaca"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/exception/ApplicationException.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "30c6c63b7848177f504bafa9c3b0c805b697b23a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/exception/ErrorCode.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "10e603f478636bb25add438d70ff1ceec0642aa9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/exception/GlobalExceptionHandler.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ecfe3b9adffb4e0b1501735159724465a5711d03"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/money/Money.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d445c1c0f20b29a0634c0affa0746f322c688c1b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2f3e448318f77ccc6aaad280c5b6fc81e711e815"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/service/FoundationService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "fbd8bc5495eacb88f76a7219bfa7a8339a4dd585"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/storage/FileStorageService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7de38dd21fad589a000d861697e529e310fd3757"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/storage/ImageStoragePolicy.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6fa8e9aa2e29af45a8634705ee73e589907c2231"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/storage/LocalFileStorageService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "091a6a25c19f61b333f8480f0bc9f5398b456e28"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/storage/StorageConfiguration.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "983a2ef10886c54630b1664f05067f46e4ec1920"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/storage/StorageException.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b707ec494f341139d5bb206ce905f332f43ed08d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/storage/StorageProperties.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d785ed42339dc3c39d1dcda57548f3e546ff8e68"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/storage/StoredContent.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f4025869915dd53447dddae7a2bcddd869dad387"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/storage/StoredFile.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "55b413d676c4576e4e18bbef78965cc53a594de3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/storage/UploadContent.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "58238e9e9927a802ac5c364ff90613b5d24638af"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/storage/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b67b9025c0f9d197b0876deb0be61a55ae2ffdde"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/common/validation/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "43cca6774d68885e4bcd4597ce786e0d174d561d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/controller/EngagementController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bf6e398765b8bafd597a8dd25dc0ef00b250a0c0"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/controller/ReviewController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "55ff5c53c1c008bbb31c9bc02a8732fb7ecb1458"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e8ca67f02fc0fe0ddde05ab912845aec333cf3b8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/dto/CreateReviewRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "aa27bee4aac711bbd4febaf6ecfed715ee7c5742"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/dto/ReviewContent.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8e4f91db56d6fcb991996351d7b599d759f8168b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/dto/ReviewImagePolicy.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8a0a77b42c2a327795792c89463175bdc66ee5e2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/dto/ReviewView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5dae38f799373637dc767e4721e0871c5587a6e1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/dto/SavedProductView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6bad81e1c787ede1bda88bbe22ccd927c3d44b17"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "17c72c2f9714de57ec1b00096a70e0a976812d45"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "86f4a4cbaee2377a2e6a5c21b773a73dedcf4a59"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a6454fe668b19454ce88487198d86a733afc71eb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/repository/EngagementRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "73ac4213c68e84b6875e0af41fa680b1dba6cbaf"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "aa0bbe9a07781ceea0d8eb119fb73b532ae18518"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/service/EngagementService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f6f11bcd334fe1d6e7785ee3e9ed57b0e091ed66"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/service/PublicReviewService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f815ccbc2adbb74458f7097d6fbbc0f58ecfb3bc"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/service/ReviewService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a615300f06dc58d59888eec784a839cb4b854096"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/service/ReviewWriter.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e591b68a871f943668c89b96232ecf3d1521dd81"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6f3229c213e1c3325d1f7575be8d29fb810ee90a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/web/EngagementNavigationAdvice.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7b4dffcb4f5d1917e3d8fe7d4f34b0740f6a11f9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/web/EngagementPageInterceptor.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d84ae5d0308124441aaa53ea15b99cbfb70321a6"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/web/EngagementWebConfig.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "11b35bd26f9a15daba2728bd7184185521095a23"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/controller/DeliveryAttemptController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8b143ca93accc7f8acf492541bd1a6975172b1a9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/controller/ShipperFulfillmentController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ddf65fa5f7e96d1e39e1702a75005e6336e2c6e9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/controller/ShipperFulfillmentPageController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2789594a5baa412a1480004c7d624ac38563083d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/dto/DeliveryAttemptResult.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "77671de58d4795b7bbe4ab7780d2a7f40cf87d24"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/dto/DeliveryFailureRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1c2d908386df54bac77ac7c705d566057db07ade"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/dto/FulfillmentRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "980c4b397df614b36157d7adf369ea188e6d42dc"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/dto/FulfillmentResult.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f69bd1c67e05d662e692d8b6632565e2b600ca5b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/dto/RetryDeliveryRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4741330211cf7420793af2a406824cb24a3322cc"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/service/DeliveryAttemptCoordinator.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b78ef43934e550e3488ff5bce3502f85fca2e909"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/service/ShipperFulfillmentService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3367712f64908edfcb86192777122dd652576440"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/AccountGovernanceController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "666140c8c00c090f8538e76d38e2b9cf9d22ed27"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/ActiveShipperController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c103faaca31ecafc100c7729b8df56939f5e85b8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/AdminRevenueController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "afc73aac9c364f3993b69281022eb4568051ad66"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/CategoryManagementController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5bb706689962a4e5d167e16143f615bc11e5576b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/CommissionController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e40988304d7ce6dc3e18321d3466a91d242542ff"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/ModerationController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4cdadc3b623282c03af06b2276cd0cafc1d1d42b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/OperationsOrderController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "35bb20c9cb16eeb83c128e2683552c50e72ec516"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/OpsAuditLogController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8fa24ac4e4a637d36718b6fe0f9ebf149026f4ab"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/OpsDashboardController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "aa6b04b7527b6f29a2fe052971d4e602072e976f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/OpsReportParameters.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "675da5cf306205f0ff5cfa17cc5eca1137ab8ca2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "71d099e27670ca199ede54618fbbe97d7b0e6ff3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/AccountView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a3fcbb06c634ce9e8382090550476d201066d31d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/AdminRevenueSummary.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "060a005ecc8fa5689fbff0d2b658f6d0b549cd0a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/AssignmentShipperOption.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "61052eb7e81234efed2d20ee3fe68c94d56c0460"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/AuditEntry.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2157cd706eb982728486c0d000091ac4b812ae96"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/CategoryOption.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "16fa2543c288a78967b76f65e715c52743b8d16b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/CategoryRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a103bdfe57b6b10ef96cb8401ad2f7f3c0a69527"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/CategoryView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "eac9e642090370eef2dbcadaf83e40138e04cc4a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/CommissionPolicySnapshot.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a8ecf8ebed9f9634916dacf6cbeb494238f83a32"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/ManagedRole.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7630f33298c0fc340df0349b66956fda036cfde9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/ModerationView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7fc133c3f09678129e2cbe25ce7439d636c0ccd3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/OpsAuditFilter.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1a68ab067608666ba88b3b0e6e66e4b8e4ff9103"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/OpsAuditPage.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4e18d9cc6ec9f0b852b2ccf5698b0606cb85aa83"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/OpsDashboardMetrics.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7e327b129666892e588e8c44565b3b8b8671aa13"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/OpsDashboardView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6bb4628fa642357e3ecaded3ba4517f27108f52b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/OpsOrderDetail.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4427f1f242d6efc5a89683ba1ac1785805f70813"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/OpsOrderPage.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "824d3652e9129577fa088f8c05edbed2f8b20b60"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/OpsOrderSummary.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c4e325fc62f8c3fd0fd7bcd4bbd6329476112c00"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/OpsReportWindow.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d6cf70a1b47262c119a51c9470c17ff98c73f61b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3d643ce5bdb54e14efaee7329206a1088fc4b43b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/entity/AuditLog.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2162d0ce1531e4715c257e1f83bc3231e7e14049"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/entity/Category.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "eeb157232407f84637a462d9d166a4f8f4f10542"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6f4b9766813dfa1023fe85489dfe73ac1ceb34d6"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5242042fd61ccd8404378b53b49c840fb35cf259"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/repository/AuditLogRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "08be530ef7c980cf7abe4c066f2250d29ae6bc74"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/repository/CategoryRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9c8aeba24658b1d5a1363c50e0fc14cdbedcfcfe"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/repository/CommissionPolicyRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8f8df151f02ca208f2615d2af96a8d50aa9f76d6"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/repository/OpsDashboardReadRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ac5723363edc00e5c1c453211407d4ae1918625a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/repository/OpsOrderQueryRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8e24da216be00de6472f3b8cdd80af8110dfb044"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/repository/RoleGovernanceRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d0083d8a883709e4dd407dfe8b68ef4d6da0601a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a1904182319e8f878014f5235d2d9a457a010fe5"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/AccountGovernanceService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ce4f36b43b2998df3babf031d4f6fe1c5109c2fa"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/AdminRevenueService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1cf7fcc6f87e2392da814ef5a17b09f1aa6c553e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/AuditLogService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bafd2c48e93b3b5d5c0e55521b55d84719dfff2e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/CategoryQueryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "66c45499f35fd43212146b1f68b752e146c14b7a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/CategoryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "fc39530a39a7003ed438c757d27579006ac49488"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/CommissionPolicyManagementService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bc12b258ff56c0155b22c7979f99b6d91bf21102"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/CommissionQueryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4346009c7b068e806675907446c8e41f2c4e138b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/DatabaseCommissionQueryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "247ade6d0c0d10fc0f3ba32bbaeaade8b552884e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/OperationsOrderService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "18fe6b8a7460e3ec268dfbb31760f9fa0d441a30"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/OpsDashboardReadService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a48daf1d8f29a08f6385bf025acf33e48ad50d13"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/OpsDashboardService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c04e919d4a5875a0b1f79915bcca2b8934944a13"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/ProductModerationService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5305b51567bd5418f0bd2d8a90aceb1d9ee34fe8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/RoleGovernanceService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2310d11f02505e839bea9b898304649ced084260"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/ShopModerationService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1057a3b53943db76da6775a02ef8e922d277dbfa"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/governance/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "fb834e1263c09869a73d680a09c8814a985ccc9c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/controller/EmailVerificationController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "da46aad221b12434a9be046e7b35645228bf1f62"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/controller/PasswordResetController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "128387ec562444211c950e21cf721dc845d75519"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/controller/RegistrationController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b49275401727aaa448c9e73454be40072a190f7e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d1aee9f196d2631e6b0044e0491684843c33866b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/AccountGovernanceData.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "07c80f6678bd32b23ad3bb6a3a3640ab307881d2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/AccountProfileData.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5e2ef7052ed1fc10f47e09dc4ec1cd51c28e6bb6"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/AuthAccountSnapshot.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1e6d9085612635e94b7b74e6d5b05ef652fbbf46"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/ForgotPasswordForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f2e8d7920a7c09c818cdbf3f365679b77fb61a1a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/RegisterForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "93a62b77a7a9ec9ffb2312daf28a2a719f837f25"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/RegistrationCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "54fdbf7166936615393a3bbbe9fc44ce7948989e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/RegistrationOutcome.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9fa72c7cffdd9e66fb2892f4c3dd5bcbc0eab449"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/ResendOtpForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "57b5637392c8d6c3d7bc0b4383a467fb5b99e52d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/ResetPasswordForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "aa556898f963d1768127e65e1dbb8e1dacc37da4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/VerifyOtpForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "116aee1929ff4567b013e1cedafa89af35f8af2b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f881d1ba220ec823352aab4a7009c0d7cb5db3f8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/validation/BcryptPasswordValidator.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ba0298a9421c450f6976bbc6400612f3529cff89"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/validation/PasswordConfirmation.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "91f38eb40eac08c02dc3c9e1b5122cc7b592160f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/validation/PasswordMatches.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "06e256618ad8162b283516e138a9b3bdaebc091d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/validation/PasswordMatchesValidator.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0ca1a5174d966cbd82d5adffb02036ff2f9161d7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/dto/validation/ValidBcryptPassword.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "076b20cde71063e50ca55d285a36a9d0d7826551"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/entity/OtpPurpose.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5305965bf45f99870cd5c0a8c217391d8c4d4f94"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/entity/OtpTokenEntity.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9d6c942813693baaec32a18901b13b8f22145f63"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/entity/RoleEntity.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "658a2e328fa2a14865b7adfde65fe58b8b1708c0"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/entity/UserEntity.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e7d7894d2e657f08d20592f7b3165444f0b95235"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/entity/UserStatus.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b27913f6e501a93789d9e6ef98c0c522a1c12538"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bbf022d610da2bc844b30339729f303381142144"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8b428cfed5fafc6f491fa77aeab8562b76d2b3e1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/repository/OtpTokenRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "772136441e0da76cbf494c9620626f5e1547ca81"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/repository/RoleRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "851531af3df2808e375d7ef1f0d0738bf2ea169c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/repository/UserRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1e16ae1cc6c1458d8bcc84cc6f19e11a83ebb889"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/repository/UserRoleRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "34e630d519cd85e3eff9f337d0f0bd8f7ec68441"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d67238719d82a5b6ac3ad5d767a1424900631dbd"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/AccountIdentityService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "711fedd71febc8027e3148c5e798f4befb1627b4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/CurrentPasswordMismatchException.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5b58eb2698c070725bc0c3bb77391e7f4df93236"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/EmailDispatchResult.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "507b66e1c6057f85099d3b06d4ebedce56cd3fca"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/EmailVerificationResult.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "edf4ec1fa6c6c9dd251727a773d7bc6dadf909a6"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/EmailVerificationService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c93caec396a71e33926a70d8b991f5fe96bf3ad3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/IdentityAccountGovernanceService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b253c6e81a92a1e652aece0ac928e44eda7bc4cf"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/IdentityAuthenticationService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9503a86a4d40c104de7fea7b6cc3f9c94dbdd71c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/OtpCodeGenerator.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "70b2845a4231b18e91a23612cc4f9d8cd76783ec"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/OtpConfiguration.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8ba2b6399c742608870bad4d8297bc9db2347ea1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/OtpHashService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a7f16e1de29289fb9653b50bf2f1b66541755b26"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/OtpMailService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a31253aa3616e98aaa9409eedd91eed2aca78cfb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/OtpProperties.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ec8b7583c4601799de4536f693487982a2067765"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/PasswordResetResult.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5f9a0cbc61eb8695bfe4136b871dc2d96f0f7bc4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/PasswordResetService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e1b847e9f2cfc3be1a55e0028cb16218bf26e384"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/RegistrationConflictException.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4c4a923a7d4a9c388f835a65713f39f278f63e28"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/RegistrationService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "056893e6c4edc6c2adb7be85db8691a8611f105a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/SecureRandomOtpCodeGenerator.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "04bc95bed67ed5ef4ba45ad4b2b3f4f9e6356a6d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/VendorRoleGrantService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4c9d0e251fe1e3899bc496de6fddda158c79c4da"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/VerificationMailProperties.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "aa944677c89400935c5c9e3376e83d6c4824d39a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a8110d548a7b4cae1ae3c86b79662a13b528e77c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/validation/PasswordPolicy.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "37070932459a10b2c61c8cdc13c4473eb5eeae93"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/controller/NotificationController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "042bed7db9397619ea0f9fd7bf01f4f38a43b86b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "008adae6db949c7c985671a8d6f6c18f0492f2ec"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/dto/NotificationCommitted.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f2816071ad290dc8b65d51b4ea428ad0c7c87340"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/dto/NotificationView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9866fb0a1a590d7963f71eaccfed19edb7968601"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "38064ac43c1ae035be8045c0c1e1e0f80591da2e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f836a3ce18381c0ad3a8f32754e223ad57d165ac"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "715ea53d817beab6a4346c5d1fd8e760d33113cb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/realtime/NotificationSocketConfiguration.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "704d2fd2ad4355bdb58d0e606ee1f759cd8ae1fa"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/realtime/NotificationSocketListener.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "747fc277fe44c828dc0db8ce6114272b687b62af"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/realtime/SocketConnections.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "35916108165e25ad8d03012fd82845f2e16d66e3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/realtime/SocketHandshake.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d245b6298e3f19a1366289cddc47e5f62a40da0c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/realtime/SocketInboundGuard.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "dd30d9c5419e26b001f879d9d2ef66a23db6279e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/realtime/SocketObservability.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "54887673358e70db51fcedaf0e343cbe343dfb96"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/repository/NotificationRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "eb14f113e40370c0064c2bdd539f9f4122b1bb7f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d43bd73c504246342047e7c3aed8c0528c1c0676"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/service/NotificationCommitPublisher.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "626010945dae4dfd99da7995aa3e1372e325fb05"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/service/NotificationProjectionService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0d92da75c0d61ddedcc03676f5aa50b07de700ca"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/service/NotificationReconciliationJob.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6ab87da4c2d26a9b85b7fbb23f24894f46dccee4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/service/NotificationService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0d426fc2ee8b3b571c6245a1a0925697f1f089cf"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/service/OrderNotificationListener.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "72130ee80f7b014c57e16fd922bef269106878a8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/service/OrderTransitionNotificationWriter.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3cc11911061b24cb0ac4b9357f1fba2f5070c157"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1b550af88c529fb5aa78c080a73b95610851da9c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/operations/controller/OperationsCancellationController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "76611940bf267766d61db52a5ae19251bb5d9701"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/operations/dto/OpsCancellationInput.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "10a0208233381494e263b79c7a1d4dcdb45eb845"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/operations/service/OperationsCancellationService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "944675b1dffb68582def1bb73d08890b88f00dcb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/AdminRefundController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1d2eec9b49a516d3080ccc6c30daf5ebd339defe"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/BuyerCancellationController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "744f0f436f3f358ed34873a2e3397e4d3a79b318"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/BuyerOrderController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "69e605023c0199dc6bdb8abed05b4cf15df2bc96"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/BuyerReturnController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "758085e42865ca4b37fd8f084534b7170ff2fd2a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/CancelledPaidRefundController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4a7ca8e1062405845ce87886c4b1171bac94b818"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/PlaceOrderController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7b786f91e847dc270581ab3780960cbd125815b5"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/PlaceOrderPageController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "db9c4e839f808764207dff5b97195edb840cdc71"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/ReturnControllerSupport.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c8e60a02f6766bf5e380cc8bc5743d41d4a642eb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/ReturnToSenderController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b8b1c5905f87cce26933f72409cb2e45ef9e0981"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/VendorDashboardController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a7f569f048537c8515ba30c18e0d707ba07b9764"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/VendorOrderController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "102c44501b3d100580a42a438bedac333e5d2311"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/VendorReturnController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d27aa9772125b7b1a0e69f93908d5a07109766a1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "113c599832bc2a4c80fa07b2af3a1f905c35f2d1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/BuyerCancellationCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2053b6069da42f8af2cf59faf035bea29c53ce02"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/BuyerCancellationInput.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ff790d990f9ff6589aa712fd4cf4a7acaf17289c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/BuyerOrderDetail.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0d007a4efd169b9874d6de18fae82dbe6103d3df"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/BuyerOrderPage.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "50541556513005a91df4bce8a22f567f3dcd238c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/BuyerOrderPageDetail.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e250b220a860987803def0e9bd6633735a8e1e3f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/BuyerOrderSummary.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "56e28976002175dabde07f449642a714cd53e7b5"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/OpsCancellationReason.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bebb811ecc965667b22f1543a66dea8bddf3579b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/OpsOrderCancellationCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "13d5af7dd6160c4bddb69545a901af2d6f6408a7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/OpsShipmentExpectation.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "fbef9fbb909c09029001f41bea813d59c8cbaa89"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/OrderAction.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7c08108994f784f3e9fc85090dbbbcd4a74638c4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/OrderReadyCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "52510d45eccb66b67c6e6e50356fbe8239a80464"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/OrderStatus.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a4a16d75b68e5b0b18a2e51aad2c9ba5c25f88e7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/OrderStatusChangedEvent.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f00a23049be870c7d58883f93e2c832dcefd6094"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/OrderTransitionCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e62e829e00d72c41f6a94afc3b930d1560c2bac1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/OrderTransitionPrepared.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "aac24b0590127828272f1e3da66f86d611310e37"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/PlaceOrderResult.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7f8836b6541cd18332076bf15022eb575658f799"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReceiveReturnCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b7dd488975cb969a64069c4a115411008109a4cd"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReceiveReturnInput.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c8c05fa38ba9bb1b2374168f1ed98804ab7a9a4c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/RequestReturnCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f9d5942074a28660a62d6f9b7e2f8202358ded13"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReturnDecisionCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "19c5e6573d2481bd0534cc88675a8c5b686b3fa7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReturnDecisionInput.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4a9b8c926a42d42a23e51855c56572277bbaa8c9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReturnManagementView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "189c1f44aa80635d73456be3bae1f27d9b095c68"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReturnRequestInput.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "64ef8cd0a8c4b1b0a529a6927f4af1d19d0af460"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReturnRequestStatus.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "849a9881d20127210cdaa34789e89ef6d06e7cfe"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReturnRequestView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c3ef9e93af0e16330a67a1a66a27f98d1ca7565d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReturnToSenderCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "93bc2814615ebc5c561a08b6784a2b0c77d88e3b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReturnToSenderInput.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "04f045b50d85f1170aeea3eb9cbd114734384fc7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReturnToSenderResult.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "02c81c926751f15ab3ab668e8e782dd98b6a3bae"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/ReviewableOrderItem.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8852dba0e97a46c52d4656d57001263a4831592c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/VendorOrderDetail.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "fb81f87b8ba3eb12112fd9bc230f3233c5e0022b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/VendorOrderMutation.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a35375ace62fd81e976099858141f33aed82e7fa"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/VendorOrderPage.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "80d338d5af0175469988943c876f94708a04a660"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "eb5700171fa3109a20b66aa631a1c437a327edd6"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/entity/Order.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0a4f99dff667021202c40a1622c164d528bd94fe"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/entity/OrderItem.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "83d223db55fd0c71982644888eef531bc0ea891b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/entity/OrderStatusHistory.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a50f0d4847adf062f9ff19814320bab1a43f66a0"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/entity/ReturnRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "dc2db19fc01ea5c36f38b7b2ce4370b590f70332"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "59290bc458ad61119ed779c3ac83d1829a9abdea"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9bbc7ccc4ed2d29f0ef014d4c53f8073a4c57899"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/repository/OrderItemRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d70d493550c596fd69a8a13f1f5af23e2a34ebd1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/repository/OrderRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0fab442a311b322b62fc6a64f2f032f0c64f9493"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/repository/OrderStatusHistoryRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1e81f65d3fc0300cefb83741128b227f95ecb82c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/repository/ReturnRequestRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "28680ff2c388a20119caa93785b18352ab6645e0"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d44a4e8a29e259930ffb4af927a40953ed55b171"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/BuyerCancellationAuthority.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e7eda5a08f194854922b538fdd1d7d58f7601151"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/BuyerOrderService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e6f17dfa22240315a1c711931ea15fabdb8e4e19"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/CancelledPaidRefundService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4cb573739607d62e53e41183b09d4cabcbf6be57"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/CheckoutRequestHash.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "554012ae9a2113ccf55a42892da57cebf0e01c97"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/OpsOrderAuthority.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c01641e47b20d5a39ac7d926b251fdebb77392b3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/OrderEligibilityQueryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f61d979306257f653987f5d93639b4f1d0ff4e72"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/OrderEligibilityService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2d08696ef93e38f22eb0f81e7879f44f7c07056b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/OrderLifecycleService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9e8bd27912b6c2efeddff3092d49d7c03256171d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/OrderLifecycleServiceImpl.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "577f8513cd5978b778cdc47ab2bf703d234436b4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/OrderPlacementService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6524329792a462ebf1558517d0741beb68e02acd"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/OrderReviewWriteBoundary.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ca09bf106794b6492a5dfe26b438843bb8772f7d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/OrderTransitionPolicy.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3a01050e4b189ffb450251206fc9da600adebcf4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/RefundOrderAuthority.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0598b65d5065773a275f4f37b42cdd63f62905f8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/ReturnOrderAuthority.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "81aaa3f78e3eda827513e434d4331c687aa6f7c4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/ReturnQueryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a46dfac9577faa440a2926638e6ac4ca8973bec2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/RevenueService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "686d890f4b0b25669be25fcb79bad9fc16b1f607"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/ShipperOrderAuthority.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "62aae64f36da834e00c3000754f8d18e219269e6"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/VendorOrderAuthority.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6930398ed86139254cb75fdb0fcc05416e9525a1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/VendorOrderService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "46d75bd676b0f8ab2d93a07d926848d601e93997"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "88772d78e398d8b66df620cb595941ea4a6287c7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/controller/PaymentController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "663cc36e8348cb3b2f3713322c7911b94510dcd9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "46c38b6b5e01a3237875ba04178475f4a866128b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/CancelledPaidRefundCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "cb02088ef2c41bbea33c5d2372b52837df9a5f37"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/CancelledPaidRefundRecordedEvent.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b5807e70f42074eed64431859e8063ecdb717907"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/CancelledPaidRefundRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "771c7b750516b9745d44964cdade8b27e5eb73d2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/CodCollectionCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "54829bf0d0b9517a2b99045f8ef3d0b0f6412303"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/CollectedCodRefund.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "baa45bfbcb396347f5d8fb77a8182f90fcbd10cf"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/CollectedPaidRefund.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "82b5995edc91bb263553d59f697f9851aac008cf"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/ManualRefundCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0a94034ee1e3c37cf8425929eefa02cff1f276de"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/ManualRefundRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a7c75517f9303de3499c7e6f0e727758ff5372e2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/PaymentRecordView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9a8045c2768ec4bd6e723649f3973f2b648b9301"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/PaymentStatus.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "518ebf315cea6d0ea52bd7004dc04486ffd5b164"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/RefundResult.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ad2895cf619c51d664482c75ca42afb35adaf488"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/RefundStatus.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3293ff471a266585679b37cc74e127d5dbbbc19e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "47424a926387084e2065c3dd2e907c84b09c56e7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/entity/Payment.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d16975056f3c637168129b1deb764118955941d8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/entity/RefundLedger.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "12290bd7fb57142f3467a32389c04de18711668b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8e256370e796743e9d6a169ee1fb65c48a6a2646"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3a355650d81769b0e80b006e92fc740ea5a8b143"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/repository/PaymentRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b50d26c94967fa3afdd214d1c443a8c773fa277d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/repository/RefundLedgerRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f6b019c822359a06831c7e75d186d56c606628b9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "49cf8906e6a8a4da27a30f5cf1d2909f98d412b8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/service/CancelledPaidRefundPayload.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "cdfbbcf31e5d51a563607f07700061e796673faf"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/service/CancelledPaidRefundPayments.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "485ee89c75c3b69073f8d8a053c5b0696e57164b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/service/CodPaymentService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "54aacaac32a2987bd8286b4aa9c1591c17c9f6e4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/service/CodRefundEligibility.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "58dfe747d39252c9c52447601a3e519b7594d2e4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/service/ManualCodRefundService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6a4363eb02c2fef57d1a58654c32beaf667b1d1b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/service/ManualRefundPayload.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6961394762018b296cd5b001322a36259181a985"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/service/PaymentReadService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "420bbd36a935edd3da429e9429bb05bff469598c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/service/PaymentService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7006b039560a234a06703025b246746c5cc353a2"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/payment/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6bd97974b1d948d897ce85c0b4b2b24dedb7c934"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/controller/VendorVoucherController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "dfc193be38b21b523fec2720a40f47d3dc7a4740"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ce6ad66797779911634dce92f58733bad9fc9a31"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/ProductPrice.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "902f9614ea21d3c2874070042c91ef5da9f4c8e9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/PromotionDisableForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "39b3c21b703f0b09296a1ffa81a66795ae18c01c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/VendorPromotionForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "db4288b6b12e4eb49508ec55669e85e71badc330"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/VendorPromotionUpdateForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "20cae376d8da8762e2dd339cbaebdaf1abe7b6c3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/VendorPromotionView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1405d83e62ec4840d024431dd7e8716c3422c087"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/VendorVoucherForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f5410a264362976d53c8a4e7ccf2088155c2ed20"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/VendorVoucherUpdateForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c03d902f518e120115fa175713e4844260974ad1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/VendorVoucherView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "887a34e4e26e1beea47b94f720b8017da58d2dff"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/VoucherApplication.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "cbabdd6e057fd9c64cc4622ba7784fb3b5f76652"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/VoucherCode.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9fe3685de00e4fe65d95835dc920ca8dedd1a213"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/VoucherScope.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0d44759589870f8418a2450acf09026909639bc8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/VoucherType.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f309f42d402fdac7bb3211a21726e747f33fbe29"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "32a53f9b699582ab02e9262547d5c5b8a0975a1e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/entity/Promotion.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b6493b1bc021965f503c26d07c95aebf413a0b18"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/entity/Voucher.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8443197243f3e226114a47adb6b277ae690413e4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/entity/VoucherUsage.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7ebfb77e4d765b43eb6314e06f8207fa164c05e8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "59ea1d4ff6bc786f0592d2685dd0ce16f1097e6d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f15ae21b9b1d583cea671aa500723466c9b34535"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/repository/PromotionRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a239815aafae5adf7ee42fa9b0858fd6409d2638"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/repository/VoucherRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f57d1eaa54b29a07302e4196717ddc6da01438fa"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/repository/VoucherUsageRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f866f4f73d50be681c5571e4cac1031c275951a7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "62b3818e201b22daae92fdf8b3a40be2d7640357"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/service/PromotionManagementService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4521dc8d57a7acce9c89f2461fa0fc3d831f0cbb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/service/PromotionPricingService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3230bd97b27189f5782ca4a7c0cabca742ec1b39"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/service/VendorVoucherService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c27c91e154ed9233270f3deb3b51f868040cf994"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/service/VoucherService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c408e89eccffff65595c8a323c5c74dd8b70b349"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/promotion/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f2931d56d4381c9e5a526979fd7037b29e106089"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/reporting/dto/RevenueAmount.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7eb274d4031b809e92c666ae09bcf10971ef0921"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/reporting/dto/RevenueMetrics.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "38294fbed8e56772e53ee26c094678a3bd235e09"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/reporting/dto/RevenuePeriod.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "214924c8180b84d207324ed4ef44ff1cdfde8ebc"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/reporting/dto/RevenueScope.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d49bdac63c418b8e53a3224d86a2019d10e12533"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/reporting/dto/RevenueSummary.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1da7a6be839634be4ccfc433e5439c5c246d76eb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/reporting/repository/RevenueQueryRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "daa30c74d74a5ba5a74b72cd66863731681eca93"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/reporting/service/RevenueProjectionService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9d3faf075ffe75ffa26535644c8419a2e616ccd3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/CurrentUser.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1857f180b235a04c1ca4292b8ecf76432753cf43"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/CurrentUserProvider.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3ac42a229e49dbcbf38cf531a9022861a72720c1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/JsonAccessDeniedHandler.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1089acf26e387e1f2856236addbe8739e53e6f6b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/JsonAuthenticationEntryPoint.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8815c3a9c0812d2fb26dee966ce40d92fe2c9381"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/JwtConfiguration.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d812d2c1c152816cd955d8b831eb773ab6ffd69c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/JwtProperties.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "561c5ba47e0b22ec5042c0a231309d0ae2a55197"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/OtpRequestLimitProperties.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "da80472f20dc9af550da30c0102e241071e16aaa"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/RoleCode.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c745bb0bc578691644107bf9eed2e9cc922e62bb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/SecurityConfig.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a7f6218eb846f3c791f5e0c2cb25e08825015110"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/SecurityContextCurrentUserProvider.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4c399b85e30c80b07cae53deb0c54e59cd8f3458"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/SecurityErrorResponseWriter.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6e14a197d4701516a1a311331267f8b35a751047"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/authentication/UteExpressPrincipal.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "271dbc91e40536027cee2432355bd706e6cc7a68"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/authentication/UteExpressPrincipalFactory.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2c92dbc5d24eb57329aa1b1eeb46451ac3fd1c7e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/authentication/UteExpressUserDetailsService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e63e287be699de8a56222a81a6be725792490720"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/controller/LoginController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "230fb4567d73f39837041a30d78115f69c754a47"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/controller/NavbarAuthenticationAdvice.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b0db12ac632a94c459d4ed8ec76ff7ebc9d3c544"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/dto/LoginCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "503e90ec728967d4e3a814eac97cfb41d778613d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/dto/LoginForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "90f5dffd001dc0522267c8d177e727cdc8d8aa14"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/dto/LoginOutcome.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0192979fa901b6c04169f91e9a251ea1fe8ba3ea"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/dto/NavbarUser.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "81aea35adade19a8b9befebfe402541b347bc476"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/dto/RequestBudgetDecision.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8740d37cc53df059d0c3cced009cc9bec3e6f547"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/dto/SocketIdentity.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b9ab6e4651374499c5abfdeddc2c745166a39640"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/filter/CsrfCookieFilter.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3e6389fd4c238b2b87a3142694bb0c42cbc3189d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/filter/JwtAuthenticationFilter.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e5a79031ef6ae694b1b97ad2d6bae56ee75e7b56"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/filter/OtpRequestLimitFilter.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "518285b63f64f2133e3b8dd20dd6af17f81c48d8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/jwt/JwtIdentity.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "344f7acd953e680ccc5238c2fe4fcf6b43bd5d9d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/jwt/JwtTokenService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f093fb25223c8302f5ecfeae976501a2331a40b9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1e0e168d696a4eb4beccaa1bb09832232bfda7f8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/service/BuyerAccessService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a2e5d981f436a9d9954abf7a50868741a2cffd43"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/service/CurrentAccountIdProvider.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "630dcad814ea41a0854c564c8bb3f8e44048da68"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/service/LoginService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a388ee0aadb622b5cb655b43ba774e87f608ee4e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/service/OtpRequestRateLimiter.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2cde91d5324c7957c5fcee0158ca27b51b7cea96"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/service/SecurityContextCurrentAccountIdProvider.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a223cd1bbb50c3ff0d502878b3e1bffbbe68f296"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/service/SocketIdentityService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "97a4f4d2587c96ef8e55437c741eb5faaf21234d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/web/JwtCookieService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9812a3e8a24a29623c4903ec986693140eb25e04"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/web/JwtLogoutSuccessHandler.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bad399400d6c4457bf12ea0b8222905ed3681881"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/web/TokenVersionLogoutHandler.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b3040ff40adeeff88c9d89fe7b4a8144ce772fb8"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/controller/ShipmentAssignmentController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0e9b328d03596fe76aaa7b5980faf9cf453c0001"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/controller/ShipperAssignmentController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1667f9c6ac175455ab897111a0e1548e84e62f91"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/controller/ShipperShipmentPageController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1b74da9fdb855585db71969d348b37588bc73666"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/controller/ShippingConfigController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e8301bff9e0bfc7f5e6d063eaa632b4ec8dd33d9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "117cb7174f93fa299f2720b687f7e60d315ffbc1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/AssignShipmentRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2f7cb6eb375cebfcf81c131763d5dceaa55f84c7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/DeliveryAttemptOperation.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "79ce4c029f8d67cf2112d8f5da5f41636335ee3d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/DeliveryFailureEvidence.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0fcab7b026bb9df574820cec78726b69fdf423be"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ReassignShipmentRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "062935dda122e906b1bc5e3a4a0e375cd0861e69"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ReturnToSenderReceipt.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "52d08a1a43d3aa32542cdb851817184e0390e98a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShipmentAssignment.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4cb25803b27b605ec7b7e43fbc927b702be8f3e9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShipmentDeliveryFacts.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4ee561b986d1b0303e34beb8410e63d763a16620"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShipmentFulfillmentFacts.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6aa4413b2e1628c4b4d2a81a9695b290e8d9e72a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShipmentStatus.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "222530515b8716b680ed7d0faf6e413e0add2f59"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShipperDashboard.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "46378b2d54e82892788769cd0a29997e06462ee0"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShippingProviderRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "af4e1d745a2fc48601251ac281cc40ec2e6b0980"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShippingProviderView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "19de873c4329a36ec04e0e7ecd30832551a02a17"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShippingQuote.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ba1d536d964ee5e70c186169a09a505a62c926c7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShippingQuoteCommand.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "66bc13e4e7f70c150d2d09bed49751bca3731225"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShippingRateRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "55ecd339d951d1c706b334d6b391f196dab5ac66"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/ShippingRateView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5f264f0485ba6d6b0c55a3b214130216b8eae5eb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4e5322b817566b8b62e5a7691b48cbb4adb8e039"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/entity/ShippingProvider.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "cc69eedf93852baaef980c8b67a2e51d03a7c0e3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/entity/ShippingRate.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "cf30fbca6bb415df016d4d609606a7b5838cf5a0"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a07b6f3e0392f0aeaac88cbf29542acc83489f65"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7ae8a56f054f3c9885a38ac23fbaba6598348ebd"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/repository/ProviderRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f671f9d5086b1d5574e2305bd5846c930ea9b8de"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/repository/ShippingRateRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3efa2d288629f938e1af3087490896739ab3d403"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "cde9948e7c6331f06de3899056d1fac1b3279da9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/DatabaseShippingQuoteService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "17bd9db4f3043312d3a663e88f1f6a22ff66ba4e"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/ReturnToSenderService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7fb2767611db08c2004b4c52ba5ef5d78450407a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/ShipmentAssignmentService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "95f5d322ed2f8fd6b629bcc40fb8a2ff106953fb"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/ShipmentAttemptService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "62bc33976ca92b08a3c42f27d6d017d7c355fe8b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/ShipmentFulfillmentService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d5ed35fd94d5a131f95aec44b413dcd6f5003e50"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/ShipperAssignmentReadService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "45ee868be1590d336d034a9128222d70f7b19b8c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/ShippingConfigService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f8be9de9ece26bf121b2cd32a1e4c15bc5b046c7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/ShippingDemoSeeder.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7d8a9819c1fd6a17fc7b345db86a45302d77af71"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/ShippingQuoteService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e3b112b7bd48a28ccceb1d18a4df195f888121af"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1b847ffec6efd20751ab73d08c5f6b772a84e42b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/controller/ShopApprovalController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "fe40664bcba48d279057879569dd03fbb905959c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/controller/ShopRegistrationController.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3f7de0f667f9d74c27e4940d964b7b163b9b5b83"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/controller/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "17a9316906650dd6cc20d23efffa68d54350593f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/dto/ShopApprovalView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1c7c2a675e3972df0cfb5a19dac646df62eabb1a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/dto/ShopRegistrationForm.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "98c5240988d2a7437e16eb0aab724053b6b61aa4"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/dto/ShopRegistrationRequest.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "934f6bf2e424f6204f2d43d5c4edbef5d40df844"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/dto/ShopView.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0349a6bbaaf27ca8ea6830f4a397fc0a752af494"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/dto/VendorShopData.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f587928a0dfcb2eb77942e1996065392b4aa89c1"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/dto/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a411ca660cdaaafb77d8a91d2a6f9f2fb610f859"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/entity/Shop.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bab2b45b3c8b599c544db6ed51692ad482e7ff91"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/entity/ShopStatus.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "63b9c1084001b9040660d8cf58df78cfa05c5c3c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/entity/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b3c705454bc256931f89b26e8b7aac3c0d88753a"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6b8eb4f5377480154c5ffcbafa69b08208f9faa7"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/repository/ShopRepository.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c421d4e32e3892ce157d5bc8cc0279525260f09d"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/repository/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a7a61911afce0aadc1814d50c5ce83a753cfc070"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/service/ShopApprovalService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b866b4ed5e6ab1f2781754ebb713d37c4a576695"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/service/ShopAvailabilityService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d2f24062fa970a0027530fa8db8de27d97d5f11f"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/service/ShopModerationServiceImpl.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "187f75f44cdf1a83258cf27afc3b3a9b81350008"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/service/ShopRegistrationService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "89ed4a68ad48573f8dfd102ff6a7f95bc587bda9"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/service/VendorShopQueryService.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d64010b26cf854796d46aa0b38dbe73838322ccd"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/service/package-info.java",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4f0be13355a1ef8e17ebd0f518110cc54e1adc22"
+    },
+    {
+      "path": "src/main/resources/application-local.yml",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1baeafacd42ffeb7f928048d7c090c50a1bd95e9"
+    },
+    {
+      "path": "src/main/resources/application-prod.yml",
+      "mode": "100644",
+      "type": "blob",
+      "object": "8ea76442013697c34d26bd6bd979effd391ea25b"
+    },
+    {
+      "path": "src/main/resources/application.yml",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4c7d37e92a83a2d1612c8263748021caf897b823"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260920143000__qd_db01_schema_baseline.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3bb4c484cda2e4b396457711d5dd2dc3cbaf95f9"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260921070156__hp_auth01_identity.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "350c8d09a9dbba4a9b6145627f478937daead198"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260921081035__qd_admin00_audit_logs.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c663c822aefed91ae94507591cf997a50dc8a854"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260922090000__qd_admin04_categories.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "711e80837104fcf6b1aee642f2409a4c78be3c1d"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260923090000__td_ord01_domain_core.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "26f4261c6dce8c0dd542dd886e75451f93f1b6a1"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260923090100__hp_auth03_email_otp.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c19385997b4eb2f00f6f47f07518b4abaed67c74"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260923100000__qd_ship00_providers_rates.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e12fbcfb0a35a454c801d45be23426d2ba8cfdaf"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260923100100__hp_vendor01_shops.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6d20d71095bfe6a0aadda7d98197559369e490e8"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260924005244__hp_prod00_catalog_foundation.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3ec58fe3c47261d8abda92e6b860c23894483f56"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260925022804__td_cart01_foundation.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c5f0f2e2e1ea75f728c650f16060edfd5aa03fe2"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260926035526__hp_auth04_password_reset.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0070fa535cfb59b1f36eeb119f274f1618e0b359"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260926085003__hp_user01_profile.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1d8c79dc6f4b6cbfa95bf06450a7507570f3e8b2"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260927123343__hp_user02_addresses.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bb649f3c169c63c11ad624c13a49c40b4c1ff454"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260928090000__qd_admin05_moderation.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e5bc09fe2da21cc5287767a23a47101199ee8e36"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260930100000__qd_eng01_favorites_recent.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5074df9a3cb3aa7f1939f23bd74305c2341669f5"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261002100000__qd_admin06_commission_policy.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "dfe877044f38ccd28e4aed371d421150882c7307"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261006090000__td_ord04_shipping_snapshot.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "41e7d5dac7c929b193416efd8c40b7655350a501"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261007090000__td_promo01_vouchers.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e5507f4641c985fe87df42bab7432502b17dfdcf"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261007100000__qd_ship01_shipments.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "04b4c11bc4588b2749b87c6cb3608e8945818d29"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261008090000__td_promo02_product_promotions.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "de410cd3492c7686caa6becdd406fb35f7118895"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261008100000__qd_ws01_notifications.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "0c90e400450e1a5d321406c1482c093d150538dd"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261013090000__td_return01_management.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d1a1ca7be5296af1ab22f62a756875ba3076d8d2"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261018090000__td_ord04_return_receipt.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "72d88e378164691f0f2543ed67a59a8cbf2486e8"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261018110000__qd_ship03_delivery_failures.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "2f20b0800114fa08865bf993e6638caf321dbc5e"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261022090000__td_pay02_refund_ledger.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b4d1c1d5c8661a70789d8d05a044119b1daf7407"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261023170000__qd_rev01_review_foundation.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bd1020adfa84accbeea44bec77411cb3b4859634"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261027100000__hp_int02_return_to_sender.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9f2fdb3e58785994da635d17c42863b4d9ed1e7a"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261028081110__td_qa02_cancelled_paid_refunds.sql",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6f645aede8c6caf1edfb153ceab344c082389719"
+    },
+    {
+      "path": "src/main/resources/static/css/app.css",
+      "mode": "100644",
+      "type": "blob",
+      "object": "28fcb7283aa30f36e665e97e0f502bdbc437f274"
+    },
+    {
+      "path": "src/main/resources/static/js/app.js",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ca72126be61c74945691508a15fb2ce513705d49"
+    },
+    {
+      "path": "src/main/resources/static/js/buyer-cancellation.js",
+      "mode": "100644",
+      "type": "blob",
+      "object": "68b1b79aafac6513dd175adbece2ec62c7bf91f8"
+    },
+    {
+      "path": "src/main/resources/static/js/notifications.js",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bed954c3174de6e0337a298ddd96c783c040b290"
+    },
+    {
+      "path": "src/main/resources/static/js/shipment-assignment.js",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a3fcbcd78de18f8b46f26d1aa4ca91919f043d2d"
+    },
+    {
+      "path": "src/main/resources/templates/account/addresses.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ff3b497ce52ae926d65b5444e813fa383fa4a37c"
+    },
+    {
+      "path": "src/main/resources/templates/account/profile.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b098aead2b5edaef2c4599e8b1378d4fc08e41c4"
+    },
+    {
+      "path": "src/main/resources/templates/auth/forgot-password.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6ef1c379b6e2207223fa2ba6b3f9ca4ae182bc5b"
+    },
+    {
+      "path": "src/main/resources/templates/auth/login.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "e89127fb4ae23ef14aaaca5998c31ceb8a71a8e9"
+    },
+    {
+      "path": "src/main/resources/templates/auth/register.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bbe2dfa39a1708215d075c9e501d7337b23d1190"
+    },
+    {
+      "path": "src/main/resources/templates/auth/reset-password.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "de0b88a21b4948d232c2f9cb12f2b9e5bc48463a"
+    },
+    {
+      "path": "src/main/resources/templates/auth/verify-otp.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "19944907f654c66eabcb0601ab7369837b194312"
+    },
+    {
+      "path": "src/main/resources/templates/cart/view.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "db8a2667e85787f9bceed908c8a75392496ad85e"
+    },
+    {
+      "path": "src/main/resources/templates/categories/detail.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4947e1a5d431974e16584c081525891fcbbc7d38"
+    },
+    {
+      "path": "src/main/resources/templates/checkout/quote.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "fc2c9554f915fa9c3f90863e99b8d4369cf36ee3"
+    },
+    {
+      "path": "src/main/resources/templates/engagement/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "63312a0fa5c0f38bd97a449e9a4cee4516d86a73"
+    },
+    {
+      "path": "src/main/resources/templates/engagement/review-form.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "998923aae8e5061540116f9d1fa885fb7bce584f"
+    },
+    {
+      "path": "src/main/resources/templates/engagement/reviews.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "fa88cd1bfe2b9705fd9743ceee068123e8b19713"
+    },
+    {
+      "path": "src/main/resources/templates/error/403.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "60c183e3f6325e25f1dc72e2f211374a720ece8e"
+    },
+    {
+      "path": "src/main/resources/templates/error/404.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "745dd9e4b606f72683dc545fd94884416a9b634c"
+    },
+    {
+      "path": "src/main/resources/templates/error/500.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5fe65e140a63f30a9ec8c2dff5edaba2a1044845"
+    },
+    {
+      "path": "src/main/resources/templates/fragments/alerts.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c2269badc5703df2b77bbad8299b5e27d977edf6"
+    },
+    {
+      "path": "src/main/resources/templates/fragments/breadcrumbs.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "948fd4101de33140679cc0802ac12fb323ad4ebf"
+    },
+    {
+      "path": "src/main/resources/templates/fragments/catalog.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "dcdc9148d0d74c17d40e01a72dfeb41e14ac2532"
+    },
+    {
+      "path": "src/main/resources/templates/fragments/components.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b5c36015b55783c153e58b6d5c6d1af98df81117"
+    },
+    {
+      "path": "src/main/resources/templates/fragments/footer.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a4b4ac5dd155b9c604d5281db0563c7e1120794b"
+    },
+    {
+      "path": "src/main/resources/templates/fragments/head.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b0f04667a506fdc84256147992f64576b06771fc"
+    },
+    {
+      "path": "src/main/resources/templates/fragments/navbar.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b9029bd1b3db33f6c44cc1735d53ece491165e82"
+    },
+    {
+      "path": "src/main/resources/templates/governance/accounts/detail.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4c312b43017546b52287dd3716e92c4eb3fe9fac"
+    },
+    {
+      "path": "src/main/resources/templates/governance/accounts/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3b6b4c578949beb416148c7156ca98c21e3b2ddc"
+    },
+    {
+      "path": "src/main/resources/templates/governance/audit-logs.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "c92cd1d83c10e587c281a16cda5f3ab6b6ed6385"
+    },
+    {
+      "path": "src/main/resources/templates/governance/categories/form.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "86e2d237a63e31ae90c4fe2229e4dcc0b35240fc"
+    },
+    {
+      "path": "src/main/resources/templates/governance/categories/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "78a639466aa2b349d1dbad35caa7fcb41fc047a7"
+    },
+    {
+      "path": "src/main/resources/templates/governance/commissions/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9edd677ee7a642ec28ed77fc8babc73ed949ad21"
+    },
+    {
+      "path": "src/main/resources/templates/governance/dashboard.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "1091ed9bcf9836cf403bb9f792fe988cf35cbc7b"
+    },
+    {
+      "path": "src/main/resources/templates/governance/moderation/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9b9e52e82e2017cfb171fa2c54945b702ff11e6b"
+    },
+    {
+      "path": "src/main/resources/templates/governance/orders/detail.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a3472711145b20c9eb412e2d0461cc55a038ba0d"
+    },
+    {
+      "path": "src/main/resources/templates/governance/orders/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f386541a0e82fce17a71fcc4b25ccc5ba1f3a8e5"
+    },
+    {
+      "path": "src/main/resources/templates/governance/revenue.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "ca2ed46976c6f7de44c20247861c950f07b78bfa"
+    },
+    {
+      "path": "src/main/resources/templates/governance/shippers/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "dad2e976ec499061100dd3be99f9aab78216e1ec"
+    },
+    {
+      "path": "src/main/resources/templates/governance/shops/detail.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "cf411645699ce69ebc196677f8f45c5135771854"
+    },
+    {
+      "path": "src/main/resources/templates/governance/shops/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "bc165e08b9391531544e0952f8191ca1c48b3ae6"
+    },
+    {
+      "path": "src/main/resources/templates/index.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "030f339bfc018249cc6811a528a375f8ce440e8b"
+    },
+    {
+      "path": "src/main/resources/templates/layout/base.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "9a0570e9ef019be9f876fad5786b05e582be1983"
+    },
+    {
+      "path": "src/main/resources/templates/layout/dashboard.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "f1720f6b38c9cbd7a57277d3805a20cf46241068"
+    },
+    {
+      "path": "src/main/resources/templates/notification/inbox.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "4a2a660c8971ccbcb52f65a6c5a9a663ccc9d5ee"
+    },
+    {
+      "path": "src/main/resources/templates/order/detail.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "a92507c8c303022c0251e34969332428f76bb23d"
+    },
+    {
+      "path": "src/main/resources/templates/order/error.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "5b53ea26d6a181c90f93eb12f18256da55d0e571"
+    },
+    {
+      "path": "src/main/resources/templates/order/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "eea803de37ce61d40a70362a287fb87eb98d2c59"
+    },
+    {
+      "path": "src/main/resources/templates/order/return.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b8f7e4fbfbf754295108ce0dd4d7c15ef4df4bc2"
+    },
+    {
+      "path": "src/main/resources/templates/products/detail.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "63d2b55027bc56dc7823a1bc8c8397e2f5889de4"
+    },
+    {
+      "path": "src/main/resources/templates/products/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d421950ae400dcf772571114a11e4844f335341f"
+    },
+    {
+      "path": "src/main/resources/templates/shipping/provider-form.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "95e0e34ec5d101f45dda760c368bf688069df662"
+    },
+    {
+      "path": "src/main/resources/templates/shipping/providers.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "37e8b6bfc05d5b5342eaef26204b908465e5ea2d"
+    },
+    {
+      "path": "src/main/resources/templates/shipping/rate-form.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "b5d2ea1355404bbd7d30c7bef0bc29d0df16467d"
+    },
+    {
+      "path": "src/main/resources/templates/shipping/rates.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7183520f7eb099338a18c2cf49aebfd267c45c6c"
+    },
+    {
+      "path": "src/main/resources/templates/shipping/shipper/dashboard.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "7879ebc64f53e970818aafc4759c31a3615adb76"
+    },
+    {
+      "path": "src/main/resources/templates/shipping/shipper/detail.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "3dd5e3ceedc79329f89de47b8367ea486c4924f4"
+    },
+    {
+      "path": "src/main/resources/templates/shipping/shipper/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d3bce037277776409a6a479a75eb12fac0f8f9d0"
+    },
+    {
+      "path": "src/main/resources/templates/shop/application.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "21800a4acc70f0118f592cce7f1cde061a51fb08"
+    },
+    {
+      "path": "src/main/resources/templates/shop/register.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "39d8aafcfe46ee5b6fbbbee6887055ea4f57dd1a"
+    },
+    {
+      "path": "src/main/resources/templates/shops/detail.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "28271f310b758b7124e5ea29fa4f5f271675703f"
+    },
+    {
+      "path": "src/main/resources/templates/shops/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "885ee6f8ddc4c9bc3d80f855aa19dc1e38b956e0"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/dashboard.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "095cbd34fac362848a12c0437bb45676d976bfea"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/orders/detail.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "fee66872c720bd23591374707393639c24a00eb0"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/orders/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "944b94968d2d671d42504778571a39ef0aab2cc4"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/products/form.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "6b9c19c513cb926df90894eb797605189a41403d"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/products/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "cec4057891089ff86f8ba76e85138a8dd78df5d3"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/promotions/error.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "991c55caf432137e4831447cab007221c1d6290f"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/promotions/form.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "de1baf3e71520c7780de181ae8c4a60f1fd7d2c9"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/promotions/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "94a4f73fd363e653e0545bc51323312dd599be58"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/vouchers/error.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "21206f6eb6f657e7b0fbbc869127bf4feed01d37"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/vouchers/form.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "d5e53ee607b25c51de8564ff01a09a1b076eb85f"
+    },
+    {
+      "path": "src/main/resources/templates/vendor/vouchers/list.html",
+      "mode": "100644",
+      "type": "blob",
+      "object": "607da2c5d6b44b0f92132f39d573ab1973054bca"
+    }
+  ],
+  "directory_and_workflow_identities": {
+    "src/main": {
+      "source_object": "a350de2a50fef5f586a52158f4f3882194149fbe",
+      "develop_object": "a350de2a50fef5f586a52158f4f3882194149fbe"
+    },
+    "src/main/java": {
+      "source_object": "02159d5a28be720a82693f26e19a771ec5e1d68f",
+      "develop_object": "02159d5a28be720a82693f26e19a771ec5e1d68f"
+    },
+    "src/main/resources": {
+      "source_object": "5c97374b7604a3976f97a9531b71e31c3e8f7c24",
+      "develop_object": "5c97374b7604a3976f97a9531b71e31c3e8f7c24"
+    },
+    "src/test": {
+      "source_object": "aae12f6d037f97e81fd3df48e7c39da201ced853",
+      "develop_object": "f34240a97364b99ed1003fed6c0fce6e6d5f8fc4"
+    },
+    ".github/workflows": {
+      "source_object": "d5555952658117250bcbcd841f66d5f537d3f4a2",
+      "develop_object": "d5555952658117250bcbcd841f66d5f537d3f4a2"
+    },
+    "pom.xml": {
+      "source_object": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      "develop_object": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f"
+    },
+    "mvnw": {
+      "source_object": "bd8896bf2217b46faa0291585e01ac1a3441a958",
+      "develop_object": "bd8896bf2217b46faa0291585e01ac1a3441a958"
+    },
+    "mvnw.cmd": {
+      "source_object": "92450f93273470af42eeee491874afb2039b700a",
+      "develop_object": "92450f93273470af42eeee491874afb2039b700a"
+    },
+    ".mvn/wrapper/maven-wrapper.properties": {
+      "source_object": "222cba3baf6a117b18214a60ca06549a8a70544a",
+      "develop_object": "222cba3baf6a117b18214a60ca06549a8a70544a"
+    }
+  },
+  "remaining_diff_name_status": [
+    "M\t.gitignore",
+    "A\tdocs/testing/qa02-combined-refund-review/.gitattributes",
+    "A\tdocs/testing/qa02-combined-refund-review/QA-02-combined-evidence.json",
+    "A\tdocs/testing/qa02-combined-refund-review/QA-02-final-acceptance-draft.md",
+    "A\tdocs/testing/qa02-combined-refund-review/QD-shared-seed-handoff.md",
+    "A\tdocs/testing/qa02-combined-refund-review/README.md",
+    "A\tdocs/testing/qa02-combined-refund-review/combined-refund-adapter.reference.py.txt",
+    "A\tdocs/testing/qa02-combined-refund-review/publication-manifest.json",
+    "A\tdocs/testing/qa02-combined-refund-review/refund-operation-invariants.proposal.sql",
+    "A\tdocs/testing/qa02-combined-refund-review/source-freeze.json",
+    "A\tdocs/testing/qa02-q70-s01-investigation/.gitattributes",
+    "A\tdocs/testing/qa02-q70-s01-investigation/ClockSkewConfiguration.reference.java.txt",
+    "A\tdocs/testing/qa02-q70-s01-investigation/Q70-S01-clock-comparison.json",
+    "A\tdocs/testing/qa02-q70-s01-investigation/Q70-S01-focused-test-results.json",
+    "A\tdocs/testing/qa02-q70-s01-investigation/Q70-S01-investigation-report.md",
+    "A\tdocs/testing/qa02-q70-s01-investigation/Q70-S01-run-evidence.json",
+    "A\tdocs/testing/qa02-q70-s01-investigation/README.md",
+    "A\tdocs/testing/qa02-q70-s01-investigation/SHA256SUMS.txt",
+    "A\tdocs/testing/qa02-q70-s01-investigation/publication-manifest.json",
+    "A\tdocs/testing/qa02-q70-s01-investigation/timestamp-fix.reference.diff.txt",
+    "A\tdocs/testing/qa03-hp-integration-validation/.gitattributes",
+    "A\tdocs/testing/qa03-hp-integration-validation/acceptance-status.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/browser-runtime-followup.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/build-provenance.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/composition.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/controlled-seed-result.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/evidence-index.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/full-run-manifest.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/hp-final-decision.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/integration-gates.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/manual-runtime-current-attempt.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/normal-seed-result.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/pr68-owner-gate-update.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/promo03-boundary-request.md",
+    "A\tdocs/testing/qa03-hp-integration-validation/qa03-current-traceability.md",
+    "A\tdocs/testing/qa03-hp-integration-validation/qa03-final-gates.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/qa03-manual-handoff.md",
+    "A\tdocs/testing/qa03-hp-integration-validation/qd-master-plan-gap-audit.md",
+    "A\tdocs/testing/qa03-hp-integration-validation/report.md",
+    "A\tdocs/testing/qa03-hp-integration-validation/residual-risk-proposal.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/run-crosschecks.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/supplemental-tests.json",
+    "A\tdocs/testing/qa03-hp-integration-validation/td-confirmation.json",
+    "A\tdocs/testing/qa03-integrated-seed/.gitattributes",
+    "A\tdocs/testing/qa03-integrated-seed/acceptance-status.json",
+    "A\tdocs/testing/qa03-integrated-seed/application-all-node-evidence.json",
+    "A\tdocs/testing/qa03-integrated-seed/application-full-regression.json",
+    "A\tdocs/testing/qa03-integrated-seed/attempts-index.json",
+    "A\tdocs/testing/qa03-integrated-seed/browser-runtime-blocker.json",
+    "A\tdocs/testing/qa03-integrated-seed/build-provenance.json",
+    "A\tdocs/testing/qa03-integrated-seed/cli-guard-evidence.json",
+    "A\tdocs/testing/qa03-integrated-seed/execution-manifest.json",
+    "A\tdocs/testing/qa03-integrated-seed/manual-matrix.json",
+    "A\tdocs/testing/qa03-integrated-seed/rehearsal-result.json",
+    "A\tdocs/testing/qa03-integrated-seed/report.md",
+    "A\tdocs/testing/qa03-post70-final/.gitattributes",
+    "A\tdocs/testing/qa03-post70-final/G01-browser-matrix.json",
+    "A\tdocs/testing/qa03-post70-final/acceptance-status.json",
+    "A\tdocs/testing/qa03-post70-final/attempts/source12f-full-receipt.json",
+    "A\tdocs/testing/qa03-post70-final/attempts/source12f-triage.json",
+    "A\tdocs/testing/qa03-post70-final/ci75-receipt.json",
+    "A\tdocs/testing/qa03-post70-final/clock-minus2-seed-result.json",
+    "A\tdocs/testing/qa03-post70-final/composition.json",
+    "A\tdocs/testing/qa03-post70-final/coverage-traceability.json",
+    "A\tdocs/testing/qa03-post70-final/environment.json",
+    "A\tdocs/testing/qa03-post70-final/findings.md",
+    "A\tdocs/testing/qa03-post70-final/fixture-provenance.json",
+    "A\tdocs/testing/qa03-post70-final/full-receipt.json",
+    "A\tdocs/testing/qa03-post70-final/full-run-manifest.json",
+    "A\tdocs/testing/qa03-post70-final/hash-checks.json",
+    "A\tdocs/testing/qa03-post70-final/human-acceptance-checklist.md",
+    "A\tdocs/testing/qa03-post70-final/migration-log-crosscheck.json",
+    "A\tdocs/testing/qa03-post70-final/normal-seed-result.json",
+    "A\tdocs/testing/qa03-post70-final/publication-manifest.json",
+    "A\tdocs/testing/qa03-post70-final/report.md",
+    "A\tdocs/testing/qa03-post70-final/seed-crosschecks.json",
+    "A\tdocs/testing/qa03-post70-final/seed-receipts.json",
+    "A\tdocs/testing/qa03-post70-final/supplemental-receipts.json",
+    "A\tdocs/testing/qa03-pr70-post68/.gitattributes",
+    "A\tdocs/testing/qa03-pr70-post68/ci-execution-321ccf3.json",
+    "A\tdocs/testing/qa03-pr70-post68/ci-execution.json",
+    "A\tdocs/testing/qa03-pr70-post68/latest-head-review.json",
+    "A\tdocs/testing/qa03-pr70-post68/manifest.json",
+    "A\tdocs/testing/qa03-pr70-post68/qd-focused-results.json",
+    "A\tdocs/testing/qa03-pr70-post68/report.md",
+    "A\tdocs/testing/qa03-refund-diagnostics/.gitattributes",
+    "A\tdocs/testing/qa03-refund-diagnostics/acceptance-status.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/browser-runtime-retry.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/build-provenance.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/clock-fixed-pass-result.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/evidence-index.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/finding-disposition.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/full-run-manifest.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/pre-fix-diagnostic-build-proof.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/predicate-verification.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/report.md",
+    "A\tdocs/testing/qa03-refund-diagnostics/reproduced-fail-result.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/root-cause.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/supplemental-tests.json",
+    "A\tdocs/testing/qa03-refund-diagnostics/td-published-review.json",
+    "A\tdocs/testing/qa70-qd-review/.gitattributes",
+    "A\tdocs/testing/qa70-qd-review/acceptance-status.json",
+    "A\tdocs/testing/qa70-qd-review/checklist.md",
+    "A\tdocs/testing/qa70-qd-review/combined-build-provenance.json",
+    "A\tdocs/testing/qa70-qd-review/combined-first-fail-result.json",
+    "A\tdocs/testing/qa70-qd-review/combined-full-run-manifest.json",
+    "A\tdocs/testing/qa70-qd-review/combined-pass-result.json",
+    "A\tdocs/testing/qa70-qd-review/combined-second-attempt-observations.json",
+    "A\tdocs/testing/qa70-qd-review/evidence-index.json",
+    "A\tdocs/testing/qa70-qd-review/findings.md",
+    "A\tdocs/testing/qa70-qd-review/first-failure-diagnostics.json",
+    "A\tdocs/testing/qa70-qd-review/independent-pr70-evidence.json",
+    "A\tdocs/testing/qa70-qd-review/report.md",
+    "A\tdocs/testing/qa70-qd-review/supplemental-test-evidence.json",
+    "A\tscripts/qa/rehearse_integrated_seed.py",
+    "A\tscripts/qa/tests/test_refund_seed_diagnostics.py",
+    "A\tsrc/test/java/qa02/investigation/ClockSkewConfiguration.java",
+    "M\tsrc/test/java/qa02/seed/RefundAcceptanceSeed.java"
+  ],
+  "production_diff": [],
+  "migration_identity_receipt": "precommit-inspection.json",
+  "jar_sha256": "ef9f481607a55f5593a5245e1ee8f818433088bd16642c3018fa3c9c410821aa",
+  "jar_scope": "Actual build-only5089 artifact; no test/regression/seed result inferred",
+  "clean_worktree_and_index": true,
+  "FR01_local_source_identity": "VERIFIED",
+  "FR01_gate": "PENDING TD-independent compatibility read-back and HP joint acceptance; NOT marked PASS",
+  "FR04_FR07": "NOT AUTHORIZED / NOT RUN"
+}

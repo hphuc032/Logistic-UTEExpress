@@ -1,0 +1,33 @@
+{
+  "recorded_utc": "2026-10-29T13:49:59.373148+00:00",
+  "executed_source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "develop_sha": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "FR01": {
+    "local_source_identity": "VERIFIED:629main objects and28SQL blobs equal accepted develop",
+    "joint_gate_status": "PENDING TD-independent read-back and HP acceptance",
+    "PASS": false
+  },
+  "FR02": {
+    "local_runner": "PASS under required UTC configuration",
+    "Docker_Testcontainers": "PASS",
+    "PostgreSQL17_SQL_auth": "PASS correct password; wrong password rejected28P01",
+    "owned_cleanup": "PASS every attempt",
+    "default_JVM_Asia_Saigon": "BLOCKED SQLSTATE22023 TimeZone parameter; failures preserved",
+    "joint_gate_status": "PENDING TD review/HP acceptance"
+  },
+  "FR04_FR07": {
+    "authorized": false,
+    "execution": "NOT RUN",
+    "requirement": "TD confirmation + explicit HP FR01/FR02 acceptance and authorization for next gates"
+  },
+  "G01_human": "PENDING / no new human evidence",
+  "Q70_S01": {
+    "status": "OPEN",
+    "severity": "Medium",
+    "disposition": "ACCEPTED RISK \u2014 LIMITED",
+    "historical_root_cause": "NOT PROVEN; no RESOLVED claim"
+  },
+  "QA03": "BLOCKED / NOT COMPLETE",
+  "PR69": "DRAFT",
+  "approve_merge_forcepush": false
+}

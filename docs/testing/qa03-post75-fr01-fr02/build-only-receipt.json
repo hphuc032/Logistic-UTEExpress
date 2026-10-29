@@ -1,0 +1,25 @@
+{
+  "source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+  "command": [
+    "mvnw.cmd",
+    "--batch-mode",
+    "--no-transfer-progress",
+    "-DskipTests",
+    "clean",
+    "package",
+    "dependency:build-classpath",
+    "-Dmdep.includeScope=test",
+    "-Dmdep.outputFile=.work/qa03-post75-sync/test-classpath.txt"
+  ],
+  "scope": "BUILD ONLY + test compilation/classpath; tests intentionally NOT RUN pending FR gates, not regression PASS",
+  "started_utc": "2026-10-29T13:19:25.563231+00:00",
+  "finished_utc": "2026-10-29T13:19:58.435617+00:00",
+  "duration_seconds": 32.872,
+  "exit_code": 0,
+  "timed_out": false,
+  "clean_before": true,
+  "clean_after": true,
+  "jar_sha256": "ef9f481607a55f5593a5245e1ee8f818433088bd16642c3018fa3c9c410821aa",
+  "log_sha256": "5859baa949d90b47c8b997249896e7533b7ce126ea9ca3f10e050b1d498f1e15"
+}

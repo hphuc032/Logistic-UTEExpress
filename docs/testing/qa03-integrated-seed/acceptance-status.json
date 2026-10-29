@@ -6,18 +6,18 @@
   "gates": [
     {
       "id": "Q03-G01",
-      "status": "G01 AUTOMATED PASS / HUMAN ACCEPTANCE PENDING",
-      "reason": "Fresh candidate75 on accepted develop; human observation/signoff pending",
+      "status": "PR75 merged / human acceptancePENDING",
+      "reason": "No human signoff inferred from mergedPR or automated prior-source checks",
       "owner": "QD execution / HP acceptance"
     },
     {
       "id": "Q03-G02",
-      "status": "TECHNICAL PASS / HP scope acceptance PENDING",
-      "source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+      "status": "Latestpost75 FR04\u2013FR07NOTRUN / authorizationPENDING",
+      "source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
       "requirements": [
-        "TD business/source review",
-        "HP explicit synthetic initialADMIN/PAID scope acceptance",
-        "HP shared-checkpoint vsindependent-child-process limitation acceptance"
+        "TD independent compatibility/source read-back",
+        "HP explicit FR01/FR02 acceptance",
+        "HP explicit authorization for FR04\u2013FR07"
       ],
       "owner": "TD + QD + HP"
     }
@@ -76,5 +76,7 @@
     "qa03": "BLOCKED",
     "td_source_acknowledgement": "CONFIRMED direct GitHub evidence review"
   },
-  "current_postmerge_packet": "../qa03-post70-final/acceptance-status.json"
+  "current_postmerge_packet": "../qa03-post70-final/acceptance-status.json",
+  "current_post75_packet": "../qa03-post75-fr01-fr02/acceptance-status.json",
+  "current_full_G02_on_post75": "NOT RUN / pendingjointFR01FR02 andHPauthorization"
 }

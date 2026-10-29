@@ -1,0 +1,7 @@
+{
+  "status": "ZIP archive verified",
+  "files": 292,
+  "sha256": "8b004e2ecf48e66188633411403f1918937d5ec55aee2fffb8b02a806378eed0",
+  "prior_attempt": "Directory copy failed at Windows long destination path; kept partial copy, no Maven run occurred; original files preserved in verified ZIP",
+  "scope": "Prior89 raw artifacts, not new execution"
+}

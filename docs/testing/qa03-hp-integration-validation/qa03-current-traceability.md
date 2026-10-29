@@ -1,3 +1,5 @@
+> Current post75 gate: accepted developa5620f1, integratedsource5089a8e. Main629objects/28SQLidentities verified, build-only and FR02UTC/authpreflight complete. FR01joint and FR02acceptance PENDING; FR04–FR07NOTAUTHORIZED/NOTRUN. Current packet `../qa03-post75-fr01-fr02/report.md`. The source89G02/oldcandidate traceability below is historical, not a new5089run. G01human remainsPENDING.
+
 # Current QA03 Master Plan traceability
 
 Original plan SHA25618523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a. Current technical packet `../qa03-post70-final/report.md`; executed source89d6762, accepted develop6a26370, separate UI candidate75db3c876.
