@@ -68,6 +68,74 @@ a:hover {
 
 .app-main {
     flex: 1 0 auto;
+    overflow-wrap: anywhere;
+}
+
+/* UI-02: contain long references and keep wide data inside named scroll regions. */
+.app-main .row > *,
+.app-main .d-flex > *,
+.app-navbar-actions {
+    min-width: 0;
+}
+
+.app-main input,
+.app-main select,
+.app-main textarea {
+    max-width: 100%;
+}
+
+.table-responsive {
+    max-width: 100%;
+    min-width: 0;
+}
+
+.table-responsive > .table {
+    min-width: 40rem;
+}
+
+.table-responsive:focus-visible {
+    outline: 3px solid var(--ute-blue-700);
+    outline-offset: -3px;
+}
+
+.app-main nav[aria-label^="Phân trang"] {
+    flex-wrap: wrap;
+    align-items: center;
+    row-gap: 0.75rem;
+}
+
+@media (min-width: 992px) {
+    .app-navbar .navbar-collapse,
+    .app-navbar-actions {
+        flex-wrap: wrap;
+        row-gap: 0.5rem;
+    }
+
+    .app-navbar .navbar-nav {
+        flex-shrink: 0;
+    }
+
+    .app-navbar-actions {
+        justify-content: flex-end;
+    }
+
+    .app-navbar-actions .btn {
+        white-space: nowrap;
+    }
+}
+
+@media (max-width: 991.98px) {
+    .app-main .app-dashboard {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    #workspaceNavigation > nav {
+        padding-top: 1rem;
+    }
+
+    .app-dashboard-sidebar {
+        border-bottom: 1px solid rgba(255, 255, 255, 0.14);
+    }
 }
 
 .app-skip-link {

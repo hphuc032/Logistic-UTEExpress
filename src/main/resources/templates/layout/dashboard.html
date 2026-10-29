@@ -3,7 +3,14 @@
 <body>
 <div th:fragment="dashboard(sidebar, content)" class="app-dashboard">
     <aside class="app-dashboard-sidebar" aria-label="Điều hướng khu vực làm việc">
-        <th:block th:replace="${sidebar}"></th:block>
+        <button class="btn btn-app-outline-light d-lg-none w-100" type="button"
+                data-bs-toggle="collapse" data-bs-target="#workspaceNavigation"
+                aria-controls="workspaceNavigation" aria-expanded="false">
+            Menu khu vực làm việc
+        </button>
+        <div id="workspaceNavigation" class="collapse d-lg-block">
+            <th:block th:replace="${sidebar}"></th:block>
+        </div>
     </aside>
     <section class="app-dashboard-content">
         <th:block th:replace="${content}"></th:block>
