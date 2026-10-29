@@ -1,0 +1,13 @@
+sequenceDiagram
+participant A0 as Browser
+participant A1 as EmailVerificationController
+participant A2 as EmailVerificationService
+participant A3 as PostgreSQL
+A0->>A1: POST verify code và CSRF
+A1->>A2: verify identifier code
+A2->>A3: Lock user và latest purpose token
+A3->>A2: Latest token đã khóa
+A2->>A2: Kiểm tra TTL attempts HMAC
+A2->>A3: Consume và activate cùng commit
+A2->>A1: VERIFIED hoặc INVALID
+A1->>A0: Login verified hoặc generic error

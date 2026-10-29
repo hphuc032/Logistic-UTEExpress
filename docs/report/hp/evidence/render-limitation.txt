@@ -1,0 +1,4 @@
+2026-10-29 packaged documents/render_docx.py invoked on HP_Chapters_1_2_4_5_12.docx with --output_dir .work/doc01/render --emit_pdf.
+Second attempt used workspace TEMP/TMP to avoid sandbox temp cleanup failure.
+Result: FileNotFoundError: LibreOffice soffice.exe was not found on PATH
+No final DOCX page render, PDF or pagination verification.

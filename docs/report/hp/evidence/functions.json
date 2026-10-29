@@ -1,0 +1,516 @@
+[
+  {
+    "num": "4.1",
+    "title": "Đăng ký tài khoản",
+    "task": "AUTH-01",
+    "actor": "Guest",
+    "controller": "identity/controller/RegistrationController.java",
+    "service": "identity/service/RegistrationService.java",
+    "anchor": "public RegistrationOutcome register(",
+    "flow": [
+      "POST register và CSRF",
+      "Bean Validation và allowlist",
+      "Chuẩn hóa email username",
+      "UNIQUE DB và BCrypt",
+      "PENDING cùng role USER",
+      "Commit rồi gửi OTP"
+    ],
+    "paragraphs": [
+      "Đăng ký thiết lập danh tính bền vững để các module khác tham chiếu. Form chỉ nhận email, username, password và confirmPassword. Controller dùng @Valid và BindingResult; trình duyệt không quyết định role, trạng thái hoặc tokenVersion. Email và username được trim/lowercase bằng Locale.ROOT cho cột chuẩn hóa; mật khẩu giữ nguyên ký tự.",
+      "RegistrationService.register chạy trong transaction. Pre-check giúp phản hồi sớm, nhưng unique constraint trên normalized_email và normalized_username mới ngăn hai yêu cầu đồng thời tạo cùng danh tính. saveAndFlush phát hiện race; lỗi được chuyển thành RegistrationConflictException với thông báo chung, không trả tên constraint hay SQL.",
+      "Mật khẩu được PasswordEncoder mã hóa BCrypt. UserEntity.pendingRegistration khởi tạo PENDING_VERIFICATION; email_verified_at chưa có, token_version bằng0. UserRoleRepository.assign chỉ gán USER. Sau khi lời gọi service commit, controller yêu cầu EmailVerificationService gửi mã rồi redirect /verify-otp; tài khoản không tự ACTIVE và lỗi SMTP không làm mất đăng ký đã commit."
+    ],
+    "relations": "RegisterForm; RegistrationCommand; RegistrationOutcome; UserEntity; RoleEntity; UserRepository; RoleRepository; UserRoleRepository.",
+    "tests": "AuthRegistrationIT; RegistrationControllerTest; RegistrationServiceTest",
+    "screenshot": "interaction-register-invalid-anonymous-_register-768.jpg",
+    "seq": null,
+    "routes": "GET /register; POST /register"
+  },
+  {
+    "num": "4.2",
+    "title": "Đăng nhập bằng email hoặc username",
+    "task": "AUTH-02",
+    "actor": "Tài khoản ACTIVE",
+    "controller": "security/controller/LoginController.java",
+    "service": "security/service/LoginService.java",
+    "anchor": "public LoginOutcome login(",
+    "flow": [
+      "POST login cùng CSRF",
+      "LoginForm chỉ identifier password",
+      "DaoAuthenticationProvider",
+      "BCrypt và trạng thái ACTIVE",
+      "JwtTokenService.issue",
+      "Cookie và redirect theo role"
+    ],
+    "paragraphs": [
+      "LoginController.login nhận LoginForm và chỉ bind identifier/password. LoginService.login tạo UsernamePasswordAuthenticationToken chưa xác thực, gọi AuthenticationManager. ProviderManager và DaoAuthenticationProvider dùng UteExpressUserDetailsService; dữ liệu được lấy qua IdentityAuthenticationService, không cho security truy cập trực tiếp entity/repository của identity.",
+      "Tài khoản phải ACTIVE và mật khẩu phải khớp BCrypt. Cùng một public message được dùng khi sai mật khẩu, không có tài khoản hoặc trạng thái không đủ điều kiện. Sau xác thực, principal được chuyển thành LoginOutcome gồm token và role hiện tại. Roles dùng để điều hướng không thay thế kiểm tra quyền ở request kế tiếp.",
+      "Controller đặt cookie qua JwtCookieService, xóa token CSRF cũ tại biên đăng nhập để trang sau cấp token mới. ADMIN chuyển /admin/dashboard, MANAGER chuyển /manager/dashboard, các role khác về /. Không bật formLogin mặc định hay lưu SecurityContext vào HTTP session."
+    ],
+    "relations": "LoginForm/LoginCommand/LoginOutcome; UteExpressPrincipal; IdentityAuthenticationService; AuthAccountSnapshot.",
+    "tests": "Auth02AuthenticationIT; AuthenticationWebTest; JwtAuthenticationFilterTest",
+    "screenshot": "post-sync-final-anonymous-_login-1440.jpg",
+    "seq": "login",
+    "routes": "GET /login; POST /login"
+  },
+  {
+    "num": "4.3",
+    "title": "Xác thực JWT trên từng request",
+    "task": "AUTH-02 SEC-01",
+    "actor": "Tài khoản đã đăng nhập",
+    "controller": "security/filter/JwtAuthenticationFilter.java",
+    "service": "security/filter/JwtAuthenticationFilter.java",
+    "anchor": "private void authenticate(",
+    "flow": [
+      "Đọc cookie HttpOnly",
+      "Decode HS256 và claims",
+      "Load account và roles từ DB",
+      "ACTIVE và tokenVersion bằng nhau",
+      "Principal vào SecurityContext",
+      "URL và method authorization"
+    ],
+    "paragraphs": [
+      "JWT sử dụng HS256 qua Spring Security JOSE. JwtConfiguration giới hạn thuật toán, kiểm tra issuer/audience, thời gian, subject và tokenVersion dạng số nguyên không âm. JwtTokenService.issue chỉ đưa sub, iat, exp, iss, aud và tokenVersion vào claims; không nhúng roles.",
+      "Subject có dạng uteexpress:user:<id>. Việc phân giải ID nằm ở security/identity boundary; business service gọi CurrentAccountIdProvider, không tự Long.parseLong(authentication.getName()). Mỗi request hợp lệ vẫn tải account từ PostgreSQL và so tokenVersion, nhờ đó khóa tài khoản hoặc thay quyền tác động tới request sau.",
+      "Nếu chữ ký, thời gian, claims, trạng thái hoặc phiên bản không hợp lệ, filter xóa context và không tạo authentication giả. Đường public vẫn có thể trả nội dung công khai; đường protected trả401 theo entry point. Thiết kế stateless giảm session server nhưng không làm hệ thống độc lập DB vì còn bước tải quyền/trạng thái."
+    ],
+    "relations": "JwtTokenService; JwtConfiguration; IdentityAuthenticationService; UteExpressPrincipalFactory; CurrentAccountIdProvider.",
+    "tests": "JwtSecurityConfigurationTest; JwtAuthenticationFilterTest; Auth02AuthenticationIT",
+    "screenshot": null,
+    "seq": "jwt",
+    "routes": "Không có endpoint JWT riêng; JwtAuthenticationFilter áp dụng trên request trong SecurityFilterChain."
+  },
+  {
+    "num": "4.4",
+    "title": "Đăng xuất và thu hồi JWT",
+    "task": "AUTH-02",
+    "actor": "Tài khoản xác thực",
+    "controller": "security/SecurityConfig.java",
+    "service": "security/web/TokenVersionLogoutHandler.java",
+    "anchor": "public void logout(",
+    "flow": [
+      "POST logout cùng CSRF",
+      "JwtAuthenticationFilter phục hồi user",
+      "LogoutHandler lấy principal",
+      "invalidateTokens trong identity",
+      "Tăng tokenVersion DB",
+      "Xóa cookie và context"
+    ],
+    "paragraphs": [
+      "Đăng xuất là POST /logout do Security Filter Chain xử lý, không cần controller nghiệp vụ giả. CSRF vẫn được kiểm tra vì browser tự gửi cookie xác thực. TokenVersionLogoutHandler chỉ xử lý principal đúng kiểu UteExpressPrincipal.",
+      "IdentityAuthenticationService.invalidateTokens tăng token_version ở DB. JwtLogoutSuccessHandler dọn cookie/context và chuyển sang màn hình đăng nhập theo hợp đồng. Xóa cookie chỉ xử lý browser hiện tại; tăng version mới là cơ chế server từ chối JWT cũ trên thiết bị khác.",
+      "Đây là chính sách thu hồi toàn bộ token cùng version của account, không phải refresh-token rotation hay một blacklist từng token. Request đã được xử lý trước thời điểm commit không bị đảo ngược; các request xác thực tiếp theo phải nạp version hiện tại."
+    ],
+    "relations": "IdentityAuthenticationService.invalidateTokens; UserRepository; JwtLogoutSuccessHandler; JwtCookieService.",
+    "tests": "Auth02AuthenticationIT; AuthenticationWebTest; CsrfCookieWebTest",
+    "screenshot": null,
+    "seq": null,
+    "routes": "POST /logout (Spring Security LogoutFilter, không phải MVC controller)"
+  },
+  {
+    "num": "4.5",
+    "title": "Xác minh email và gửi lại OTP",
+    "task": "AUTH-03 QA-01",
+    "actor": "Guest có tài khoản PENDING_VERIFICATION",
+    "controller": "identity/controller/EmailVerificationController.java",
+    "service": "identity/service/EmailVerificationService.java",
+    "anchor": "public EmailVerificationResult verify(",
+    "flow": [
+      "POST verify hoặc resend có CSRF",
+      "Khóa user theo identifier",
+      "Latest token cùng purpose",
+      "TTL attempts HMAC và cooldown",
+      "Consume cùng activateEmail",
+      "Commit rồi redirect login"
+    ],
+    "paragraphs": [
+      "GET /verify-otp dựng form; POST /verify-otp thực hiện verify; POST /verify-otp/resend yêu cầu mã mới. Mã gồm sáu chữ số do SecureRandom sinh. DB chỉ lưu HMAC-SHA256 trong ngữ cảnh userId:purpose:code; secret lấy từ OTP_PEPPER_BASE64, không đưa mã hoặc HMAC ra response/log.",
+      "Service khóa user, sau đó khóa token mới nhất theo user và EMAIL_VERIFICATION, thứ tự sentAt giảm dần rồi id giảm dần. Mã đã consume, hết hạn hoặc đạt giới hạn thử đều bị từ chối; sai HMAC tăng attempts trong transaction trả kết quả INVALID. Token cũ vẫn không hợp lệ sau resend vì chỉ latest token được xét.",
+      "QA-01 giới hạn TTL tối đa5 phút, attempts tối đa5 và cooldown tối thiểu60 giây; bản ghi cũ dài hơn cũng chịu cap sentAt+TTL hiện tại. Verify thành công consume và chuyển PENDING_VERIFICATION sang ACTIVE cùng emailVerifiedAt trong một transaction. Gửi mail diễn ra sau commit token; SMTP fail vẫn giữ token/cooldown, không tuyên bố đã gửi thành công."
+    ],
+    "relations": "VerifyOtpForm; ResendOtpForm; OtpTokenEntity; OtpPurpose; OtpTokenRepository; OtpMailService.",
+    "tests": "Auth03EmailVerificationIT; Qa01OtpSecurityIT; OtpSecurityTest; EmailVerificationControllerTest",
+    "screenshot": null,
+    "seq": "otp",
+    "routes": "GET /verify-otp; POST /verify-otp; POST /verify-otp/resend"
+  },
+  {
+    "num": "4.6",
+    "title": "Yêu cầu khôi phục mật khẩu",
+    "task": "AUTH-04",
+    "actor": "Guest",
+    "controller": "identity/controller/PasswordResetController.java",
+    "service": "identity/service/PasswordResetService.java",
+    "anchor": "public EmailDispatchResult sendResetCode(",
+    "flow": [
+      "Email hợp lệ và CSRF",
+      "Transaction tìm ACTIVE user",
+      "Cooldown theo RESET_PASSWORD",
+      "Sinh HMAC và lưu OTP",
+      "Commit rồi gửi SMTP",
+      "Cùng redirect và thông báo chung"
+    ],
+    "paragraphs": [
+      "POST /forgot-password dùng ForgotPasswordForm chỉ chứa email. Controller.requestReset luôn chuyển /reset-password?requested=true sau đầu vào hợp lệ. Email tồn tại, không tồn tại, không đủ điều kiện hoặc gửi mail thất bại có cùng public redirect/message nhằm giảm account enumeration.",
+      "PasswordResetService.sendResetCode chỉ phát mã cho ACTIVE. Hàm issue trong TransactionTemplate khóa account và token RESET_PASSWORD mới nhất; kiểm tra cooldown trước khi sinh/lưu mã. OtpMailService.sendPasswordReset dùng hạ tầng AUTH-03; không tạo bảng reset-token riêng hoặc hệ thống SMTP thứ hai.",
+      "Mục tiêu response chung không đồng nghĩa đã chứng minh timing constant-time. Kiểm tra độ trễ với SMTP thật còn NOT RUN trong QA-01. Rate budget HTTP chung và cooldown DB giới hạn lạm dụng trong phạm vi được thiết kế; không thể thay bằng thông báo email không tồn tại cho dễ demo."
+    ],
+    "relations": "ForgotPasswordForm; PasswordResetService.issue; UserRepository; OtpPurpose.RESET_PASSWORD; OtpTokenRepository.",
+    "tests": "PasswordResetControllerTest; PasswordResetServiceTest; Auth04PasswordResetIT",
+    "screenshot": null,
+    "seq": null,
+    "routes": "GET /forgot-password; POST /forgot-password"
+  },
+  {
+    "num": "4.7",
+    "title": "Đặt lại mật khẩu bằng OTP",
+    "task": "AUTH-04",
+    "actor": "Guest có reset OTP hợp lệ",
+    "controller": "identity/controller/PasswordResetController.java",
+    "service": "identity/service/PasswordResetService.java",
+    "anchor": "public PasswordResetResult resetPassword(",
+    "flow": [
+      "Validate email code password match",
+      "Khóa ACTIVE user",
+      "Khóa latest RESET_PASSWORD OTP",
+      "TTL attempts HMAC đúng purpose",
+      "BCrypt + consume + tokenVersion",
+      "Commit rồi login passwordReset"
+    ],
+    "paragraphs": [
+      "ResetPasswordForm gồm email, code, newPassword và confirmPassword, được validate trước khi gọi service. PasswordPolicy dùng chung với đổi mật khẩu/đăng ký:8–64 ký tự và tối đa72 byte UTF-8 cho BCrypt. Không trim, lowercase hay silently truncate password; xác nhận phải khớp.",
+      "PasswordResetService.resetPassword là transaction atomic: resolve user với pessimistic lock, chọn latest token cùng RESET_PASSWORD, kiểm tra expiry/consumed/attempts và HMAC. EMAIL_VERIFICATION không thể dùng tại đây vì query và hash context đều mang purpose riêng. Sai OTP tăng attempts; không vứt thay đổi bằng một rollback exception chỉ để trả lỗi dự kiến.",
+      "Khi đúng, user.resetPassword lưu BCrypt hash mới và tăng tokenVersion, token.consume ghi thời gian dùng trong cùng transaction. JWT cũ bị từ chối ở request kế tiếp, mật khẩu cũ không còn login được; controller redirect /login?passwordReset=true. Hai request tranh cùng mã không được cùng thành công."
+    ],
+    "relations": "ResetPasswordForm; PasswordPolicy; PasswordMatches; UserEntity.resetPassword; OtpTokenEntity.consume.",
+    "tests": "Auth04PasswordResetIT; PasswordResetServiceTest; PasswordResetControllerTest",
+    "screenshot": null,
+    "seq": "reset",
+    "routes": "GET /reset-password; POST /reset-password"
+  },
+  {
+    "num": "4.8",
+    "title": "Phân quyền CSRF và ngân sách OTP",
+    "task": "SEC-01 SEC-02 QA-01",
+    "actor": "Tất cả actor",
+    "controller": "security/SecurityConfig.java",
+    "service": "security/filter/OtpRequestLimitFilter.java",
+    "anchor": "@Override protected void doFilterInternal(",
+    "flow": [
+      "CSRF trên unsafe browser request",
+      "Rate budget theo socket peer",
+      "URL role policy và method guard",
+      "Owner scope tại service/query",
+      "Safe401 403 429 response",
+      "Không lộ giá trị nhạy cảm"
+    ],
+    "paragraphs": [
+      "Authentication trả lời người gọi là ai; authorization quyết định được làm gì trên tài nguyên nào. Least Privilege được thể hiện qua public allowlist, anyRequest().authenticated(), ROLE_USER/VENDOR/MANAGER/ADMIN/SHIPPER và @PreAuthorize. Guest không phải DB role; role check không thay ownership hoặc trạng thái nghiệp vụ.",
+      "CookieCsrfTokenRepository cấp XSRF-TOKEN đọc được, tách khỏi UTEEXPRESS_AUTH HttpOnly. Form Thymeleaf th:action tích hợp hidden token; JavaScript dùng token đã render tương thích cơ chế XOR. Đăng nhập, đăng xuất và các POST business đều chịu CSRF. Không tắt CSRF vì JWT nằm trong cookie tự động gửi.",
+      "OtpRequestLimitFilter chạy sau CSRF, chia chung budget cho register/verify/resend/forgot/reset theo request.getRemoteAddr, không tin Forwarded/X-Forwarded-For. Mặc định20 request/phút, tối đa10000 cửa sổ; saturation fail closed,429 + Retry-After. State chỉ ở một instance, reset khi restart; login brute force/distributed limiter không được suy ra là đã bảo vệ hoàn chỉnh.",
+      "ErrorResponse giữ thông điệp public cố định. Security exceptions ở filter có handler riêng, không dựa hoàn toàn ControllerAdvice. Input DTO và binder allowlist chống mass assignment; th:text/textContent giảm XSS. SCA, TLS/proxy/ACL, live SMTP/timing/load/restart còn NOT RUN hoặc DEFERRED, nên QA-01 chỉ accepted với deferred gates."
+    ],
+    "relations": "RoleCode; CurrentUserProvider; CurrentAccountIdProvider; SecurityErrorResponseWriter; GlobalExceptionHandler.",
+    "tests": "SecurityFoundationTest; SecurityHardeningIT; OtpRequestLimitFilterTest; OtpRequestRateLimiterTest; Qa01OtpSecurityIT",
+    "screenshot": null,
+    "seq": null,
+    "routes": "Cross-cutting: public allowlist và /user/**, /vendor/**, /admin/**, /manager/**, /shipper/**; không thêm endpoint nghiệp vụ."
+  },
+  {
+    "num": "5.1",
+    "title": "Hồ sơ cá nhân",
+    "task": "USER-01",
+    "actor": "USER hoặc VENDOR",
+    "controller": "account/controller/ProfileController.java",
+    "service": "account/service/ProfileService.java",
+    "anchor": "public ProfileView updateProfile(",
+    "flow": [
+      "GET user profile",
+      "Principal xác định accountId",
+      "Allowlist fullName phone",
+      "ProfileService gọi identity service",
+      "Cập nhật user có khóa",
+      "Redirect cùng flash"
+    ],
+    "paragraphs": [
+      "Chức năng cho chủ tài khoản xem username/email và sửa fullName/phone; không nhận userId từ form. ProfileController.populate dựng ProfileView thay vì expose UserEntity. Binder chỉ chấp nhận hai trường cho hồ sơ; form không quyết định email, username, role, status hay tokenVersion.",
+      "ProfileService ownerId lấy CurrentAccountIdProvider và gọi AccountIdentityService.updateProfile. Đây là boundary account→identity service/DTO; account không nhập identity.repository/entity. Identity giữ quyền thay đổi UserEntity, xác minh account ACTIVE và khóa dòng khi mutation.",
+      "Tên/điện thoại được kiểm tra chiều dài/ký tự và trim theo convention. Thành công POST-REDIRECT-GET với flash; validation fail render form và dữ liệu đã nhập an toàn. Đổi hồ sơ không làm tăng tokenVersion vì không thay credential. Email change/re-verification và username rename chưa có flow ở snapshot này."
+    ],
+    "relations": "ProfileForm; ProfileView; AccountProfileData; AccountIdentityService; UserRepository/UserEntity trong identity.",
+    "tests": "User01ProfileIT; ProfileControllerTest; ProfileServiceTest",
+    "screenshot": null,
+    "seq": null,
+    "routes": "GET /user/profile; POST /user/profile"
+  },
+  {
+    "num": "5.2",
+    "title": "Đổi mật khẩu khi đã đăng nhập",
+    "task": "USER-01",
+    "actor": "USER hoặc VENDOR",
+    "controller": "account/controller/ProfileController.java",
+    "service": "identity/service/AccountIdentityService.java",
+    "anchor": "public void changePassword(",
+    "flow": [
+      "POST user password và CSRF",
+      "PasswordChangeForm hợp lệ",
+      "Lấy owner từ principal",
+      "Khóa account và matches mật khẩu cũ",
+      "Hash mới + tokenVersion tăng",
+      "Redirect yêu cầu login lại"
+    ],
+    "paragraphs": [
+      "Người dùng phải chứng minh mật khẩu hiện tại. ProfileController.changePassword không đọc repository; nó gọi ProfileService rồi AccountIdentityService.changePassword. Mật khẩu mới dùng cùng PasswordPolicy với AUTH-04, xác nhận ở lớp form, không đi qua chuẩn hóa identifier.",
+      "Identity service khóa user, kiểm tra ACTIVE, PasswordEncoder.matches mật khẩu cũ và encode mật khẩu mới. UserEntity.resetPassword cập nhật hash/version trong cùng transaction. Mismatch trả lỗi tại currentPassword nhưng không echo giá trị password vào HTML; success chuyển /login?passwordChanged=true.",
+      "JWT trên các browser dùng version trước khi đổi đều mất hiệu lực ở bước xác thực kế tiếp. Đây không phải quên mật khẩu: người đã login cần mật khẩu cũ, còn AUTH-04 cần OTP riêng. Không bổ sung password history, MFA, OAuth hay refresh token vào DOC-01."
+    ],
+    "relations": "PasswordChangeForm; CurrentPasswordMismatchException; PasswordPolicy; UserEntity; PasswordEncoder.",
+    "tests": "User01ProfileIT; ProfileControllerTest; ProfileServiceTest",
+    "screenshot": null,
+    "seq": null,
+    "routes": "POST /user/password"
+  },
+  {
+    "num": "5.3",
+    "title": "Ảnh đại diện và storage an toàn",
+    "task": "USER-01 SEC-02",
+    "actor": "USER hoặc VENDOR",
+    "controller": "account/controller/ProfileController.java",
+    "service": "account/service/ProfileService.java",
+    "anchor": "public void updateAvatar(",
+    "flow": [
+      "Multipart avatar và CSRF",
+      "Giới hạn2MiB 4096px",
+      "Decode extension MIME magic",
+      "UUID key ngoài classpath",
+      "Identity cập nhật key",
+      "Dọn file lỗi hoặc file cũ"
+    ],
+    "paragraphs": [
+      "POST /user/avatar nhận MultipartFile, chuyển dữ liệu thành AvatarUpload/UploadContent; GET /user/avatar phục vụ ảnh của chính principal. Giới hạn avatar2MiB, chiều rộng/cao tối đa4096; chỉ JPEG/PNG/WebP. LocalFileStorageService đối chiếu extension, MIME, magic, reader format và decode đầy đủ, không chỉ tin tên file.",
+      "Key avatars/<uuid>.<ext> do server sinh. Namespace allowlist, real-path containment và chống symlink/traversal giữ file trong UPLOAD_DIR ngoài classpath. Response dùng MIME đã xác minh, no-store và nosniff; không render storage key ra UI.",
+      "ProfileService lưu ảnh mới trước rồi cập nhật key qua identity boundary; DB fail thì xóa file mới, sau cập nhật thành công dọn file cũ theo cơ chế hiện có. File và DB không có distributed transaction, vì vậy backup/restore phải bao gồm cả hai và kiểm tra orphan. Tài liệu không xem storage ACL của máy đích là đã nghiệm thu."
+    ],
+    "relations": "AvatarUpload; UploadContent; ImageStoragePolicy; FileStorageService; LocalFileStorageService; StoredContent.",
+    "tests": "User01ProfileIT; LocalFileStorageServiceTest; SecurityHardeningIT",
+    "screenshot": null,
+    "seq": null,
+    "routes": "GET /user/avatar; POST /user/avatar"
+  },
+  {
+    "num": "5.4",
+    "title": "Địa chỉ và địa chỉ mặc định",
+    "task": "USER-02",
+    "actor": "USER hoặc VENDOR",
+    "controller": "account/controller/AddressController.java",
+    "service": "account/service/AddressService.java",
+    "anchor": "public AddressView setDefault(",
+    "flow": [
+      "Principal lấy ownerId",
+      "Khóa users row",
+      "Query addressId cùng userId",
+      "Mutation trong transaction",
+      "Partial UNIQUE default",
+      "Flush rồi view hoặc redirect"
+    ],
+    "paragraphs": [
+      "GET /user/addresses liệt kê địa chỉ của chủ tài khoản; các POST create/update/delete/default giữ CSRF. AddressForm chỉ có receiverName,phone,provinceCode,district,detail. Ownership được quyết định tại ownerId và findByIdAndUserId; địa chỉ ngoại lai không trở thành của người gọi khi sửa hidden input.",
+      "AddressService khóa dòng user qua AccountIdentityService.requireActiveAccountForUpdate để tuần tự hóa tạo đầu tiên, đổi mặc định và xóa. Địa chỉ đầu tự mặc định; địa chỉ sau không mặc định. Đổi default xóa cờ cũ rồi đặt cờ target trong cùng transaction. Partial unique index bảo đảm tối đa một default.",
+      "Xóa địa chỉ mặc định chọn địa chỉ còn lại có id nhỏ nhất; xóa cuối cùng để0 địa chỉ/0 default. AddressQueryService trả AddressData bất biến cho checkout: requireOwnedAddress phải được gọi với buyerId đã được xác định ở service boundary. Order lưu snapshot; sửa địa chỉ hiện tại không được thay địa chỉ của đơn đã tạo."
+    ],
+    "relations": "Address; AddressRepository; AddressForm/AddressView/AddressData; AddressQueryService; AccountIdentityService.",
+    "tests": "User02AddressIT; AddressServiceTest; AddressControllerTest",
+    "screenshot": null,
+    "seq": null,
+    "routes": "GET /user/addresses; POST /user/addresses; POST /user/addresses/{id}/update; POST /user/addresses/{id}/delete; POST /user/addresses/{id}/default"
+  },
+  {
+    "num": "5.5",
+    "title": "Đăng ký và theo dõi cửa hàng",
+    "task": "VENDOR-01",
+    "actor": "USER hoặc VENDOR",
+    "controller": "shop/controller/ShopRegistrationController.java",
+    "service": "shop/service/ShopRegistrationService.java",
+    "anchor": "public ShopView register(",
+    "flow": [
+      "POST user shop register",
+      "Allowlist dữ liệu hồ sơ",
+      "Owner từ principal",
+      "Unique owner và slug",
+      "Lưu Shop PENDING",
+      "Xem user shop chờ Admin"
+    ],
+    "paragraphs": [
+      "GET /user/shop/register dựng form; GET /user/shop xem tình trạng hồ sơ; POST gửi ShopRegistrationRequest. Binder chỉ nhận name,slug,description,pickupAddress. Service trim và lowercase slug, kiểm tra account đã có shop hoặc slug trùng; DB unique xử lý race sau pre-check.",
+      "Shop.pendingApplication tạo PENDING và chưa cấp VENDOR. Người đăng ký không được gửi status/approvedBy/ownerId để tự duyệt. Khi xung đột, controller render thông báo chung; success redirect về /user/shop với flash đang chờ xét duyệt.",
+      "Admin duyệt/từ chối thuộc ADMIN-03 và QĐ, chỉ trình bày boundary: ShopApprovalService khóa hồ sơ, kiểm tra expectedVersion/PENDING; approve gọi VendorRoleGrantService và audit cùng transaction. Manager không có quyền approve. Trong snapshot không tìm thấy VendorShopController hoặc flow sửa thông tin shop/logo/banner như tên dự kiến của Plan; không mô tả chúng là đã hoàn thành."
+    ],
+    "relations": "Shop/ShopStatus; ShopRepository; ShopView; ShopRegistrationForm/Request; VendorRoleGrantService ở identity.",
+    "tests": "ShopRegistrationIT; ShopRegistrationControllerTest; ShopRegistrationServiceTest; ShopApprovalIT (QĐ boundary)",
+    "screenshot": null,
+    "seq": null,
+    "routes": "GET /user/shop; GET /user/shop/register; POST /user/shop/register"
+  },
+  {
+    "num": "5.6",
+    "title": "Quản lý sản phẩm của Vendor",
+    "task": "PROD-00 VENDOR-02",
+    "actor": "VENDOR có shop APPROVED",
+    "controller": "catalog/controller/VendorProductController.java",
+    "service": "catalog/service/ProductService.java",
+    "anchor": "public ProductView update(",
+    "flow": [
+      "Vendor và CSRF",
+      "Approved owned shop",
+      "Active category qua service QĐ",
+      "Owned product + expectedVersion",
+      "Create update hoặc hide",
+      "Flush và DTO không entity"
+    ],
+    "paragraphs": [
+      "Các route Vendor list/new/edit/create/update/delete dùng ProductCreateRequest và ProductUpdateRequest. Trình duyệt được nhập giá/stock trong chức năng quản lý được phân quyền, nhưng điều này khác với checkout: người mua không được quyết định số tiền của Order. ShopId luôn lấy từ approvedShop(), không từ form.",
+      "ProductService dùng VendorShopQueryService.requireApprovedOwnedShop và CategoryQueryService.requireActiveCategory, rồi query findByIdAndShopId. Update/hide yêu cầu version phù hợp để phát hiện sửa đồng thời. DTO/binder chỉ cho name,description,price,stock,categoryId,version; status/moderation không do Vendor tự đặt.",
+      "POST /vendor/products/{id}/delete gọi hide thay vì xóa cứng Product. Snapshot OrderItem đã lưu không bị mất và FK không phải cascade xóa lịch sử. Giá dùng BigDecimal, stock có ràng buộc không âm; các lỗi optimistic lock/integrity thành conflict. Promotion/Voucher là ownership TD; controller product-promotion chỉ là điểm tích hợp."
+    ],
+    "relations": "Product; ProductRepository; ProductView; ProductCreateRequest/ProductUpdateRequest; VendorShopData; CategoryOption.",
+    "tests": "VendorProductIT; ProductServiceTest; VendorProductControllerTest; ProductModelTest",
+    "screenshot": null,
+    "seq": null,
+    "routes": "GET /vendor/products; GET /vendor/products/new; GET /vendor/products/{id}/edit; POST /vendor/products; POST /vendor/products/{id}/update; POST /vendor/products/{id}/delete"
+  },
+  {
+    "num": "5.7",
+    "title": "Ảnh sản phẩm và quyền đọc ảnh",
+    "task": "VENDOR-02 PROD-01 SEC-02",
+    "actor": "VENDOR ghi ảnh Guest đọc ảnh công khai",
+    "controller": "catalog/controller/VendorProductController.java",
+    "service": "catalog/service/ProductService.java",
+    "anchor": "public ProductImageView addImage(",
+    "flow": [
+      "Owner shop và khóa product",
+      "Tối đa5 ảnh mỗi sản phẩm",
+      "Validate5MiB 4096px decode",
+      "Lưu file UUID rồi ProductImage",
+      "Rollback dọn ảnh mới",
+      "Public read kiểm tra visibility"
+    ],
+    "paragraphs": [
+      "ProductService.addImage khóa product thuộc shop hiện tại, đếm số ảnh để giữ tối đa5, normalize altText rồi lưu ảnh theo ImageStoragePolicy5MiB/4096px. ProductImage lưu key nội bộ, position và altText; response DTO không lộ file path.",
+      "Ảnh mới có rollback cleanup qua TransactionSynchronization; deleteImage xóa row rồi đăng ký afterCommit xóa file cũ, tránh rollback DB nhưng file mất. Cơ chế compensation không phải transaction filesystem; lỗi dọn file cần được theo dõi khi vận hành.",
+      "GET /products/{productId}/images/{imageId}/content là public route nhưng service kiểm tra cả liên kết ảnh và visibility Product/Shop/Category trước khi đọc key. Hide/moderate/suspend/disable category làm mất quyền public cả HTML lẫn ảnh. Vendor read riêng cũng phải đúng owned product/image. MIME/nosniff/no-store không thay authorization."
+    ],
+    "relations": "ProductImage; ProductImageRepository; ProductImageView; FileStorageService; PublicCatalogService.image.",
+    "tests": "VendorProductIT; PublicCatalogIT; ProductImagePolicyTest; LocalFileStorageServiceTest",
+    "screenshot": null,
+    "seq": null,
+    "routes": "POST /vendor/products/{id}/images; POST /vendor/products/{id}/images/{imageId}/delete; GET /vendor/products/{id}/images/{imageId}/content; GET /products/{productId}/images/{imageId}/content"
+  },
+  {
+    "num": "5.8",
+    "title": "Catalog công khai và chi tiết",
+    "task": "PROD-01",
+    "actor": "Guest USER và các actor được xem công khai",
+    "controller": "catalog/controller/PublicCatalogController.java",
+    "service": "catalog/service/PublicCatalogService.java",
+    "anchor": "public ProductDetailView product(",
+    "flow": [
+      "GET home products shop category",
+      "Controller nhận route params",
+      "PublicCatalogService validate ID slug",
+      "Read model JOIN với visibility",
+      "DTO và ảnh hợp lệ",
+      "Thymeleaf escaped output hoặc404"
+    ],
+    "paragraphs": [
+      "PublicCatalogController phục vụ /, /products, /products/{id}, /shops, /shops/{slug}, /categories/{slug}. PublicCatalogService trả card/detail/home DTO; product() kiểm tra ID dương và bổ sung images. Slug phải canonical và giới hạn120 ký tự. Không có entity được bind vào view.",
+      "CatalogReadRepository dùng NamedParameterJdbcTemplate cho projection JOIN, thay vì ép toàn bộ read model thành JPA association. Predicate chung là Product ACTIVE, Shop APPROVED, Category active. Đọc giá qua product_prices_at(:pricingAt) để thống nhất promotion server; thuật toán promotion do TD sở hữu, không nhân đôi tại UI.",
+      "Home lấy tối đa12 sản phẩm mới, danh mục và shop hợp lệ; không mặc định đây là12 sản phẩm thật nếu DB chưa seed. Hàng hết stock có thể xuất hiện để phản ánh tình trạng, còn checkout revalidate stock/availability. UI dùng escaped text và link ảnh qua endpoint, không th:utext cho dữ liệu người dùng."
+    ],
+    "relations": "CatalogReadRepository; ProductCard/ProductDetailView/PublicHomeView; Shop/Category service contracts của owner.",
+    "tests": "PublicCatalogIT; PublicCatalogControllerTest; PublicCatalogServiceTest",
+    "screenshot": "post-sync-final-buyer-_products_1-1440.jpg",
+    "seq": null,
+    "routes": "GET /; GET /products; GET /products/{id}; GET /categories/{slug}; GET /shops; GET /shops/{slug}"
+  },
+  {
+    "num": "5.9",
+    "title": "Tìm kiếm lọc sắp xếp và phân trang",
+    "task": "PROD-02",
+    "actor": "Guest",
+    "controller": "catalog/controller/PublicCatalogController.java",
+    "service": "catalog/service/PublicCatalogService.java",
+    "anchor": "public ProductSearchPage search(",
+    "flow": [
+      "Bind ProductSearchCriteria",
+      "Normalize validate bounds",
+      "Sort enum allowlist",
+      "Count cùng pricingAt",
+      "LIMIT OFFSET server",
+      "Giữ criteria trong link page"
+    ],
+    "paragraphs": [
+      "Người xem tìm tên và lọc theo slug shop/category, minPrice/maxPrice; page/size có bounds. PublicCatalogService.search validate dữ liệu và lấy pricingAt từ Clock, truncate microsecond để count/list dùng cùng mốc giá. Offset tính bằng long; trang quá cuối trả danh sách rỗng.",
+      "ProductSort ánh xạ newest,priceAsc,priceDesc,bestSelling; giá trị không biết trở về NEWEST. SQL ghép fragment nội bộ từ allowlist và bind dữ liệu qua named parameters, không đưa chuỗi sort tùy ý vào ORDER BY. Bán chạy chỉ tổng hợp dòng hàng từ Order DELIVERED.",
+      "ProductSearchPage gồm totalItems,totalPages,hasPrevious/hasNext cùng criteria. Form/link phải giữ filter khi đổi trang; empty state không tạo sản phẩm giả. Master Plan có ý tưởng đánh giá cao nhưng ProductSort hiện không có highestRated; phải ghi là chưa có lựa chọn sort này, không mượn Review của QĐ để nói HP đã triển khai."
+    ],
+    "relations": "ProductSearchCriteria; ProductSearchPage; ProductSort; CatalogReadRepository.countPublicProducts/findPublicProducts.",
+    "tests": "ProductDiscoveryIT; PublicCatalogControllerTest; PublicCatalogServiceTest",
+    "screenshot": null,
+    "seq": null,
+    "routes": "GET /products với q, shop, category, minPrice, maxPrice, sort, page, size"
+  },
+  {
+    "num": "5.10",
+    "title": "Inventory contract và tích hợp checkout",
+    "task": "PROD-00 INT-01",
+    "actor": "Checkout service của TD",
+    "controller": "catalog/service/InventoryService.java",
+    "service": "catalog/service/DatabaseInventoryService.java",
+    "anchor": "public void lockAndCheck(",
+    "flow": [
+      "Checkout transaction đã mở",
+      "Canonical productId tăng dần",
+      "Khóa product và validate availability",
+      "Đủ stock rồi bind LockedBatch",
+      "decrease đúng batch một lần",
+      "Commit hoặc rollback toàn pipeline"
+    ],
+    "paragraphs": [
+      "HP sở hữu Product và InventoryService; TD sở hữu checkout/order state machine/pricing. DatabaseInventoryService.lockAndCheck và decrease có propagation MANDATORY, bắt buộc tham gia transaction đặt hàng của caller, không mở luồng giảm tồn riêng rồi commit sớm.",
+      "Danh sách StockQuantity được canonical theo productId để khóa ổn định; null/ID sai/quantity không dương/ID trùng bị từ chối. Sau khóa, catalog kiểm tra purchasable và stock hiện tại. LockedBatch gắn vào transaction, decrease chỉ nhận cùng payload và chưa decreased để tránh trừ lặp trong một transaction.",
+      "restore cũng khóa và kiểm tra overflow; owner Order quyết định lúc nào được restore và đánh dấu idempotent theo lifecycle, không để controller tự gọi vì thấy trạng thái hủy. Một checkout chỉ một shop; address/cart/buyer phải từ principal; tiền, commission và snapshot do server. INT-01 kiểm chứng hợp đồng, không nhận ownership commerce từ TD."
+    ],
+    "relations": "InventoryService; StockQuantity; ProductRepository.findAllByIdForUpdate; CatalogQueryService; OrderLifecycleService thuộc TD.",
+    "tests": "ProductCatalogIT; INT-01 evidence và các Checkout/Order IT của TD",
+    "screenshot": "interaction-checkout-receipt-buyer-_user_checkout_view-768.jpg",
+    "seq": "checkout",
+    "routes": "InventoryService là biên service, không có HTTP controller riêng. Checkout/Order của TD gọi trong transaction nghiệp vụ."
+  },
+  {
+    "num": "5.11",
+    "title": "Shared UI và responsive",
+    "task": "UI-01 UI-02",
+    "actor": "Buyer Vendor Manager Admin Shipper",
+    "controller": "security/controller/NavbarAuthenticationAdvice.java",
+    "service": "src/main/resources/static/js/app.js",
+    "anchor": "document.querySelectorAll(",
+    "flow": [
+      "layout base + fragments",
+      "Menu theo capability đã có",
+      "Dashboard collapse dưới992px",
+      "Table region cuộn và focus",
+      "Form validation escaped text",
+      "375 768 1440 containment"
+    ],
+    "paragraphs": [
+      "UI dùng Thymeleaf layout/base, fragments/head,navbar,footer,alerts,breadcrumbs và Bootstrap5.3.3 CDN có integrity/crossorigin theo template. app.css giữ màu thương hiệu/navy và tokens; app.js chỉ bổ sung hành vi nhỏ, không có React/Vue hay Node build pipeline.",
+      "UI-02 xử lý chuỗi dài, gutters, action header, bảng rộng và workspace menu. Table-responsive được đặt tên theo caption và tabindex0 để dùng keyboard; không bỏ cột nghiệp vụ. Dashboard xuống một cột dưới992px, collapse dùng Bootstrap thật. Navbar dùng buyerFeaturesAvailable để ẩn link buyer cho staff; backend role policy không bị nới.",
+      "Evidence UI-02 gồm240 render/containment trên80 actor-route×3 viewport; đây không phải240 CRUD journeys. Các happy path Promotion/Voucher có provenance riêng, do HP chạy nhưng logic thuộc TD. Native Escape/Cancel/focus có HP manual + DOM/log/DB; HP chấp nhận giới hạn, QĐ scoped approval chứ chưa tái chạy native toàn ma trận. PR74 merged6315cc3; các QA/release gate khác giữ nguyên."
+    ],
+    "relations": "layout/base.html; layout/dashboard.html; fragments; app.css/app.js; RoleCode/BuyerAccessService chỉ dùng boundary.",
+    "tests": "UiLayoutTest; src/test/js/app.test.cjs (7 mới); CI171 có40 Node/705 Java",
+    "screenshot": "post-sync-final-manager-_manager_dashboard-768.jpg",
+    "seq": null,
+    "routes": "Shared templates/static phục vụ các route hiện có; NavbarAuthenticationAdvice bổ sung model, không là business endpoint."
+  }
+]

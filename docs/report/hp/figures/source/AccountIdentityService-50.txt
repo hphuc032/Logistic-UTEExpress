@@ -1,0 +1,13 @@
+    public void changePassword(Long userId, String currentPassword, String newPassword) {
+        if (!PasswordPolicy.isValid(newPassword)) {
+            throw new IllegalArgumentException("New password does not satisfy the password policy");
+        }
+        UserEntity user = activeUserForUpdate(userId);
+        if (!passwordEncoder.matches(currentPassword, user.getPasswordHash())) {
+            throw new CurrentPasswordMismatchException();
+        }
+        user.changePassword(passwordEncoder.encode(newPassword), Instant.now(clock));
+    }
+
+    /** Serializes account-owned mutations without exposing the identity repository cross-module. */
+    @Transactional

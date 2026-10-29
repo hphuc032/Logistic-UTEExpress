@@ -1,0 +1,11 @@
+    @Override protected void doFilterInternal(HttpServletRequest request,HttpServletResponse response,FilterChain chain)
+            throws ServletException,IOException {
+        var decision=limiter.acquire(request.getRemoteAddr());
+        if(!decision.allowed()) {
+            response.setHeader("Retry-After",Long.toString(decision.retryAfterSeconds()));
+            errors.write(request,response,ErrorCode.TOO_MANY_REQUESTS);
+            return;
+        }
+        chain.doFilter(request,response);
+    }
+}

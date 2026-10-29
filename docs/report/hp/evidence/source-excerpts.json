@@ -1,0 +1,154 @@
+[
+  {
+    "path": "src/main/java/com/uteexpress/identity/service/RegistrationService.java",
+    "startLine": 36,
+    "endLine": 48,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "03c47719d6124240f1612afe0db6f58a9010c2f362b58ee254cb5ab8f06a636b",
+    "figure": "figures\\source\\RegistrationService-36.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/security/service/LoginService.java",
+    "startLine": 27,
+    "endLine": 38,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "1ff6076e15065e0cca27faaf33b00fca9040c1f19d3c7a9580da85d1fa1aca2a",
+    "figure": "figures\\source\\LoginService-27.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/security/filter/JwtAuthenticationFilter.java",
+    "startLine": 52,
+    "endLine": 64,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "6afce6ab375362866292ea3ab1c3acb72413ebbe84adeec492fc2e3b1e9b8e7e",
+    "figure": "figures\\source\\JwtAuthenticationFilter-52.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/security/web/TokenVersionLogoutHandler.java",
+    "startLine": 20,
+    "endLine": 27,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "7d7105721908a749730c9d921e10b5561fee0d00b0e82cd13dc740d8bc932349",
+    "figure": "figures\\source\\TokenVersionLogoutHandler-20.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/identity/service/EmailVerificationService.java",
+    "startLine": 72,
+    "endLine": 84,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "fbca0c23bb022be7ba09871ef96f571503a84721cd52774279cdc448de359776",
+    "figure": "figures\\source\\EmailVerificationService-72.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/identity/service/PasswordResetService.java",
+    "startLine": 55,
+    "endLine": 67,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "ec6811caf5a6aa66957e3ae92a83adfcfbf73bf1a12a91f419ad634ad9fc9c03",
+    "figure": "figures\\source\\PasswordResetService-55.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/identity/service/PasswordResetService.java",
+    "startLine": 76,
+    "endLine": 88,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "ec6811caf5a6aa66957e3ae92a83adfcfbf73bf1a12a91f419ad634ad9fc9c03",
+    "figure": "figures\\source\\PasswordResetService-76.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/security/filter/OtpRequestLimitFilter.java",
+    "startLine": 33,
+    "endLine": 43,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "f346de6bce719e0264230225c8692f73d96b7c4fe8bc38cb7bc7e816d0f3b86b",
+    "figure": "figures\\source\\OtpRequestLimitFilter-33.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/account/service/ProfileService.java",
+    "startLine": 45,
+    "endLine": 57,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "a45050fc490693fa609c49f98f268850161b772013e17e994c31e6018e7c477b",
+    "figure": "figures\\source\\ProfileService-45.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/identity/service/AccountIdentityService.java",
+    "startLine": 50,
+    "endLine": 62,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "57328c9748ba1335a73fe9d61ee7823ebe0265db87c81d527f41086467f3dc2c",
+    "figure": "figures\\source\\AccountIdentityService-50.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/account/service/ProfileService.java",
+    "startLine": 49,
+    "endLine": 61,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "a45050fc490693fa609c49f98f268850161b772013e17e994c31e6018e7c477b",
+    "figure": "figures\\source\\ProfileService-49.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/account/service/AddressService.java",
+    "startLine": 86,
+    "endLine": 98,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "aefe568249291e3255e270f545885f37e71819ddf60e327b7d6226973c6defcf",
+    "figure": "figures\\source\\AddressService-86.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/shop/service/ShopRegistrationService.java",
+    "startLine": 44,
+    "endLine": 56,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "001a39483091c5fb61741cbe601299c423ccda7d17032a9ba7643f8fc6763375",
+    "figure": "figures\\source\\ShopRegistrationService-44.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/catalog/service/ProductService.java",
+    "startLine": 102,
+    "endLine": 114,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "f225d7800c84cae840343d7453e3aa17c059cd7f70145ce18efa5613bb253320",
+    "figure": "figures\\source\\ProductService-102.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/catalog/service/ProductService.java",
+    "startLine": 122,
+    "endLine": 134,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "f225d7800c84cae840343d7453e3aa17c059cd7f70145ce18efa5613bb253320",
+    "figure": "figures\\source\\ProductService-122.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/catalog/service/PublicCatalogService.java",
+    "startLine": 76,
+    "endLine": 88,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "3559a0a4038e24257d0374463ba72a5a3214129340ddd311f2679f70f789820e",
+    "figure": "figures\\source\\PublicCatalogService-76.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/catalog/service/PublicCatalogService.java",
+    "startLine": 55,
+    "endLine": 67,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "3559a0a4038e24257d0374463ba72a5a3214129340ddd311f2679f70f789820e",
+    "figure": "figures\\source\\PublicCatalogService-55.png"
+  },
+  {
+    "path": "src/main/java/com/uteexpress/catalog/service/DatabaseInventoryService.java",
+    "startLine": 38,
+    "endLine": 50,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "68dadbdf481136791b72f44513aadff41ff9375f170dc2f7191047a3e2cc235a",
+    "figure": "figures\\source\\DatabaseInventoryService-38.png"
+  },
+  {
+    "path": "src/main/resources/static/js/app.js",
+    "startLine": 5,
+    "endLine": 17,
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "33878f951f4be137e2c592da0003a14a1233c54c0e77dc6190e345dd9b45f16a",
+    "figure": "figures\\source\\app-5.png"
+  }
+]

@@ -1,0 +1,167 @@
+[
+  {
+    "path": "README.md",
+    "sha256": "a1b1130fef84a70bc762ef4638efa72533a4459870e5a27b8d7146cd9d424a77",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "pom.xml",
+    "sha256": "f7cc0fa9ad3428557da0e42435dde1624795b2727725a837e1331978aeb95187",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/architecture.md",
+    "sha256": "f65269a9fef9dbbe94d656df313534ee09c0596ee433e98d83de61ca8b729a3b",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/security.md",
+    "sha256": "b8d527bea576dac084070f7bcd31b445754bf233fccfd33d4530970116dbc0b5",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/DATABASE_CONVENTIONS.md",
+    "sha256": "c9e07ba53767bb753a56c70d3882f1494aef4c5eec34dbd355b8238626ffd562",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/order-contracts.md",
+    "sha256": "7cc241f94d075ec47bdf6b818c1f54882d2e8008cca9a86d5b15e1f995198e52",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/ui-conventions.md",
+    "sha256": "c12d422100aefd82185c685d5d71fd59401a6ec287b8d1c9423d6bc61a2ce860",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/MASTER_TASK_BOARD.md",
+    "sha256": "597ce9b5afe2498e7c417e5be8af07b5a469ea106ec2540f7185ae5ce7dc66f2",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/ARCH-01-completion-report.md",
+    "sha256": "1affa717d1145344103456b797754927a031353298464dca2c8da574d6297cdb",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/AUTH-01-completion-report.md",
+    "sha256": "95185d4768fda47670ff12f0e867d6512ae079ec727e5bcb7a9807eae437d412",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/AUTH-02-completion-report.md",
+    "sha256": "c2c4821ddc248f9e4431b5c6bcdeef7fa6b5a933c4d736bf05e0280fa731792d",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/AUTH-03-completion-report.md",
+    "sha256": "5dbfacac4a24fab96f890b530da10d35fa5fc9ba558d2fd4d46e766ebc3fc3c3",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/AUTH-04-completion-report.md",
+    "sha256": "a54683fac502bf8db7c0c3522c94607ca2ec2cc5f84a2c4daf5182cf06ca6ce0",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/SEC-02-security-hardening.md",
+    "sha256": "71227c9b04ecfcc4141b85b5c90627f627b10c73a952a2b0ad68da1da94bc616",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/USER-01-completion-report.md",
+    "sha256": "dab193a4b037f7ecde24ee5f17b025537897c60b7480e06da0b1316d76730985",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/USER-02-completion-report.md",
+    "sha256": "fc4cfbf9a523174d82834006e66594fd97f76d2f794e9b564ee5c77e44e29772",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/VENDOR-01-completion-report.md",
+    "sha256": "dfceff70f8aa6f178440c2e13c9373ff8378aa21410389ebb96d048790d05941",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/VENDOR-02-completion-report.md",
+    "sha256": "62004ad644379894c94a3394d5b4b355d8b5217714b60c83b2804cf8f2193dbb",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/PROD-00-completion-report.md",
+    "sha256": "29c773cc73e0aad0190c6d52d493504aa6a99b3c95a0cd2a612cbd2a232c956b",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/PROD-01-completion-report.md",
+    "sha256": "36ae3761f1f8d7d414a77178d663716b354d18cde3115256287f691394ac43cf",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/PROD-02-completion-report.md",
+    "sha256": "470024d8f22761ac593f7681d8c06868ce7993bf58295b98900cda0670290a0d",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/UI-01-completion-report.md",
+    "sha256": "e8bf0eb293d47de863057c25e7cf04d27e4459b89b6da32c26300fdc083bbac3",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/INT-01-checkout-integration.md",
+    "sha256": "7eaf35cf8126acaa78c6d00a6284e3acf2d8b4fbf99fd1ab290a09fdf50f8393",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/testing/INT-02-integration-report.md",
+    "sha256": "fdaa6d4d425c94a8da17e4c050408279b749d34057539973853ead0731432c35",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/testing/QA-01-security-report.md",
+    "sha256": "9341f3d17b340aa7775ab30c4aa731eaf61c095d279d2452169a3e2f13b38ad7",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/testing/QA-01-security-matrix.md",
+    "sha256": "ae12f7f023368964fe1498c73112d307bce1ad402de60261cc3fe1b4b2a2a081",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/testing/QA-01-findings.md",
+    "sha256": "47780292c99204517e0a9ee1aafde8729cf38b118df251d39bc7d6a3db5165f3",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/testing/QA-01-evidence-manifest.md",
+    "sha256": "3515245e01d0faf61ff0df56b26e37a58ca1fd60f94dfc5f341b125556369de8",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/testing/UI-02-responsive-report.md",
+    "sha256": "c26455caf78a66493ec6044a5ab325715696e79a1dc0079ef5ab6678ff3f7536",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/testing/QA-02-regression-report.md",
+    "sha256": "45513cadbb7d6ef549efec99003b630a144c449a5f72ada868019f9b7d996542",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/testing/qa03-acceptance/report.md",
+    "sha256": "dc2c6190f9764de13768f4e6a4611dfe03e13da538f23519e5c0c97599f74ceb",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/SEED_MANIFEST.md",
+    "sha256": "25168c2e3c91377da865e6d3fe3fff4b8089e2f4c792cc327a0b3f10e1e8fd2e",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  },
+  {
+    "path": "docs/dependencies.txt",
+    "sha256": "8595bd031d083ae2d63a069dd6d3caa15462b8d69bf85982436491dd02109ee1",
+    "usage": "Source/context or historical evidence; relevant sections consulted, not relabelled as current runtime PASS."
+  }
+]
