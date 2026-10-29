@@ -32,7 +32,12 @@ public class VendorProductPromotionController {
         binder.setAllowedFields("name", "discountPercent", "startsAt", "endsAt", "active", "version");
     }
     @InitBinder("disableForm")
-    void disableFields(WebDataBinder binder) { binder.setAllowedFields("version"); }
+    void disableFields(WebDataBinder binder) {
+        if (binder instanceof ExtendedServletRequestDataBinder servletBinder) {
+            servletBinder.setHeaderPredicate(header -> false);
+        }
+        binder.setAllowedFields("version");
+    }
     @GetMapping
     String list(@PathVariable Long productId, Model model) {
         model.addAttribute("product", management.product(productId));

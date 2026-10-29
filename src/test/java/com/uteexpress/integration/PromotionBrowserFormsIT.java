@@ -58,6 +58,25 @@ class PromotionBrowserFormsIT {
         assertThat(other.browser().post("/vendor/products/"+owner.product()+"/promotions",promotion()).statusCode()).isEqualTo(404);
         assertNoWrites();
     }
+    @Test void realPromotionDisableAcceptsHeadersAndRetainsOwnershipCsrfAndFieldValidation() throws Exception {
+        String path="/vendor/products/"+owner.product()+"/promotions";
+        assertRedirect(owner.browser().post(path,promotion()));
+        long id=jdbc.queryForObject("SELECT id FROM uteexpress.promotions WHERE product_id=?",Long.class,owner.product());
+        String disable=path+"/"+id+"/disable";
+        var fields=Map.of("version",jdbc.queryForObject("SELECT version FROM uteexpress.promotions WHERE id=?",Long.class,id).toString());
+        assertThat(other.browser().post(disable,fields).statusCode()).isEqualTo(404);
+        assertThat(user.post(disable,fields).statusCode()).isEqualTo(403);
+        assertThat(owner.browser().post(disable,fields,false,Map.of()).statusCode()).isEqualTo(403);
+        assertThat(owner.browser().post(disable,Map.of(),true,Map.of("version",fields.get("version"))).statusCode()).isEqualTo(400);
+        assertThat(owner.browser().post(disable,Map.of("version",fields.get("version"),"discountPercent","25")).statusCode()).isEqualTo(400);
+        assertThat(jdbc.queryForObject("SELECT active FROM uteexpress.promotions WHERE id=?",Boolean.class,id)).isTrue();
+        assertRedirect(owner.browser().post(disable,fields));
+        assertThat(jdbc.queryForMap("SELECT active,product_id,discount_percent FROM uteexpress.promotions WHERE id=?",id))
+                .containsEntry("active",false).containsEntry("product_id",owner.product());
+        assertThat(jdbc.queryForObject("SELECT discount_percent FROM uteexpress.promotions WHERE id=?",java.math.BigDecimal.class,id))
+                .isEqualByComparingTo("10");
+        assertThat(owner.browser().post(disable,fields).statusCode()).isEqualTo(409);
+    }
     @Test void csrfAndRoleChecksStillRunBeforeBusinessMutation() throws Exception {
         assertThat(owner.browser().post("/vendor/vouchers",voucher(),false,Map.of()).statusCode()).isEqualTo(403);
         assertThat(user.post("/vendor/vouchers",voucher()).statusCode()).isEqualTo(403);
