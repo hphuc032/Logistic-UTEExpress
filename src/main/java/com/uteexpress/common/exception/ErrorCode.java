@@ -9,6 +9,7 @@ public enum ErrorCode {
     CONFLICT(HttpStatus.CONFLICT, "Request conflicts with the current resource state."),
     UNAUTHENTICATED(HttpStatus.UNAUTHORIZED, "Authentication is required."),
     ACCESS_DENIED(HttpStatus.FORBIDDEN, "Access is denied."),
+    TOO_MANY_REQUESTS(HttpStatus.TOO_MANY_REQUESTS, "Too many requests. Please try again later."),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred.");
 
     private final HttpStatus status;

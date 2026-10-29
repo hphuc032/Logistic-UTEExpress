@@ -46,7 +46,7 @@ class EmailVerificationServiceTest {
 
     @BeforeEach
     void setUp() {
-        properties = new OtpProperties(Duration.ofMinutes(10), Duration.ofMinutes(1), 5, PEPPER);
+        properties = new OtpProperties(Duration.ofMinutes(5), Duration.ofMinutes(1), 5, PEPPER);
         hashes = new OtpHashService(properties);
     }
 
@@ -68,7 +68,7 @@ class EmailVerificationServiceTest {
                 .matches("[0-9a-f]{64}");
         verify(transactionManager).commit(transactionStatus);
         verify(mail).sendEmailVerification(
-                "persisted@example.com", "004271", Duration.ofMinutes(10));
+                "persisted@example.com", "004271", Duration.ofMinutes(5));
     }
 
     @Test
