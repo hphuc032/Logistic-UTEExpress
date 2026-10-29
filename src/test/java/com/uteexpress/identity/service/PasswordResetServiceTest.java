@@ -47,7 +47,7 @@ class PasswordResetServiceTest {
 
     @BeforeEach
     void setUp() {
-        properties = new OtpProperties(Duration.ofMinutes(10), Duration.ofMinutes(1), 5, PEPPER);
+        properties = new OtpProperties(Duration.ofMinutes(5), Duration.ofMinutes(1), 5, PEPPER);
         hashes = new OtpHashService(properties);
     }
 
@@ -70,7 +70,7 @@ class PasswordResetServiceTest {
                 .isNotEqualTo("004271")
                 .matches("[0-9a-f]{64}");
         verify(mail).sendPasswordReset(
-                "Persisted@Example.com", "004271", Duration.ofMinutes(10));
+                "Persisted@Example.com", "004271", Duration.ofMinutes(5));
     }
 
     @Test
