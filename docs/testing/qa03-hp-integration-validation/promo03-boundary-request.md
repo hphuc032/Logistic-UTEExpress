@@ -1,0 +1,9 @@
+# PROMO-03 boundary request — design only
+
+Status: REQUEST FOR HP/TD DECISION, not an approved API or implementation. Master Task Board assigns QD Ops pages/actions with Manager limits via TD PromotionService. Repository currently exposes VendorVoucherService and ProductPromotionManagementService for Vendor-owned SHOP/product management; neither is an Admin PLATFORM management contract. VoucherService cancellation release is a lifecycle effect, not an administration writer.
+
+Proposed smallest slice for decision: ADMIN management of PLATFORM vouchers, Manager DENY ALL pending explicit limits; product-promotion platform scope remains undecided. HP must confirm whether PLATFORM vouchers, product promotions or both are required. This proposal does not apply ADMIN06's commission-only exception automatically to PROMO03.
+
+TD should own authorized management DTOs/service operations, persisted actor eligibility, uniqueness/time/quota/business validation, expected versions, lock/governance freshness and historical checkout compatibility. QD should own controllers/forms/templates/audit adapter under agreed transaction protocol, no direct voucher/promotion repository writes and no duplicate pricing engine. Final interface/lock order must follow existing code review, not invented signatures here.
+
+Acceptance to agree before production mutation: positive Admin create/list/update/disable; denied Manager/Vendor/User/Shipper/anonymous; CSRF and strict allowlists; forged actor/scope/shop/usage/snapshot fields; stale/duplicate requests; invalid date/discount/quota; active governance revocation; concurrent quota use versus edits; audit rollback; existing checkout snapshots/voucher usage and refund/cancellation semantics unchanged. QD will add exact-source PostgreSQL/HTTP tests after TD authority is approved. No Flyway version is reserved by this document.
