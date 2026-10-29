@@ -46,10 +46,10 @@ class PlatformVoucherManagementIT {
     @Autowired PasswordEncoder passwords;
     @Autowired PlatformTransactionManager transactions;
     @Autowired com.uteexpress.identity.service.AccountIdentityService identities;
-    long admin, vendor, shop, ownVoucher, shopVoucher;
+    long admin, vendor, buyer, shop, ownVoucher, shopVoucher;
     String code, shopCode;
     @BeforeEach void fixture() {
-        admin = account("ADMIN"); vendor = account("VENDOR");
+        admin = account("ADMIN"); vendor = account("VENDOR"); buyer = account("USER");
         shop = jdbc.queryForObject("INSERT INTO uteexpress.shops(owner_id,name,slug,pickup_address,status) VALUES (?,'Shop',?,'Pickup','APPROVED') RETURNING id", Long.class, vendor, UUID.randomUUID().toString());
         code = "ADMIN_" + UUID.randomUUID().toString().replace("-", "").toUpperCase(Locale.ROOT);
         shopCode = "SHOP_" + UUID.randomUUID().toString().replace("-", "").toUpperCase(Locale.ROOT);
@@ -208,6 +208,7 @@ class PlatformVoucherManagementIT {
         var form=updateForm();form.setValue(new BigDecimal("20"));
         try(var executor=Executors.newSingleThreadExecutor()) {
             var future=new TransactionTemplate(transactions).execute(tx -> {
+                jdbc.queryForObject("SELECT id FROM uteexpress.users WHERE id=? FOR UPDATE",Long.class,buyer);
                 jdbc.queryForObject("SELECT id FROM uteexpress.vouchers WHERE id=? FOR UPDATE",Long.class,ownVoucher);
                 var pending=executor.submit(() -> {
                     authenticate(admin,"ADMIN");
@@ -296,6 +297,8 @@ class PlatformVoucherManagementIT {
     private long voucher(String code,String scope,Long shop) {
         return jdbc.queryForObject("INSERT INTO uteexpress.vouchers(code,scope,shop_id,type,value,min_subtotal,starts_at,ends_at,total_limit,per_user_limit,active,created_by) VALUES (?,?,?,'PERCENTAGE',10,0,'2020-01-01','2100-01-01',10,2,true,?) RETURNING id",Long.class,code,scope,shop,admin);
     }
+    // Buyer differs from the management actor: a real checkout locks its own buyer before Voucher.
+    // Reusing Admin here would insert a buyer FK after Voucher against the actor lock, inventing a lock inversion.
     private void usage(String state) {
         String key=UUID.randomUUID().toString();
         long order=jdbc.queryForObject("""
@@ -303,8 +306,8 @@ class PlatformVoucherManagementIT {
                 receiver_name,phone,province_code,district,detail,subtotal,discount_total,shipping_fee,
                 grand_total,commission_amount,commission_rate_snapshot,voucher_id,voucher_code,voucher_scope)
             VALUES (?,?,?, ?,?,'NEW','Receiver','0900','VN','District','Detail',10000,1000,0,9000,0,0,?,?,'PLATFORM') RETURNING id
-            """,Long.class,"ORD-"+key,key,"hash-"+key,admin,shop,ownVoucher,code);
-        jdbc.update("INSERT INTO uteexpress.voucher_usages(voucher_id,user_id,order_id,status,discount_amount,released_at) VALUES (?,?,?,?,1000,CASE WHEN ?='RELEASED' THEN CURRENT_TIMESTAMP ELSE NULL END)",ownVoucher,admin,order,state,state);
+            """,Long.class,"ORD-"+key,key,"hash-"+key,buyer,shop,ownVoucher,code);
+        jdbc.update("INSERT INTO uteexpress.voucher_usages(voucher_id,user_id,order_id,status,discount_amount,released_at) VALUES (?,?,?,?,1000,CASE WHEN ?='RELEASED' THEN CURRENT_TIMESTAMP ELSE NULL END)",ownVoucher,buyer,order,state,state);
     }
     private Map<String,Object> row(long id) {return jdbc.queryForMap("SELECT * FROM uteexpress.vouchers WHERE id=?",id);}
     private long audits(long id) {return jdbc.queryForObject("SELECT count(*) FROM uteexpress.audit_logs WHERE target_type='VOUCHER' AND target_id=?",Long.class,id);}
