@@ -107,3 +107,20 @@ TD explicitly confirmed all five requested source/evidence points for `f9c6fd68e
 Responsibility: TD owns Payment/Refund/business-invariant investigation; QD owns fixture/runner diagnostics and source-bound evidence; HP owns formal disposition, integration permission and final acceptance. Reopening/escalation triggers are enumerated in `residual-risk-proposal.json`: unexplained clean-seed CONFLICT, invariant/duplicate/rollback/fingerprint mismatch, provenance or Clock-marker mismatch, timeout/incomplete evidence, or guard/scope changes. Preserve failed evidence, block affected acceptance and refer to TD/QD/HP; never weaken eligibility guards.
 
 **Submitted for HP formal risk decision; not applied. Q70-S01 OPEN / Medium.** Original historical predicate remains unproven; no universal clock-skew or invalid chronology acceptance. PRs #68/#69/#70 remain unapproved/unmerged by QD, #69 Draft, QA02 IN PROGRESS, QA03 BLOCKED, HP Final Acceptance PENDING, PAY03/VNPAY DEFERRED.
+
+## Direct TD acknowledgement and remaining handoff
+
+The initial relayed receipt is now supplemented by the independently retrieved [TD GitHub confirmation](https://github.com/hphuc032/Logistic-UTEExpress/pull/70#issuecomment-6485644464), comment author `Tender0603`, created `2026-10-29T01:49:28Z`. This supersedes the earlier no-URL observation; its original publication remains in Git history. TD explicitly limits the acknowledgement to published source/provenance/evidence, without an independent JAR rebuild/byte comparison or a new PostgreSQL run.
+
+QD's reviewed evidence does not identify an additional unresolved TD production defect beyond the tracked Q70-S01 uncertainty; this is not an exhaustive QA-02 sign-off. Historical `QA-02-findings.md` contains source-time OPEN publication/plan/shutdown entries and must not be interpreted as a current authoritative closure list without TD reconciliation. Q02-F05 was accepted/merged in #63; teardown mitigation #64 is separately recorded in QA03 acceptance findings.
+
+| Task / criterion | Remaining action | Owner / related PR |
+|---|---|---|
+| Q70-S01 Medium | HP decide bounded disposition; retain unknown original predicate and reopen triggers | HP decision, TD commerce + QD evidence; #69/#70/#71 |
+| QA-02 integrated acceptance | After HP authorizes dependency integration, verify accepted source: migration/old ledger, both refund operations, chronology, idempotency/concurrency/rollback, inventory/voucher and revenue; publish exact source/CI/results | TD + QD; #68 -> #70 -> #69 subject HP decision |
+| QA-02 findings reconciliation | TD reconcile historical findings with merged fixes and current evidence, identify any further Master Plan gaps explicitly; HP decides completeness | TD/HP; historical QA-02-findings.md is not blanket acceptance |
+| QA-03 Q03-G02 | Combined normal/skew/rerun evidence exists; HP fixture/bootstrap/checkpoint scope and final integrated-source acceptance remain separate | TD + QD, HP; #69 |
+| QA-03 Q03-G01 | Browser/manual Ops and responsive evidence remains NOT RUN/BLOCKED; not a TD production bug | QD + HP/UI |
+| PAY-03 | VNPAY Sandbox DEFERRED; not claimed QA-02 provider evidence | TD, HP policy |
+
+No new production change, test execution, approval, merge, formal risk disposition or whole-QA completion is claimed by this documentation update.

@@ -1,7 +1,7 @@
 {
   "status": "CONFIRMED / SOURCE AND PUBLISHED EVIDENCE REVIEW",
   "source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
-  "received_via": "User-relayed TD message on 2026-10-29 Asia/Saigon; no GitHub review URL supplied or observed",
+  "received_via": "Direct GitHub comment independently retrieved and author verified as Tender0603; initial user-relayed receipt retained in Git history",
   "scope": "TD compared GitHub source and published evidence; not a new independent PostgreSQL execution",
   "confirmed": [
     "Ordered composition #68 -> #70 -> #69 and production guard scope",
@@ -10,5 +10,11 @@
     "Normal and -2s combined seeds; independent TD process rerun; within-run 34-table fingerprints unchanged",
     "No new Payment/Refund/inventory/voucher/revenue regression evidenced within tested scope"
   ],
-  "risk_position": "Agrees with bounded ACCEPTED RISK proposal; HP formal disposition still pending"
+  "risk_position": "Agrees with bounded ACCEPTED RISK proposal; HP formal disposition still pending",
+  "github_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/70#issuecomment-6485644464",
+  "github_comment_id": 6485644464,
+  "github_author": "Tender0603",
+  "github_created_at": "2026-10-29T01:49:28Z",
+  "verification_date": "2026-10-29 Asia/Saigon",
+  "limits": "TD did not independently rebuild/byte-compare JAR/classes or rerun PostgreSQL; acknowledgement of published provenance/results only"
 }
