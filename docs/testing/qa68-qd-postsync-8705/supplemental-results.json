@@ -1,0 +1,12 @@
+{
+  "node": {
+    "exit": 0,
+    "expected_tests": 33,
+    "log_sha256": "be1b1d872adbe850fa4b3245ed62748c89a96a7d2be085896fb544a7099cd78c"
+  },
+  "tooling": {
+    "exit": 0,
+    "expected_tests": 17,
+    "log_sha256": "da7d137c8b21322a7d4f54de11da7d10231be1dc0bfb41a8157bd29001f12696"
+  }
+}

@@ -1,0 +1,84 @@
+{
+  "source_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+  "runner_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+  "unit": 705,
+  "postgresql": 1352,
+  "java_total": 2057,
+  "verified_xml_count": 141,
+  "all_xml_and_log_hashes_verified": true,
+  "source_clean_before_publication": true,
+  "maven_exit": 0,
+  "wrapper_exit": 0,
+  "failsafe_timeout": false,
+  "focus": {
+    "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "8df5cbf9cdd75a3f4f0e9ac3f1533fc37824b726d339fec41ff6fd25244412ab"
+    },
+    "com.uteexpress.security.OtpRequestLimitFilterTest": {
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "47f95ad387d837961787fa42913cf151e1fabbf454a60828dc5d7d573fb0ec6d"
+    },
+    "com.uteexpress.security.OtpRequestRateLimiterTest": {
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "3d9f28d75ce882189bb51bd31ad56224266003c6ee37822908cb5e655653398e"
+    },
+    "com.uteexpress.integration.PromotionBrowserFormsIT": {
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "cccc3100732a92fa1b136d8e59d0fa153b6422aa21189a96cf075a3bce98fbe6"
+    },
+    "com.uteexpress.promotion.ProductPromotionIT": {
+      "tests": 59,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "be0ed3c007f50587d7d15688c6d51c79581a37fc703e1189d865c77ab0980667"
+    },
+    "com.uteexpress.promotion.VendorVoucherIT": {
+      "tests": 73,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "4c6aba6da8cf589fab12aa9ce239446b237100d92617ba9bac7bbac08bbdde4d"
+    },
+    "com.uteexpress.promotion.VoucherCheckoutIT": {
+      "tests": 57,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "afa2eade067db4d2c3adeaa0c321d3cc4b63d7e2e74c73d78ecdbe08fc1fa6e1"
+    },
+    "com.uteexpress.security.Qa01CookieCsrfIT": {
+      "tests": 15,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "963f724e047bc9d1871d06bb8b278285bed7adbdf50f6e5188daebfe1c798782"
+    },
+    "com.uteexpress.security.Qa01OtpSecurityIT": {
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "xml_sha256": "ed6eb7c8d91ed3717db73fbed8aa59d353f15c64417c9e6924156557b67515b2"
+    }
+  },
+  "literal_log_diagnostics": {
+    "Failed to validate connection": 0,
+    "Connection refused": 0,
+    "Surefire is going to kill self fork JVM": 0
+  },
+  "scope": "Independent QD full Java/PostgreSQL on exact8705; no #70/combined-seed or production release acceptance"
+}

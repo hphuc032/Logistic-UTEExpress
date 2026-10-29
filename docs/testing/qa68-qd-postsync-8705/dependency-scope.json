@@ -1,0 +1,11 @@
+{
+  "qa01_develop": {
+    "sha": "b538dbc3af17ff80802fa33eea187705c40059fe",
+    "ancestor_of_tested_source": true
+  },
+  "pr70_cancelled_paid": {
+    "sha": "688884cd33f4b2f4dc62f5d33a4c4002e9146660",
+    "ancestor_of_tested_source": false
+  },
+  "scope": "This #68 verification includes merged QA01 but does not integrate or verify unmerged #70 cancelled-paid implementation. Full #68 counts are not compared as equal to prior combined #69/#70 stack counts."
+}

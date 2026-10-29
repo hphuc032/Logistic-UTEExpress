@@ -1,0 +1,15 @@
+{
+  "source_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+  "git_objects": {
+    "src/main": "26387187c9a8cd64a20c4d93b6ea3160431216bd",
+    "src/test": "d2f625796099d87510f7b381132b4cec376b95e7",
+    "pom.xml": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+    "scripts/qa": "eca6ed2e788ec78c6e9f28d6c6a23c9afb48f69b",
+    ".github/workflows": "32d64cf1bdcd8db7e5519a9324bd66f1bd1fedc1"
+  },
+  "docker_server_version": "29.4.1",
+  "java_version": "java version \"21.0.2\" 2024-01-16 LTS",
+  "node_version": "v22.21.0",
+  "python_version": "Python 3.13.9",
+  "environment_scope": "Local developer verification with disposable Testcontainers PostgreSQL17.6, not clean-host production acceptance"
+}

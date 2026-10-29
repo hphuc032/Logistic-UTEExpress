@@ -1,0 +1,19 @@
+{
+  "tested_source_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+  "runner_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+  "result": "PASS / SCOPED; latest target sync gate separate",
+  "publication": "Separate docs-only evidence branch after completed independent execution",
+  "files_sha256": {
+    ".gitattributes": "b0d7fe396a43bff47fef8b077ca598998059b01f2f1545f27cac5b076bbf89d2",
+    "dependency-scope.json": "5f0571c0d6ee5ffccae8f2c3fe538d85f0b21193c49302f79bb1caacbcd521f0",
+    "environment.json": "bc541ac357fd3ac16f6697de00da1dc396437867395c50cb91273e284bac409f",
+    "independent-results.json": "873ce2c5adc921dabfed1e2e0149cd912dafd62b4a3525321c13c2059bc32b50",
+    "operations-evidence.json": "8eef6e70ff5b8d8d1a16cf5cfa389bd460a20bbfbf053809de83749ef9f38728",
+    "report.md": "29b39bebf640e3a670856bf887e31dcc4da8321ca16234db99ae5df6a2c92515",
+    "supplemental-results.json": "0a3f6ac848d12c6fcf74d163efd30c92d25760118dea638ea8dd89bfca8681db",
+    "td-failed-attempt-reference.json": "4eb3b4fd074ff96ff9a888d29eb520fe36131b48fdec2b2a58d2c474f663f29a"
+  },
+  "no_approval_or_merge": true,
+  "qa02": "IN PROGRESS",
+  "qa03": "BLOCKED"
+}

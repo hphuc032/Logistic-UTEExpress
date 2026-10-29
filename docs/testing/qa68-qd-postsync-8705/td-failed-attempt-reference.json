@@ -1,0 +1,18 @@
+{
+  "published_commit": "b0cecbfb7ee243d80cbf69eef4a1860cdccd6bdf",
+  "manifest_verified_files": 8,
+  "tested_source_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+  "td_status": "NOT_READY_FOR_HP_FINAL_ACCEPTANCE",
+  "td_postgres_summary": {
+    "classes": 65,
+    "tests": 73,
+    "failures": 0,
+    "errors": 73,
+    "skipped": 0,
+    "flakes": 0,
+    "status": "ENVIRONMENT_BLOCKED",
+    "successful_integration_testcases": 0,
+    "business_assertions_verified": false
+  },
+  "note": "Preserved environment-blocked attempt, not replaced/relabelled by QD independent run"
+}
