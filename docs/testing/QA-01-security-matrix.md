@@ -1,7 +1,7 @@
 # QA-01 security acceptance matrix
 
 Master Plan H1–H8/K/L/M/N; source/hash and actual branch identities are in the report.
-Frozen executable source `3c4fb5555b1ce580ed03dab592806c59f9bdf62a`. Custom Hx IDs below are traceability labels; Txx
+Frozen executable source `6e93d44614b1574ab2d310bae9a54ae57c385893`. Custom Hx IDs below are traceability labels; Txx
 references retain the Plan's actual definitions, not invented test numbers.
 PASS means the listed executed contracts, not independent QĐ approval or exhaustive
 coverage of every possible request. Source-only observations/tool runs are labelled.
@@ -34,6 +34,7 @@ coverage of every possible request. Source-only observations/tool runs are label
 | H4-01 / T09–11 | Profile/Avatar/Address ownership | USER/VENDOR | User01ProfileIT; User02AddressIT; Qa01CookieCsrfIT | Principal owner; no userId/role/status assignment | Cross-owner reads/writes and persisted field whitelist pass | PASS | final XML: User01ProfileIT |
 | H4-02 / T19–22 | Cart/checkout ownership and money | Buyer CartItems/address/quote | CartActionsIT; CartDatabaseIT; CheckoutQuoteIT; PlaceOrderIT | Own data and one Shop; client money/IDs not authoritative | BOLA/tamper rejects; denied mutation snapshots unchanged | PASS | final XML: CheckoutQuoteIT |
 | H4-03 / T28/T35 | Buyer Order/Return ownership | Buyer reads/returns; USER cancellation | BuyerOrderIT; ReturnManagementIT; BuyerCancellationIT | Own read/mutation, eligible state/time; approved cancel contract | Foreign read/write, forbidden actor, stale state/version and duplicate cancel blocked | PASS | final XML: BuyerCancellationIT |
+| H4-UI / T28 | Cancellation page/command boundary | USER-owned NEW order | BuyerCancellationIT; buyer-cancellation.test.cjs | Advisory version/role UI never replaces locked command checks; masked CSRF required | Fresh page/state/foreign owner/role/version and client-safe-feedback regressions PASS | PASS | Fresh XML/combined Node |
 | H4-04 / T37 | Review and media scope | Buyer item / public eligible media | ReviewIntegrationIT; OrderEligibilityIT | Own eligible purchase; no foreign write; hidden media private | HTTP/service/transaction compensation checks pass | PASS | final XML: ReviewIntegrationIT |
 | H4-05 / T47 | Notification recipient ownership | All authenticated own inbox/read | NotificationIT.deduplicationOwnershipAndIdempotentRead; NotificationSocketIT | No foreign inbox/read or destination | Owner scoped/idempotent/private checks pass | PASS | final XML: NotificationIT |
 | H5-01 / T08 | Representative POST CSRF | Identity/Shop/Order/Governance/Shipping/logout | Qa01CookieCsrfIT.representativeIdentityShopOrderGovernanceAndShippingCommandsRejectCookieOnlyCsrf | Cookie without valid token rejected before mutation | 11 real-filter route/actor cases, persisted state unchanged | PASS | final XML: Qa01CookieCsrfIT |
@@ -50,8 +51,8 @@ coverage of every possible request. Source-only observations/tool runs are label
 | H7-02 / T46 | Private destinations/no client broker publish | Authenticated socket peers | NotificationSocketIT.foreignOrBrokerSubscriptionsCloseConnection; clientPublishAndForgedIdentityAreRejected | Reject foreign subscribe/forged identity and SEND | Inbound destination controls pass | PASS | final XML: NotificationSocketIT |
 | H7-03 / T47 | Connection freshness | Expiry/logout/account lock/role revoke | NotificationSocketIT; SocketIdentityServiceTest | Current account/version/roles and strict expiry; close revoked socket | Idle/inbound/outbound/governance contention checks pass | PASS | final XML: NotificationSocketIT |
 | H7/I8-04 / T47 | Atomic inbox / commit-only hints / recovery | Order + Notification | NotificationRecoveryIT; NotificationSocketIT; NotificationIT; NotificationSchedulerIT; Node tests | Rollback no successful notification; offline inbox; dedupe | INT-02 MANDATORY writer and WS guarantees unchanged | PASS | final XML: NotificationRecoveryIT |
-| H6-SECRET-01 | Offline local secret review | Tracked source/config + limited filename history | Redacted source inventory and mandatory ENV review | No live credential in reviewed matches | 9 synthetic fixture candidates; no credential filenames | PASS (bounded review) | source-audit.json |
-| H6-SAST-01 | Limited offline static scan | Production main source | Semgrep1.155.0 + scripts/security/qa01-semgrep.yml | Triage actual scanner output, not equate alerts with exploit | 7 rules;605 targets;5 SQL candidates safe;11 skipped | PASS (tool run/triage) | semgrep-final.json |
+| H6-SECRET-01 | Offline local secret review | Source/config and PR67 delta | Prior redacted inventory/ENV review plus current code-delta inspection | No live credential in reviewed matches | Prior9 synthetic fixture candidates; unchanged security config; no new secret found in inspected runtime delta; no fresh full-history scan | PASS (bounded review) | Historical7aa74a2 manifest and current Security Report |
+| H6-SAST-01 | Limited offline static scan | Production main source | Semgrep1.155.0 + scripts/security/qa01-semgrep.yml | Triage actual scanner output, not equate alerts with exploit | 7 rules;607 targets;5 SQL candidates safe;0 scanner errors | PASS (tool run/triage) | .work/qa01/20261029-final-sync/semgrep.json |
 | DEPENDENCY-01 | Dependency vulnerability database | Packaged resolved dependencies | Library inventory only | CVE/SCA report if scanner/database available | No usable local SCA database/scanner; no upgrade/no clean-CVE claim | NOT RUN | resolved-libraries.txt |
 | OPS/UI-01 / T49/T50 | Deployment/browser/SMTP/load acceptance | Proxy/TLS/ACLs/responsive/live network | Outside this local QA-01 execution | Separate QA/UI/REL acceptance | No production or manual browser acceptance claimed | NOT RUN / OUT OF SCOPE | limitations |
 
@@ -67,6 +68,8 @@ business capability is not. Review edit/delete routes absent from the current ap
 slice are N/A, not fake endpoints/tests. Existing image count/compensation and socket
 suites are reused rather than duplicated.
 
-Final full gate: 694 unit/architecture + 1329 PostgreSQL = 2023 Java, 12 Node
-separately; zero failures/errors/skips/flaky-rerun markers; timeout=false. Actual XML
+Fresh 2026-10-29 full gate: 694 unit/architecture + 1346 PostgreSQL = 2040 Java, 33 combined Node
+separately (runner notification-only Node is an overlapping subset); zero failures/errors/skips/flaky-rerun markers; timeout=false. Actual XML
 case counts/digests and raw artifact references are in the evidence manifest.
+
+Prior QĐ approval applies to7aa74a2 only. The new source imports PR67 application/test/CI changes and was freshly verified; final delta review remains pending. Dependency and operational NOT RUN classifications/owners are in the current Security Report; no automatic formal deferral or COMPLETED claim.

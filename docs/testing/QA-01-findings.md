@@ -1,6 +1,6 @@
 # QA-01 findings and residual verification
 
-Base `798535b32ff81a011f34cfa01bbeb2d2dd0cb981`; final tested executable `3c4fb5555b1ce580ed03dab592806c59f9bdf62a`. Severity describes demonstrated
+Initial baseline `798535b32ff81a011f34cfa01bbeb2d2dd0cb981`; original remediation tests at3c4fb55. Current fresh-tested source `6e93d44614b1574ab2d310bae9a54ae57c385893` after develop fa48cb69cef92276f0dddf0d2bd396eee098f2f3. Severity describes demonstrated
 impact, not a CVE/CVSS calculation. No account takeover, secret exfiltration or
 production exploitation is inferred merely from a failed policy assertion.
 
@@ -131,5 +131,23 @@ production exploitation is inferred merely from a failed policy assertion.
   network responses or an exhaustive account-enumeration side-channel assessment.
 
 No unresolved confirmed Critical/High QA-01 vulnerability in the tested scope.
-No remote issue/comment/PR/approval or merge into develop/main was created. Final task completion still
-requires QĐ review, CI/review gates and HP merge authorization.
+PR #66 is published. QĐ previously APPROVED7aa74a2; the new post-sync HEAD requires final delta review. No merge into develop/main or QA-01 completion is performed by this follow-up.
+
+
+## 2026-10-29 current delta verdict and outstanding verification
+
+Fresh source `6e93d44614b1574ab2d310bae9a54ae57c385893`, synced develop `fa48cb69cef92276f0dddf0d2bd396eee098f2f3`; full 2040 Java +33 combined Node PASS, failures/errors/skips0. Independent QĐ approval at7aa74a2 remains historical, not an approval of this new merge or an independent rerun of HP's current full suite.
+
+PR67 changes the owner-scoped cancellation page/read model and browser adapter. Existing server command locks/identity/state/version, safe CSRF token handling, foreign/missing/state/role guards and private WS/inbox contracts were exercised by the fresh suite. Security/Identity/Account/Notification Java package objects remain byte-identical; no new confirmed application vulnerability was identified in this follow-up. The earlier findings describe their original reproduction sources; fixes are preserved, not reimplemented.
+
+| Check | Status/classification | Owner / closure requirement |
+|---|---|---|
+| Application security regression, PostgreSQL locks/transactions and WS | PASS on the current tested source | HP evidence; QĐ must review the new delta/HEAD |
+| Dependency CVE/SCA | NOT RUN — verification gap; not a confirmed vulnerability or a clean-CVE result | HP/QĐ: run an available dependency scanner with a usable DB, or explicitly record scope/risk/owner/time-bound deferral. No such new deferral is authorized by this report |
+| Live SMTP and network timing uniformity | NOT RUN — deployment/live-service verification | HP/REL: verify the real mail path and approved response/timing expectations; generic HTTP contract tests are narrower |
+| Deployed HTTPS, proxy trust/NAT, cookie flags and storage ACLs | NOT RUN in a deployed environment | HP/REL: environment-specific acceptance. Unit/HTTP tests prove configured application behavior only |
+| Multi-instance/distributed abuse limits, load and restart behavior | NOT RUN — operational limitation | HP/REL: single-instance limiter resets on restart; agree deployment limits/acceptance separately |
+| Browser/manual Ops, full seed, backup/restore and release rehearsal | NOT rerun by QA-01 — separate QA/UI/REL ownership | Preserve each owner's exact-source evidence/scope decisions; importing PR67 browser evidence does not create new HP browser acceptance |
+| Dependency/operational formal acceptance or deferral | PENDING HP decision where required | NOT RUN is not converted to PASS, accepted risk or COMPLETED by this update |
+
+SCA is a verification gap, not a reported CVE. Operational NOT RUN items are not automatically new QA-01 code blockers and are not silently accepted either. HP/QĐ must record any required scope-limited acceptance or formal deferral; this report records none on their behalf. Actual deployed security, clean-CVE status, broad browser/QA-03 acceptance and QA-01 COMPLETED remain unclaimed.
