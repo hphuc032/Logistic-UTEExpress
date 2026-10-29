@@ -25,6 +25,7 @@ import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
 @EnableMethodSecurity
+@org.springframework.boot.context.properties.EnableConfigurationProperties(OtpRequestLimitProperties.class)
 public class SecurityConfig {
     private static final String[] PUBLIC_ROUTES = {
             "/",
@@ -51,6 +52,7 @@ public class SecurityConfig {
             JsonAccessDeniedHandler accessDeniedHandler,
             JwtAuthenticationFilter jwtAuthenticationFilter,
             CsrfCookieFilter csrfCookieFilter,
+            com.uteexpress.security.filter.OtpRequestLimitFilter otpRequestLimitFilter,
             TokenVersionLogoutHandler tokenVersionLogoutHandler,
             JwtLogoutSuccessHandler logoutSuccessHandler,
             CsrfTokenRepository csrfTokenRepository) throws Exception {
@@ -84,6 +86,7 @@ public class SecurityConfig {
                         .logoutSuccessHandler(logoutSuccessHandler)
                         .permitAll())
                 .addFilterAfter(csrfCookieFilter, CsrfFilter.class)
+                .addFilterAfter(otpRequestLimitFilter, CsrfCookieFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, LogoutFilter.class);
         return http.build();
     }
@@ -132,5 +135,13 @@ public class SecurityConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    FilterRegistrationBean<com.uteexpress.security.filter.OtpRequestLimitFilter> otpLimitFilterRegistration(
+            com.uteexpress.security.filter.OtpRequestLimitFilter filter) {
+        var registration=new FilterRegistrationBean<>(filter);
+        registration.setEnabled(false); // Security chain only; never count one request twice.
+        return registration;
     }
 }

@@ -1,0 +1,20 @@
+{
+  "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "method": "Companion real authenticated HTTP, not browser interaction",
+  "controls": [
+    {
+      "route": "/vendor/vouchers",
+      "method": "POST",
+      "csrf": "omitted",
+      "expected": 403,
+      "actual": 403
+    },
+    {
+      "route": "/vendor/products/1/promotions",
+      "method": "POST",
+      "csrf": "omitted",
+      "expected": 403,
+      "actual": 403
+    }
+  ]
+}

@@ -57,6 +57,16 @@ class OtpSecurityTest {
     }
 
     private OtpProperties properties(String pepper) {
-        return new OtpProperties(Duration.ofMinutes(10), Duration.ofMinutes(1), 5, pepper);
+        return new OtpProperties(Duration.ofMinutes(5), Duration.ofMinutes(1), 5, pepper);
+    }
+
+    @Test void unsafePolicyOverridesFailClosedInsteadOfExtendingTheOtpAttackWindow() {
+        assertThatThrownBy(()->new OtpProperties(Duration.ofMinutes(10),Duration.ofMinutes(1),5,TEST_PEPPER))
+                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(()->new OtpProperties(Duration.ofMinutes(5),Duration.ofSeconds(59),5,TEST_PEPPER))
+                .isInstanceOf(IllegalStateException.class);
+        assertThatThrownBy(()->new OtpProperties(Duration.ofMinutes(5),Duration.ofMinutes(1),6,TEST_PEPPER))
+                .isInstanceOf(IllegalStateException.class);
+        assertThat(new OtpProperties(Duration.ofMinutes(1),Duration.ofMinutes(1),3,TEST_PEPPER).maxAttempts()).isEqualTo(3);
     }
 }

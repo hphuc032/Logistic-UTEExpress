@@ -1,0 +1,427 @@
+{
+  "source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+  "mode": "companion HTTP, separate from browser DOM/layout observations",
+  "routes": [
+    {
+      "role": "buyer",
+      "route": "/",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/products",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/products/1",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/categories/ui02-category",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/shops",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/shops/ui02-shop",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/user/cart/view",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/user/checkout/view",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/orders",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/orders/1",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/user/profile",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/user/addresses",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/user/favorites",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/user/recently-viewed",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/notifications",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/products/1/reviews",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/orders/1/return",
+      "http": 200
+    },
+    {
+      "role": "buyer",
+      "route": "/order-items/1/review",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/vendor/dashboard",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/vendor/products",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/vendor/products/new",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/vendor/products/1/edit",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/vendor/orders",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/vendor/orders/1",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/vendor/vouchers",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/vendor/vouchers/new",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/vendor/products/1/promotions",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/vendor/products/1/promotions/new",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/user/shop",
+      "http": 200
+    },
+    {
+      "role": "vendor",
+      "route": "/notifications",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/dashboard",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/accounts",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/accounts/1",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/categories",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/categories/new",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/categories/1/edit",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/products",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/shops/moderation",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/orders",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/orders/1",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/shipping/providers",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/shipping/providers/new",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/shipping/providers/1/edit",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/shipping/rates",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/shipping/rates/new",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/shipping/rates/1/edit",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/commissions",
+      "http": 200
+    },
+    {
+      "role": "manager",
+      "route": "/manager/shippers",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/dashboard",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/accounts",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/accounts/1",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/categories",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/categories/new",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/categories/1/edit",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/products",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/shops/moderation",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/orders",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/orders/1",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/shipping/providers",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/shipping/providers/new",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/shipping/providers/1/edit",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/shipping/rates",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/shipping/rates/new",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/shipping/rates/1/edit",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/commissions",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/shippers",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/shops",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/shops/1",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/audit-logs",
+      "http": 200
+    },
+    {
+      "role": "admin",
+      "route": "/admin/dashboard/revenue",
+      "http": 200
+    },
+    {
+      "role": "shipper",
+      "route": "/shipper/dashboard",
+      "http": 200
+    },
+    {
+      "role": "shipper",
+      "route": "/shipper/shipments/view",
+      "http": 200
+    },
+    {
+      "role": "shipper",
+      "route": "/shipper/shipments/1/view",
+      "http": 200
+    }
+  ],
+  "security": [
+    {
+      "id": "Buyer cannot open Admin dashboard",
+      "expected": 403,
+      "actual": 403,
+      "result": "PASS"
+    },
+    {
+      "id": "Buyer cannot open Vendor products",
+      "expected": 403,
+      "actual": 403,
+      "result": "PASS"
+    },
+    {
+      "id": "Manager cannot open Admin dashboard",
+      "expected": 403,
+      "actual": 403,
+      "result": "PASS"
+    },
+    {
+      "id": "Shipper cannot open Manager orders",
+      "expected": 403,
+      "actual": 403,
+      "result": "PASS"
+    },
+    {
+      "id": "Foreign buyer cannot read owner order",
+      "expected": 404,
+      "actual": 404,
+      "result": "PASS"
+    },
+    {
+      "id": "Foreign buyer cannot read owner return form",
+      "expected": 404,
+      "actual": 404,
+      "result": "PASS"
+    },
+    {
+      "id": "Anonymous protected orders request",
+      "expected": 401,
+      "actual": 401,
+      "result": "PASS"
+    },
+    {
+      "id": "Missing CSRF blocks POST cart",
+      "expected": 403,
+      "actual": 403,
+      "result": "PASS"
+    },
+    {
+      "id": "Missing CSRF blocks POST login",
+      "expected": 403,
+      "actual": 403,
+      "result": "PASS"
+    }
+  ]
+}

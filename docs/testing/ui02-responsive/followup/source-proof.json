@@ -1,0 +1,25 @@
+{
+  "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "runtimeSource": "1f375fa01882f09755e6a107e0e13c79f427f671",
+  "jarSha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+  "verifiedUtc": "2026-10-29T06:53:07.470348+00:00",
+  "objects": {
+    "src/main": {
+      "runtime": "56d774e38fe2426cd8339413b9e2f01896dec681",
+      "followup": "56d774e38fe2426cd8339413b9e2f01896dec681"
+    },
+    "src/test": {
+      "runtime": "694666c41820976f7b14d6fa9c41e5be3ad519fe",
+      "followup": "694666c41820976f7b14d6fa9c41e5be3ad519fe"
+    },
+    "pom.xml": {
+      "runtime": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      "followup": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f"
+    },
+    ".github/workflows": {
+      "runtime": "32d64cf1bdcd8db7e5519a9324bd66f1bd1fedc1",
+      "followup": "32d64cf1bdcd8db7e5519a9324bd66f1bd1fedc1"
+    }
+  },
+  "followupDelta": "Evidence/documentation only; no executable changes and no new Maven/PostgreSQL execution claimed"
+}

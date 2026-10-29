@@ -1,0 +1,12 @@
+{
+  "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "command": "node --test src/test/js/app.test.cjs src/test/js/notifications.test.cjs src/test/js/buyer-cancellation.test.cjs",
+  "tests": 40,
+  "pass": 40,
+  "fail": 0,
+  "cancelled": 0,
+  "skipped": 0,
+  "exitCode": 0,
+  "newMavenExecution": false,
+  "executableDelta": false
+}

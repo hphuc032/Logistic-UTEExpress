@@ -102,8 +102,11 @@ OAuth login, or production seed account.
 AUTH-03 persists `EMAIL_VERIFICATION` tokens in `otp_tokens`. Production generates a
 six-digit code with `SecureRandom`, stores only HMAC-SHA256 over
 `userId:purpose:code`, and reads the HMAC key from `OTP_PEPPER_BASE64`. The decoded key
-must contain at least 32 bytes. Defaults are a 10-minute lifetime, five failed attempts,
-and a 60-second resend cooldown; all three values are configuration-driven.
+must contain at least 32 bytes. QA-01 aligns H8 with a five-minute maximum lifetime,
+at most five failed attempts, and a resend cooldown of at least 60 seconds. Configuration
+may tighten these bounds; unsafe overrides fail startup. Both verification purposes
+also cap previously issued longer-lived records at sent_at plus the current TTL, without
+rewriting historical rows or migrations.
 
 Registration commits the `PENDING_VERIFICATION` user before OTP issuance or SMTP
 delivery. A mail failure therefore leaves the account intact and eligible for resend.
@@ -136,4 +139,19 @@ and HMAC inputs both include the server-owned purpose.
 
 SMTP delivery happens after OTP persistence. If delivery fails, the public response
 stays generic and the persisted token remains subject to the normal resend cooldown.
-Broader abuse protection and global rate limiting remain deferred to SEC-02.
+QA-01 adds a shared, always-enabled HTTP budget for POST /register, /verify-otp,
+/verify-otp/resend, /forgot-password and /reset-password. Defaults under
+uteexpress.security.otp-request-limit are 20 requests per minute per socket peer and
+10,000 retained peer windows. CSRF is checked first; denied requests return the safe
+429 ErrorResponse and Retry-After before controller/database/mail work. Changing an
+identifier/purpose/route or spoofing Forwarded/X-Forwarded-For does not create a new
+budget. Per-account issuance cooldown and per-token attempts still use database locks.
+The route matcher uses MVC-compatible parsed path segments, so percent-encoded route
+characters cannot bypass the same budget; application context paths are respected.
+
+The limiter is bounded and atomic in one application instance. Saturation fails closed
+without evicting active counters; expired windows are reclaimed. Restart resets its
+memory, and multiple instances do not share budgets. It is not a distributed limiter,
+DDoS defense or login brute-force guarantee. Trusted reverse-proxy address handling,
+shared-NAT tuning and deployment-wide limits require operational review; never trust
+arbitrary client forwarding headers or disable the control to accommodate a proxy.
