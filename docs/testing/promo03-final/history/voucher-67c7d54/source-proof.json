@@ -1,0 +1,101 @@
+{
+  "schemaVersion": 1,
+  "baseDevelop": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "baseTree": "797bf319420e7a82f5d2ff89859f998ae9117b35",
+  "executedSource": "cd3651f59ca22e2805675b5be589e8150784c65e",
+  "executedTree": "9cd3934e6b2c6bfa2ce7a19c3aa4a7182c1425cd",
+  "branch": "codex/promo03-platform-integration",
+  "masterPlan": {
+    "path": "D:/JavaWeb/Project/UTEExpress_Master_Project_Plan.docx",
+    "sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+    "checkedLocally": true
+  },
+  "changedAtTestedSource": {
+    "docs/testing/promo03-final/contract-decision.md": "8c15940438e406cdbeb6da5a78e27750f5092f8c",
+    "src/main/java/com/uteexpress/governance/service/RoleGovernanceService.java": "ce9c5c3e398c3075d28507c45f0cb1fa9d3522eb",
+    "src/main/java/com/uteexpress/promotion/controller/PlatformVoucherController.java": "dd6a4ea493745c7759d235e45a405a91ba4e503e",
+    "src/main/java/com/uteexpress/promotion/dto/PlatformVoucherForm.java": "8f958385c05a3a8033b719b0fbea5366269f6dbb",
+    "src/main/java/com/uteexpress/promotion/dto/PlatformVoucherUpdateForm.java": "03c9e6f72be5e9bd97488cb9558b3db4519f8c8d",
+    "src/main/java/com/uteexpress/promotion/dto/PlatformVoucherView.java": "dd577fbfdffd1c50decfd70ebd1c9b5939287f0f",
+    "src/main/java/com/uteexpress/promotion/dto/VendorVoucherForm.java": "ac80904ea6c635c27a1b0d580958096cdbb4a360",
+    "src/main/java/com/uteexpress/promotion/dto/VoucherDefinitionForm.java": "99301c899fa1065aad6d8780e7277f1d4e45dcc5",
+    "src/main/java/com/uteexpress/promotion/dto/VoucherVersionForm.java": "47e26b8adf52059ebe6afc5812f43ae20e012c05",
+    "src/main/java/com/uteexpress/promotion/repository/VoucherRepository.java": "167422f6339810d040643996ad8a195a6e3ab810",
+    "src/main/java/com/uteexpress/promotion/service/PlatformVoucherManagementService.java": "1f352bc4ae4db8cfcabb6c88d690e97c59029a0f",
+    "src/main/resources/templates/admin/vouchers/error.html": "cf3c107a3e0559eb2a1a252043d0e818debd37a6",
+    "src/main/resources/templates/admin/vouchers/form.html": "e4cf104a2d20ce6fa936e45be9c7bb8bc343b867",
+    "src/main/resources/templates/admin/vouchers/list.html": "b1b4059aaed6449ec8fa4e823bd2fb6b62d86fad",
+    "src/main/resources/templates/governance/dashboard.html": "8dd980f9456da5eb7b0593532d749343c69aea09",
+    "src/test/java/com/uteexpress/promotion/PlatformVoucherManagementIT.java": "32a1529ae94d3e224b98a650b81c2be08b872be5",
+    "src/test/java/com/uteexpress/promotion/VoucherCheckoutIT.java": "30340e062de315ad92185416ed0a780a5d294a1e"
+  },
+  "publicationPolicy": "Final documentation commit is not an additional execution. All executable/test/POM/workflow objects must match executedSource; no self-referential publication SHA is invented. Live PR HEAD and CI reported separately.",
+  "preserved": {
+    "primaryCheckoutHead": "7dc3a885a4358c212fd77f93434dcad22fd1243a",
+    "fr10CheckoutHead": "2b7d4eb780f4d48f5684a1a999a9d92c4e82f203",
+    "pr69ObservedHead": "f23f905489b8f009ace8e695e74428a88a066224",
+    "pr69State": "OPEN / DRAFT; read-only, not edited",
+    "migrationObjectsIdenticalToBase": true,
+    "securityConfigAndRulesIdenticalToBase": true
+  },
+  "documents": {
+    "acceptance-matrix.md": "8f6f5a84afcca4f4d6894ac022ccf0087ee326dae4d110c65f24e42bb1941da9",
+    "contract-decision.md": "6ca7eed571eaa5e76ea6f0a7fe3a2746de3247967a11d2f7f30bb06d3024b11c",
+    "findings.md": "9f99b5328eeb9d130c443429402fa0762489a14a20a699ea1a37551df756ca87",
+    "owner-handoff.md": "6ed0915cb32dc4fd37f277119cee2935684b900706464ad73a3e0c88c29f6edf",
+    "report.md": "b2d09939efc0fde1e5b0497686097b885593264c8bad47fc435f13036ab99da3",
+    "test-results.json": "a761c55e2c86b3ea4ff3afc34a2ae3f94960a74719ae975f35dfa7e6bc215b30"
+  },
+  "fixtureCorrection": {
+    "commit": "cd3651f59ca22e2805675b5be589e8150784c65e",
+    "productionIdenticalTo61b55d4": true,
+    "changedTest": "src/test/java/com/uteexpress/promotion/PlatformVoucherManagementIT.java"
+  },
+  "unchangedAuthorities": {
+    "src/main/java/com/uteexpress/promotion/entity/Voucher.java": {
+      "baseBlob": "8443197243f3e226114a47adb6b277ae690413e4",
+      "testedBlob": "8443197243f3e226114a47adb6b277ae690413e4"
+    },
+    "src/main/java/com/uteexpress/promotion/entity/VoucherUsage.java": {
+      "baseBlob": "7ebfb77e4d765b43eb6314e06f8207fa164c05e8",
+      "testedBlob": "7ebfb77e4d765b43eb6314e06f8207fa164c05e8"
+    },
+    "src/main/java/com/uteexpress/promotion/service/VoucherService.java": {
+      "baseBlob": "c408e89eccffff65595c8a323c5c74dd8b70b349",
+      "testedBlob": "c408e89eccffff65595c8a323c5c74dd8b70b349"
+    },
+    "src/main/java/com/uteexpress/promotion/service/VendorVoucherService.java": {
+      "baseBlob": "c27c91e154ed9233270f3deb3b51f868040cf994",
+      "testedBlob": "c27c91e154ed9233270f3deb3b51f868040cf994"
+    },
+    "src/main/java/com/uteexpress/promotion/service/PromotionManagementService.java": {
+      "baseBlob": "4521dc8d57a7acce9c89f2461fa0fc3d831f0cbb",
+      "testedBlob": "4521dc8d57a7acce9c89f2461fa0fc3d831f0cbb"
+    },
+    "src/main/java/com/uteexpress/promotion/service/PromotionPricingService.java": {
+      "baseBlob": "3230bd97b27189f5782ca4a7c0cabca742ec1b39",
+      "testedBlob": "3230bd97b27189f5782ca4a7c0cabca742ec1b39"
+    },
+    "src/main/java/com/uteexpress/catalog/service/ProductPromotionManagementService.java": {
+      "baseBlob": "bd515ae651f6f5df0419b7a551bb756daa0d8ab4",
+      "testedBlob": "bd515ae651f6f5df0419b7a551bb756daa0d8ab4"
+    },
+    "src/main/java/com/uteexpress/order/service/OrderLifecycleService.java": {
+      "baseBlob": "9e8bd27912b6c2efeddff3092d49d7c03256171d",
+      "testedBlob": "9e8bd27912b6c2efeddff3092d49d7c03256171d"
+    },
+    "src/main/java/com/uteexpress/order/service/OrderPlacementService.java": {
+      "baseBlob": "6524329792a462ebf1558517d0741beb68e02acd",
+      "testedBlob": "6524329792a462ebf1558517d0741beb68e02acd"
+    },
+    "src/main/java/com/uteexpress/governance/service/AuditLogService.java": {
+      "baseBlob": "bafd2c48e93b3b5d5c0e55521b55d84719dfff2e",
+      "testedBlob": "bafd2c48e93b3b5d5c0e55521b55d84719dfff2e"
+    },
+    "src/main/java/com/uteexpress/governance/repository/RoleGovernanceRepository.java": {
+      "baseBlob": "d0083d8a883709e4dd407dfe8b68ef4d6da0601a",
+      "testedBlob": "d0083d8a883709e4dd407dfe8b68ef4d6da0601a"
+    }
+  },
+  "documentHashConvention": "SHA-256 of canonical LF publication bytes, verified against staged Git blobs. On autoCRLF checkouts validate git show HEAD:path bytes rather than converted working-tree JSON."
+}

@@ -1,0 +1,551 @@
+{
+  "schemaVersion": 2,
+  "baseDevelop": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "executedSource": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+  "executedTree": "379b6beeb4586176e9a9e873680014359b70f859",
+  "branch": "codex/promo03-platform-integration",
+  "masterPlanSha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+  "publicationPolicy": "Later docs/screenshots only; no self-referential publication SHA. Live PR HEAD/CI/merge reported separately. Canonical LF Git bytes are hash authority, not autoCRLF-converted checkout bytes.",
+  "changedFilesAtExecution": {
+    "docs/testing/promo03-final/acceptance-matrix.md": "51907ba73865b91c92fe1439a327c78f672a687e",
+    "docs/testing/promo03-final/contract-decision.md": "719da2893619923108a8b468689ddc7d61cc3644",
+    "docs/testing/promo03-final/findings.md": "9a2719df3e8b47e9284c0e250565ea36336d0075",
+    "docs/testing/promo03-final/owner-handoff.md": "fcb8a29319d55a35d5c8c35dcd4d075e576443a7",
+    "docs/testing/promo03-final/report.md": "ca9335ad0b5a86a1c01ab7c349eb143c8ea4318b",
+    "docs/testing/promo03-final/source-proof.json": "106e04276b7037f1aa47b6597040e0e2433134f6",
+    "docs/testing/promo03-final/test-results.json": "3be0beca0813e58e3677a3effd1c1f31811e1c36",
+    "src/main/java/com/uteexpress/catalog/controller/AdminProductPromotionController.java": "174f4f9a6f881134917d4293974a97625484217b",
+    "src/main/java/com/uteexpress/catalog/dto/PromotionProductOption.java": "bd7666b85dcbc54df618212eaaf85897dde7eec4",
+    "src/main/java/com/uteexpress/catalog/dto/PromotionProductPage.java": "2d3675ffa46ae9ec07363e200d2bfbf820c32e3a",
+    "src/main/java/com/uteexpress/catalog/service/AdminProductPromotionService.java": "ed18b1d88a30cb5bb067fd82f600a4bf27b171db",
+    "src/main/java/com/uteexpress/governance/service/RoleGovernanceService.java": "ce9c5c3e398c3075d28507c45f0cb1fa9d3522eb",
+    "src/main/java/com/uteexpress/promotion/controller/PlatformVoucherController.java": "b4f3f42d787c02d9df0ed08cb271c39a5086f0a4",
+    "src/main/java/com/uteexpress/promotion/dto/AdminPromotionForm.java": "3ea6ee138e3c8d42c6e20a6d1442651c95be16be",
+    "src/main/java/com/uteexpress/promotion/dto/AdminPromotionUpdateForm.java": "5f6e946f329dcb17f54ca3e3f72136cdcdd1cb4a",
+    "src/main/java/com/uteexpress/promotion/dto/PlatformVoucherForm.java": "8f958385c05a3a8033b719b0fbea5366269f6dbb",
+    "src/main/java/com/uteexpress/promotion/dto/PlatformVoucherUpdateForm.java": "03c9e6f72be5e9bd97488cb9558b3db4519f8c8d",
+    "src/main/java/com/uteexpress/promotion/dto/PlatformVoucherView.java": "dd577fbfdffd1c50decfd70ebd1c9b5939287f0f",
+    "src/main/java/com/uteexpress/promotion/dto/PromotionDefinitionForm.java": "350044d91b135ee3b668f8c76c136cfd53c46b7e",
+    "src/main/java/com/uteexpress/promotion/dto/PromotionView.java": "862da3204a4dd3081fba53805e3f9052a882954b",
+    "src/main/java/com/uteexpress/promotion/dto/VendorPromotionForm.java": "570563313814b5c593424d6aeb6330f03a9af810",
+    "src/main/java/com/uteexpress/promotion/dto/VendorVoucherForm.java": "ac80904ea6c635c27a1b0d580958096cdbb4a360",
+    "src/main/java/com/uteexpress/promotion/dto/VoucherDefinitionForm.java": "99301c899fa1065aad6d8780e7277f1d4e45dcc5",
+    "src/main/java/com/uteexpress/promotion/dto/VoucherVersionForm.java": "47e26b8adf52059ebe6afc5812f43ae20e012c05",
+    "src/main/java/com/uteexpress/promotion/repository/VoucherRepository.java": "167422f6339810d040643996ad8a195a6e3ab810",
+    "src/main/java/com/uteexpress/promotion/service/PlatformVoucherManagementService.java": "1f352bc4ae4db8cfcabb6c88d690e97c59029a0f",
+    "src/main/java/com/uteexpress/promotion/service/PromotionManagementService.java": "5508c0e379b1e721f8f2716c6f39921a74a122de",
+    "src/main/java/com/uteexpress/shop/service/ShopAvailabilityService.java": "32c20364960b7e8610dcdc205aa3e5768dce3e2f",
+    "src/main/resources/templates/admin/promotions/confirm-disable.html": "ce971b1c135e7ab367f6f6065987fb056ab52610",
+    "src/main/resources/templates/admin/promotions/error.html": "6683b06c153b641ed307b14382c07032c1c191d9",
+    "src/main/resources/templates/admin/promotions/form.html": "8c76b0a1bbe2db6d4bb811935d725956ff6071b2",
+    "src/main/resources/templates/admin/promotions/list.html": "79c9a01e44b993267131f3d13034c1051f03f593",
+    "src/main/resources/templates/admin/promotions/products.html": "0f7d0d25f654f9a6e8e984b411246e61bcc4424a",
+    "src/main/resources/templates/admin/vouchers/confirm-disable.html": "529e78b3c05f8a1ffc44b48d923abc8ad8163587",
+    "src/main/resources/templates/admin/vouchers/error.html": "cf3c107a3e0559eb2a1a252043d0e818debd37a6",
+    "src/main/resources/templates/admin/vouchers/form.html": "e4cf104a2d20ce6fa936e45be9c7bb8bc343b867",
+    "src/main/resources/templates/admin/vouchers/list.html": "05e30f005ee3f27bec0b6642d7d8de5e64dd8a86",
+    "src/main/resources/templates/governance/dashboard.html": "29549f5c7a617e665277322d92e89f7934378f29",
+    "src/test/java/com/uteexpress/promotion/AdminProductPromotionIT.java": "965374ff35e87033596361a0279405e659760c4d",
+    "src/test/java/com/uteexpress/promotion/PlatformVoucherManagementIT.java": "89f2da2cb1ed08e3dca3a06415ab27b34eba30d1",
+    "src/test/java/com/uteexpress/promotion/VoucherCheckoutIT.java": "30340e062de315ad92185416ed0a780a5d294a1e"
+  },
+  "preservedContracts": {
+    "migrations": true,
+    "security": true,
+    "checkoutOrderPaymentRefund": true,
+    "pricingAuthority": true,
+    "architectureTests": true
+  },
+  "screenshots": [
+    {
+      "path": "browser/screenshots/promotion-navigation-375.png",
+      "sha256": "0ad8bcef093a0f336f2b0068a5339cceac95989821dc401b503e5d3c90da9854",
+      "route": "/admin/promotions/products/1/new",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-validation-375.png",
+      "sha256": "03037f18825fdea937c369a0e3880a32bb727b69cedb92849aad821c1889932a",
+      "route": "/admin/promotions/products/1",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-create-375.png",
+      "sha256": "ea11aa0151cd369641534449ed6c5033cddf816feb637da2cca10a01277a7d0b",
+      "route": "/admin/promotions/products/1/1/edit",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-update-375.png",
+      "sha256": "07bd36e23ee94cdd36901958e2cbed926e91073c10bcefdd03e5dbcaefefb355",
+      "route": "/admin/promotions/products/1/1/edit",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-cancel-375.png",
+      "sha256": "a58d75a32bc2c53ecef1e82665e0cc1a423c06570ed766210c187564b50cb085",
+      "route": "/admin/promotions/products/1",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-confirmation-375.png",
+      "sha256": "cf0e20518d6f62c3ad0643a21483cbbbf8203b692950303fe7824614cddce271",
+      "route": "/admin/promotions/products/1/1/disable",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-disable-375.png",
+      "sha256": "de5cedcf87f315be282c2fc054e677b4f62a04d250086f54008cf5c90879b6dc",
+      "route": "/admin/promotions/products/1",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-navigation-375.png",
+      "sha256": "16cc2f98d306d00c0c6280be3e424b5f5d5b4a9c8e7c4b3e75af92b108a37473",
+      "route": "/admin/vouchers/new",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-create-375.png",
+      "sha256": "051fa495e2e0a9abee40314293e43fd41c59f1802ec0c060313cd4093c406588",
+      "route": "/admin/vouchers/1/edit",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-update-375.png",
+      "sha256": "79294554ccc5c954696a85daf9f7c5408949f8807c5e8edfe6cac0dabd161d00",
+      "route": "/admin/vouchers/1/edit",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-cancel-375.png",
+      "sha256": "e561656a62eb08cd21e36b3806968748c0c7709d49cb0b7f1a63eb3c91973d20",
+      "route": "/admin/vouchers",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-confirmation-375.png",
+      "sha256": "8a10d210f52643db4b5e13356a9cc5f18f1478c1190c19ad198a8163b98e1f24",
+      "route": "/admin/vouchers/1/disable",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-disable-375.png",
+      "sha256": "5a4f4fffa59a323e0774aa5d83b3157da608cd4c990a11f953cdab4fd51c922a",
+      "route": "/admin/vouchers",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-navigation-768.png",
+      "sha256": "ed884dd5c93a5273b26c60fae9147c7214d8bb27772937d641d2a300725a499e",
+      "route": "/admin/promotions/products/1/new",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-validation-768.png",
+      "sha256": "fd734b559f267f5774a360d79d61c8b7ed15c2d72f8b3576e348e34dbda3b726",
+      "route": "/admin/promotions/products/1",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-create-768.png",
+      "sha256": "6e331181d3ae095c7662dc4e032579bbd751b5ba6ff1e6a79dd372b2ca98d12e",
+      "route": "/admin/promotions/products/1/2/edit",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-update-768.png",
+      "sha256": "fe91f6fbe4390060438aed17353c705f677c0113fb4f4af5b87dd3b0d64726f2",
+      "route": "/admin/promotions/products/1/2/edit",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-cancel-768.png",
+      "sha256": "08a7cc984203f9eeb523941d9a0f4433a585c1a0f154764870fff49cec77bc97",
+      "route": "/admin/promotions/products/1",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-confirmation-768.png",
+      "sha256": "6014e58f243ec8ba0bf651ca0acb20b638b8f0cce83d5cb0d0f0378b8d20ac5e",
+      "route": "/admin/promotions/products/1/2/disable",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-disable-768.png",
+      "sha256": "12aa900d00b1bd53e538c22299598b7592cd2f93db480c3083c69dcebefc1ca7",
+      "route": "/admin/promotions/products/1",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-navigation-768.png",
+      "sha256": "ecd4b8334b12b46f546a45758e6a5c99a1c1540c0fc071150942c7ddee158300",
+      "route": "/admin/vouchers/new",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-create-768.png",
+      "sha256": "963bb4ff9ec683aef50bb065031f35699cb537251d30aa9e915dc57ee7d63c63",
+      "route": "/admin/vouchers/2/edit",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-update-768.png",
+      "sha256": "ee2b66502b89b124ff04166b158809f1b18672993ed1382f3b780ca1236e7479",
+      "route": "/admin/vouchers/2/edit",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-cancel-768.png",
+      "sha256": "416496130dff1f72dd3204234fa4c4074bd751faf0eccbdf6cd802e375dc03b5",
+      "route": "/admin/vouchers",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-confirmation-768.png",
+      "sha256": "79cf6968d2089f032f1a693d1da3d6f1e8abd5d8a33b9696b212f69e4df8854d",
+      "route": "/admin/vouchers/2/disable",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-disable-768.png",
+      "sha256": "5d71f9be690282eff289fba27ac357784ca5bb0fe78dd2e850bcaaec9d28f340",
+      "route": "/admin/vouchers",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-navigation-1440.png",
+      "sha256": "b3ace0a91948fab6000214ea34393a7b7447a9e8b4663853d41d0cf63d30c7e5",
+      "route": "/admin/promotions/products/1/new",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-validation-1440.png",
+      "sha256": "8e4d30d0978269f824966782e67f16d3fa24cad10c65335e12976f07d490f0ca",
+      "route": "/admin/promotions/products/1",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-create-1440.png",
+      "sha256": "f2b164d7a396e636b548a7278b59eaa919c4c6528f03563928901545a9e29d6c",
+      "route": "/admin/promotions/products/1/3/edit",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-update-1440.png",
+      "sha256": "25014af97febf79ed058c941b9a48dd3a522f8d9eef0d499d5f9f99851be2318",
+      "route": "/admin/promotions/products/1/3/edit",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-cancel-1440.png",
+      "sha256": "6ea738232ed99a6531b4c464645e4aff0991f9eda20f6d297b6ff38b5624c6f6",
+      "route": "/admin/promotions/products/1",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-confirmation-1440.png",
+      "sha256": "3aa8c5c51513851eaa6ad36c0b025d6506bb6e10726a0f050c08c1684b2badcd",
+      "route": "/admin/promotions/products/1/3/disable",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/promotion-disable-1440.png",
+      "sha256": "909a069e0869b4383c607f7899252062c897901241a308a8e05f66bf0feffcc4",
+      "route": "/admin/promotions/products/1",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-navigation-1440.png",
+      "sha256": "0ed92fd49f2618321d0d8a6cc3e2fe5fcd362b87f247f978728b8348a59db453",
+      "route": "/admin/vouchers/new",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-create-1440.png",
+      "sha256": "665b94b29111e219b7a9983111b3b40a067fb202af149a77f7c403743cf50d14",
+      "route": "/admin/vouchers/3/edit",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-update-1440.png",
+      "sha256": "acaf3e702b3e7d2e7f274c89bee65910bdd99990868b457057c457026be4586b",
+      "route": "/admin/vouchers/3/edit",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-cancel-1440.png",
+      "sha256": "d9e807933e0c735a253fbf9f6235d2969fc264f2e847a0e6aeea24960be11490",
+      "route": "/admin/vouchers",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-confirmation-1440.png",
+      "sha256": "7bda1b54d1554be49b2b611141a1c4f76b4127c4ebff37751a1505f551545bee",
+      "route": "/admin/vouchers/3/disable",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    },
+    {
+      "path": "browser/screenshots/voucher-disable-1440.png",
+      "sha256": "4f9175619cef786e66121efb967f2e8c4ae1ecb6e029fe47dd587d8142040568",
+      "route": "/admin/vouchers",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+      "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78"
+    }
+  ],
+  "artifacts": {
+    "acceptance-matrix.md": "74e609d1cbb0e8dc32f70b4d6cb2a1308f49c736bbb386db0f7d7dbd70991436",
+    "browser/attempt-history.json": "cfab4e860a5bd642ad927e7306d6b0a5db51fe37f42bd9c484ef6e3fc616e5eb",
+    "browser/browser-results.json": "606b3459a9712ef2a3ff524949cc904596e1d8fb24891e29884a302f908b948a",
+    "browser/environment-receipt.json": "17fbd6536928f236ca4093129804fa111df7844a2879c6df1fff95f08a082979",
+    "browser/screenshots/promotion-cancel-1440.png": "6ea738232ed99a6531b4c464645e4aff0991f9eda20f6d297b6ff38b5624c6f6",
+    "browser/screenshots/promotion-cancel-375.png": "a58d75a32bc2c53ecef1e82665e0cc1a423c06570ed766210c187564b50cb085",
+    "browser/screenshots/promotion-cancel-768.png": "08a7cc984203f9eeb523941d9a0f4433a585c1a0f154764870fff49cec77bc97",
+    "browser/screenshots/promotion-confirmation-1440.png": "3aa8c5c51513851eaa6ad36c0b025d6506bb6e10726a0f050c08c1684b2badcd",
+    "browser/screenshots/promotion-confirmation-375.png": "cf0e20518d6f62c3ad0643a21483cbbbf8203b692950303fe7824614cddce271",
+    "browser/screenshots/promotion-confirmation-768.png": "6014e58f243ec8ba0bf651ca0acb20b638b8f0cce83d5cb0d0f0378b8d20ac5e",
+    "browser/screenshots/promotion-create-1440.png": "f2b164d7a396e636b548a7278b59eaa919c4c6528f03563928901545a9e29d6c",
+    "browser/screenshots/promotion-create-375.png": "ea11aa0151cd369641534449ed6c5033cddf816feb637da2cca10a01277a7d0b",
+    "browser/screenshots/promotion-create-768.png": "6e331181d3ae095c7662dc4e032579bbd751b5ba6ff1e6a79dd372b2ca98d12e",
+    "browser/screenshots/promotion-disable-1440.png": "909a069e0869b4383c607f7899252062c897901241a308a8e05f66bf0feffcc4",
+    "browser/screenshots/promotion-disable-375.png": "de5cedcf87f315be282c2fc054e677b4f62a04d250086f54008cf5c90879b6dc",
+    "browser/screenshots/promotion-disable-768.png": "12aa900d00b1bd53e538c22299598b7592cd2f93db480c3083c69dcebefc1ca7",
+    "browser/screenshots/promotion-navigation-1440.png": "b3ace0a91948fab6000214ea34393a7b7447a9e8b4663853d41d0cf63d30c7e5",
+    "browser/screenshots/promotion-navigation-375.png": "0ad8bcef093a0f336f2b0068a5339cceac95989821dc401b503e5d3c90da9854",
+    "browser/screenshots/promotion-navigation-768.png": "ed884dd5c93a5273b26c60fae9147c7214d8bb27772937d641d2a300725a499e",
+    "browser/screenshots/promotion-update-1440.png": "25014af97febf79ed058c941b9a48dd3a522f8d9eef0d499d5f9f99851be2318",
+    "browser/screenshots/promotion-update-375.png": "07bd36e23ee94cdd36901958e2cbed926e91073c10bcefdd03e5dbcaefefb355",
+    "browser/screenshots/promotion-update-768.png": "fe91f6fbe4390060438aed17353c705f677c0113fb4f4af5b87dd3b0d64726f2",
+    "browser/screenshots/promotion-validation-1440.png": "8e4d30d0978269f824966782e67f16d3fa24cad10c65335e12976f07d490f0ca",
+    "browser/screenshots/promotion-validation-375.png": "03037f18825fdea937c369a0e3880a32bb727b69cedb92849aad821c1889932a",
+    "browser/screenshots/promotion-validation-768.png": "fd734b559f267f5774a360d79d61c8b7ed15c2d72f8b3576e348e34dbda3b726",
+    "browser/screenshots/voucher-cancel-1440.png": "d9e807933e0c735a253fbf9f6235d2969fc264f2e847a0e6aeea24960be11490",
+    "browser/screenshots/voucher-cancel-375.png": "e561656a62eb08cd21e36b3806968748c0c7709d49cb0b7f1a63eb3c91973d20",
+    "browser/screenshots/voucher-cancel-768.png": "416496130dff1f72dd3204234fa4c4074bd751faf0eccbdf6cd802e375dc03b5",
+    "browser/screenshots/voucher-confirmation-1440.png": "7bda1b54d1554be49b2b611141a1c4f76b4127c4ebff37751a1505f551545bee",
+    "browser/screenshots/voucher-confirmation-375.png": "8a10d210f52643db4b5e13356a9cc5f18f1478c1190c19ad198a8163b98e1f24",
+    "browser/screenshots/voucher-confirmation-768.png": "79cf6968d2089f032f1a693d1da3d6f1e8abd5d8a33b9696b212f69e4df8854d",
+    "browser/screenshots/voucher-create-1440.png": "665b94b29111e219b7a9983111b3b40a067fb202af149a77f7c403743cf50d14",
+    "browser/screenshots/voucher-create-375.png": "051fa495e2e0a9abee40314293e43fd41c59f1802ec0c060313cd4093c406588",
+    "browser/screenshots/voucher-create-768.png": "963bb4ff9ec683aef50bb065031f35699cb537251d30aa9e915dc57ee7d63c63",
+    "browser/screenshots/voucher-disable-1440.png": "4f9175619cef786e66121efb967f2e8c4ae1ecb6e029fe47dd587d8142040568",
+    "browser/screenshots/voucher-disable-375.png": "5a4f4fffa59a323e0774aa5d83b3157da608cd4c990a11f953cdab4fd51c922a",
+    "browser/screenshots/voucher-disable-768.png": "5d71f9be690282eff289fba27ac357784ca5bb0fe78dd2e850bcaaec9d28f340",
+    "browser/screenshots/voucher-navigation-1440.png": "0ed92fd49f2618321d0d8a6cc3e2fe5fcd362b87f247f978728b8348a59db453",
+    "browser/screenshots/voucher-navigation-375.png": "16cc2f98d306d00c0c6280be3e424b5f5d5b4a9c8e7c4b3e75af92b108a37473",
+    "browser/screenshots/voucher-navigation-768.png": "ecd4b8334b12b46f546a45758e6a5c99a1c1540c0fc071150942c7ddee158300",
+    "browser/screenshots/voucher-update-1440.png": "acaf3e702b3e7d2e7f274c89bee65910bdd99990868b457057c457026be4586b",
+    "browser/screenshots/voucher-update-375.png": "79294554ccc5c954696a85daf9f7c5408949f8807c5e8edfe6cac0dabd161d00",
+    "browser/screenshots/voucher-update-768.png": "ee2b66502b89b124ff04166b158809f1b18672993ed1382f3b780ca1236e7479",
+    "contract-decision.md": "71f287464686c55f7dc597d7d979b677084892064d3ccf7613753b736ec61e03",
+    "findings.md": "e6125ac6a9b68e1e4316b4c9d11989488bc3caddadf7b3a9ceb2d92a26fd863f",
+    "history/voucher-67c7d54/acceptance-matrix.md": "8f6f5a84afcca4f4d6894ac022ccf0087ee326dae4d110c65f24e42bb1941da9",
+    "history/voucher-67c7d54/contract-decision.md": "6ca7eed571eaa5e76ea6f0a7fe3a2746de3247967a11d2f7f30bb06d3024b11c",
+    "history/voucher-67c7d54/findings.md": "9f99b5328eeb9d130c443429402fa0762489a14a20a699ea1a37551df756ca87",
+    "history/voucher-67c7d54/owner-handoff.md": "6ed0915cb32dc4fd37f277119cee2935684b900706464ad73a3e0c88c29f6edf",
+    "history/voucher-67c7d54/report.md": "b2d09939efc0fde1e5b0497686097b885593264c8bad47fc435f13036ab99da3",
+    "history/voucher-67c7d54/source-proof.json": "2fcbbcc3e71e81400b383c079b76fa87b1b485f3bab4318633375474f85f39a5",
+    "history/voucher-67c7d54/test-results.json": "a761c55e2c86b3ea4ff3afc34a2ae3f94960a74719ae975f35dfa7e6bc215b30",
+    "owner-handoff.md": "759aa70a063e1c2db1e92d2e78eb2cf6e64a2fb7a7c819165277f5c21fb24bc1",
+    "report.md": "315136ebf3f44de1c3763b3cfa5b4bf0cc2f3196d09c1437807ddf85746bdb7a",
+    "reproduction/admin-browser.cjs": "bb837e08424edecbeb34e98ce162d32b2ced56337cde32e1f1ffa0aece7daba7",
+    "reproduction/run-admin-browser.py": "0ed1ee376379589161dc8b99c127acfae1e2a86d67a258a3c2d954d7c85e2b06",
+    "test-results.json": "3219a1edc7b8911944bcb5f45f74e80963460ef638dab3d445372ca7e8901ccf"
+  },
+  "cleanupReceipts": "test-results.json and browser/environment-receipt.json",
+  "review": "PENDING final-source independent owner approval, not inferred from implementation authorization"
+}
