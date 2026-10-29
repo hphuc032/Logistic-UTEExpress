@@ -40,3 +40,29 @@ not rewritten as an UI-02 fix.
 
 No failed attempt is deleted because a later attempt passes. No old-source
 result is silently assigned a new SHA. See the report for QA/release boundaries.
+
+
+## Supplemental browser/manual verification — 2026-10-29
+
+The original execution history above remains intact. A new
+[follow-up packet](ui02-responsive/followup/README.md) on source
+`1124a4908d886b4edfa872839ab90208f38e9ff1` supersedes the historical NOT RUN
+status **only** for the cases below; executable objects match runtime1f375fa.
+
+| Gate | New evidence and precise scope |
+|---|---|
+| Native dismissal | HP manual Escape375, Cancel768, Tab/Shift+Tab then Escape1440. Each returns focus to enabled cancel button. PostgreSQL order2 remains NEW/version0 with original timestamp; zero cancellation POSTs. QĐ independent verification is pending; no native-dialog-chrome screenshot or every action at every width is claimed. |
+| Voucher creation | Real Vendor form with CSRF: POST302→edit GET200, success flash, owned SHOP voucher persisted. Submit375; successful edit page containment/screenshots375/768/1440. Update/disable remain NOT RUN. |
+| Promotion creation | Real Vendor form with CSRF: POST302→edit GET200, success flash, product1/10%/active persisted. Submit375; successful edit page containment/screenshots375/768/1440. Update/disable remain NOT RUN. |
+| Regression/scope |40 Node PASS freshly executed. No production changes; no fresh local Maven/full PostgreSQL run claimed. New publication HEAD/CI is recorded on PR74. |
+
+Original native timeout/changed order and browser-disabled limitations are
+historical, not deleted. This run used the Brave extension after browser access
+was restored; native tool timeouts were completed by HP manual actions and are
+labelled as such. The earlier OK action is separately documented as
+CANCELLED/version1, never dismissal evidence. The original151 images/161 hashes
+and240 cases remain unchanged. The supplemental packet has its own manifest.
+Independent QĐ review and HP acceptance/merge are still required; UI-02 and the
+QA/release tasks are not marked COMPLETED. See the packet checklist and remaining
+limitations rather than interpreting old NOT RUN entries as current create-case
+status or interpreting new results as exhaustive CRUD/browser acceptance.

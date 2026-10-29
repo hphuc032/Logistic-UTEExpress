@@ -1,0 +1,46 @@
+{
+  "id": "UI02-FOLLOWUP-PROMOTION",
+  "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "jarSha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+  "startedUtc": "2026-10-29T06:47:52.615Z",
+  "completedUtc": "2026-10-29T06:48:29.686Z",
+  "role": "VENDOR",
+  "submitViewport": [
+    375,
+    812
+  ],
+  "csrfPresent": true,
+  "url": "http://127.0.0.1:50884/vendor/products/1/promotions/1/edit",
+  "flash": "Đã tạo khuyến mãi sản phẩm.",
+  "access": "[29/Oct/2026:06:47:54 +0000] POST /vendor/products/1/promotions 302 -\r\n[29/Oct/2026:06:48:03 +0000] GET /vendor/products/1/promotions/1/edit 200 8090\r\n[29/Oct/2026:06:48:03 +0000] GET /js/app.js 200 1365\r\n[29/Oct/2026:06:48:03 +0000] GET /css/app.css 200 32051\r\n[29/Oct/2026:06:48:03 +0000] GET /js/app.js 200 1365\r\n[29/Oct/2026:06:48:03 +0000] GET /js/notifications.js 200 5084\r\n[29/Oct/2026:06:48:03 +0000] GET /notifications/realtime-session 200 147\r\n[29/Oct/2026:06:48:03 +0000] GET /ws 101 -\r\n[29/Oct/2026:06:48:03 +0000] GET /notifications/inbox 200 198\r\n[29/Oct/2026:06:48:04 +0000] GET /js/notifications.js 200 5084\r\n",
+  "navigationObservation": "Initial DOM returned pre-redirect form; no re-submit. Confirmed redirected edit page with flash after transport delay.",
+  "renders": [
+    {
+      "clientWidth": 360,
+      "documentWidth": 360,
+      "name": "UI02 Followup Promo",
+      "viewport": [
+        375,
+        812
+      ]
+    },
+    {
+      "clientWidth": 753,
+      "documentWidth": 753,
+      "name": "UI02 Followup Promo",
+      "viewport": [
+        768,
+        1024
+      ]
+    },
+    {
+      "clientWidth": 1425,
+      "documentWidth": 1425,
+      "name": "UI02 Followup Promo",
+      "viewport": [
+        1440,
+        900
+      ]
+    }
+  ]
+}

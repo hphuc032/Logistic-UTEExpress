@@ -1,0 +1,17 @@
+{
+  "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "method": "HP manually clicked native Cancel per chat attestation; DOM/access/DB corroboration by automation; not independent QD review",
+  "verifiedUtc": "2026-10-29T06:53:20.988Z",
+  "after": {
+    "currentState": "Trạng thái hiện tại: NEW",
+    "focus": {
+      "disabled": false,
+      "tag": "BUTTON",
+      "text": "Hủy đơn hàng"
+    },
+    "viewport": [
+      768,
+      1024
+    ]
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "order1": {
+    "id": 1,
+    "status": "CANCELLED",
+    "version": 1
+  },
+  "voucher": {
+    "id": 1,
+    "code": "UI02FOLLOWUP",
+    "scope": "SHOP",
+    "shopId": 1,
+    "type": "FIXED",
+    "value": 10000.0,
+    "minSubtotal": 0.0,
+    "totalLimit": 10,
+    "perUserLimit": 1,
+    "startsAt": "2026-10-30T02:00:00+00:00",
+    "endsAt": "2026-11-01T02:00:00+00:00",
+    "active": true,
+    "createdBy": 3
+  },
+  "promotion": {
+    "id": 1,
+    "productId": 1,
+    "name": "UI02 Followup Promo",
+    "discountPercent": 10,
+    "startsAt": "2026-10-30T02:00:00+00:00",
+    "endsAt": "2026-11-01T02:00:00+00:00",
+    "active": true,
+    "createdBy": 3
+  },
+  "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "jarSha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+  "method": "Read-only PostgreSQL query after actual browser form submissions"
+}
