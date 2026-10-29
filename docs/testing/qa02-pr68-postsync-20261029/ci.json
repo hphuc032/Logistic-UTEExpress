@@ -1,0 +1,38 @@
+{
+  "run_id": 40818775178,
+  "run_number": 159,
+  "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40818775178",
+  "head_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+  "base_sha": "b538dbc3af17ff80802fa33eea187705c40059fe",
+  "event": "pull_request",
+  "status": "completed",
+  "conclusion": "success",
+  "created_at": "2026-10-29T04:37:19Z",
+  "updated_at": "2026-10-29T04:39:06Z",
+  "checkout_sha": "0c4f4ab408c6ca3e38e290d8c102c50062d51884",
+  "checkout_tree": "3cba80a0ab92b90e7a82e9b4726acdb9bc0f328c",
+  "checkout_parents": [
+    "b538dbc3af17ff80802fa33eea187705c40059fe",
+    "8705e8a865736387c96007aee7eb813a58dd1911"
+  ],
+  "source_tree_identical": true,
+  "job_id": 123266046590,
+  "node_tests": 33,
+  "maven_test_unit_tests": 705,
+  "maven_package_unit_tests": 705,
+  "overlapping_java_executions_not_added": true,
+  "postgres_it_executed": false,
+  "tooling_executed": false,
+  "sanitized_log_lines": [
+    "2026-10-29T04:37:27.3322240Z HEAD is now at 0c4f4ab Merge 8705e8a865736387c96007aee7eb813a58dd1911 into b538dbc3af17ff80802fa33eea187705c40059fe",
+    "2026-10-29T04:37:27.3371025Z [command]/usr/bin/git log -1 --format=%H",
+    "2026-10-29T04:37:27.3409735Z 0c4f4ab408c6ca3e38e290d8c102c50062d51884",
+    "2026-10-29T04:37:30.8226583Z # tests 33",
+    "2026-10-29T04:37:30.8227354Z # pass 33",
+    "2026-10-29T04:37:30.8227759Z # fail 0",
+    "2026-10-29T04:38:24.8760526Z [INFO] Tests run: 705, Failures: 0, Errors: 0, Skipped: 0",
+    "2026-10-29T04:38:24.8779268Z [INFO] BUILD SUCCESS",
+    "2026-10-29T04:39:01.9834502Z [INFO] Tests run: 705, Failures: 0, Errors: 0, Skipped: 0",
+    "2026-10-29T04:39:03.0122824Z [INFO] BUILD SUCCESS"
+  ]
+}

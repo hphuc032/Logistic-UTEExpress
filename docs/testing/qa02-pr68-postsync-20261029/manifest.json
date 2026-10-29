@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "run_id": "pr68-postsync-20261029T043536Z",
+  "generated_utc": "2026-10-29T04:40:46.995098+00:00",
+  "tested_source_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+  "tested_git_tree": "3cba80a0ab92b90e7a82e9b4726acdb9bc0f328c",
+  "old_pr_head": "c593352492184da2a9ca46ebea4a55b802ac6416",
+  "develop_sha": "b538dbc3af17ff80802fa33eea187705c40059fe",
+  "merge_parents": [
+    "c593352492184da2a9ca46ebea4a55b802ac6416",
+    "b538dbc3af17ff80802fa33eea187705c40059fe"
+  ],
+  "ahead": 7,
+  "behind": 0,
+  "conflicts": [],
+  "source_identity_verified": true,
+  "publication_mode": "separate docs-only evidence branch, parent is tested code HEAD; code branch unchanged by evidence publication",
+  "status": "NOT_READY_FOR_HP_FINAL_ACCEPTANCE",
+  "qd_delta_review": "PENDING",
+  "qa02": "IN_PROGRESS",
+  "qa03": "NOT_DECLARED_COMPLETE",
+  "q70_s01": "ACCEPTED RISK - LIMITED",
+  "unit": {
+    "classes": 76,
+    "tests": 705,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "flakes": 0
+  },
+  "postgres": {
+    "classes": 65,
+    "tests": 73,
+    "failures": 0,
+    "errors": 73,
+    "skipped": 0,
+    "flakes": 0,
+    "status": "ENVIRONMENT_BLOCKED",
+    "successful_integration_testcases": 0,
+    "business_assertions_verified": false
+  },
+  "node": {
+    "status": "PASS_WITH_ENVIRONMENT_ACCOMMODATION",
+    "tests": 33
+  },
+  "tooling": {
+    "status": "PASS_WITH_ENVIRONMENT_ACCOMMODATION",
+    "tests": 17
+  },
+  "ci": {
+    "run_id": 40818775178,
+    "run_number": 159,
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40818775178",
+    "head_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+    "base_sha": "b538dbc3af17ff80802fa33eea187705c40059fe",
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-10-29T04:37:19Z",
+    "updated_at": "2026-10-29T04:39:06Z",
+    "checkout_sha": "0c4f4ab408c6ca3e38e290d8c102c50062d51884",
+    "checkout_tree": "3cba80a0ab92b90e7a82e9b4726acdb9bc0f328c",
+    "checkout_parents": [
+      "b538dbc3af17ff80802fa33eea187705c40059fe",
+      "8705e8a865736387c96007aee7eb813a58dd1911"
+    ],
+    "source_tree_identical": true,
+    "job_id": 123266046590,
+    "node_tests": 33,
+    "maven_test_unit_tests": 705,
+    "maven_package_unit_tests": 705,
+    "overlapping_java_executions_not_added": true,
+    "postgres_it_executed": false,
+    "tooling_executed": false,
+    "sanitized_log_lines": [
+      "2026-10-29T04:37:27.3322240Z HEAD is now at 0c4f4ab Merge 8705e8a865736387c96007aee7eb813a58dd1911 into b538dbc3af17ff80802fa33eea187705c40059fe",
+      "2026-10-29T04:37:27.3371025Z [command]/usr/bin/git log -1 --format=%H",
+      "2026-10-29T04:37:27.3409735Z 0c4f4ab408c6ca3e38e290d8c102c50062d51884",
+      "2026-10-29T04:37:30.8226583Z # tests 33",
+      "2026-10-29T04:37:30.8227354Z # pass 33",
+      "2026-10-29T04:37:30.8227759Z # fail 0",
+      "2026-10-29T04:38:24.8760526Z [INFO] Tests run: 705, Failures: 0, Errors: 0, Skipped: 0",
+      "2026-10-29T04:38:24.8779268Z [INFO] BUILD SUCCESS",
+      "2026-10-29T04:39:01.9834502Z [INFO] Tests run: 705, Failures: 0, Errors: 0, Skipped: 0",
+      "2026-10-29T04:39:03.0122824Z [INFO] BUILD SUCCESS"
+    ]
+  },
+  "versions": {
+    "java": "Temurin 21.0.12.1",
+    "maven": "3.9.11",
+    "node": "22.11.0",
+    "python": "3.13",
+    "testcontainers": "2.0.5",
+    "docker_client": "29.8.0",
+    "docker_server": "UNAVAILABLE: permission denied",
+    "postgresql_image_requested": "17.6",
+    "postgresql_runtime": "NOT RUN"
+  },
+  "historical_sources_preserved": [
+    "8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5",
+    "c593352492184da2a9ca46ebea4a55b802ac6416"
+  ],
+  "source_transport": {
+    "shell_fetch": "FAILED: .git/FETCH_HEAD permission denied",
+    "shell_git_network": "FAILED: proxy connection refused",
+    "fallback": "GitHub connector; exact hash-verified Git objects in isolated repo; no primary .git writes",
+    "remote_update_force": false,
+    "remote_expected_old_sha": "c593352492184da2a9ca46ebea4a55b802ac6416"
+  },
+  "runs": [
+    {
+      "name": "docker-version",
+      "argv": [
+        "docker",
+        "--context",
+        "desktop-linux",
+        "version"
+      ],
+      "working_directory": "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029",
+      "start_utc": "2026-10-29T04:35:36.688765+00:00",
+      "timeout_seconds": 60,
+      "pid": 39676,
+      "exit_code": 1,
+      "timeout": false,
+      "end_utc": "2026-10-29T04:35:36.929030+00:00",
+      "log": "docker-version.log",
+      "log_sha256": "1aff6b7c02c788b405d7cda851ba668e9d591d82c4960cf364a65d41b264c037"
+    },
+    {
+      "name": "java-version",
+      "argv": [
+        "C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.12.101-hotspot\\bin\\java.exe",
+        "-version"
+      ],
+      "working_directory": "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029",
+      "start_utc": "2026-10-29T04:35:37.026063+00:00",
+      "timeout_seconds": 60,
+      "pid": 4952,
+      "exit_code": 0,
+      "timeout": false,
+      "end_utc": "2026-10-29T04:35:37.165857+00:00",
+      "log": "java-version.log",
+      "log_sha256": "c09b3f6e7993628681d0f0e0fdfa12ccbfef6d7798ad260ec13807486db8b267"
+    },
+    {
+      "name": "node-version",
+      "argv": [
+        "node",
+        "--version"
+      ],
+      "working_directory": "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029",
+      "start_utc": "2026-10-29T04:35:37.268471+00:00",
+      "timeout_seconds": 60,
+      "pid": 20040,
+      "exit_code": 0,
+      "timeout": false,
+      "end_utc": "2026-10-29T04:35:37.379335+00:00",
+      "log": "node-version.log",
+      "log_sha256": "cebeb735a2f7d0b37af01dd44e5348009ca5362f97fbd5288ed2b428431460c0"
+    },
+    {
+      "name": "python-version",
+      "argv": [
+        "C:\\Users\\Tender\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "--version"
+      ],
+      "working_directory": "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029",
+      "start_utc": "2026-10-29T04:35:37.603250+00:00",
+      "timeout_seconds": 60,
+      "pid": 38924,
+      "exit_code": 0,
+      "timeout": false,
+      "end_utc": "2026-10-29T04:35:37.712446+00:00",
+      "log": "python-version.log",
+      "log_sha256": "7df82ab65b4519ae39741e49a32fc74c1204a162d427c7171409dbbbfebbd3f0"
+    },
+    {
+      "name": "maven-full",
+      "argv": [
+        "cmd",
+        "/d",
+        "/c",
+        "mvnw.cmd",
+        "-B",
+        "--no-transfer-progress",
+        "-o",
+        "-Ppostgres-it",
+        "clean",
+        "verify"
+      ],
+      "working_directory": "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029",
+      "start_utc": "2026-10-29T04:35:37.811416+00:00",
+      "timeout_seconds": 1800,
+      "pid": 12276,
+      "exit_code": 1,
+      "timeout": false,
+      "end_utc": "2026-10-29T04:36:32.107058+00:00",
+      "log": "maven-full.log",
+      "log_sha256": "88212e53cc883932680fe8a27a9e56330acfefa78d9f6f01551ab4092292c359"
+    },
+    {
+      "name": "node-default",
+      "argv": [
+        "node",
+        "--test",
+        "--test-reporter=tap",
+        "src/test/js/notifications.test.cjs",
+        "src/test/js/buyer-cancellation.test.cjs"
+      ],
+      "working_directory": "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029",
+      "start_utc": "2026-10-29T04:36:33.258948+00:00",
+      "timeout_seconds": 120,
+      "pid": 25256,
+      "exit_code": 1,
+      "timeout": false,
+      "end_utc": "2026-10-29T04:36:33.416750+00:00",
+      "log": "node-default.log",
+      "log_sha256": "4b6aba20f9e2d92941e0f2842df62fe1ef6cf29b9db07a77f55c16bf85a4d126"
+    },
+    {
+      "name": "tooling-default",
+      "argv": [
+        "C:\\Users\\Tender\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/qa/tests",
+        "-v"
+      ],
+      "working_directory": "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029",
+      "start_utc": "2026-10-29T04:36:33.526473+00:00",
+      "timeout_seconds": 120,
+      "pid": 31320,
+      "exit_code": 1,
+      "timeout": false,
+      "end_utc": "2026-10-29T04:36:33.801578+00:00",
+      "log": "tooling-default.log",
+      "log_sha256": "f7874579f1fa0648d5d1317112f3c47d966623cfc04b642602b17482b254d8eb"
+    },
+    {
+      "name": "node-inprocess",
+      "argv": [
+        "node",
+        "--experimental-test-isolation=none",
+        "--test",
+        "--test-reporter=tap",
+        "src/test/js/notifications.test.cjs",
+        "src/test/js/buyer-cancellation.test.cjs"
+      ],
+      "working_directory": "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029",
+      "start_utc": "2026-10-29T04:36:34.082901+00:00",
+      "timeout_seconds": 120,
+      "pid": 5176,
+      "exit_code": 0,
+      "timeout": false,
+      "end_utc": "2026-10-29T04:36:34.271462+00:00",
+      "log": "node-inprocess.log",
+      "log_sha256": "325099d4a57c75a99bc5dc09acecae0f577d3db17b5d5286945e446ad19477ad"
+    },
+    {
+      "name": "tooling-inherited-temp",
+      "argv": [
+        "C:\\Users\\Tender\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-B",
+        "C:\\Logistic-UTEExpress\\.work\\pr68-tooling-temp-adapter.py"
+      ],
+      "working_directory": "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029",
+      "start_utc": "2026-10-29T04:36:34.375807+00:00",
+      "timeout_seconds": 120,
+      "pid": 38988,
+      "exit_code": 0,
+      "timeout": false,
+      "end_utc": "2026-10-29T04:36:34.874826+00:00",
+      "log": "tooling-inherited-temp.log",
+      "log_sha256": "d1648c8ba68e74c8215fecd882cb4b55a91c5f2b2e6a10d7dc332ff73bed3cf6"
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/testing/QA-02-regression-report.md",
+      "bytes": 19907,
+      "sha256": "514a9461fd1b86eef2e5ca376cc78b6ee51095219e04e71f68b792165347fe73"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-postsync-20261029/.gitattributes",
+      "bytes": 14,
+      "sha256": "a79691a93b46e49ce460c26ef22afcc03d6eca1e63bf2edbc20e96159510f6c9"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-postsync-20261029/ci.json",
+      "bytes": 1692,
+      "sha256": "e0d7bb2c21210886e265080fa85b1c3732d84857659fca62e27145232a41738c"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-postsync-20261029/delta-review.md",
+      "bytes": 5399,
+      "sha256": "4c29851fd551152316de0922e31c5fee9eedbc9fa2ac23bf8c55d3c68b4b96d8"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-postsync-20261029/execution.json",
+      "bytes": 227069,
+      "sha256": "6270098ca008cf6e638cc3d36766804fe531d81e8baed5afda34cc22a40b7df9"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-postsync-20261029/pr68-run-accommodated.py",
+      "bytes": 1074,
+      "sha256": "82f05b9338af7f30f171e6f1184853dafcf640403dcbb10eb9a6ebc15a58b639"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-postsync-20261029/pr68-run-regression.py",
+      "bytes": 4938,
+      "sha256": "f31d820bc550b56753151892fa29bed992c59fd7afa638787b40ac35cb0f1ee9"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-postsync-20261029/pr68-tooling-temp-adapter.py",
+      "bytes": 1083,
+      "sha256": "b765c1ad15d71ade0ef4733e315b337fd6c61774dde635f3f1de2f09f621dd9a"
+    }
+  ]
+}
