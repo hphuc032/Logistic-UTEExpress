@@ -1,0 +1,45 @@
+{
+  "id": "UI02-FOLLOWUP-VOUCHER",
+  "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "jarSha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+  "startedUtc": "2026-10-29T06:47:24.915Z",
+  "completedUtc": "2026-10-29T06:47:34.569Z",
+  "role": "VENDOR",
+  "submitViewport": [
+    375,
+    812
+  ],
+  "csrfPresent": true,
+  "url": "http://127.0.0.1:50884/vendor/vouchers/1/edit",
+  "flash": "Đã tạo voucher của cửa hàng.",
+  "access": "[29/Oct/2026:06:47:25 +0000] POST /vendor/vouchers 302 -\r\n[29/Oct/2026:06:47:25 +0000] GET /vendor/vouchers/1/edit 200 9877\r\n[29/Oct/2026:06:47:25 +0000] GET /css/app.css 200 32051\r\n[29/Oct/2026:06:47:25 +0000] GET /js/app.js 200 1365\r\n[29/Oct/2026:06:47:25 +0000] GET /js/notifications.js 200 5084\r\n[29/Oct/2026:06:47:25 +0000] GET /notifications/realtime-session 200 147\r\n[29/Oct/2026:06:47:25 +0000] GET /ws 101 -\r\n[29/Oct/2026:06:47:26 +0000] GET /notifications/inbox 200 198\r\n[29/Oct/2026:06:47:27 +0000] GET /js/app.js 200 1365\r\n[29/Oct/2026:06:47:28 +0000] GET /js/notifications.js 200 5084\r\n",
+  "renders": [
+    {
+      "clientWidth": 360,
+      "code": "UI02FOLLOWUP",
+      "documentWidth": 360,
+      "viewport": [
+        375,
+        812
+      ]
+    },
+    {
+      "clientWidth": 753,
+      "code": "UI02FOLLOWUP",
+      "documentWidth": 753,
+      "viewport": [
+        768,
+        1024
+      ]
+    },
+    {
+      "clientWidth": 1425,
+      "code": "UI02FOLLOWUP",
+      "documentWidth": 1425,
+      "viewport": [
+        1440,
+        900
+      ]
+    }
+  ]
+}

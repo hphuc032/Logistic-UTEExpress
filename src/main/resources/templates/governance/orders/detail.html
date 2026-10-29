@@ -20,9 +20,11 @@
     </dl>
     <h2>Sản phẩm</h2>
     <p th:if="${order.facts.items.empty}">Chưa có dữ liệu sản phẩm.</p>
-    <table th:unless="${order.facts.items.empty}" class="table"><thead><tr><th>Tên</th><th>Số lượng</th><th>Thành tiền</th></tr></thead>
+    <div class="table-responsive" th:unless="${order.facts.items.empty}">
+    <table class="table"><thead><tr><th scope="col">Tên</th><th scope="col">Số lượng</th><th scope="col">Thành tiền</th></tr></thead>
         <tbody><tr th:each="item : ${order.facts.items}"><td th:text="${item.productNameSnapshot}"></td>
             <td th:text="${item.quantity}"></td><td th:text="${item.lineTotal}"></td></tr></tbody></table>
+    </div>
     <h2>Lịch sử trạng thái</h2>
     <p th:if="${order.facts.timeline.empty}">Chưa có lịch sử được ghi.</p>
     <ol><li th:each="entry : ${order.facts.timeline}" th:text="|${entry.createdAt}: ${entry.fromStatus ?: 'Bắt đầu'} → ${entry.toStatus}|"></li></ol>
@@ -49,7 +51,7 @@
             <input type="hidden" name="expectedShipment" th:value="${order.shipment == null ? 'EXPECTED_ABSENT' : 'EXPECTED_PRESENT'}">
             <input th:if="${order.shipment != null}" type="hidden" name="expectedShipmentVersion" th:value="${order.shipment.version}">
             <label for="ops-cancel-reason">Lý do</label>
-            <select id="ops-cancel-reason" name="reasonCode" required><option value="UNABLE_TO_FULFILL">Không thể thực hiện đơn hàng</option></select>
+            <select id="ops-cancel-reason" name="reasonCode" class="form-select mb-2" required><option value="UNABLE_TO_FULFILL">Không thể thực hiện đơn hàng</option></select>
             <button type="submit" class="btn btn-danger">Hủy đơn hàng</button>
         </form>
     </section>
