@@ -63,9 +63,9 @@ class PlatformVoucherManagementIT {
                 .andExpect(status().isOk()).andExpect(content().string(containsString(code)))
                 .andExpect(content().string(not(containsString(shopCode))))
                 .andExpect(content().string(not(containsString("Chưa có voucher"))))
-                .andExpect(content().string(containsString("name=\"version\"")))
+                .andExpect(content().string(containsString("/admin/vouchers/" + ownVoucher + "/disable")))
                 .andExpect(content().string(containsString("name=\"_csrf\"")));
-        for (String path : List.of("/new", "/" + ownVoucher, "/" + ownVoucher + "/edit"))
+        for (String path : List.of("/new", "/" + ownVoucher, "/" + ownVoucher + "/edit", "/" + ownVoucher + "/disable"))
             mvc.perform(get("/admin/vouchers" + path).with(user(principal(admin, "ADMIN"))))
                     .andExpect(status().isOk()).andExpect(content().string(containsString("name=\"_csrf\"")));
     }
@@ -277,7 +277,7 @@ class PlatformVoucherManagementIT {
         mvc.perform(valid(post(path(id, "/update")), newCode).param("version", "0")
                         .cookie(auth, editPage.getCookie("XSRF-TOKEN")).param("_csrf", token(editPage.getContentAsString())))
                 .andExpect(status().is3xxRedirection());
-        var listPage = mvc.perform(get("/admin/vouchers").cookie(auth)).andExpect(status().isOk()).andReturn().getResponse();
+        var listPage = mvc.perform(get(path(id, "/disable")).cookie(auth)).andExpect(status().isOk()).andReturn().getResponse();
         mvc.perform(post(path(id, "/disable")).param("version", "1").cookie(auth, listPage.getCookie("XSRF-TOKEN"))
                         .param("_csrf", token(listPage.getContentAsString())))
                 .andExpect(status().is3xxRedirection());

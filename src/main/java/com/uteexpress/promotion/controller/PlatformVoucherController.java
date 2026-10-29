@@ -91,6 +91,12 @@ public class PlatformVoucherController {
         return "redirect:/admin/vouchers/" + id + "/edit";
     }
 
+    @GetMapping("/{id}/disable")
+    String confirmDisable(@PathVariable Long id, Model model) {
+        model.addAttribute("voucher", vouchers.get(id));
+        return "admin/vouchers/confirm-disable";
+    }
+
     @PostMapping("/{id}/disable")
     String disable(@PathVariable Long id, @Valid @ModelAttribute("versionForm") VoucherVersionForm form,
             BindingResult binding, RedirectAttributes redirect) {

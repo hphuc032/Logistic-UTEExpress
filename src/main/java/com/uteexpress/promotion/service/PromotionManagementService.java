@@ -27,8 +27,9 @@ public class PromotionManagementService {
     private final PromotionRepository promotions;
     private final EntityManager entityManager;
     private final Clock clock;
-    public PromotionManagementService(PromotionRepository promotions, EntityManager entityManager, Clock clock) {
-        this.promotions = promotions; this.entityManager = entityManager; this.clock = clock;
+    private final com.uteexpress.governance.service.RoleGovernanceService administration;
+    public PromotionManagementService(PromotionRepository promotions, EntityManager entityManager, Clock clock, com.uteexpress.governance.service.RoleGovernanceService administration) {
+        this.promotions = promotions; this.entityManager = entityManager; this.clock = clock; this.administration = administration;
     }
     @Transactional(readOnly = true)
     public List<VendorPromotionView> list(Long productId) {
@@ -42,24 +43,63 @@ public class PromotionManagementService {
     }
     @Transactional(propagation = Propagation.MANDATORY)
     public Long create(Long productId, Long creator, @NotNull @Valid VendorPromotionForm form) {
-        var promotion = new Promotion(productId, creator, form.getName(), form.getDiscountPercent(),
-                instant(form.getStartsAt()), instant(form.getEndsAt()), form.isActive(), now());
-        overlap(promotion, null);
-        return persist(promotion).getId();
+        return createDefinition(productId, creator, form);
     }
     @Transactional(propagation = Propagation.MANDATORY)
     public void update(Long productId, Long id, @NotNull @Valid VendorPromotionUpdateForm form) {
-        var promotion = locked(productId, id);
-        if (!Objects.equals(promotion.getVersion(), form.getVersion())) conflict();
-        // Validate before mutating a managed entity: JPQL queries may trigger AUTO flush.
-        if (form.isActive() && promotions.countOverlaps(productId, instant(form.getStartsAt()),
-                instant(form.getEndsAt()), id) > 0) conflict();
-        promotion.update(form.getName(), form.getDiscountPercent(), instant(form.getStartsAt()),
-                instant(form.getEndsAt()), form.isActive(), now());
-        persist(promotion);
+        updateDefinition(productId, id, form.getVersion(), form);
     }
     @Transactional(propagation = Propagation.MANDATORY)
-    public void disable(Long productId, Long id, Long version) {
+    public void disable(Long productId, Long id, Long version) { disableDefinition(productId, id, version); }
+
+    // Internal Catalog-authorized ADMIN entries; the caller holds Account -> Product -> Shop.
+    // Deliberately override only these methods, never broaden the existing VENDOR guard.
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority())")
+    @Transactional(propagation = Propagation.MANDATORY)
+    public List<PromotionView> listForAdministrator(Long productId) {
+        administrator();
+        return promotions.findAllByProductIdOrderByStartsAtDescIdDesc(productId).stream().map(this::adminView).toList();
+    }
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority())")
+    @Transactional(propagation = Propagation.MANDATORY)
+    public PromotionView getForAdministrator(Long productId, Long id) {
+        administrator();
+        return adminView(promotions.findByIdAndProductId(id, productId)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND)));
+    }
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority())")
+    @Transactional(propagation = Propagation.MANDATORY)
+    public Long createForAdministrator(Long productId, @NotNull @Valid AdminPromotionForm form) {
+        return createDefinition(productId, administrator(), form);
+    }
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority())")
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void updateForAdministrator(Long productId, Long id, @NotNull @Valid AdminPromotionUpdateForm form) {
+        administrator(); updateDefinition(productId, id, form.getVersion(), form);
+    }
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority())")
+    @Transactional(propagation = Propagation.MANDATORY)
+    public void disableForAdministrator(Long productId, Long id, Long version) {
+        administrator(); disableDefinition(productId, id, version);
+    }
+    private Long administrator() { return administration.requireCurrentActiveAdministratorForUpdate(); }
+    private PromotionView adminView(Promotion promotion) {
+        var v = view(promotion, now());
+        return new PromotionView(v.id(), v.productId(), v.name(), v.discountPercent(), v.startsAt(), v.endsAt(), v.active(), v.version(), v.status());
+    }
+    private Long createDefinition(Long productId, Long creator, PromotionDefinitionForm form) {
+        var promotion = new Promotion(productId, creator, form.getName(), form.getDiscountPercent(),
+                instant(form.getStartsAt()), instant(form.getEndsAt()), form.isActive(), now());
+        overlap(promotion, null); return persist(promotion).getId();
+    }
+    private void updateDefinition(Long productId, Long id, Long version, PromotionDefinitionForm form) {
+        var promotion = locked(productId, id);
+        if (!Objects.equals(promotion.getVersion(), version)) conflict();
+        if (form.isActive() && promotions.countOverlaps(productId, instant(form.getStartsAt()), instant(form.getEndsAt()), id) > 0) conflict();
+        promotion.update(form.getName(), form.getDiscountPercent(), instant(form.getStartsAt()), instant(form.getEndsAt()), form.isActive(), now());
+        persist(promotion);
+    }
+    private void disableDefinition(Long productId, Long id, Long version) {
         var promotion = locked(productId, id);
         if (version == null || version < 0) throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
         if (!Objects.equals(promotion.getVersion(), version)) conflict();

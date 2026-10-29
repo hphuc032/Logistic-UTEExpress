@@ -25,10 +25,7 @@
                           th:text="${voucher.active} ? 'Đã bật' : 'Đã ngừng'"></span></td>
                 <td><div class="d-flex flex-wrap gap-2">
                     <a class="btn btn-sm btn-app-secondary" th:href="@{/admin/vouchers/{id}/edit(id=${voucher.id})}">Chỉnh sửa</a>
-                    <form method="post" th:if="${voucher.active}" th:action="@{/admin/vouchers/{id}/disable(id=${voucher.id})}">
-                        <input type="hidden" name="version" th:value="${voucher.version}">
-                        <button class="btn btn-sm btn-outline-danger" type="submit">Ngừng voucher</button>
-                    </form>
+                    <a class="btn btn-sm btn-outline-danger" th:if="${voucher.active}" th:href="@{/admin/vouchers/{id}/disable(id=${voucher.id})}">Ngừng voucher…</a>
                 </div></td>
             </tr></tbody>
         </table>
