@@ -1,5 +1,9 @@
 # QA-02 regression report — Q02-F05 production correction
 
+Current PR #68 continuation (2026-10-29): [gate report](QA-02-PR68-gate-report.md),
+[source-bound evidence](QA-02-PR68-gate-evidence.json). The Q02-F05 report below is
+a historical snapshot; its original counts and publication limits are preserved.
+
 Base develop: `798535b32ff81a011f34cfa01bbeb2d2dd0cb981`. Exact tested source HEAD: `b6c832785d87c3af10008a7c357389ef685f2123`.
 Branch: `fix/q02-f05-buyer-cancellation`; worktree: `C:/Logistic-UTEExpress/.work/q02-f05-fix`.
 Owner/executor: TD. HP retains final acceptance and merge authority.
@@ -119,3 +123,41 @@ No push, GitHub PR, remote message, CI execution or HP final acceptance claimed.
 Local PR title/body prepared under `.work/qa02-fix/PR-body.md`; TD must authorize publication.
 Browser/manual deployment, SMTP/gateway, ONLINE refund/PAY-03 and multi-instance load
 are not run or introduced by this fix. See [findings](QA-02-findings.md).
+
+## PR #68 regression continuation — 2026-10-29
+
+Tested HEAD and published PR HEAD are both
+`c593352492184da2a9ca46ebea4a55b802ac6416`. The existing full process completed
+normally at `2026-10-29T03:52:32.388756+00:00`: **697 Surefire +1326 PostgreSQL
+Failsafe =2023 PASS**, 0 failures/errors/skips/flakes, actual Maven exit **0**,
+timeout=false, BUILD SUCCESS. Existing focused **697+138 PASS** and same-source
+Node **33/33 PASS** were verified without rerun and are not added to the full total.
+All 137 full suite XML hashes, summary/logs and 763 input-file hashes were checked.
+
+CI [#155](https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40813357695)
+SUCCESS is associated with that exact PR HEAD; actual checkout is synthetic merge
+`da7329eefd66d4556d99b124625a72038c2d9b5c`. It passes 697 unit tests in each
+test/package invocation plus 33 Node tests, without PostgreSQL integration.
+Live PR remains OPEN/unmerged/mergeable; fix publication is verified. Its body still
+contains the older source/counts, recorded as Low Q68-DOC-01.
+
+Delegated technical review of controller binding, CSRF/validation, authorization,
+ownership and business invariants is PASS; details, test boundaries and diagnostics
+are in the linked gate report. Formal GitHub owner reviews remain absent and HP
+acceptance is pending. Q03-G01 browser/manual and #70/#69 integrated/postmerge
+execution are NOT RUN here. Historical FAIL attempts remain FAIL in the evidence.
+
+Recommendation: **READY FOR HP MERGE DECISION** for #68. QA-02 remains IN PROGRESS;
+no approval/merge or overall acceptance claimed. Evidence edits are local only.
+
+## HP-requested handoff supplement
+
+See the [separate-run comparison](qa02-pr68-handoff/run-comparison.md) and
+[Git/input provenance](qa02-pr68-handoff/provenance.json). New 2023 PASS is bound
+to exact `c593352` by the runner's before/after clean Git state, tree, actual
+subprocess exit, hashed raw log/XML and 763 prior inputs checked against immutable
+Git blobs. The older 2011 PASS remains on `8bab8dd`; historical raw log/XML are
+not available for fresh rehashing, which is explicitly distinguished from the new
+run's independently checked raw artifacts. HP scoped code review PASS is verified
+as GitHub COMMENTED at 03:59:51Z, not APPROVED/final acceptance. Publication will
+use a separate documentation branch so the code HEAD and its CI identity stay intact.

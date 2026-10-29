@@ -1,5 +1,8 @@
 # QA-02 evidence manifest — Q02-F05 fix
 
+Current #68 evidence is indexed in the [2026-10-29 addendum](#pr-68-gate-evidence--2026-10-29).
+The Q02-F05 and PR #67 artifact identities below remain historical snapshots.
+
 Base develop: `798535b32ff81a011f34cfa01bbeb2d2dd0cb981`. Exact tested source HEAD: `b6c832785d87c3af10008a7c357389ef685f2123`.
 Branch: `fix/q02-f05-buyer-cancellation`; worktree: `C:/Logistic-UTEExpress/.work/q02-f05-fix`.
 Owner/executor: TD. HP retains final acceptance and merge authority.
@@ -133,3 +136,40 @@ Only documentation/evidence is being published; publication HEAD and CI must be 
 after push, with the standard synthetic merge checkout/source-tree qualification retained.
 **Ready for HP review only after publication-head CI succeeds.** No merge is authorized;
 QA-02 remains IN PROGRESS. The separate local manual application is left running.
+
+## PR #68 gate evidence — 2026-10-29
+
+- [Current gate report](QA-02-PR68-gate-report.md): delegated technical review,
+  exact-source full result, publication/CI qualifications and pending HP decision.
+- [Current source-bound evidence](QA-02-PR68-gate-evidence.json): SHA
+  `c593352492184da2a9ca46ebea4a55b802ac6416`, full 697+1326=2023 PASS, actual
+  Maven exit 0, 137 full XML suites, retained focused 697+138 PASS, existing Node33,
+  GitHub CI #155/synthetic merge checkout, 763 unchanged inputs and 227 hashed artifacts.
+- Original raw logs, subprocess exit records, XML and verification snapshot remain
+  ignored locally under `.work/pr68-recheck-20261029/`; prior failed Docker/publication
+  records remain under `.work/td-20261029/` and `.work/pr68-gate-20261029/`.
+- Evidence collection script `.work/pr68-recheck-20261029/collect_gate.py` only verifies
+  existing artifacts; it does not execute tests or mutate refs. No already-PASS gate rerun.
+
+Current gate evidence JSON SHA-256 (UTF-8/LF):
+`f43d7733a8b88c54a402d3f0ff7084d2303d6252b7615d1d72562df4f0ec53da`.
+
+Recommendation: **READY FOR HP MERGE DECISION**, with formal owner signoff and HP
+acceptance pending. QA-02 stays IN PROGRESS. Documentation/evidence is local only;
+no new commit/push/CI/approval/merge is claimed for these edits. Historical evidence
+JSON files and their original hashes are unchanged.
+
+## HP-requested evidence handoff packet
+
+- [Historical/new table](qa02-pr68-handoff/run-comparison.md) and
+  [comparison JSON](qa02-pr68-handoff/run-comparison.json): separate source/run/time,
+  commands/exit records and the verified 11+1 test delta.
+- [New exact-source provenance](qa02-pr68-handoff/provenance.json): 763 inputs
+  compared with immutable `c593352` blobs; 137 raw XML report hashes/counters,
+  actual process exit, build metadata and source/runner identities.
+- [Source-bound runner copy](qa02-pr68-handoff/run_gate.py) and
+  [HP review/CI snapshot](qa02-pr68-handoff/review-and-ci.json).
+
+Raw logs/XML remain local; the packet publishes only sanitized metadata/checksums.
+The original historical manifests and original new gate-evidence JSON remain unchanged.
+Publication targets a separate documentation branch; code PR #68 remains at `c593352`.

@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "historical": {
+    "run_id": "historical-integrated-full-8bab8dd-20261028T102849Z-manifest",
+    "run_id_qualification": "Stable handoff label derived from original manifest identity; original runner did not record a separate run ID",
+    "source_sha": "8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5",
+    "source_tree": "70e4a19de2473a747b4d0d1f554f78b6c6cada99",
+    "manifest_collected_utc": "2026-10-28T10:28:49.493245+00:00",
+    "started_utc": null,
+    "finished_utc": null,
+    "timing_qualification": "Original manifest records collection time only; precise process start/end unavailable in accessible artifacts",
+    "counts": {
+      "unit": 686,
+      "postgresql": 1325,
+      "total": 2011
+    },
+    "maven_exit_code": 0,
+    "node_exit_code": 0,
+    "commands": [
+      "mvnw.cmd -q -Ppostgres-it clean verify",
+      "node --test --test-reporter=tap src/test/js/notifications.test.cjs"
+    ],
+    "command_qualification": "Reconstructed from unchanged source-bound runner commands(), not a newly recovered command transcript; matching CRLF runner hash corroborates Windows checkout",
+    "manifest_path": "docs/testing/qa03-form-binding/integrated-full-run-manifest.json",
+    "manifest_sha256": "739b534b3cdeac4f02b45a4a48198f9ac7314f05a1b876975fc90725952c9898",
+    "manifest_git_blob": "b3fc8a3702c68cdf6f7e7471fc69352f3d61f5f5",
+    "runner_git_lf_sha256": "894884feb5cdb3cafa45088880cb0b0f7827706c7c2247ef7e140d83bb583dc8",
+    "runner_recorded_crlf_sha256": "4005a275ed21d1d657f9f8c5cb0ad663f83be08074fe66cb10926d494a21036f",
+    "log_sha256": {
+      "maven": "e06e1c848797ea80523a83eba2ad90cca19c6b663bc741a9d641ed4cb4f7ef5a",
+      "node": "534a73f62af960df76e65d421bffc0632837d9666cb380c32a721ff962603156"
+    },
+    "summary_sha256": "bbecfefc98fc73024680041bd358150193cb3624fdf1ee85a44550b0778c4787",
+    "qualification": "Previously published source-bound manifest verified byte/JSON identity; historical raw XML/log files not located in accessible workspace and not independently rehashed now; original PASS/exit0 remain historical recorded results"
+  },
+  "new": {
+    "run_id": "pr68-recheck-full-20261029T034451Z",
+    "source_sha": "c593352492184da2a9ca46ebea4a55b802ac6416",
+    "source_tree": "1d545a3350963edf8ca46d5cae7284ce018467cb",
+    "started_utc": "2026-10-29T03:44:51.535402+00:00",
+    "finished_utc": "2026-10-29T03:52:32.388756+00:00",
+    "counts": {
+      "unit": 697,
+      "postgresql": 1326,
+      "total": 2023
+    },
+    "maven_exit_code": 0,
+    "timeout": false,
+    "command": [
+      "cmd",
+      "/d",
+      "/c",
+      "mvnw.cmd",
+      "-B",
+      "--no-transfer-progress",
+      "-o",
+      "-Ppostgres-it",
+      "clean",
+      "verify"
+    ],
+    "run_record_path": ".work/pr68-recheck-20261029/full.json",
+    "run_record_sha256": "e08888f65f0c8963a48a4cb6ceb8a74b102b99fd8490f70ce89591ad5d59380c",
+    "log_sha256": "b9a8b718e1580b121e93463973771aabd5f0eb8a145907a9bf5112c820e7b0e1",
+    "evidence_path": "docs/testing/QA-02-PR68-gate-evidence.json",
+    "provenance_path": "docs/testing/qa02-pr68-handoff/provenance.json",
+    "qualification": "Raw log, subprocess exit record, 137 XML and Git/input provenance independently checked in this handoff"
+  },
+  "suite_count_deltas": [
+    {
+      "suite": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "historical": 0,
+      "new": 11
+    },
+    {
+      "suite": "com.uteexpress.integration.PromotionBrowserFormsIT",
+      "historical": 5,
+      "new": 6
+    }
+  ],
+  "new_testcases": [
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "businessVersionComesFromTheFormEvenWhenAHeaderHasTheSameName"
+    },
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "aHeaderCannotSupplyTheRequiredVersion"
+    },
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "invalidVersionsRemainRejected(String)[1]"
+    },
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "invalidVersionsRemainRejected(String)[2]"
+    },
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "invalidVersionsRemainRejected(String)[3]"
+    },
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "submittedBusinessFieldsRemainRejected(String)[1]"
+    },
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "submittedBusinessFieldsRemainRejected(String)[2]"
+    },
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "submittedBusinessFieldsRemainRejected(String)[3]"
+    },
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "submittedBusinessFieldsRemainRejected(String)[4]"
+    },
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "disableAcceptsNormalFormTransportHeaders"
+    },
+    {
+      "classname": "com.uteexpress.catalog.controller.VendorProductPromotionBindingTest",
+      "name": "ownedLookupStillRejectsForeignResourcesBeforeMutation"
+    },
+    {
+      "classname": "com.uteexpress.integration.PromotionBrowserFormsIT",
+      "name": "realPromotionDisableAcceptsHeadersAndRetainsOwnershipCsrfAndFieldValidation"
+    }
+  ],
+  "changed_source_files": [
+    "src/main/java/com/uteexpress/catalog/controller/VendorProductPromotionController.java",
+    "src/test/java/com/uteexpress/catalog/controller/VendorProductPromotionBindingTest.java",
+    "src/test/java/com/uteexpress/integration/PromotionBrowserFormsIT.java"
+  ],
+  "no_test_removals": true,
+  "all_other_suite_counts_unchanged": true,
+  "historical_artifacts_overwritten": false,
+  "counts_combined": false
+}

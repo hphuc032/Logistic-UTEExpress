@@ -1,5 +1,9 @@
 # QA-02 findings — Q02-F05 correction
 
+Current PR #68 gate update (2026-10-29): see the [gate report](QA-02-PR68-gate-report.md)
+and [exact-source evidence](QA-02-PR68-gate-evidence.json). The Q02-F05 snapshot below
+is historical; its source, counts and publication statements are preserved.
+
 Base develop: `798535b32ff81a011f34cfa01bbeb2d2dd0cb981`. Exact tested source HEAD: `b6c832785d87c3af10008a7c357389ef685f2123`.
 Branch: `fix/q02-f05-buyer-cancellation`; worktree: `C:/Logistic-UTEExpress/.work/q02-f05-fix`.
 Owner/executor: TD. HP retains final acceptance and merge authority.
@@ -97,3 +101,39 @@ real socket security/recovery suites also pass in full.
 
 No unresolved Critical/High blocker was found for this approved fix after full regression.
 PR readiness is local READY; broader QA-02 completion/CI/HP final acceptance remain open.
+
+## PR #68 findings update — 2026-10-29
+
+Exact tested and published PR HEAD: `c593352492184da2a9ca46ebea4a55b802ac6416`.
+Existing focused 697 unit +138 PostgreSQL PASS is retained without rerun. Full
+regression finished with 697 unit +1326 PostgreSQL = **2023 PASS**, actual Maven
+exit **0**, no timeout/failures/errors/skips/flakes. Exact-head-associated CI #155
+SUCCESS uses GitHub synthetic merge `da7329e`; CI covers unit/package +33 Node,
+while PostgreSQL proof comes from the local full run.
+
+| ID / boundary | Current disposition |
+|---|---|
+| Q68-BIND-01, Medium functional | FIXED, EXACT-SOURCE VERIFIED: published disable binder correction completes header exclusion for voucher/promotion forms; technical review of binding, CSRF/validation, authorization, ownership and business regression PASS. |
+| Q68-DOC-01, Low | OPEN: live PR description still cites historical e79b760/8bab8dd and 2011 tests; corrected current report/evidence prepared locally. |
+| Historical Q02-F03, Low | OPEN history retained: current full has 0 closed-connection and 0 fork-shutdown diagnostic matches, versus historical 484/1. Historical root cause is not established by non-reproduction. |
+| Historical Q02-F04 publication gate | Historical Q02-F05 snapshot retained. For #68 specifically, fix publication and CI are VERIFIED; HP acceptance remains PENDING. No whole-QA closure inferred. |
+| Q02-F05 business regression | Full BuyerCancellationIT 50/50 PASS on current #68 source; original source/counts and existing acceptance history are not rewritten. |
+| Formal owner signoff | PENDING: zero GitHub reviews/inline threads observed; agent technical review is complete and does not impersonate TD/HP human approval. |
+| Q03-G01 / #70 / #69 | NOT RUN in this gate; browser/manual, integrated migration/combined-seed and postmerge acceptance remain separate. |
+
+**READY FOR HP MERGE DECISION** for bounded #68 technical scope. QA-02 stays
+**IN PROGRESS**. HP retains final owner acceptance and merge authority. No approval
+or merge performed; the documentation/evidence updates remain local and uncommitted.
+
+## HP evidence-handoff request — 2026-10-29
+
+HP's [scoped COMMENTED review](https://github.com/hphuc032/Logistic-UTEExpress/pull/68#pullrequestreview-5692679850)
+confirms code review PASS at `c593352`; final acceptance/merge remain PENDING.
+The [run comparison](qa02-pr68-handoff/run-comparison.md) reconciles historical
+686+1325 on `8bab8dd` with new 697+1326 on `c593352`: 11 new unit cases and one
+real HTTP case account for the entire delta. [Provenance](qa02-pr68-handoff/provenance.json)
+independently verifies the new raw log/XML/exit record and 763 inputs against Git objects.
+Historical raw artifacts are unavailable locally; their originally published
+manifest/hash/exit assertions are preserved with that limit. No finding is closed.
+Evidence publication is authorized on a separate documentation branch; its final
+remote status must be checked separately from these prepared local files.
