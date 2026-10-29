@@ -1,0 +1,53 @@
+rules:
+  - id: qa01-global-csrf-disable
+    languages: [java]
+    severity: ERROR
+    message: Review a disabled CSRF boundary in this cookie-authenticated application.
+    pattern-either:
+      - pattern: $HTTP.csrf().disable()
+      - pattern: $HTTP.csrf(AbstractHttpConfigurer::disable)
+      - patterns:
+          - pattern: $CSRF.disable()
+          - metavariable-regex:
+              metavariable: $CSRF
+              regex: (?i).*csrf.*
+  - id: qa01-dynamic-sql-call
+    languages: [java]
+    severity: WARNING
+    message: Review concatenated SQL at execution; a finding does not establish injection.
+    pattern-either:
+      - pattern: $JDBC.query($SQL + $VALUE, ...)
+      - pattern: $JDBC.queryForObject($SQL + $VALUE, ...)
+      - pattern: $JDBC.update($SQL + $VALUE, ...)
+      - pattern: $JDBC.execute($SQL + $VALUE, ...)
+  - id: qa01-unescaped-thymeleaf
+    languages: [generic]
+    severity: WARNING
+    message: Review unescaped Thymeleaf output for user-controlled content.
+    pattern-regex: 'th:utext\s*='
+    paths:
+      include: ['*.html']
+  - id: qa01-dom-html-sink
+    languages: [generic]
+    severity: WARNING
+    message: Review HTML insertion sinks; notification text must use safe text APIs.
+    pattern-regex: '(?:innerHTML|outerHTML)\s*=|insertAdjacentHTML\s*\(|document\.write\s*\('
+    paths:
+      include: ['*.js', '*.html']
+  - id: qa01-browser-storage
+    languages: [generic]
+    severity: WARNING
+    message: Review browser storage writes; JWT must remain in its HttpOnly cookie.
+    pattern-regex: '(?:localStorage|sessionStorage)\s*\.\s*setItem\s*\('
+    paths:
+      include: ['*.js', '*.html']
+  - id: qa01-private-key-material
+    languages: [generic]
+    severity: ERROR
+    message: Potential private key material; do not copy matched content into a report.
+    pattern-regex: '-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----'
+  - id: qa01-literal-sensitive-setting
+    languages: [generic]
+    severity: WARNING
+    message: Potential literal sensitive setting; inspect privately and publish only redacted metadata.
+    pattern-regex: '(?i)(?:password|secret-base64|pepper-base64)\s*[:=]\s*["''](?!\$\{)[^"''\r\n]{8,}["'']'

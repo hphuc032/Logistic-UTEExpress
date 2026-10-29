@@ -95,6 +95,7 @@ public class PasswordResetService {
         OtpTokenEntity token = latest.get();
         Instant now = clock.instant();
         if (token.isConsumed() || token.isExpired(now)
+                || !now.isBefore(token.getSentAt().plus(properties.ttl()))
                 || token.hasReachedAttemptLimit(properties.maxAttempts())) {
             return PasswordResetResult.INVALID;
         }
