@@ -1,0 +1,1064 @@
+{
+  "browser": "155.0.8059.82",
+  "headless": true,
+  "mode": "Automated real browser UI; not human manual signoff",
+  "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+  "cases": [
+    {
+      "case": "assignment-reassignment",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:54:00.192Z",
+      "steps": [
+        {
+          "assignment_reassignment": "UI JSON adapter",
+          "locked_shipper_denied": true,
+          "stale_denied": true,
+          "old_assignee_denied": true,
+          "postpickup_control_hidden": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\assignment-reassignment-375-stale.png",
+          "sha256": "dc7ab6dd2719a650ecd7f2dcd7ec8f53f6b411892a534026b7d7ca42357ec263",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-375-stale.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\assignment-reassignment-375-assigned.png",
+          "sha256": "ee13111f9d192b0478efd580b0a618ae3ca18bd33752f261370bdc5fcbb17d94",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-375-assigned.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\assignment-reassignment-375-after-pickup.png",
+          "sha256": "97992d1f4cba17f5708101d5cc893b05e47c17eacc841d0cea851b6bcce9543d",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-375-after-pickup.png"
+        }
+      ],
+      "precondition": {
+        "id": 1,
+        "orderStatus": "CONFIRMED",
+        "orderVersion": 2,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": null,
+        "shipmentStatus": null,
+        "shipmentVersion": null,
+        "attempt": null,
+        "shipperId": null,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 2,
+        "itemId": 1
+      },
+      "actual": {
+        "id": 1,
+        "orderStatus": "PICKED_UP",
+        "orderVersion": 3,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": 1,
+        "shipmentStatus": "PICKED_UP",
+        "shipmentVersion": 2,
+        "attempt": 0,
+        "shipperId": 4,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 3,
+        "itemId": 1
+      },
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:54:10.284Z"
+    },
+    {
+      "case": "failure-retry",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:54:10.366Z",
+      "steps": [
+        {
+          "first_failure_retry_second_failure": "UI_SUBMITTED",
+          "order_unchanged": true,
+          "foreign_shipper_denied": true,
+          "no_third_retry": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\failure-retry-375-exhausted.png",
+          "sha256": "7ea5fe7a054b70dd1bc9f9017521a388d2082d75b68fc53e41d3c7c768e65e5e",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/failure-retry-375-exhausted.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:54:18.275Z"
+    },
+    {
+      "case": "attempt2-delivery",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:54:18.321Z",
+      "steps": [
+        {
+          "wrong_COD_rejected": true,
+          "delivered_at_attempt2": true,
+          "payment": "PAID"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\attempt2-delivery-375-delivered.png",
+          "sha256": "439d16e924ca4e43538b86301732544f65e4775580f4afa9d3424786636bde3b",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/attempt2-delivery-375-delivered.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:54:23.751Z"
+    },
+    {
+      "case": "return-to-sender",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:54:23.762Z",
+      "steps": [
+        {
+          "receipt_submitted_via_UI": true,
+          "order": "CANCELLED",
+          "shipment": "RETURNED_TO_SENDER"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\return-to-sender-375-received.png",
+          "sha256": "40894799fa5d27e058f5c18b580f9112e34df6633ae79832e1b730419d9497e6",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/return-to-sender-375-received.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:54:31.017Z"
+    },
+    {
+      "case": "notification-two-sessions",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:54:31.031Z",
+      "steps": [
+        {
+          "live_private_hint": true,
+          "foreign_hint_denied": true,
+          "persisted_recipients_checked": true,
+          "read_UI": true,
+          "offline_HTTP_recovery": true,
+          "logout_denial": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\notification-two-sessions-375-buyer-inbox.png",
+          "sha256": "b818588c0d4d45024c4bdff5dcd38aa07adbbddf466252c04c672610a9a2da00",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/notification-two-sessions-375-buyer-inbox.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\notification-two-sessions-375-recovered.png",
+          "sha256": "22035f94e2585c3e22f6a184b6dd06300901630e56a092b6d706da69eed2eb0b",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/notification-two-sessions-375-recovered.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:54:40.003Z"
+    },
+    {
+      "case": "review-media",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:54:40.095Z",
+      "steps": [
+        {
+          "valid_UI_review": true,
+          "foreign_denied": true,
+          "public_after_return": true,
+          "return_precondition_method": "real HTTP buyer/vendor flow"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\review-media-375-public.png",
+          "sha256": "1bcea35166e94c9c6f1fb1ba32e5b7ee8f9e0f958bce6956e03c91e6bcc78d80",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/review-media-375-public.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\review-media-375-after-return.png",
+          "sha256": "1bcea35166e94c9c6f1fb1ba32e5b7ee8f9e0f958bce6956e03c91e6bcc78d80",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/review-media-375-after-return.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:54:49.412Z"
+    },
+    {
+      "case": "admin-financial-scope",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:54:49.463Z",
+      "steps": [
+        {
+          "admin_UI": true,
+          "manager_denied": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\admin-financial-scope-375-admin.png",
+          "sha256": "a993264815e8629ff1f5bec687affc32034a04e161015fb0c0eb9b8ab560ae50",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/admin-financial-scope-375-admin.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\admin-financial-scope-375-manager-denied.png",
+          "sha256": "61cf6e257219fec9ecedcb8c5ed50963131a249c3fa302899d9e560cb231a00f",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/admin-financial-scope-375-manager-denied.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:54:51.873Z"
+    },
+    {
+      "case": "full-user-journey",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:54:51.921Z",
+      "steps": [
+        {
+          "all_UI_actions": [
+            "register",
+            "OTP",
+            "login",
+            "address",
+            "product",
+            "cart",
+            "checkout",
+            "vendor-confirm",
+            "vendor-ready",
+            "admin-assign",
+            "shipper-pickup",
+            "shipping",
+            "COD-delivered",
+            "buyer-review"
+          ],
+          "fake_identity": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\full-user-journey-375-otp-policy-copy.png",
+          "sha256": "0b83ade317a445a311bf32541e33e50230a152983d9dc97931e8d6c7d7be07ab",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/full-user-journey-375-otp-policy-copy.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\full-user-journey-375-completed.png",
+          "sha256": "c230fa48e6a995dcbadedc373e6eaa7528d8ee73a8093442d766cb5153fc4805",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/full-user-journey-375-completed.png"
+        }
+      ],
+      "additional_finding": "OTP_UI_COPY_10MIN_VS_SERVER5MIN",
+      "actual": {
+        "id": 8,
+        "orderStatus": "DELIVERED",
+        "orderVersion": 5,
+        "grandTotal": 105000,
+        "inventoryReleased": false,
+        "shipmentId": 6,
+        "shipmentStatus": "DELIVERED",
+        "shipmentVersion": 3,
+        "attempt": 1,
+        "shipperId": 3,
+        "paymentStatus": "PAID",
+        "paymentAmount": 105000,
+        "reviewCount": 1,
+        "historyCount": 5,
+        "itemId": 8
+      },
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:55:01.531Z"
+    },
+    {
+      "case": "assignment-reassignment",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:55:01.698Z",
+      "steps": [
+        {
+          "assignment_reassignment": "UI JSON adapter",
+          "locked_shipper_denied": true,
+          "stale_denied": true,
+          "old_assignee_denied": true,
+          "postpickup_control_hidden": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\assignment-reassignment-768-stale.png",
+          "sha256": "89603ad0d041d3becb78e46f10aa24427b216697cf00d3e0bc69ced32ce4f813",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-768-stale.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\assignment-reassignment-768-assigned.png",
+          "sha256": "1a82fcf078c98b6406e6776094dc71e3f94efbd88e7a7a2fdec486013015fa63",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-768-assigned.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\assignment-reassignment-768-after-pickup.png",
+          "sha256": "9411736b2b98aed0104ee8f93c91dd794119ae65d0cfa784f0a2bc4d33db6572",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-768-after-pickup.png"
+        }
+      ],
+      "precondition": {
+        "id": 9,
+        "orderStatus": "CONFIRMED",
+        "orderVersion": 2,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": null,
+        "shipmentStatus": null,
+        "shipmentVersion": null,
+        "attempt": null,
+        "shipperId": null,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 2,
+        "itemId": 9
+      },
+      "actual": {
+        "id": 9,
+        "orderStatus": "PICKED_UP",
+        "orderVersion": 3,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": 7,
+        "shipmentStatus": "PICKED_UP",
+        "shipmentVersion": 2,
+        "attempt": 0,
+        "shipperId": 4,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 3,
+        "itemId": 9
+      },
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:55:10.175Z"
+    },
+    {
+      "case": "failure-retry",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:55:10.268Z",
+      "steps": [
+        {
+          "first_failure_retry_second_failure": "UI_SUBMITTED",
+          "order_unchanged": true,
+          "foreign_shipper_denied": true,
+          "no_third_retry": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\failure-retry-768-exhausted.png",
+          "sha256": "7782ced86eb83a2522c77f5e4398ffab19bbc324e5a9c6f84fe15a94aec3c995",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/failure-retry-768-exhausted.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:55:17.380Z"
+    },
+    {
+      "case": "attempt2-delivery",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:55:17.425Z",
+      "steps": [
+        {
+          "wrong_COD_rejected": true,
+          "delivered_at_attempt2": true,
+          "payment": "PAID"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\attempt2-delivery-768-delivered.png",
+          "sha256": "8ad18c2b0419701abbadb9035d5c69cd0853dac38e858c8180338034b9d41ecd",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/attempt2-delivery-768-delivered.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:55:23.151Z"
+    },
+    {
+      "case": "return-to-sender",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:55:23.161Z",
+      "steps": [
+        {
+          "receipt_submitted_via_UI": true,
+          "order": "CANCELLED",
+          "shipment": "RETURNED_TO_SENDER"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\return-to-sender-768-received.png",
+          "sha256": "7ffd8c5c839333acc4f38e4d2077eb1723cd1b6972b988ecf59dd5cc0b47ca6e",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/return-to-sender-768-received.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:55:29.981Z"
+    },
+    {
+      "case": "notification-two-sessions",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:55:29.994Z",
+      "steps": [
+        {
+          "live_private_hint": true,
+          "foreign_hint_denied": true,
+          "persisted_recipients_checked": true,
+          "read_UI": true,
+          "offline_HTTP_recovery": true,
+          "logout_denial": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\notification-two-sessions-768-buyer-inbox.png",
+          "sha256": "a4b79702e24bbdec25c1358f4c65a3be66fc207dcef470968e6b397c931fa50b",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/notification-two-sessions-768-buyer-inbox.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\notification-two-sessions-768-recovered.png",
+          "sha256": "4a45b2de104c94aecdfac90ae57ddc21c2b105d4ce7e0f533b93bf4379ec7532",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/notification-two-sessions-768-recovered.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:55:37.653Z"
+    },
+    {
+      "case": "review-media",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:55:37.744Z",
+      "steps": [
+        {
+          "valid_UI_review": true,
+          "foreign_denied": true,
+          "public_after_return": true,
+          "return_precondition_method": "real HTTP buyer/vendor flow"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\review-media-768-public.png",
+          "sha256": "4df52f7f81d28e7dc9956bd0833dabde6a98021bb80eadaafdf1bcb0be55a4e5",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/review-media-768-public.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\review-media-768-after-return.png",
+          "sha256": "4df52f7f81d28e7dc9956bd0833dabde6a98021bb80eadaafdf1bcb0be55a4e5",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/review-media-768-after-return.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:55:46.040Z"
+    },
+    {
+      "case": "admin-financial-scope",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:55:46.084Z",
+      "steps": [
+        {
+          "admin_UI": true,
+          "manager_denied": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\admin-financial-scope-768-admin.png",
+          "sha256": "e90bc438fe93bd200877cfe6ea9b91e1819c6dc1b0ef836ef14e6b39c0309c82",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/admin-financial-scope-768-admin.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\admin-financial-scope-768-manager-denied.png",
+          "sha256": "053adb412bef3e7a77028156eeba2f32407e86b1639a8a0282789240a6e8c091",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/admin-financial-scope-768-manager-denied.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:55:48.281Z"
+    },
+    {
+      "case": "full-user-journey",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:55:48.331Z",
+      "steps": [
+        {
+          "all_UI_actions": [
+            "register",
+            "OTP",
+            "login",
+            "address",
+            "product",
+            "cart",
+            "checkout",
+            "vendor-confirm",
+            "vendor-ready",
+            "admin-assign",
+            "shipper-pickup",
+            "shipping",
+            "COD-delivered",
+            "buyer-review"
+          ],
+          "fake_identity": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\full-user-journey-768-otp-policy-copy.png",
+          "sha256": "1c917762325664c1607ba9549ed67a189ed3e9a0e541171cced4d6aa53b4e0b8",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/full-user-journey-768-otp-policy-copy.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\full-user-journey-768-completed.png",
+          "sha256": "f19a1b4a3653eee1dceaf9eb057a8a6acba9677bcfaa32f2d2f1094670e78383",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/full-user-journey-768-completed.png"
+        }
+      ],
+      "additional_finding": "OTP_UI_COPY_10MIN_VS_SERVER5MIN",
+      "actual": {
+        "id": 16,
+        "orderStatus": "DELIVERED",
+        "orderVersion": 5,
+        "grandTotal": 105000,
+        "inventoryReleased": false,
+        "shipmentId": 12,
+        "shipmentStatus": "DELIVERED",
+        "shipmentVersion": 3,
+        "attempt": 1,
+        "shipperId": 3,
+        "paymentStatus": "PAID",
+        "paymentAmount": 105000,
+        "reviewCount": 1,
+        "historyCount": 5,
+        "itemId": 16
+      },
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:55:57.316Z"
+    },
+    {
+      "case": "assignment-reassignment",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:55:57.439Z",
+      "steps": [
+        {
+          "assignment_reassignment": "UI JSON adapter",
+          "locked_shipper_denied": true,
+          "stale_denied": true,
+          "old_assignee_denied": true,
+          "postpickup_control_hidden": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\assignment-reassignment-1440-stale.png",
+          "sha256": "8ce51fb7d5c70eb0f0ef6e5792217be3d7dab986c63dcf8bcd86711fff6efd32",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-1440-stale.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\assignment-reassignment-1440-assigned.png",
+          "sha256": "79b823bada2854402134a0dc9f115fe72bc4e172ed214e8244ee6b393a2a83cd",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-1440-assigned.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\assignment-reassignment-1440-after-pickup.png",
+          "sha256": "383ce6abd62be25a13513b08e0be31587247c63d7b2a9d333cfabea348fd4e5a",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-1440-after-pickup.png"
+        }
+      ],
+      "precondition": {
+        "id": 17,
+        "orderStatus": "CONFIRMED",
+        "orderVersion": 2,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": null,
+        "shipmentStatus": null,
+        "shipmentVersion": null,
+        "attempt": null,
+        "shipperId": null,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 2,
+        "itemId": 17
+      },
+      "actual": {
+        "id": 17,
+        "orderStatus": "PICKED_UP",
+        "orderVersion": 3,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": 13,
+        "shipmentStatus": "PICKED_UP",
+        "shipmentVersion": 2,
+        "attempt": 0,
+        "shipperId": 4,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 3,
+        "itemId": 17
+      },
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:56:05.517Z"
+    },
+    {
+      "case": "failure-retry",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:56:05.609Z",
+      "steps": [
+        {
+          "first_failure_retry_second_failure": "UI_SUBMITTED",
+          "order_unchanged": true,
+          "foreign_shipper_denied": true,
+          "no_third_retry": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\failure-retry-1440-exhausted.png",
+          "sha256": "66e78b24ae2f5225ba3da4683dd40e4ed0e8259b69c944f0fa1b9d990fdc9d87",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/failure-retry-1440-exhausted.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:56:12.579Z"
+    },
+    {
+      "case": "attempt2-delivery",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:56:12.626Z",
+      "steps": [
+        {
+          "wrong_COD_rejected": true,
+          "delivered_at_attempt2": true,
+          "payment": "PAID"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\attempt2-delivery-1440-delivered.png",
+          "sha256": "6b2067e76291b7a3d5f9f00deee7dd923ed61e11cf9eaa7c94e0e6a8aabe4f1e",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/attempt2-delivery-1440-delivered.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:56:18.179Z"
+    },
+    {
+      "case": "return-to-sender",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:56:18.192Z",
+      "steps": [
+        {
+          "receipt_submitted_via_UI": true,
+          "order": "CANCELLED",
+          "shipment": "RETURNED_TO_SENDER"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\return-to-sender-1440-received.png",
+          "sha256": "3c5b31db041762e19f1360a78990572fe22c509384ffba31d9afcb45e29aa4ad",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/return-to-sender-1440-received.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:56:25.060Z"
+    },
+    {
+      "case": "notification-two-sessions",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:56:25.073Z",
+      "steps": [
+        {
+          "live_private_hint": true,
+          "foreign_hint_denied": true,
+          "persisted_recipients_checked": true,
+          "read_UI": true,
+          "offline_HTTP_recovery": true,
+          "logout_denial": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\notification-two-sessions-1440-buyer-inbox.png",
+          "sha256": "fd3987408991152c9fde2c93984d77215665ae6f88a0b344e8ae497d4bea7c39",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/notification-two-sessions-1440-buyer-inbox.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\notification-two-sessions-1440-recovered.png",
+          "sha256": "2b9cd83f9f0d5ac2229b0d0840c87fa46597deca5822f901c26d1b303672f89f",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/notification-two-sessions-1440-recovered.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:56:32.908Z"
+    },
+    {
+      "case": "review-media",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:56:32.992Z",
+      "steps": [
+        {
+          "valid_UI_review": true,
+          "foreign_denied": true,
+          "public_after_return": true,
+          "return_precondition_method": "real HTTP buyer/vendor flow"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\review-media-1440-public.png",
+          "sha256": "50de81d87e731332fad3ad386b585a7a4cfe6c8fb37f9550c67463386cf63ffa",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/review-media-1440-public.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\review-media-1440-after-return.png",
+          "sha256": "08898ef20feed589e8eb9bb6c4ce23daedfb91e0434a67f91f81543c604cb0d0",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/review-media-1440-after-return.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:56:41.386Z"
+    },
+    {
+      "case": "admin-financial-scope",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:56:41.431Z",
+      "steps": [
+        {
+          "admin_UI": true,
+          "manager_denied": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\admin-financial-scope-1440-admin.png",
+          "sha256": "9c8591e1dc63be3aa8a4eaee1616868dc6b1c70618b110a635cf3b28fa98f3c4",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/admin-financial-scope-1440-admin.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\admin-financial-scope-1440-manager-denied.png",
+          "sha256": "49a0788677f82035264b7cbc7e4e413a8a9d1fd636f3809641f249a9eff8e917",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/admin-financial-scope-1440-manager-denied.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:56:43.473Z"
+    },
+    {
+      "case": "full-user-journey",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "e4cd94fb642e804d6c22c06ca4e7e75135c40d22722f1c4bb6296586c40b0cea",
+      "started_utc": "2026-10-29T06:56:43.523Z",
+      "steps": [
+        {
+          "all_UI_actions": [
+            "register",
+            "OTP",
+            "login",
+            "address",
+            "product",
+            "cart",
+            "checkout",
+            "vendor-confirm",
+            "vendor-ready",
+            "admin-assign",
+            "shipper-pickup",
+            "shipping",
+            "COD-delivered",
+            "buyer-review"
+          ],
+          "fake_identity": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\full-user-journey-1440-otp-policy-copy.png",
+          "sha256": "90de85317487e6457c125221121a9deb3c5d58956a90e043ba98e16993b3173e",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/full-user-journey-1440-otp-policy-copy.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-final\\full-user-journey-1440-completed.png",
+          "sha256": "2339e917cb0694a7c3b9d6b8bbbb098a20db2e9706cce8b82d55aa3fa8d13a1d",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/full-user-journey-1440-completed.png"
+        }
+      ],
+      "additional_finding": "OTP_UI_COPY_10MIN_VS_SERVER5MIN",
+      "actual": {
+        "id": 24,
+        "orderStatus": "DELIVERED",
+        "orderVersion": 5,
+        "grandTotal": 105000,
+        "inventoryReleased": false,
+        "shipmentId": 18,
+        "shipmentStatus": "DELIVERED",
+        "shipmentVersion": 3,
+        "attempt": 1,
+        "shipperId": 3,
+        "paymentStatus": "PAID",
+        "paymentAmount": 105000,
+        "reviewCount": 1,
+        "historyCount": 5,
+        "itemId": 24
+      },
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:56:51.747Z"
+    }
+  ]
+}

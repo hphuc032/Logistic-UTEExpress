@@ -3,6 +3,7 @@ package com.uteexpress.governance.controller;
 import com.uteexpress.governance.dto.OpsOrderDetail;
 import com.uteexpress.governance.dto.OpsOrderPage;
 import com.uteexpress.governance.service.OperationsOrderService;
+import com.uteexpress.governance.service.RoleGovernanceService;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,7 +18,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class OperationsOrderController {
     private final OperationsOrderService orders;
 
-    public OperationsOrderController(OperationsOrderService orders) { this.orders = orders; }
+    private final RoleGovernanceService roles;
+
+    public OperationsOrderController(OperationsOrderService orders, RoleGovernanceService roles) {
+        this.orders = orders;
+        this.roles = roles;
+    }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -47,7 +53,22 @@ public class OperationsOrderController {
     @GetMapping(value = "/{id}", produces = MediaType.TEXT_HTML_VALUE)
     public String detail(@PathVariable String ops, @PathVariable Long id, Model model) {
         model.addAttribute("ops", ops);
-        model.addAttribute("order", orders.detail(id));
+        var order = orders.detail(id);
+        model.addAttribute("order", order);
+        // Advisory UI only. Existing JSON commands recheck state, version and active role under locks.
+        boolean ready = "CONFIRMED".equals(order.facts().status()) && order.readyAt() != null;
+        boolean assign = ready && order.shipment() == null;
+        boolean reassign = ready && order.shipment() != null
+                && "ASSIGNED".equals(order.shipment().status()) && order.shipment().pickedUpAt() == null;
+        if (assign || reassign) {
+            var shippers = roles.assignmentShipperOptions(
+                    order.shipment() == null ? null : order.shipment().assignedShipperId());
+            model.addAttribute("assignmentShippers", shippers);
+            model.addAttribute("assignmentAction", "/" + ops + "/orders/" + id + (assign ? "/assign" : "/reassign"));
+            model.addAttribute("assignmentVersionField", assign ? "expectedOrderVersion" : "expectedShipmentVersion");
+            model.addAttribute("assignmentVersion", assign ? order.version() : order.shipment().version());
+            model.addAttribute("assignmentLabel", assign ? "Phân công Shipper" : "Phân công lại Shipper");
+        }
         return "governance/orders/detail";
     }
 }

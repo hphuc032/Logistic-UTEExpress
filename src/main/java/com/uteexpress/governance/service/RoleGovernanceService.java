@@ -40,6 +40,16 @@ public class RoleGovernanceService {
         return roles.activeShippers();
     }
 
+    /** UI projection only; keep repository row types out of controllers. */
+    @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority(), T(com.uteexpress.security.RoleCode).MANAGER.authority())")
+    @Transactional(readOnly = true)
+    public List<com.uteexpress.governance.dto.AssignmentShipperOption> assignmentShipperOptions(Long excludeId) {
+        return roles.activeShippers().stream()
+                .filter(row -> excludeId == null || row.id() != excludeId.longValue())
+                .map(row -> new com.uteexpress.governance.dto.AssignmentShipperOption(row.id(), row.username()))
+                .toList();
+    }
+
     /** Serialize assignment with SHIPPER grants/revocations and account locks. */
     @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority(), T(com.uteexpress.security.RoleCode).MANAGER.authority())")
     @Transactional
