@@ -5,10 +5,10 @@
 <h1>Chuyến giao của tôi</h1>
 <a th:href="@{/shipper/dashboard}" class="btn btn-link px-0">Tổng quan giao hàng</a>
 <p th:if="${shipments.empty}">Bạn chưa có chuyến giao được phân công.</p>
-<table th:unless="${shipments.empty}" class="table">
-<thead><tr><th>Chuyến giao</th><th>Đơn hàng</th><th>Dịch vụ</th><th>Trạng thái</th></tr></thead>
+<div class="table-responsive" th:unless="${shipments.empty}"><table class="table">
+<thead><tr><th scope="col">Chuyến giao</th><th scope="col">Đơn hàng</th><th scope="col">Dịch vụ</th><th scope="col">Trạng thái</th></tr></thead>
 <tbody><tr th:each="shipment : ${shipments}">
 <td><a th:href="@{/shipper/shipments/{id}/view(id=${shipment.id})}" th:text="${shipment.id}"></a></td>
 <td th:text="${shipment.orderId}"></td><td th:text="${shipment.serviceCode}"></td><td th:text="${shipment.status}"></td>
-</tr></tbody></table>
+</tr></tbody></table></div>
 </section></body></html>

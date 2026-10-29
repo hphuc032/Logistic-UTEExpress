@@ -1,0 +1,20 @@
+{
+  "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "jarSha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+  "role": "USER",
+  "route": "/orders/2",
+  "method": "HP manual Escape attestation in chat; automation read-only DOM plus PostgreSQL/access checks; not independent QD review",
+  "viewport": [
+    375,
+    812
+  ],
+  "verifiedUtc": "2026-10-29T06:52:23.947Z",
+  "after": {
+    "currentState": "Trạng thái hiện tại: NEW",
+    "focus": {
+      "disabled": false,
+      "tag": "BUTTON",
+      "text": "Hủy đơn hàng"
+    }
+  }
+}

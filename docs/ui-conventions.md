@@ -81,10 +81,31 @@ do not display exception class names, SQL, stacktraces or rejected secrets.
 
 ## Responsive and accessibility rules
 
-The shared layout supports a collapsed navbar below the Bootstrap `lg` breakpoint,
-a single-column dashboard below 768px, scrollable tables and full-width primary
-actions on narrow phones. Feature pages must be checked at approximately 375px,
-768px, 1366px and 1440px or wider.
+The shared layout supports a collapsed navbar and a single-column dashboard below
+the Bootstrap `lg` breakpoint (992px). The dashboard's workspace menu uses the
+existing Bootstrap collapse component: its native button controls
+`workspaceNavigation`; desktop navigation remains visible. Do not duplicate this
+fragment within one page, because its collapse target ID is page-scoped.
+
+Wrap wide tables in `.table-responsive`; do not hide columns or clip the entire
+page to conceal overflow. These regions contain positioned accessible labels,
+keep a readable 40rem table minimum and receive a keyboard focus target and name
+from `app.js` (a caption when present, otherwise the shared fallback). Existing
+ARIA names and keyboard policies are preserved. Test ArrowLeft/ArrowRight while
+the region has focus, and keep the focus indicator visible. Use the established
+`app-table-shell` style when the page needs its border/background treatment.
+
+Long names/references wrap within the content. Large `g-5` gutters are reduced
+below `lg` so nested grids do not exceed the page container. Inline search forms
+allow the input to shrink while retaining a readable submit button. Navbar buyer
+links reuse the existing `buyerFeaturesAvailable` view capability; link visibility
+never replaces route or service authorization.
+
+UI-02's exact acceptance viewports are **375×812**, **768×1024** and **1440×900**
+CSS pixels; full-page screenshot height can exceed viewport height. Route-level
+results, source/build provenance and independent-review limitations are in
+[the UI-02 report](testing/UI-02-responsive-report.md). A screenshot at one width
+does not establish the other widths or another actor's access.
 
 Keep heading order meaningful, use landmarks, native links/buttons and descriptive
 labels, and retain the global focus indicator. Images need useful `alt` text unless
