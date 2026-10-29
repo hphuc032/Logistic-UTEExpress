@@ -1,0 +1,17 @@
+{
+  "checkedUtc": "2026-10-29T17:29:07.079038+00:00",
+  "productionJavaTemplatesConfigMigrationsTestsCiChanged": false,
+  "originalExistingAssertionsChanged": false,
+  "allMarkdownLinks": "PASS",
+  "allCaseScreenshotHashes": "PASS",
+  "originalAttemptJsonAndPngBytesPreserved": true,
+  "humanFields": "36 observations unsigned; no actual/result/reviewer/time/signature supplied",
+  "newSourceBehaviorFinding": "FR10-CAT-01 OPEN/Medium; not fixed",
+  "gitDiffCheck": "Run on staged/committed diff before publication; outcome reported in Git/PR",
+  "primaryCheckout": "Original DOC01 branch HEAD7dc3a88 and index preserved; each run has before/after hash proof",
+  "CI": "Publication CI must be checked separately; not a browser/human acceptance result",
+  "provenanceLimits": [
+    "Baseline driver archive copied after execution; no contemporaneous launch hash in original run1 proof",
+    "Initial build-only start timestamp and separate raw build log not captured; terminal finish/duration/exit retained"
+  ]
+}
