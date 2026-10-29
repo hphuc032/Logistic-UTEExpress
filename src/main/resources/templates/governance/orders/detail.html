@@ -18,6 +18,24 @@
         <dt class="col-sm-3">Phí vận chuyển</dt><dd class="col-sm-9" th:text="${order.facts.shippingFee}"></dd>
         <dt class="col-sm-3">Tổng tiền</dt><dd class="col-sm-9" th:text="${order.facts.grandTotal}"></dd>
     </dl>
+    <section th:if="${assignmentAction != null}" class="app-surface p-3 my-3" aria-label="Phân công giao hàng">
+        <h2 th:text="${assignmentLabel}">Phân công Shipper</h2>
+        <p>Chỉ phân công trước khi lấy hàng. Máy chủ kiểm tra lại trạng thái, phiên bản và Shipper đang hoạt động.</p>
+        <p th:if="${#lists.isEmpty(assignmentShippers)}">Chưa có Shipper phù hợp để chọn.</p>
+        <form th:unless="${#lists.isEmpty(assignmentShippers)}" data-shipment-assignment
+              th:attr="data-action=${assignmentAction},data-version-field=${assignmentVersionField},data-version=${assignmentVersion},data-csrf-header=${_csrf.headerName},data-csrf-token=${_csrf.token}">
+            <label for="assignment-shipper" class="form-label">Shipper đang hoạt động</label>
+            <select id="assignment-shipper" name="shipperId" class="form-select" required>
+                <option value="">Chọn Shipper</option>
+                <option th:each="shipper : ${assignmentShippers}" th:value="${shipper.id}" th:text="${shipper.username}"></option>
+            </select>
+            <button type="submit" class="btn btn-primary mt-2" data-assignment-submit disabled th:text="${assignmentLabel}">Phân công</button>
+            <p data-assignment-status role="status" aria-live="polite" class="mt-2 mb-0"></p>
+            <a th:href="@{/{ops}/orders/{id}(ops=${ops},id=${order.facts.id})}" data-assignment-refresh hidden>Tải lại trạng thái đơn hàng</a>
+            <noscript>Cần bật JavaScript để gửi yêu cầu phân công an toàn.</noscript>
+        </form>
+        <script th:src="@{/js/shipment-assignment.js}" defer></script>
+    </section>
     <h2>Sản phẩm</h2>
     <p th:if="${order.facts.items.empty}">Chưa có dữ liệu sản phẩm.</p>
     <table th:unless="${order.facts.items.empty}" class="table"><thead><tr><th>Tên</th><th>Số lượng</th><th>Thành tiền</th></tr></thead>

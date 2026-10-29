@@ -178,6 +178,44 @@ class ShipmentAssignmentIT {
         assertThat(shipperReads.detail(assigned.id()).shipperId()).isEqualTo(second);
     }
 
+    @Test void opsHtmlOffersActiveAssignmentThenReassignmentWithoutChangingTheJsonAuthority() throws Exception {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        long manager = insertUser("ACTIVE", "MANAGER");
+        long first = insertUser("ACTIVE", "SHIPPER");
+        long second = insertUser("ACTIVE", "SHIPPER");
+        long locked = insertUser("LOCKED", "SHIPPER");
+        long id = order(true, "CONFIRMED", true);
+        var page = mvc.perform(get("/admin/orders/{id}", id).accept("text/html")
+                        .with(user(principal(admin, "ADMIN"))))
+                .andExpect(status().isOk())
+                .andExpect(org.springframework.test.web.servlet.result.MockMvcResultMatchers.content()
+                        .string(org.hamcrest.Matchers.containsString("data-shipment-assignment")))
+                .andReturn();
+        var choices = (java.util.List<?>) page.getModelAndView().getModel().get("assignmentShippers");
+        assertThat(choices).extracting("id").contains(first, second).doesNotContain(locked);
+        assertThat(page.getModelAndView().getModel().get("assignmentAction")).isEqualTo("/admin/orders/" + id + "/assign");
+        authenticate(admin, "ADMIN");
+        assignments.assign(id, first, 0L);
+        var next = mvc.perform(get("/manager/orders/{id}", id).accept("text/html")
+                        .with(user(principal(manager, "MANAGER"))))
+                .andExpect(status().isOk()).andReturn();
+        assertThat(next.getModelAndView().getModel().get("assignmentAction")).isEqualTo("/manager/orders/" + id + "/reassign");
+        assertThat(next.getModelAndView().getModel().get("assignmentVersionField")).isEqualTo("expectedShipmentVersion");
+        assertThat((java.util.List<?>) next.getModelAndView().getModel().get("assignmentShippers"))
+                .extracting("id").doesNotContain(first, locked).contains(second);
+        mvc.perform(get("/admin/orders/{id}", id).accept("text/html")
+                .with(user(principal(first, "SHIPPER")))).andExpect(status().isForbidden());
+    }
+
+    @Test void opsHtmlDoesNotOfferAssignmentForNewOrUnreadyOrders() throws Exception {
+        long admin = insertUser("ACTIVE", "ADMIN");
+        for (long id : new long[]{order(true, "NEW", false), order(true, "CONFIRMED", false)}) {
+            var page = mvc.perform(get("/admin/orders/{id}", id).accept("text/html")
+                    .with(user(principal(admin, "ADMIN")))).andExpect(status().isOk()).andReturn();
+            assertThat(page.getModelAndView().getModel()).doesNotContainKey("assignmentAction");
+        }
+    }
+
     private long insertUser(String status, String role) {
         String name = "ship" + java.util.UUID.randomUUID().toString().replace("-", "").substring(0, 20);
         long id = jdbc.queryForObject("""
