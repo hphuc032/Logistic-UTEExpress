@@ -1,0 +1,499 @@
+# TASK: DOC-01 — HP TECHNICAL DOCUMENTATION & RELEASE/DEMO PREPARATION
+
+## 1. Vai trò
+
+Bạn là Senior Java/Spring Boot Engineer, Software Architect và Technical Documentation Engineer.
+
+Bạn đang làm việc trong repository:
+
+`hphuc032/Logistic-UTEExpress`
+
+Nhiệm vụ là hoàn thiện phần tài liệu kỹ thuật của **HP (Hoàng Phúc)** cho đồ án UTEExpress, đúng với Master Project Plan và yêu cầu nộp báo cáo của giảng viên.
+
+**Yêu cầu quan trọng: không chỉ viết outline hoặc lập kế hoạch. Hãy đọc source code thực tế, tạo nội dung hoàn chỉnh, tạo hình minh họa và xuất file DOCX có thể nộp.**
+
+Ngôn ngữ báo cáo: tiếng Việt học thuật, rõ ràng, đúng thuật ngữ kỹ thuật.
+
+## 2. Tài liệu bắt buộc phải đọc
+
+Trước khi thực hiện, tìm và đọc:
+
+1. `UTEExpress_Master_Project_Plan.docx` — bản kế hoạch gốc.
+2. `README.md`.
+3. `pom.xml`.
+4. `docs/architecture.md`.
+5. Các tài liệu hoàn thành ARCH-01, AUTH, SEC, USER, SHOP, PROD, UI, INT và QA-01 hiện có.
+6. Source code thuộc HP ownership.
+7. Các migrations, cấu hình, test classes và GitHub PR liên quan.
+8. Hướng dẫn viết báo cáo và các tài liệu DOC-01/DOC-02/DOC-03 hiện có.
+
+Nếu Master Plan không có trong repository, hãy tìm trong workspace và các thư mục tài liệu được cung cấp. Nếu vẫn không tìm được, ghi rõ giới hạn; không tự suy diễn nội dung của Master Plan.
+
+Phải ưu tiên **Master Plan gốc** khi xác định số chương và phạm vi. Các chương được giao dự kiến là 1–2, 4–5 và 12; hãy xác minh tên chương chính xác, không tự đổi thứ tự của giảng viên hoặc kế hoạch.
+
+## 3. Git workflow và bảo vệ source
+
+Trước khi sửa file:
+
+- Kiểm tra current branch, remote và working tree.
+- Fetch trạng thái mới nhất của `develop`.
+- Kiểm tra các PR liên quan và trạng thái merge hiện tại.
+- Xác định source SHA được dùng để viết tài liệu.
+- Không làm việc trực tiếp trên `main` hoặc `develop`.
+- Không xóa hoặc ghi đè thay đổi local chưa commit.
+- Tạo branch tài liệu riêng, ví dụ:
+
+`docs/doc-01-hp-technical-documentation`
+
+Không sửa production code, migrations, bảo mật, business logic, tests hoặc CI chỉ để phù hợp với lời giải thích trong báo cáo.
+
+Nếu phát hiện source khác tài liệu, cập nhật báo cáo theo source thực tế và ghi finding, không tự ý sửa hệ thống.
+
+## 4. Phạm vi tài liệu HP cần thực hiện
+
+### CHƯƠNG 1 — GIỚI THIỆU ĐỀ TÀI
+
+Viết đầy đủ:
+
+- Bối cảnh bài toán logistics và thương mại điện tử.
+- Lý do xây dựng UTEExpress.
+- Mục tiêu của hệ thống.
+- Đối tượng sử dụng.
+- Các nhóm chức năng chính.
+- Phạm vi triển khai của đồ án.
+- Giới hạn và những tính năng chưa hoàn thiện.
+- Giới thiệu ngắn công nghệ sử dụng.
+
+Không trình bày những tính năng đang DEFERRED hoặc chưa nghiệm thu như đã hoàn thành.
+
+### CHƯƠNG 2 — KIẾN TRÚC VÀ CÔNG NGHỆ
+
+Phân tích kiến trúc thực tế của UTEExpress.
+
+Nội dung cần có:
+
+**2.1. Kiến trúc tổng thể**
+
+- Kiến trúc Spring Boot và cách tổ chức các lớp.
+- Web UI sử dụng Thymeleaf/Bootstrap/JavaScript theo repository.
+- Backend Controller, Service, Repository.
+- Entity/JPA và PostgreSQL.
+- Spring Security.
+- Database migrations bằng Flyway.
+- Các thành phần email, thông báo và lưu trữ nếu thực sự tồn tại.
+- Các kết nối giữa người dùng, ứng dụng và database.
+
+**2.2. Công nghệ**
+
+Đọc `pom.xml` và cấu hình thực tế để ghi đúng phiên bản:
+
+- Java.
+- Spring Boot.
+- Spring Security.
+- Spring Data JPA.
+- PostgreSQL.
+- Flyway.
+- Maven.
+- Thymeleaf/Bootstrap/JavaScript.
+- Các thư viện cần thiết khác.
+
+Không đoán phiên bản.
+
+**2.3. Cấu trúc source code**
+
+Mô tả package structure và nhiệm vụ của những package quan trọng.
+
+Giải thích sự khác nhau giữa:
+
+- Controller.
+- DTO.
+- Service.
+- Repository.
+- Entity.
+- Security configuration.
+- Database migration.
+- Frontend templates/static resources.
+
+**2.4. Sơ đồ kiến trúc**
+
+Tạo ít nhất:
+
+1. System Context Diagram.
+2. Application Architecture Diagram.
+3. Backend Layer Diagram.
+4. Authentication/Security Flow Diagram.
+5. Database interaction diagram.
+
+Sơ đồ phải phản ánh source thực tế.
+
+Ưu tiên Mermaid/PlantUML hoặc công cụ sơ đồ có thể xuất SVG/PNG chất lượng cao.
+
+Không dùng sơ đồ AI tự tạo có thành phần không tồn tại trong project.
+
+### CHƯƠNG 4 — AUTHENTICATION, AUTHORIZATION VÀ SECURITY
+
+Phân tích source hiện có và viết hướng dẫn xây dựng các chức năng thuộc phạm vi HP.
+
+Bao gồm khi được xác nhận tồn tại:
+
+- User Registration.
+- Login.
+- Logout.
+- Email OTP Verification.
+- Forgot Password.
+- Reset Password.
+- JWT authentication.
+- Session/cookie handling.
+- Password hashing.
+- Role-based authorization.
+- CSRF protection.
+- Ownership checks.
+- JWT revocation/token version.
+- OTP expiry/rate limiting.
+- Input validation và error handling.
+
+Với từng chức năng phải trình bày:
+
+1. Mục đích.
+2. Actor.
+3. Điều kiện đầu vào.
+4. Quy trình xử lý.
+5. Activity Diagram.
+6. Sequence Diagram nếu luồng phức tạp.
+7. Controller thực tế.
+8. Service thực tế.
+9. Repository/Entity/DTO liên quan.
+10. Ảnh hoặc đoạn source code minh họa.
+11. Giải thích source code theo từng bước.
+12. Ảnh giao diện tương ứng.
+13. Điều kiện thành công/thất bại.
+14. Các biện pháp bảo mật.
+15. Test cases/evidence hiện có.
+
+Ví dụ về trình bày source:
+
+**Chức năng đăng nhập**
+
+- Controller tiếp nhận dữ liệu.
+- Security/service xác minh thông tin.
+- Kiểm tra tài khoản và trạng thái.
+- Tạo hoặc thiết lập thông tin xác thực.
+- Gửi cookie/token.
+- Chuyển hướng giao diện.
+- Xử lý trường hợp sai mật khẩu, tài khoản chưa kích hoạt hoặc không đủ quyền.
+
+Tên class/method/route phải lấy từ source thực tế, không dùng tên ví dụ rồi trình bày như code của dự án.
+
+**Bảo mật là phần quan trọng của HP.**
+
+Cần diễn giải rõ nguyên tắc Least Privilege, authentication và authorization khác nhau như thế nào, nhưng liên hệ trực tiếp với implementation.
+
+Ghi nhận QA-01 theo phạm vi nghiệm thu thực tế; không tuyên bố production security PASS nếu SCA/operational checks vẫn NOT RUN hoặc DEFERRED.
+
+### CHƯƠNG 5 — ACCOUNT, ADDRESS, SHOP, PRODUCT, CATALOG VÀ SHARED UI
+
+Đọc và giải thích các module HP sở hữu trong Master Plan.
+
+**Account/Profile**
+- Xem và chỉnh sửa thông tin cá nhân.
+- Đổi mật khẩu.
+- Avatar nếu có.
+- Các bước xác minh và giới hạn truy cập.
+
+**Address**
+- CRUD địa chỉ.
+- Địa chỉ mặc định.
+- Ownership và concurrency nếu được triển khai.
+
+**Shop**
+- Đăng ký Shop.
+- Theo dõi trạng thái.
+- Các điều kiện xử lý và phê duyệt theo ranh giới role thực tế.
+
+**Product/Catalog**
+- Cấu trúc sản phẩm.
+- Hiển thị danh sách và chi tiết.
+- Tìm kiếm, lọc, phân trang, sắp xếp nếu có.
+- Ảnh sản phẩm và inventory boundary.
+- Cách Controller/Service/Repository phối hợp.
+
+**Shared UI**
+- Layout chung.
+- Navbar, footer, breadcrumbs, alert.
+- Form/table/modal.
+- Các màn hình responsive.
+- Các trường hợp hiển thị menu theo role.
+
+Phải đối chiếu UI-01 và UI-02 với source đã merge.
+
+Nếu một chức năng thực tế do TD hoặc QĐ sở hữu, chỉ mô tả phần integration boundary của HP, không nhận ownership hoặc viết trùng chương của họ.
+
+Với mỗi nhóm chức năng, tạo sơ đồ hoạt động, hình source và ảnh giao diện phù hợp.
+
+### CHƯƠNG 12 — TÍCH HỢP, KIỂM THỬ, RELEASE VÀ DEMO
+
+Đối chiếu tên chương với Master Plan trước khi viết.
+
+Nội dung HP phụ trách:
+
+**12.1. Integration**
+
+- Mô tả sự phối hợp các module.
+- Dependency giữa Authentication, Catalog, Checkout, Order, Payment, Shipping.
+- Các integration contracts quan trọng.
+- Phân biệt trách nhiệm HP, TD và QĐ.
+
+**12.2. Testing**
+
+- Unit tests.
+- Integration tests.
+- PostgreSQL/Testcontainers.
+- Security tests.
+- Frontend/Node tests.
+- GitHub Actions.
+- QA-01, QA-02, QA-03 theo trạng thái thực tế.
+
+Không cộng trùng số lượng tests qua các lần chạy hoặc dùng kết quả trên SHA cũ làm bằng chứng cho source mới.
+
+**12.3. Release preparation**
+
+- Kiểm tra môi trường.
+- Cấu hình production-like hoặc local demo.
+- Biến môi trường.
+- Database migrations.
+- Build artifact.
+- Smoke tests.
+- Giới hạn release nếu các gate chưa được nghiệm thu.
+
+**12.4. Hướng dẫn setup ứng dụng**
+
+Tạo một file hướng dẫn setup độc lập và đưa nội dung tương ứng vào DOCX.
+
+Phải có:
+
+1. Yêu cầu môi trường.
+2. Cài Java/JDK.
+3. Maven Wrapper.
+4. PostgreSQL.
+5. Tạo database.
+6. Cấu hình environment variables.
+7. Flyway migration.
+8. Build project.
+9. Chạy Spring Boot.
+10. Truy cập website.
+11. Tài khoản demo theo fixture thực tế nếu có.
+12. Các lỗi thường gặp và cách xử lý.
+
+Không công bố mật khẩu thật, token, API key hoặc secret.
+
+Nếu cần database `.sql`, phối hợp QĐ để lấy bản export đúng theo migrations/seed; không tự xuất dữ liệu production hoặc thay đổi migration lịch sử.
+
+**12.5. Demo script**
+
+Chuẩn bị kịch bản video phần HP:
+
+- Giới thiệu bản thân và vai trò.
+- Giới thiệu ứng dụng UTEExpress.
+- Trình bày kiến trúc tổng thể.
+- Demo đăng ký/đăng nhập.
+- Demo chức năng Account/Catalog.
+- Giải thích các biện pháp bảo mật chính.
+- Giới thiệu cách chạy ứng dụng và GitHub.
+
+Viết lời thoại tự nhiên, phù hợp cho sinh viên báo cáo trước giảng viên.
+
+Không cần agent tự quay video có mặt HP; agent chỉ chuẩn bị storyboard, kịch bản và danh sách màn hình cần ghi hình.
+
+## 5. Tiêu chuẩn viết từng chức năng
+
+Không được chỉ viết mô tả lý thuyết.
+
+Mỗi chức năng phải có:
+
+**A. Tổng quan**
+- Tên chức năng và Task ID.
+- Role thực hiện.
+- Mục tiêu nghiệp vụ.
+
+**B. Sơ đồ hoạt động**
+- Entry point.
+- Validation.
+- Security/authorization.
+- Business processing.
+- Database operations.
+- Success/error handling.
+
+**C. Diễn giải source code**
+- File path.
+- Class và method.
+- Mã nguồn chọn lọc.
+- Giải thích.
+- Mối liên hệ với các lớp khác.
+
+**D. Hình giao diện**
+- Screenshot ứng dụng thật.
+- Tên màn hình/route.
+- Chú thích vùng chức năng.
+- Hình kết quả sau thao tác nếu có.
+
+**E. Kiểm thử**
+- Test class hoặc test case.
+- Kết quả đã xác minh.
+- Source SHA và evidence.
+- Giới hạn chưa kiểm thử.
+
+Không gắn nhãn screenshot thực tế cho ảnh được mô phỏng hoặc tạo bằng AI.
+
+## 6. Yêu cầu tạo hình
+
+Tạo hình ở định dạng phù hợp để chèn Word:
+
+- Sơ đồ kiến trúc.
+- Sơ đồ luồng nghiệp vụ.
+- Sơ đồ sequence.
+- Hình database/ERD liên quan.
+- Hình diễn giải source code.
+- Ảnh giao diện thực tế.
+
+Tất cả hình cần:
+
+- Rõ chữ khi mở trong DOCX.
+- Có số hình.
+- Có tiêu đề tiếng Việt.
+- Được nhắc đến trong đoạn giải thích.
+- Có nguồn hoặc tên file/source SHA.
+- Không chứa thông tin nhạy cảm.
+
+Ví dụ:
+
+`Hình 4.3. Luồng xử lý đăng nhập và xác thực JWT của UTEExpress.`
+
+Nếu không thể khởi chạy ứng dụng để chụp ảnh giao diện, hãy tận dụng screenshot có provenance đã được publish và phù hợp với source. Nếu không có, tạo placeholder rõ ràng, ghi MISSING SCREENSHOT và báo HP; không dựng ảnh giao diện giả.
+
+## 7. Danh sách prompt AI
+
+Giảng viên yêu cầu nộp các prompt nhóm đã sử dụng để AI hỗ trợ sinh code, sinh hình và những công việc liên quan.
+
+Hãy tìm prompt có thể truy xuất được từ:
+
+- Repository.
+- Tài liệu project.
+- Các prompt log.
+- Các tài liệu bàn giao.
+- Những file do HP cung cấp.
+
+Với mỗi prompt, ghi:
+
+- STT.
+- Người sử dụng.
+- Công cụ/model nếu có evidence.
+- Task ID.
+- Mục đích.
+- Prompt gốc.
+- Loại đầu ra.
+- Tài liệu/source liên quan.
+
+**Không tự tạo prompt rồi nói đó là prompt lịch sử đã sử dụng.**
+
+Nếu thiếu lịch sử prompt, lập danh sách cần HP/TD/QĐ bổ sung.
+
+Các prompt agent sử dụng mới trong nhiệm vụ này phải lưu riêng, có ngày và ghi đúng provenance.
+
+## 8. Định dạng báo cáo DOCX
+
+Xuất file Word chỉnh sửa được.
+
+Yêu cầu:
+
+- Trang A4.
+- Font Times New Roman hoặc theo mẫu giảng viên nếu có.
+- Nội dung dễ đọc, thống nhất.
+- Heading 1/2/3 có style đúng để tạo mục lục.
+- Đánh số chương/mục.
+- Header/footer và số trang.
+- Hình có caption.
+- Bảng có tiêu đề.
+- Đoạn source được trình bày rõ ràng, tránh tràn lề.
+- Mục lục tự động nếu công cụ hỗ trợ.
+- Tài liệu tham khảo và phụ lục.
+
+Không dùng Markdown làm sản phẩm cuối thay cho DOCX.
+
+Có thể tạo Markdown/diagram source làm bản trung gian, nhưng phải xuất DOCX cuối.
+
+Các chương HP phải được thiết kế để QĐ dễ ghép với chương của TD/QĐ mà không mất định dạng.
+
+## 9. Deliverables
+
+Tạo thư mục tài liệu đầu ra riêng, theo cấu trúc phù hợp với repository:
+
+```text
+docs/report/hp/
+├── HP_Chapters_1_2_4_5_12.docx
+├── SETUP_GUIDE.md
+├── HP_DEMO_SCRIPT.md
+├── HP_SOURCE_INDEX.md
+├── HP_AI_PROMPT_REGISTER.md
+├── figures/
+│   ├── architecture/
+│   ├── activity/
+│   ├── sequence/
+│   ├── source/
+│   └── screenshots/
+└── evidence/
+    └── documentation-validation.md
+```
+
+Có thể thay đổi cấu trúc nếu repository đã có DOC-01 convention chính thức.
+
+Nếu Master Plan quy định chương khác với danh sách dự kiến, phải dùng đúng cấu trúc đã xác minh và giải thích sự khác biệt trong báo cáo cho HP.
+
+Không tự tạo file rỗng rồi tuyên bố hoàn thành.
+
+## 10. Kiểm tra chất lượng
+
+Trước khi bàn giao:
+
+1. Đối chiếu từng mục tài liệu với Master Plan.
+2. Xác minh tên class, method, route và source path.
+3. Kiểm tra phiên bản công nghệ.
+4. Kiểm tra tất cả hình đã được nhúng vào DOCX.
+5. Kiểm tra các caption và tham chiếu chéo.
+6. Kiểm tra không có screenshot giả hoặc dữ liệu nhạy cảm.
+7. Kiểm tra DOCX mở được và không lỗi định dạng.
+8. Render DOCX để kiểm tra visual layout nếu có công cụ.
+9. Chạy `git diff --check`.
+10. Kiểm tra source code không bị thay đổi.
+11. Đảm bảo các tài liệu không ghi sai trạng thái QA/release.
+12. Kiểm tra các nội dung TD/QĐ ownership không bị nhận nhầm là của HP.
+
+Nếu công cụ DOCX hoặc render không khả dụng, ghi rõ limitation; không đổi yêu cầu sang PDF hoặc Markdown mà vẫn tuyên bố hoàn thành.
+
+## 11. Git và bàn giao
+
+- Commit phần tài liệu trên branch riêng.
+- Không commit các file chứa secret hoặc dữ liệu cá nhân.
+- Không tự merge PR.
+- Nếu cần publish, tạo PR vào `develop`.
+- Gửi cho HP link PR, exact HEAD, danh sách file và tình trạng kiểm tra.
+
+Nếu repository thay đổi trong quá trình viết, ghi rõ source snapshot và xem xét những đoạn tài liệu bị ảnh hưởng. Không âm thầm cập nhật nội dung theo source mới mà không ghi provenance.
+
+## 12. Báo cáo cuối cùng
+
+Khi hoàn tất, trả về:
+
+1. Master Plan đã đọc và SHA nếu xác minh được.
+2. Source SHA đã sử dụng.
+3. Danh sách chương đã hoàn thành.
+4. Số chức năng được diễn giải.
+5. Số sơ đồ kiến trúc, activity và sequence.
+6. Số hình source code và screenshot giao diện thật.
+7. Đường dẫn file DOCX.
+8. Đường dẫn SETUP_GUIDE và demo script.
+9. Danh sách prompt AI đã thu thập được.
+10. Phần thiếu, blocker và yêu cầu HP hỗ trợ.
+11. Branch/commit/PR đã tạo.
+12. Trạng thái `READY FOR HP REVIEW` hoặc `PARTIAL — MISSING EVIDENCE`.
+
+**Bắt đầu thực hiện ngay: đọc Master Plan và inventory source, sau đó viết tài liệu đầy đủ. Không dừng ở bước lập kế hoạch hoặc chỉ tạo outline.**

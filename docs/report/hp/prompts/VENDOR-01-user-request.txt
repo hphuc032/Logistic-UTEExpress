@@ -1,0 +1,1944 @@
+Bạn là Senior Spring Boot Engineer phụ trách VENDOR-01 của project UTEExpress.
+
+REPOSITORY:
+https://github.com/hphuc032/Logistic-UTEExpress
+
+OWNER:
+Hoàng Phúc
+
+TASK:
+VENDOR-01 — Shop Registration Foundation
+
+SPRINT:
+S1
+
+PRIORITY:
+P0
+
+TARGET:
+develop
+
+TASK BRANCH:
+feature/vendor-01-shop-registration
+
+
+==================================================
+1. PURPOSE
+==================================================
+
+VENDOR-01 xây dựng nền tảng đăng ký Shop cho một tài khoản UTEExpress.
+
+Business flow:
+
+ACTIVE USER
+   ↓
+đăng nhập bằng AUTH-02
+   ↓
+gửi đơn đăng ký Shop
+   ↓
+Shop = PENDING
+   ↓
+Admin/Manager review ở ADMIN-03 sau này
+   ↓
+APPROVED
+   ↓
+User được cấp VENDOR role ở ADMIN-03
+   ↓
+có thể truy cập /vendor/**
+
+VENDOR-01 KHÔNG tự phê duyệt Shop.
+
+VENDOR-01 KHÔNG tự cấp role VENDOR.
+
+
+==================================================
+2. HARD PRECONDITION — CHECK BEFORE CODING
+==================================================
+
+Trước tiên:
+
+git fetch origin
+git switch develop
+git pull --ff-only origin develop
+
+Kiểm tra:
+
+git status
+git log -5 --oneline
+
+Sau đó inspect GitHub/local history để xác nhận:
+
+AUTH-01 merged
+AUTH-02 merged
+AUTH-03 merged
+
+AUTH-03 phải có trong develop.
+
+Nếu AUTH-03 vẫn chỉ tồn tại ở:
+
+feature/auth-03-email-otp
+
+hoặc PR AUTH-03 vẫn chưa merge:
+
+STOP.
+
+Không tạo stacked VENDOR-01 trên AUTH-03 branch.
+
+Report:
+
+VENDOR-01 BLOCKED:
+AUTH-03 is not merged into develop.
+
+Không code tiếp.
+
+Nếu AUTH-03 đã merge:
+
+git switch -c feature/vendor-01-shop-registration
+
+
+==================================================
+3. CURRENT ARCHITECTURE
+==================================================
+
+UTEExpress hiện là Spring Boot modular monolith:
+
+Controller
+   ↓
+Service
+   ↓
+Repository
+   ↓
+PostgreSQL
+
+Technologies:
+
+- Java 21
+- Spring Boot 4.1.1
+- Maven Wrapper
+- Spring MVC
+- Thymeleaf
+- Bootstrap
+- Spring Security
+- JWT HttpOnly cookie
+- stateless authentication
+- CSRF enabled
+- JPA/Hibernate
+- PostgreSQL
+- Flyway
+- Testcontainers PostgreSQL 17.6
+- @Version optimistic locking
+
+Existing auth contract:
+
+GUEST = unauthenticated
+
+Roles:
+
+USER
+VENDOR
+MANAGER
+ADMIN
+SHIPPER
+
+Security routes:
+
+/user/**
+→ USER or VENDOR
+
+/vendor/**
+→ VENDOR
+
+/manager/**
+→ MANAGER
+
+/admin/**
+→ ADMIN
+
+/shipper/**
+→ SHIPPER
+
+JWT roles are NOT trusted from JWT claims.
+
+Every authenticated request reloads current roles from DB.
+
+
+==================================================
+4. WHY SHOP REGISTRATION MUST NOT USE /vendor/**
+==================================================
+
+A normal USER applying to become a Vendor does NOT yet have:
+
+ROLE_VENDOR
+
+Therefore:
+
+DO NOT put shop application under:
+
+/vendor/register
+/vendor/shop/register
+
+Those routes require VENDOR authority
+and create a circular authorization problem.
+
+Use an authenticated USER route.
+
+Recommended:
+
+GET  /user/shop/register
+POST /user/shop/register
+
+Recommended application/status page:
+
+GET /user/shop
+
+or:
+
+GET /user/shop/application
+
+Choose one consistent design after inspecting current UI conventions.
+
+The route must remain under:
+
+/user/**
+
+so USER and existing VENDOR can reach it according to current SecurityConfig.
+
+
+==================================================
+5. INSPECT BEFORE IMPLEMENTATION
+==================================================
+
+Inspect at minimum:
+
+pom.xml
+
+src/main/java/com/uteexpress/security/
+- SecurityConfig
+- RoleCode
+- CurrentUserProvider
+- CurrentAccountIdProvider
+- SecurityContextCurrentAccountIdProvider
+- UteExpressPrincipal
+
+src/main/java/com/uteexpress/identity/
+- UserEntity
+- UserStatus
+- UserRepository
+- UserRoleRepository
+- IdentityAuthenticationService
+
+AUTH-03 code after merge.
+
+src/main/java/com/uteexpress/governance/
+- audit architecture
+- category implementation
+
+src/main/java/com/uteexpress/order/
+- Order entity
+- ORD-01 migration
+- deferred FK documentation
+
+src/main/resources/
+- templates/layout
+- fragments/navbar
+- application.yml
+- db/migration/
+
+docs/
+- DATABASE_SCHEMA.md
+- DATABASE_CONVENTIONS.md
+- security.md
+- AUTH-02-completion-report.md
+- AUTH-03-completion-report.md
+- ORD-01-domain-core.md
+- current progress docs
+
+tests:
+- JWT/security integration patterns
+- CategoryIT / CategoryWebTest
+- AUTH-03 PostgreSQL tests
+
+
+==================================================
+6. RETURN IMPLEMENTATION PLAN FIRST
+==================================================
+
+Before writing code, return:
+
+VENDOR-01 IMPLEMENTATION PLAN
+
+A. Current develop SHA
+B. AUTH-03 merge confirmation
+C. Shop database model
+D. Shop status model
+E. Ownership model
+F. Registration routes
+G. DTO/form design
+H. Slug strategy
+I. Validation rules
+J. Authentication/authorization strategy
+K. One-shop-per-user enforcement
+L. Duplicate/race handling
+M. Future ADMIN-03 integration boundary
+N. Future PROD-00 dependency
+O. ORD-01 deferred FK impact
+P. Flyway migration plan
+Q. PostgreSQL test plan
+R. MVC/security test plan
+S. Files expected to change
+
+Only after that begin implementation.
+
+
+==================================================
+7. DATABASE CONTRACT
+==================================================
+
+DATABASE_SCHEMA already defines:
+
+shops
+
+Owner:
+Hoàng Phúc
+
+Fields:
+
+- id
+- owner_id
+- name
+- slug
+- logo_key
+- banner_key
+- description
+- pickup_address
+- status
+- rejection_reason
+- version
+
+Required relationship:
+
+owner_id → users.id
+
+Cardinality:
+
+one User → zero or one Shop
+
+Therefore:
+
+owner_id MUST be UNIQUE.
+
+
+==================================================
+8. SHOP TABLE
+==================================================
+
+Create Flyway migration for:
+
+uteexpress.shops
+
+Recommended columns:
+
+id BIGINT identity PK
+
+owner_id BIGINT NOT NULL
+
+name VARCHAR(...) NOT NULL
+
+slug VARCHAR(...) NOT NULL
+
+logo_key VARCHAR(...) NULL
+
+banner_key VARCHAR(...) NULL
+
+description TEXT / bounded varchar according to project convention
+
+pickup_address VARCHAR(...) NOT NULL
+
+status VARCHAR(...) NOT NULL
+
+rejection_reason VARCHAR(...) NULL
+
+created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+version BIGINT NOT NULL DEFAULT 0
+
+
+==================================================
+9. REQUIRED DATABASE CONSTRAINTS
+==================================================
+
+Must include:
+
+PK shops.id
+
+FK:
+shops.owner_id
+→ users.id
+
+UNIQUE:
+owner_id
+
+UNIQUE:
+slug
+
+CHECK:
+name not blank
+
+CHECK:
+slug valid
+
+CHECK:
+pickup_address not blank
+
+CHECK:
+version >= 0
+
+CHECK:
+status only approved enum values
+
+Rejection reason consistency should be enforced where reasonably possible.
+
+No cascade delete from user.
+
+Do not delete a Shop automatically when User is deleted/disabled.
+
+
+==================================================
+10. MIGRATION VERSION
+==================================================
+
+DO NOT use a migration timestamp from this prompt blindly.
+
+At implementation time inspect:
+
+src/main/resources/db/migration/
+
+Find highest MERGED migration version.
+
+AUTH-03 and/or SHIP-00 may have introduced newer migrations.
+
+Create:
+
+VyyyyMMddHHmmss__hp_vendor01_shops.sql
+
+where version sorts AFTER all currently merged migrations.
+
+Do NOT:
+
+- edit merged migrations
+- enable Flyway out-of-order
+- enable ddl-auto update
+- rename shared applied migrations
+
+
+==================================================
+11. SHOP STATUS
+==================================================
+
+Create explicit enum.
+
+Use only statuses required for current workflow.
+
+Recommended initial contract:
+
+PENDING
+APPROVED
+REJECTED
+
+Do NOT invent:
+
+SUSPENDED
+BANNED
+DELETED
+CLOSED
+
+unless an existing project source already defines them.
+
+Initial application:
+
+PENDING
+
+Only ADMIN-03 will later perform:
+
+PENDING → APPROVED
+
+or:
+
+PENDING → REJECTED
+
+
+==================================================
+12. REJECTION REASON
+==================================================
+
+On initial Vendor application:
+
+rejection_reason = NULL
+
+VENDOR-01 does not allow applicant to set it.
+
+ADMIN-03 owns rejection reason later.
+
+Never accept:
+
+rejectionReason
+
+from shop-registration request.
+
+
+==================================================
+13. VENDOR ROLE — CRITICAL
+==================================================
+
+VENDOR-01 MUST NOT grant:
+
+ROLE_VENDOR
+
+when user submits a Shop application.
+
+After registration:
+
+User remains ROLE_USER.
+
+Shop status:
+
+PENDING.
+
+Role VENDOR will be granted only after successful Shop approval
+in ADMIN-03.
+
+This prevents users from self-elevating privileges.
+
+
+==================================================
+14. JWT BEHAVIOR
+==================================================
+
+Do NOT modify JWT structure.
+
+Do NOT add vendor status to JWT.
+
+AUTH-02 already reloads roles from PostgreSQL each request.
+
+Therefore in future ADMIN-03:
+
+when VENDOR role is assigned in DB,
+the next authenticated request can see the new role.
+
+No new JWT claim is required.
+
+No manual JWT role claim update.
+
+
+==================================================
+15. AUTHENTICATED OWNER
+==================================================
+
+Owner MUST come from:
+
+CurrentAccountIdProvider
+
+Example concept:
+
+Long ownerId = currentAccountIdProvider.requireCurrentAccountId();
+
+Never accept ownerId from:
+
+request parameter
+form
+hidden input
+URL
+JavaScript
+
+
+==================================================
+16. MASS ASSIGNMENT PROTECTION
+==================================================
+
+Registration form must NOT bind:
+
+ownerId
+status
+rejectionReason
+version
+logoKey
+bannerKey
+role
+approved
+vendor
+
+Use explicit DTO and/or @InitBinder allowlist.
+
+
+==================================================
+17. SHOP REGISTRATION FORM
+==================================================
+
+Recommended fields:
+
+name
+slug
+description
+pickupAddress
+
+Do NOT implement file upload in VENDOR-01.
+
+logo_key:
+
+NULL
+
+banner_key:
+
+NULL
+
+Image upload belongs to a later Shop management task.
+
+This avoids introducing storage infrastructure into VENDOR-01.
+
+
+==================================================
+18. NAME VALIDATION
+==================================================
+
+Shop name:
+
+@NotBlank
+
+trim before persistence.
+
+Recommended max:
+
+120 characters
+
+or use another existing documented project limit if found.
+
+Reject whitespace-only values.
+
+Render escaped.
+
+
+==================================================
+19. SLUG CONTRACT
+==================================================
+
+Slug is public identifier.
+
+Recommended:
+
+lowercase ASCII
+
+pattern:
+
+^[a-z0-9]+(?:-[a-z0-9]+)*$
+
+Examples:
+
+memory-flower
+ute-tech-shop
+phuc-store-01
+
+Reject:
+
+../admin
+ABC SHOP
+<script>
+shop_
+shop--test
+
+Do not silently trust arbitrary URL strings.
+
+
+==================================================
+20. SLUG STRATEGY
+==================================================
+
+Choose ONE clear strategy after inspection:
+
+Option A:
+user enters slug
+
+OR
+
+Option B:
+server derives slug from shop name.
+
+For VENDOR-01, prefer explicit validated slug
+unless existing project conventions strongly prefer generated slugs.
+
+If user enters slug:
+
+trim
+lowercase Locale.ROOT
+validate pattern
+
+Do not perform dangerous aggressive transliteration without tests.
+
+
+==================================================
+21. UNIQUE SLUG RACE
+==================================================
+
+Do not rely solely on:
+
+existsBySlug()
+
+Database UNIQUE constraint remains final authority.
+
+Service can pre-check for UX,
+but must catch:
+
+DataIntegrityViolationException
+
+and map safely to:
+
+CONFLICT
+
+or a safe validation message.
+
+
+==================================================
+22. ONE SHOP PER USER
+==================================================
+
+Rule:
+
+one authenticated user can own at most one Shop.
+
+Enforce at BOTH layers:
+
+Service check:
+
+exists/findByOwnerId
+
+AND database:
+
+UNIQUE(owner_id)
+
+This handles concurrent duplicate submissions.
+
+
+==================================================
+23. EXISTING SHOP APPLICATION
+==================================================
+
+If user already has a Shop:
+
+do not create another.
+
+Behavior should depend on current shop:
+
+PENDING:
+show application status.
+
+APPROVED:
+show that Shop already exists / appropriate safe link.
+
+REJECTED:
+for VENDOR-01 do NOT automatically create a new second Shop.
+
+Existing row should remain canonical.
+
+Do NOT solve re-application/resubmission policy unless Master Plan explicitly requires it.
+
+If resubmission behavior is undefined:
+
+report it as deferred to ADMIN-03 / VENDOR-02.
+
+
+==================================================
+24. ENTITY DESIGN
+==================================================
+
+Create:
+
+Shop
+
+under an appropriate business module,
+for example:
+
+com.uteexpress.shop
+
+Do not place Shop in identity/security.
+
+Suggested structure:
+
+shop/
+  controller/
+  dto/
+  entity/
+  repository/
+  service/
+
+
+==================================================
+25. ENTITY MUTABILITY
+==================================================
+
+Shop entity should NOT expose generic:
+
+setOwnerId()
+setStatus()
+setRejectionReason()
+
+Provide narrow domain creation factory.
+
+Example concept:
+
+Shop.pendingApplication(...)
+
+Initial state is internally fixed:
+
+PENDING
+
+owner is trusted service input.
+
+Future ADMIN-03 can add controlled transition methods
+through its own reviewed task.
+
+
+==================================================
+26. @VERSION
+==================================================
+
+Shop is versioned according to DB plan.
+
+Use:
+
+@Version
+Long version
+
+Persist:
+
+version BIGINT NOT NULL DEFAULT 0
+
+Even if VENDOR-01 does not yet edit shop data,
+this prepares safe ADMIN-03/VENDOR-02 mutations.
+
+
+==================================================
+27. CREATED_AT / UPDATED_AT
+==================================================
+
+Follow DB conventions.
+
+Use:
+
+Instant
+UTC
+
+created_at:
+not null
+
+updated_at:
+not null
+
+Any later mutation must update updated_at.
+
+Do not use local date/time for persistence.
+
+
+==================================================
+28. SHOP SERVICE
+==================================================
+
+Create service, e.g.:
+
+ShopRegistrationService
+
+Responsibilities:
+
+- resolve authenticated account ID
+- ensure caller can apply
+- ensure caller has no existing Shop
+- normalize input
+- persist PENDING Shop
+- handle unique conflict safely
+- return DTO/view
+
+Controller must not access repository/entity.
+
+
+==================================================
+29. METHOD SECURITY
+==================================================
+
+Service should require authenticated buyer role.
+
+Recommended:
+
+@PreAuthorize(
+  "hasAnyAuthority(USER, VENDOR)"
+)
+
+using RoleCode contract, NOT hardcoded `"ROLE_USER"` strings.
+
+Example style consistent with repo:
+
+hasAnyAuthority(
+ T(com.uteexpress.security.RoleCode).USER.authority(),
+ T(com.uteexpress.security.RoleCode).VENDOR.authority()
+)
+
+A VENDOR may call the status view,
+but cannot create second shop because ownership constraint blocks it.
+
+
+==================================================
+30. USER STATUS
+==================================================
+
+AUTH-02 permits only ACTIVE authenticated accounts.
+
+Therefore authenticated shop registration naturally requires ACTIVE account.
+
+Do not duplicate PENDING email activation logic.
+
+Do not change UserStatus.
+
+Do not activate accounts here.
+
+
+==================================================
+31. CONTROLLER
+==================================================
+
+Recommended routes:
+
+GET /user/shop
+
+Purpose:
+show current Shop/application status.
+
+GET /user/shop/register
+
+Purpose:
+render registration form if no Shop exists.
+
+POST /user/shop/register
+
+Purpose:
+create PENDING Shop.
+
+All are authenticated under existing:
+
+/user/**
+
+No SecurityConfig weakening should be necessary.
+
+
+==================================================
+32. CSRF
+==================================================
+
+POST /user/shop/register
+
+must remain CSRF protected.
+
+Do NOT:
+
+csrf.disable()
+
+Do not add CSRF exemptions.
+
+Thymeleaf form must contain token.
+
+
+==================================================
+33. USER EXPERIENCE
+==================================================
+
+After successful application:
+
+redirect:
+
+/user/shop
+
+Display safe status:
+
+"Đơn đăng ký cửa hàng đang chờ xét duyệt."
+
+Do not tell user they are already VENDOR.
+
+Do not show `/vendor/dashboard`
+unless they actually have VENDOR permission.
+
+
+==================================================
+34. STATUS PAGE
+==================================================
+
+GET /user/shop should safely display:
+
+Shop name
+slug
+status
+
+If REJECTED and rejection_reason is present in the future,
+it may be displayed escaped.
+
+Never use:
+
+th:utext
+
+for Shop/user-controlled text.
+
+
+==================================================
+35. PUBLIC SHOP ROUTES
+==================================================
+
+Current SecurityConfig already treats:
+
+/shops/**
+
+as public.
+
+VENDOR-01 should NOT repurpose:
+
+/shops/**
+
+for authenticated management.
+
+That namespace is intended for public Shop/catalog browsing.
+
+Authenticated application stays:
+
+/user/shop/**
+
+
+==================================================
+36. NO VENDOR DASHBOARD YET
+==================================================
+
+Do not implement:
+
+/vendor/dashboard
+
+unless already explicitly assigned to VENDOR-01 by existing project documentation.
+
+Primary VENDOR-01 deliverable is:
+
+Shop application foundation.
+
+Later tasks own full Vendor management functionality.
+
+
+==================================================
+37. OUT OF SCOPE
+==================================================
+
+Do NOT implement:
+
+- ADMIN-03 approval/rejection UI
+- assigning VENDOR role
+- removing VENDOR role
+- Shop suspension
+- Product CRUD
+- PROD-00
+- Product images
+- Storefront
+- Vendor order management
+- Voucher
+- Promotion
+- Revenue dashboard
+- Shop logo upload
+- Shop banner upload
+- file storage
+- shipping
+- WebSocket
+- wallet
+- commission management
+- shop deletion
+
+
+==================================================
+38. ADMIN-03 FUTURE CONTRACT
+==================================================
+
+ADMIN-03 depends on VENDOR-01.
+
+VENDOR-01 should leave clean architecture for later:
+
+PENDING
+→ APPROVED / REJECTED
+
+But do NOT implement the transitions now unless necessary for entity invariants.
+
+Document:
+
+ADMIN-03 must:
+
+- approve/reject Shop
+- safely set rejection reason
+- assign VENDOR role on approval
+- handle current user role/tokenVersion policy according to Security owner contract
+- audit governance action
+
+
+==================================================
+39. USER ROLE ASSIGNMENT
+==================================================
+
+Do not call:
+
+UserRoleRepository.assign(...VENDOR...)
+
+inside VENDOR-01.
+
+Tests must assert:
+
+USER applies for Shop
+→ Shop created PENDING
+→ user's role remains USER
+
+
+==================================================
+40. ORD-01 INTEGRATION NOTE
+==================================================
+
+ORD-01 currently has:
+
+orders.shop_id
+
+with Shop FK deferred until shops exists
+according to phased FK plan.
+
+Once VENDOR-01 adds shops table,
+this parent dependency becomes available.
+
+However:
+
+DO NOT silently modify TD-owned Order migration/entity
+inside VENDOR-01.
+
+Do not edit merged ORD-01 migration.
+
+Report in completion report:
+
+"orders.shop_id → shops.id deferred FK is now unblocked
+and requires a new follow-up migration coordinated with ORD owner."
+
+If team explicitly wants VENDOR-01 to add this cross-owned FK:
+
+STOP and request OWNER REVIEW before implementing.
+
+
+==================================================
+41. PROD-00 DEPENDENCY
+==================================================
+
+Products require:
+
+shop_id → shops
+
+Therefore VENDOR-01 is a prerequisite for PROD-00.
+
+Do not create products table now.
+
+Completion report should note:
+
+PROD-00 unblocked after VENDOR-01 merge.
+
+
+==================================================
+42. REPOSITORY METHODS
+==================================================
+
+Likely required concepts:
+
+Optional<Shop> findByOwnerId(Long ownerId)
+
+boolean existsByOwnerId(Long ownerId)
+
+boolean existsBySlug(String slug)
+
+Optional<Shop> findBySlug(String slug)
+
+Only add methods actually used.
+
+Do not expose unrestricted management APIs unnecessarily.
+
+
+==================================================
+43. DTO
+==================================================
+
+Create clean DTOs.
+
+Example:
+
+ShopRegistrationRequest
+
+fields:
+
+name
+slug
+description
+pickupAddress
+
+ShopView
+
+fields:
+
+id
+name
+slug
+description
+pickupAddress
+status
+rejectionReason
+version
+
+Do not expose Entity directly to MVC.
+
+
+==================================================
+44. PICKUP ADDRESS
+==================================================
+
+For VENDOR-01:
+
+pickup_address is Shop business data stored directly in shops table.
+
+Do not create Address FK unless existing schema says so.
+
+Validate:
+
+@NotBlank
+reasonable max length
+
+Do not confuse with USER-02 multiple buyer addresses.
+
+
+==================================================
+45. XSS SAFETY
+==================================================
+
+Test Shop name/description such as:
+
+<script>alert(1)</script>
+
+Rendered HTML must escape it.
+
+Use:
+
+th:text
+
+not:
+
+th:utext
+
+
+==================================================
+46. ERROR BEHAVIOR
+==================================================
+
+Handle safely:
+
+duplicate slug
+duplicate owner
+invalid form
+missing authenticated account
+repository conflict
+stale data if applicable
+
+Do not expose:
+
+SQL
+constraint name
+stack trace
+internal user ID
+
+
+==================================================
+47. NO OWNER ENUMERATION
+==================================================
+
+No public endpoint like:
+
+/shop/by-owner?id=...
+
+for vendor registration.
+
+Current Shop application must derive owner from authenticated principal.
+
+
+==================================================
+48. DATABASE INTEGRATION TESTS
+==================================================
+
+Use Testcontainers PostgreSQL 17.6.
+
+At minimum verify:
+
+1. Flyway migration succeeds
+
+2. Hibernate ddl-auto=validate succeeds
+
+3. shops table exists
+
+4. owner FK exists
+
+5. duplicate owner rejected
+
+6. duplicate slug rejected
+
+7. invalid status rejected
+
+8. blank/invalid slug rejected
+
+9. version starts at 0
+
+10. invalid user FK rejected
+
+11. second Flyway migrate:
+    0 new migrations
+
+
+==================================================
+49. BUSINESS INTEGRATION TESTS
+==================================================
+
+Using real persisted users:
+
+ACTIVE ROLE_USER:
+→ can create one Shop
+
+created Shop:
+status = PENDING
+
+rejection_reason:
+NULL
+
+owner_id:
+matches authenticated user
+
+user role after creation:
+still USER
+
+same user submits again:
+→ rejected / conflict
+
+different users:
+→ may each own one Shop
+
+duplicate slug across users:
+→ rejected
+
+request ownerId spoof:
+→ ignored/not bindable
+
+request status=APPROVED:
+→ ignored/not bindable
+
+request role=VENDOR:
+→ no effect
+
+
+==================================================
+50. JWT INTEGRATION TEST
+==================================================
+
+Important test:
+
+1. persist ACTIVE USER
+2. login through AUTH-02
+3. obtain real JWT auth cookie
+4. POST /user/shop/register with:
+   JWT cookie
+   CSRF token
+5. Shop created for JWT principal account ID
+6. no owner ID accepted from client
+7. role remains USER
+
+This proves trusted ownership boundary end-to-end.
+
+
+==================================================
+51. AUTHORIZATION TESTS
+==================================================
+
+Anonymous:
+
+GET /user/shop
+→ 401
+
+Anonymous:
+
+POST /user/shop/register
+→ denied
+
+USER:
+→ allowed
+
+VENDOR:
+→ allowed to view current Shop
+→ duplicate creation prevented
+
+ADMIN-only principal without USER/VENDOR:
+follow existing route policy
+→ must not gain buyer/vendor application capability accidentally
+
+MANAGER:
+same principle.
+
+SHIPPER:
+must not apply.
+
+
+==================================================
+52. CSRF TESTS
+==================================================
+
+Authenticated USER:
+
+POST without CSRF
+→ 403
+
+POST with CSRF
+→ reaches application service
+
+JWT cookie alone:
+must not bypass CSRF.
+
+
+==================================================
+53. CONCURRENCY
+==================================================
+
+Two concurrent attempts from same owner must not create:
+
+2 Shops.
+
+Database UNIQUE owner_id is final authority.
+
+Two concurrent same slug attempts:
+at most one succeeds.
+
+Service must convert persistence race into safe conflict,
+not HTTP 500 stacktrace.
+
+
+==================================================
+54. SLUG CASE
+==================================================
+
+Ensure:
+
+My-Shop
+my-shop
+
+cannot become logically duplicated.
+
+Preferred:
+
+normalize lowercase before persistence.
+
+DB contains canonical lowercase slug.
+
+Database check enforces canonical format.
+
+
+==================================================
+55. SECURITY REGRESSION
+==================================================
+
+VENDOR-01 must NOT modify:
+
+JWT claims
+JWT cookie
+tokenVersion behavior
+OTP logic
+login flow
+logout flow
+
+except test mocks/wiring strictly required by new Shop service.
+
+
+==================================================
+56. AUTH-03 REGRESSION
+==================================================
+
+After AUTH-03 merge:
+
+registration
+OTP verification
+login
+
+must remain green.
+
+Do not modify email verification just to support Vendor.
+
+
+==================================================
+57. TEST PROFILE
+==================================================
+
+Existing application-test profile excludes persistence.
+
+For MVC tests:
+
+mock Shop service where appropriate.
+
+For persistence/business tests:
+
+use postgres-it/Testcontainers.
+
+Do not introduce H2.
+
+
+==================================================
+58. ARCHITECTURE
+==================================================
+
+Follow existing rules:
+
+Controller
+→ Service
+→ Repository
+
+Controller must not depend on:
+
+Repository
+Entity
+
+DTO must not depend on:
+
+Repository
+Controller
+
+Do not weaken ArchitectureTest broadly.
+
+If legitimate module dependency fails architecture rule:
+
+STOP
+and report OWNER REVIEW REQUIRED.
+
+
+==================================================
+59. AUDIT LOG
+==================================================
+
+Do not introduce governance AuditLog coupling merely to create a Shop
+unless existing project contract explicitly requires Shop self-application auditing.
+
+ADMIN-03 approval/rejection is the governance action
+that definitely needs audit.
+
+If Agent thinks application creation itself requires AuditLog:
+
+report it in OWNER REVIEW REQUIRED before adding cross-module dependency.
+
+
+==================================================
+60. NO HARD DELETE
+==================================================
+
+Do not implement Shop deletion.
+
+Later business records will reference Shop.
+
+Use status lifecycle instead.
+
+
+==================================================
+61. UI
+==================================================
+
+Use existing UI-01 shared layout.
+
+Create clean responsive Thymeleaf pages.
+
+Suggested:
+
+templates/shop/application.html
+templates/shop/register.html
+
+or equivalent consistent naming.
+
+No custom frontend framework.
+
+Bootstrap only according to existing conventions.
+
+
+==================================================
+62. NAVBAR
+==================================================
+
+Optional narrow change:
+
+Authenticated USER with no Shop:
+"Đăng ký bán hàng"
+
+Authenticated USER with Shop:
+"Cửa hàng của tôi"
+
+But do not add complex dynamic DB query globally
+to every navbar request unless necessary.
+
+Prefer keeping VENDOR-01 focused.
+
+If navbar integration creates unnecessary coupling:
+defer it.
+
+
+==================================================
+63. DOCUMENTATION
+==================================================
+
+Create:
+
+docs/VENDOR-01-completion-report.md
+
+Document:
+
+- Shop schema
+- one Shop per user
+- initial PENDING status
+- authenticated owner source
+- no client ownerId
+- no self-grant VENDOR role
+- ADMIN-03 approval deferred
+- logo/banner upload deferred
+- PROD-00 dependency unblocked
+- ORD-01 shop FK follow-up note
+
+
+==================================================
+64. DATABASE_SCHEMA DOC
+==================================================
+
+Do not rewrite master schema unnecessarily.
+
+Only update docs if implementation status needs recording.
+
+Keep original ownership/dependency contracts intact.
+
+
+==================================================
+65. REGRESSION COMMANDS
+==================================================
+
+Run:
+
+.\mvnw.cmd clean test
+
+.\mvnw.cmd package
+
+Docker running:
+
+.\mvnw.cmd -Ppostgres-it verify
+
+Then:
+
+git diff --check
+
+git status
+
+
+==================================================
+66. POSTGRES-IT MERGE GATE
+==================================================
+
+Because VENDOR-01 adds:
+
+- shops table
+- FK users
+- unique owner
+- unique slug
+- persistence business logic
+
+PostgreSQL integration PASS is mandatory.
+
+If Docker unavailable:
+
+READY FOR REVIEW can be YES
+
+READY FOR MERGE = NO
+
+
+==================================================
+67. ACCEPTANCE CHECKLIST
+==================================================
+
+Before PR verify:
+
+[ ] AUTH-03 merged before branch creation
+[ ] branch from latest develop
+[ ] migration version > current merged max
+[ ] shops table exists
+[ ] owner FK → users
+[ ] owner unique
+[ ] slug unique
+[ ] status CHECK
+[ ] version CHECK
+[ ] @Version present
+[ ] initial status PENDING
+[ ] rejection_reason NULL initially
+[ ] owner from CurrentAccountIdProvider
+[ ] no ownerId client binding
+[ ] no status client binding
+[ ] USER role remains USER
+[ ] VENDOR role NOT auto-assigned
+[ ] second Shop for same owner rejected
+[ ] duplicate slug rejected
+[ ] CSRF enabled
+[ ] /user/** used for registration
+[ ] /vendor/** not used for pre-approval application
+[ ] no Shop delete
+[ ] no Product implementation
+[ ] no ADMIN-03 implementation
+[ ] no file upload
+[ ] no JWT modifications
+[ ] AUTH regression passes
+[ ] postgres-it passes
+
+
+==================================================
+68. COMMITS
+==================================================
+
+Use meaningful commits.
+
+Example:
+
+feat(shop): add shop registration persistence
+
+feat(shop): implement authenticated shop application
+
+test(shop): cover ownership and registration security
+
+docs(shop): document VENDOR-01 contract
+
+Do not fake-split trivial commits.
+
+
+==================================================
+69. PUSH
+==================================================
+
+Push:
+
+git push -u origin feature/vendor-01-shop-registration
+
+Do not push directly to:
+
+develop
+main
+
+
+==================================================
+70. CREATE PR
+==================================================
+
+PR:
+
+feature/vendor-01-shop-registration
+        ↓
+develop
+
+Suggested title:
+
+VENDOR-01: implement shop registration foundation
+
+
+==================================================
+71. PR BODY
+==================================================
+
+Use:
+
+## Scope
+
+Authenticated Shop application foundation.
+
+## Implemented
+
+- shops persistence
+- one Shop per account
+- unique Shop slug
+- PENDING application state
+- trusted authenticated ownership
+- registration/status UI
+- optimistic version foundation
+
+## Security
+
+- owner derived server-side
+- no ownerId mass assignment
+- no status mass assignment
+- no self-grant VENDOR authority
+- CSRF remains enabled
+- anonymous application blocked
+
+## Deferred
+
+- Shop approval/rejection → ADMIN-03
+- VENDOR role assignment → ADMIN-03
+- Shop management → VENDOR-02
+- Product foundation → PROD-00
+- images/uploads → later task
+
+## Integration notes
+
+- shops now unblocks PROD-00
+- ORD-01 orders.shop_id FK follow-up requires coordination with TD
+- do not edit merged ORD-01 migration
+
+## Verification
+
+List ACTUAL command results only.
+
+
+==================================================
+72. DO NOT MERGE
+==================================================
+
+Agent MUST NOT merge PR.
+
+No direct:
+
+develop commit
+main commit
+
+No develop → main PR.
+
+
+==================================================
+73. FINAL REPORT
+==================================================
+
+Return exactly:
+
+VENDOR-01 TASK COMPLETION REPORT
+
+Branch:
+Base:
+Base SHA:
+Head:
+PR:
+PR URL:
+
+PRECONDITIONS:
+AUTH-01:
+AUTH-02:
+AUTH-03:
+Created from latest develop:
+
+DATABASE:
+Migration:
+Table:
+Owner FK:
+Owner unique:
+Slug unique:
+Status constraint:
+Version:
+Hibernate validate:
+Flyway validate:
+
+SHOP:
+Initial status:
+One shop per user:
+Rejection reason initial:
+Logo upload implemented:
+Banner upload implemented:
+
+OWNERSHIP:
+Owner source:
+Client ownerId accepted:
+Client status accepted:
+Client role accepted:
+
+ROLES:
+Applicant role before:
+Applicant role after:
+VENDOR auto-assigned:
+ADMIN-03 owns approval:
+
+ROUTES:
+Status page:
+Registration GET:
+Registration POST:
+Pre-approval /vendor route used:
+
+SECURITY:
+Authentication required:
+CSRF:
+JWT changed:
+OTP changed:
+Mass assignment protected:
+XSS escaping:
+
+INTEGRATION:
+PROD-00 unblocked:
+orders.shop_id FK follow-up:
+Cross-owner migration changed:
+
+FILES CREATED:
+- ...
+
+FILES MODIFIED:
+- ...
+
+TESTS:
+Entity/domain:
+MVC:
+CSRF:
+Authorization:
+Owner spoof:
+Status spoof:
+Duplicate owner:
+Duplicate slug:
+Concurrency:
+JWT integration:
+PostgreSQL integration:
+Architecture regression:
+AUTH regression:
+
+BUILD:
+clean test:
+package:
+postgres-it:
+git diff --check:
+
+CI:
+Status:
+Run URL:
+
+DEFERRED:
+ADMIN-03:
+VENDOR-02:
+PROD-00:
+Uploads:
+
+OWNER REVIEW REQUIRED:
+- ...
+
+MAIN MODIFIED:
+NO
+
+DEVELOP DIRECT COMMIT:
+NO
+
+MERGED:
+NO
+
+READY FOR REVIEW:
+YES / NO
+
+READY FOR MERGE:
+YES / NO
+
+READY FOR MERGE must be NO unless:
+
+- AUTH-03 is already merged into develop
+- branch is based on current develop
+- clean test PASS
+- package PASS
+- postgres-it PASS
+- CI PASS
+- migration ordering correct
+- no security blocker
+- VENDOR role is NOT self-assigned

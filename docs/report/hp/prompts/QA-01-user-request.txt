@@ -1,0 +1,584 @@
+# UTEExpress — QA-01 Security Acceptance & Regression
+
+You are a Senior Application Security Engineer, Java/Spring Security Engineer, PostgreSQL Integration Tester and Security QA Lead.
+
+You are working for HP, the project leader and QA-01 owner of UTEExpress.
+
+Your mission is to **implement and complete QA-01 Security Acceptance according to the original UTEExpress Master Project Plan**, verify all applicable P0/P1 security requirements, remediate confirmed defects within approved boundaries, and produce a reproducible Security Test Report.
+
+Work autonomously through all safe and authorized local development/testing steps. Do not stop at the first successful test run.
+
+## 1. Project context
+
+Repository:
+
+`https://github.com/hphuc032/Logistic-UTEExpress`
+
+Technology:
+
+- Java 21, Spring Boot 4
+- Spring Security, JWT in secure cookies, BCrypt
+- Thymeleaf, Bootstrap, JavaScript
+- PostgreSQL 17.6, JPA, Flyway
+- WebSocket/STOMP
+- Maven Wrapper
+- JUnit, MockMvc and PostgreSQL integration tests
+- Node tests
+
+Team responsibilities:
+
+- HP: QA-01 owner, Identity, Security, Account, Catalog, Shop, Integration
+- QĐ: QA-01 reviewer, Governance, Shipping, Notification, Review
+- TD: Commerce, Order, Payment and financial reporting
+
+### Confirmed project milestone
+
+INT-02 PR #62 has been merged into `develop`.
+
+Merge commit:
+
+`798535b32ff81a011f34cfa01bbeb2d2dd0cb981`
+
+DASH-01 and DASH-02 were merged before INT-02.
+
+Verify the current repository and branch state before proceeding. Historical SHAs are references, not substitutes for fetching current source.
+
+## 2. Official QA-01 contract
+
+Read `UTEExpress_Master_Project_Plan(1).docx` before implementation.
+
+The Master Task Board defines:
+
+- Task ID: QA-01
+- Sprint: S5
+- Name: Security acceptance
+- Owner: HP
+- Reviewer: QĐ
+- Priority: P0
+- Dependency: INT-02
+- Planned branch: `test/qa-01-security`
+- Deliverable: Security Test Report
+- Scope: Auth, OTP, RBAC, ownership, upload, CSRF regression and evidence
+
+Also review:
+
+- Section H — Security Matrix and Validation
+- Section L — Definition of Done
+- Section M — Integration Strategy and Code Ownership
+- Section N — Testing Plan
+- Section K — Git workflow
+- INT-02 test matrix, findings and evidence
+
+**Do not expand QA-01 into QA-02, QA-03, UI-02 or REL-01.**
+
+Cross-module security checks are in scope, but the acceptance report must clearly distinguish QA-01 findings from other task ownership.
+
+## 3. Phase 0 — Baseline and Git safety
+
+Before making changes:
+
+1. Inspect current branch and working tree.
+2. Record current HEAD and latest `develop`.
+3. Verify INT-02 merge commit exists.
+4. Inspect existing tests and previous security evidence.
+5. Identify uncommitted and untracked user files.
+6. Protect all existing work.
+7. Create branch `test/qa-01-security` from the latest approved `develop`.
+
+If the branch already exists, inspect and continue it safely.
+
+Do not use:
+
+- `git reset --hard`
+- Destructive `git clean`
+- Force-push
+- Direct commits to `main` or `develop`
+- Destructive operations against existing databases
+
+Use an isolated PostgreSQL/Testcontainers environment.
+
+Run baseline verification before adding tests, recording exact command, SHA, test counts, exit codes and failure details.
+
+## 4. Phase 1 — Security acceptance matrix
+
+Build a traceability matrix covering all applicable Master Plan Security Matrix requirements.
+
+For each control, record:
+
+- Requirement ID
+- Relevant role/actor
+- Endpoint/service
+- Expected secure behavior
+- Existing test
+- Missing test
+- Actual result
+- Evidence
+- Finding ID, if applicable
+
+Prioritize demonstrated security requirements, not arbitrary generic security checklists.
+
+### A. Authentication and JWT
+
+Verify:
+
+- Valid credentials authenticate correctly.
+- Invalid credentials are denied.
+- Passwords are stored using BCrypt.
+- Pending/locked/inactive accounts cannot authenticate.
+- JWT signature, issuer, audience, expiration and required claims are validated.
+- JWT cookie configuration is correct for the approved HTTP/HTTPS environments.
+- HttpOnly and SameSite restrictions are enforced.
+- Secure is enforced where HTTPS is required.
+- Logout invalidates previously issued tokens through tokenVersion.
+- Password change/reset invalidates previously issued tokens.
+- Role changes invalidate previously issued tokens.
+- Account lock invalidates previously issued tokens.
+- Roles are reloaded from persisted authority, not trusted from stale JWT claims.
+- JWT is not stored in localStorage.
+- Authentication is not duplicated through an independent HTTP session-login mechanism.
+
+Use the project's existing JWT contracts as source of truth.
+
+Avoid introducing a new refresh-token framework or MFA system.
+
+### B. OTP security
+
+Verify:
+
+- Registration creates the correct pending account state.
+- OTP activation requires the correct purpose.
+- Reset OTP cannot be reused for activation and vice versa.
+- Expired OTP is rejected.
+- Already-consumed OTP is rejected.
+- Incorrect OTP increments the relevant attempt counter.
+- Maximum attempts are enforced.
+- Resend cooldown is enforced.
+- Old OTP is invalidated after resend.
+- OTP consumption is atomic under concurrent requests.
+- Duplicate normalized email/username registration is rejected.
+- No account-existence disclosure beyond the approved response contract.
+- OTP/password-reset endpoints follow configured anti-abuse limits.
+- Raw OTP and its sensitive values are absent from application logs and API responses.
+
+Master Plan reference values include five-minute expiry, maximum five attempts and resend cooldown of at least 60 seconds. Verify their actual implementation and configuration before asserting compliance.
+
+Use deterministic Clock fixtures and PostgreSQL integration tests for race conditions.
+
+Do not log real OTP values as evidence.
+
+### C. RBAC and authorization
+
+Test the six actors:
+
+- Guest
+- User
+- Vendor
+- Manager
+- Admin
+- Shipper
+
+Use the Master Plan H1/H2 permission matrix.
+
+Verify unauthorized access is denied at both HTTP and service boundaries where applicable.
+
+High-priority scenarios:
+
+- Guest cannot invoke authenticated commands.
+- User cannot access Vendor management.
+- Vendor cannot access another Vendor's Shop or products.
+- Manager cannot assign Admin roles or lock accounts.
+- Manager cannot approve/reject Shop applications where the matrix reserves that for Admin.
+- Manager cannot view Admin-only global audit and account reports.
+- Manager cannot access Admin financial reporting.
+- Admin cannot bypass Order state machine.
+- Admin cannot impersonate Buyer to create reviews.
+- Shipper can only access currently assigned deliveries.
+- Revoked roles immediately lose authorization according to the tokenVersion contract.
+- Last active Admin protection is enforced.
+
+Check endpoint security and direct service invocation.
+
+Do not consider a hidden UI link equivalent to authorization.
+
+### D. Ownership / BOLA / IDOR
+
+Verify owner-scoped access for:
+
+- Profile and Address
+- Cart and CartItem
+- Buyer Orders and returns
+- Vendor Shop and Product
+- Vendor Order and Dashboard
+- Shipper assigned Shipment
+- Review and ReviewMedia
+- Notification inbox and mark-read
+- Admin/Manager data scopes
+
+Create separate authorized accounts and owned resources.
+
+Attempt cross-account access using IDs from another actor.
+
+Test both read and mutation behavior.
+
+Verify rejected mutations do not alter persisted state.
+
+Ensure userId, shopId, commissionRate, paidAmount or role sent from the browser cannot override server-derived identity or authoritative values.
+
+Check scoped repository/service queries and DTO field whitelisting.
+
+### E. CSRF protection
+
+Because the application uses cookie-based JWT authentication, CSRF remains required.
+
+Verify:
+
+- POST/PATCH/DELETE requests without valid CSRF protection are denied.
+- Thymeleaf forms include valid CSRF inputs.
+- AJAX commands include the required CSRF header.
+- Login/logout and state-changing operations follow the approved CSRF policy.
+- Invalid or cross-session CSRF values are rejected.
+- No broad `csrf.disable()` or unrestricted ignoring matcher exists.
+- Any payment-provider callback exemption is narrow, justified and separately protected.
+
+Test representative endpoints from Identity, Shop, Order, Governance and Shipping.
+
+Verify denied requests have no unintended database side effects.
+
+### F. Upload and file security
+
+Inspect Avatar, ProductImage and ReviewMedia upload services.
+
+Verify:
+
+- Allowed JPEG/PNG/WebP formats.
+- File extension validation.
+- Declared MIME validation.
+- Real file-content validation.
+- File-size limits.
+- Image-count limits.
+- Dimension restrictions where specified.
+- Client filenames do not become filesystem paths.
+- Server-generated safe storage keys.
+- No path traversal.
+- No public executable SVG/HTML/script upload.
+- Storage outside executable application directories.
+- Ownership and role checks on upload/delete.
+- Restricted access to private media where required.
+- Safe handling of interrupted transactions and cleanup/reconciliation.
+
+Master Plan proposed limits:
+
+- Avatar: 2 MB.
+- Product/Review image: 5 MB per image.
+- Maximum five images per Product.
+- Maximum three images per Review.
+
+Confirm whether these are the final approved application limits before changing production settings.
+
+Use isolated synthetic files for tests. Do not upload malicious payloads to external services.
+
+### G. XSS, injection and output safety
+
+Review and test:
+
+- Thymeleaf output escaping.
+- Product description rendering.
+- Review comments.
+- Notification rendering.
+- Search and sorting parameters.
+- Error responses.
+- Dynamic SQL parameters.
+- User-controlled image names and metadata.
+
+Required behaviors:
+
+- User-controlled plain text remains escaped.
+- Unsafe HTML is not rendered as executable content.
+- Client notification rendering uses safe text APIs.
+- SQL values are parameterized.
+- Sort columns are whitelisted.
+- Invalid inputs do not produce stack traces or SQL errors in browser responses.
+- No mass assignment of sensitive Entity fields.
+
+Use harmless synthetic test strings and assertions.
+
+Do not run destructive SQL against shared environments.
+
+### H. WebSocket / STOMP security regression
+
+Although QĐ owns Notifications, QA-01 must verify relevant cross-module authorization requirements.
+
+Cover:
+
+- Authenticated handshake.
+- Invalid or expired JWT.
+- Wrong Origin.
+- Missing/invalid STOMP CSRF.
+- Private destination enforcement.
+- Cross-user subscription attempts.
+- Unauthorized publish to broker destinations.
+- Account lock after connection.
+- Logout/tokenVersion revocation.
+- Role revocation.
+- Sensitive information exposure.
+- Notifications available through authorized inbox recovery.
+
+Verify JWT and authorization checks on inbound frames as required by the current WS-02 contract.
+
+Preserve INT-02 transaction guarantees:
+
+- Persist inbox inside the business transaction.
+- Rollback leaves no successful notification.
+- WebSocket dispatch occurs after commit.
+
+Do not alter approved WebSocket design unless a confirmed security defect requires remediation.
+
+## 5. Phase 2 — Test coverage and execution
+
+Inspect existing tests before adding new ones.
+
+Avoid duplicating tests that already prove the same invariant.
+
+Add missing deterministic tests with clear names and assertions.
+
+Use:
+
+- JUnit and MockMvc for controller/security behavior.
+- Service tests for method authorization.
+- PostgreSQL/Testcontainers for persisted state, locking and transaction invariants.
+- Node tests where browser-side notification behavior is relevant.
+
+Map each test to actual Master Plan test cases, particularly authentication/OTP, ownership, governance, upload and T46/T47.
+
+Do not invent Txx numbers.
+
+Run focused suites after each related change, then full regression at final executable HEAD.
+
+## 6. Phase 3 — Vulnerability triage and remediation
+
+For each confirmed failure:
+
+1. Reproduce it.
+2. Identify the responsible security boundary.
+3. Record the exact expected and actual behavior.
+4. Assign severity with an explanation.
+5. Determine root cause.
+6. Implement a minimal remediation if within HP's ownership and approved contracts.
+7. Add a regression test.
+8. Re-run the affected tests.
+9. Verify no authorization or business invariant was weakened.
+
+If a defect belongs to TD/QĐ-owned business logic, report it with reproducible evidence and owner assignment.
+
+Do not silently rewrite their module.
+
+Do not use test skips, weakened expectations, broad security exemptions or mocks to conceal real failures.
+
+Prioritize Critical and High findings before cosmetic improvements.
+
+## 7. Phase 4 — Secret and dependency checks
+
+Perform available offline/local checks for:
+
+- Committed credentials.
+- JWT secrets.
+- Database passwords.
+- SMTP passwords.
+- OTP or token leakage.
+- Unnecessary sensitive logs.
+- Dependency vulnerability reports.
+
+If a dependency scanner or vulnerability database is unavailable, record NOT RUN rather than claiming no vulnerabilities.
+
+Distinguish scanner findings from confirmed exploitable weaknesses.
+
+Do not automatically upgrade Spring Boot, Hibernate, Spring Security or other major dependencies without compatibility review.
+
+Do not copy raw credentials into the report.
+
+## 8. Phase 5 — Full QA-01 regression
+
+Execute the repository's documented commands.
+
+On Windows:
+
+```powershell
+.\mvnw.cmd -B --no-transfer-progress -Ppostgres-it clean verify
+```
+
+Node:
+
+```powershell
+node --test --test-reporter=tap src/test/js/notifications.test.cjs
+```
+
+If the approved QA-03 evidence runner is available, use it according to its documented supported mode. Do not treat an unmerged Draft PR as automatically available on `develop`.
+
+Record:
+
+- Exact tested commit SHA.
+- Toolchain versions.
+- Test command.
+- Maven/Node exit codes.
+- Surefire counts.
+- PostgreSQL Failsafe counts.
+- Failures/errors/skips/flakes.
+- Timeout status.
+- Report hashes.
+- Git worktree state.
+- Relevant CI results when available.
+
+Do not reuse INT-02's 1,950 Java tests as evidence that the changed QA-01 source passed.
+
+If documentation-only commits follow the final test run, verify that executable inputs remain unchanged and record both SHAs.
+
+## 9. Phase 6 — Security acceptance report
+
+Create:
+
+`docs/testing/QA-01-security-report.md`
+
+`docs/testing/QA-01-security-matrix.md`
+
+`docs/testing/QA-01-findings.md`
+
+`docs/testing/QA-01-evidence-manifest.md`
+
+### Security report
+
+Include:
+
+- QA-01 objective and Master Plan scope.
+- Source branch and SHA.
+- Test environment.
+- Security controls examined.
+- Tests executed.
+- Security findings.
+- Confirmed remediations.
+- Regression outcomes.
+- Missing verification.
+- Final acceptance recommendation.
+
+### Security matrix
+
+Use:
+
+| ID | Control | Role/Endpoint | Test | Expected | Actual | Result | Evidence |
+|---|---|---|---|---|---|---|---|
+
+### Findings
+
+Each finding must include:
+
+- Finding ID
+- Severity
+- Affected component
+- Reproduction steps
+- Expected behavior
+- Actual behavior
+- Root cause
+- Risk
+- Remediation
+- Owner
+- Status
+- Test evidence
+
+### Evidence manifest
+
+Record:
+
+- Exact source SHA.
+- Test commands and exit codes.
+- Sanitized report paths.
+- SHA-256 hashes.
+- Counts and results.
+- Unexecuted checks.
+- Environmental limitations.
+
+Do not commit raw token, OTP, credentials, private data or unsanitized logs.
+
+## 10. Acceptance criteria
+
+QA-01 is **TECHNICALLY READY FOR QĐ REVIEW** only when:
+
+1. Master Plan security requirements are mapped to tests.
+2. Authentication and JWT controls pass.
+3. OTP security controls pass.
+4. RBAC and ownership checks pass.
+5. CSRF protections pass.
+6. Upload security checks pass.
+7. Required XSS/SQL injection regression passes.
+8. Required WebSocket security regression passes.
+9. All confirmed Critical/High QA-01 security findings are resolved.
+10. Required full regression tests pass.
+11. Evidence corresponds to the exact tested source.
+12. All remaining risks and unexecuted controls are documented.
+
+Do not mark QA-01 COMPLETED merely because full Maven tests pass.
+
+For final project completion:
+
+- HP prepares QA-01.
+- QĐ reviews the resulting PR.
+- GitHub CI and required review gates pass.
+- HP authorizes merge.
+- QA-01 may then be marked COMPLETED.
+
+If mandatory security checks cannot be performed, report BLOCKED or PARTIAL according to their actual importance.
+
+## 11. Git and scope restrictions
+
+Allowed:
+
+- Create QA-01 branch.
+- Add security tests.
+- Apply narrowly scoped HP-owned security fixes.
+- Update documentation.
+- Commit local changes.
+
+Without explicit HP authorization, do not:
+
+- Push to remote.
+- Create or approve PR.
+- Merge into develop/main.
+- Deploy production.
+- Change branch protection.
+- Rewrite history.
+- Delete untracked files.
+- Modify applied Flyway migrations.
+- Weaken security controls.
+- Change financial formulas or Order lifecycle.
+- Modify TD/QĐ-owned production logic without review.
+
+Preserve all meaningful author attribution.
+
+Keep test and remediation commits reviewable.
+
+## 12. Final response
+
+At completion report:
+
+1. Branch and exact HEAD SHA.
+2. Base develop SHA.
+3. Master Plan requirements covered.
+4. Security controls PASS/FAIL/NOT RUN.
+5. New tests added.
+6. Confirmed vulnerabilities and severity.
+7. Fixes implemented.
+8. Full Maven/PostgreSQL results.
+9. Node and tooling results.
+10. Evidence file paths.
+11. Remaining blockers.
+12. Commits created.
+13. Final recommendation.
+
+Use exactly one of:
+
+- `TECHNICALLY READY — PENDING QĐ REVIEW`
+- `BLOCKED — SECURITY FINDINGS`
+- `BLOCKED — REQUIRED VERIFICATION`
+- `PARTIAL — DOCUMENTED LIMITATIONS`
+
+Never report a security control as PASS without supporting evidence.
+
+**Begin now by reading the Master Plan, verifying the latest develop contains INT-02, then creating the safe QA-01 branch and running baseline security verification. Continue through implementation, remediation, full regression and final reporting without waiting for routine approval.**

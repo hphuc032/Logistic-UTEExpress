@@ -1,0 +1,72 @@
+[
+  {
+    "function": "4.3 Xác thực JWT trên từng request",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "4.4 Đăng xuất và thu hồi JWT",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "4.5 Xác minh email và gửi lại OTP",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "4.6 Yêu cầu khôi phục mật khẩu",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "4.7 Đặt lại mật khẩu bằng OTP",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "4.8 Phân quyền CSRF và ngân sách OTP",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "5.1 Hồ sơ cá nhân",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "5.2 Đổi mật khẩu khi đã đăng nhập",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "5.3 Ảnh đại diện và storage an toàn",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "5.4 Địa chỉ và địa chỉ mặc định",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "5.5 Đăng ký và theo dõi cửa hàng",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "5.6 Quản lý sản phẩm của Vendor",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "5.7 Ảnh sản phẩm và quyền đọc ảnh",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  },
+  {
+    "function": "5.9 Tìm kiếm lọc sắp xếp và phân trang",
+    "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
+    "status": "MISSING SCREENSHOT"
+  }
+]

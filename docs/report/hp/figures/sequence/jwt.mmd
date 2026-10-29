@@ -1,0 +1,12 @@
+sequenceDiagram
+participant A0 as Browser
+participant A1 as JwtAuthenticationFilter
+participant A2 as IdentityAuthenticationService
+participant A3 as PostgreSQL
+A0->>A1: Cookie token trên request
+A1->>A1: Decode qua JwtTokenService
+A1->>A2: findByUserId
+A2->>A3: Load ACTIVE roles tokenVersion
+A3->>A2: Account và roles đã persist
+A2->>A1: AuthAccountSnapshot
+A1->>A0: Tiếp tục chain hoặc401 protected

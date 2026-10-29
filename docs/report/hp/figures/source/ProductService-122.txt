@@ -1,0 +1,13 @@
+    public ProductImageView addImage(Long productId, @NotNull UploadContent upload, String altText) {
+        VendorShopData shop = approvedShop();
+        Product product = ownedForUpdate(productId, shop.shopId());
+        List<ProductImage> current = images.findByProductIdOrderByPositionAsc(product.getId());
+        if (current.size() >= MAX_IMAGES) throw new ApplicationException(ErrorCode.CONFLICT);
+        String normalizedAlt = normalizeAlt(altText);
+        final StoredFile stored;
+        try {
+            stored = storage.storeImage("products", upload, IMAGE_POLICY);
+        } catch (StorageException invalidImage) {
+            throw new ApplicationException(ErrorCode.VALIDATION_FAILED);
+        }
+        registerRollbackCleanup(stored.key());

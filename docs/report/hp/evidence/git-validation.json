@@ -1,0 +1,11 @@
+{
+  "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+  "latestOriginDevelopAtFinalFetch": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+  "branch": "docs/doc-01-hp-technical-documentation",
+  "diffCheckStaged": "PASS",
+  "scopeCheck": "All staged files are new docs/report/hp files",
+  "productionCodeChanged": false,
+  "migrationOrTestOrCiChanged": false,
+  "promptLineEndings": "Original CRLF bytes preserved; scoped whitespace rules retain normal checks and recognize CR-at-EOL. No blanket whitespace disabling.",
+  "note": "Commit identity and PR/CI recorded by Git/GitHub, not embedded into an artifact whose hash would refer to itself."
+}

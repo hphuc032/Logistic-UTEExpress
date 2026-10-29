@@ -1,0 +1,1938 @@
+Bạn là Senior Spring Boot Security Engineer phụ trách AUTH-02 của project UTEExpress.
+
+REPOSITORY:
+https://github.com/hphuc032/Logistic-UTEExpress
+
+OWNER:
+Hoàng Phúc
+
+TASK:
+AUTH-02 — Login + JWT Authentication + Logout
+
+SPRINT:
+S1
+
+PRIORITY:
+P0
+
+BASE:
+develop
+
+TASK BRANCH:
+feature/auth-02-login-jwt
+
+
+==================================================
+1. CURRENT PROJECT STATE
+==================================================
+
+Repository hiện tại là Spring Boot modular monolith.
+
+Đã merge vào develop:
+
+ARCH-01  ✅
+QA-00    ✅
+SEC-01   ✅
+DB-01    ✅
+UI-01    ✅
+ORD-00   ✅
+AUTH-01  ✅
+ADMIN-00 ✅
+
+develop hiện đã có:
+
+- Java 21
+- Spring Boot 4.1.1
+- Maven 3.9.11
+- Spring MVC
+- Thymeleaf
+- Bootstrap 5
+- Spring Security
+- BCryptPasswordEncoder
+- PostgreSQL
+- Flyway
+- Testcontainers
+- CSRF ENABLED
+- ddl-auto=validate
+- users
+- roles
+- user_roles
+- audit_logs
+- UserStatus:
+  PENDING_VERIFICATION
+  ACTIVE
+  LOCKED
+  DISABLED
+- users.token_version
+- RoleCode:
+  USER
+  VENDOR
+  MANAGER
+  ADMIN
+  SHIPPER
+- CurrentUserProvider
+- SecurityContextCurrentUserProvider
+- existing route authorization
+- GET/POST /register
+- shared UI layout
+- /admin/dashboard
+- /manager/dashboard
+
+AUTH-01 đã tạo account đăng ký với:
+
+status = PENDING_VERIFICATION
+email_verified_at = NULL
+token_version = 0
+role = USER
+
+AUTH-03 sau này mới activate email.
+
+Do đó:
+
+AUTH-02 PHẢI chỉ cho account ACTIVE đăng nhập.
+
+
+==================================================
+2. FIRST ACTION — DO NOT CODE IMMEDIATELY
+==================================================
+
+Chạy:
+
+git fetch origin
+git switch develop
+git pull --ff-only origin develop
+
+Kiểm tra:
+
+git status
+git log -1 --oneline
+
+Sau đó:
+
+git switch -c feature/auth-02-login-jwt
+
+KHÔNG lấy code từ PR #7 ORD-01.
+Không merge feature branch khác vào AUTH-02.
+
+Inspect tối thiểu:
+
+pom.xml
+
+src/main/java/com/uteexpress/
+- UteExpressApplication.java
+
+security/
+- SecurityConfig
+- CurrentUser
+- CurrentUserProvider
+- SecurityContextCurrentUserProvider
+- RoleCode
+- JsonAuthenticationEntryPoint
+- JsonAccessDeniedHandler
+
+identity/
+- UserEntity
+- RoleEntity
+- UserStatus
+- UserRepository
+- RoleRepository
+- UserRoleRepository
+- RegistrationService
+
+governance/
+- OpsDashboardService
+
+resources/
+- application.yml
+- application-local.yml
+- application-prod.yml
+- templates/layout
+- templates/fragments
+- navbar
+- register page
+
+tests/
+- SecurityFoundationTest
+- RegistrationControllerTest
+- AuthRegistrationIT
+- AuditLogIT
+- ArchitectureTest
+
+docs/
+- architecture.md
+- security.md
+- AUTH-01-completion-report.md
+- governance-audit.md
+
+Sau khi inspect, TRẢ TRƯỚC:
+
+AUTH-02 IMPLEMENTATION PLAN
+
+A. Current authentication state
+B. Login architecture
+C. Identity lookup boundary
+D. UserDetails / principal design
+E. JWT design
+F. JWT claims
+G. Cookie design
+H. CSRF + stateless design
+I. JWT filter flow
+J. Login flow
+K. Logout/token invalidation flow
+L. Role-loading strategy
+M. Test strategy
+N. Existing-test impact
+O. Files expected to change
+
+Sau đó mới code.
+
+
+==================================================
+3. AUTH-02 SCOPE
+==================================================
+
+AUTH-02 PHẢI triển khai:
+
+1. Login bằng username HOẶC email
+2. Spring Security authentication
+3. Application-owned UserDetailsService
+4. Custom authenticated principal
+5. JWT issue
+6. JWT signature validation
+7. JWT expiration validation
+8. issuer validation
+9. audience validation
+10. tokenVersion validation
+11. JWT authentication filter
+12. JWT lưu trong HttpOnly cookie
+13. role lấy lại từ DB trên mỗi authenticated request
+14. account status validation
+15. logout
+16. token invalidation bằng tokenVersion
+17. stateless authentication
+18. CSRF vẫn ENABLED
+19. Thymeleaf login page
+20. navbar authenticated state + logout action nếu triển khai sạch
+21. tests
+22. PostgreSQL/Testcontainers auth integration tests
+23. documentation
+
+
+==================================================
+4. OUT OF SCOPE
+==================================================
+
+KHÔNG triển khai:
+
+- Email OTP
+- gửi email
+- otp_tokens
+- verify OTP logic
+- activate account
+- forgot password
+- reset password
+- refresh token
+- refresh token table
+- remember-me
+- OAuth Google/Facebook
+- MFA
+- Redis session/token blacklist
+- rate limiting
+- account management
+- profile
+- address
+- Vendor registration
+- Order code
+- Admin account management
+- password change
+- VNPAY
+- WebSocket
+
+AUTH-03:
+Email OTP + activation.
+
+AUTH-04:
+Forgot/reset password.
+
+SEC-02:
+Security hardening/rate limiting later.
+
+
+==================================================
+5. NO NEW AUTH DATABASE TABLE
+==================================================
+
+AUTH-02 phải sử dụng schema đã có từ AUTH-01.
+
+KHÔNG tạo:
+
+jwt_tokens
+sessions
+refresh_tokens
+login_sessions
+token_blacklist
+
+Không cần Flyway migration mới trừ khi phát hiện blocker thật sự.
+
+Nếu Agent cho rằng cần migration:
+STOP và report OWNER REVIEW REQUIRED trước.
+
+users.token_version đã tồn tại và phải được sử dụng.
+
+
+==================================================
+6. LOGIN IDENTIFIER
+==================================================
+
+Login cho phép:
+
+- username
+HOẶC
+- email
+
+Normalization:
+
+trim
+lowercase Locale.ROOT
+
+Ví dụ:
+
+Phuc03
+phuc03
+
+phải cùng tìm một user.
+
+Email:
+
+Test@Example.com
+test@example.com
+
+phải cùng tìm một user.
+
+Không normalize password.
+
+
+==================================================
+7. IDENTITY AUTH QUERY BOUNDARY
+==================================================
+
+Security module KHÔNG được truy cập trực tiếp:
+
+identity.repository
+identity.entity
+
+qua cross-module dependency.
+
+Tạo một identity service + DTO contract phù hợp.
+
+Ví dụ concept:
+
+identity.dto.AuthAccountSnapshot
+
+chứa INTERNAL authentication information:
+
+- userId
+- username/displayUsername
+- passwordHash
+- active / status information cần thiết
+- tokenVersion
+- roleCodes
+
+DTO này:
+
+- không phải HTTP response
+- không expose ra controller
+- không serialize cho browser
+
+Identity service cung cấp tối thiểu:
+
+find/load account theo login identifier
+
+find/load account theo persisted user id
+
+load role codes
+
+invalidate tokenVersion khi logout
+
+Security sử dụng service/DTO boundary,
+không lấy UserEntity trực tiếp.
+
+
+==================================================
+8. USERDETAILSSERVICE
+==================================================
+
+AUTH-02 phải có application-owned UserDetailsService.
+
+Ví dụ concept:
+
+UteExpressUserDetailsService
+
+Không bật/generated Spring development user.
+
+UteExpressApplication hiện exclude:
+
+UserDetailsServiceAutoConfiguration
+
+Giữ safeguard đó nếu custom UserDetailsService vẫn hoạt động.
+
+Không tạo:
+
+in-memory user
+default password
+demo admin
+hardcoded credential
+
+Update SecurityFoundationTest:
+
+không còn assert "zero UserDetailsService" nếu AUTH-02 có app-owned bean.
+
+Thay vào đó verify:
+
+- đúng application UserDetailsService tồn tại
+- không có generated development user
+- không có hardcoded credential
+
+
+==================================================
+9. AUTHENTICATED PRINCIPAL
+==================================================
+
+Tạo custom principal, ví dụ:
+
+UteExpressPrincipal
+
+Nó cần tối thiểu:
+
+- Long userId
+- stable subject
+- displayUsername
+- tokenVersion
+- GrantedAuthority set
+
+Không expose password ngoài authentication machinery.
+
+Subject phải ổn định và server-owned.
+
+Khuyến nghị format:
+
+uteexpress:user:<id>
+
+JWT:
+
+sub = uteexpress:user:<id>
+
+Business modules KHÔNG được tự:
+
+Long.parseLong(authentication.getName())
+
+Nếu cần persisted account ID sau này,
+cung cấp narrow trusted security/identity service boundary.
+
+Không thay đổi ORD-00 trong AUTH-02.
+
+
+==================================================
+10. ACCOUNT STATUS
+==================================================
+
+CHỈ:
+
+ACTIVE
+
+được login và authenticated bằng JWT.
+
+Các status sau phải fail:
+
+PENDING_VERIFICATION
+LOCKED
+DISABLED
+
+Public login error phải generic.
+
+Không leak:
+
+"email tồn tại"
+"account locked"
+"account pending"
+"user không tồn tại"
+
+Ví dụ public message:
+
+"Không thể đăng nhập với thông tin đã cung cấp."
+
+Spring internal status có thể phân biệt,
+nhưng browser không được nhận chi tiết nhạy cảm.
+
+
+==================================================
+11. PASSWORD AUTHENTICATION
+==================================================
+
+Dùng PasswordEncoder bean hiện có:
+
+BCryptPasswordEncoder
+
+Ưu tiên Spring AuthenticationManager +
+application-owned UserDetailsService /
+authentication provider.
+
+Không tự viết password hashing.
+
+Không:
+
+password.equals(hash)
+raw password logging
+password response
+password in exception
+password in audit
+
+Nếu account không tồn tại,
+authentication path không được tạo timing leak rõ ràng.
+
+Ưu tiên behavior chuẩn của DaoAuthenticationProvider /
+Spring Security chống user-enumeration timing.
+
+
+==================================================
+12. JWT LIBRARY
+==================================================
+
+Ưu tiên dependency chính chủ Spring Security:
+
+spring-security-oauth2-jose
+
+Dùng version do Spring Boot BOM quản lý.
+
+KHÔNG pin version thủ công nếu BOM đã quản lý.
+
+Không tự implement:
+
+HMAC
+Base64 JWT parser
+signature algorithm
+
+Không dùng custom crypto.
+
+Nếu API Spring Security 7 / Boot 4 khác tutorial cũ,
+inspect actual dependency/API và dùng API đúng version hiện tại.
+
+
+==================================================
+13. JWT ALGORITHM
+==================================================
+
+Dùng HMAC SHA-256 / HS256 với secret >= 256 bit.
+
+Secret lấy từ ENV:
+
+JWT_SECRET_BASE64
+
+Secret là Base64 encoded random bytes.
+
+Startup production phải fail rõ nếu:
+
+- secret missing
+- Base64 invalid
+- decoded key < 32 bytes
+
+KHÔNG:
+
+hardcode production secret
+commit real secret
+print secret
+print JWT signing key
+
+
+==================================================
+14. JWT CONFIG
+==================================================
+
+Config concept:
+
+uteexpress:
+  security:
+    jwt:
+      issuer: uteexpress
+      audience: uteexpress-web
+      ttl: PT30M
+      cookie-name: UTEEXPRESS_AUTH
+      cookie-secure: true
+
+Environment:
+
+JWT_SECRET_BASE64
+
+Optional:
+
+JWT_COOKIE_SECURE
+
+Production default:
+
+Secure = true
+
+application-local.yml:
+
+có thể set cookie-secure=false
+để localhost HTTP chạy được.
+
+Không làm production default insecure.
+
+
+==================================================
+15. JWT CLAIMS
+==================================================
+
+JWT access token phải chứa:
+
+sub
+iat
+exp
+iss
+aud
+tokenVersion
+
+TTL:
+
+khoảng 30 phút.
+
+Không chứa:
+
+password
+passwordHash
+email
+address
+full User entity
+sensitive personal data
+
+QUAN TRỌNG:
+
+KHÔNG dùng role trong JWT làm authorization authority.
+
+Tốt nhất:
+không lưu role trong JWT.
+
+Role phải được đọc lại từ DB mỗi request.
+
+
+==================================================
+16. WHY ROLE MUST COME FROM DB
+==================================================
+
+JWT chỉ chứng minh:
+
+- token được server ký
+- account subject
+- tokenVersion
+- thời gian validity
+
+Mỗi request authenticated:
+
+1. verify JWT
+2. resolve user từ DB
+3. require ACTIVE
+4. compare tokenVersion
+5. load current roles từ DB
+6. map role code -> RoleCode -> authority
+7. create Authentication
+
+Điều này đảm bảo role thay đổi trong DB
+không bị stale đến hết JWT lifetime.
+
+Không trust:
+
+roles
+authorities
+isAdmin
+isVendor
+
+từ token/browser.
+
+
+==================================================
+17. TOKEN VERSION
+==================================================
+
+JWT claim:
+
+tokenVersion
+
+phải bằng:
+
+users.token_version
+
+mỗi request.
+
+Mismatch:
+
+token INVALID.
+
+Các trường hợp tương lai:
+
+- logout
+- reset password
+- role change
+- account lock
+
+có thể increment token_version.
+
+AUTH-02 bắt buộc implement logout invalidation.
+
+
+==================================================
+18. LOGOUT SEMANTICS
+==================================================
+
+POST /logout
+
+CSRF protected.
+
+Logout hợp lệ phải:
+
+1. resolve authenticated user server-side
+2. increment users.token_version atomically
+3. clear auth cookie
+4. clear SecurityContext
+5. redirect an toàn, ví dụ:
+   /login?logout=true
+
+Theo project contract,
+logout hiện là logout-all-devices.
+
+Không nhận:
+
+userId
+tokenVersion
+role
+
+từ browser.
+
+Nếu token đã expired/invalid:
+
+POST /logout vẫn nên có khả năng clear auth cookie
+mà không tạo security bypass.
+
+Không tạo GET logout state change.
+
+
+==================================================
+19. TOKEN VERSION UPDATE
+==================================================
+
+Implement ở identity service.
+
+Phải atomic.
+
+Không:
+
+read tokenVersion
++ calculate browser-side
++ write arbitrary value.
+
+Có thể dùng trusted repository update:
+
+token_version = token_version + 1
+
+và giữ updated_at/version semantics đúng.
+
+Concurrent invalidations không được làm tokenVersion quay lùi.
+
+
+==================================================
+20. JWT COOKIE
+==================================================
+
+Auth cookie:
+
+Name:
+UTEEXPRESS_AUTH
+
+Required attributes:
+
+HttpOnly = true
+Secure = true in production
+SameSite = Lax
+Path = /
+Max-Age <= JWT TTL
+
+Không set Domain nếu không cần.
+
+JWT không được:
+
+- localStorage
+- sessionStorage
+- JavaScript variable
+- HTML
+- query parameter
+- URL fragment
+
+Không trả JWT trong response body.
+
+
+==================================================
+21. SESSIONLESS AUTHENTICATION
+==================================================
+
+JWT là authentication state chính.
+
+Configure Spring Security:
+
+SessionCreationPolicy.STATELESS
+
+Không lưu authenticated SecurityContext vào HttpSession.
+
+Không để hệ thống vô tình fallback sang JSESSIONID authentication.
+
+Test phải verify authentication vẫn hoạt động
+chỉ bằng JWT cookie.
+
+
+==================================================
+22. CSRF — VERY IMPORTANT
+==================================================
+
+JWT nằm trong browser cookie,
+do đó CSRF vẫn bắt buộc.
+
+KHÔNG:
+
+csrf.disable()
+
+Vì authentication stateless,
+không dùng HttpSessionCsrfTokenRepository.
+
+Dùng cookie-backed CSRF repository phù hợp,
+ví dụ CookieCsrfTokenRepository.
+
+CSRF token cookie khác auth JWT cookie.
+
+CSRF cookie có thể readable bởi browser/client,
+JWT cookie phải HttpOnly.
+
+Unsafe methods:
+
+POST
+PUT
+PATCH
+DELETE
+
+vẫn yêu cầu valid CSRF.
+
+Thymeleaf forms phải tiếp tục sinh hidden `_csrf`.
+
+
+==================================================
+23. SECURITYCONFIG
+==================================================
+
+AUTH-02 ĐƯỢC sửa SecurityConfig.
+
+Giữ nguyên role routes:
+
+/user/**:
+USER or VENDOR
+
+/vendor/**:
+VENDOR
+
+/manager/**:
+MANAGER
+
+/admin/**:
+ADMIN
+
+/shipper/**:
+SHIPPER
+
+Giữ public:
+
+/
+/products/**
+/categories/**
+/shops/**
+/login
+/register
+/verify-otp
+/forgot-password
+/reset-password
+static assets
+foundation
+health
+
+Add JWT filter vào đúng vị trí.
+
+Do not enable:
+
+httpBasic
+default formLogin
+generated user
+
+unless specifically required and fully controlled.
+
+POST /logout có thể permit request đến controller
+để expired-cookie user vẫn clear cookie,
+nhưng CSRF phải còn hiệu lực.
+
+
+==================================================
+24. JWT FILTER
+==================================================
+
+Implement OncePerRequestFilter.
+
+Flow:
+
+1. If SecurityContext already authenticated:
+   do not replace it.
+
+2. Find configured JWT auth cookie.
+
+3. Missing cookie:
+   continue chain.
+
+4. Token exists:
+   validate:
+   - HS256 signature
+   - issuer
+   - audience
+   - exp
+   - iat validity / clock skew
+   - subject
+   - tokenVersion
+
+5. Resolve account from DB.
+
+6. Require ACTIVE.
+
+7. Compare database tokenVersion.
+
+8. Load current roles FROM DB.
+
+9. Convert roles through RoleCode.
+
+10. Build authenticated principal.
+
+11. Put Authentication in SecurityContext.
+
+12. Continue chain.
+
+On:
+
+expired token
+bad signature
+wrong issuer
+wrong audience
+malformed token
+unknown user
+inactive user
+tokenVersion mismatch
+
+DO NOT throw 500.
+
+Clear authentication and continue anonymous.
+
+Then:
+
+protected route -> existing 401 handler
+public route -> can still render anonymously.
+
+Optionally expire invalid auth cookie safely.
+
+Never log raw token.
+
+
+==================================================
+25. CLOCK SKEW
+==================================================
+
+Use a small explicit clock skew if library supports it.
+
+Example:
+
+<= 60 seconds.
+
+Do not accept arbitrarily expired tokens.
+
+`iat` far in the future must be rejected.
+
+
+==================================================
+26. LOGIN FORM
+==================================================
+
+Create:
+
+templates/auth/login.html
+
+Use shared UI-01 layout.
+
+Fields:
+
+identifier
+password
+
+identifier label:
+Email hoặc tên đăng nhập
+
+Recommended autocomplete:
+
+identifier:
+username
+
+password:
+current-password
+
+Never pre-fill password.
+
+POST:
+
+/login
+
+Use:
+
+@Valid
+BindingResult
+
+Allowed fields only:
+
+identifier
+password
+
+No:
+
+role
+userId
+status
+tokenVersion
+
+
+==================================================
+27. LOGIN CONTROLLER
+==================================================
+
+GET /login
+
+renders login page.
+
+POST /login
+
+flow:
+
+1. validate form
+2. authenticate through Spring AuthenticationManager
+3. generic failure if AuthenticationException
+4. issue JWT
+5. set HttpOnly auth cookie
+6. POST-REDIRECT-GET
+
+No token in Model.
+
+No raw AuthenticationException message in UI.
+
+Safe success redirect.
+
+Recommended:
+
+ADMIN:
+ /admin/dashboard
+
+MANAGER:
+ /manager/dashboard
+
+all other roles:
+ /
+
+If multiple roles:
+ADMIN can take precedence.
+
+Do NOT accept arbitrary `redirect=` URL in AUTH-02.
+
+Avoid open redirect.
+
+
+==================================================
+28. PENDING USER BEHAVIOR
+==================================================
+
+Remember:
+
+AUTH-01 public registrations are PENDING_VERIFICATION.
+
+AUTH-02 MUST NOT activate them.
+
+Therefore normal newly registered user cannot login yet.
+
+This is CORRECT until AUTH-03.
+
+Do not modify:
+
+status
+email_verified_at
+
+during login.
+
+
+==================================================
+29. NAVBAR
+==================================================
+
+If modifying shared navbar:
+
+Anonymous:
+
+Đăng nhập
+Đăng ký
+
+Authenticated:
+
+display safe username
+logout form using POST
+CSRF token included
+
+Use:
+
+th:text
+
+Never th:utext for username.
+
+Do not expose JWT.
+
+If adding authenticated model state,
+keep it view-only and safe.
+
+Do not add a new large dependency solely for navbar
+if a simple controller advice / safe model solution works.
+
+
+==================================================
+30. CURRENT USER CONTRACT
+==================================================
+
+CurrentUserProvider must keep working.
+
+After JWT authentication:
+
+CurrentUser.subject
+
+should be stable server-owned subject.
+
+CurrentUser.roles
+
+must reflect roles loaded from DB this request.
+
+CurrentUser.authorities
+
+must match RoleCode authorities.
+
+Do not break existing consumers.
+
+
+==================================================
+31. CURRENT ACCOUNT ID BOUNDARY
+==================================================
+
+Business modules must never parse JWT subject.
+
+If AUTH-02 needs/provides persisted user ID access,
+create a narrow trusted service boundary such as:
+
+security.service.CurrentAccountIdProvider
+
+Concept:
+
+Optional<Long> currentAccountId()
+Long requireCurrentAccountId()
+
+Implementation may read the custom authenticated principal.
+
+This is preferable to:
+
+Long.parseLong(authentication.getName())
+
+Do NOT modify ORD-01 in this task.
+
+
+==================================================
+32. ROLE VALIDATION
+==================================================
+
+DB role values must map through:
+
+RoleCode
+
+Unknown role:
+
+fail closed.
+
+Do not create authority with:
+
+"ROLE_" + databaseString
+
+without RoleCode validation.
+
+No role claim from JWT is authoritative.
+
+
+==================================================
+33. TEST PROFILE WARNING
+==================================================
+
+Current application-test.yml disables:
+
+DataSource
+Hibernate
+Flyway
+
+Existing HTTP/security/UI tests run without DB.
+
+New authentication components may depend on identity persistence.
+
+DO NOT break:
+
+FoundationHttpTest
+SecurityFoundationTest
+UiLayoutTest
+RegistrationControllerTest
+OpsDashboardTest
+
+Use test-side mocks where appropriate.
+
+Do NOT add H2.
+
+Do NOT add @Profile hacks to production code just to pass tests.
+
+
+==================================================
+34. JWT SECRET IN TESTS
+==================================================
+
+Production JWT secret must be ENV-only.
+
+Tests may use an explicit TEST-ONLY Base64 secret.
+
+It must be obviously non-production.
+
+Unit/HTTP profile can configure it in test resources.
+
+PostgreSQL integration profile also needs a safe test JWT secret.
+
+Do not force developers to put a real secret in GitHub.
+
+Do not weaken production missing-secret validation.
+
+
+==================================================
+35. EXISTING POSTGRES-IT
+==================================================
+
+`-Ppostgres-it verify` currently runs real PostgreSQL 17.6 tests.
+
+AUTH-02 must not break:
+
+AUTH-01 persistence tests
+ADMIN-00 audit tests
+DB baseline tests
+
+If JWT config causes existing PostgreSQL IT contexts to fail due missing secret,
+provide test-only configuration for the Maven postgres-it test lifecycle.
+
+Do NOT weaken production config.
+
+
+==================================================
+36. LOGIN SECURITY TESTS
+==================================================
+
+Test at least:
+
+ACTIVE username + correct password
+→ login success
+
+ACTIVE email + correct password
+→ login success
+
+case-insensitive normalized identifier
+→ login success
+
+wrong password
+→ generic failure
+
+unknown user
+→ same generic public failure
+
+PENDING_VERIFICATION
+→ denied
+
+LOCKED
+→ denied
+
+DISABLED
+→ denied
+
+Password/token never appears in HTML response.
+
+
+==================================================
+37. JWT UNIT TESTS
+==================================================
+
+Test:
+
+valid token
+→ accepted
+
+expired
+→ rejected
+
+tampered signature
+→ rejected
+
+wrong issuer
+→ rejected
+
+wrong audience
+→ rejected
+
+missing/invalid subject
+→ rejected
+
+missing tokenVersion
+→ rejected
+
+future iat beyond allowed skew
+→ rejected
+
+JWT contains:
+sub
+iat
+exp
+iss
+aud
+tokenVersion
+
+JWT does NOT contain:
+password
+passwordHash
+email
+
+Role authority must not depend on token role claim.
+
+
+==================================================
+38. FILTER TESTS
+==================================================
+
+Valid cookie + ACTIVE user + matching tokenVersion
+→ authenticated
+
+No cookie
+→ anonymous
+
+Malformed cookie
+→ anonymous, no 500
+
+Expired cookie
+→ anonymous
+
+tokenVersion mismatch
+→ anonymous
+
+user becomes LOCKED after token issue
+→ old token no longer authenticates
+
+user becomes DISABLED
+→ old token no longer authenticates
+
+role changes in DB
+→ next request uses CURRENT DB roles
+
+This last test is IMPORTANT.
+
+
+==================================================
+39. AUTHORIZATION TESTS
+==================================================
+
+Using real JWT cookie:
+
+USER:
+cannot access /admin/**
+
+ADMIN:
+can access /admin/dashboard
+
+MANAGER:
+can access /manager/dashboard
+
+ADMIN without MANAGER:
+manager route follows existing project policy
+
+No JWT:
+protected route -> 401
+
+Correct JWT wrong role:
+-> 403
+
+
+==================================================
+40. CSRF TESTS
+==================================================
+
+POST /login without CSRF
+→ 403
+
+POST /login with valid CSRF
+→ authentication attempted
+
+POST /logout without CSRF
+→ 403
+
+POST /logout with valid CSRF
+→ logout performed
+
+JWT cookie alone must NOT bypass CSRF for unsafe request.
+
+
+==================================================
+41. COOKIE TESTS
+==================================================
+
+Successful login auth cookie:
+
+name = configured auth cookie
+HttpOnly
+Path=/
+SameSite=Lax
+Max-Age sane
+Secure according to profile/config
+
+JWT must not appear in:
+
+response body
+HTML
+redirect URL
+
+Logout:
+
+same cookie name
+Max-Age=0
+empty value / expired
+
+
+==================================================
+42. STATELESS TEST
+==================================================
+
+Ensure authentication does not rely on:
+
+JSESSIONID
+
+A protected request with valid JWT cookie works
+without authenticated HTTP session.
+
+Removing JWT cookie must remove authentication ability.
+
+Do not accidentally persist SecurityContext in session.
+
+
+==================================================
+43. TOKEN INVALIDATION INTEGRATION TEST
+==================================================
+
+Using PostgreSQL/Testcontainers:
+
+1. create ACTIVE user
+2. assign USER role
+3. login
+4. capture JWT cookie
+5. access protected resource successfully
+6. increment token_version / logout
+7. reuse OLD JWT cookie
+8. must receive 401
+
+Also verify:
+
+tokenVersion never decreases.
+
+
+==================================================
+44. ROLE DB REFRESH INTEGRATION TEST
+==================================================
+
+Using same valid JWT:
+
+1. ACTIVE account has USER
+2. JWT issued
+3. DB role changes server-side
+4. next request must use CURRENT DB role
+
+This proves role is not trusted from JWT.
+
+
+==================================================
+45. ADMIN LOGIN INTEGRATION
+==================================================
+
+Do NOT seed production admin.
+
+In Testcontainers fixture only:
+
+- create ACTIVE account
+- assign ADMIN role
+- login
+- access /admin/dashboard with JWT cookie
+→ 200
+
+USER JWT:
+→ /admin/dashboard 403
+
+
+==================================================
+46. NO PRODUCTION SEED ACCOUNT
+==================================================
+
+Absolutely no:
+
+admin/admin
+root/root
+demo password
+default user
+
+in:
+
+migration
+Java
+YAML
+README
+Docker
+tests accidentally packaged into production
+
+
+==================================================
+47. ERROR HANDLING
+==================================================
+
+Authentication failures:
+
+do not expose:
+- SQL
+- JWT parser exception
+- signature details
+- user existence
+- password state
+- stacktrace
+
+Malformed JWT must never become 500.
+
+Use generic public messages.
+
+
+==================================================
+48. LOGGING
+==================================================
+
+Never log:
+
+raw password
+JWT
+JWT secret
+Authorization/cookie value
+passwordHash
+
+Logs may include:
+
+safe event type
+request path
+exception class
+user ID after successful authentication if justified
+
+Do not log PII unnecessarily.
+
+
+==================================================
+49. DEPENDENCIES
+==================================================
+
+If adding:
+
+spring-security-oauth2-jose
+
+update:
+
+pom.xml
+docs/dependencies.txt
+
+using deliberate dependency-tree regeneration.
+
+Do not add:
+
+JJWT
+Lombok
+MapStruct
+Redis
+
+unless strictly required and owner-approved.
+
+
+==================================================
+50. ENV EXAMPLE
+==================================================
+
+Update `.env.example` with placeholder only.
+
+Example concept:
+
+JWT_SECRET_BASE64=replace_with_base64_32_byte_secret
+
+Optional:
+
+JWT_COOKIE_SECURE=false
+
+Never commit a real secret.
+
+Document local behavior:
+
+application-local:
+Secure auth cookie may be false for HTTP localhost.
+
+production:
+Secure must be true.
+
+
+==================================================
+51. DOCUMENTATION
+==================================================
+
+Update:
+
+docs/security.md
+
+Create:
+
+docs/AUTH-02-completion-report.md
+
+Document:
+
+- login identifier rules
+- ACTIVE-only authentication
+- JWT claims
+- TTL
+- JWT cookie
+- CSRF design
+- stateless security
+- tokenVersion
+- logout-all-devices behavior
+- DB role reload per request
+- AUTH-03 activation still deferred
+- no refresh token
+
+
+==================================================
+52. REGRESSION TESTS
+==================================================
+
+Run:
+
+.\mvnw.cmd clean test
+
+.\mvnw.cmd package
+
+Docker running:
+
+.\mvnw.cmd -Ppostgres-it verify
+
+Also:
+
+git diff --check
+
+All existing modules must remain green:
+
+ARCH-01
+SEC-01
+DB-01
+UI-01
+ORD-00
+AUTH-01
+ADMIN-00
+AUTH-02
+
+
+==================================================
+53. POSTGRES-IT IS A MERGE GATE
+==================================================
+
+Because AUTH-02:
+
+- loads real users
+- loads roles
+- checks tokenVersion
+- invalidates tokenVersion
+
+PostgreSQL integration MUST pass before merge.
+
+If Docker unavailable:
+
+READY FOR REVIEW = YES possible
+
+READY FOR MERGE = NO
+
+
+==================================================
+54. SECURITY ACCEPTANCE CHECKLIST
+==================================================
+
+Before PR:
+
+[ ] only ACTIVE user authenticates
+[ ] username login works
+[ ] email login works
+[ ] BCrypt used
+[ ] no password logging
+[ ] JWT signed
+[ ] HS256 pinned
+[ ] issuer validated
+[ ] audience validated
+[ ] exp validated
+[ ] iat checked
+[ ] tokenVersion validated
+[ ] roles loaded from DB
+[ ] JWT roles not authoritative
+[ ] auth cookie HttpOnly
+[ ] production Secure cookie
+[ ] SameSite=Lax
+[ ] JWT not localStorage
+[ ] stateless authentication
+[ ] CSRF still enabled
+[ ] login CSRF protected
+[ ] logout CSRF protected
+[ ] logout increments tokenVersion
+[ ] old token rejected after logout
+[ ] inactive account invalidates old token
+[ ] no generated user
+[ ] no production seeded account
+[ ] no refresh token
+[ ] no OTP implementation
+[ ] existing role routes unchanged
+
+
+==================================================
+55. COMMITS
+==================================================
+
+Use meaningful commits.
+
+Example:
+
+feat(auth): add database-backed authentication principal
+
+feat(auth): implement JWT cookie authentication
+
+feat(auth): add secure login and logout flows
+
+test(auth): verify JWT invalidation and authorization
+
+docs(auth): document AUTH-02 authentication contract
+
+Do not fake-split commits.
+
+
+==================================================
+56. PUSH AND PR
+==================================================
+
+Push:
+
+git push -u origin feature/auth-02-login-jwt
+
+Create PR:
+
+feature/auth-02-login-jwt
+        ↓
+develop
+
+Suggested title:
+
+AUTH-02: implement JWT login and logout
+
+
+PR body:
+
+## Scope
+Database-backed login, JWT cookie authentication and logout.
+
+## Implemented
+- username/email login
+- application UserDetailsService
+- ACTIVE-only authentication
+- JWT HS256
+- issuer/audience/expiration validation
+- HttpOnly authentication cookie
+- stateless SecurityContext
+- cookie-backed CSRF
+- DB tokenVersion validation
+- roles reloaded from DB
+- logout token invalidation
+- Thymeleaf login page
+
+## Security
+- JWT not stored in localStorage
+- token role claims are not authoritative
+- CSRF remains enabled
+- PENDING/LOCKED/DISABLED cannot authenticate
+- no production credential seeded
+
+## Deferred
+- OTP activation → AUTH-03
+- forgot/reset → AUTH-04
+- refresh token → not in current scope
+- rate limiting → SEC-02
+
+## Verification
+Include only actual results.
+
+Do not claim PASS if not run.
+
+
+==================================================
+57. DO NOT MERGE
+==================================================
+
+Agent MUST NOT merge PR.
+
+Do not push directly:
+
+develop
+main
+
+Do not create:
+
+develop → main PR
+
+
+==================================================
+58. FINAL REPORT
+==================================================
+
+Return exactly this structure:
+
+AUTH-02 TASK COMPLETION REPORT
+
+Branch:
+Base:
+Head:
+PR:
+PR URL:
+
+LOGIN:
+Username:
+Email:
+ACTIVE only:
+Generic failure:
+
+PRINCIPAL:
+Type:
+Subject format:
+CurrentUserProvider compatible:
+
+JWT:
+Library:
+Algorithm:
+Issuer:
+Audience:
+TTL:
+Claims:
+Role claims authoritative: NO
+Secret source:
+
+COOKIE:
+Name:
+HttpOnly:
+Secure production:
+SameSite:
+Path:
+MaxAge:
+localStorage used: NO
+
+CSRF:
+Enabled:
+Repository:
+Login protected:
+Logout protected:
+
+SESSION:
+Authentication stateless:
+JSESSIONID required: NO
+
+TOKEN VERSION:
+Validated every request:
+Logout increments:
+Old JWT after logout:
+
+ROLES:
+Source:
+Reloaded each request:
+Unknown role behavior:
+
+LOGOUT:
+Endpoint:
+Method:
+All-device invalidation:
+Cookie cleared:
+
+FILES CREATED:
+- ...
+
+FILES MODIFIED:
+- ...
+
+TESTS:
+Login:
+JWT:
+Filter:
+CSRF:
+Authorization:
+Logout:
+Role refresh:
+Security regression:
+Architecture:
+PostgreSQL integration:
+
+BUILD:
+clean test:
+package:
+postgres-it:
+git diff --check:
+
+CI:
+Status:
+Run URL:
+
+DEFERRED:
+AUTH-03:
+AUTH-04:
+SEC-02:
+
+OWNER REVIEW REQUIRED:
+- ...
+
+MAIN MODIFIED:
+NO
+
+DEVELOP DIRECT COMMIT:
+NO
+
+MERGED:
+NO
+
+READY FOR REVIEW:
+YES / NO
+
+READY FOR MERGE:
+YES / NO
+
+Do not report READY FOR MERGE=YES unless:
+- tests pass
+- package passes
+- postgres-it passes
+- CI passes
+- no unresolved security blocker exists.

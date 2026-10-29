@@ -1,0 +1,13 @@
+sequenceDiagram
+participant A0 as Browser
+participant A1 as PasswordResetController
+participant A2 as PasswordResetService
+participant A3 as PostgreSQL
+A0->>A1: POST reset và CSRF
+A1->>A2: resetPassword sau validation
+A2->>A3: Lock ACTIVE user latest RESET_PASSWORD
+A3->>A2: User và latest token đã khóa
+A2->>A2: Kiểm tra HMAC TTL attempts
+A2->>A3: BCrypt hash consume version++ atomic
+A2->>A1: RESET
+A1->>A0: redirect login passwordReset

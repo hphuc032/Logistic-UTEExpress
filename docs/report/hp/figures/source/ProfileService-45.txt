@@ -1,0 +1,13 @@
+    public ProfileView updateProfile(ProfileForm form) {
+        return view(identities.updateProfile(ownerId(), form.getFullName(), form.getPhone()));
+    }
+
+    public void updateAvatar(AvatarUpload avatar) {
+        StoredFile stored = storage.storeImage("avatars",
+                new UploadContent(avatar.bytes(), avatar.originalFilename(), avatar.contentType()),
+                AVATAR_POLICY);
+        final String previous;
+        try {
+            previous = identities.replaceAvatarKey(ownerId(), stored.key());
+        } catch (RuntimeException exception) {
+            storage.delete(stored.key());

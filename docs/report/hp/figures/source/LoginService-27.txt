@@ -1,0 +1,12 @@
+    public LoginOutcome login(LoginCommand command) {
+        Authentication authentication = authenticationManager.authenticate(
+                UsernamePasswordAuthenticationToken.unauthenticated(
+                        command.identifier(), command.password()));
+        UteExpressPrincipal principal = (UteExpressPrincipal) authentication.getPrincipal();
+        Set<RoleCode> roles = principal.getAuthorities().stream()
+                .map(authority -> RoleCode.fromAuthority(authority.getAuthority()))
+                .flatMap(Optional::stream)
+                .collect(Collectors.toUnmodifiableSet());
+        return new LoginOutcome(tokens.issue(principal), roles);
+    }
+}

@@ -1,0 +1,2032 @@
+Bạn là Senior Spring Boot / JPA Engineer phụ trách PROD-00 của project UTEExpress.
+
+REPOSITORY:
+https://github.com/hphuc032/Logistic-UTEExpress
+
+OWNER:
+Hoàng Phúc
+
+REVIEWER:
+Tiến Đạt
+
+TASK:
+PROD-00 — Product Model / Catalog Contract Foundation
+
+SPRINT:
+S1
+
+PRIORITY:
+P0
+
+TARGET:
+develop
+
+TASK BRANCH:
+feature/prod-00-model-contract
+
+
+==================================================
+1. TASK PURPOSE
+==================================================
+
+PROD-00 xây dựng nền tảng persistence và service contract của Product/Catalog
+để CART-01 và các task Commerce có thể tích hợp mà không phụ thuộc trực tiếp
+vào Product entity/repository.
+
+Deliverable chính:
+
+- Product schema
+- ProductImage schema
+- Product JPA mapping
+- ProductImage JPA mapping
+- Product repository foundation
+- Product image repository foundation
+- production implementation cho CatalogQueryService hiện có
+- giữ nguyên InventoryService contract hiện có
+- minimal demo/test seed
+- PostgreSQL integration tests
+
+PROD-00 KHÔNG phải Product CRUD hoàn chỉnh.
+
+VENDOR-02 mới triển khai:
+
+- Vendor Product CRUD
+- Product image upload/management
+- soft-delete business commands
+- stock mutation / InventoryService locking implementation
+- Vendor UI
+
+
+==================================================
+2. LIVE REPOSITORY BASELINE
+==================================================
+
+Tại thời điểm giao task, live develop đã có:
+
+ARCH-01 ✅
+SEC-01 ✅
+UI-01 ✅
+DB-01 ✅
+ORD-00 ✅
+QA-00 ✅
+
+AUTH-01 ✅
+AUTH-02 ✅
+AUTH-03 ✅
+
+ADMIN-00 ✅
+ADMIN-04 ✅
+
+SHIP-00 ✅
+
+ORD-01 ✅
+
+VENDOR-01 ✅
+
+Latest develop observed:
+
+d0df02e62cda33af356c1b082e2ea83add7e38cc
+
+Latest merged migration observed:
+
+V20260923100100__hp_vendor01_shops.sql
+
+IMPORTANT:
+
+Đây chỉ là snapshot lúc giao task.
+
+Agent PHẢI inspect lại remote trước khi code.
+
+
+==================================================
+3. HARD PRECONDITION
+==================================================
+
+Trước tiên:
+
+git fetch origin
+git switch develop
+git pull --ff-only origin develop
+
+Run:
+
+git status
+git log -5 --oneline
+
+Confirm:
+
+- VENDOR-01 merged
+- ORD-00 contract present
+- ADMIN-04 categories present
+- VENDOR-01 shops present
+
+Also inspect open PRs / latest migrations if GitHub access is available.
+
+Nếu VENDOR-01 chưa ở develop:
+
+STOP
+
+Report:
+
+PROD-00 BLOCKED:
+VENDOR-01 is not merged into develop.
+
+Nếu đủ:
+
+git switch -c feature/prod-00-model-contract
+
+
+==================================================
+4. INSPECT BEFORE CODING
+==================================================
+
+Không code ngay.
+
+Inspect ít nhất:
+
+pom.xml
+
+src/main/java/com/uteexpress/catalog/
+- dto/ProductSnapshot.java
+- dto/StockQuantity.java
+- service/CatalogQueryService.java
+- service/InventoryService.java
+- package-info files
+
+src/main/java/com/uteexpress/shop/
+- entity/Shop.java
+- entity/ShopStatus.java
+- repository/ShopRepository.java
+- service/ShopRegistrationService.java
+- dto/ShopView.java
+
+src/main/java/com/uteexpress/governance/
+- entity/Category.java
+- repository/CategoryRepository.java
+- service/CategoryService.java
+- dto/CategoryView.java
+
+src/main/java/com/uteexpress/order/
+- existing ORD-00 contracts
+- ORD-01 persistence
+
+src/main/resources/db/migration/
+
+especially:
+
+ADMIN-04 categories migration
+ORD-01 order migration
+VENDOR-01 shops migration
+
+docs:
+- DATABASE_SCHEMA.md
+- DATABASE_CONVENTIONS.md
+- SEED_MANIFEST.md
+- order-contracts.md
+- VENDOR-01-completion-report.md
+- ADMIN-04-completion-report.md
+- ArchitectureTest
+
+Current tests for:
+- PostgreSQL/Testcontainers
+- categories
+- shop
+- shipping
+- architecture
+
+
+==================================================
+5. RETURN IMPLEMENTATION PLAN FIRST
+==================================================
+
+Before modifying files, return:
+
+PROD-00 IMPLEMENTATION PLAN
+
+A. Current develop SHA
+B. Current maximum Flyway migration
+C. VENDOR-01 dependency status
+D. ADMIN-04/category dependency status
+E. Existing ORD-00 Catalog contracts
+F. Product schema
+G. ProductImage schema
+H. ProductStatus vocabulary
+I. CatalogQueryService implementation design
+J. Purchasability rules
+K. Cross-module read strategy
+L. InventoryService boundary
+M. Seed strategy
+N. ORD-01 deferred FK impact
+O. CART-01 integration boundary
+P. Test strategy
+Q. Files expected to change
+R. Explicit deferred work
+
+Only after this plan begin coding.
+
+
+==================================================
+6. MASTER DATABASE CONTRACT
+==================================================
+
+Product table contract:
+
+products
+
+Fields:
+
+- id
+- shop_id
+- category_id
+- name
+- description
+- price
+- stock
+- status
+- version
+
+Relationships:
+
+shop_id → shops.id
+
+category_id → categories.id
+
+
+ProductImage contract:
+
+product_images
+
+Fields:
+
+- id
+- product_id
+- storage_key
+- position
+- alt_text
+
+Relationship:
+
+product_id → products.id
+
+
+==================================================
+7. PRODUCT TABLE
+==================================================
+
+Create:
+
+uteexpress.products
+
+Recommended:
+
+id BIGINT GENERATED BY DEFAULT AS IDENTITY
+
+shop_id BIGINT NOT NULL
+
+category_id BIGINT NOT NULL
+
+name VARCHAR(200) NOT NULL
+
+description VARCHAR(4000) NULL
+
+price NUMERIC(19,2) NOT NULL
+
+stock INTEGER NOT NULL
+
+status VARCHAR(32) NOT NULL
+
+created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+updated_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP
+
+version BIGINT NOT NULL DEFAULT 0
+
+
+==================================================
+8. REQUIRED PRODUCT FOREIGN KEYS
+==================================================
+
+Must create:
+
+fk_products_shop_id
+→ uteexpress.shops(id)
+
+fk_products_category_id
+→ uteexpress.categories(id)
+
+Do NOT use cascade delete.
+
+Products referenced by commerce/history must survive
+future Shop/Category state changes.
+
+
+==================================================
+9. REQUIRED PRODUCT CONSTRAINTS
+==================================================
+
+Must enforce at DB level:
+
+name:
+nonblank
+
+price:
+> 0
+
+price:
+must not be NaN
+
+VND amount:
+whole dong only
+
+Example concept:
+
+price = trunc(price)
+
+stock:
+>= 0
+
+version:
+>= 0
+
+status:
+only approved ProductStatus values
+
+shop_id:
+positive
+
+category_id:
+positive
+
+
+==================================================
+10. PRODUCT INDEXES
+==================================================
+
+Database conventions require:
+
+INDEX on:
+
+(category_id, status)
+
+INDEX on:
+
+(shop_id, status)
+
+Use project naming convention:
+
+ix_products_category_id_status
+ix_products_shop_id_status
+
+
+==================================================
+11. PRODUCT STATUS
+==================================================
+
+Search existing approved docs/code first.
+
+Do NOT create many speculative statuses.
+
+If no exact ProductStatus enum already exists,
+use the minimal PROD-00 vocabulary:
+
+ACTIVE
+HIDDEN
+
+Meaning:
+
+ACTIVE:
+eligible for normal catalog/business checks
+provided Shop/Category also satisfy their conditions.
+
+HIDDEN:
+not purchasable and not public.
+
+This status-based hiding is the foundation for soft-delete semantics.
+
+Do NOT add without requirement:
+
+DRAFT
+DELETED
+BANNED
+ARCHIVED
+SUSPENDED
+
+If a newer merged contract defines ProductStatus differently,
+follow the merged contract instead.
+
+Never edit a merged migration later to add a status;
+future tasks must add a new migration.
+
+
+==================================================
+12. PRODUCT ENTITY
+==================================================
+
+Create Product in catalog module.
+
+Recommended:
+
+com.uteexpress.catalog.entity.Product
+
+Mapping:
+
+@Entity
+@Table(name="products", schema="uteexpress")
+
+Use:
+
+Long id
+Long shopId
+Long categoryId
+String name
+String description
+BigDecimal price
+int stock / Integer according to mapping decision
+ProductStatus status
+Instant createdAt
+Instant updatedAt
+@Version Long version
+
+
+==================================================
+13. NO CROSS-MODULE ENTITY MAPPING
+==================================================
+
+CRITICAL:
+
+Do NOT map:
+
+@ManyToOne Shop shop
+
+Do NOT map:
+
+@ManyToOne Category category
+
+because Shop and Category belong to different business modules
+and ArchitectureTest protects module internals.
+
+Store:
+
+Long shopId
+Long categoryId
+
+Database FKs provide referential integrity.
+
+Cross-module Java code must go through service/DTO boundaries,
+not foreign entities/repositories.
+
+
+==================================================
+14. PRODUCT ENTITY MUTABILITY
+==================================================
+
+PROD-00 is foundation only.
+
+Do NOT add broad setters such as:
+
+setShopId()
+setCategoryId()
+setPrice()
+setStock()
+setStatus()
+
+Future VENDOR-02 owns business mutation methods.
+
+Expose only safe getters.
+
+If a construction factory is needed for tests/internal setup,
+keep its API narrow and do not encode VENDOR-02 business flow prematurely.
+
+
+==================================================
+15. MONEY CONTRACT
+==================================================
+
+Product price is server-owned BigDecimal.
+
+Never use:
+
+double
+float
+
+Storage:
+
+NUMERIC(19,2)
+
+ProductSnapshot already promises positive whole-VND unitPrice.
+
+Therefore DB and service must reject fractional VND.
+
+Examples:
+
+100000.00 ✅
+15000.00 ✅
+
+10000.50 ❌
+
+0 ❌
+
+-100 ❌
+
+NaN ❌
+
+
+==================================================
+16. STOCK CONTRACT
+==================================================
+
+stock >= 0
+
+Use an integral Java type compatible with existing:
+
+StockQuantity.quantity = int
+
+Do not allow negative stock.
+
+PROD-00 stores stock but DOES NOT yet implement
+production stock decrement/restore logic.
+
+
+==================================================
+17. PRODUCT IMAGE TABLE
+==================================================
+
+Create:
+
+uteexpress.product_images
+
+Recommended:
+
+id BIGINT identity PK
+
+product_id BIGINT NOT NULL
+
+storage_key VARCHAR(512) NOT NULL
+
+position INTEGER NOT NULL
+
+alt_text VARCHAR(255) NULL
+
+
+==================================================
+18. PRODUCT IMAGE CONSTRAINTS
+==================================================
+
+Must include:
+
+FK:
+product_id → products.id
+
+No cascade delete.
+
+storage_key:
+nonblank
+
+position:
+>= 0
+
+Recommended unique:
+
+(product_id, position)
+
+so two images for one Product cannot occupy the same display position.
+
+Name:
+
+uq_product_images_product_id_position
+
+If using another equivalent ordering invariant,
+document it.
+
+
+==================================================
+19. PRODUCT IMAGE ENTITY
+==================================================
+
+Create:
+
+ProductImage
+
+under:
+
+com.uteexpress.catalog.entity
+
+Use:
+
+Long productId
+
+rather than unnecessary bidirectional relationships.
+
+No upload implementation.
+
+No MultipartFile.
+
+No filesystem/storage code.
+
+No public image endpoint.
+
+`storage_key` is only persistence foundation in PROD-00.
+
+
+==================================================
+20. PRODUCT REPOSITORIES
+==================================================
+
+Create minimal repository contracts.
+
+Example concepts:
+
+ProductRepository
+ProductImageRepository
+
+Only expose methods actually needed for PROD-00.
+
+Do not implement complete VENDOR-02 CRUD API prematurely.
+
+Useful read methods may include:
+
+findById(...)
+findAllById(...)
+
+ProductImage:
+
+findByProductIdOrderByPositionAsc(...)
+
+Production Catalog query may use:
+
+- a dedicated read repository/projection
+OR
+- carefully scoped native query
+
+Choose the cleanest design after inspecting current architecture.
+
+
+==================================================
+21. EXISTING ORD-00 CONTRACTS — DO NOT DUPLICATE
+==================================================
+
+Repo already contains:
+
+CatalogQueryService
+
+with:
+
+requirePurchasableProducts(Set<Long> productIds)
+
+ProductSnapshot
+
+with:
+
+productId
+shopId
+productName
+unitPrice
+version
+
+InventoryService:
+
+lockAndCheck(...)
+decrease(...)
+restore(...)
+
+StockQuantity
+
+DO NOT create duplicate interfaces.
+
+DO NOT rename them casually.
+
+PROD-00 must implement/adapt around these existing contracts.
+
+
+==================================================
+22. CATALOG QUERY SERVICE
+==================================================
+
+Provide a real production bean implementing:
+
+CatalogQueryService
+
+Suggested name:
+
+DatabaseCatalogQueryService
+
+or equivalent.
+
+CART-01 and later Checkout must be able to inject:
+
+CatalogQueryService
+
+without depending on ProductRepository/Product entity.
+
+
+==================================================
+23. REQUIRE PURCHASABLE PRODUCTS
+==================================================
+
+`requirePurchasableProducts(productIds)` must:
+
+- validate inputs safely
+- resolve all requested Product IDs
+- return trusted server prices
+- return trusted Shop IDs
+- return trusted names
+- return versions
+- reject unavailable Products
+- never return partial results
+
+
+==================================================
+24. PURCHASABILITY RULE
+==================================================
+
+For PROD-00, a Product is purchasable only when:
+
+Product.status == ACTIVE
+
+AND
+
+Shop.status == APPROVED
+
+AND
+
+Category.active == true
+
+Stock availability is NOT decided by CatalogQueryService.
+
+InventoryService owns stock locking/checking.
+
+Therefore a stock=0 product may still resolve as a catalog ProductSnapshot,
+and later InventoryService rejects insufficient stock.
+
+Do not duplicate inventory responsibility in CatalogQueryService.
+
+
+==================================================
+25. BATCH ALL-OR-NOTHING
+==================================================
+
+Example request:
+
+{10, 20, 30}
+
+If:
+
+10 ACTIVE
+20 ACTIVE
+30 missing/HIDDEN/non-approved Shop/inactive Category
+
+DO NOT return:
+
+[10, 20]
+
+Fail the entire call.
+
+No partial pricing.
+
+
+==================================================
+26. EMPTY INPUT
+==================================================
+
+Checkout contract rejects an empty item list before Catalog query.
+
+For CatalogQueryService itself,
+choose a deterministic safe behavior.
+
+Recommended:
+
+empty set
+→ empty list
+
+But document and test it.
+
+Null input:
+→ reject INVALID_REQUEST.
+
+
+==================================================
+27. DUPLICATE IDS
+==================================================
+
+Input type is Set<Long>,
+therefore duplicate product IDs are already normalized at this boundary.
+
+Reject:
+
+null product IDs
+non-positive IDs
+
+if they can reach service internally.
+
+
+==================================================
+28. DETERMINISTIC OUTPUT
+==================================================
+
+Return ProductSnapshots in deterministic order.
+
+Recommended:
+
+ascending productId
+
+Do not depend on unspecified database row order.
+
+This helps checkout canonical hashing/testing later.
+
+
+==================================================
+29. CATALOG READ IMPLEMENTATION / MODULE BOUNDARIES
+==================================================
+
+CatalogQueryService must know:
+
+Product status
+Shop approval status
+Category active status
+
+BUT catalog Java code must NOT import:
+
+shop.entity.Shop
+shop.repository.ShopRepository
+governance.entity.Category
+governance.repository.CategoryRepository
+
+Preferred implementation for PROD-00:
+
+a read-only persistence projection/native query inside catalog repository layer
+that joins:
+
+products
+shops
+categories
+
+and returns only catalog-safe projection fields.
+
+This is a read model, not cross-module entity coupling.
+
+If you instead introduce read service contracts in Shop/Governance,
+keep them extremely narrow and document why.
+
+Do NOT use the ops-only CategoryService from Product/Vendor code.
+
+Do NOT weaken ArchitectureTest.
+
+
+==================================================
+30. ERROR CONTRACT
+==================================================
+
+Missing or unavailable requested Product:
+
+fail closed.
+
+Recommended existing error:
+
+RESOURCE_NOT_FOUND
+
+Do not expose publicly whether failure was caused by:
+
+- Product missing
+- Product hidden
+- Shop not approved
+- Category inactive
+
+This keeps a simple safe internal contract.
+
+
+==================================================
+31. INVENTORYSERVICE — CRITICAL SCOPE
+==================================================
+
+ORD-00 already defines:
+
+InventoryService.lockAndCheck
+InventoryService.decrease
+InventoryService.restore
+
+PROD-00 MUST PRESERVE THIS CONTRACT.
+
+BUT according to project plan:
+
+real InventoryService locking/decrement/restore
+belongs to Sprint 2 / VENDOR-02 integration.
+
+Therefore PROD-00 MUST NOT prematurely implement:
+
+- SELECT ... FOR UPDATE stock locking
+- stock decrement
+- stock restore
+- checkout inventory transaction
+- inventory_released_at behavior
+
+unless newer merged project requirements explicitly moved it into PROD-00.
+
+Document:
+
+InventoryService production implementation:
+DEFERRED TO VENDOR-02.
+
+
+==================================================
+32. NO FAKE INVENTORY IMPLEMENTATION
+==================================================
+
+Do not create a fake production bean that:
+
+- always succeeds
+- returns dummy stock
+- does nothing in decrease()
+- does nothing in restore()
+
+It is safer to leave InventoryService contract unimplemented
+until its real task than to create unsafe behavior.
+
+Tests may use mocks/stubs.
+
+
+==================================================
+33. CART-01 INTEGRATION
+==================================================
+
+CART-01 depends on PROD-00.
+
+After PROD-00, TD must have stable access to:
+
+CatalogQueryService
+ProductSnapshot
+Product IDs backed by real PostgreSQL products
+
+TD must NOT need:
+
+ProductRepository
+Product entity
+
+to implement Cart.
+
+
+==================================================
+34. PRODUCT CREATION / VENDOR OWNERSHIP
+==================================================
+
+Do NOT implement Vendor Product create/update/delete endpoints here.
+
+VENDOR-02 will enforce:
+
+- ROLE_VENDOR
+- authenticated account owns Shop
+- Shop APPROVED
+- Category active
+- Product belongs to that Shop
+- field whitelist
+- stock mutation rules
+
+PROD-00 only creates the model/foundation.
+
+
+==================================================
+35. SHOP APPROVAL STATUS
+==================================================
+
+VENDOR-01 supports:
+
+PENDING
+APPROVED
+REJECTED
+
+Product purchasability requires:
+
+APPROVED
+
+Do not treat:
+
+PENDING
+REJECTED
+
+as purchasable.
+
+
+==================================================
+36. CATEGORY STATUS
+==================================================
+
+ADMIN-04 Category has:
+
+active BOOLEAN
+
+Product must reference an existing Category by FK.
+
+CatalogQueryService requires:
+
+active = true
+
+for purchasability.
+
+Do not modify Category state in PROD-00.
+
+
+==================================================
+37. PRODUCT IMAGE UPLOAD
+==================================================
+
+Strictly deferred.
+
+PROD-00:
+
+schema ✅
+entity ✅
+repository foundation ✅
+
+Upload:
+
+NO
+
+Do not introduce:
+
+MultipartFile
+UPLOAD_DIR logic
+MIME sniffing
+UUID filename generation
+image resizing
+
+Those belong to VENDOR-02 / upload task.
+
+
+==================================================
+38. PRODUCT PUBLIC UI
+==================================================
+
+Do NOT implement:
+
+GET /products
+GET /products/{id}
+homepage product cards
+search/filter
+pagination
+sorting
+top rated
+best-selling
+
+These belong to:
+
+PROD-01
+PROD-02
+
+Even though SecurityConfig already marks `/products/**` public,
+a public route without controller may remain 404 for now.
+
+
+==================================================
+39. NO VENDOR UI
+==================================================
+
+Do NOT implement:
+
+/vendor/products
+/vendor/products/new
+/vendor/products/{id}/edit
+
+These belong to:
+
+VENDOR-02.
+
+
+==================================================
+40. SOFT DELETE
+==================================================
+
+Product rows must never be hard-deleted as normal business behavior.
+
+For PROD-00:
+
+define status foundation only.
+
+Do not expose repository delete methods unless technically required
+by tests, and preferably do not expose them.
+
+Future VENDOR-02/Admin moderation uses status transition.
+
+Historical OrderItem snapshots must remain valid.
+
+
+==================================================
+41. ORD-01 DEFERRED FK
+==================================================
+
+ORD-01 currently deliberately deferred:
+
+order_items.product_id
+→ products.id
+
+because products did not exist yet.
+
+After PROD-00 creates products,
+this FK becomes unblocked.
+
+However:
+
+order_items is TD-owned.
+
+DO NOT:
+
+edit merged ORD-01 migration
+
+DO NOT silently add cross-owner FK in PROD-00.
+
+Completion report must say:
+
+"fk_order_items_product_id is now unblocked and requires
+a follow-up migration coordinated with TD."
+
+Similarly:
+
+orders.shop_id → shops.id
+
+was already unblocked by VENDOR-01.
+
+Do not modify TD-owned Order migration here.
+
+
+==================================================
+42. PRODUCTIMAGE AND ORDER HISTORY
+==================================================
+
+Order history never depends on live ProductImage.
+
+No cascade from Product/ProductImage into:
+
+order_items
+orders
+
+Do not rewrite snapshot semantics.
+
+
+==================================================
+43. FLYWAY MIGRATION
+==================================================
+
+Inspect latest merged migration immediately before creating file.
+
+Current observed max:
+
+V20260923100100__hp_vendor01_shops.sql
+
+Create a version sorting AFTER current maximum.
+
+Pattern:
+
+VyyyyMMddHHmmss__hp_prod00_catalog_foundation.sql
+
+Do NOT blindly use timestamp from this prompt.
+
+If another PR merged a newer migration,
+choose a later UTC version.
+
+Never modify existing merged migrations.
+
+
+==================================================
+44. HIBERNATE
+==================================================
+
+Keep:
+
+ddl-auto=validate
+
+Do NOT use:
+
+update
+create
+create-drop
+
+Flyway remains sole schema writer.
+
+
+==================================================
+45. MINIMAL SEED — REQUIRED
+==================================================
+
+PROD-00 task requires minimal seed,
+but do NOT put demo rows in Flyway production migrations.
+
+Follow existing SEED_MANIFEST principle:
+
+demo data requires explicit demo profile + opt-in.
+
+
+==================================================
+46. PRODUCT DEMO SEED DESIGN
+==================================================
+
+Recommended:
+
+ProductDemoSeeder
+
+active only when:
+
+profile = demo
+
+AND an explicit property is true.
+
+Example concept:
+
+uteexpress.demo.catalog.enabled=true
+
+No production startup seed.
+
+
+==================================================
+47. SEED OWNERSHIP
+==================================================
+
+PROD-00 owns Product/ProductImage data,
+not User/Shop/Category governance data.
+
+Therefore Product demo seed should resolve
+prerequisite Shop and Category using stable natural keys.
+
+Recommended configurable prerequisites:
+
+shop slug
+category slug
+
+Only seed Products after finding:
+
+Shop.status = APPROVED
+
+Category.active = true
+
+If demo seeding is explicitly enabled and prerequisites are missing:
+
+fail clearly or skip with an explicit documented reason.
+
+Do NOT silently create production-like Shop/Category ownership records
+inside Product seed.
+
+
+==================================================
+48. MINIMAL PRODUCT SEED SET
+==================================================
+
+For PROD-00, minimum demo seed may be 3 products:
+
+1. ACTIVE + stock > 0
+2. ACTIVE + stock = 0
+3. HIDDEN + stock > 0
+
+Use fictional names/data.
+
+This proves:
+
+- purchasable product
+- inventory edge case
+- hidden product
+
+PROD-01 later owns the ≥12-product public demo catalog.
+
+Do NOT claim PROD-00 satisfies PROD-01 seed target.
+
+
+==================================================
+49. SEED IDEMPOTENCY
+==================================================
+
+Running ProductDemoSeeder twice:
+
+must not duplicate products.
+
+Do not reset live edits.
+
+Use stable natural demo keys.
+
+Since products currently have no explicit slug/SKU in master schema,
+choose a safe documented seed strategy.
+
+If lack of a natural Product key makes safe idempotent seeding impossible
+without inventing a permanent schema field:
+
+do NOT invent `sku` merely for seed.
+
+Instead:
+- use a narrowly scoped demo marker strategy outside production schema
+  OR
+- document minimal fixture seed as integration-test fixture and
+  defer persistent demo seeding to PROD-01.
+
+Prefer schema correctness over adding unsupported fields.
+
+
+==================================================
+50. DO NOT INVENT PRODUCT SKU
+==================================================
+
+Master schema does NOT define:
+
+sku
+barcode
+brand
+variant
+color
+size
+weight
+
+Do not add them.
+
+No Product variants in current project scope.
+
+
+==================================================
+51. PRODUCT IMAGE DEMO DATA
+==================================================
+
+No real image upload exists yet.
+
+ProductImage table must be tested.
+
+A PostgreSQL integration test may insert a synthetic storage_key.
+
+Do not pretend the file exists.
+
+Do not require image rows in Product demo seed
+if no storage infrastructure exists.
+
+
+==================================================
+52. DATABASE TESTS
+==================================================
+
+Use Testcontainers PostgreSQL 17.6.
+
+Must verify:
+
+1. Flyway migration succeeds
+
+2. Hibernate validate succeeds
+
+3. products table exists
+
+4. product_images table exists
+
+5. products.shop_id FK exists
+
+6. products.category_id FK exists
+
+7. product_images.product_id FK exists
+
+8. price <= 0 rejected
+
+9. fractional-VND price rejected
+
+10. stock < 0 rejected
+
+11. invalid Product status rejected
+
+12. invalid shop FK rejected
+
+13. invalid category FK rejected
+
+14. invalid product image FK rejected
+
+15. duplicate product image position rejected
+
+16. negative image position rejected
+
+17. blank storage_key rejected
+
+18. version starts at 0
+
+19. second Flyway migrate executes 0 migrations
+
+
+==================================================
+53. CATALOG QUERY INTEGRATION TESTS
+==================================================
+
+Using real PostgreSQL data:
+
+ACTIVE product
++
+APPROVED shop
++
+active Category
+
+→ ProductSnapshot returned.
+
+
+Test:
+
+ProductSnapshot.productId correct
+
+ProductSnapshot.shopId correct
+
+ProductSnapshot.productName correct
+
+ProductSnapshot.unitPrice server DB value
+
+ProductSnapshot.version correct
+
+
+==================================================
+54. UNAVAILABLE PRODUCT TESTS
+==================================================
+
+CatalogQueryService must reject batch if any requested Product is:
+
+missing
+
+HIDDEN
+
+in PENDING Shop
+
+in REJECTED Shop
+
+in inactive Category
+
+
+==================================================
+55. NO PARTIAL RESULTS TEST
+==================================================
+
+Given:
+
+Product A valid
+Product B valid
+Product C hidden
+
+Call:
+
+requirePurchasableProducts({A,B,C})
+
+Expected:
+
+failure
+
+NOT:
+
+[A,B]
+
+
+==================================================
+56. PRICE TRUST TEST
+==================================================
+
+ProductSnapshot price must come from PostgreSQL.
+
+There is no browser/client price input at this layer.
+
+Tests should demonstrate:
+
+DB price = 125000
+
+snapshot price = 125000.00
+
+No request-provided price can override it.
+
+
+==================================================
+57. DETERMINISTIC BATCH TEST
+==================================================
+
+Input IDs in arbitrary Set iteration order.
+
+Output:
+
+ascending productId
+
+or another explicitly documented deterministic order.
+
+Test it.
+
+
+==================================================
+58. ARCHITECTURE TEST
+==================================================
+
+Confirm:
+
+catalog controller does not depend on repository/entity
+
+catalog DTO does not expose entity
+
+Catalog implementation does not import:
+
+shop.entity.*
+shop.repository.*
+governance.entity.*
+governance.repository.*
+
+No new module cycle.
+
+Do not weaken ArchitectureTest broadly.
+
+
+==================================================
+59. SECURITY
+==================================================
+
+PROD-00 has no public mutation endpoint.
+
+No new SecurityConfig permissions should be required.
+
+Do NOT alter:
+
+JWT
+OTP
+login
+logout
+role mapping
+CSRF
+
+CatalogQueryService is an internal trusted server boundary.
+
+
+==================================================
+60. NO CLIENT AUTHORITY INPUT
+==================================================
+
+Product model must not contain business ownership
+derived from browser-controlled:
+
+userId
+ownerId
+shopId hidden form
+
+There is no Product write controller in PROD-00 anyway.
+
+Future VENDOR-02 resolves Shop from current account ownership.
+
+
+==================================================
+61. CONCURRENCY
+==================================================
+
+PROD-00 does NOT implement stock locking yet.
+
+Do not fake concurrency guarantees.
+
+Product `@Version` foundation is required.
+
+Real pessimistic stock locking:
+VENDOR-02 / InventoryService implementation.
+
+
+==================================================
+62. REPOSITORY DELETE
+==================================================
+
+Avoid exposing:
+
+delete(...)
+deleteById(...)
+
+as normal ProductRepository API.
+
+Product history should use state change, not hard deletion.
+
+
+==================================================
+63. DOCUMENTATION
+==================================================
+
+Create:
+
+docs/PROD-00-completion-report.md
+
+Document:
+
+- Product schema
+- ProductImage schema
+- ProductStatus
+- price/VND contract
+- stock invariant
+- Shop/Category FKs
+- indexes
+- CatalogQueryService implementation
+- purchasability definition
+- all-or-nothing batch behavior
+- no entity leakage
+- InventoryService remains contract-only
+- VENDOR-02 deferred behavior
+- PROD-01 public catalog deferred
+- seed boundary
+- ORD-01 product FK follow-up
+- CART-01 now unblocked
+
+
+==================================================
+64. EXISTING CONTRACT DOCS
+==================================================
+
+Do not rewrite ORD-00 contracts unless implementation exposes
+an actual contradiction.
+
+If contradiction found:
+
+STOP
+
+Report:
+
+OWNER REVIEW REQUIRED
+
+Do not silently redefine:
+
+ProductSnapshot
+InventoryService
+StockQuantity
+
+
+==================================================
+65. DATABASE SCHEMA DOC
+==================================================
+
+Only update DATABASE_SCHEMA / progress docs if necessary
+to record implementation status.
+
+Do not change the 30-table ownership model.
+
+
+==================================================
+66. TEST PROFILE
+==================================================
+
+Do not introduce H2.
+
+Existing MVC test profile intentionally excludes persistence.
+
+For persistence:
+use postgres-it/Testcontainers.
+
+For HTTP fixtures:
+mock only new beans when existing tests need context wiring.
+
+
+==================================================
+67. REGRESSION COMMANDS
+==================================================
+
+Run:
+
+.\mvnw.cmd clean test
+
+.\mvnw.cmd package
+
+With Docker Desktop running:
+
+.\mvnw.cmd -Ppostgres-it verify
+
+Then:
+
+git diff --check
+git status
+
+
+==================================================
+68. POSTGRES-IT MERGE GATE
+==================================================
+
+PROD-00 adds:
+
+- 2 tables
+- 3 foreign keys
+- money constraints
+- stock constraint
+- status constraint
+- JPA mapping
+- catalog production query
+
+Therefore:
+
+postgres-it PASS is mandatory.
+
+If Docker unavailable:
+
+READY FOR REVIEW may be YES
+
+READY FOR MERGE = NO
+
+
+==================================================
+69. ACCEPTANCE CHECKLIST
+==================================================
+
+Before PR:
+
+[ ] branch from latest develop
+[ ] VENDOR-01 merged
+[ ] ORD-00 contracts inspected
+[ ] ADMIN-04 categories present
+[ ] migration after current max
+[ ] products table created
+[ ] product_images table created
+[ ] products → shops FK
+[ ] products → categories FK
+[ ] product_images → products FK
+[ ] price NUMERIC(19,2)
+[ ] price > 0
+[ ] whole-VND enforced
+[ ] stock >= 0
+[ ] Product @Version
+[ ] required product indexes
+[ ] ProductImage position invariant
+[ ] no cross-module JPA entity association
+[ ] no Product CRUD controller
+[ ] no Vendor Product UI
+[ ] no upload implementation
+[ ] no InventoryService fake implementation
+[ ] CatalogQueryService production bean exists
+[ ] query is all-or-nothing
+[ ] HIDDEN product rejected
+[ ] non-approved Shop product rejected
+[ ] inactive Category product rejected
+[ ] prices server-derived
+[ ] deterministic result order
+[ ] demo/test seed safe
+[ ] no production automatic seed
+[ ] ORD-01 migration untouched
+[ ] ArchitectureTest passes
+[ ] AUTH regressions pass
+[ ] Shop regressions pass
+[ ] Shipping regressions pass
+
+
+==================================================
+70. COMMIT STRATEGY
+==================================================
+
+Use meaningful commits.
+
+Suggested:
+
+feat(catalog): add product and image persistence
+
+feat(catalog): implement catalog product query boundary
+
+test(catalog): cover product schema and purchasability
+
+docs(catalog): document PROD-00 foundation
+
+If seed is meaningful enough:
+
+feat(catalog): add opt-in demo product fixtures
+
+Do not fake split tiny changes.
+
+
+==================================================
+71. PUSH
+==================================================
+
+Push only:
+
+git push -u origin feature/prod-00-model-contract
+
+Do NOT commit directly to:
+
+develop
+main
+
+
+==================================================
+72. CREATE PR
+==================================================
+
+PR:
+
+feature/prod-00-model-contract
+        ↓
+develop
+
+Title:
+
+PROD-00: implement product catalog foundation
+
+
+==================================================
+73. PR BODY
+==================================================
+
+Use:
+
+## Scope
+
+Product/ProductImage persistence and Catalog contract implementation.
+
+## Implemented
+
+- products schema
+- product_images schema
+- Shop/Category/Product image FKs
+- ProductStatus foundation
+- whole-VND price constraints
+- nonnegative stock
+- Product optimistic version
+- CatalogQueryService PostgreSQL implementation
+- all-or-nothing ProductSnapshot resolution
+- minimal demo/test fixtures
+
+## Purchasability
+
+Product must be:
+- ACTIVE
+- in APPROVED Shop
+- in active Category
+
+Stock remains InventoryService responsibility.
+
+## Deferred
+
+- Vendor Product CRUD → VENDOR-02
+- Inventory locking/decrease/restore → VENDOR-02
+- image upload → VENDOR-02
+- public catalog → PROD-01
+- search/filter/ranking → PROD-02
+
+## Integration
+
+- CART-01 can use CatalogQueryService
+- fk_order_items_product_id is now unblocked
+  but TD-owned ORD migration was not modified
+
+## Verification
+
+List ACTUAL results only.
+
+Never claim a command passed if it was not executed.
+
+
+==================================================
+74. DO NOT MERGE
+==================================================
+
+Agent must NOT merge the PR.
+
+No:
+
+direct develop push
+
+direct main push
+
+develop → main PR
+
+
+==================================================
+75. FINAL REPORT FORMAT
+==================================================
+
+Return:
+
+PROD-00 TASK COMPLETION REPORT
+
+Branch:
+Base:
+Base SHA:
+Head:
+PR:
+PR URL:
+
+PRECONDITIONS:
+VENDOR-01:
+ORD-00:
+ADMIN-04:
+Created from latest develop:
+
+DATABASE:
+Migration:
+Products table:
+ProductImages table:
+Shop FK:
+Category FK:
+ProductImage FK:
+Price constraint:
+Stock constraint:
+Status constraint:
+Indexes:
+Hibernate validate:
+Flyway validate:
+
+PRODUCT:
+Status values:
+Price Java type:
+Price DB type:
+Whole-VND:
+Stock type:
+Version:
+Hard delete exposed:
+
+PRODUCT IMAGE:
+Storage key:
+Position:
+Unique position:
+Upload implemented:
+
+CATALOG QUERY:
+Implementation:
+Production bean:
+Purchasability:
+Missing Product:
+Hidden Product:
+Pending Shop:
+Rejected Shop:
+Inactive Category:
+Partial result possible:
+Deterministic order:
+Price source:
+
+INVENTORY:
+Existing interface preserved:
+lockAndCheck implemented:
+decrease implemented:
+restore implemented:
+Deferred to:
+
+SEED:
+Production auto seed:
+Demo profile:
+Opt-in:
+Products seeded:
+Prerequisite Shop:
+Prerequisite Category:
+Idempotent:
+
+ORD INTEGRATION:
+order_items.product_id FK now unblocked:
+ORD migration modified:
+Follow-up owner:
+
+CART INTEGRATION:
+CatalogQueryService usable:
+ProductSnapshot usable:
+CART-01 unblocked:
+
+SECURITY:
+JWT changed:
+OTP changed:
+SecurityConfig changed:
+Client price trusted:
+Cross-module entity import:
+
+FILES CREATED:
+- ...
+
+FILES MODIFIED:
+- ...
+
+TESTS:
+Migration:
+Product constraints:
+ProductImage constraints:
+Catalog happy path:
+Hidden:
+Shop state:
+Category state:
+Batch all-or-nothing:
+Price trust:
+Ordering:
+Seed:
+Architecture:
+Regression:
+
+BUILD:
+clean test:
+package:
+postgres-it:
+git diff --check:
+
+CI:
+Status:
+Run URL:
+
+DEFERRED:
+VENDOR-02:
+PROD-01:
+PROD-02:
+ORD FK follow-up:
+
+OWNER REVIEW REQUIRED:
+- ...
+
+MAIN MODIFIED:
+NO
+
+DEVELOP DIRECT COMMIT:
+NO
+
+MERGED:
+NO
+
+READY FOR REVIEW:
+YES / NO
+
+READY FOR MERGE:
+YES / NO
+
+READY FOR MERGE must be NO unless:
+
+- clean test PASS
+- package PASS
+- postgres-it PASS
+- CI PASS
+- migration ordering correct
+- no architecture violation
+- CatalogQueryService has real production implementation
+- no fake InventoryService
+- no unresolved security/data-integrity blocker
