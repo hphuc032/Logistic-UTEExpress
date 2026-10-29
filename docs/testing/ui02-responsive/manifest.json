@@ -1,0 +1,869 @@
+{
+  "schema": 1,
+  "created_utc": "2026-10-29T06:00:04.007413+00:00",
+  "task": "UI-02",
+  "status": "READY FOR SCOPED REVIEW; independent native-dialog/physical/manual gates remain",
+  "initial_develop": "fb7dcebd434c6887396881e9b34df1bf12d8250e",
+  "synced_develop": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+  "tested_source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+  "branch": "feature/ui-02-responsive-polish",
+  "builds": {
+    "fb7dcebd434c6887396881e9b34df1bf12d8250e": "fc492e2fc5c8857ab45437376ca310a02e6ab934b1b3592c342e5d8e74641690",
+    "0ad4d6436769bcc8679dd0892c18b7ca19f68617": "a01d2fd2dbca92740197e90571fb00cd5b9f5bba01fe64bbf63869a8a70365e6",
+    "70b80a2df8fb64920997a00eff17c4351f6f5904": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+    "1f375fa01882f09755e6a107e0e13c79f427f671": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9"
+  },
+  "browser": "Codex in-app browser via cua_repl; exact engine version NOT VERIFIED; do not borrow historical Chromium versions",
+  "viewports": [
+    {
+      "width": 375,
+      "height": 812
+    },
+    {
+      "width": 768,
+      "height": 1024
+    },
+    {
+      "width": 1440,
+      "height": 900
+    }
+  ],
+  "final_browser_counts": {
+    "buyer": 54,
+    "vendor": 36,
+    "shipper": 9,
+    "manager": 54,
+    "admin": 66,
+    "anonymous": 21
+  },
+  "final_render_checks": 240,
+  "results_scope": "Actual render + clientWidth/documentWidth containment. Business/keyboard actions have separate source-bound receipts.",
+  "screenshots": 151,
+  "console": "pre-sync 70b80a2 inspected warn/error collection empty; post-sync final console collection NOT RUN before browser use disabled",
+  "network": "Sanitized server method/path/status access data and companion HTTP. No browser HAR/trace or unsupported performance API claimed.",
+  "environment": {
+    "java": "Oracle Java21+35",
+    "maven": "Wrapper3.9.11",
+    "postgres": "17.6",
+    "docker_server": "29.4.3",
+    "node": "24.14.0",
+    "profile": "local",
+    "migrations": {
+      "applied": 27,
+      "latest": "20261027100000",
+      "success": true
+    }
+  },
+  "blocking_limits": [
+    "Native confirm dismissal/physical keyboard/focus not verified",
+    "Remaining post-sync interactions/console blocked: Local browser use is disabled in Work settings",
+    "Physical touch/IME/screen-reader, full ordered seed, production/release checks NOT RUN"
+  ],
+  "artifacts": [
+    {
+      "path": ".gitattributes",
+      "bytes": 73,
+      "sha256": "f923524899bc28d99dfc1ed6834c390976889e55ccdfee695e8df43016ea7545"
+    },
+    {
+      "path": "browser-cases.json",
+      "bytes": 514715,
+      "sha256": "38fb7949458a3b77f6b5da12801c2f07d9d45c8523c954e22c71376cbf2ad2e5"
+    },
+    {
+      "path": "db-snapshot.json",
+      "bytes": 1736,
+      "sha256": "67ef597fa2d5e24424c44c730eb2c9dd7d8eedf2fd847d6d053ef2d351f792f5"
+    },
+    {
+      "path": "http-results.json",
+      "bytes": 8114,
+      "sha256": "fa314fc2ecb7a9c34dba922ec447cd81ca8c2db119381370e38d2c8214a17e5a"
+    },
+    {
+      "path": "interactions.json",
+      "bytes": 8381,
+      "sha256": "fe2b226ea021608098b61c78e26ee6e139ffa4b5f40159fc2cdbcd9b3eaf6287"
+    },
+    {
+      "path": "routes.json",
+      "bytes": 2064,
+      "sha256": "5757459db862adedf36018f6402ce58dc4f28c8146402bd755a144211d380d1a"
+    },
+    {
+      "path": "screenshots/after-buyer-_orders_1-375.jpg",
+      "bytes": 100308,
+      "sha256": "c1a9bc1c25c64ddc33e73ec2015d3ff2cff62be4b74398c6ec089a3a5253e8f0"
+    },
+    {
+      "path": "screenshots/after-buyer-_products_1-375.jpg",
+      "bytes": 77257,
+      "sha256": "85eadaba14590f2168206f6fa85e82834223ac4b2233721387e04e6438e61dba"
+    },
+    {
+      "path": "screenshots/after-manager-_manager_dashboard-768.jpg",
+      "bytes": 119536,
+      "sha256": "4c487458793e9931747b5fcc1c58025909c73d8c30ba89a98e863deacfb18433"
+    },
+    {
+      "path": "screenshots/before-admin-_admin_commissions-375.jpg",
+      "bytes": 53180,
+      "sha256": "6ce255e8854d7c03b75931899f97dcc924a644ce733b4c0123a50f5c66a8146f"
+    },
+    {
+      "path": "screenshots/before-admin-_admin_dashboard-375.jpg",
+      "bytes": 139299,
+      "sha256": "67bf304da2a0f0910e492cfe90b77eb886424ec78e9004d4001cbc9d971dbbbb"
+    },
+    {
+      "path": "screenshots/before-admin-_admin_orders_1-375.jpg",
+      "bytes": 112254,
+      "sha256": "5a57d524100d51974840a71cf61717f341d9c883a7dbeaa1aaa1db84bac2ccba"
+    },
+    {
+      "path": "screenshots/before-admin-_admin_orders_1-768.jpg",
+      "bytes": 109922,
+      "sha256": "caeedd3061472a60cd33af06e4ba58cb30e4688d730ba446af58b8702e118265"
+    },
+    {
+      "path": "screenshots/before-admin-_admin_shippers-375.jpg",
+      "bytes": 31330,
+      "sha256": "b5fd8de4502d43dd885d9501e7391cec40389b6f60ae61a85e46b29e26ca2a2b"
+    },
+    {
+      "path": "screenshots/before-anonymous-_products_1-375.jpg",
+      "bytes": 89042,
+      "sha256": "192faf50961d6e27e27d662184c6ca496c2b58a9e146428cd460782294caa668"
+    },
+    {
+      "path": "screenshots/before-buyer-_orders_1-375.jpg",
+      "bytes": 115775,
+      "sha256": "a86ba6966aa9b3d2576415dc6ab93c96e3a9d0f32706002d18c9b6739cb42fe6"
+    },
+    {
+      "path": "screenshots/before-buyer-_user_cart_view-375.jpg",
+      "bytes": 56416,
+      "sha256": "8dd0543c343aa11a7150282f452185896af6affa2d3007815449c5553d9dc108"
+    },
+    {
+      "path": "screenshots/before-buyer-checkout-375.jpg",
+      "bytes": 106526,
+      "sha256": "6392f4e15d705fafcb589b34e1813d220b8f319571af993e9a713bcd546e0af0"
+    },
+    {
+      "path": "screenshots/before-manager-_manager_categories-375.jpg",
+      "bytes": 52702,
+      "sha256": "6684e8f3743901ba1dfc04ba2e4f34ece796ed22957df42ff4c9394ec7860aa5"
+    },
+    {
+      "path": "screenshots/before-manager-_manager_dashboard-768.jpg",
+      "bytes": 126424,
+      "sha256": "fef060f73702cd98a8be5bbc0f7013b9933a2a3c334e9355726a43a524e5f085"
+    },
+    {
+      "path": "screenshots/before-nav-vendor-_vendor_products-1440.jpg",
+      "bytes": 246613,
+      "sha256": "d81f5304f6224a6226d5ca6f1c66e69ea521ff593a98182694b551decf362f44"
+    },
+    {
+      "path": "screenshots/before-shipper-_shipper_shipments_view-375.jpg",
+      "bytes": 30035,
+      "sha256": "845db1ea4f7ebdced7a4c5e9efd65da950fde4e737873f282abc90014afa94d8"
+    },
+    {
+      "path": "screenshots/before-vendor-_vendor_dashboard-768.jpg",
+      "bytes": 191076,
+      "sha256": "26c353204af358a33774e9ca7cd020d70f9e0f51fa5b55d6874ce948b3844f68"
+    },
+    {
+      "path": "screenshots/before-vendor-_vendor_orders_1-375.jpg",
+      "bytes": 117363,
+      "sha256": "6e72d39ad276342b36e820209fb676149e1fe0caf65164f63ff78072d3c68cbc"
+    },
+    {
+      "path": "screenshots/before-vendor-_vendor_products-1440.jpg",
+      "bytes": 246638,
+      "sha256": "1d950f12f0394018e09a45a286ccfdbfdbb0713be4fa2c8718673d3f665676d4"
+    },
+    {
+      "path": "screenshots/final-admin-_admin_dashboard-1440.jpg",
+      "bytes": 164759,
+      "sha256": "2f3ae4b2a9d44e0e1121ffc301704c8b1b655bd6bb5578f07a297dc713c6cc72"
+    },
+    {
+      "path": "screenshots/final-admin-_admin_dashboard-375.jpg",
+      "bytes": 124417,
+      "sha256": "9794ba1f350dde36b06782b2da0065d974f53b101b11458f24e835bab8fa1f7d"
+    },
+    {
+      "path": "screenshots/final-admin-_admin_dashboard-768.jpg",
+      "bytes": 142727,
+      "sha256": "3db2fe324f491aa261cf7a610c14ef2d138ad9420e37793cb47dc086eef65d6e"
+    },
+    {
+      "path": "screenshots/final-admin-_admin_orders_1-1440.jpg",
+      "bytes": 152918,
+      "sha256": "541d8b9a0b5d4dc88ce43d795738a455aa5d5cf80327af08b9b71cbf0e0be4e7"
+    },
+    {
+      "path": "screenshots/final-admin-_admin_orders_1-375.jpg",
+      "bytes": 110974,
+      "sha256": "956b2065d546991d86459ec2a5cbdf83fb5d602252f46e6d1762a2b58d2c5eb6"
+    },
+    {
+      "path": "screenshots/final-admin-_admin_orders_1-768.jpg",
+      "bytes": 127436,
+      "sha256": "63d0cce509215cb4236b708c84b9c28db540907293ad67ddb66904f425f90464"
+    },
+    {
+      "path": "screenshots/final-anonymous-_login-1440.jpg",
+      "bytes": 68233,
+      "sha256": "8a8ed25ada8db7a7a6d57f686bf1fa32bc77704f254b797465e21c746362f5e6"
+    },
+    {
+      "path": "screenshots/final-anonymous-_login-375.jpg",
+      "bytes": 46271,
+      "sha256": "ee7b2169179e75597cb041b346a756670d642eea8b28fe840c8ef853900fcc87"
+    },
+    {
+      "path": "screenshots/final-anonymous-_login-768.jpg",
+      "bytes": 53550,
+      "sha256": "a507abae3702326d4acd704c8a3613f0872eef682f425626ee86a20a2f3a2c5d"
+    },
+    {
+      "path": "screenshots/final-buyer-_-1440.jpg",
+      "bytes": 362849,
+      "sha256": "5c06cd1f205df5f9a1b8ddb1c3c439d416084c05fa153af5bf1d736d097fc41e"
+    },
+    {
+      "path": "screenshots/final-buyer-_-375.jpg",
+      "bytes": 286194,
+      "sha256": "447e09e169ff305ba127cd9e2ef6cc207f9f0b32d1146a5b5faffc46f8b49e90"
+    },
+    {
+      "path": "screenshots/final-buyer-_-768.jpg",
+      "bytes": 317240,
+      "sha256": "39c1e16abf8209e7c1062bc1fcea8fe9d889a1e5bea27f9c5f05f5c970eca479"
+    },
+    {
+      "path": "screenshots/final-buyer-_orders_1-1440.jpg",
+      "bytes": 150249,
+      "sha256": "42464e647706d2e52008820bc0d27268c06001e4c67fe224962ff02593dbaf0d"
+    },
+    {
+      "path": "screenshots/final-buyer-_orders_1-375.jpg",
+      "bytes": 100308,
+      "sha256": "c1a9bc1c25c64ddc33e73ec2015d3ff2cff62be4b74398c6ec089a3a5253e8f0"
+    },
+    {
+      "path": "screenshots/final-buyer-_orders_1-768.jpg",
+      "bytes": 124582,
+      "sha256": "a9cdec16e3eb6cfd7f8572d31ef55034ebc76be988aa49068c9e77f54ec68be6"
+    },
+    {
+      "path": "screenshots/final-buyer-_products_1-1440.jpg",
+      "bytes": 118606,
+      "sha256": "2b532ef4beb0d4324dbe3164e832ddc4eb98ac1ecca20ba08682adb5b9d8362d"
+    },
+    {
+      "path": "screenshots/final-buyer-_products_1-375.jpg",
+      "bytes": 76202,
+      "sha256": "c16e9bcfa7173ec62f37f9cfb0aa7aa91bf45632fc96c12c7061eabda07abaea"
+    },
+    {
+      "path": "screenshots/final-buyer-_products_1-768.jpg",
+      "bytes": 92865,
+      "sha256": "bcafc7ac0176e081bc0ddf15f3b6f7d7096138709147a7e7932ff7ab52aba848"
+    },
+    {
+      "path": "screenshots/final-manager-_manager_dashboard-1440.jpg",
+      "bytes": 137208,
+      "sha256": "f8a2ca9922deeabb5c195b843973c6842d4fd19d5b1be724d845626b71269452"
+    },
+    {
+      "path": "screenshots/final-manager-_manager_dashboard-375.jpg",
+      "bytes": 104378,
+      "sha256": "a624bdd1c44be72fe2341c24039be474c52dd442b0b70a432406e5580c4ca3c2"
+    },
+    {
+      "path": "screenshots/final-manager-_manager_dashboard-768.jpg",
+      "bytes": 119536,
+      "sha256": "4c487458793e9931747b5fcc1c58025909c73d8c30ba89a98e863deacfb18433"
+    },
+    {
+      "path": "screenshots/final-manager-_manager_orders_1-1440.jpg",
+      "bytes": 152974,
+      "sha256": "a05f6d9168a39ebfa05dc83b9068ca3df05cf62192fd9e927ef61f6500ad6bbd"
+    },
+    {
+      "path": "screenshots/final-manager-_manager_orders_1-375.jpg",
+      "bytes": 110974,
+      "sha256": "956b2065d546991d86459ec2a5cbdf83fb5d602252f46e6d1762a2b58d2c5eb6"
+    },
+    {
+      "path": "screenshots/final-manager-_manager_orders_1-768.jpg",
+      "bytes": 127436,
+      "sha256": "63d0cce509215cb4236b708c84b9c28db540907293ad67ddb66904f425f90464"
+    },
+    {
+      "path": "screenshots/final-shipper-_shipper_dashboard-1440.jpg",
+      "bytes": 95539,
+      "sha256": "14aec1c7faaa5b615a709ab1e97e1099d102266f9c397a59d110e71edc8450a3"
+    },
+    {
+      "path": "screenshots/final-shipper-_shipper_dashboard-375.jpg",
+      "bytes": 78134,
+      "sha256": "ab76fe024825d0c99a6a7528e6773838560bd06cba0a3c38bec0d6593960a62f"
+    },
+    {
+      "path": "screenshots/final-shipper-_shipper_dashboard-768.jpg",
+      "bytes": 80748,
+      "sha256": "22f1bb082a29d1627badea0aed0b3446d2d159f3e2360f7790babdc04901da90"
+    },
+    {
+      "path": "screenshots/final-shipper-_shipper_shipments_1_view-1440.jpg",
+      "bytes": 57767,
+      "sha256": "76d2387b8b000c34db13d31486ce0db51d1090b2e1098f18cca2b1c0357c08d1"
+    },
+    {
+      "path": "screenshots/final-shipper-_shipper_shipments_1_view-375.jpg",
+      "bytes": 40595,
+      "sha256": "dec668df3663605831d3586c271b57aed743963a985bb6a14dbc735a94ff92f1"
+    },
+    {
+      "path": "screenshots/final-shipper-_shipper_shipments_1_view-768.jpg",
+      "bytes": 45630,
+      "sha256": "53964a56612ea9134bb95ebffaa6407f2440accd3796326a733953ea1d20ac01"
+    },
+    {
+      "path": "screenshots/final-vendor-_vendor_dashboard-1440.jpg",
+      "bytes": 223778,
+      "sha256": "fe2a97971dce43bcb189b47540ccf9ab6310e0d88ec66519590c5bfc1b5d6d2c"
+    },
+    {
+      "path": "screenshots/final-vendor-_vendor_dashboard-375.jpg",
+      "bytes": 160684,
+      "sha256": "2bd8d11e63e2f7a4c902fc07b8bb6fb2d0c000d73fd70ec440d0e1912e63ba28"
+    },
+    {
+      "path": "screenshots/final-vendor-_vendor_dashboard-768.jpg",
+      "bytes": 191566,
+      "sha256": "b246bac351334d27b1b5c546dff9d7b83ec7857cb246f270bd8978e9f67c581c"
+    },
+    {
+      "path": "screenshots/final-vendor-_vendor_orders_1-1440.jpg",
+      "bytes": 166774,
+      "sha256": "1367a257ce5ffc375feeb949e2016090c40a94d9d451ab97b036f08a6a51ad41"
+    },
+    {
+      "path": "screenshots/final-vendor-_vendor_orders_1-375.jpg",
+      "bytes": 111077,
+      "sha256": "4409e1920c5e38a35c10836d2063ed9ca6e849d2824f63f0c432562bc8d26562"
+    },
+    {
+      "path": "screenshots/final-vendor-_vendor_orders_1-768.jpg",
+      "bytes": 134657,
+      "sha256": "ec431a037688677696556285fd16e94b11699480a2b002e502fb0e4e5fbe2f93"
+    },
+    {
+      "path": "screenshots/interaction-assigned-shipper-_shipper_shipments_1_view-375.jpg",
+      "bytes": 40595,
+      "sha256": "dec668df3663605831d3586c271b57aed743963a985bb6a14dbc735a94ff92f1"
+    },
+    {
+      "path": "screenshots/interaction-cart-populated-buyer-_user_cart_view-1440.jpg",
+      "bytes": 94242,
+      "sha256": "42b92889cfed6344196613dee5d203335dc008b4fc20cf91e1b018ce6778e7c1"
+    },
+    {
+      "path": "screenshots/interaction-cart-populated-buyer-_user_cart_view-375.jpg",
+      "bytes": 59880,
+      "sha256": "3a95956db18acfb7d440d9a99e7e9084bd82b092d96aefd6fe2aa92e434762d8"
+    },
+    {
+      "path": "screenshots/interaction-cart-populated-buyer-_user_cart_view-768.jpg",
+      "bytes": 74525,
+      "sha256": "4f6352b6d19b8e035ec53fd46a2be672922e7bdaacb97056735f123cc750ddac"
+    },
+    {
+      "path": "screenshots/interaction-checkout-quote-buyer-_user_checkout_view-1440.jpg",
+      "bytes": 141585,
+      "sha256": "6002e922a3106279f48adf498b5ba1c1a9ced9cb3349bf8b9020cae63b0a8b49"
+    },
+    {
+      "path": "screenshots/interaction-checkout-quote-buyer-_user_checkout_view-375.jpg",
+      "bytes": 109253,
+      "sha256": "cb33d053daafdd80d07c80e46384cc7529ac36a3fd137e3e0abc245d7313aef2"
+    },
+    {
+      "path": "screenshots/interaction-checkout-quote-buyer-_user_checkout_view-768.jpg",
+      "bytes": 125809,
+      "sha256": "b900b6b11bbbeb864f2854df502d755f2d98ed93e0f1817351c3257f80442ddb"
+    },
+    {
+      "path": "screenshots/interaction-checkout-receipt-buyer-_user_checkout_view-1440.jpg",
+      "bytes": 107003,
+      "sha256": "839046d69b2ab25445d49f6528400972afde00781d2474cbfad4419ae9b0f286"
+    },
+    {
+      "path": "screenshots/interaction-checkout-receipt-buyer-_user_checkout_view-375.jpg",
+      "bytes": 79421,
+      "sha256": "7d1f26fb0319892ff44b69a8df1fa0d61b480daf252348e49c310563209ba8f2"
+    },
+    {
+      "path": "screenshots/interaction-checkout-receipt-buyer-_user_checkout_view-768.jpg",
+      "bytes": 92348,
+      "sha256": "2ace48cad8070a78ba9652a23212947bffd63637329defffe2fc84153439b239"
+    },
+    {
+      "path": "screenshots/interaction-keyboard-scroll-admin-_admin_orders_1-375.jpg",
+      "bytes": 112767,
+      "sha256": "a61684ece5cec9e904eed4724ae4bc320c21506b66334e36efdc4d3f5581e800"
+    },
+    {
+      "path": "screenshots/interaction-keyboard-scroll-buyer-_orders_1-375.jpg",
+      "bytes": 101938,
+      "sha256": "23db727a1a171723092a693c5255434dbe8f9435437f64444a0d85b5f6e7fd67"
+    },
+    {
+      "path": "screenshots/interaction-keyboard-scroll-manager-_manager_products-375.jpg",
+      "bytes": 86879,
+      "sha256": "f839b83c04a794b80995cb5a591a07b1168572bb28af5f7deae808d9b8ea457d"
+    },
+    {
+      "path": "screenshots/interaction-keyboard-scroll-shipper-_shipper_shipments_view-375.jpg",
+      "bytes": 29549,
+      "sha256": "71479523c0d257f469ee041f86fc78dc4aff1d7c44ff9944aac0d50759f27bcf"
+    },
+    {
+      "path": "screenshots/interaction-keyboard-scroll-vendor-_vendor_products-375.jpg",
+      "bytes": 126909,
+      "sha256": "883ca66d6e31c2d4beba7a9372c0e9889fda0176e60f6787772cf2bcf5a337bc"
+    },
+    {
+      "path": "screenshots/interaction-mobile-nav-open-manager-_manager_dashboard-375.jpg",
+      "bytes": 109635,
+      "sha256": "22cd9e79793dd1267f5c3de1efdfa0d6013a9796de49bbdda5cf2c1700530a56"
+    },
+    {
+      "path": "screenshots/interaction-register-invalid-anonymous-_register-1440.jpg",
+      "bytes": 106575,
+      "sha256": "92574de079ae840022d90eb31771c075455ffa1382e5ee21c9bbda1a273c1780"
+    },
+    {
+      "path": "screenshots/interaction-register-invalid-anonymous-_register-375.jpg",
+      "bytes": 77865,
+      "sha256": "1304f38fb9c6a9341c8df106dded86ed774f4c59b03a6cc41234384aed4e9d36"
+    },
+    {
+      "path": "screenshots/interaction-register-invalid-anonymous-_register-768.jpg",
+      "bytes": 90045,
+      "sha256": "b00e3a92ad2fca3c70c5c1264d1aef83eab25ef569bf1ee608f84880f3bab0bf"
+    },
+    {
+      "path": "screenshots/interaction-shipping-form-shipper-_shipper_shipments_1_view-1440.jpg",
+      "bytes": 68638,
+      "sha256": "4326495758518fb679caef9b6aea77d2caef08f36858ca1c488d61227a27082b"
+    },
+    {
+      "path": "screenshots/interaction-shipping-form-shipper-_shipper_shipments_1_view-375.jpg",
+      "bytes": 51689,
+      "sha256": "a880ec3e6a7b721263edd69a69482411906be33edc3b0ce3d0c831e6005c05d0"
+    },
+    {
+      "path": "screenshots/interaction-shipping-form-shipper-_shipper_shipments_1_view-768.jpg",
+      "bytes": 56521,
+      "sha256": "e16bbca8685ec7ec4d0a7e7304a0e147b03f73f2caf5228e31da6d57eb5ce797"
+    },
+    {
+      "path": "screenshots/interaction-workspace-open-manager-_manager_dashboard-768.jpg",
+      "bytes": 131362,
+      "sha256": "fa74d8c47f18d697cd18b8e0802a9945aaa966af91018c3dee0fa2bc51685789"
+    },
+    {
+      "path": "screenshots/post-sync-final-admin-_admin_dashboard-1440.jpg",
+      "bytes": 162736,
+      "sha256": "c42d02f6054d0134e29f5ce4e2ae98c5521e4f1970df73e7401b34100c6e2861"
+    },
+    {
+      "path": "screenshots/post-sync-final-admin-_admin_dashboard-375.jpg",
+      "bytes": 126778,
+      "sha256": "9132e55df21bc3558a5755452d20e6b250158fb2e8d68b2c98a92a8b704b6a9f"
+    },
+    {
+      "path": "screenshots/post-sync-final-admin-_admin_dashboard-768.jpg",
+      "bytes": 143075,
+      "sha256": "f4a857d9b9c136644224df1e4d0853f31cd528fe4331f59e0142b4972bc655f1"
+    },
+    {
+      "path": "screenshots/post-sync-final-admin-_admin_orders_1-1440.jpg",
+      "bytes": 148771,
+      "sha256": "368e8e8441e52e0a5de08bbc1d2adbd622b10d56a365515805ee4a93739b258d"
+    },
+    {
+      "path": "screenshots/post-sync-final-admin-_admin_orders_1-375.jpg",
+      "bytes": 112869,
+      "sha256": "e580e2fa98808c7bf8d8d1011b78c2d31a64b01f83194309376fa770c54520ef"
+    },
+    {
+      "path": "screenshots/post-sync-final-admin-_admin_orders_1-768.jpg",
+      "bytes": 128320,
+      "sha256": "93e6be10e209204dc3022c522e542b28f2d40d6b6a0c8ef810c49d221eb48477"
+    },
+    {
+      "path": "screenshots/post-sync-final-anonymous-_login-1440.jpg",
+      "bytes": 68233,
+      "sha256": "8a8ed25ada8db7a7a6d57f686bf1fa32bc77704f254b797465e21c746362f5e6"
+    },
+    {
+      "path": "screenshots/post-sync-final-anonymous-_login-375.jpg",
+      "bytes": 46271,
+      "sha256": "ee7b2169179e75597cb041b346a756670d642eea8b28fe840c8ef853900fcc87"
+    },
+    {
+      "path": "screenshots/post-sync-final-anonymous-_login-768.jpg",
+      "bytes": 53550,
+      "sha256": "a507abae3702326d4acd704c8a3613f0872eef682f425626ee86a20a2f3a2c5d"
+    },
+    {
+      "path": "screenshots/post-sync-final-buyer-_-1440.jpg",
+      "bytes": 362873,
+      "sha256": "876db954db790b1400c5aeb1c8a81d8aa06a3364419ec2e3dfc62a0042bb2b46"
+    },
+    {
+      "path": "screenshots/post-sync-final-buyer-_-375.jpg",
+      "bytes": 286194,
+      "sha256": "447e09e169ff305ba127cd9e2ef6cc207f9f0b32d1146a5b5faffc46f8b49e90"
+    },
+    {
+      "path": "screenshots/post-sync-final-buyer-_-768.jpg",
+      "bytes": 317240,
+      "sha256": "39c1e16abf8209e7c1062bc1fcea8fe9d889a1e5bea27f9c5f05f5c970eca479"
+    },
+    {
+      "path": "screenshots/post-sync-final-buyer-_orders_1-1440.jpg",
+      "bytes": 170594,
+      "sha256": "0c55863ef8675cc24c4130045d4599da2037c8f24ac7228b5a7f4073f31b0b82"
+    },
+    {
+      "path": "screenshots/post-sync-final-buyer-_orders_1-375.jpg",
+      "bytes": 119157,
+      "sha256": "5aeea345fe25a663bd359fbf63ccb72afbabe7d44fe7babb5ffd1df7cfc57db7"
+    },
+    {
+      "path": "screenshots/post-sync-final-buyer-_orders_1-768.jpg",
+      "bytes": 143370,
+      "sha256": "14bbce0a0a427640a8f14932b6c9483814241edc0721d0a023bbc45f2f084685"
+    },
+    {
+      "path": "screenshots/post-sync-final-buyer-_products_1-1440.jpg",
+      "bytes": 118619,
+      "sha256": "22b59f1d2dc7cc86faf5611fe77cb05cd812be476cc34e8b079f01b89801615f"
+    },
+    {
+      "path": "screenshots/post-sync-final-buyer-_products_1-375.jpg",
+      "bytes": 76202,
+      "sha256": "c16e9bcfa7173ec62f37f9cfb0aa7aa91bf45632fc96c12c7061eabda07abaea"
+    },
+    {
+      "path": "screenshots/post-sync-final-buyer-_products_1-768.jpg",
+      "bytes": 92865,
+      "sha256": "bcafc7ac0176e081bc0ddf15f3b6f7d7096138709147a7e7932ff7ab52aba848"
+    },
+    {
+      "path": "screenshots/post-sync-final-manager-_manager_dashboard-1440.jpg",
+      "bytes": 137249,
+      "sha256": "2d6d36c6283b3d1744741899f5a92b41d0f158cbd046d458d7118a49e6a10386"
+    },
+    {
+      "path": "screenshots/post-sync-final-manager-_manager_dashboard-375.jpg",
+      "bytes": 104215,
+      "sha256": "c8670f2014c78f36c871bc2c41b77c4672042eb2048f02d916936ca3b0642f02"
+    },
+    {
+      "path": "screenshots/post-sync-final-manager-_manager_dashboard-768.jpg",
+      "bytes": 120621,
+      "sha256": "2825a1b27e7b40dbb48794a51d54f4c0196396ae3fb3672e7e392fc6f2ce92d0"
+    },
+    {
+      "path": "screenshots/post-sync-final-manager-_manager_orders_1-1440.jpg",
+      "bytes": 149025,
+      "sha256": "2ace7a53c01c8dced259cd7a05398b717cdf08adfe4d2edd830bb2cd9afd6219"
+    },
+    {
+      "path": "screenshots/post-sync-final-manager-_manager_orders_1-375.jpg",
+      "bytes": 112869,
+      "sha256": "e580e2fa98808c7bf8d8d1011b78c2d31a64b01f83194309376fa770c54520ef"
+    },
+    {
+      "path": "screenshots/post-sync-final-manager-_manager_orders_1-768.jpg",
+      "bytes": 128320,
+      "sha256": "93e6be10e209204dc3022c522e542b28f2d40d6b6a0c8ef810c49d221eb48477"
+    },
+    {
+      "path": "screenshots/post-sync-final-shipper-_shipper_dashboard-1440.jpg",
+      "bytes": 94914,
+      "sha256": "fe9367d287ab52cc00168ac15a3d5c0241aa8f0081938331b702e537b510a775"
+    },
+    {
+      "path": "screenshots/post-sync-final-shipper-_shipper_dashboard-375.jpg",
+      "bytes": 77510,
+      "sha256": "4dda93432783f5b9e99ccfbf01ff8cf842baaca40144e2787fa02aa78d3fe930"
+    },
+    {
+      "path": "screenshots/post-sync-final-shipper-_shipper_dashboard-768.jpg",
+      "bytes": 80057,
+      "sha256": "099b6318ca0e1c8bcf0f11356bf0003f8f1b3244eb29b8669e5fe2a1f5465570"
+    },
+    {
+      "path": "screenshots/post-sync-final-shipper-_shipper_shipments_1_view-1440.jpg",
+      "bytes": 55710,
+      "sha256": "15b7dca5485269430dc522e2b1733bbe20502a9fb1a3e9f05ff588ad6f224fe7"
+    },
+    {
+      "path": "screenshots/post-sync-final-shipper-_shipper_shipments_1_view-375.jpg",
+      "bytes": 37427,
+      "sha256": "634a2337cfa6a22aa75f5f53ed98d7f1eb78ad07045690ac247785f8a187c956"
+    },
+    {
+      "path": "screenshots/post-sync-final-shipper-_shipper_shipments_1_view-768.jpg",
+      "bytes": 43566,
+      "sha256": "f12d49a6bb30e3792c1ac3e5446b73bc9842d2205989c65119a312aac971c90e"
+    },
+    {
+      "path": "screenshots/post-sync-final-vendor-_vendor_dashboard-1440.jpg",
+      "bytes": 237827,
+      "sha256": "703d68c333a2714e84bcefba3e0144aa6ad64b7139130ec14259c1f843db75dc"
+    },
+    {
+      "path": "screenshots/post-sync-final-vendor-_vendor_dashboard-375.jpg",
+      "bytes": 163349,
+      "sha256": "0c9e19a7536b1172e3447195ffd605536c396d6e171d6b5172f738f5bc5a040d"
+    },
+    {
+      "path": "screenshots/post-sync-final-vendor-_vendor_dashboard-768.jpg",
+      "bytes": 207309,
+      "sha256": "2161e8d3c849e2d66157673e7701fe21aeb2279455f1c19ad0e39d4499bc2f0b"
+    },
+    {
+      "path": "screenshots/post-sync-final-vendor-_vendor_orders_1-1440.jpg",
+      "bytes": 173864,
+      "sha256": "7425c6bbd9557aa8c275cad52a84ae4b8e33331e8cd4f12d74aa205ae0c4872e"
+    },
+    {
+      "path": "screenshots/post-sync-final-vendor-_vendor_orders_1-375.jpg",
+      "bytes": 124234,
+      "sha256": "2cb2d9ae687f0783fe812249d254b25b36be224dedd3c54c74b3a4301dbcd746"
+    },
+    {
+      "path": "screenshots/post-sync-final-vendor-_vendor_orders_1-768.jpg",
+      "bytes": 146421,
+      "sha256": "01030bfe4540b1b753d184050e99b33e1f8ecfc65021e1b629b9c412b85905a9"
+    },
+    {
+      "path": "screenshots/post-sync-voucher-invalid-vendor-_vendor_vouchers_new-1440.jpg",
+      "bytes": 128840,
+      "sha256": "ba24475af68952d5b73c5f11e2c17cce29989b27cd909c75d5fa15887e9e4002"
+    },
+    {
+      "path": "screenshots/post-sync-voucher-invalid-vendor-_vendor_vouchers_new-375.jpg",
+      "bytes": 85836,
+      "sha256": "7ececcaeddb265af5f2de2b43b0febd739514e4103c88abfe941fe35d48b56ed"
+    },
+    {
+      "path": "screenshots/post-sync-voucher-invalid-vendor-_vendor_vouchers_new-768.jpg",
+      "bytes": 102795,
+      "sha256": "dde8198b937d208182d3b9b5813ebdeabf70bf8ce4a8e8a7b1827f46d926cfee"
+    },
+    {
+      "path": "screenshots/probe-admin-_admin_dashboard-1440.jpg",
+      "bytes": 166270,
+      "sha256": "6f222825cb09847116ae5894e186ad32665b7058e1f794f886840d760421ef8c"
+    },
+    {
+      "path": "screenshots/probe-admin-_admin_dashboard-375.jpg",
+      "bytes": 124417,
+      "sha256": "9794ba1f350dde36b06782b2da0065d974f53b101b11458f24e835bab8fa1f7d"
+    },
+    {
+      "path": "screenshots/probe-admin-_admin_dashboard-768.jpg",
+      "bytes": 142727,
+      "sha256": "3db2fe324f491aa261cf7a610c14ef2d138ad9420e37793cb47dc086eef65d6e"
+    },
+    {
+      "path": "screenshots/probe-admin-_admin_orders_1-1440.jpg",
+      "bytes": 154394,
+      "sha256": "6bba2bf7eebcd7be0494dc9aab03105d70603526f19c05c9b59a80aec9977ae4"
+    },
+    {
+      "path": "screenshots/probe-admin-_admin_orders_1-375.jpg",
+      "bytes": 110974,
+      "sha256": "956b2065d546991d86459ec2a5cbdf83fb5d602252f46e6d1762a2b58d2c5eb6"
+    },
+    {
+      "path": "screenshots/probe-admin-_admin_orders_1-768.jpg",
+      "bytes": 127436,
+      "sha256": "63d0cce509215cb4236b708c84b9c28db540907293ad67ddb66904f425f90464"
+    },
+    {
+      "path": "screenshots/probe-buyer-_-1440.jpg",
+      "bytes": 362849,
+      "sha256": "5c06cd1f205df5f9a1b8ddb1c3c439d416084c05fa153af5bf1d736d097fc41e"
+    },
+    {
+      "path": "screenshots/probe-buyer-_-375.jpg",
+      "bytes": 283900,
+      "sha256": "4e76411b032459d11a9d2203475270a774db9f20ada0e06810ee1e893a02860c"
+    },
+    {
+      "path": "screenshots/probe-buyer-_-768.jpg",
+      "bytes": 316898,
+      "sha256": "2757905a4a71f8adc47d5719ec42c181b311e761583526695870e77d139d69c2"
+    },
+    {
+      "path": "screenshots/probe-buyer-_orders_1-1440.jpg",
+      "bytes": 150249,
+      "sha256": "42464e647706d2e52008820bc0d27268c06001e4c67fe224962ff02593dbaf0d"
+    },
+    {
+      "path": "screenshots/probe-buyer-_orders_1-375.jpg",
+      "bytes": 100308,
+      "sha256": "c1a9bc1c25c64ddc33e73ec2015d3ff2cff62be4b74398c6ec089a3a5253e8f0"
+    },
+    {
+      "path": "screenshots/probe-buyer-_orders_1-768.jpg",
+      "bytes": 124582,
+      "sha256": "a9cdec16e3eb6cfd7f8572d31ef55034ebc76be988aa49068c9e77f54ec68be6"
+    },
+    {
+      "path": "screenshots/probe-buyer-_products_1-1440.jpg",
+      "bytes": 118568,
+      "sha256": "d03966ff23e7b1a5775b2b385c458a32daafa429cad696b38a2c2f4f0c7ce3f2"
+    },
+    {
+      "path": "screenshots/probe-buyer-_products_1-375.jpg",
+      "bytes": 77257,
+      "sha256": "85eadaba14590f2168206f6fa85e82834223ac4b2233721387e04e6438e61dba"
+    },
+    {
+      "path": "screenshots/probe-buyer-_products_1-768.jpg",
+      "bytes": 92832,
+      "sha256": "8638a98af15282720ed58c14ba0966cc10a5ee200a1e0917ac6dac663b72061b"
+    },
+    {
+      "path": "screenshots/probe-manager-_manager_dashboard-1440.jpg",
+      "bytes": 138748,
+      "sha256": "96688e1dd97ed2401b15d3126fb7a7ad24697dd2b08ea8561a3feae4925eb83c"
+    },
+    {
+      "path": "screenshots/probe-manager-_manager_dashboard-375.jpg",
+      "bytes": 104378,
+      "sha256": "a624bdd1c44be72fe2341c24039be474c52dd442b0b70a432406e5580c4ca3c2"
+    },
+    {
+      "path": "screenshots/probe-manager-_manager_dashboard-768.jpg",
+      "bytes": 119536,
+      "sha256": "4c487458793e9931747b5fcc1c58025909c73d8c30ba89a98e863deacfb18433"
+    },
+    {
+      "path": "screenshots/probe-manager-_manager_orders_1-1440.jpg",
+      "bytes": 154440,
+      "sha256": "c637c7bb7d7c0822530ace3c765b30c81c854f883e1d3b9511f62e492886778c"
+    },
+    {
+      "path": "screenshots/probe-manager-_manager_orders_1-375.jpg",
+      "bytes": 110974,
+      "sha256": "956b2065d546991d86459ec2a5cbdf83fb5d602252f46e6d1762a2b58d2c5eb6"
+    },
+    {
+      "path": "screenshots/probe-manager-_manager_orders_1-768.jpg",
+      "bytes": 127436,
+      "sha256": "63d0cce509215cb4236b708c84b9c28db540907293ad67ddb66904f425f90464"
+    },
+    {
+      "path": "screenshots/probe-manager-workspace-open-768.jpg",
+      "bytes": 50220,
+      "sha256": "010215f5b7b3542e61c2d1ce2363dd5161f372944d4346b462c41249f8abfd7e"
+    },
+    {
+      "path": "screenshots/probe-shipper-_shipper_dashboard-1440.jpg",
+      "bytes": 96846,
+      "sha256": "1194e485ace7497ac1a4603f8f492068ecf3c9a19eb087cee17f9e1c67cbb5cb"
+    },
+    {
+      "path": "screenshots/probe-shipper-_shipper_dashboard-375.jpg",
+      "bytes": 78134,
+      "sha256": "ab76fe024825d0c99a6a7528e6773838560bd06cba0a3c38bec0d6593960a62f"
+    },
+    {
+      "path": "screenshots/probe-shipper-_shipper_dashboard-768.jpg",
+      "bytes": 80748,
+      "sha256": "22f1bb082a29d1627badea0aed0b3446d2d159f3e2360f7790babdc04901da90"
+    },
+    {
+      "path": "screenshots/probe-shipper-_shipper_shipments_1_view-1440.jpg",
+      "bytes": 59107,
+      "sha256": "5bca5856aea1cb8f0b80a3d9bdf3dcf267593345f8967102a3245ea37b4d8669"
+    },
+    {
+      "path": "screenshots/probe-shipper-_shipper_shipments_1_view-375.jpg",
+      "bytes": 40595,
+      "sha256": "dec668df3663605831d3586c271b57aed743963a985bb6a14dbc735a94ff92f1"
+    },
+    {
+      "path": "screenshots/probe-shipper-_shipper_shipments_1_view-768.jpg",
+      "bytes": 37460,
+      "sha256": "9925e3d8c9e332eda1a95078e76d3fdc58a715517c0897278bd93431b2a9e74a"
+    },
+    {
+      "path": "screenshots/probe-vendor-_vendor_dashboard-1440.jpg",
+      "bytes": 223713,
+      "sha256": "880952b182cc402d114e13090dcaf2db4c61295fd7386c16881621cc9438cd56"
+    },
+    {
+      "path": "screenshots/probe-vendor-_vendor_dashboard-375.jpg",
+      "bytes": 160664,
+      "sha256": "191f186bce3e9e3e6d9c1d91f1068bfd3b28e3c854b1a5d9cfb75548e99b8eaa"
+    },
+    {
+      "path": "screenshots/probe-vendor-_vendor_dashboard-768.jpg",
+      "bytes": 191481,
+      "sha256": "1e6d7def126bc0a0e0495f17f9943537c2b265ee3437c5bbe3f904d33442196c"
+    },
+    {
+      "path": "screenshots/probe-vendor-_vendor_orders_1-1440.jpg",
+      "bytes": 166774,
+      "sha256": "1367a257ce5ffc375feeb949e2016090c40a94d9d451ab97b036f08a6a51ad41"
+    },
+    {
+      "path": "screenshots/probe-vendor-_vendor_orders_1-375.jpg",
+      "bytes": 111077,
+      "sha256": "4409e1920c5e38a35c10836d2063ed9ca6e849d2824f63f0c432562bc8d26562"
+    },
+    {
+      "path": "screenshots/probe-vendor-_vendor_orders_1-768.jpg",
+      "bytes": 134657,
+      "sha256": "ec431a037688677696556285fd16e94b11699480a2b002e502fb0e4e5fbe2f93"
+    },
+    {
+      "path": "screenshots.json",
+      "bytes": 128580,
+      "sha256": "411431e3d9356a42846b6d090e15de3ae1054f28e17ad8cc4a171124274a6ea1"
+    },
+    {
+      "path": "server-access.json",
+      "bytes": 241528,
+      "sha256": "7372feb3e2ab4fec8440ce0e55e1f840bd56eeec779adaa4df95ff78e3da884b"
+    },
+    {
+      "path": "source-proof.json",
+      "bytes": 18766,
+      "sha256": "782c3977d3c515b9c0eba2b005c895896e8bbf0e30541719f8aa6356a72cb494"
+    },
+    {
+      "path": "test-results.json",
+      "bytes": 63383,
+      "sha256": "267e016986baf531cf7f04d1edb3c4467791ec1bb9b86739d6419a12fcba29eb"
+    }
+  ]
+}

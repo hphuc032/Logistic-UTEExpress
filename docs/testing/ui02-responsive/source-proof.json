@@ -1,0 +1,472 @@
+{
+  "tested_source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+  "source_tree": "6b7d6e710c21b7a7d045f6328d67854f588e03e2",
+  "owner_develop": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+  "runtime_jar_sha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+  "git_objects": {
+    "fb7dcebd434c6887396881e9b34df1bf12d8250e": {
+      "src/main": "bbd3dda5d2949b131a20d674b271f9c0edcb84f2",
+      "src/test/java": "9cec9a6e953ef33d098a271f702fc992e2258ea9",
+      "src/test/resources": "55e542e0fbe1c0f5aeed60be0b1916755fcdae18",
+      "pom.xml": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      ".github/workflows": "32d64cf1bdcd8db7e5519a9324bd66f1bd1fedc1",
+      "src/test/js": "81ce7e98ff58c23f7ff35df6e55a09a17dc0a166"
+    },
+    "0ad4d6436769bcc8679dd0892c18b7ca19f68617": {
+      "src/main": "72ac0ba1289d00cc5ce1cfeb83c8c297ff4b4f3c",
+      "src/test/java": "9cec9a6e953ef33d098a271f702fc992e2258ea9",
+      "src/test/resources": "55e542e0fbe1c0f5aeed60be0b1916755fcdae18",
+      "pom.xml": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      ".github/workflows": "32d64cf1bdcd8db7e5519a9324bd66f1bd1fedc1",
+      "src/test/js": "814eb74078a438cf1e285483f68fdcf260f024d6"
+    },
+    "70b80a2df8fb64920997a00eff17c4351f6f5904": {
+      "src/main": "f4fc8e84068ca4640c38ee794ec5e6b8e555762d",
+      "src/test/java": "9cec9a6e953ef33d098a271f702fc992e2258ea9",
+      "src/test/resources": "55e542e0fbe1c0f5aeed60be0b1916755fcdae18",
+      "pom.xml": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      ".github/workflows": "32d64cf1bdcd8db7e5519a9324bd66f1bd1fedc1",
+      "src/test/js": "814eb74078a438cf1e285483f68fdcf260f024d6"
+    },
+    "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9": {
+      "src/main": "26387187c9a8cd64a20c4d93b6ea3160431216bd",
+      "src/test/java": "f50cf2b152294fa825a06f65d228e87c2165450a",
+      "src/test/resources": "55e542e0fbe1c0f5aeed60be0b1916755fcdae18",
+      "pom.xml": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      ".github/workflows": "32d64cf1bdcd8db7e5519a9324bd66f1bd1fedc1",
+      "src/test/js": "81ce7e98ff58c23f7ff35df6e55a09a17dc0a166"
+    },
+    "1f375fa01882f09755e6a107e0e13c79f427f671": {
+      "src/main": "56d774e38fe2426cd8339413b9e2f01896dec681",
+      "src/test/java": "f50cf2b152294fa825a06f65d228e87c2165450a",
+      "src/test/resources": "55e542e0fbe1c0f5aeed60be0b1916755fcdae18",
+      "pom.xml": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      ".github/workflows": "32d64cf1bdcd8db7e5519a9324bd66f1bd1fedc1",
+      "src/test/js": "814eb74078a438cf1e285483f68fdcf260f024d6"
+    }
+  },
+  "ui02_paths_against_develop": [
+    "src/main/resources/static/css/app.css",
+    "src/main/resources/static/js/app.js",
+    "src/main/resources/templates/fragments/navbar.html",
+    "src/main/resources/templates/governance/orders/detail.html",
+    "src/main/resources/templates/layout/dashboard.html",
+    "src/main/resources/templates/shipping/shipper/list.html",
+    "src/test/js/app.test.cjs"
+  ],
+  "backend_migrations_security_test_assertions_config_workflow_equal_to_develop": true,
+  "runtime_resource_entries": [
+    {
+      "path": "application-local.yml",
+      "sha256": "5e6aa3719be07f467d87a63d885a90b99bbb373f3ee6dc3c8599bec278b7aa7b"
+    },
+    {
+      "path": "application-prod.yml",
+      "sha256": "94ed19493dcee8fc4eebd70bc379d0329c2b5a59485899f9ca0e9be55b84634d"
+    },
+    {
+      "path": "application.yml",
+      "sha256": "8c90a3610767e39c960f368ee545ef24913f01ae64e52f8979f1219fa20f332f"
+    },
+    {
+      "path": "templates/index.html",
+      "sha256": "6534a5ab27bf9e7df805bbcea60c1d286e8af13837be4f0c9a85253c3170afcf"
+    },
+    {
+      "path": "templates/account/addresses.html",
+      "sha256": "6550292c4d4edd620e722750e67f0b82e8901eaf265978078585887e85c9ddb4"
+    },
+    {
+      "path": "templates/account/profile.html",
+      "sha256": "2de8852bf66ff0da82156f4ef8274ee43931d5fc305c1fbf30183bf0cd46c360"
+    },
+    {
+      "path": "templates/auth/forgot-password.html",
+      "sha256": "cb296256794ec08b86449d9800b749fd6a0aa46e2887c8896147741351198929"
+    },
+    {
+      "path": "templates/auth/login.html",
+      "sha256": "f0f6b12b37a4deafca4f0bdc1860b63c81d2091a21b45a64f8be721c00c05e38"
+    },
+    {
+      "path": "templates/auth/register.html",
+      "sha256": "50e9a978789b70638ba0a9d333c033edfce72c096c2e5a10f4956e20ac1a3519"
+    },
+    {
+      "path": "templates/auth/reset-password.html",
+      "sha256": "4c92c38f665feec9f7f27c1ec510fc69f1a16212514bbab3806b714360330b88"
+    },
+    {
+      "path": "templates/auth/verify-otp.html",
+      "sha256": "c9c6fa0d0d19fa1263260061c4e92f823ff42895ab888bc867a23a9dafbcca1a"
+    },
+    {
+      "path": "templates/cart/view.html",
+      "sha256": "b5137e0651569f6f957e80f0919b3d68175cdc276f8221bdf3591d975b15369c"
+    },
+    {
+      "path": "templates/categories/detail.html",
+      "sha256": "f2e8ab344d8b5c603be7d8589e304140401dd91363eae2d50260cfb2baca5551"
+    },
+    {
+      "path": "templates/checkout/quote.html",
+      "sha256": "62e49da595c53cbf22f180d364398a49a9d54281dc3159a2f0a1f82c7c93f4b3"
+    },
+    {
+      "path": "templates/engagement/list.html",
+      "sha256": "710b61d8c0ecd094c5ac9def9ad924f030db87e5421d1c7f9437a160efba9ca5"
+    },
+    {
+      "path": "templates/engagement/review-form.html",
+      "sha256": "4edc51018fedddd601acbbefec91132c9d4d12a76d6c5d2b38acb55304efdd41"
+    },
+    {
+      "path": "templates/engagement/reviews.html",
+      "sha256": "632ba3007d458b72fc7c615f760a83b7e677d8d0f269e5c59aa5a7057ca9b0b8"
+    },
+    {
+      "path": "templates/error/403.html",
+      "sha256": "9a0258d281656a82e6ed8aca4c0ebfbc270ddd6f6518b1dd24fc569a1a88cc6e"
+    },
+    {
+      "path": "templates/error/404.html",
+      "sha256": "790857dd5e254d261fde8ba4e5995d55445ae51bbe3ce79465303299cb0ad989"
+    },
+    {
+      "path": "templates/error/500.html",
+      "sha256": "7405123530662ac325dd4d3d7e9b240367c4f568341ea6c7ffaf12886a620a46"
+    },
+    {
+      "path": "templates/fragments/alerts.html",
+      "sha256": "8f3501757670e900dbbb6f436eaa90031cc55c7b8c37734780276cf92ba0633f"
+    },
+    {
+      "path": "templates/fragments/breadcrumbs.html",
+      "sha256": "ddde11211bb684a7613bdd038821bc6d7d03d81e3adeb60cb7b5694193c70d4c"
+    },
+    {
+      "path": "templates/fragments/catalog.html",
+      "sha256": "1a88b12359c00c25f7a59a5b96720880b6db1ca411c9c59a14effda74f169fdc"
+    },
+    {
+      "path": "templates/fragments/components.html",
+      "sha256": "e6b99209963a628a289f127348433a9c3c9606bb0f85d2f3abd7a7833d6eef4d"
+    },
+    {
+      "path": "templates/fragments/footer.html",
+      "sha256": "5382a4dba443c71e578d6761a5b173fe75cda27f3562d2f3e6d3c00d195fd665"
+    },
+    {
+      "path": "templates/fragments/head.html",
+      "sha256": "2f9af9050c9e0ec8867a8087638fe9d429c42a215e7ad9f24cb54310132c5783"
+    },
+    {
+      "path": "templates/fragments/navbar.html",
+      "sha256": "6f4155bbe27d0d4437f2487e384b17f92b5058e073f6d1c6096920460ed5bdda"
+    },
+    {
+      "path": "templates/governance/audit-logs.html",
+      "sha256": "4805d12a8395d67c6504dc491c85815735a3659ae5b0381b925c3c333e8662c8"
+    },
+    {
+      "path": "templates/governance/dashboard.html",
+      "sha256": "ff68524e2963e944cb1fa4b9b6d766d95b2471127ec85782e360dac81906a1a6"
+    },
+    {
+      "path": "templates/governance/revenue.html",
+      "sha256": "f7e34d8d81aa7aee461c1a3f3912fb168ece4b88d48c3a25c3a58201de2139ea"
+    },
+    {
+      "path": "templates/layout/base.html",
+      "sha256": "6c234a990818f10b39b550f4583d48855031126327645287dc8fb7de4f3c11ff"
+    },
+    {
+      "path": "templates/layout/dashboard.html",
+      "sha256": "cc0343841e570920e6940a4a6785bc074127fe3ee1a072d106ac85cab5aec953"
+    },
+    {
+      "path": "templates/notification/inbox.html",
+      "sha256": "c7aa177bd8a0636daa3bbba0ea00dbda91fedaef720a7f0ea3552212d1d0dd4e"
+    },
+    {
+      "path": "templates/order/detail.html",
+      "sha256": "c22e3320d597f28257ab52a6931378441341fb53622547052a4893fa764704a2"
+    },
+    {
+      "path": "templates/order/error.html",
+      "sha256": "5590fc30a8c90d84e5669588cfe9071f8df9ccb815dbe8aaa64cbe1d4713cbd9"
+    },
+    {
+      "path": "templates/order/list.html",
+      "sha256": "279241960800576ad95f1f83e2a639cf4c3e3e049dbf8560b07b335f6bcba0b6"
+    },
+    {
+      "path": "templates/order/return.html",
+      "sha256": "71cd816d8e1b5bd2a671f50f93468cfa9a25f9e35f93a50ce9a3b0050441f146"
+    },
+    {
+      "path": "templates/products/detail.html",
+      "sha256": "32088269d42d5f107600c2911441534874985e3618669abaaddd759727dc60d3"
+    },
+    {
+      "path": "templates/products/list.html",
+      "sha256": "fd06340e2e745e7a7a234480cd48bf2c4813ac2f1e3360a46d2663d1ba3ebda6"
+    },
+    {
+      "path": "templates/shipping/provider-form.html",
+      "sha256": "c487d7e7814d1db1d3c68c22516f72b45e8f5e4ed11b8fa98a63db0a8bcbf8bf"
+    },
+    {
+      "path": "templates/shipping/providers.html",
+      "sha256": "5fce02fff13fbcebe5620000947f0dcedbf5bde84e26f681c77d5fdd7225f85c"
+    },
+    {
+      "path": "templates/shipping/rate-form.html",
+      "sha256": "d5f1ed4c5e6c6541308905e05f6a023d72e3b53d39901e3449a9b1016982bb2f"
+    },
+    {
+      "path": "templates/shipping/rates.html",
+      "sha256": "3156e1cf157f8bf11cf9d3c85560dfd69b3bafb86fddb2bd7a0f508ab97fd753"
+    },
+    {
+      "path": "templates/shop/application.html",
+      "sha256": "31bb7f05978945c0c8f829a4e7e97850f2aa494f8a572c9f804df49c47f09694"
+    },
+    {
+      "path": "templates/shop/register.html",
+      "sha256": "9c084fdd2f973921b9f84fa64db54b28b56be6f94da1b77b414aa75a812a96b2"
+    },
+    {
+      "path": "templates/shops/detail.html",
+      "sha256": "82eda5dea9a1d06d06bf8ef8b88a7d8de84db583cd12f6bcf83c3a28a8491062"
+    },
+    {
+      "path": "templates/shops/list.html",
+      "sha256": "886b4ba37d056e42a5a0f112b716cc6ff0ee164f90aa6b376dffad31e8474e43"
+    },
+    {
+      "path": "templates/vendor/dashboard.html",
+      "sha256": "0d97bf93e4eb1b6f2c6516c09380c127fb0e36029d0699a8db7b667ca3063027"
+    },
+    {
+      "path": "templates/vendor/orders/detail.html",
+      "sha256": "a0092b81967c31dc67fefbd486f6ab4cbf06bf256b26fd8f5d1a277b8d8f76cb"
+    },
+    {
+      "path": "templates/vendor/orders/list.html",
+      "sha256": "62e4d21d928d46a2c4ebba38970765795ffa4006ca261feca9f926eb668dda14"
+    },
+    {
+      "path": "templates/vendor/products/form.html",
+      "sha256": "aa016e6a323af0864b14b901fc00081c8e1eb640070b0d91b43b82d95471d1a2"
+    },
+    {
+      "path": "templates/vendor/products/list.html",
+      "sha256": "14ddfc96dfff120ebe4fe3cd706f1da6ee0300f37f49f86fdaa75ddc22035598"
+    },
+    {
+      "path": "templates/vendor/promotions/error.html",
+      "sha256": "4b478ec55682c517fec9e6523415eea42699764b410210066c1b267fa01ae3f7"
+    },
+    {
+      "path": "templates/vendor/promotions/form.html",
+      "sha256": "e09c2226176537ddc93b90c1289ffac3f8ac5c5a8f046dc5d3cfdcfcb3dece54"
+    },
+    {
+      "path": "templates/vendor/promotions/list.html",
+      "sha256": "2e7f1c3380812b29451bff4f7641fe9f09905891194c1e9931104f7f1c16c4aa"
+    },
+    {
+      "path": "templates/vendor/vouchers/error.html",
+      "sha256": "1709c615bbde07ed22f90f0186d7a9a985947f78f9afff91b23b3b8675fb704c"
+    },
+    {
+      "path": "templates/vendor/vouchers/form.html",
+      "sha256": "2982a805d8f89d3a54c7c7b0f86dc8b5eefaa5f28a71c29123e176ac49810fa5"
+    },
+    {
+      "path": "templates/vendor/vouchers/list.html",
+      "sha256": "5f41013bb6fe5f778734fb3ae9af19ae763747d4743d98ddc18fc22e5e9852c0"
+    },
+    {
+      "path": "templates/shipping/shipper/dashboard.html",
+      "sha256": "8094cf190d3ead2dc00c5be6f70dea38e0efcb79fc45b7212d15b552187660e7"
+    },
+    {
+      "path": "templates/shipping/shipper/detail.html",
+      "sha256": "d788fa90492f313c61280b97884595d916c840138a4843c74e8811341efa55ed"
+    },
+    {
+      "path": "templates/shipping/shipper/list.html",
+      "sha256": "fa8befe38ce2630c912cb32cab46fe17171a5ab9f427aeab001396cf08585ffb"
+    },
+    {
+      "path": "templates/governance/accounts/detail.html",
+      "sha256": "963bb98587c7d5d6dc622942cd9a714a19ffad196a31a53556ffbc8cc4fb491c"
+    },
+    {
+      "path": "templates/governance/accounts/list.html",
+      "sha256": "975d002a7645eb6a04ce964c6ef60339d6f555c692b12533c2c5060c09fbe647"
+    },
+    {
+      "path": "templates/governance/categories/form.html",
+      "sha256": "88f7d713aa74780e236a9f6b3c8310388cd6ee57700c910db502bc8fa61c7cd5"
+    },
+    {
+      "path": "templates/governance/categories/list.html",
+      "sha256": "14f23b5a301fcc285531969a3ad9d11ed9bcd189d5d80fd2203069fa8848289a"
+    },
+    {
+      "path": "templates/governance/commissions/list.html",
+      "sha256": "01e7e3dff7c569e7bae25f6d61559b3ea58d03bbcc8060a294ca630f66428169"
+    },
+    {
+      "path": "templates/governance/moderation/list.html",
+      "sha256": "c59e086a409ffb23fc7c2d2853c4f1868ec7ba5bd30bb9a17759fc4b1854d0b2"
+    },
+    {
+      "path": "templates/governance/orders/detail.html",
+      "sha256": "76ee56770a0d196eb40b6c2a28b3e80e208bc6027bd09c79d237c6fa9f1f4111"
+    },
+    {
+      "path": "templates/governance/orders/list.html",
+      "sha256": "34ffa034eca4e4ebc75be6122f09eafde3712099672574335aaf8df9c7f7c2b8"
+    },
+    {
+      "path": "templates/governance/shippers/list.html",
+      "sha256": "8c723a0aec97458701410dfdb5259f3e933b41c59ae90b5b76d3e7f081094511"
+    },
+    {
+      "path": "templates/governance/shops/detail.html",
+      "sha256": "2fe3e65fa98d2fabf034778e9edbe456237e5958217d8d7b533bcda7de4fb2a4"
+    },
+    {
+      "path": "templates/governance/shops/list.html",
+      "sha256": "4b15dd5b74356ce952a793339ce4064140cf04963b986340eccf61384a01ee3e"
+    },
+    {
+      "path": "static/css/app.css",
+      "sha256": "b64bc47a1f65f06b9467a927c7c506c7931e61b45bf8d40da82d672dec4a50d9"
+    },
+    {
+      "path": "static/js/app.js",
+      "sha256": "33878f951f4be137e2c592da0003a14a1233c54c0e77dc6190e345dd9b45f16a"
+    },
+    {
+      "path": "static/js/buyer-cancellation.js",
+      "sha256": "32df1791f1f3465fcae2db4c777c1136ebd15cf596cb269ce3e1d91ea9db56c2"
+    },
+    {
+      "path": "static/js/notifications.js",
+      "sha256": "2caabc227085d8442427372b7370a1a47e3f62812a49c4fba24d582ffbea7b20"
+    },
+    {
+      "path": "db/migration/V20260920143000__qd_db01_schema_baseline.sql",
+      "sha256": "a241a457141e6e34ee11fe7a7e9bf591b540a715ce8c708033cbe1debc1a3941"
+    },
+    {
+      "path": "db/migration/V20260921070156__hp_auth01_identity.sql",
+      "sha256": "ac644e830983f72ce3237c09b03778dd185920ca76b803049bbf5efbbfb877a5"
+    },
+    {
+      "path": "db/migration/V20260921081035__qd_admin00_audit_logs.sql",
+      "sha256": "3cd187338e33e8ab6414fc621cb667c516e4ac929d01841bf7ac84b1306d8e2c"
+    },
+    {
+      "path": "db/migration/V20260922090000__qd_admin04_categories.sql",
+      "sha256": "f75bc99129719b34164a69e367f6687931d141db90521d0679a068554a9d5bcb"
+    },
+    {
+      "path": "db/migration/V20260923090000__td_ord01_domain_core.sql",
+      "sha256": "345c62905f5fc1761c1bcc0f14ba7da975414c6f7975274a11ffa4c0cd4b3a5a"
+    },
+    {
+      "path": "db/migration/V20260923090100__hp_auth03_email_otp.sql",
+      "sha256": "a5f0256f419bb19c4c762ee1b611e4923dcf29f05b44584598cac3a1b111cc3f"
+    },
+    {
+      "path": "db/migration/V20260923100000__qd_ship00_providers_rates.sql",
+      "sha256": "4fa9fcec259779ad94dba9d29186b550c8feae0c1bbb021f380034f898d09c7e"
+    },
+    {
+      "path": "db/migration/V20260923100100__hp_vendor01_shops.sql",
+      "sha256": "9c1e31911b37e913da642cd71a480efb805e0e9df905b4b6a118c63f09677b78"
+    },
+    {
+      "path": "db/migration/V20260924005244__hp_prod00_catalog_foundation.sql",
+      "sha256": "9cca5d0678a5d214d5ab0cc5f1936548dad6d05e6a12d6446b7ded0eb3e2a95a"
+    },
+    {
+      "path": "db/migration/V20260925022804__td_cart01_foundation.sql",
+      "sha256": "0061c769782bd983dcbaa6a2680891c43d95531aca7d88424058524106d16303"
+    },
+    {
+      "path": "db/migration/V20260926035526__hp_auth04_password_reset.sql",
+      "sha256": "fc62277b6762093a342c49c0816c0b2898a8198ff8554cfb7e6e892310a58d0e"
+    },
+    {
+      "path": "db/migration/V20260926085003__hp_user01_profile.sql",
+      "sha256": "dfa4db850991c95dba9b0eaabb9f4bc9daed7e4ae81bbacdf6a0432b18f42dfa"
+    },
+    {
+      "path": "db/migration/V20260927123343__hp_user02_addresses.sql",
+      "sha256": "73304b16065d4f6b9744d4525bb809ec353247c80977b9dabbdf51f268b7a2bf"
+    },
+    {
+      "path": "db/migration/V20260928090000__qd_admin05_moderation.sql",
+      "sha256": "0250865da420d8bfa8b239634253bcde7582a7d1bc6fd983d8daee360c7e930a"
+    },
+    {
+      "path": "db/migration/V20260930100000__qd_eng01_favorites_recent.sql",
+      "sha256": "a6976386318d9b9057494499737a6e52730c6dd33351e633252600c9f721ae4f"
+    },
+    {
+      "path": "db/migration/V20261002100000__qd_admin06_commission_policy.sql",
+      "sha256": "8f04e9655751e8a47494da1c0ba09b917dda2c856e163f021aae24800f029497"
+    },
+    {
+      "path": "db/migration/V20261006090000__td_ord04_shipping_snapshot.sql",
+      "sha256": "93dd7f644ead082e203c025a3f685a1a1ba187f4095911d0598ad1b564998b81"
+    },
+    {
+      "path": "db/migration/V20261007090000__td_promo01_vouchers.sql",
+      "sha256": "303b5978d70ce507eb1da609b26eb179efb9839a5ff1299c038576532452b9e1"
+    },
+    {
+      "path": "db/migration/V20261007100000__qd_ship01_shipments.sql",
+      "sha256": "4ec2a3f168becafd9a0cbb7516b49a27ee8a6d768804a57221c0f77b37955eb0"
+    },
+    {
+      "path": "db/migration/V20261008090000__td_promo02_product_promotions.sql",
+      "sha256": "2f3a7cbff0fcc5f8d7aa901c542b865a8af0db234d5658fa47ad42bfa1c1fa68"
+    },
+    {
+      "path": "db/migration/V20261008100000__qd_ws01_notifications.sql",
+      "sha256": "98f7acdb109e37382654b1e06b43aada927227c312e0e0cd3b2adb1ef8c7d11b"
+    },
+    {
+      "path": "db/migration/V20261013090000__td_return01_management.sql",
+      "sha256": "7990fe405cc5b23a2d13e84aaa73076d70fd7ad963a3ab6d75993af476ab55a5"
+    },
+    {
+      "path": "db/migration/V20261018090000__td_ord04_return_receipt.sql",
+      "sha256": "69fdb05bae4a7ddd91e17a80dae34cb475d6d2dc620951863ed2c1477044f84e"
+    },
+    {
+      "path": "db/migration/V20261018110000__qd_ship03_delivery_failures.sql",
+      "sha256": "1af037bcbb909cadd8b33dd705b6698de91cad7b5da4f120635464190ecfab2f"
+    },
+    {
+      "path": "db/migration/V20261022090000__td_pay02_refund_ledger.sql",
+      "sha256": "4d547b491933268c69d0022f2bc0fdb2d622a913b08dfcbb0e6b8fbfc9bacdee"
+    },
+    {
+      "path": "db/migration/V20261023170000__qd_rev01_review_foundation.sql",
+      "sha256": "e29eede1d50a4c36e95277644d33da2252cf6a0e40f2c9f70e2260de7e3229ea"
+    },
+    {
+      "path": "db/migration/V20261027100000__hp_int02_return_to_sender.sql",
+      "sha256": "9a0354adf78d7586ba6ecd205e8ee3ee29c3ce08d9221e50bbc77b76fd7864b2"
+    }
+  ]
+}
