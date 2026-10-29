@@ -1,0 +1,138 @@
+{
+  "schema": 1,
+  "recorded_utc": "2026-10-29T17:07:55.909004+00:00",
+  "decision_client_date": "2026-10-30",
+  "executed_source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "source_tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+  "evidence_publication": "c5ce35c94b10fa9015277512e5ab0d7e0641a5dc",
+  "decision_authority": "HP official decision supplied directly in current user task; no new approval/merge action by QD",
+  "decision_reference_url": null,
+  "decision_reference_status": "PENDING direct HP decision URL/receipt attachment; forwarded decision is authority for this append-only record",
+  "layers": {
+    "QD_technical_execution": "Normal and Clock-2 runner exit0; original observer STOP and subsequent read-only cleanup audit preserved",
+    "TD_independent_raw_verification": "PASS per official decision supplied in current task; QD did not perform or relabel this as its own independent review",
+    "TD_independent_seed_execution": "NOT RUN",
+    "HP_FR06_acceptance": "ACCEPTED WITH DOCUMENTED LIMITATIONS"
+  },
+  "TD_raw_review_reference": {
+    "url": null,
+    "receipt_sha256": null,
+    "status": "PENDING traceability link/receipt from TD; reported PASS is not downgraded or expanded"
+  },
+  "limitations": [
+    {
+      "id": "FR06-E01",
+      "status": "RETAINED / ACCEPTED WITH DOCUMENTED LIMITATIONS",
+      "scope": "Cleanup observer case-sensitive false stop, read-only exact-ID/name cleanup proof and separate remaining-mode observer correction; no normal seed retry or pinned guard change"
+    },
+    {
+      "id": "JAR_BINARY_EQUIVALENCE",
+      "status": "NOT VERIFIED",
+      "scope": "Source provenance and original QD JAR checksum do not prove byte-for-byte equivalence to another build/JAR"
+    },
+    {
+      "id": "SHARED_CHECKPOINT",
+      "status": "SAME-PROCESS ONLY",
+      "scope": "Shared validate-and-preserve checkpoint; no shared full cross-process/crash recovery claim"
+    },
+    {
+      "id": "LIVE_GATEWAY",
+      "status": "NOT VERIFIED",
+      "scope": "Synthetic PAID/manual attestation fixtures, not bank/gateway settlement verification"
+    },
+    {
+      "id": "TD_SEED_EXECUTION",
+      "status": "NOT RUN",
+      "scope": "QD-launched child JVMs are not TD-performed independent seed execution"
+    }
+  ],
+  "other_retained_limits": [
+    "FR06-SETUP01 junction setup attempt preserved",
+    "pg_dump hash only; no dump-byte restore verification",
+    "34-table fingerprints do not prove sequence/upload/clean-host/backup recovery"
+  ],
+  "gates": {
+    "FR04": "ACCEPTED",
+    "FR05": "ACCEPTED WITH DOCUMENTED LIMITATION: historical Docker cleanup incomplete; FR06 does not replace it",
+    "FR06": "ACCEPTED WITH DOCUMENTED LIMITATIONS",
+    "FR07": "AUTHORIZED / NOT RUN; TD owner, QD support only",
+    "G01_human": "PENDING",
+    "QA03": "NOT COMPLETED",
+    "PR69": "DRAFT; no approval/merge",
+    "Q70_S01": "OPEN / Medium \u2014 ACCEPTED RISK \u2014 LIMITED"
+  },
+  "historical_preservation": {
+    "files": [
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/.gitattributes",
+        "git_object": "883436c6dc977dbc31ddf7d778ef43b4e79f37e1",
+        "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8"
+      },
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/acceptance-status.json",
+        "git_object": "ab4a91069ae13b5186e0b6d8db560c1d143e67b5",
+        "sha256": "27afff1fb63963ff42db91da34df3c058b9e051355f0d8e0db12dfabf2ebaa15"
+      },
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/environment-receipt.json",
+        "git_object": "458a59cc8b1885bea118b124dc5ccec6c82c2cc9",
+        "sha256": "1dab404d29a46b958ca1196c0997ef40d8dec4533e952c4ab9c1cedb9bf5d2ce"
+      },
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/execution-receipt.json",
+        "git_object": "3f866bd099828ba5598bb1fd83bb3e48977650e3",
+        "sha256": "5f916e87a7cd2217109a15b8f51bce515fd14d696926fab8cc9f12b71b174c1a"
+      },
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/normal-cleanup-readonly-audit.json",
+        "git_object": "eede86047ee2348c274ee059a7044d37a60c23ec",
+        "sha256": "f304b43e1f4d53ad07c4764dbff4ce389c20c2c6ac0499d98994722d69cc1d7f"
+      },
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/observer-correction-receipt.json",
+        "git_object": "5bf08d0bcb494db1fc358e21a894d605f067728f",
+        "sha256": "be251304ded7cf5664bd83e267ae2d36ead1fbba7f8fe6703cc9607052249ae9"
+      },
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/original-normal-stop-receipt.json",
+        "git_object": "9c0de2c7f5c028c95422af11d98bceae1ea36d75",
+        "sha256": "0579d4f729e57d9afba8c8df7e0ec757b53a57aec59b4888623a929e04ebea7e"
+      },
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/publication-manifest.json",
+        "git_object": "1a61054064c95dc19939adb4a9e5b23acf9c1861",
+        "sha256": "32ec41f0a6c31796bc6e39fa88b5c8e47db50451d0f36fbca54d58105ed98fdd"
+      },
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/raw-artifact-hashes.json",
+        "git_object": "0e012d9a99b74980d9a443e9dd9e144a0046e7ae",
+        "sha256": "62254aa82b25e4a5eeaae6bf07915f0c0d2ae6ee4610b383889ff8359d45adff"
+      },
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/report.md",
+        "git_object": "52e9bd32d599ea374740c1100e8e36182d907371",
+        "sha256": "1b35c62e6cf26a9b0aaf8a01d338d43695d8feab48a4432dd7de871d9a6c74b6"
+      },
+      {
+        "path": "docs/testing/qa03-fr06-5089a8e/validation-matrix.json",
+        "git_object": "3f8bc8b08227123ffb243c3e833d8d8cfdba3610",
+        "sha256": "e0fae6ad99e128786e7e25fd705de1ea795aa9f0588b84ddb86b7ee77660664e"
+      }
+    ],
+    "archive_sha256": "d9b7396099c4514b67d815475e127bd5313f317b25d83bd1d3e53b8284c14717",
+    "artifact_count": 103,
+    "CRC_and_all_artifact_hashes": "REVERIFIED PASS",
+    "no_original_file_modified": true
+  },
+  "current_task_execution": "Documentation/static preparation only; no test/migration/fixture/DB/container action or new raw transfer",
+  "FR07_support_packet": {
+    "kind": "STATIC ONLY; kept outside repository",
+    "local_path": "C:\\Users\\T14GEN5\\Documents\\workspace-spring-tools-for-eclipse-5.3.0.RELEASE\\PROJECT CU\u1ed0I KH\u00d3A\\qa03-fr07-support-prep-20261030",
+    "archive_sha256": "10f6d7e4d45a048ae50dd4da1a63981ae2bb1e4310d1fa2098eef862ae5b2b35",
+    "support_manifest_sha256": "75f25503f74275782ae68ea93ce1b7ed235881889f5871d8c642582738750cc4",
+    "criteria": 14,
+    "migration_count": 28,
+    "QD_execution": "NOT RUN",
+    "transfer": "NO TRANSFER IN THIS TASK"
+  }
+}
