@@ -1,0 +1,139 @@
+"""Local QA-02 proposal adapter over the unchanged PR69 runner; never a production seed."""
+import concurrent.futures, datetime as dt, hashlib, json, os, pathlib, secrets, sys, threading, urllib.parse
+sys.dont_write_bytecode=True
+import rehearse_integrated_seed as upstream
+
+ROOT=pathlib.Path(__file__).resolve().parents[2]
+BAD_SQL="""SELECT count(*) FROM uteexpress.refunds r JOIN uteexpress.payments p ON p.id=r.payment_id
+ JOIN uteexpress.orders o ON o.id=r.order_id WHERE p.order_id<>o.id OR p.status<>'PAID'
+ OR r.amount<>p.amount OR r.amount<>o.grand_total OR o.status<>'REFUNDED'"""
+REFUND_SQL="""SELECT count(*) FROM uteexpress.refunds r
+ JOIN uteexpress.payments p ON p.id=r.payment_id JOIN uteexpress.orders o ON o.id=r.order_id
+ LEFT JOIN uteexpress.return_requests t ON t.id=r.return_request_id
+ WHERE p.order_id<>o.id OR p.status<>'PAID' OR p.expired_at IS NOT NULL
+ OR r.status<>'SUCCEEDED' OR r.amount<>p.amount OR r.amount<>o.grand_total OR r.amount<=0
+ OR r.amount<>trunc(r.amount) OR btrim(r.proof_reference)='' OR r.payment_paid_at<>p.paid_at
+ OR NOT COALESCE(((r.operation='PAY02_MANUAL_COD_REFUND_V1' AND o.status='REFUNDED' AND p.method='COD'
+   AND t.order_id=o.id AND t.status='APPROVED' AND t.received_at=r.return_received_at
+   AND r.order_cancelled_at IS NULL AND r.result_order_version=r.expected_order_version+1)
+ OR (r.operation='PAY02_CANCELLED_PAID_REFUND_V1' AND o.status='CANCELLED'
+   AND o.delivered_at IS NULL AND o.inventory_released_at=o.cancelled_at
+   AND r.order_cancelled_at=o.cancelled_at AND p.paid_at BETWEEN p.created_at AND o.cancelled_at
+   AND r.return_request_id IS NULL AND r.expected_return_request_version IS NULL
+   AND r.return_received_at IS NULL AND r.result_order_version=r.expected_order_version
+   AND NOT EXISTS(SELECT 1 FROM uteexpress.return_requests x WHERE x.order_id=o.id)
+   AND NOT EXISTS(SELECT 1 FROM uteexpress.order_status_history h WHERE h.order_id=o.id AND h.to_status='DELIVERED'))),false)
+ OR (p.method='ONLINE' AND NOT COALESCE(p.provider_reference ~ '[^[:space:]]',false))"""
+
+class Combined(upstream.Seed):
+    def git(self,*args):
+        # Exported candidate has no commit/checkout. Validate its frozen source instead of claiming git-clean.
+        manifest=json.loads((self.root/'.work/source-freeze.json').read_text())
+        if args==('rev-parse','HEAD'):return manifest['sourceTreeSha']
+        if args==('status','--porcelain'):
+            for path,digest in manifest['files'].items():
+                upstream.require(hashlib.sha256((self.root/path).read_bytes()).hexdigest()==digest,'SOURCE_CHANGED_'+path)
+            return ''
+        raise upstream.SeedError('UNEXPECTED_GIT_QUERY')
+    def __init__(self,root,out,password):
+        super().__init__(root,out,password)
+        self.result.pop('source_sha');self.result['source_tree_sha']=self.source
+        self.result['source_identity_kind']='Git tree SHA of exported combined candidate; no commit or merge created'
+        self.result['checkout_guard']='Every exported source file checked against frozen manifest; not a git-clean claim'
+        self.result['bootstrap_exception']+=' One additional fresh owned-database Payment prerequisite is explicitly synthetic ONLINE/PAID, not a callback or production writer.'
+    def snapshot(self,order):
+        return self.sql("SELECT jsonb_build_object('order',to_jsonb(o),'payments',(SELECT jsonb_agg(to_jsonb(p) ORDER BY id) FROM uteexpress.payments p WHERE order_id=o.id),'items',(SELECT jsonb_agg(to_jsonb(i) ORDER BY id) FROM uteexpress.order_items i WHERE order_id=o.id),'history',(SELECT jsonb_agg(to_jsonb(h) ORDER BY id) FROM uteexpress.order_status_history h WHERE order_id=o.id),'usage',(SELECT jsonb_agg(to_jsonb(u) ORDER BY id) FROM uteexpress.voucher_usages u WHERE order_id=o.id),'inbox',(SELECT jsonb_agg(to_jsonb(n) ORDER BY id) FROM uteexpress.notifications n WHERE order_id=o.id),'stock',(SELECT stock FROM uteexpress.products WHERE id="+str(self.state['products'][2])+")) FROM uteexpress.orders o WHERE id="+str(order))
+    def post_status(self,client,path,body,status,key='qa02-negative',csrf=True):
+        headers={'Content-Type':'application/json','Accept':'application/json','Idempotency-Key':key}
+        if csrf:headers['X-XSRF-TOKEN']=client.token()
+        return client.call(path,json.dumps(body).encode(),headers,allowed=(status,))
+    def orders(self):
+        super().orders()
+        old=self.sql('SELECT row_to_json(r) FROM uteexpress.refunds r ORDER BY id')
+        pid=self.state['products'][2]
+        selected=self.one('SELECT ci.id FROM uteexpress.cart_items ci JOIN uteexpress.carts c ON c.id=ci.cart_id WHERE c.user_id='+str(self.state['actors']['buyer_a']['id'])+' AND ci.product_id='+str(self.state['products'][1]))
+        self.buyer.json('/user/cart/items/'+str(selected)+'/selection',{'selected':False})
+        self.buyer.json('/user/cart/items',{'productId':pid,'quantity':2})
+        selection={'addressId':self.state['buyer_a_address'],'shippingProviderId':self.state['provider'],'shippingServiceCode':'STANDARD','voucherCode':'QA03_VOUCHER_A'}
+        quote=self.buyer.json('/user/checkout/quote',selection)
+        upstream.require(quote['quote']['totals']['grandTotal']==205000,'PAID_CANCEL_QUOTE')
+        placed=self.buyer.json('/user/checkout/place-order',dict(selection,checkoutKey='qa02-combined-cancelled-paid',items=[{'productId':pid,'quantity':2}],paymentMethod='COD'))
+        order=int(placed['orderId']);self.state['orders']['CANCELLED_PAID_REFUNDED']=order
+        upstream.require(self.created and self.name.startswith('qa03-seed-'),'OWNED_DB_REQUIRED')
+        upstream.require(self.one('SELECT count(*) FROM uteexpress.payments WHERE order_id='+str(order)+" AND status='UNPAID' AND method='COD'")==1,'FRESH_FIXTURE_REQUIRED')
+        # Explicit synthetic persisted prerequisite only in the runner's newly created owned PostgreSQL.
+        self.command(['docker','exec',self.name,'psql','-X','-v','ON_ERROR_STOP=1','-U','postgres','-d','postgres','-c',
+            "UPDATE uteexpress.payments SET method='ONLINE',status='PAID',paid_at=CURRENT_TIMESTAMP,updated_at=CURRENT_TIMESTAMP,provider_reference='QA02_COMBINED_SYNTHETIC_PAID' WHERE order_id="+str(order)+" AND status='UNPAID' AND method='COD'"])
+        self.buyer.json('/buyer/orders/'+str(order)+'/cancel',{'expectedOrderVersion':self.version('orders',order)})
+        self.buyer.json('/user/cart/items/'+str(selected)+'/selection',{'selected':True})
+        before=self.snapshot(order);path='/admin/orders/'+str(order)+'/refunds/cancelled-paid'
+        command={'expectedOrderVersion':self.version('orders',order),'proofReference':'QA02-COMBINED-SYNTHETIC-NOT-REAL-MONEY'}
+        checks={}
+        for role,client in [('buyer',self.buyer),('manager',self.actor('manager')),('vendor',self.vendor_a)]:
+            self.post_status(client,path,command,403);checks[role+'Denied']=403
+        self.post_status(upstream.Client(self),path,command,401);checks['anonymousDenied']=401
+        self.post_status(self.admin,path,command,403,csrf=False);checks['csrfMissing']=403
+        self.post_status(self.admin,path,{'expectedOrderVersion':command['expectedOrderVersion']},400);checks['proofMissing']=400
+        self.post_status(self.admin,path,dict(command,amount=999999),400);checks['amountOverride']=400
+        self.post_status(self.admin,path,dict(command,expectedOrderVersion=0),409);checks['staleVersion']=409
+        clients=[self.actor('admin'),self.actor('admin')];barrier=threading.Barrier(2)
+        def send(client):
+            barrier.wait(timeout=10);return client.json(path,command,{'Idempotency-Key':'qa02-combined-refund'})
+        with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
+            futures=[pool.submit(send,c) for c in clients];responses=[f.result(timeout=30) for f in futures]
+        upstream.require(sorted(r['replay'] for r in responses)==[False,True],'CONCURRENT_REPLAY')
+        upstream.require(all(r['status']=='SUCCEEDED' and r['refundAmount']==205000 for r in responses),'REFUND_RESPONSE')
+        self.post_status(self.admin,path,command,409,key='qa02-combined-other-key');checks['differentKeyDuplicate']=409
+        self.post_status(self.admin,path,dict(command,proofReference='DIFFERENT'),409,key='qa02-combined-refund');checks['differentProofReplay']=409
+        upstream.require(self.snapshot(order)==before,'REFUND_MUTATED_CANCELLATION_FACTS')
+        upstream.require(self.sql("SELECT row_to_json(r) FROM uteexpress.refunds r WHERE operation='PAY02_MANUAL_COD_REFUND_V1' ORDER BY id")==old,'OLD_REFUND_REWRITTEN')
+        upstream.require(self.one('SELECT stock FROM uteexpress.products WHERE id='+str(pid))==50,'DOUBLE_STOCK_RESTORATION')
+        upstream.require(self.sql('SELECT status FROM uteexpress.voucher_usages WHERE order_id='+str(order))=='RELEASED','VOUCHER_NOT_RELEASED')
+        upstream.require(self.one('SELECT count(*) FROM uteexpress.refunds WHERE order_id='+str(order))==1,'DOUBLE_REFUND')
+        upstream.require(self.one("SELECT count(*) FROM uteexpress.audit_logs WHERE action='ORDER_CANCELLED_PAID_REFUNDED' AND target_id="+str(order))==1,'DOUBLE_REFUND_AUDIT')
+        legacy=self.one(BAD_SQL);upstream.require(legacy==1,'EXPECTED_LEGACY_ASSERTION_MISMATCH')
+        self.result['steps']['combined_refund']={'status':'PASS','orderId':order,'paymentFixtureProvenance':'Explicit synthetic persisted ONLINE/PAID prerequisite; no callback, no production data','httpNegativeChecks':checks,'simultaneousHttpResults':[{'status':'SUCCEEDED','replay':r['replay'],'amount':r['refundAmount']} for r in responses],'oldRefundPreserved':True,'orderPaymentStockVoucherHistoryInboxUnchangedByRefund':True,'legacyPr69Assertion':{'status':'FAIL on valid combined fixture (controlled incompatibility probe)','invalidRows':legacy},'actualPgBlockingProof':'Separate fresh combined-source PostgreSQL integration tests, not claimed from HTTP timing'}
+    def validate(self):
+        upstream.require(self.one('SELECT count(DISTINCT selected) FROM uteexpress.cart_items')==2,'CART_SELECTION_FIXTURES_MISSING')
+        upstream.require(self.sql("SELECT string_agg(code,',' ORDER BY code) FROM uteexpress.roles")=='ADMIN,MANAGER,SHIPPER,USER,VENDOR','ROLE_MANIFEST_MISMATCH')
+        upstream.require(len(self.state['orders'])==10 and len(self.state['products'])==14,'SEED_STATE_INCOMPLETE')
+        expected={'NEW':'NEW','ASSIGNED':'CONFIRMED','SHIPPING':'SHIPPING','DELIVERED':'DELIVERED','REFUNDED':'REFUNDED','FAILED':'SHIPPING','RTS':'CANCELLED','BUYER_CANCEL':'CANCELLED','OTHER_SHOP_NEW':'NEW','CANCELLED_PAID_REFUNDED':'CANCELLED'}
+        for key,status in expected.items():
+            oid=self.oid(key);upstream.require(self.sql('SELECT status FROM uteexpress.orders WHERE id='+str(oid))==status,'ORDER_STATUS_'+key)
+            upstream.require(self.one('SELECT count(*) FROM uteexpress.order_status_history WHERE order_id='+str(oid))>0,'ORDER_HISTORY_MISSING')
+        queries={
+            'all_constraints_validated':"SELECT count(*) FROM pg_constraint c JOIN pg_namespace n ON n.oid=c.connamespace WHERE n.nspname='uteexpress' AND NOT c.convalidated",
+            'payment_amount_matches_order':'SELECT count(*) FROM uteexpress.payments p JOIN uteexpress.orders o ON o.id=p.order_id WHERE p.amount<>o.grand_total',
+            'operation_specific_refund':REFUND_SQL,
+            'one_default_address':'SELECT count(*) FROM (SELECT user_id FROM uteexpress.addresses WHERE is_default GROUP BY user_id HAVING count(*)>1) s',
+            'nonnegative_stock':'SELECT count(*) FROM uteexpress.products WHERE stock<0',
+            'history_matches_current_order':"SELECT count(*) FROM uteexpress.orders o JOIN (SELECT DISTINCT ON(order_id) order_id,to_status FROM uteexpress.order_status_history ORDER BY order_id,id DESC) h ON h.order_id=o.id WHERE o.status<>h.to_status",
+            'item_totals_match_snapshot':'SELECT count(*) FROM uteexpress.orders o JOIN (SELECT order_id,sum(line_total) total FROM uteexpress.order_items GROUP BY order_id) i ON i.order_id=o.id WHERE o.subtotal<>i.total',
+            'voucher_total_quota':"SELECT count(*) FROM (SELECT v.id FROM uteexpress.vouchers v JOIN uteexpress.voucher_usages u ON u.voucher_id=v.id WHERE u.status<>'RELEASED' GROUP BY v.id,v.total_limit HAVING count(*)>v.total_limit) q",
+            'voucher_user_quota':"SELECT count(*) FROM (SELECT v.id,u.user_id FROM uteexpress.vouchers v JOIN uteexpress.voucher_usages u ON u.voucher_id=v.id WHERE u.status<>'RELEASED' GROUP BY v.id,u.user_id,v.per_user_limit HAVING count(*)>v.per_user_limit) q"}
+        for code,query in queries.items():upstream.require(self.one(query)==0,'INVARIANT_'+code)
+        upstream.require(self.one('SELECT stock FROM uteexpress.products WHERE id='+str(self.state['products'][0]))==38,'STOCK_RESERVATION_RELEASE_MISMATCH')
+        for table,count in [('reviews',2),('review_media',2),('refunds',2),('shipment_return_receipts',1)]:
+            upstream.require(self.one('SELECT count(*) FROM uteexpress.'+table)==count,'COUNT_'+table)
+        for op in ['PAY02_MANUAL_COD_REFUND_V1','PAY02_CANCELLED_PAID_REFUND_V1']:
+            upstream.require(self.one("SELECT count(*) FROM uteexpress.refunds WHERE operation='"+op+"'")==1,'REFUND_OPERATION_COUNT')
+        upstream.require(self.one('SELECT count(*) FROM uteexpress.notifications')>0,'DURABLE_INBOX_MISSING')
+        day=self.sql("SELECT (min(created_at) AT TIME ZONE 'Asia/Ho_Chi_Minh')::date FROM uteexpress.orders")
+        end=(dt.date.fromisoformat(day)+dt.timedelta(days=2)).isoformat();params=urllib.parse.urlencode({'from':day,'toExclusive':end})
+        money={'deliveredSales':340000,'collectedPayments':530000,'refunds':360000,'netCollectedRevenue':170000,'netCommission':11900,'netRevenueAfterCommission':158100}
+        for actor,path in ((self.vendor_a,'/vendor/dashboard'),(self.admin,'/admin/dashboard/revenue/metrics')):
+            report=json.loads(actor.call(path+'?'+params,headers={'Accept':'application/json'}))['selected']['metrics']
+            for metric,value in money.items():upstream.require(report[metric]['complete'] and report[metric]['unknownEvents']==0 and report[metric]['value']==value,'FINANCIAL_METRIC_'+metric)
+        return {'status':'PASS','order_states':expected,'constraint_and_business_checks':list(queries),'financial_expected_and_actual':money,'financial_scope':'Vendor A and Admin global; both operations, shipping excluded','role_passwords_reset':False}
+
+def main():
+    import argparse
+    parser=argparse.ArgumentParser();parser.add_argument('--disposable-demo',action='store_true',required=True);parser.add_argument('--output',type=pathlib.Path,required=True);args=parser.parse_args()
+    args.output.mkdir(parents=True,exist_ok=False);password=secrets.token_urlsafe(24)
+    seed=Combined(ROOT,args.output,password);code=seed.run()
+    seed.result['upstreamRunnerSha256']=hashlib.sha256(pathlib.Path(upstream.__file__).read_bytes()).hexdigest()
+    seed.result['proposalAdapterSha256']=hashlib.sha256(pathlib.Path(__file__).read_bytes()).hexdigest()
+    seed.result['checkpoint_scope']='Completed in-memory checkpoint validate-and-preserve rerun, not cross-process resumable installation'
+    (args.output/'result.json').write_text(json.dumps(seed.result,indent=2)+'\n',encoding='utf-8')
+    return code
+if __name__=='__main__':raise SystemExit(main())
