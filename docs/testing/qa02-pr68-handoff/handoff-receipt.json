@@ -1,0 +1,225 @@
+{
+  "schema_version": 1,
+  "verified_utc": "2026-10-29 04:18:40 UTC",
+  "repository": "hphuc032/Logistic-UTEExpress",
+  "pr": 68,
+  "decision": "READY FOR HP FINAL ACCEPTANCE",
+  "code_head": "c593352492184da2a9ca46ebea4a55b802ac6416",
+  "evidence_branch": "docs/qa02-pr68-evidence-20261029",
+  "core_packet_commit": "5b9de50291fc43d3791de328aa33c2e3abe96b87",
+  "core_packet_tree": "cef32f48d42b0e8037ac337a8f624e1a77e3fbe9",
+  "publication_status": "PUBLISHED - 12 core packet files retrieved by immutable commit and blob identities matched",
+  "remote_core_readback": [
+    {
+      "path": "docs/testing/QA-02-PR68-gate-report.md",
+      "blob": "69ea89df787a23f1ac69709343def90cb31d6148",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/QA-02-PR68-gate-report.md"
+    },
+    {
+      "path": "docs/testing/QA-02-PR68-gate-evidence.json",
+      "blob": "a25ba2b30ac6e2b728db3b9bfb3c5c19c8be00c9",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/QA-02-PR68-gate-evidence.json"
+    },
+    {
+      "path": "docs/testing/QA-02-findings.md",
+      "blob": "b007a2b51cac4ecc57250f1bfc52672625e413d8",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/QA-02-findings.md"
+    },
+    {
+      "path": "docs/testing/QA-02-regression-report.md",
+      "blob": "5bd4a6e83ae9f442a3530467a0abc99b5de40411",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/QA-02-regression-report.md"
+    },
+    {
+      "path": "docs/testing/QA-02-evidence-manifest.md",
+      "blob": "a90ae6f6c055ce1f5f0b7d8ebb0ac31a79a22e99",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/QA-02-evidence-manifest.md"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-handoff/.gitattributes",
+      "blob": "fc78aa14b5eb5477d0bac9bc5d6efc5a27b987d1",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/qa02-pr68-handoff/.gitattributes"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-handoff/provenance.json",
+      "blob": "47f0f50d60b1a0ffd44d225b488e6203c7a65cf5",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/qa02-pr68-handoff/provenance.json"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-handoff/review-and-ci.json",
+      "blob": "f81b159f496402f3750f0aed4c87506553fadd6e",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/qa02-pr68-handoff/review-and-ci.json"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-handoff/run-comparison.json",
+      "blob": "513a3ca6241b3ccaa8a6b2726ad8e236dcacbea9",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/qa02-pr68-handoff/run-comparison.json"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-handoff/run-comparison.md",
+      "blob": "e5c0f4b0bb14126c876aaa098ef6a5c5aadaea7d",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/qa02-pr68-handoff/run-comparison.md"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-handoff/run_gate.py",
+      "blob": "c879a58c765087c165b28b2dc773397f2ce6a906",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/qa02-pr68-handoff/run_gate.py"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-handoff/packet-manifest.json",
+      "blob": "85ac08cf217e649e68bb9a272a7ed3e642a6c2d4",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/5b9de50291fc43d3791de328aa33c2e3abe96b87/docs/testing/qa02-pr68-handoff/packet-manifest.json"
+    }
+  ],
+  "diff_scope": {
+    "base": "c593352492184da2a9ca46ebea4a55b802ac6416",
+    "head": "5b9de50291fc43d3791de328aa33c2e3abe96b87",
+    "total_commits": 1,
+    "files": [
+      "docs/testing/QA-02-PR68-gate-evidence.json",
+      "docs/testing/QA-02-PR68-gate-report.md",
+      "docs/testing/QA-02-evidence-manifest.md",
+      "docs/testing/QA-02-findings.md",
+      "docs/testing/QA-02-regression-report.md",
+      "docs/testing/qa02-pr68-handoff/.gitattributes",
+      "docs/testing/qa02-pr68-handoff/packet-manifest.json",
+      "docs/testing/qa02-pr68-handoff/provenance.json",
+      "docs/testing/qa02-pr68-handoff/review-and-ci.json",
+      "docs/testing/qa02-pr68-handoff/run-comparison.json",
+      "docs/testing/qa02-pr68-handoff/run-comparison.md",
+      "docs/testing/qa02-pr68-handoff/run_gate.py"
+    ],
+    "only_docs": true
+  },
+  "pr_description": {
+    "status": "UPDATED AND READ BACK",
+    "updated_at": "2026-10-29T04:17:46Z",
+    "body_sha256": "cd7a097275be8742a595adbe7fc8d8c0e207f93bf9560feb73c815b7116dd6b1",
+    "qualification": "Hash of core handoff body before adding a link to this supplementary receipt"
+  },
+  "latest_pr_state": {
+    "state": "open",
+    "merged": false,
+    "mergeable": true,
+    "head_unchanged": true
+  },
+  "ci": [
+    {
+      "id": 40813357695,
+      "name": "CI",
+      "status": "completed",
+      "conclusion": "success",
+      "run_number": 155,
+      "jobs_url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/actions/runs/40813357695/jobs",
+      "logs_url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/actions/runs/40813357695/logs",
+      "workflow_id": 362365352
+    }
+  ],
+  "ci_jobs": [
+    {
+      "id": 123248627092,
+      "name": "Maven test and package",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 40813357695,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Checkout source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Set up Java 21",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Set up Node for notification client tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Notification and Buyer cancellation client tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Maven test",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Maven package",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "Post Set up Node for notification client tests",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Post Set up Java 21",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Post Checkout source",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        }
+      ]
+    }
+  ],
+  "ci_qualification": "Run155 associated with unchanged exact PR head; synthetic merge checkout da7329eefd66d4556d99b124625a72038c2d9b5c. CI unit/package and Node33; local PostgreSQL1326 is separate. Evidence-only branch has no claimed new CI.",
+  "full_regression": {
+    "source_sha": "c593352492184da2a9ca46ebea4a55b802ac6416",
+    "unit": 697,
+    "postgresql": 1326,
+    "total": 2023,
+    "maven_exit": 0,
+    "timeout": false,
+    "provenance": "Core packet provenance.json verifies raw log, 137 XML, run Git guards and 763 input files against immutable Git blobs"
+  },
+  "historical": {
+    "source_sha": "8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5",
+    "unit": 686,
+    "postgresql": 1325,
+    "total": 2011,
+    "qualification": "Historical published manifest preserved and checked; raw log/XML not available locally for fresh rehashing. Original start/end unavailable. Not a blocker to independently verified new run."
+  },
+  "hp_scoped_code_review": "PASS at c593352; GitHub COMMENTED review5692679850",
+  "hp_final_acceptance": "PENDING",
+  "merge": "PENDING",
+  "qa02": "IN PROGRESS",
+  "findings_closed": false,
+  "remaining_actions": [
+    "HP assess published evidence and decide final acceptance/merge",
+    "Q03-G01 and PR70/69 integrated/postmerge gates remain separate and not run here"
+  ],
+  "qualification": "This receipt records final read-back and supersedes initial local-only/pre-publication observations in the core report. Supplement outside the 12-file packet manifest; core historical/raw records unchanged.",
+  "no_approval_or_merge": true,
+  "no_force_push": true
+}
