@@ -3,6 +3,7 @@
 Uses the existing approved evidence validators. No production/bootstrap/guard changes.
 """
 import argparse
+import base64
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -201,6 +202,14 @@ def run():
         (public / "execution.json").write_text(json.dumps(state, indent=2) + "\n")
         sums = [digest(p) + "  " + p.name for p in sorted(public.iterdir()) if p.is_file()]
         (public / "SHA256SUMS").write_text("\n".join(sums) + "\n")
+    # Connector-readable transport when direct artifact downloads are unavailable.
+    # Only the same sanitized metadata and already-public ciphertext are emitted.
+    # Raw plaintext, credentials and the recipient private key never enter CI logs.
+    encoded = base64.b64encode(json.dumps(state, separators=(",", ":")).encode()).decode("ascii")
+    print("QA70_EVIDENCE_B64=" + encoded, flush=True)
+    encrypted = base64.b64encode((public / "raw-artifacts.cms.der").read_bytes()).decode("ascii")
+    for index in range(0, len(encrypted), 60000):
+        print("QA70_RAW_CMS_B64_%04d=" % (index // 60000) + encrypted[index:index + 60000], flush=True)
     print("PR70 " + state["status"] + "; sanitized evidence and encrypted raw archive retained", flush=True)
     return 0 if state["status"] == "PASS" else 1
 
