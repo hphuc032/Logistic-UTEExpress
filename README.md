@@ -83,6 +83,9 @@ powershell -NoProfile -File scripts/Test-DatabasePlan.ps1
 
 ## Documentation and team handoff
 
+- [Master Task Board status register](docs/MASTER_TASK_BOARD.md) records the scoped
+  QA-01 acceptance and existing deferred gates, with the original plan provenance.
+
 - [Architecture](docs/architecture.md) records architecture and SEC-01 integration.
 - [Security foundation](docs/security.md) defines public/protected routes, principals and CSRF.
 - [ORD-00 contracts](docs/order-contracts.md) defines Order lifecycle, checkout money,

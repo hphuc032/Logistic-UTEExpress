@@ -1,6 +1,8 @@
-# QA-01 — Current source-bound evidence (2026-10-29)
+# QA-01 — Source-bound evidence and application-scope close-out (2026-10-29)
 
-Branch `test/qa-01-security`, PR #66. Synced develop `fa48cb69cef92276f0dddf0d2bd396eee098f2f3`; current tested merge `6e93d44614b1574ab2d310bae9a54ae57c385893`. Normal merge, behind0 at sync; no rebase/force push. Previous QĐ APPROVED `7aa74a215f2539012344d252ffd7e125c8fe64d3` is a distinct, historical review. The following publication commit changes only QA-01 reports/matrix/generated JSON; its final SHA/CI is linked in the PR and must preserve these executable inputs.
+This close-out validates existing evidence only; it runs no new Maven/PostgreSQL/Node suite and changes no runner output/checksum. The original execution record below remains bound to6e93d44.
+
+Branch `test/qa-01-security`, PR #66. Synced develop `fa48cb69cef92276f0dddf0d2bd396eee098f2f3`; current tested merge `6e93d44614b1574ab2d310bae9a54ae57c385893`. Normal merge, behind0 at sync; no rebase/force push. Final reviewed/published HEAD `026a29deb6695e23380d0a95c5da68564add004e`, QĐ APPROVED and exact-head CI [40814999100 SUCCESS](https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40814999100), was merged as `b538dbc3af17ff80802fa33eea187705c40059fe`. The earlier7aa74a2 review is historical. Source→HEAD differs only by five QA-01 documentation/evidence files; HEAD and merge have identical complete Git trees and the executable objects below. Current documentation branch base/develop at verification is b538dbc, not an assumed future latest develop.
 
 ## Exact fresh execution
 
@@ -84,7 +86,7 @@ Semgrep1.155.0,7 checked-in rules on exact source 6e93d44: 607 main targets,5 ca
 | `src/main/java/com/uteexpress/notification/repository/NotificationRepository.java` | 75 | Fixed SQL fragment; request values bound |
 | `src/main/java/com/uteexpress/notification/repository/NotificationRepository.java` | 91 | Fixed SQL fragment; request values bound |
 
-Packaged resolved dependency inventory: 109 library JAR names, no upgrade. No usable local dependency CVE scanner/database was available. Dependency SCA NOT RUN; no clean-CVE claim or automatic deferral. Live SMTP/timing, deployed TLS/proxy/NAT/cookie/storage ACLs, distributed rate limits/load/restart and wider browser/seed/backup/release acceptance remain classified in the current Security Report/Findings with owners and closure conditions. NOT RUN is not PASS; HP's formal decision is still required where applicable. Source/config review remains bounded, not a new full-history entropy scan.
+Packaged resolved dependency inventory: 109 library JAR names, no upgrade. No usable local dependency CVE scanner/database was available. Dependency scan execution remains NOT RUN; [HP explicitly deferred the separate release gate](https://github.com/hphuc032/Logistic-UTEExpress/pull/66#issuecomment-6487721811), without a production-review waiver or clean-CVE claim. Live SMTP/timing, deployed TLS/proxy/NAT/cookie/storage ACLs, distributed rate limits/load/restart and wider browser/seed/backup/release acceptance remain classified in the current Security Report/Findings with owners and closure conditions. NOT RUN is not PASS; HP's existing scope-limited deferral is now recorded, and each release gate still needs its specified evidence/closure. Source/config review remains bounded, not a new full-history entropy scan.
 
 ## Historical evidence / review chain
 
@@ -92,4 +94,19 @@ Packaged resolved dependency inventory: 109 library JAR names, no upgrade. No us
 - Previous full source:3c4fb55,2023 Java +12 Node; [old manifest](https://github.com/hphuc032/Logistic-UTEExpress/blob/7aa74a215f2539012344d252ffd7e125c8fe64d3/docs/testing/QA-01-runner-evidence.json), SHA-256 `43175396d5e7b7929191e2a2de90f55ab3583e4d5c079eb558ad25d33e5a7ed7`.
 - QĐ independently scoped878 Java +12 Node at89600fd, then APPROVED static delta at7aa74a2. This does not independently rehash HP's private files or approve the new source.
 - [Prior complete handoff](https://github.com/hphuc032/Logistic-UTEExpress/blob/7aa74a215f2539012344d252ffd7e125c8fe64d3/docs/testing/QA-01-evidence-manifest.md) retains all old reproductions, failed sandbox/Docker attempts, earlier SHA/hash tables and sync history. Those values are historical and never substituted for this fresh run.
-- New published HEAD/CI and final QĐ delta verdict belong to PR #66. No merge, deployment, migration rewrite, formal NOT RUN deferral or QA-01 COMPLETED is performed here.
+- [Final QĐ approval on026a29d](https://github.com/hphuc032/Logistic-UTEExpress/pull/66#pullrequestreview-5692747388) reports independent33 Node +17 tooling PASS and verifies public provenance/counts; no new Java/PostgreSQL run or private raw-file rehash by QĐ.
+- [HP decision](https://github.com/hphuc032/Logistic-UTEExpress/pull/66#issuecomment-6487721811) accepts application-scope integration, defers SCA and operational gates without marking them PASS/waiving production review, and authorizes the recorded PR #66 merge. Overall QA-01 is not COMPLETED.
+- Merge b538dbc verified via GitHub PR metadata and local Git ancestry; exact-head CI40814999100 SUCCESS verified via workflow run and job-step metadata. No deployment, migration rewrite or additional merge is performed by this documentation close-out.
+
+
+## Close-out validation and provenance limits
+
+- Verified develop/branch base: `b538dbc3af17ff80802fa33eea187705c40059fe` after fetch; merge commit contains reviewed HEAD026a29d and full-tested source6e93d44. HEAD and merge tree IDs match exactly. App/test/POM/workflows/QA/security-script objects match across tested source, reviewed HEAD, merge and documentation branch.
+- Portable JSON remains byte-identical to the reviewed file: SHA-256 `4d5df38345bf938c3554e2da24e337c4515847c9ec56c5cbe9813a3c0f39c436`. It is not edited or regenerated by close-out.
+- HP local check rehashed all139 suite XML files and9 private artifact references against this manifest, checked testcase totals/statuses and Failsafe summary:694+1346=2040, failures/errors/skips/flaky/rerun0, timeout=false. This is revalidation of existing files, not a fresh execution or QĐ independent full-suite result.
+- Local receipt: `.work/qa01/acceptance-closeout/validation.json`, sanitized counts/object identities only; raw XML/logs stay private. QĐ's private independent receipt/log files are unavailable on this machine and were NOT VERIFIED/rehashed here; its attested33 Node/17 tooling results come from the linked GitHub review.
+- TD's [PR67 browser packet](QA-02-browser-acceptance-PR67.md) is separately scoped to c5901c3 and records TD-attested manual observations. It is neither HP's2040 execution nor QĐ's independent results. No counts are combined and no QA-02/QA-03 state is changed.
+- Original DOCX remains external/unmodified at `D:/JavaWeb/Project/UTEExpress_Master_Project_Plan.docx`, same SHA-25618523e58...ab68b7a recorded in the Security Report. No Task Board/Plan was tracked at b538dbc; [the repository status register](../MASTER_TASK_BOARD.md) introduces only a QA-01 status overlay of the verified original row. It is not an assertion that unknown statuses of other tasks are TODO/COMPLETED.
+- No production source/configuration, migration, test assertion, workflow, script or generated runner evidence is changed. `git diff --check` and documentation-only path/object checks are required before publishing this close-out PR. No full PostgreSQL rerun is needed for these status edits.
+
+Scoped disposition: **APPLICATION SECURITY REMEDIATION MERGED — ACCEPTED WITH DEFERRED GATES**. Formal deferral/remaining evidence and closure owners are listed once in [the canonical gate table](QA-01-security-report.md#deferred-and-operational-follow-up-gates). Production/release and overall QA-01 acceptance remain separate.
