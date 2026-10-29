@@ -1,0 +1,59 @@
+{
+  "source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+  "files": [
+    {
+      "path": "docs/testing/qa03-fr06-5089a8e/.gitattributes",
+      "bytes": 30,
+      "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-5089a8e/acceptance-status.json",
+      "bytes": 459,
+      "sha256": "27afff1fb63963ff42db91da34df3c058b9e051355f0d8e0db12dfabf2ebaa15"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-5089a8e/environment-receipt.json",
+      "bytes": 3897,
+      "sha256": "1dab404d29a46b958ca1196c0997ef40d8dec4533e952c4ab9c1cedb9bf5d2ce"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-5089a8e/execution-receipt.json",
+      "bytes": 72505,
+      "sha256": "5f916e87a7cd2217109a15b8f51bce515fd14d696926fab8cc9f12b71b174c1a"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-5089a8e/normal-cleanup-readonly-audit.json",
+      "bytes": 1627,
+      "sha256": "f304b43e1f4d53ad07c4764dbff4ce389c20c2c6ac0499d98994722d69cc1d7f"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-5089a8e/observer-correction-receipt.json",
+      "bytes": 579,
+      "sha256": "be251304ded7cf5664bd83e267ae2d36ead1fbba7f8fe6703cc9607052249ae9"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-5089a8e/original-normal-stop-receipt.json",
+      "bytes": 13908,
+      "sha256": "0579d4f729e57d9afba8c8df7e0ec757b53a57aec59b4888623a929e04ebea7e"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-5089a8e/raw-artifact-hashes.json",
+      "bytes": 20010,
+      "sha256": "62254aa82b25e4a5eeaae6bf07915f0c0d2ae6ee4610b383889ff8359d45adff"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-5089a8e/report.md",
+      "bytes": 6557,
+      "sha256": "1b35c62e6cf26a9b0aaf8a01d338d43695d8feab48a4432dd7de871d9a6c74b6"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-5089a8e/validation-matrix.json",
+      "bytes": 10323,
+      "sha256": "e0fae6ad99e128786e7e25fd705de1ea795aa9f0588b84ddb86b7ee77660664e"
+    }
+  ],
+  "hash_basis": "staged Git bytes, excludes self",
+  "FR06": "QD execution complete, PENDING TD_HP REVIEW",
+  "FR07": "NOT RUN"
+}

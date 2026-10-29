@@ -1,0 +1,9 @@
+{
+  "recorded_utc": "2026-10-29T16:39:08.972377+00:00",
+  "original_controller_sha256": "2fdcd62cd45dfb229c0cab4fc4923bdeb473faadd60d99fb1ea4a566017cb281",
+  "new_controller_sha256": "2ff75df63ea06af44a1ac799abf95efb02fe7d24789d85e2cb9e9632bccae877",
+  "change": "case-insensitive no-such-object classification, separate remaining-mode controller/outdir; no normal rerun",
+  "source_or_seed_change": false,
+  "prior_stop_preserved": true,
+  "new_gate_not_requested": "FR06 remaining mode was already authorized; no actual normal cleanup anomaly after read-only audit"
+}

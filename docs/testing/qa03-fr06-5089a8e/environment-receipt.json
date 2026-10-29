@@ -1,0 +1,95 @@
+{
+  "explicit-java-version": {
+    "log_sha256": "686d528f1c68b17717fd0be35eff08c951c1111359408a62b893d6790f56b8dc",
+    "observed_lines": [
+      "java version \"21.0.2\" 2024-01-16 LTS",
+      "Java(TM) SE Runtime Environment (build 21.0.2+13-LTS-58)"
+    ]
+  },
+  "maven-version": {
+    "log_sha256": "ee2f79f7aa50b8db5e5e0ffc87a5e54021db1931749b9b79d9f500ef38b0242a",
+    "observed_lines": [
+      "Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)",
+      "Java version: 21.0.2, vendor: Oracle Corporation, runtime: C:\\Program Files\\Java\\jdk-21"
+    ]
+  },
+  "node-version": {
+    "log_sha256": "2a0d4de5abb327d8e92eff6db4dcc81a9b02c5f1542dadf2e25fe71cc4802de6",
+    "observed_lines": [
+      "v22.21.0"
+    ]
+  },
+  "python-version": {
+    "log_sha256": "829ac2581a6275b79e6369c6c1130807da7060f355fb83e37c8cb8ae5dc9b4cf",
+    "observed_lines": [
+      "Python 3.13.9"
+    ]
+  },
+  "docker-version": {
+    "log_sha256": "bcc9d4cd68680751f9f4caa3c3c211881509ceec7998fe1d5884d2511a3768a4",
+    "observed_lines": [
+      "Version:           29.4.1",
+      "API version:       1.54",
+      "Version:          29.4.1",
+      "API version:      1.54 (minimum version 1.40)",
+      "Version:          v2.2.3",
+      "Version:          1.3.5",
+      "Version:          0.19.0"
+    ]
+  },
+  "auth_preflight": {
+    "source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+    "started_utc": "2026-10-29T16:33:19.313360400Z",
+    "JVM_timezone": "UTC",
+    "clean_before": true,
+    "docker_testcontainers_ping": true,
+    "owned_container_id": "429a27165ded18540257c0d9eb5bd285252c50c804a0e7e11038ab0c6de7f525",
+    "owned_container_name": "qa03-fr02-c02e26a46b47",
+    "testcontainers_host": "localhost",
+    "default_host_SQL": "PASS",
+    "SQL_host_used": "127.0.0.1",
+    "SQL_stage": "wrong_password",
+    "postgresql_server_version": "17.6 (Debian 17.6-2.pgdg13+1)",
+    "SQL_authentication": "PASS",
+    "owned_database": "qa03_fr02_c02e26a46b47",
+    "wrong_password_SQLSTATE": "28P01",
+    "wrong_password_denied": true,
+    "host_auth_policy": "scram-sha-256",
+    "port_binding": "127.0.0.1 ephemeral",
+    "clean_after": true,
+    "owned_container_removed": true,
+    "finished_utc": "2026-10-29T16:33:28.561349Z",
+    "scope": "FR02 Docker/Testcontainers/SQL auth preflight only; no Flyway, application lifecycle, combined seed, regression or rerun",
+    "status": "PASS",
+    "exit_code": 0
+  },
+  "source_env": {
+    "scope": "FR06 QD-owned combined normal/-2s only",
+    "source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+    "tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+    "publication_before": "735a8af1d27412330cfd09ec3d228258c2193774",
+    "started_utc": "2026-10-29T16:32:35.452563+00:00",
+    "commands": [],
+    "runs": [],
+    "TD_independent_verification": "PENDING; QD-launched children are not TD execution",
+    "FR07": "NOT RUN",
+    "status": "RUNNING",
+    "authorization": "HP FR04 accepted, FR05 accepted with historical cleanup limitation, FR06 authorized per current task",
+    "clean_before": true,
+    "objects": {
+      "src/main": "a350de2a50fef5f586a52158f4f3882194149fbe",
+      "src/test": "aae12f6d037f97e81fd3df48e7c39da201ced853",
+      "scripts/qa": "a126f47ea5a4dca54654b67493b957aee4f68bf2",
+      "pom.xml": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      ".github/workflows": "d5555952658117250bcbcd841f66d5f537d3f4a2"
+    },
+    "explicit_java_exe": "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+    "java_exe_sha256": "ef94c79783d01753cc19bdafbedf1641a77e66913e5a8321b570717ff90b7046",
+    "runtime_env": {
+      "JAVA_HOME": "C:\\Program Files\\Java\\jdk-21",
+      "JAVA_TOOL_OPTIONS": "-Duser.timezone=UTC",
+      "MAVEN_OPTS": "-Duser.timezone=UTC",
+      "DOCKER_HOST": "npipe:////./pipe/docker_engine"
+    }
+  }
+}
