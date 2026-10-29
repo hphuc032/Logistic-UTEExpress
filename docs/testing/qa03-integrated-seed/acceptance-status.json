@@ -57,22 +57,22 @@
   },
   "current_finding_disposition": {
     "finding": "Q70-S01",
-    "status": "OPEN",
+    "status": "ACCEPTED RISK — LIMITED",
     "severity": "Medium",
-    "candidate": "retained and validated; not accepted/closed",
+    "candidate": "Validated; HP limited residual risk accepted, not RESOLVED",
     "reference": "../qa03-refund-diagnostics/finding-disposition.json",
     "td_new_evidence": "Published PR71 c0b2f76; QD scoped published artifact/source consistency PASS; raw private logs/XML not rehashed/rerun",
-    "authorized_integration_regression": "NOT RUN; dependencies remain unmerged",
+    "authorized_integration_regression": "Local validation f9c6fd6 PASS; final post-merge source verification NOT RUN",
     "hp_final_acceptance": "PENDING",
     "published_review_reference": "../qa03-refund-diagnostics/td-published-review.json"
   },
   "hp_authorized_validation_update": {
     "tested_source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
     "execution": "PASS fresh full/normal/controlled",
-    "finding_status": "OPEN / Medium",
-    "recommendation": "ACCEPTED RISK proposal, not applied",
+    "finding_status": "ACCEPTED RISK — LIMITED",
+    "recommendation": "HP final bounded disposition applied",
     "report": "../qa03-hp-integration-validation/report.md",
     "qa03": "BLOCKED",
-    "td_source_acknowledgement": "PENDING"
+    "td_source_acknowledgement": "CONFIRMED direct GitHub evidence review"
   }
 }

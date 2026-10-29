@@ -124,3 +124,9 @@ QD's reviewed evidence does not identify an additional unresolved TD production 
 | PAY-03 | VNPAY Sandbox DEFERRED; not claimed QA-02 provider evidence | TD, HP policy |
 
 No new production change, test execution, approval, merge, formal risk disposition or whole-QA completion is claimed by this documentation update.
+
+## HP final risk decision and ordered integration
+
+HP explicitly authorized **ACCEPTED RISK — LIMITED**, relayed by the user on 2026-10-29. This supersedes earlier OPEN/pending-disposition snapshots; historical evidence remains unchanged. Only the unknown original disposable-fixture CONFLICT predicate is accepted; it is **not RESOLVED**, production chronology/eligibility guards remain intact, and new Payment/Refund/concurrency/rollback/financial failures trigger reopening. Responsibilities and detailed reopening triggers remain applicable. See `hp-final-decision.json`.
+
+Order authorized: **#68 -> #70 -> #69**, with a separate HP merge decision after each gate. All three remain unmerged when checked; #68 exact-head CI SUCCESS but owner approval remains pending, #70 compatibility must be checked after actual #68 integration, and #69 remains Draft until dependencies sync and final full Java/PostgreSQL, Node/tooling and normal/-2s combined rerun evidence on accepted source. Existing f9c6fd6 evidence is not relabelled as postmerge. HP must explicitly accept synthetic ADMIN/PAID bootstrap and checkpoint scope. `integration-gates.json` records PASS/PENDING/NOT RUN distinctly. QA02 IN PROGRESS, QA03 BLOCKED, PAY03 DEFERRED; no automatic approval/merge or QA completion.

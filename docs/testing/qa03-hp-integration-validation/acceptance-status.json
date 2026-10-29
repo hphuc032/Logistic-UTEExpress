@@ -6,8 +6,8 @@
   "ready_for_whole_qa_final_acceptance": false,
   "finding": "Q70-S01",
   "severity": "Medium",
-  "finding_status": "OPEN",
-  "recommended_disposition": "ACCEPTED RISK (proposal only, not applied)",
+  "finding_status": "ACCEPTED RISK — LIMITED",
+  "recommended_disposition": "ACCEPTED RISK — LIMITED (HP authorized, not RESOLVED)",
   "td_source_acknowledgement": "CONFIRMED / direct GitHub source-evidence acknowledgement",
   "dependencies_github_merged": false,
   "postmerge_develop_verification": "NOT RUN / dependencies unmerged",
@@ -18,6 +18,7 @@
   "PAY03_VNPAY": "DEFERRED",
   "approved_or_closed_or_merged_by_qd": false,
   "td_confirmation_record": "td-confirmation.json",
-  "hp_risk_disposition": "AGREED IN PRINCIPLE / FINAL DECISION PENDING",
-  "td_confirmation_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/70#issuecomment-6485644464"
+  "hp_risk_disposition": "APPLIED / HP FINAL DECISION",
+  "td_confirmation_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/70#issuecomment-6485644464",
+  "hp_decision_record": "hp-final-decision.json"
 }

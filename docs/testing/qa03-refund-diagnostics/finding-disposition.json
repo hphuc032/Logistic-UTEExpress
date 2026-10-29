@@ -1,8 +1,8 @@
 {
   "finding": "Q70-S01",
   "severity": "Medium",
-  "status": "OPEN",
-  "candidate_status": "RETAINED / VALIDATED, not accepted or closed",
+  "status": "ACCEPTED RISK — LIMITED",
+  "candidate_status": "Validated test-fixture candidate; historical original cause unproven",
   "candidate_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
   "historical_conflict": {
     "exact_predicate": "NOT CAPTURED",
@@ -51,9 +51,9 @@
   "production_guard_unchanged": true,
   "guard_git_blob": "485ee89c75c3b69073f8d8a053c5b0696e57164b",
   "next_steps": [
-    "HP formally decide bounded disposition with documented owners and reopening conditions",
-    "HP separately decide dependency integration/merge acceptance; no approval inferred",
-    "Fresh verification on accepted integrated source after changes as required; QA02/QA03 gates remain separate"
+    "Complete #68 owner review/CSRF-validation/CI gate and request HP merge decision",
+    "After HP merges #68, check #70 migration/old ledger compatibility and request HP merge decision",
+    "After #68/#70 merge, sync #69 and run final integrated regression/normal/-2s seeds; HP explicitly accept synthetic bootstrap/checkpoint scope"
   ],
   "qa02": "IN PROGRESS",
   "qa03": "BLOCKED",
@@ -94,5 +94,23 @@
     "verification_date": "2026-10-29 Asia/Saigon",
     "limits": "TD did not independently rebuild/byte-compare JAR/classes or rerun PostgreSQL; acknowledgement of published provenance/results only"
   },
-  "residual_risk_record": "../qa03-hp-integration-validation/residual-risk-proposal.json"
+  "residual_risk_record": "../qa03-hp-integration-validation/residual-risk-proposal.json",
+  "hp_final_risk_decision": {
+    "authority": "HP",
+    "provenance": "User-relayed explicit HP FINAL DECISION on 2026-10-29 Asia/Saigon; no direct GitHub decision URL supplied",
+    "disposition": "ACCEPTED RISK — LIMITED",
+    "original_severity": "Medium",
+    "resolved": false,
+    "scope": "Only unknown exact predicate/root cause of original historical disposable-fixture CONFLICT",
+    "retain_historical_fail": true,
+    "production_guard_relaxation": false,
+    "integration_order": [
+      68,
+      70,
+      69
+    ],
+    "automatic_approval_or_merge": false,
+    "final_qa_acceptance": "PENDING",
+    "reopen_on": "New Payment/Refund/concurrency/rollback/financial inconsistency; detailed diagnostic/provenance triggers retained in residual-risk-proposal.json"
+  }
 }

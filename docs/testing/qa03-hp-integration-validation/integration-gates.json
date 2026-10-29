@@ -1,0 +1,25 @@
+{
+  "decision": "hp-final-decision.json",
+  "checked_pr_heads": {
+    "68": "e79b760d1e48f0532e6cb132e76ffa44e53dbf78",
+    "70": "688884cd33f4b2f4dc62f5d33a4c4002e9146660"
+  },
+  "pr68": {
+    "exact_head_ci": "SUCCESS",
+    "owner_review": "PENDING formal owner review",
+    "existing_http_evidence": "Positive form, CSRF, validation/ownership negative cases; source-bound historical evidence retained",
+    "hp_merge_decision": "PENDING"
+  },
+  "pr70": {
+    "exact_head_ci": "SUCCESS",
+    "post68_compatibility_gate": "PENDING actual #68 integration",
+    "hp_merge_decision": "PENDING"
+  },
+  "pr69": {
+    "draft": true,
+    "sync_after_dependencies": "PENDING #68/#70 merges",
+    "final_integrated_full_node_tooling_normal_skew_seed": "NOT RUN on postmerge source",
+    "synthetic_ADMIN_PAID_bootstrap_and_checkpoint_acceptance": "HP explicit acceptance PENDING"
+  },
+  "no_automatic_merge": true
+}
