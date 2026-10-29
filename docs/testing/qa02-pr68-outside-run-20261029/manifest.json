@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "run_id": "pr68-outside-powershell-20261029T045843Z",
+  "collected_utc": "2026-10-29T05:02:11.853087+00:00",
+  "source_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+  "source_git_tree": "3cba80a0ab92b90e7a82e9b4726acdb9bc0f328c",
+  "source_identity_method": "retrospective independently reproduced binary/resource equality plus current clean immutable Git identity",
+  "status": "PASS_ARTIFACTS_VERIFIED_WITH_PROVENANCE_LIMITS",
+  "unqualified_original_exact_head_process_pass_claimed": false,
+  "original_process_source_guard_captured": false,
+  "source_clean_at_collection": true,
+  "compiled_inputs_verified": true,
+  "execution_context": "User PowerShell outside Codex sandbox with Docker Desktop authorization; Codex did not execute PostgreSQL or gain Docker permissions",
+  "process_exit": {
+    "value": 0,
+    "evidence": "user-attested; no contemporaneous exit-code receipt found in raw log",
+    "independently_captured": false
+  },
+  "original_argv": "NOT CAPTURED; log-observed Maven clean/test/package/integration-test/verify phases",
+  "start_timestamp": "NOT CAPTURED",
+  "finished_at": "2026-10-29T11:58:43+07:00",
+  "maven_duration": " 08:02 min",
+  "build_success": true,
+  "unit": {
+    "suites": 76,
+    "tests": 705,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "flakes": 0
+  },
+  "postgres": {
+    "suites": 65,
+    "tests": 1352,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "flakes": 0
+  },
+  "java_total": 2057,
+  "raw_log": {
+    "file": "pr68-postsync-full-postgres.log",
+    "bytes": 2607052,
+    "sha256": "049580366662357f1e4a541ea8c997edc700b75e7a701c0e4903aeb448759dbd",
+    "encoding": "utf-16",
+    "mtime_utc": "2026-10-29T04:58:43.463880+00:00"
+  },
+  "failsafe_summary": {
+    "sha256": "9bae1986691ea97c43bf6210f019fd5e129b99d417e300410a15302d4b5bd2a3",
+    "bytes": 495,
+    "timeout": "false",
+    "counts": {
+      "completed": 1352,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0,
+      "flakes": 0
+    }
+  },
+  "runtime": {
+    "xml_properties": {
+      "java.home": [
+        "C:\\Program Files\\Eclipse Adoptium\\jdk-21.0.12.101-hotspot"
+      ],
+      "basedir": [
+        "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029"
+      ],
+      "java.version": [
+        "21.0.12.1"
+      ],
+      "user.dir": [
+        "C:\\Logistic-UTEExpress\\.work\\pr68-postsync-20261029"
+      ],
+      "java.vendor": [
+        "Eclipse Adoptium"
+      ],
+      "java.vm.version": [
+        "21.0.12.1+1-LTS"
+      ]
+    },
+    "docker_server_version": "29.8.0",
+    "postgresql_version": [
+      "17.6"
+    ],
+    "testcontainers_version": [
+      "2.0.5"
+    ],
+    "maven_enforcer_java_rule_passed": true,
+    "maven_enforcer_maven_rule_passed": true
+  },
+  "node_tooling": {
+    "source": "8705e8a865736387c96007aee7eb813a58dd1911",
+    "node": 33,
+    "tooling": 17,
+    "new_execution_in_external_run": false,
+    "reuse": "Existing exact-source results and logs rehashed; default-isolation/temp allocation failures retained separately."
+  },
+  "ci": {
+    "run_id": 40818775178,
+    "run_number": 159,
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40818775178",
+    "head_sha": "8705e8a865736387c96007aee7eb813a58dd1911",
+    "base_sha": "b538dbc3af17ff80802fa33eea187705c40059fe",
+    "event": "pull_request",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-10-29T04:37:19Z",
+    "updated_at": "2026-10-29T04:39:06Z",
+    "checkout_sha": "0c4f4ab408c6ca3e38e290d8c102c50062d51884",
+    "checkout_tree": "3cba80a0ab92b90e7a82e9b4726acdb9bc0f328c",
+    "checkout_parents": [
+      "b538dbc3af17ff80802fa33eea187705c40059fe",
+      "8705e8a865736387c96007aee7eb813a58dd1911"
+    ],
+    "source_tree_identical": true,
+    "job_id": 123266046590,
+    "node_tests": 33,
+    "maven_test_unit_tests": 705,
+    "maven_package_unit_tests": 705,
+    "overlapping_java_executions_not_added": true,
+    "postgres_it_executed": false,
+    "tooling_executed": false,
+    "sanitized_log_lines": [
+      "2026-10-29T04:37:27.3322240Z HEAD is now at 0c4f4ab Merge 8705e8a865736387c96007aee7eb813a58dd1911 into b538dbc3af17ff80802fa33eea187705c40059fe",
+      "2026-10-29T04:37:27.3371025Z [command]/usr/bin/git log -1 --format=%H",
+      "2026-10-29T04:37:27.3409735Z 0c4f4ab408c6ca3e38e290d8c102c50062d51884",
+      "2026-10-29T04:37:30.8226583Z # tests 33",
+      "2026-10-29T04:37:30.8227354Z # pass 33",
+      "2026-10-29T04:37:30.8227759Z # fail 0",
+      "2026-10-29T04:38:24.8760526Z [INFO] Tests run: 705, Failures: 0, Errors: 0, Skipped: 0",
+      "2026-10-29T04:38:24.8779268Z [INFO] BUILD SUCCESS",
+      "2026-10-29T04:39:01.9834502Z [INFO] Tests run: 705, Failures: 0, Errors: 0, Skipped: 0",
+      "2026-10-29T04:39:03.0122824Z [INFO] BUILD SUCCESS"
+    ]
+  },
+  "qd_review": "PENDING - independent run started; no completed verdict observed",
+  "hp_final_acceptance": "PENDING",
+  "latest_develop_sha": "fb7dcebd434c6887396881e9b34df1bf12d8250e",
+  "ahead": 7,
+  "behind": 2,
+  "develop_delta": "Two documentation-only commits; code held per QD request; no synchronization performed in this evidence-only task",
+  "evidence_parent": "b0cecbfb7ee243d80cbf69eef4a1860cdccd6bdf",
+  "evidence_publication": "Separate docs-only branch; code HEAD unchanged; historical packets retained",
+  "historical_evidence": [
+    "e79b760d1e48f0532e6cb132e76ffa44e53dbf78",
+    "5b9de50291fc43d3791de328aa33c2e3abe96b87",
+    "b0cecbfb7ee243d80cbf69eef4a1860cdccd6bdf"
+  ],
+  "sanitization": "Only allowlisted metadata, names/counts, digests, versions, proof/checklists and collector source. Raw logs, XML properties/system-out, cookies, credentials, dumps, raw binaries and environment dumps remain private.",
+  "limits": [
+    "Exact original argv, start timestamp and process-exit receipt were not captured in available files.",
+    "No original before/after Git snapshot exists in available external-run records. Current clean Git/reflog plus identical independently compiled binaries/resources corroborate source identity retrospectively.",
+    "This is not a second PostgreSQL run by Codex."
+  ],
+  "files": [
+    {
+      "path": "docs/testing/QA-02-regression-report.md",
+      "bytes": 22881,
+      "sha256": "a9ade01e6fb2aa8988138ac4ef01ee4ca34ee63aec0cfc914259e3f94bd00c64"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-outside-run-20261029/.gitattributes",
+      "bytes": 14,
+      "sha256": "a79691a93b46e49ce460c26ef22afcc03d6eca1e63bf2edbc20e96159510f6c9"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-outside-run-20261029/ci.json",
+      "bytes": 1692,
+      "sha256": "e0d7bb2c21210886e265080fa85b1c3732d84857659fca62e27145232a41738c"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-outside-run-20261029/collect-external-run.py",
+      "bytes": 7099,
+      "sha256": "44d4393bd9032f76f4cba1e899495670840e51f14db5467d8168af2349bcf46e"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-outside-run-20261029/review-handoff.md",
+      "bytes": 5541,
+      "sha256": "097485a5500767f976cd970ab406d4b5f304a2f153176be3d8c5609ea611bb71"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-outside-run-20261029/run-comparison.json",
+      "bytes": 4392,
+      "sha256": "71403185212b6355880f3fa404d026edac60bb8e9e7b1e4e090a6d7b11f37b1a"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-outside-run-20261029/source-proof.json",
+      "bytes": 181621,
+      "sha256": "ad8af6a71a106f80fe3f19a0b66e866a93961e8db2c24e90422eb55fb0efea25"
+    },
+    {
+      "path": "docs/testing/qa02-pr68-outside-run-20261029/suite-evidence.json",
+      "bytes": 268210,
+      "sha256": "63db8b836a8cb4f7f224fe52dbd67b6baaa555f72e8de67cbaa70574ee1e768c"
+    }
+  ]
+}

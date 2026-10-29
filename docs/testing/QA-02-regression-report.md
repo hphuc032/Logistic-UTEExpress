@@ -1,3 +1,23 @@
+# QA-02 — External PowerShell full-regression receipt, 2026-10-29
+
+**2057 PASS artifacts verified:705 unit +1352 PostgreSQL,0 failures/errors/skips/flakes.** Source at collection `8705e8a865736387c96007aee7eb813a58dd1911`, tree `3cba80a0ab92b90e7a82e9b4726acdb9bc0f328c`, clean. Independent clean compilation matches903/903 binary/resource files and683 JAR runtime entries. Exact original source guard/argv/start/exit receipt are absent; exit0 is user-attested. This is **PASS_ARTIFACTS_VERIFIED_WITH_PROVENANCE_LIMITS**, not an unqualified observed exact-head process PASS.
+
+Raw log `pr68-postsync-full-postgres.log`, UTF-16 bytes2607052, SHA256 `049580366662357f1e4a541ea8c997edc700b75e7a701c0e4903aeb448759dbd`. Log/XML report BUILD SUCCESS; finished2026-10-29T11:58:43+07:00; Maven duration08:02min. Java21.0.12.1, Docker Server29.8.0, PostgreSQL17.6, Testcontainers2.0.5 verified. This run occurred in user PowerShell outside Codex sandbox; Codex Docker access is not claimed. Raw logs/XML were snapshotted privately and all141 suite digests checked. No raw sensitive artifacts are committed.
+
+PromotionBrowserFormsIT6, VendorVoucherIT73, ProductPromotionIT59, Qa01CookieCsrfIT15 and Qa01OtpSecurityIT11 all PASS; these are subsets of1352, not extra totals. Node33/tooling17 reuse earlier same-source PASS with rehashed logs; no new execution claimed. CI159 remains SUCCESS for8705, synthetic checkout tree matches, and it does not run postgres-it.
+
+See [new manifest](qa02-pr68-outside-run-20261029/manifest.json), [all suite checksums/counts](qa02-pr68-outside-run-20261029/suite-evidence.json), [source equivalence proof](qa02-pr68-outside-run-20261029/source-proof.json), [history comparison](qa02-pr68-outside-run-20261029/run-comparison.json), and [QĐ/HP handoff with explicit limits](qa02-pr68-outside-run-20261029/review-handoff.md).
+
+**READY FOR QĐ EVIDENCE REVIEW; HP FINAL ACCEPTANCE PENDING.** QĐ independent verdict/provenance evaluation remains outstanding. Current develop `fb7dcebd434c6887396881e9b34df1bf12d8250e` is two documentation-only commits ahead of the tested target; PR ahead7/behind2. Code is held during QĐ verification. Do not carry forward old behind0 or claim a latest-target merge. HP must decide whether later documentation synchronization is required.
+
+Historical2011 PASS,2023 PASS and the8705 sandbox startup FAIL remain unchanged in their immutable packets. The former Docker blocker describes the sandbox attempt; actual external PostgreSQL assertions now have passing artifacts, subject to stated provenance limits. QA-02 remains IN PROGRESS; no QA-03 completion, finding closure, approval/merge or Q70-S01 risk change.
+
+---
+
+## Previous published report retained below as historical context
+
+The following report is preserved from evidence commitb0cecbfb7ee243d80cbf69eef4a1860cdccd6bdf. Its Docker failure, NOT VERIFIED and behind0 statements apply to that earlier observation only and are not rewritten as this new run.
+
 # QA-02 — PR68 post-sync gate, 2026-10-29
 
 **NOT READY FOR HP FINAL ACCEPTANCE.** Full PostgreSQL/HTTP/CSRF/ownership regression is blocked by Docker access; QĐ delta review is PENDING. CI status is recorded separately below. No approval, merge into develop, QA finding closure or QA-02/QA-03 completion is claimed.

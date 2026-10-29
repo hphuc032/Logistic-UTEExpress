@@ -1,0 +1,138 @@
+{
+  "historical_8bab8dd": {
+    "source": "8bab8dd9358a9f6fef022ec2c4e489e2f0c26fb5",
+    "unit": 686,
+    "postgres": 1325,
+    "total": 2011,
+    "status": "HISTORICAL_PASS",
+    "raw_artifacts_freshly_rehashed": false
+  },
+  "historical_c593352": {
+    "source": "c593352492184da2a9ca46ebea4a55b802ac6416",
+    "unit": 697,
+    "postgres": 1326,
+    "total": 2023,
+    "status": "HISTORICAL_PASS",
+    "raw_artifacts_freshly_rehashed": false
+  },
+  "sandbox_attempt_8705": {
+    "source": "8705e8a865736387c96007aee7eb813a58dd1911",
+    "run_id": "pr68-postsync-20261029T043536Z",
+    "unit": 705,
+    "postgres_setup_errors": 73,
+    "postgres_successful": 0,
+    "maven_exit_code": 1,
+    "status": "HISTORICAL_ENVIRONMENT_FAIL",
+    "frozen_evidence_commit": "b0cecbfb7ee243d80cbf69eef4a1860cdccd6bdf",
+    "raw_checks": [
+      {
+        "log": "docker-version.log",
+        "sha256": "1aff6b7c02c788b405d7cda851ba668e9d591d82c4960cf364a65d41b264c037",
+        "matches_original_manifest": true
+      },
+      {
+        "log": "java-version.log",
+        "sha256": "c09b3f6e7993628681d0f0e0fdfa12ccbfef6d7798ad260ec13807486db8b267",
+        "matches_original_manifest": true
+      },
+      {
+        "log": "node-version.log",
+        "sha256": "cebeb735a2f7d0b37af01dd44e5348009ca5362f97fbd5288ed2b428431460c0",
+        "matches_original_manifest": true
+      },
+      {
+        "log": "python-version.log",
+        "sha256": "7df82ab65b4519ae39741e49a32fc74c1204a162d427c7171409dbbbfebbd3f0",
+        "matches_original_manifest": true
+      },
+      {
+        "log": "maven-full.log",
+        "sha256": "88212e53cc883932680fe8a27a9e56330acfefa78d9f6f01551ab4092292c359",
+        "matches_original_manifest": true
+      },
+      {
+        "log": "node-default.log",
+        "sha256": "4b6aba20f9e2d92941e0f2842df62fe1ef6cf29b9db07a77f55c16bf85a4d126",
+        "matches_original_manifest": true
+      },
+      {
+        "log": "tooling-default.log",
+        "sha256": "f7874579f1fa0648d5d1317112f3c47d966623cfc04b642602b17482b254d8eb",
+        "matches_original_manifest": true
+      },
+      {
+        "log": "node-inprocess.log",
+        "sha256": "325099d4a57c75a99bc5dc09acecae0f577d3db17b5d5286945e446ad19477ad",
+        "matches_original_manifest": true
+      },
+      {
+        "log": "tooling-inherited-temp.log",
+        "sha256": "d1648c8ba68e74c8215fecd882cb4b55a91c5f2b2e6a10d7dc332ff73bed3cf6",
+        "matches_original_manifest": true
+      }
+    ],
+    "old_xml_note": "External clean verify replaced working target XML; original published failed-run XML digests/counts and private Maven log remain retained. No original failed XML rehash is claimed."
+  },
+  "outside_powershell_run": {
+    "run_id": "pr68-outside-powershell-20261029T045843Z",
+    "source_at_collection": "8705e8a865736387c96007aee7eb813a58dd1911",
+    "unit": 705,
+    "postgres": 1352,
+    "total": 2057,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0,
+    "flakes": 0,
+    "result": "PASS_ARTIFACTS_VERIFIED",
+    "exit_code": {
+      "value": 0,
+      "evidence": "user-attested; no contemporaneous exit-code receipt found in raw log",
+      "independently_captured": false
+    }
+  },
+  "count_deltas_from_c593": [
+    {
+      "group": "unit",
+      "suite": "com.uteexpress.identity.service.OtpSecurityTest",
+      "c593_tests": 3,
+      "outside_tests": 4,
+      "delta": 1
+    },
+    {
+      "group": "unit",
+      "suite": "com.uteexpress.security.OtpRequestLimitFilterTest",
+      "c593_tests": 0,
+      "outside_tests": 2,
+      "delta": 2
+    },
+    {
+      "group": "unit",
+      "suite": "com.uteexpress.security.OtpRequestRateLimiterTest",
+      "c593_tests": 0,
+      "outside_tests": 5,
+      "delta": 5
+    },
+    {
+      "group": "postgres",
+      "suite": "com.uteexpress.security.Qa01CookieCsrfIT",
+      "c593_tests": 0,
+      "outside_tests": 15,
+      "delta": 15
+    },
+    {
+      "group": "postgres",
+      "suite": "com.uteexpress.security.Qa01OtpSecurityIT",
+      "c593_tests": 0,
+      "outside_tests": 11,
+      "delta": 11
+    }
+  ],
+  "overlapping_runs_not_added": true,
+  "node_tooling": {
+    "source": "8705e8a865736387c96007aee7eb813a58dd1911",
+    "node": 33,
+    "tooling": 17,
+    "new_execution_in_external_run": false,
+    "reuse": "Existing exact-source results and logs rehashed; default-isolation/temp allocation failures retained separately."
+  }
+}
