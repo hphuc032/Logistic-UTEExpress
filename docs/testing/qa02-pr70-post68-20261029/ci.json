@@ -1,0 +1,78 @@
+{
+  "full_gate": {
+    "run_id": 40827082904,
+    "run_number": 2,
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40827082904",
+    "head_sha": "321ccf33528fbd214cf9d5399cadbc19df218148",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-10-29T06:05:02Z",
+    "updated_at": "2026-10-29T06:13:24Z",
+    "checkout": "exact PR head via actions/checkout ref",
+    "job_id": 123292476051
+  },
+  "standard": {
+    "run_id": 40827082941,
+    "run_number": 166,
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40827082941",
+    "head_sha": "321ccf33528fbd214cf9d5399cadbc19df218148",
+    "status": "completed",
+    "conclusion": "success",
+    "synthetic_sha": "cfdc89dc8fd680ae950a19e6c9dcefcda6eb7035",
+    "synthetic_tree": "31a913354b423726e4f97d40e2233db8429fbfc3",
+    "synthetic_parents": [
+      "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "321ccf33528fbd214cf9d5399cadbc19df218148"
+    ],
+    "unit_test": 709,
+    "unit_package": 709,
+    "node": 33,
+    "overlaps_not_added": true,
+    "postgres_it_executed": false,
+    "sanitized_lines": [
+      "2026-10-29T06:05:09.4745175Z HEAD is now at cfdc89d Merge 321ccf33528fbd214cf9d5399cadbc19df218148 into a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "2026-10-29T06:05:09.4794274Z [command]/usr/bin/git log -1 --format=%H",
+      "2026-10-29T06:05:09.4828621Z cfdc89dc8fd680ae950a19e6c9dcefcda6eb7035",
+      "2026-10-29T06:05:15.4200011Z # tests 33",
+      "2026-10-29T06:05:15.4200377Z # pass 33",
+      "2026-10-29T06:05:15.4200518Z # fail 0",
+      "2026-10-29T06:05:48.8781732Z [INFO] Tests run: 709, Failures: 0, Errors: 0, Skipped: 0",
+      "2026-10-29T06:05:48.8807419Z [INFO] BUILD SUCCESS",
+      "2026-10-29T06:06:11.6584141Z [INFO] Tests run: 709, Failures: 0, Errors: 0, Skipped: 0",
+      "2026-10-29T06:06:12.2618474Z [INFO] BUILD SUCCESS"
+    ]
+  },
+  "tooling": {
+    "run_id": 40827082990,
+    "run_number": 24,
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40827082990",
+    "head_sha": "321ccf33528fbd214cf9d5399cadbc19df218148",
+    "conclusion": "success",
+    "tests": 17,
+    "sanitized_lines": [
+      "2026-10-29T06:05:09.6386681Z HEAD is now at cfdc89d Merge 321ccf33528fbd214cf9d5399cadbc19df218148 into a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "2026-10-29T06:05:09.6431308Z [command]/usr/bin/git log -1 --format=%H",
+      "2026-10-29T06:05:09.6464074Z cfdc89dc8fd680ae950a19e6c9dcefcda6eb7035",
+      "2026-10-29T06:05:10.2267208Z Ran 17 tests in 0.062s",
+      "2026-10-29T06:05:10.2267957Z OK"
+    ]
+  },
+  "artifact": {
+    "id": 12877307823,
+    "name": "pr70-integration-321ccf33528fbd214cf9d5399cadbc19df218148-40827082904",
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40827082904/artifacts/12877307823",
+    "bytes": 1106457,
+    "provider_zip_digest": "sha256:1f844a226aa5b41ec2fd8c85fe6f5374378791d94b37c5a101b9ba26977e56ac",
+    "created_at": "2026-10-29T06:13:19Z",
+    "expires_at": "2026-11-28T06:13:18Z",
+    "expired": false
+  },
+  "initial_attempt": {
+    "source": "158c9c91006c54c1dc3f256db964a0657bd3bd60",
+    "run_id": 40825786384,
+    "conclusion": "success",
+    "artifact_id": 12876991602,
+    "counts_reused": false,
+    "reason": "Transport follow-up required a fresh exact-source run; previous SUCCESS remains distinct."
+  }
+}

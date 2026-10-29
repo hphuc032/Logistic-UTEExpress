@@ -1,0 +1,91 @@
+{
+  "verified_utc": "2026-10-29T06:14:41.705655+00:00",
+  "source": "321ccf33528fbd214cf9d5399cadbc19df218148",
+  "git_tree": "31a913354b423726e4f97d40e2233db8429fbfc3",
+  "source_clean": true,
+  "status": "PASS",
+  "actual_process_exits_verified": true,
+  "source_guards_before_after_verified": true,
+  "encrypted_archive_sha256": "419dce0751a63cc5fb59f03928e75a876e071f5b5d83719fe497b5149d53b19c",
+  "decrypted_archive_sha256": "e44f8029898997c0c2afa6cdf9f3ff00da5db28eba3931bf0ecb9aa1bbb43c16",
+  "raw_log_digests_recomputed": 11,
+  "raw_xml_digests_recomputed": 229,
+  "counts": {
+    "full-maven": {
+      "unit": {
+        "tests": 709,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "flakes": 0,
+        "classes": 77
+      },
+      "postgresql": {
+        "tests": 1415,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "flakes": 0,
+        "classes": 67
+      }
+    },
+    "targeted-refund": {
+      "unit": {
+        "tests": 709,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "flakes": 0,
+        "classes": 77
+      },
+      "postgresql": {
+        "tests": 205,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "flakes": 0,
+        "classes": 8
+      }
+    }
+  },
+  "versions_from_xml": {
+    "java.home": [
+      "/usr/lib/jvm/temurin-21-jdk-amd64"
+    ],
+    "basedir": [
+      "/home/runner/work/Logistic-UTEExpress/Logistic-UTEExpress"
+    ],
+    "java.version": [
+      "21.0.13"
+    ],
+    "user.dir": [
+      "/home/runner/work/Logistic-UTEExpress/Logistic-UTEExpress"
+    ],
+    "java.vendor": [
+      "Eclipse Adoptium"
+    ]
+  },
+  "log_diagnostics": {
+    "full-maven": {
+      "build_success": true,
+      "pg_blocking_observations": 15,
+      "warnings": 213,
+      "closed_connection_lines": 0,
+      "connection_refused_lines": 0,
+      "forced_fork_lines": 0
+    },
+    "targeted-refund": {
+      "build_success": true,
+      "pg_blocking_observations": 15,
+      "warnings": 44,
+      "closed_connection_lines": 0,
+      "connection_refused_lines": 0,
+      "forced_fork_lines": 0
+    }
+  },
+  "node_tests": 33,
+  "tooling_tests": 17,
+  "full_and_targeted_overlap_not_added": true,
+  "manual_ops": "NOT RUN",
+  "raw_plaintext_published": false
+}

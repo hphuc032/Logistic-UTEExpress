@@ -1,0 +1,226 @@
+{
+  "verified_utc": "2026-10-29T06:06:54.700122+00:00",
+  "old_pr_head": "688884cd33f4b2f4dc62f5d33a4c4002e9146660",
+  "develop": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+  "normal_merge": "60b84fa46904053cff939897f40a55452e520598",
+  "new_pr_head": "321ccf33528fbd214cf9d5399cadbc19df218148",
+  "git_tree": "31a913354b423726e4f97d40e2233db8429fbfc3",
+  "ahead": 4,
+  "behind": 0,
+  "conflicts": [],
+  "protected_refund_guard_ledger_tests_objects": {
+    "src/main/java/com/uteexpress/order/controller/CancelledPaidRefundController.java": {
+      "old": "4a7ca8e1062405845ce87886c4b1171bac94b818",
+      "new": "4a7ca8e1062405845ce87886c4b1171bac94b818",
+      "equal": true
+    },
+    "src/main/java/com/uteexpress/order/service/CancelledPaidRefundService.java": {
+      "old": "4cb573739607d62e53e41183b09d4cabcbf6be57",
+      "new": "4cb573739607d62e53e41183b09d4cabcbf6be57",
+      "equal": true
+    },
+    "src/main/java/com/uteexpress/order/service/RefundOrderAuthority.java": {
+      "old": "0598b65d5065773a275f4f37b42cdd63f62905f8",
+      "new": "0598b65d5065773a275f4f37b42cdd63f62905f8",
+      "equal": true
+    },
+    "src/main/java/com/uteexpress/payment": {
+      "old": "c993d006b6073089d0285cac40f8d9c92c648202",
+      "new": "c993d006b6073089d0285cac40f8d9c92c648202",
+      "equal": true
+    },
+    "src/main/java/com/uteexpress/reporting/repository/RevenueQueryRepository.java": {
+      "old": "daa30c74d74a5ba5a74b72cd66863731681eca93",
+      "new": "daa30c74d74a5ba5a74b72cd66863731681eca93",
+      "equal": true
+    },
+    "src/main/resources/db/migration": {
+      "old": "31a7ad4f5c882528c94a376ae76a78710de32f06",
+      "new": "31a7ad4f5c882528c94a376ae76a78710de32f06",
+      "equal": true
+    },
+    "src/test/java/com/uteexpress/order/CancelledPaidRefundIT.java": {
+      "old": "0c7a9673b523b8a9b2c939c73db7fbc3b48e0ca0",
+      "new": "0c7a9673b523b8a9b2c939c73db7fbc3b48e0ca0",
+      "equal": true
+    },
+    "src/test/java/com/uteexpress/payment/CancelledPaidRefundMigrationIT.java": {
+      "old": "31d85114534d725dfd73ea3cefb1d1a53bc39877",
+      "new": "31d85114534d725dfd73ea3cefb1d1a53bc39877",
+      "equal": true
+    },
+    "src/test/java/qa02/seed/RefundAcceptanceSeed.java": {
+      "old": "4374db3ac31e5c01ae18f857c54621e8aba0ce63",
+      "new": "4374db3ac31e5c01ae18f857c54621e8aba0ce63",
+      "equal": true
+    }
+  },
+  "post68_security_binders_equal_develop": {
+    "src/main/java/com/uteexpress/security": {
+      "develop": "b04a4a6ddea63abb1c1e006edeaad360d712b1f6",
+      "postmerge": "b04a4a6ddea63abb1c1e006edeaad360d712b1f6",
+      "equal": true
+    },
+    "src/main/java/com/uteexpress/catalog/controller/VendorProductPromotionController.java": {
+      "develop": "09477da0a4361edfebd2e0e91e34235e01f23995",
+      "postmerge": "09477da0a4361edfebd2e0e91e34235e01f23995",
+      "equal": true
+    },
+    "src/main/java/com/uteexpress/promotion/controller/VendorVoucherController.java": {
+      "develop": "dfc193be38b21b523fec2720a40f47d3dc7a4740",
+      "postmerge": "dfc193be38b21b523fec2720a40f47d3dc7a4740",
+      "equal": true
+    }
+  },
+  "migration_count_before": 27,
+  "migration_count_after": 28,
+  "prior_migrations_unchanged": [
+    {
+      "path": "src/main/resources/db/migration/V20260920143000__qd_db01_schema_baseline.sql",
+      "git_blob": "3bb4c484cda2e4b396457711d5dd2dc3cbaf95f9",
+      "sha256": "ba5ff8b1d860a1c6e0a54d8739dfa626b8c5eb6d49ecaa7c58b06a6fabb00d9a"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260921070156__hp_auth01_identity.sql",
+      "git_blob": "350c8d09a9dbba4a9b6145627f478937daead198",
+      "sha256": "c71e9be7b5853fe918ab7b6a832c1aea7da7fcdddc93f7a999dbea90471dee18"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260921081035__qd_admin00_audit_logs.sql",
+      "git_blob": "c663c822aefed91ae94507591cf997a50dc8a854",
+      "sha256": "fb3f215ef40a85b72c5cd595397d7c9d34cdb89fbf95befc699b21bdd34e827b"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260922090000__qd_admin04_categories.sql",
+      "git_blob": "711e80837104fcf6b1aee642f2409a4c78be3c1d",
+      "sha256": "cab0eeb0dd5f31861fc6c84aeadec9a268da16150c081bc4caa497c39ad2876b"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260923090000__td_ord01_domain_core.sql",
+      "git_blob": "26f4261c6dce8c0dd542dd886e75451f93f1b6a1",
+      "sha256": "a7e5519b8460ef4b75e1e1fa15fe5767d38e07a8cbd6315a0a823b0ce4e6eaa8"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260923090100__hp_auth03_email_otp.sql",
+      "git_blob": "c19385997b4eb2f00f6f47f07518b4abaed67c74",
+      "sha256": "dad01a98afb0414091753d2e0981e72c5c5357ba2b1a81f391e3626c95fafe45"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260923100000__qd_ship00_providers_rates.sql",
+      "git_blob": "e12fbcfb0a35a454c801d45be23426d2ba8cfdaf",
+      "sha256": "0493811cdb53b5023994b8ad628908f275c2fb11dba831ea634963faaad6fce3"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260923100100__hp_vendor01_shops.sql",
+      "git_blob": "6d20d71095bfe6a0aadda7d98197559369e490e8",
+      "sha256": "eb9dd9f5a3fed7001fca248c8d4884c4384095b234f9acb10b705e2918180d22"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260924005244__hp_prod00_catalog_foundation.sql",
+      "git_blob": "3ec58fe3c47261d8abda92e6b860c23894483f56",
+      "sha256": "cd3a8b75dde9a23de1ae3e57691f34fa2f753a01c193f7896cf180f60a77b385"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260925022804__td_cart01_foundation.sql",
+      "git_blob": "c5f0f2e2e1ea75f728c650f16060edfd5aa03fe2",
+      "sha256": "6dbefdc94bab2c6ae3ded301fc504f51a2dc751bb196c9aa33ca4b592f7d1838"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260926035526__hp_auth04_password_reset.sql",
+      "git_blob": "0070fa535cfb59b1f36eeb119f274f1618e0b359",
+      "sha256": "0beb01d1d859365b3e0d067acffd9cf331c5419a1e7a390e8f826dfc2db09dd8"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260926085003__hp_user01_profile.sql",
+      "git_blob": "1d8c79dc6f4b6cbfa95bf06450a7507570f3e8b2",
+      "sha256": "8a7213edf1c14b6aa5a08a76e1fce177e0fcf88be9536b5e407eb037b2c4b9f0"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260927123343__hp_user02_addresses.sql",
+      "git_blob": "bb649f3c169c63c11ad624c13a49c40b4c1ff454",
+      "sha256": "f038f01ecd74672336b9e4640f9a6488feb73fde72741f16e7a5a87b1a1e2366"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260928090000__qd_admin05_moderation.sql",
+      "git_blob": "e5bc09fe2da21cc5287767a23a47101199ee8e36",
+      "sha256": "de087d26114c7723a04f50b163b131d06ab28fe718010e7547aafeff226aabe9"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20260930100000__qd_eng01_favorites_recent.sql",
+      "git_blob": "5074df9a3cb3aa7f1939f23bd74305c2341669f5",
+      "sha256": "67c4063edc2966433d716394f110f168cc9c815ed0a6e781279361ff3652d9ad"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261002100000__qd_admin06_commission_policy.sql",
+      "git_blob": "dfe877044f38ccd28e4aed371d421150882c7307",
+      "sha256": "c9e5c0bf14c1cf12ecce85d0a6438eddd8aac7e5fdae7f4c36d2cbf39c68fd95"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261006090000__td_ord04_shipping_snapshot.sql",
+      "git_blob": "41e7d5dac7c929b193416efd8c40b7655350a501",
+      "sha256": "2b0ea6626d6489a6128f564f9e47a2906590f9c76ec0b81a8aed25aba2310ca9"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261007090000__td_promo01_vouchers.sql",
+      "git_blob": "e5507f4641c985fe87df42bab7432502b17dfdcf",
+      "sha256": "be77235d3d35ffb406560ac8cd051fa0a8c6869f5f86ff9d786d7eaaf31c7e91"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261007100000__qd_ship01_shipments.sql",
+      "git_blob": "04b4c11bc4588b2749b87c6cb3608e8945818d29",
+      "sha256": "707c8483250e45685c3b205b8aa1651f5651fdd17a62d644a2dc49ca490ee3e3"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261008090000__td_promo02_product_promotions.sql",
+      "git_blob": "de410cd3492c7686caa6becdd406fb35f7118895",
+      "sha256": "63a8f266fddbc766b38b28e520ce069365c931d25462d0feda2cc4670db0ad2c"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261008100000__qd_ws01_notifications.sql",
+      "git_blob": "0c90e400450e1a5d321406c1482c093d150538dd",
+      "sha256": "b20acb55c2b34a27a6bdeb53917cd02dec8005da7f613f57476f403f8634dc92"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261013090000__td_return01_management.sql",
+      "git_blob": "d1a1ca7be5296af1ab22f62a756875ba3076d8d2",
+      "sha256": "d69c8d7cabc084ded87ef2cd4c6597042ee1ceb23a5921a5e4de96a98e93fd67"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261018090000__td_ord04_return_receipt.sql",
+      "git_blob": "72d88e378164691f0f2543ed67a59a8cbf2486e8",
+      "sha256": "4f5d3763c738ef01d31c0e6f542076a1ba7c4c9befadd665578e58c9b9b9ec3c"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261018110000__qd_ship03_delivery_failures.sql",
+      "git_blob": "2f20b0800114fa08865bf993e6638caf321dbc5e",
+      "sha256": "8e3d10f2fe26c908bf619ffb79d54c07d548b3441f8111e3b0b3c951781bf58a"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261022090000__td_pay02_refund_ledger.sql",
+      "git_blob": "b4d1c1d5c8661a70789d8d05a044119b1daf7407",
+      "sha256": "2c1d59afa52ac770269994572d757750bed1e0ee0153509fbc78b188fd272867"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261023170000__qd_rev01_review_foundation.sql",
+      "git_blob": "bd1020adfa84accbeea44bec77411cb3b4859634",
+      "sha256": "4965c8a574aad08662c78e74cef88e80019b86e3ed813e383c48116836dc4a5c"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261027100000__hp_int02_return_to_sender.sql",
+      "git_blob": "9f2fdb3e58785994da635d17c42863b4d9ed1e7a",
+      "sha256": "9a0354adf78d7586ba6ecd205e8ee3ee29c3ce08d9221e50bbc77b76fd7864b2"
+    }
+  ],
+  "added_migrations": [
+    "src/main/resources/db/migration/V20261028081110__td_qa02_cancelled_paid_refunds.sql"
+  ],
+  "duplicate_versions": false,
+  "postmerge_additional_changes": [
+    ".github/workflows/pr70-integration-gate.yml",
+    "scripts/qa/pr70_integration_gate.py"
+  ],
+  "q70_s01": "ACCEPTED RISK - LIMITED; original uncaptured historical predicate remains unproven; not RESOLVED",
+  "fixture_scope": "Existing PR70 synthetic seed still uses CURRENT_TIMESTAMP; #69 fixture candidate not silently imported. Full combined normal/-2s seed/rerun belongs to subsequent #69 gate; NOT RUN here.",
+  "financial_review_status": "STATIC REVIEW COMPLETED; runtime regression must be separately verified",
+  "source_clean": true
+}

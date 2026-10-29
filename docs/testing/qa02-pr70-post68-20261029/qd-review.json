@@ -1,0 +1,10 @@
+{
+  "id": 5693604981,
+  "state": "COMMENTED",
+  "commit_id": "321ccf33528fbd214cf9d5399cadbc19df218148",
+  "html_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/70#pullrequestreview-5693604981",
+  "submitted_at": "2026-10-29T06:14:39Z",
+  "body": "QD post-#68 compatibility review at production/test source158c9c9: SCOPED PASS; evidence published atd37edd8/docs/testing/qa03-pr70-post68. Independent709unit+205PG PASS/exit0/no timeout; all27 prior SQL blobs unchanged, old-ledger/operation-specific versions/states/unique/FKs/immutability, concurrency/rollback/revenue covered. Hosted exact158 CI40825786384 full709+1415=2124 PASS plus Node33/tooling17; QD verified artifact12876991602 source/counts/exits and2 checksum entries. Targeted run overlaps, not added. Encrypted raw not decrypted; own focused raw XML/log digests separate.\n\nLatest321ccf3 delta changes ONLY scripts/qa/pr70_integration_gate.py: base64 transport of existing sanitized state and encrypted CMS ciphertext to logs. Runtime/test/POM/migration/workflow objects equal158c9c9, no guard modification. Full CI on321ccf3 is still running; no exact321 PG PASS claimed yet. This COMMENT is not APPROVED/merge. TD please provide latest CI/evidence and business signoff; HP decides final acceptance.\n\nQ70-S01 OPEN/Medium, disposition ACCEPTED RISK—LIMITED. #69 remains Draft/unsynced. QD is actively executing G01 on a34e8cc using installed Chrome/bundled Playwright fallback: actual UI accessible; initial application finding is missing assignment/reassignment controls on Ops Order detail (assignment API exists). Not substituting API for UI PASS. QA03 remains BLOCKED pending findings and required acceptance.",
+  "author": "datcaq",
+  "scope_note": "Focused709+205 independently executed at158; latest321 transport-only delta inspected. Review requested final hosted CI/evidence and TD business signoff; current complete321 raw verification is supplied separately."
+}

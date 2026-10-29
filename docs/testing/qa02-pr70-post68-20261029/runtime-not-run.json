@@ -1,0 +1,31 @@
+{
+  "source": "321ccf33528fbd214cf9d5399cadbc19df218148",
+  "scenarios": [
+    {
+      "scenario": "Manual Ops actual browser/JSON UX and responsive acceptance",
+      "status": "NOT RUN",
+      "owner": "QD/HP with TD financial support"
+    },
+    {
+      "scenario": "PR69 combined ordered seed, normal/-2s Clock and independent process rerun with34-table fingerprints",
+      "status": "NOT RUN",
+      "reason": "Sequential PR69 gate after actual PR70 integration; PR69 fixture/Clock candidate not imported"
+    },
+    {
+      "scenario": "Production or VNPAY/provider payment transfer verification",
+      "status": "DEFERRED PAY03 / NOT RUN",
+      "reason": "No production data or external payment calls authorized"
+    },
+    {
+      "scenario": "Standalone original PR70 disposable seed first/rerun",
+      "status": "NOT RUN",
+      "reason": "Not part of the required full/targeted JUnit gate; known CURRENT_TIMESTAMP synthetic fixture boundary retained under Q70-S01 limited historical uncertainty"
+    },
+    {
+      "scenario": "Production deployment, SCA, off-host recovery and load/restart acceptance",
+      "status": "NOT RUN",
+      "reason": "Separate owner/release gates"
+    }
+  ],
+  "q70_s01": "ACCEPTED RISK - LIMITED; not RESOLVED; no historical failure erased"
+}

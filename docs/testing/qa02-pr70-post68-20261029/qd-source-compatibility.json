@@ -1,0 +1,38 @@
+{
+  "verified_utc": "2026-10-29T06:18:14.318277+00:00",
+  "qd_focused_tested_source": "158c9c91006c54c1dc3f256db964a0657bd3bd60",
+  "final_tested_source": "321ccf33528fbd214cf9d5399cadbc19df218148",
+  "changed_paths": [
+    "scripts/qa/pr70_integration_gate.py"
+  ],
+  "transport_diff": "diff --git a/scripts/qa/pr70_integration_gate.py b/scripts/qa/pr70_integration_gate.py\nindex ebda799..65fdd78 100644\n--- a/scripts/qa/pr70_integration_gate.py\n+++ b/scripts/qa/pr70_integration_gate.py\n@@ -3,6 +3,7 @@\n Uses the existing approved evidence validators. No production/bootstrap/guard changes.\n \"\"\"\n import argparse\n+import base64\n from datetime import datetime, timezone\n import hashlib\n import json\n@@ -201,6 +202,14 @@ def run():\n         (public / \"execution.json\").write_text(json.dumps(state, indent=2) + \"\\n\")\n         sums = [digest(p) + \"  \" + p.name for p in sorted(public.iterdir()) if p.is_file()]\n         (public / \"SHA256SUMS\").write_text(\"\\n\".join(sums) + \"\\n\")\n+    # Connector-readable transport when direct artifact downloads are unavailable.\n+    # Only the same sanitized metadata and already-public ciphertext are emitted.\n+    # Raw plaintext, credentials and the recipient private key never enter CI logs.\n+    encoded = base64.b64encode(json.dumps(state, separators=(\",\", \":\")).encode()).decode(\"ascii\")\n+    print(\"QA70_EVIDENCE_B64=\" + encoded, flush=True)\n+    encrypted = base64.b64encode((public / \"raw-artifacts.cms.der\").read_bytes()).decode(\"ascii\")\n+    for index in range(0, len(encrypted), 60000):\n+        print(\"QA70_RAW_CMS_B64_%04d=\" % (index // 60000) + encrypted[index:index + 60000], flush=True)\n     print(\"PR70 \" + state[\"status\"] + \"; sanitized evidence and encrypted raw archive retained\", flush=True)\n     return 0 if state[\"status\"] == \"PASS\" else 1",
+  "runtime_test_build_workflow_equality": {
+    "src/main": {
+      "old": "6f69a0277175d6f2fe854e3bad2823caa0262bc5",
+      "new": "6f69a0277175d6f2fe854e3bad2823caa0262bc5",
+      "equal": true
+    },
+    "src/test": {
+      "old": "1f8cf15484c978b69fd2279627fdb34433354e90",
+      "new": "1f8cf15484c978b69fd2279627fdb34433354e90",
+      "equal": true
+    },
+    "pom.xml": {
+      "old": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      "new": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      "equal": true
+    },
+    ".mvn": {
+      "old": "19109738bacf2030de5bc45e1b4d4d45897b6fcd",
+      "new": "19109738bacf2030de5bc45e1b4d4d45897b6fcd",
+      "equal": true
+    },
+    ".github/workflows": {
+      "old": "7163703c770363161be3872b0b025dfc54a83328",
+      "new": "7163703c770363161be3872b0b025dfc54a83328",
+      "equal": true
+    }
+  },
+  "fresh_full_regression_on_final_source": true,
+  "old_review_not_automatically_relabelled": true
+}
