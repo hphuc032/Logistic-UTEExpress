@@ -6,9 +6,9 @@
   "gates": [
     {
       "id": "Q03-G01",
-      "status": "NOT RUN / BLOCKED",
-      "reason": "Computer Use initialization unavailable; 0 screenshots; 24 manual matrix entries NOT RUN",
-      "owner": "QD + HP/UI"
+      "status": "Automated browser24 PASS / human manual NOT RUN",
+      "reason": "See current QA03 final gates and PR75; no human manual acceptance implied",
+      "owner": "QD execution / HP acceptance"
     },
     {
       "id": "Q03-G02",
@@ -57,19 +57,20 @@
   },
   "current_finding_disposition": {
     "finding": "Q70-S01",
-    "status": "ACCEPTED RISK — LIMITED",
+    "status": "OPEN",
     "severity": "Medium",
     "candidate": "Validated; HP limited residual risk accepted, not RESOLVED",
     "reference": "../qa03-refund-diagnostics/finding-disposition.json",
     "td_new_evidence": "Published PR71 c0b2f76; QD scoped published artifact/source consistency PASS; raw private logs/XML not rehashed/rerun",
     "authorized_integration_regression": "Local validation f9c6fd6 PASS; final post-merge source verification NOT RUN",
     "hp_final_acceptance": "PENDING",
-    "published_review_reference": "../qa03-refund-diagnostics/td-published-review.json"
+    "published_review_reference": "../qa03-refund-diagnostics/td-published-review.json",
+    "disposition": "ACCEPTED RISK \u2014 LIMITED"
   },
   "hp_authorized_validation_update": {
     "tested_source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
     "execution": "PASS fresh full/normal/controlled",
-    "finding_status": "ACCEPTED RISK — LIMITED",
+    "finding_status": "ACCEPTED RISK \u2014 LIMITED",
     "recommendation": "HP final bounded disposition applied",
     "report": "../qa03-hp-integration-validation/report.md",
     "qa03": "BLOCKED",

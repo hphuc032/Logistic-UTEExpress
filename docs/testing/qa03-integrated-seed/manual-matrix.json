@@ -1,251 +1,618 @@
 {
   "scope": "Manual browser/responsive Ops acceptance; HTTP and automated tests do not substitute this matrix",
-  "source_sha": null,
-  "dataset_source_sha": null,
-  "browser_version": null,
-  "executor": null,
-  "status": "BLOCKED",
-  "reason": "Computer Use kernel assets initialization fails with Windows os error 3. No viewport execution or screenshot was possible.",
+  "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+  "dataset_source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+  "browser_version": "155.0.8059.82",
+  "executor": "QD agent via Playwright; no human manual signoff",
+  "status": "HUMAN MANUAL NOT RUN / AUTOMATED BROWSER24 PASS",
+  "reason": "Supported runtimes failed; explicitly authorized installed Chrome/Playwright fallback executed real UI. Automation is not relabeled manual acceptance.",
   "cases": [
     {
       "case": "assignment-reassignment",
       "viewport_width_px": 375,
       "role": "ADMIN/MANAGER",
       "expected": "Assignment succeeds before pickup; stale/foreign/ineligible paths preserve state",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "assignment_reassignment": "UI JSON adapter",
+            "locked_shipper_denied": true,
+            "stale_denied": true,
+            "old_assignee_denied": true,
+            "postpickup_control_hidden": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-375-stale.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-375-assigned.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-375-after-pickup.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "assignment-reassignment",
       "viewport_width_px": 768,
       "role": "ADMIN/MANAGER",
       "expected": "Assignment succeeds before pickup; stale/foreign/ineligible paths preserve state",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "assignment_reassignment": "UI JSON adapter",
+            "locked_shipper_denied": true,
+            "stale_denied": true,
+            "old_assignee_denied": true,
+            "postpickup_control_hidden": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-768-stale.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-768-assigned.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-768-after-pickup.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "assignment-reassignment",
       "viewport_width_px": 1440,
       "role": "ADMIN/MANAGER",
       "expected": "Assignment succeeds before pickup; stale/foreign/ineligible paths preserve state",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "assignment_reassignment": "UI JSON adapter",
+            "locked_shipper_denied": true,
+            "stale_denied": true,
+            "old_assignee_denied": true,
+            "postpickup_control_hidden": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-1440-stale.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-1440-assigned.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-1440-after-pickup.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "failure-retry",
       "viewport_width_px": 375,
       "role": "SHIPPER",
       "expected": "Failure 1, retry 2 and failure 2; no retry 3, readable evidence/errors",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "first_failure_retry_second_failure": "UI_SUBMITTED",
+            "order_unchanged": true,
+            "foreign_shipper_denied": true,
+            "no_third_retry": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/failure-retry-375-exhausted.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "failure-retry",
       "viewport_width_px": 768,
       "role": "SHIPPER",
       "expected": "Failure 1, retry 2 and failure 2; no retry 3, readable evidence/errors",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "first_failure_retry_second_failure": "UI_SUBMITTED",
+            "order_unchanged": true,
+            "foreign_shipper_denied": true,
+            "no_third_retry": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/failure-retry-768-exhausted.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "failure-retry",
       "viewport_width_px": 1440,
       "role": "SHIPPER",
       "expected": "Failure 1, retry 2 and failure 2; no retry 3, readable evidence/errors",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "first_failure_retry_second_failure": "UI_SUBMITTED",
+            "order_unchanged": true,
+            "foreign_shipper_denied": true,
+            "no_third_retry": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/failure-retry-1440-exhausted.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "attempt2-delivery",
       "viewport_width_px": 375,
       "role": "SHIPPER",
       "expected": "Delivery attempt 2 with exact COD succeeds once",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "wrong_COD_rejected": true,
+            "delivered_at_attempt2": true,
+            "payment": "PAID"
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/attempt2-delivery-375-delivered.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "attempt2-delivery",
       "viewport_width_px": 768,
       "role": "SHIPPER",
       "expected": "Delivery attempt 2 with exact COD succeeds once",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "wrong_COD_rejected": true,
+            "delivered_at_attempt2": true,
+            "payment": "PAID"
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/attempt2-delivery-768-delivered.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "attempt2-delivery",
       "viewport_width_px": 1440,
       "role": "SHIPPER",
       "expected": "Delivery attempt 2 with exact COD succeeds once",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "wrong_COD_rejected": true,
+            "delivered_at_attempt2": true,
+            "payment": "PAID"
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/attempt2-delivery-1440-delivered.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "return-to-sender",
       "viewport_width_px": 375,
       "role": "ADMIN",
       "expected": "Trusted receipt and replay, no buyer-return/refund crossover",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "receipt_submitted_via_UI": true,
+            "order": "CANCELLED",
+            "shipment": "RETURNED_TO_SENDER"
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/return-to-sender-375-received.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "return-to-sender",
       "viewport_width_px": 768,
       "role": "ADMIN",
       "expected": "Trusted receipt and replay, no buyer-return/refund crossover",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "receipt_submitted_via_UI": true,
+            "order": "CANCELLED",
+            "shipment": "RETURNED_TO_SENDER"
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/return-to-sender-768-received.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "return-to-sender",
       "viewport_width_px": 1440,
       "role": "ADMIN",
       "expected": "Trusted receipt and replay, no buyer-return/refund crossover",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "receipt_submitted_via_UI": true,
+            "order": "CANCELLED",
+            "shipment": "RETURNED_TO_SENDER"
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/return-to-sender-1440-received.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "notification-two-sessions",
       "viewport_width_px": 375,
       "role": "BUYER A/B + VENDOR",
       "expected": "Vendor confirm reaches only persisted Buyer; offline/reconnect/read/logout work",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "live_private_hint": true,
+            "foreign_hint_denied": true,
+            "persisted_recipients_checked": true,
+            "read_UI": true,
+            "offline_HTTP_recovery": true,
+            "logout_denial": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-375-buyer-inbox.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-375-recovered.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "notification-two-sessions",
       "viewport_width_px": 768,
       "role": "BUYER A/B + VENDOR",
       "expected": "Vendor confirm reaches only persisted Buyer; offline/reconnect/read/logout work",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "live_private_hint": true,
+            "foreign_hint_denied": true,
+            "persisted_recipients_checked": true,
+            "read_UI": true,
+            "offline_HTTP_recovery": true,
+            "logout_denial": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-768-buyer-inbox.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-768-recovered.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "notification-two-sessions",
       "viewport_width_px": 1440,
       "role": "BUYER A/B + VENDOR",
       "expected": "Vendor confirm reaches only persisted Buyer; offline/reconnect/read/logout work",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "live_private_hint": true,
+            "foreign_hint_denied": true,
+            "persisted_recipients_checked": true,
+            "read_UI": true,
+            "offline_HTTP_recovery": true,
+            "logout_denial": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-1440-buyer-inbox.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-1440-recovered.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "review-media",
       "viewport_width_px": 375,
       "role": "BUYER + public",
       "expected": "Owned delivered item, validation/duplicate/foreign errors, public media after Return",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "valid_UI_review": true,
+            "foreign_denied": true,
+            "public_after_return": true,
+            "return_precondition_method": "real HTTP buyer/vendor flow"
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-375-public.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-375-after-return.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "review-media",
       "viewport_width_px": 768,
       "role": "BUYER + public",
       "expected": "Owned delivered item, validation/duplicate/foreign errors, public media after Return",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "valid_UI_review": true,
+            "foreign_denied": true,
+            "public_after_return": true,
+            "return_precondition_method": "real HTTP buyer/vendor flow"
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-768-public.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-768-after-return.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "review-media",
       "viewport_width_px": 1440,
       "role": "BUYER + public",
       "expected": "Owned delivered item, validation/duplicate/foreign errors, public media after Return",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "valid_UI_review": true,
+            "foreign_denied": true,
+            "public_after_return": true,
+            "return_precondition_method": "real HTTP buyer/vendor flow"
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-1440-public.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-1440-after-return.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "admin-financial-scope",
       "viewport_width_px": 375,
       "role": "ADMIN/MANAGER",
       "expected": "Admin metrics usable; Manager cannot access private finance",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "admin_UI": true,
+            "manager_denied": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-375-admin.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-375-manager-denied.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "admin-financial-scope",
       "viewport_width_px": 768,
       "role": "ADMIN/MANAGER",
       "expected": "Admin metrics usable; Manager cannot access private finance",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "admin_UI": true,
+            "manager_denied": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-768-admin.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-768-manager-denied.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "admin-financial-scope",
       "viewport_width_px": 1440,
       "role": "ADMIN/MANAGER",
       "expected": "Admin metrics usable; Manager cannot access private finance",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "admin_UI": true,
+            "manager_denied": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-1440-admin.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-1440-manager-denied.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "full-user-journey",
       "viewport_width_px": 375,
       "role": "BUYER/VENDOR/SHIPPER/ADMIN",
       "expected": "Register, catalog, cart, checkout, delivery and review controls usable",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "all_UI_actions": [
+              "register",
+              "OTP",
+              "login",
+              "address",
+              "product",
+              "cart",
+              "checkout",
+              "vendor-confirm",
+              "vendor-ready",
+              "admin-assign",
+              "shipper-pickup",
+              "shipping",
+              "COD-delivered",
+              "buyer-review"
+            ],
+            "fake_identity": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-375-otp-policy-copy.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-375-completed.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "full-user-journey",
       "viewport_width_px": 768,
       "role": "BUYER/VENDOR/SHIPPER/ADMIN",
       "expected": "Register, catalog, cart, checkout, delivery and review controls usable",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "all_UI_actions": [
+              "register",
+              "OTP",
+              "login",
+              "address",
+              "product",
+              "cart",
+              "checkout",
+              "vendor-confirm",
+              "vendor-ready",
+              "admin-assign",
+              "shipper-pickup",
+              "shipping",
+              "COD-delivered",
+              "buyer-review"
+            ],
+            "fake_identity": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-768-otp-policy-copy.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-768-completed.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     },
     {
       "case": "full-user-journey",
       "viewport_width_px": 1440,
       "role": "BUYER/VENDOR/SHIPPER/ADMIN",
       "expected": "Register, catalog, cart, checkout, delivery and review controls usable",
-      "status": "NOT RUN",
-      "actual": null,
-      "screenshot": null,
-      "finding": "Q03-G01-RUNTIME"
+      "status": "NOT RUN (human manual)",
+      "actual": {
+        "automated_browser": "PASS",
+        "steps": [
+          {
+            "all_UI_actions": [
+              "register",
+              "OTP",
+              "login",
+              "address",
+              "product",
+              "cart",
+              "checkout",
+              "vendor-confirm",
+              "vendor-ready",
+              "admin-assign",
+              "shipper-pickup",
+              "shipping",
+              "COD-delivered",
+              "buyer-review"
+            ],
+            "fake_identity": true
+          }
+        ]
+      },
+      "screenshot": [
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-1440-otp-policy-copy.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-1440-completed.png"
+      ],
+      "finding": null,
+      "automated_result": "PASS"
     }
-  ]
+  ],
+  "automated_evidence": "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/results.json"
 }

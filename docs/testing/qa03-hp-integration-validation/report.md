@@ -136,3 +136,16 @@ Order authorized: **#68 -> #70 -> #69**, with a separate HP merge decision after
 TD reports OWNER TECHNICAL SIGNOFF at `c593352492184da2a9ca46ebea4a55b802ac6416` and local697unit+1326PG=2023 PASS. QD verified exact-head CI run40813357695 SUCCESS and inspected the three-file disable binder/test delta. This is not a new independent PostgreSQL execution. The gate report `docs/testing/QA-02-PR68-gate-report.md` is still unavailable at that GitHub ref (HTTP404). HP scoped code review5692679850 explicitly requires source-bound manifest/log hashes and clarification of the exact tested source before final approval. Keep historical2011 tests on8bab8dd separate; do not infer that local2023 has been published or relabel the old evidence.
 
 Await TD sanitized report/manifest publication and HP final #68 decision. #70 actual post68 migration/constraints/old-ledger compatibility is still pending; #69 sync/final verification follows actual dependency integration. QD sent the publication request; no PR approve/merge or QA completion.
+
+
+## Current G01/browser and dependency update (2026-10-29)
+
+This section supersedes earlier no-browser/no-screenshot observations, without changing historical execution artifacts. Read the original Master Plan again: QA03 depends INT02 and covers Assignment/failure/WS/review/migration/clean DB; T50 requires real UI at375/768/1440.
+
+Installed Chrome155 with authorized Playwright fallback executed24 real automated UI cases PASS on5538405, with screenshots and source/dataset/JAR hashes. Human manual execution is NOT CLAIMED. Missing Ops assignment UI was reproduced on develop and repaired on a separate candidate; Draft PR75 contains implementation, retained attempts, full2059Java +41Node +17tooling PASS and browser evidence. HP/TD review and HP G01 acceptance are pending. Low OTP help-text5min/10min mismatch is HP-owned; security policy unchanged. Source5538405 does not include unmerged70 and is not the G02 final combined source.
+
+PR68 is merged as a34e8cc. PR70 exact321ccf3 remains unmerged; QD scoped migration/DB/compatibility review PASS and exact-head hosted2124Java/33Node/17tooling evidence was verified (raw encrypted bundle hash checked, not decrypted). QD has not approved/merged70. Per HP instruction, PR69 remains Draft and is not source-synced or final-run before actual70 merge.
+
+Current Q70-S01: OPEN / Medium, separate disposition ACCEPTED RISK — LIMITED. Historical predicate remains unproven. QA02 IN PROGRESS, QA03 BLOCKED, DOC73 paused. PROMO03 platform-management scope still needs HP/TD contract decision; vendor promotion UI is not proof of Admin/Manager authority. Release follow-ups remain separately NOT RUN.
+
+Supplementary browser checks now cover Manager assign/reassign, Review short400/no-row and duplicate409/one-row, plus RTS identical replay302/different payload409 with unchanged facts at all3widths (9PASS). A separate earlier3FAIL RTS expectation is preserved as a harness defect: existing authoritative ReturnToSenderIT requires identical replay rather than universal409. No production change. Supplemental docs-only59a1df3 has identical source/test/build inputs and JAR to full-tested5538405. PR75 exact final evidence head is recorded in current gates; CI is checked separately rather than inherited from an older head.
