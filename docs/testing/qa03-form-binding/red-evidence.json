@@ -1,0 +1,15 @@
+{
+  "source_sha": "c7e0d70f26c597ca9cf19635973700fea3a76249",
+  "tests": 5,
+  "failures": 2,
+  "errors": 0,
+  "skips": 0,
+  "maven_exit": 1,
+  "failed_cases": [
+    "realVoucherCreateAndUpdateAcceptNormalTransportHeaders",
+    "realPromotionCreateAndUpdateAcceptNormalTransportHeaders"
+  ],
+  "xml_sha256": "aac6d3db04e5f9361e58c267a0333713fa3019c6bd5c008d4c4b8066dd72f4a5",
+  "log_sha256": "c80e5d3a149ff42bd4f01972eee3f8dbed955908f8c2bf0604383888bd63a4c3",
+  "test_source_sha256": "28b4da015f65a81691b26a9260b34a3be072d6106beaa848197b84b0d60bb919"
+}
