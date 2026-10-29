@@ -1,11 +1,11 @@
 {
   "scope": "Manual browser/responsive Ops acceptance; HTTP and automated tests do not substitute this matrix",
-  "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
-  "dataset_source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+  "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+  "dataset_source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
   "browser_version": "155.0.8059.82",
   "executor": "QD agent via Playwright; no human manual signoff",
-  "status": "HUMAN MANUAL NOT RUN / AUTOMATED BROWSER24 PASS",
-  "reason": "Supported runtimes failed; explicitly authorized installed Chrome/Playwright fallback executed real UI. Automation is not relabeled manual acceptance.",
+  "status": "G01 AUTOMATED PASS / HUMAN ACCEPTANCE PENDING",
+  "reason": "Fresh automated UI candidate checked after70/UI02; no human signoff claimed",
   "cases": [
     {
       "case": "assignment-reassignment",
@@ -26,9 +26,9 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-375-stale.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-375-assigned.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-375-after-pickup.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-375-stale.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-375-assigned.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-375-after-pickup.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -52,9 +52,9 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-768-stale.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-768-assigned.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-768-after-pickup.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-768-stale.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-768-assigned.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-768-after-pickup.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -78,9 +78,9 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-1440-stale.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-1440-assigned.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/assignment-reassignment-1440-after-pickup.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-1440-stale.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-1440-assigned.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-1440-after-pickup.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -103,7 +103,7 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/failure-retry-375-exhausted.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/failure-retry-375-exhausted.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -126,7 +126,7 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/failure-retry-768-exhausted.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/failure-retry-768-exhausted.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -149,7 +149,7 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/failure-retry-1440-exhausted.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/failure-retry-1440-exhausted.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -171,7 +171,7 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/attempt2-delivery-375-delivered.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/attempt2-delivery-375-delivered.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -193,7 +193,7 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/attempt2-delivery-768-delivered.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/attempt2-delivery-768-delivered.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -215,7 +215,7 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/attempt2-delivery-1440-delivered.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/attempt2-delivery-1440-delivered.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -237,7 +237,7 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/return-to-sender-375-received.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/return-to-sender-375-received.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -259,7 +259,7 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/return-to-sender-768-received.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/return-to-sender-768-received.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -281,7 +281,7 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/return-to-sender-1440-received.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/return-to-sender-1440-received.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -306,8 +306,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-375-buyer-inbox.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-375-recovered.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-375-buyer-inbox.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-375-recovered.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -332,8 +332,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-768-buyer-inbox.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-768-recovered.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-768-buyer-inbox.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-768-recovered.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -358,8 +358,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-1440-buyer-inbox.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/notification-two-sessions-1440-recovered.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-1440-buyer-inbox.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-1440-recovered.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -382,8 +382,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-375-public.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-375-after-return.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-375-public.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-375-after-return.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -406,8 +406,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-768-public.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-768-after-return.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-768-public.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-768-after-return.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -430,8 +430,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-1440-public.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/review-media-1440-after-return.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-1440-public.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-1440-after-return.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -452,8 +452,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-375-admin.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-375-manager-denied.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-375-admin.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-375-manager-denied.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -474,8 +474,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-768-admin.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-768-manager-denied.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-768-admin.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-768-manager-denied.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -496,8 +496,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-1440-admin.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/admin-financial-scope-1440-manager-denied.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-1440-admin.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-1440-manager-denied.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -533,8 +533,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-375-otp-policy-copy.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-375-completed.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-375-otp-policy-copy.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-375-completed.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -570,8 +570,8 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-768-otp-policy-copy.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-768-completed.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-768-otp-policy-copy.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-768-completed.png"
       ],
       "finding": null,
       "automated_result": "PASS"
@@ -607,12 +607,12 @@
         ]
       },
       "screenshot": [
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-1440-otp-policy-copy.png",
-        "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/full-user-journey-1440-completed.png"
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-1440-otp-policy-copy.png",
+        "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-1440-completed.png"
       ],
       "finding": null,
       "automated_result": "PASS"
     }
   ],
-  "automated_evidence": "https://github.com/hphuc032/Logistic-UTEExpress/tree/59a1df394d7ed586ed38425ce839f0757415c8c7/docs/testing/qa03-assignment-ui/browser/results.json"
+  "automated_evidence": "../qa03-post70-final/G01-browser-matrix.json"
 }

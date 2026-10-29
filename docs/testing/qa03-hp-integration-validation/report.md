@@ -149,3 +149,10 @@ PR68 is merged as a34e8cc. PR70 exact321ccf3 remains unmerged; QD scoped migrati
 Current Q70-S01: OPEN / Medium, separate disposition ACCEPTED RISK — LIMITED. Historical predicate remains unproven. QA02 IN PROGRESS, QA03 BLOCKED, DOC73 paused. PROMO03 platform-management scope still needs HP/TD contract decision; vendor promotion UI is not proof of Admin/Manager authority. Release follow-ups remain separately NOT RUN.
 
 Supplementary browser checks now cover Manager assign/reassign, Review short400/no-row and duplicate409/one-row, plus RTS identical replay302/different payload409 with unchanged facts at all3widths (9PASS). A separate earlier3FAIL RTS expectation is preserved as a harness defect: existing authoritative ReturnToSenderIT requires identical replay rather than universal409. No production change. Supplemental docs-only59a1df3 has identical source/test/build inputs and JAR to full-tested5538405. PR75 exact final evidence head is recorded in current gates; CI is checked separately rather than inherited from an older head.
+
+
+## Current post70 merge packet — supersedes prior waiting-for70 gate
+
+Accepted develop6a26370 includes68/74/70. QA03 normal sync12f3530 preserved production/migrations;89d6762 adds generated-Python-cache housekeeping. Fresh accepted runner89d6762:709unit+1415PG=2124PASS,40Node,23tooling. Normal95b528ce406c and Clock−2s3138bd73d978 each PASS, two independent TD child processes each,34table before/after equality and cleanup. Full receipt/144XML/log hashes checked. Previous12f runnerFAIL from bytecode remains preserved, not relabeled. See `../qa03-post70-final/report.md` and acceptance-status.json for current authoritative status; historical f9c6fd6 raw evidence is unchanged.
+
+G01 candidate75 db3c876 is separate and unmerged:24main+12supplementary+local persistence automated PASS, human acceptance PENDING. HP bootstrap/PAID/checkpoint, candidate/human and PROMO03 scope gates remain pending. QA03 stays BLOCKED, Q70-S01 OPEN/Medium plus ACCEPTED RISK—LIMITED.

@@ -9,11 +9,11 @@
   "finding_status": "OPEN",
   "recommended_disposition": "ACCEPTED RISK \u2014 LIMITED (HP authorized, not RESOLVED)",
   "td_source_acknowledgement": "CONFIRMED / direct GitHub source-evidence acknowledgement",
-  "dependencies_github_merged": false,
-  "postmerge_develop_verification": "NOT RUN final G02: PR70 unmerged; PR68 already merged",
+  "dependencies_github_merged": true,
+  "postmerge_develop_verification": "Fresh89d6762 full+normal/-2s+rereuns34table technical PASS; scope acceptance PENDING",
   "qa02": "IN PROGRESS",
   "qa03": "BLOCKED",
-  "G01": "24 automated browser PASS on5538405; PR75 candidate; human manual NOT RUN/HP acceptance pending",
+  "G01": "G01 AUTOMATED PASS / HUMAN ACCEPTANCE PENDING",
   "hp_final_acceptance": "PENDING",
   "PAY03_VNPAY": "DEFERRED",
   "approved_or_closed_or_merged_by_qd": false,
@@ -22,5 +22,6 @@
   "td_confirmation_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/70#issuecomment-6485644464",
   "hp_decision_record": "hp-final-decision.json",
   "current_final_gate_record": "qa03-final-gates.json",
-  "disposition": "ACCEPTED RISK \u2014 LIMITED"
+  "disposition": "ACCEPTED RISK \u2014 LIMITED",
+  "current_postmerge_packet": "../qa03-post70-final/acceptance-status.json"
 }

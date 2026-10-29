@@ -1,3 +1,5 @@
+> Latest postmerge update: accepted develop6a26370; QA03 executed source89d6762 full2124Java/PG +40Node +23tooling and normal/-2s seed/reruns34table/cleanup PASS. Separate75candidate db3c876 browser24+12 and localuploadrestart PASS; human/candidate/syntheticbootstrap/checkpoint/PROMO03 acceptance still pending. Current packet `../qa03-post70-final/report.md` supersedes all earlier waiting-for70/runtime-only statements below. No DOC work resumed or task completion declared.
+
 > Current update2026-10-29: the original audit below is historical. Current gates are `qa03-final-gates.json` and `qa03-current-traceability.md`. PR66/68 are merged, developa34e8cc. G01 now has24 real automated browser PASS, not human manual acceptance; candidate fix/evidence PR75 awaits review. QD retains execution ownership. PR70 exact321ccf3 remains unmerged; final69sync/G02 waits actual merge. DOC73 is paused, not an active work item. Q70-S01 is OPEN/Medium, disposition ACCEPTED RISK — LIMITED.
 
 # QD remaining work — Master Plan audit, 2026-10-29

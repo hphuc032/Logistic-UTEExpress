@@ -12,7 +12,7 @@
   "gates": [
     {
       "id": "Q03-G01",
-      "status": "24 AUTOMATED BROWSER CASES PASS; human manual acceptance NOT RUN / HP decision PENDING",
+      "status": "G01 AUTOMATED PASS / HUMAN ACCEPTANCE PENDING",
       "owner": "QD execution; HP final acceptance",
       "actual_cases": 24,
       "planned_cases": 24,
@@ -22,13 +22,13 @@
         1440
       ],
       "latest_runtime_attempt": "Chrome155 with bundled Playwright works; node_repl/CUA os3 persists",
-      "needed": "Review candidate PR75, exact-head CI and acceptance scope; human execution not claimed",
+      "needed": "TD/HP review75 and genuine human acceptance; no silent inclusion in develop/69",
       "automated_pass": 24,
       "human_manual_cases": 0,
-      "evidence": "https://github.com/hphuc032/Logistic-UTEExpress/pull/75",
-      "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+      "evidence": "../qa03-post70-final/G01-browser-matrix.json",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
       "candidate_pr": 75,
-      "candidate_pr_head": "bce9714",
+      "candidate_pr_head": "3ae2c8286a3f372782a7327bf490cde48f9542f8",
       "supplemental_browser": {
         "manager_assign_reassign": 3,
         "review_validation_duplicate": 3,
@@ -37,11 +37,12 @@
         "retained_harness_wrong_rts_expectation": 3,
         "source": "59a1df394d7ed586ed38425ce839f0757415c8c7",
         "application_test_build_inputs_equal_to": "55384056538968f9e54bb2fcf1f525272c60b157"
-      }
+      },
+      "supplemental_pass": 12
     },
     {
       "id": "Q03-G02",
-      "status": "Existing local validation PASS; final integrated-source execution NOT RUN / HP scope acceptance PENDING",
+      "status": "TECHNICAL PASS / HP scope acceptance PENDING",
       "owner": "QD execution, TD business review, HP final acceptance",
       "order": [
         68,
@@ -55,19 +56,28 @@
           "merge_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9"
         },
         {
+          "pr": 74,
+          "status": "MERGED",
+          "merge_sha": "6315cc3bf831a7c2c05a89c69d7b1a3f5a96c5bd"
+        },
+        {
           "pr": 70,
-          "head": "321ccf33528fbd214cf9d5399cadbc19df218148",
-          "status": "OPEN / UNMERGED",
-          "qd_scoped_review": "PASS / review5693769863",
-          "exact_head_ci_full": "2124 Java;33Node;17tooling PASS; hosted artifact hashes checked; encrypted raw not decrypted",
-          "remaining": "TD business signoff and HP final decision/merge"
+          "status": "MERGED",
+          "merge_sha": "6a26370659a2fa7b95c6a1d00d2598820de6bb34"
         },
         {
           "pr": 69,
-          "status": "DRAFT / UNSYNCED by instruction",
-          "remaining": "Only after actual70 merge: sync develop and final full+normal/-2s+independent TD process rerun/34-table fingerprints; HP bootstrap/checkpoint acceptance"
+          "status": "DRAFT / safely synced, fresh technical verification PASS",
+          "remaining": "TD review; HP synthetic bootstrap/checkpoint and overall acceptance"
         }
-      ]
+      ],
+      "source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+      "full_java_postgres": 2124,
+      "node": 40,
+      "tooling": 23,
+      "normal_run": "run-95b528ce406c",
+      "controlled_run": "run-3138bd73d978",
+      "fingerprints": "34tables equal before/after within each run; four TD child processes exit0; cleanup verified"
     }
   ],
   "qa02": "IN PROGRESS",
@@ -77,5 +87,7 @@
   ],
   "release_followups": "Target-host/TLS/upload persistence/off-host restore/production observability NOT RUN, separate release scope",
   "no_approval_merge_or_completion_by_qd": true,
-  "current_develop_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9"
+  "current_develop_sha": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+  "executed_QA03_source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+  "current_packet": "../qa03-post70-final/report.md"
 }

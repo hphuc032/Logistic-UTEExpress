@@ -1,0 +1,112 @@
+{
+  "source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+  "source_tree": "11929f0afac30d8ad998cb97f0287902557059d2",
+  "accepted_develop_sha": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+  "qa03": "BLOCKED / NOT COMPLETED",
+  "technical_evidence_ready_for_HP_TD_review": true,
+  "whole_QA03_ready_for_final_acceptance": false,
+  "QA02": "IN PROGRESS",
+  "G01": "G01 AUTOMATED PASS / HUMAN ACCEPTANCE PENDING (separate PR75 candidate)",
+  "G02": "TECHNICAL PASS / HP bootstrap/checkpoint acceptance PENDING",
+  "items": [
+    {
+      "id": "Q03-G01",
+      "status": "G01 AUTOMATED PASS / HUMAN ACCEPTANCE PENDING",
+      "owner": "QD execution; TD integration review; HP acceptance",
+      "evidence": "PR75 post70 at3ae2c82, executable source db3c876;24main+12supplement+local persistence PASS",
+      "blocks_completion": true,
+      "next": "Review/accept separate UI candidate and genuine human observation/signoff; do not silently include75 in develop/69"
+    },
+    {
+      "id": "Q03-G02",
+      "status": "TECHNICAL PASS / HP SCOPE ACCEPTANCE PENDING",
+      "owner": "QD execution; TD business review; HP scope/final acceptance",
+      "evidence": "89d6762 full2124Java/PG+40Node+23tooling; normal and-2s both PASS;4TDchild processes/34table fingerprints/cleanup",
+      "blocks_completion": true,
+      "next": "TD review and HP explicit synthetic bootstrap/checkpoint acceptance"
+    },
+    {
+      "id": "BOOTSTRAP",
+      "status": "EXECUTED IN OWNED DISPOSABLE DB / ACCEPTANCE PENDING",
+      "owner": "HP approval; QD shared ADMIN fixture; TD synthetic PAID fixture",
+      "evidence": "Seed bootstrap_exception +fixture-provenance.json",
+      "blocks_completion": true,
+      "next": "Explicit HP acceptance of initial ADMIN role bootstrap and synthetic persisted ONLINE PAID prerequisite; no gateway callback/settlement verification"
+    },
+    {
+      "id": "CHECKPOINT",
+      "status": "SHARED SAME-PROCESS AND TD INDEPENDENT-PROCESS RERUN PASS / HP ACCEPTANCE PENDING",
+      "owner": "QD/TD/HP",
+      "evidence": "seed-crosschecks.json",
+      "blocks_completion": true,
+      "next": "HP accepts documented scope; lost/shared-checkpoint cross-process recovery NOT RUN and not claimed"
+    },
+    {
+      "id": "PROMO03",
+      "status": "PENDING OWNER CONTRACT / PLATFORM-MANAGEMENT SCOPE",
+      "owner": "HP business/security; TD Promotion/Voucher authority; QD Ops adapter",
+      "evidence": "../qa03-hp-integration-validation/promo03-boundary-request.md; Vendor forms are not platform authority",
+      "blocks_completion": "Scope blocker pending explicit HP decision; no silent PASS/DEFER",
+      "next": "HP/TD identify exact Admin/Manager platform behavior and service boundary or explicit scope disposition before whole-plan closure"
+    },
+    {
+      "id": "ADMIN06/T41c",
+      "status": "DEFERRED / ACCEPTED SCOPE EXCEPTION",
+      "owner": "HP",
+      "evidence": "Recorded HP scope decision; Manager commission writes DENY ALL",
+      "blocks_completion": false,
+      "next": "No limited-write PASS claimed"
+    },
+    {
+      "id": "Q70-S01",
+      "status": "OPEN",
+      "severity": "Medium",
+      "disposition": "ACCEPTED RISK \u2014 LIMITED",
+      "owner": "TD commerce/finance; QD fixture/runner/provenance; HP risk approver",
+      "evidence": "Historical FAIL retained; fresh normal/-2s verification; prior HP decision6486630710",
+      "blocks_completion": false,
+      "next": "Reopen/escalate fresh unexplained conflict, invalid chronology, duplicate/rollback/stock/voucher/revenue drift, Clock/source/hash/fingerprint/cleanup mismatch; original historical predicate remains unproven"
+    },
+    {
+      "id": "OTP-COPY",
+      "status": "OPEN / Low",
+      "owner": "HP UI/security",
+      "evidence": "PR75 actual OTP screenshot10minutes vsserver5minutes",
+      "blocks_completion": "HP disposition pending; not independently Critical/High",
+      "next": "HP-owned fix/acceptance; QD did not edit security/OTP"
+    },
+    {
+      "id": "PHYSICAL-IME-SCREENREADER",
+      "status": "NOT RUN",
+      "owner": "Human observer QD/HP UI acceptance",
+      "evidence": "Automated viewport/keyboard evidence is narrower",
+      "blocks_completion": "HP must decide applicable human scope; not automatically deferred",
+      "next": "Record genuine human observation where required; never infer physical-device/screen-reader PASS"
+    },
+    {
+      "id": "T49-LOCAL",
+      "status": "LOCAL PROBES PASS",
+      "owner": "QD",
+      "evidence": "PR75 local owned-app upload restart/hash match; missing mandatory MAIL_HOST startup denied",
+      "blocks_completion": false,
+      "next": "Do not infer valid production startup, target-host/TLS or offhost restore"
+    },
+    {
+      "id": "RELEASE",
+      "status": "NOT RUN",
+      "owner": "QD/operator REL01; HP acceptance",
+      "evidence": "Master Plan REL01 depends QA01/02/03",
+      "blocks_completion": "Separate release gate, not circular prerequisite for local QA03",
+      "next": "Target-host/TLS/real SMTP/storage ACL/offhost DB+uploads restore/production alerts need release evidence"
+    },
+    {
+      "id": "PAY03-VNPAY",
+      "status": "DEFERRED",
+      "owner": "TD/HP",
+      "evidence": "HP scope decision",
+      "blocks_completion": false,
+      "next": "No sandbox/gateway verification claimed"
+    }
+  ],
+  "approved_or_merged_by_this_work": false
+}

@@ -5,7 +5,7 @@
   "recommended_disposition_not_applied": "SUPERSEDED by explicit HP final decision",
   "files_sha256": {
     ".gitattributes": "b0d7fe396a43bff47fef8b077ca598998059b01f2f1545f27cac5b076bbf89d2",
-    "acceptance-status.json": "c05ff5bac1dffe4105b5d06a16e102ace856ddb8bbd6b33f6d9b823465e37d0d",
+    "acceptance-status.json": "2968bd29147927db15566ebb8604b5c5208604d00fc83bdf98ea4df570681213",
     "browser-runtime-followup.json": "d8013f64d530b0122fb0604526f187e93d7cb79118bc7ffea8d62450a8a5e6b5",
     "build-provenance.json": "f3a0cada1d9ac472698d63cc57bff1074c233f676f24a786fcc4e56bc8f1becb",
     "composition.json": "b47ab32cc0bad82b5f003a043f355f36eddef35c2d97956603e39fa65d2ca902",
@@ -17,11 +17,11 @@
     "normal-seed-result.json": "0b343bf3cec9e84ed003023f74d1d3549c5e9c0b9a8a903dfe1cbcd37fe9eb43",
     "pr68-owner-gate-update.json": "c5a3d9c75a4db5a73e97cc4924f85885f6aba880bea1907a8ff9c0dfe1c0b50f",
     "promo03-boundary-request.md": "e52257add562e4e2fef5cc543534e00f0db28f196379b47e1764692bef8399c5",
-    "qa03-current-traceability.md": "6ac1ae570a9da966f7b89beba50ea1ecc45f21bcb619eae9c37d1e53bc4fd764",
-    "qa03-final-gates.json": "aabf2caa61ab615f03fd85e4686b3d7819d875ae10f965998b0b02b0654fc4b1",
-    "qa03-manual-handoff.md": "577f4b47bc147ba92d754f97cdef60693a9ec0e92d4462bb3ebc4da9bc1f2e2e",
-    "qd-master-plan-gap-audit.md": "afb98a004e49efd6b26ae86732269d9150553364b7883c6b1de5c5378f745b7c",
-    "report.md": "232c378cbb29b8e5c64665deb67cebac2b22d20b2a81a49b21c90fd2dca4709f",
+    "qa03-current-traceability.md": "114b0ada794ce4ff25b249b25007ff6e731b2c3dc9750d6f923eeefe50f04239",
+    "qa03-final-gates.json": "456d9683d185ddb77595103adb3a39d389b29aade69f526b7663cc59a83d7652",
+    "qa03-manual-handoff.md": "5a51e60747bc7cebde5d0beca3b1ac9080b3d9c6210b18388afb7699ad328cea",
+    "qd-master-plan-gap-audit.md": "8c8f20bb4a09c962d36d2aece1495b43d26afe77f65de1bc07f6f6ceae10f30a",
+    "report.md": "7bd94a4c528af594cba5b0455acc49e6f3eaaf40803d3c092003ae654056ad55",
     "residual-risk-proposal.json": "f1b059dd12c43c00f1be4d94495de863a3064c01790293e502ec0b089793d8c1",
     "run-crosschecks.json": "6b948a6db8555013c88702b4fad6acdc39698caaafff4df9501a3411c8252b4f",
     "supplemental-tests.json": "0e4e7d4b45781d0fcadfde8c27dad02d8ea9bb20bdad1c2e836ad7e85086525b",
@@ -29,7 +29,8 @@
   },
   "severity": "Medium",
   "disposition": "ACCEPTED RISK \u2014 LIMITED",
-  "metadata_update_scope": "Current gate update only; preserved full/normal/controlled f9c6fd6 execution artifacts are historical, not new runs",
+  "metadata_update_scope": "Current gate update only; historical f9 execution artifacts unchanged",
   "browser_evidence_pr": 75,
-  "previous_index_commit": "2d580472c680d50bb564be2b26eb499bd41e54c8"
+  "previous_index_commit": "2d580472c680d50bb564be2b26eb499bd41e54c8",
+  "current_postmerge_packet": "../qa03-post70-final/publication-manifest.json"
 }

@@ -1,0 +1,54 @@
+[
+  {
+    "mode": "normal",
+    "source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+    "command": [
+      "python",
+      "scripts/qa/rehearse_integrated_seed.py",
+      "--checkout",
+      ".",
+      "--include-qa02-refunds",
+      "--disposable-demo",
+      "--refund-clock-skew-seconds",
+      "0"
+    ],
+    "started_utc": "2026-10-29T08:26:49.671847+00:00",
+    "finished_utc": "2026-10-29T08:29:50.061101+00:00",
+    "duration_seconds": 180.389,
+    "exit_code": 0,
+    "timed_out": false,
+    "run_id": "run-95b528ce406c",
+    "status": "PASS",
+    "failure_code": null,
+    "result_path": ".work\\qa03-integrated-seed\\run-95b528ce406c\\result.json",
+    "result_sha256": "d4b8a1f6d745b149bf19da4bd79574ea1536c8f529bd57de7a8834698b73509e",
+    "log_sha256": "d3107e902eb0623eaf1b8f9c1f52b89750152bcd9e203ba6060b26250c6c1b74",
+    "owned_container_removed": true
+  },
+  {
+    "mode": "clock-minus2",
+    "source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+    "command": [
+      "python",
+      "scripts/qa/rehearse_integrated_seed.py",
+      "--checkout",
+      ".",
+      "--include-qa02-refunds",
+      "--disposable-demo",
+      "--refund-clock-skew-seconds",
+      "-2"
+    ],
+    "started_utc": "2026-10-29T08:29:50.076412+00:00",
+    "finished_utc": "2026-10-29T08:32:53.752602+00:00",
+    "duration_seconds": 183.676,
+    "exit_code": 0,
+    "timed_out": false,
+    "run_id": "run-3138bd73d978",
+    "status": "PASS",
+    "failure_code": null,
+    "result_path": ".work\\qa03-integrated-seed\\run-3138bd73d978\\result.json",
+    "result_sha256": "018251e0286f51550611a84cd0208dbccc9e66abcfd19d7b6a363ad0e12e60af",
+    "log_sha256": "34ca6f575e72641f5c06e354f98cc004ee43aee169a7da976c1a2045c6ca2588",
+    "owned_container_removed": true
+  }
+]

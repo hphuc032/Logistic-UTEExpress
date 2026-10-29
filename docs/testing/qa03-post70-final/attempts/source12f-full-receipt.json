@@ -1,0 +1,16 @@
+{
+  "command": [
+    "python",
+    "scripts/qa/verify_operations.py",
+    "--checkout",
+    "."
+  ],
+  "source_sha": "12f3530835b0c63ea52883b3e9312708f6382f19",
+  "tree": "c2982cf19735bfef1c5f9b287bd94e8ae83aa672",
+  "started_utc": "2026-10-29T07:51:36.288231+00:00",
+  "finished_utc": "2026-10-29T08:07:54.129783+00:00",
+  "duration_seconds": 977.842,
+  "exit_code": 1,
+  "timed_out": false,
+  "driver_log_sha256": "231447771be2baf0f42846754b1b3ff71644561f32674791acd77ddfa7848105"
+}

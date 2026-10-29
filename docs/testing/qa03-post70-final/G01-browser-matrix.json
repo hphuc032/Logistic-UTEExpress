@@ -1,0 +1,3831 @@
+{
+  "status": "G01 AUTOMATED PASS / HUMAN ACCEPTANCE PENDING",
+  "accepted_develop_sha": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+  "candidate_source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+  "candidate_PR": 75,
+  "candidate_unmerged": true,
+  "main": {
+    "browser": "155.0.8059.82",
+    "headless": true,
+    "mode": "Automated real browser UI; not human manual signoff",
+    "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+    "cases": [
+      {
+        "case": "assignment-reassignment",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:07:19.363Z",
+        "steps": [
+          {
+            "assignment_reassignment": "UI JSON adapter",
+            "locked_shipper_denied": true,
+            "stale_denied": true,
+            "old_assignee_denied": true,
+            "postpickup_control_hidden": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\assignment-reassignment-375-stale.png",
+            "sha256": "1ea5971fa86bd10f0c12c5f1c7ca98a1e425197f711621d9e3be0903c17b675b",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/assignment-reassignment-375-stale.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-375-stale.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\assignment-reassignment-375-assigned.png",
+            "sha256": "49cad91be1e5a108188005c7e3d28fe45b7c7c1ddb15e1a4a66056efac08c893",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/assignment-reassignment-375-assigned.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-375-assigned.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\assignment-reassignment-375-after-pickup.png",
+            "sha256": "136005b6b8688c7cb3183ebffaf7b5bc3eb28fa63bb4232320fee24571b4d4ab",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/assignment-reassignment-375-after-pickup.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-375-after-pickup.png"
+          }
+        ],
+        "actor_scope": "ADMIN / SHIPPER old+current",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "precondition": {
+          "id": 1,
+          "orderStatus": "CONFIRMED",
+          "orderVersion": 2,
+          "grandTotal": 185000,
+          "inventoryReleased": false,
+          "shipmentId": null,
+          "shipmentStatus": null,
+          "shipmentVersion": null,
+          "attempt": null,
+          "shipperId": null,
+          "paymentStatus": "UNPAID",
+          "paymentAmount": 185000,
+          "reviewCount": 0,
+          "historyCount": 2,
+          "itemId": 1
+        },
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/accounts/4/lock",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/1/assign",
+            "status": 403
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/accounts/4/unlock",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/1/assign",
+            "status": 409
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/1/assign",
+            "status": 201
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/1/reassign",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_b",
+            "method": "POST",
+            "route": "/shipper/orders/1/pickup",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/orders/1",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/accounts/4",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/accounts/4",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/1",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/1",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/1/view",
+            "status": 404
+          },
+          {
+            "actor": "shipper_b",
+            "route": "/shipper/shipments/1/view",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/1",
+            "status": 200
+          }
+        ],
+        "actual": {
+          "id": 1,
+          "orderStatus": "PICKED_UP",
+          "orderVersion": 3,
+          "grandTotal": 185000,
+          "inventoryReleased": false,
+          "shipmentId": 1,
+          "shipmentStatus": "PICKED_UP",
+          "shipmentVersion": 2,
+          "attempt": 0,
+          "shipperId": 4,
+          "paymentStatus": "UNPAID",
+          "paymentAmount": 185000,
+          "reviewCount": 0,
+          "historyCount": 3,
+          "itemId": 1
+        },
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:07:30.388Z",
+        "expected": "Assignment succeeds before pickup; stale/foreign/ineligible paths preserve state",
+        "actors_observed": [
+          "admin",
+          "shipper_a",
+          "shipper_b"
+        ]
+      },
+      {
+        "case": "failure-retry",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:07:30.500Z",
+        "steps": [
+          {
+            "first_failure_retry_second_failure": "UI_SUBMITTED",
+            "order_unchanged": true,
+            "foreign_shipper_denied": true,
+            "no_third_retry": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\failure-retry-375-exhausted.png",
+            "sha256": "7ea5fe7a054b70dd1bc9f9017521a388d2082d75b68fc53e41d3c7c768e65e5e",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/failure-retry-375-exhausted.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/failure-retry-375-exhausted.png"
+          }
+        ],
+        "actor_scope": "SHIPPER own+foreign",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/2/delivery-failed",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/2/retry",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/2/delivery-failed",
+            "status": 302
+          },
+          {
+            "actor": "shipper_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/2/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/2/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/2/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/2/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/2/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_b",
+            "route": "/shipper/shipments/2/view",
+            "status": 404
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:07:38.611Z",
+        "expected": "Failure 1, retry 2 and failure 2; no retry 3, readable evidence/errors",
+        "actors_observed": [
+          "shipper_a",
+          "shipper_b"
+        ]
+      },
+      {
+        "case": "attempt2-delivery",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:07:38.667Z",
+        "steps": [
+          {
+            "wrong_COD_rejected": true,
+            "delivered_at_attempt2": true,
+            "payment": "PAID"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\attempt2-delivery-375-delivered.png",
+            "sha256": "439d16e924ca4e43538b86301732544f65e4775580f4afa9d3424786636bde3b",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/attempt2-delivery-375-delivered.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/attempt2-delivery-375-delivered.png"
+          }
+        ],
+        "actor_scope": "SHIPPER",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/3/delivery-failed",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/3/retry",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/3/delivered",
+            "status": 409
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/3/delivered",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/3/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/3/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/3/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/3/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/3/view",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:07:44.700Z",
+        "expected": "Delivery attempt 2 with exact COD succeeds once",
+        "actors_observed": [
+          "shipper_a"
+        ]
+      },
+      {
+        "case": "return-to-sender",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:07:44.711Z",
+        "steps": [
+          {
+            "receipt_submitted_via_UI": true,
+            "order": "CANCELLED",
+            "shipment": "RETURNED_TO_SENDER"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\return-to-sender-375-received.png",
+            "sha256": "1a9d9ea80f403f2b834ac496402ddc397d645cf623da2a2e3f08beb97bc2ecae",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/return-to-sender-375-received.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/return-to-sender-375-received.png"
+          }
+        ],
+        "actor_scope": "ADMIN",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/4/return-to-sender",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/orders/4",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:07:51.784Z",
+        "expected": "Trusted receipt and replay, no buyer-return/refund crossover",
+        "actors_observed": [
+          "admin"
+        ]
+      },
+      {
+        "case": "notification-two-sessions",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:07:51.804Z",
+        "steps": [
+          {
+            "live_private_hint": true,
+            "foreign_hint_denied": true,
+            "persisted_recipients_checked": true,
+            "read_UI": true,
+            "offline_HTTP_recovery": true,
+            "logout_denial": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\notification-two-sessions-375-buyer-inbox.png",
+            "sha256": "d6f6f71d7093de8eb4818ad5e7ea9ec76c1d3b5047a1c7bf020d90b0f67b836f",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/notification-two-sessions-375-buyer-inbox.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-375-buyer-inbox.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\notification-two-sessions-375-recovered.png",
+            "sha256": "8b24ab39295256ceea43ad5809f16c6b91ab9ba0949b71f2b2f37aabac53681a",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/notification-two-sessions-375-recovered.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-375-recovered.png"
+          }
+        ],
+        "actor_scope": "BUYER A+B / VENDOR",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "buyer_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/5/confirm",
+            "status": 302
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/notifications/27/read",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/6/confirm",
+            "status": 302
+          },
+          {
+            "actor": "buyer_b",
+            "method": "POST",
+            "route": "/logout",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "buyer_a",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "buyer_b",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "vendor_a",
+            "route": "/vendor/orders/5",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "vendor_a",
+            "route": "/vendor/orders/6",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "buyer_b",
+            "route": "/notifications",
+            "status": 401
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:07:59.394Z",
+        "expected": "Vendor confirm reaches only persisted Buyer; offline/reconnect/read/logout work",
+        "actors_observed": [
+          "buyer_a",
+          "buyer_b",
+          "vendor_a"
+        ]
+      },
+      {
+        "case": "review-media",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:07:59.484Z",
+        "steps": [
+          {
+            "valid_UI_review": true,
+            "foreign_denied": true,
+            "public_after_return": true,
+            "return_precondition_method": "real HTTP buyer/vendor flow"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\review-media-375-public.png",
+            "sha256": "49141d9e9da95be5bb2907d032369dd6e4ba3a8458b802ea01a331be853c8ef3",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/review-media-375-public.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-375-public.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\review-media-375-after-return.png",
+            "sha256": "49141d9e9da95be5bb2907d032369dd6e4ba3a8458b802ea01a331be853c8ef3",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/review-media-375-after-return.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-375-after-return.png"
+          }
+        ],
+        "actor_scope": "BUYER A+B / PUBLIC",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/7/review",
+            "status": 400
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/7/review",
+            "status": 302
+          },
+          {
+            "actor": "buyer_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "buyer_a",
+            "route": "/orders/7",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/order-items/7/review",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/products/1/reviews",
+            "status": 200
+          },
+          {
+            "actor": "buyer_b",
+            "route": "/order-items/7/review",
+            "status": 404
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/products/1/reviews",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:08:08.834Z",
+        "expected": "Owned delivered item, validation/duplicate/foreign errors, public media after Return",
+        "actors_observed": [
+          "buyer_a",
+          "buyer_b"
+        ]
+      },
+      {
+        "case": "admin-financial-scope",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:08:08.914Z",
+        "steps": [
+          {
+            "admin_UI": true,
+            "manager_denied": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\admin-financial-scope-375-admin.png",
+            "sha256": "2099671dad4ef7d3afd7905b68d2eb5be9d50e861fba78bd448772fe82353d33",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/admin-financial-scope-375-admin.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-375-admin.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\admin-financial-scope-375-manager-denied.png",
+            "sha256": "0908a8be68d76cd001349395e2db17da3343371b77513f807b108a49a639543a",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/admin-financial-scope-375-manager-denied.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-375-manager-denied.png"
+          }
+        ],
+        "actor_scope": "ADMIN / MANAGER",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/dashboard/revenue",
+            "status": 200
+          },
+          {
+            "actor": "manager",
+            "route": "/admin/dashboard/revenue",
+            "status": 403
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:08:10.823Z",
+        "expected": "Admin metrics usable; Manager cannot access private finance",
+        "actors_observed": [
+          "admin",
+          "manager"
+        ]
+      },
+      {
+        "case": "full-user-journey",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:08:10.863Z",
+        "steps": [
+          {
+            "all_UI_actions": [
+              "register",
+              "OTP",
+              "login",
+              "address",
+              "product",
+              "cart",
+              "checkout",
+              "vendor-confirm",
+              "vendor-ready",
+              "admin-assign",
+              "shipper-pickup",
+              "shipping",
+              "COD-delivered",
+              "buyer-review"
+            ],
+            "fake_identity": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\full-user-journey-375-otp-policy-copy.png",
+            "sha256": "db687bbeedb3b279125844c816247593849e166293ea7eb5afe131f446251665",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/full-user-journey-375-otp-policy-copy.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-375-otp-policy-copy.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\full-user-journey-375-completed.png",
+            "sha256": "394a04638965d6f3eb588d6f55d9d6c4580c008140fe64cb07af6e64c11f6025",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/full-user-journey-375-completed.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-375-completed.png"
+          }
+        ],
+        "actor_scope": "NEW BUYER / VENDOR / ADMIN / SHIPPER",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "routes": [
+          {
+            "actor": "new-buyer/public",
+            "route": "/register",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/login",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/user/addresses",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/products/1",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/user/checkout/view",
+            "status": 200
+          },
+          {
+            "actor": "vendor_a",
+            "route": "/vendor/orders/8",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/8",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/6/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/6/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/6/view",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/orders/8",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/products/1/reviews",
+            "status": 200
+          }
+        ],
+        "additional_finding": "OTP_UI_COPY_10MIN_VS_SERVER5MIN",
+        "ui_http": [
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/8/confirm",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/8/ready",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/8/assign",
+            "status": 201
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/8/pickup",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/8/shipping",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/8/delivered",
+            "status": 302
+          }
+        ],
+        "actual": {
+          "id": 8,
+          "orderStatus": "DELIVERED",
+          "orderVersion": 5,
+          "grandTotal": 105000,
+          "inventoryReleased": false,
+          "shipmentId": 6,
+          "shipmentStatus": "DELIVERED",
+          "shipmentVersion": 3,
+          "attempt": 1,
+          "shipperId": 3,
+          "paymentStatus": "PAID",
+          "paymentAmount": 105000,
+          "reviewCount": 1,
+          "historyCount": 5,
+          "itemId": 8
+        },
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:08:20.182Z",
+        "expected": "Register, catalog, cart, checkout, delivery and review controls usable",
+        "actors_observed": [
+          "admin",
+          "new-buyer/public",
+          "shipper_a",
+          "vendor_a"
+        ]
+      },
+      {
+        "case": "assignment-reassignment",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:08:20.304Z",
+        "steps": [
+          {
+            "assignment_reassignment": "UI JSON adapter",
+            "locked_shipper_denied": true,
+            "stale_denied": true,
+            "old_assignee_denied": true,
+            "postpickup_control_hidden": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\assignment-reassignment-768-stale.png",
+            "sha256": "77f1a42979c906365bfa646643b1d75f6d3b62d71423c42b45541370f53fe69c",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/assignment-reassignment-768-stale.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-768-stale.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\assignment-reassignment-768-assigned.png",
+            "sha256": "07b1d2cbbbbb67d0ebf57ca22c3e2194dbf5a3441cf2b50801c47ed07f81b6d4",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/assignment-reassignment-768-assigned.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-768-assigned.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\assignment-reassignment-768-after-pickup.png",
+            "sha256": "6d715b8620bfacc40dad90b0d254aed6db9abd00b08162c50191f205919a77fc",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/assignment-reassignment-768-after-pickup.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-768-after-pickup.png"
+          }
+        ],
+        "actor_scope": "ADMIN / SHIPPER old+current",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "precondition": {
+          "id": 9,
+          "orderStatus": "CONFIRMED",
+          "orderVersion": 2,
+          "grandTotal": 185000,
+          "inventoryReleased": false,
+          "shipmentId": null,
+          "shipmentStatus": null,
+          "shipmentVersion": null,
+          "attempt": null,
+          "shipperId": null,
+          "paymentStatus": "UNPAID",
+          "paymentAmount": 185000,
+          "reviewCount": 0,
+          "historyCount": 2,
+          "itemId": 9
+        },
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/accounts/4/lock",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/9/assign",
+            "status": 403
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/accounts/4/unlock",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/9/assign",
+            "status": 409
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/9/assign",
+            "status": 201
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/9/reassign",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_b",
+            "method": "POST",
+            "route": "/shipper/orders/9/pickup",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/orders/9",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/accounts/4",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/accounts/4",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/9",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/9",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/7/view",
+            "status": 404
+          },
+          {
+            "actor": "shipper_b",
+            "route": "/shipper/shipments/7/view",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/9",
+            "status": 200
+          }
+        ],
+        "actual": {
+          "id": 9,
+          "orderStatus": "PICKED_UP",
+          "orderVersion": 3,
+          "grandTotal": 185000,
+          "inventoryReleased": false,
+          "shipmentId": 7,
+          "shipmentStatus": "PICKED_UP",
+          "shipmentVersion": 2,
+          "attempt": 0,
+          "shipperId": 4,
+          "paymentStatus": "UNPAID",
+          "paymentAmount": 185000,
+          "reviewCount": 0,
+          "historyCount": 3,
+          "itemId": 9
+        },
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:08:30.306Z",
+        "expected": "Assignment succeeds before pickup; stale/foreign/ineligible paths preserve state",
+        "actors_observed": [
+          "admin",
+          "shipper_a",
+          "shipper_b"
+        ]
+      },
+      {
+        "case": "failure-retry",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:08:30.392Z",
+        "steps": [
+          {
+            "first_failure_retry_second_failure": "UI_SUBMITTED",
+            "order_unchanged": true,
+            "foreign_shipper_denied": true,
+            "no_third_retry": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\failure-retry-768-exhausted.png",
+            "sha256": "7782ced86eb83a2522c77f5e4398ffab19bbc324e5a9c6f84fe15a94aec3c995",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/failure-retry-768-exhausted.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/failure-retry-768-exhausted.png"
+          }
+        ],
+        "actor_scope": "SHIPPER own+foreign",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/10/delivery-failed",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/10/retry",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/10/delivery-failed",
+            "status": 302
+          },
+          {
+            "actor": "shipper_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/8/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/8/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/8/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/8/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/8/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_b",
+            "route": "/shipper/shipments/8/view",
+            "status": 404
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:08:37.592Z",
+        "expected": "Failure 1, retry 2 and failure 2; no retry 3, readable evidence/errors",
+        "actors_observed": [
+          "shipper_a",
+          "shipper_b"
+        ]
+      },
+      {
+        "case": "attempt2-delivery",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:08:37.640Z",
+        "steps": [
+          {
+            "wrong_COD_rejected": true,
+            "delivered_at_attempt2": true,
+            "payment": "PAID"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\attempt2-delivery-768-delivered.png",
+            "sha256": "8ad18c2b0419701abbadb9035d5c69cd0853dac38e858c8180338034b9d41ecd",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/attempt2-delivery-768-delivered.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/attempt2-delivery-768-delivered.png"
+          }
+        ],
+        "actor_scope": "SHIPPER",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/11/delivery-failed",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/11/retry",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/11/delivered",
+            "status": 409
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/11/delivered",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/9/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/9/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/9/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/9/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/9/view",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:08:43.166Z",
+        "expected": "Delivery attempt 2 with exact COD succeeds once",
+        "actors_observed": [
+          "shipper_a"
+        ]
+      },
+      {
+        "case": "return-to-sender",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:08:43.175Z",
+        "steps": [
+          {
+            "receipt_submitted_via_UI": true,
+            "order": "CANCELLED",
+            "shipment": "RETURNED_TO_SENDER"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\return-to-sender-768-received.png",
+            "sha256": "c96ceef64cd60dc1aa270ec7513eeb33bd00eb32880d2a967ea61568425bebf1",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/return-to-sender-768-received.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/return-to-sender-768-received.png"
+          }
+        ],
+        "actor_scope": "ADMIN",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/12/return-to-sender",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/orders/12",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:08:49.740Z",
+        "expected": "Trusted receipt and replay, no buyer-return/refund crossover",
+        "actors_observed": [
+          "admin"
+        ]
+      },
+      {
+        "case": "notification-two-sessions",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:08:49.769Z",
+        "steps": [
+          {
+            "live_private_hint": true,
+            "foreign_hint_denied": true,
+            "persisted_recipients_checked": true,
+            "read_UI": true,
+            "offline_HTTP_recovery": true,
+            "logout_denial": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\notification-two-sessions-768-buyer-inbox.png",
+            "sha256": "d437903b9855a0448b3d829950269ddfb00ac334feca828b5116f0cc510c0037",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/notification-two-sessions-768-buyer-inbox.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-768-buyer-inbox.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\notification-two-sessions-768-recovered.png",
+            "sha256": "9f6b21071632fd4362a3ec4aed94dd87eb2ec091ddbb0044f4f596c46bf63ad6",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/notification-two-sessions-768-recovered.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-768-recovered.png"
+          }
+        ],
+        "actor_scope": "BUYER A+B / VENDOR",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "buyer_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/13/confirm",
+            "status": 302
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/notifications/77/read",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/14/confirm",
+            "status": 302
+          },
+          {
+            "actor": "buyer_b",
+            "method": "POST",
+            "route": "/logout",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "buyer_a",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "buyer_b",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "vendor_a",
+            "route": "/vendor/orders/13",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "vendor_a",
+            "route": "/vendor/orders/14",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "buyer_b",
+            "route": "/notifications",
+            "status": 401
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:08:57.217Z",
+        "expected": "Vendor confirm reaches only persisted Buyer; offline/reconnect/read/logout work",
+        "actors_observed": [
+          "buyer_a",
+          "buyer_b",
+          "vendor_a"
+        ]
+      },
+      {
+        "case": "review-media",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:08:57.298Z",
+        "steps": [
+          {
+            "valid_UI_review": true,
+            "foreign_denied": true,
+            "public_after_return": true,
+            "return_precondition_method": "real HTTP buyer/vendor flow"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\review-media-768-public.png",
+            "sha256": "862eb9807cc4e20c3502f49b065f2ec7b4ccbba62d2886892d4f609cd0ff389c",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/review-media-768-public.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-768-public.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\review-media-768-after-return.png",
+            "sha256": "862eb9807cc4e20c3502f49b065f2ec7b4ccbba62d2886892d4f609cd0ff389c",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/review-media-768-after-return.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-768-after-return.png"
+          }
+        ],
+        "actor_scope": "BUYER A+B / PUBLIC",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/15/review",
+            "status": 400
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/15/review",
+            "status": 302
+          },
+          {
+            "actor": "buyer_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "buyer_a",
+            "route": "/orders/15",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/order-items/15/review",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/products/1/reviews",
+            "status": 200
+          },
+          {
+            "actor": "buyer_b",
+            "route": "/order-items/15/review",
+            "status": 404
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/products/1/reviews",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:09:05.297Z",
+        "expected": "Owned delivered item, validation/duplicate/foreign errors, public media after Return",
+        "actors_observed": [
+          "buyer_a",
+          "buyer_b"
+        ]
+      },
+      {
+        "case": "admin-financial-scope",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:09:05.347Z",
+        "steps": [
+          {
+            "admin_UI": true,
+            "manager_denied": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\admin-financial-scope-768-admin.png",
+            "sha256": "a9918a480dbe59e19f54aaf6b0f5eafbe720aa731fed2c1ad488528fcedf4fcb",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/admin-financial-scope-768-admin.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-768-admin.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\admin-financial-scope-768-manager-denied.png",
+            "sha256": "7fa61ec128e274bca364c14051b0004e0c542c8cf3b2df5a2e7d167143cbbe5c",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/admin-financial-scope-768-manager-denied.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-768-manager-denied.png"
+          }
+        ],
+        "actor_scope": "ADMIN / MANAGER",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/dashboard/revenue",
+            "status": 200
+          },
+          {
+            "actor": "manager",
+            "route": "/admin/dashboard/revenue",
+            "status": 403
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:09:07.705Z",
+        "expected": "Admin metrics usable; Manager cannot access private finance",
+        "actors_observed": [
+          "admin",
+          "manager"
+        ]
+      },
+      {
+        "case": "full-user-journey",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:09:07.754Z",
+        "steps": [
+          {
+            "all_UI_actions": [
+              "register",
+              "OTP",
+              "login",
+              "address",
+              "product",
+              "cart",
+              "checkout",
+              "vendor-confirm",
+              "vendor-ready",
+              "admin-assign",
+              "shipper-pickup",
+              "shipping",
+              "COD-delivered",
+              "buyer-review"
+            ],
+            "fake_identity": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\full-user-journey-768-otp-policy-copy.png",
+            "sha256": "9be60bcb409a7cf5db0b8e7ee96ba6bf64f8cabfa8ef23920a1868604e96485c",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/full-user-journey-768-otp-policy-copy.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-768-otp-policy-copy.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\full-user-journey-768-completed.png",
+            "sha256": "82281cb54c69493139debaf5f06af902daf61614d5ee25e28c9b3b8a51b77c6a",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/full-user-journey-768-completed.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-768-completed.png"
+          }
+        ],
+        "actor_scope": "NEW BUYER / VENDOR / ADMIN / SHIPPER",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "routes": [
+          {
+            "actor": "new-buyer/public",
+            "route": "/register",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/login",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/user/addresses",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/products/1",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/user/checkout/view",
+            "status": 200
+          },
+          {
+            "actor": "vendor_a",
+            "route": "/vendor/orders/16",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/16",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/12/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/12/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/12/view",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/orders/16",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/products/1/reviews",
+            "status": 200
+          }
+        ],
+        "additional_finding": "OTP_UI_COPY_10MIN_VS_SERVER5MIN",
+        "ui_http": [
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/16/confirm",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/16/ready",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/16/assign",
+            "status": 201
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/16/pickup",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/16/shipping",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/16/delivered",
+            "status": 302
+          }
+        ],
+        "actual": {
+          "id": 16,
+          "orderStatus": "DELIVERED",
+          "orderVersion": 5,
+          "grandTotal": 105000,
+          "inventoryReleased": false,
+          "shipmentId": 12,
+          "shipmentStatus": "DELIVERED",
+          "shipmentVersion": 3,
+          "attempt": 1,
+          "shipperId": 3,
+          "paymentStatus": "PAID",
+          "paymentAmount": 105000,
+          "reviewCount": 1,
+          "historyCount": 5,
+          "itemId": 16
+        },
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:09:15.171Z",
+        "expected": "Register, catalog, cart, checkout, delivery and review controls usable",
+        "actors_observed": [
+          "admin",
+          "new-buyer/public",
+          "shipper_a",
+          "vendor_a"
+        ]
+      },
+      {
+        "case": "assignment-reassignment",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:09:15.288Z",
+        "steps": [
+          {
+            "assignment_reassignment": "UI JSON adapter",
+            "locked_shipper_denied": true,
+            "stale_denied": true,
+            "old_assignee_denied": true,
+            "postpickup_control_hidden": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\assignment-reassignment-1440-stale.png",
+            "sha256": "2234b06d2c511fd8ccec3ea8933078edd96e06dba5eb48f30143be2d9ebda80c",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/assignment-reassignment-1440-stale.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-1440-stale.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\assignment-reassignment-1440-assigned.png",
+            "sha256": "44fb225abfd418884f8a45dc5b5264b24add8bfa08d109dbf8810346e755897c",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/assignment-reassignment-1440-assigned.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-1440-assigned.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\assignment-reassignment-1440-after-pickup.png",
+            "sha256": "7af8dd6afbdf0b2c055693694c076c97b12ef1e7f7d73c4049e6edc5aaefe91c",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/assignment-reassignment-1440-after-pickup.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/assignment-reassignment-1440-after-pickup.png"
+          }
+        ],
+        "actor_scope": "ADMIN / SHIPPER old+current",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "precondition": {
+          "id": 17,
+          "orderStatus": "CONFIRMED",
+          "orderVersion": 2,
+          "grandTotal": 185000,
+          "inventoryReleased": false,
+          "shipmentId": null,
+          "shipmentStatus": null,
+          "shipmentVersion": null,
+          "attempt": null,
+          "shipperId": null,
+          "paymentStatus": "UNPAID",
+          "paymentAmount": 185000,
+          "reviewCount": 0,
+          "historyCount": 2,
+          "itemId": 17
+        },
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/accounts/4/lock",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/17/assign",
+            "status": 403
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/accounts/4/unlock",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/17/assign",
+            "status": 409
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/17/assign",
+            "status": 201
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/17/reassign",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_b",
+            "method": "POST",
+            "route": "/shipper/orders/17/pickup",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/orders/17",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/accounts/4",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/accounts/4",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/17",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/17",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/13/view",
+            "status": 404
+          },
+          {
+            "actor": "shipper_b",
+            "route": "/shipper/shipments/13/view",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/17",
+            "status": 200
+          }
+        ],
+        "actual": {
+          "id": 17,
+          "orderStatus": "PICKED_UP",
+          "orderVersion": 3,
+          "grandTotal": 185000,
+          "inventoryReleased": false,
+          "shipmentId": 13,
+          "shipmentStatus": "PICKED_UP",
+          "shipmentVersion": 2,
+          "attempt": 0,
+          "shipperId": 4,
+          "paymentStatus": "UNPAID",
+          "paymentAmount": 185000,
+          "reviewCount": 0,
+          "historyCount": 3,
+          "itemId": 17
+        },
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:09:23.455Z",
+        "expected": "Assignment succeeds before pickup; stale/foreign/ineligible paths preserve state",
+        "actors_observed": [
+          "admin",
+          "shipper_a",
+          "shipper_b"
+        ]
+      },
+      {
+        "case": "failure-retry",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:09:23.537Z",
+        "steps": [
+          {
+            "first_failure_retry_second_failure": "UI_SUBMITTED",
+            "order_unchanged": true,
+            "foreign_shipper_denied": true,
+            "no_third_retry": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\failure-retry-1440-exhausted.png",
+            "sha256": "e8b79b077e8a43325fbffac52a94a1d395830ff09553d7da9b9b38ee1ba30a28",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/failure-retry-1440-exhausted.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/failure-retry-1440-exhausted.png"
+          }
+        ],
+        "actor_scope": "SHIPPER own+foreign",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/18/delivery-failed",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/18/retry",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/18/delivery-failed",
+            "status": 302
+          },
+          {
+            "actor": "shipper_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/14/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/14/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/14/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/14/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/14/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_b",
+            "route": "/shipper/shipments/14/view",
+            "status": 404
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:09:30.037Z",
+        "expected": "Failure 1, retry 2 and failure 2; no retry 3, readable evidence/errors",
+        "actors_observed": [
+          "shipper_a",
+          "shipper_b"
+        ]
+      },
+      {
+        "case": "attempt2-delivery",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:09:30.081Z",
+        "steps": [
+          {
+            "wrong_COD_rejected": true,
+            "delivered_at_attempt2": true,
+            "payment": "PAID"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\attempt2-delivery-1440-delivered.png",
+            "sha256": "696beacc13593833580eb33ca3651b3321ea878b745dbfdd31f2b5583aca2377",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/attempt2-delivery-1440-delivered.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/attempt2-delivery-1440-delivered.png"
+          }
+        ],
+        "actor_scope": "SHIPPER",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/19/delivery-failed",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/19/retry",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/19/delivered",
+            "status": 409
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/19/delivered",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/15/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/15/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/15/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/15/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/15/view",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:09:35.950Z",
+        "expected": "Delivery attempt 2 with exact COD succeeds once",
+        "actors_observed": [
+          "shipper_a"
+        ]
+      },
+      {
+        "case": "return-to-sender",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:09:35.959Z",
+        "steps": [
+          {
+            "receipt_submitted_via_UI": true,
+            "order": "CANCELLED",
+            "shipment": "RETURNED_TO_SENDER"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\return-to-sender-1440-received.png",
+            "sha256": "8c3724da67973da86034780c956f5102c88ec55634acc39aedc10f462e3b0a28",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/return-to-sender-1440-received.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/return-to-sender-1440-received.png"
+          }
+        ],
+        "actor_scope": "ADMIN",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/20/return-to-sender",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/orders/20",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:09:42.526Z",
+        "expected": "Trusted receipt and replay, no buyer-return/refund crossover",
+        "actors_observed": [
+          "admin"
+        ]
+      },
+      {
+        "case": "notification-two-sessions",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:09:42.539Z",
+        "steps": [
+          {
+            "live_private_hint": true,
+            "foreign_hint_denied": true,
+            "persisted_recipients_checked": true,
+            "read_UI": true,
+            "offline_HTTP_recovery": true,
+            "logout_denial": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\notification-two-sessions-1440-buyer-inbox.png",
+            "sha256": "a98efe52c91e2eb785515a8ed7b26cf2a6d7ae08aad7db1faac196c19a8d4140",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/notification-two-sessions-1440-buyer-inbox.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-1440-buyer-inbox.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\notification-two-sessions-1440-recovered.png",
+            "sha256": "a9d4a4046093a2574124234ae8daab09ee5543cef79dcf759699647f6f5fb61a",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/notification-two-sessions-1440-recovered.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/notification-two-sessions-1440-recovered.png"
+          }
+        ],
+        "actor_scope": "BUYER A+B / VENDOR",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "buyer_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/21/confirm",
+            "status": 302
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/notifications/127/read",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/22/confirm",
+            "status": 302
+          },
+          {
+            "actor": "buyer_b",
+            "method": "POST",
+            "route": "/logout",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "buyer_a",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "buyer_b",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "vendor_a",
+            "route": "/vendor/orders/21",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "vendor_a",
+            "route": "/vendor/orders/22",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/notifications",
+            "status": 200
+          },
+          {
+            "actor": "buyer_b",
+            "route": "/notifications",
+            "status": 401
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:09:50.143Z",
+        "expected": "Vendor confirm reaches only persisted Buyer; offline/reconnect/read/logout work",
+        "actors_observed": [
+          "buyer_a",
+          "buyer_b",
+          "vendor_a"
+        ]
+      },
+      {
+        "case": "review-media",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:09:50.220Z",
+        "steps": [
+          {
+            "valid_UI_review": true,
+            "foreign_denied": true,
+            "public_after_return": true,
+            "return_precondition_method": "real HTTP buyer/vendor flow"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\review-media-1440-public.png",
+            "sha256": "8a7fd557071655ccd65560a35248b7b7de7f8344e84fec9c251829aa00df694b",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/review-media-1440-public.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-1440-public.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\review-media-1440-after-return.png",
+            "sha256": "b1960ce8bc82a0247d48acb90a34018e25c623a6a7a69a9de5967bee300680ee",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/review-media-1440-after-return.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/review-media-1440-after-return.png"
+          }
+        ],
+        "actor_scope": "BUYER A+B / PUBLIC",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/23/review",
+            "status": 400
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/23/review",
+            "status": 302
+          },
+          {
+            "actor": "buyer_b",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "buyer_a",
+            "route": "/orders/23",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/order-items/23/review",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/products/1/reviews",
+            "status": 200
+          },
+          {
+            "actor": "buyer_b",
+            "route": "/order-items/23/review",
+            "status": 404
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/products/1/reviews",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:09:58.312Z",
+        "expected": "Owned delivered item, validation/duplicate/foreign errors, public media after Return",
+        "actors_observed": [
+          "buyer_a",
+          "buyer_b"
+        ]
+      },
+      {
+        "case": "admin-financial-scope",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:09:58.358Z",
+        "steps": [
+          {
+            "admin_UI": true,
+            "manager_denied": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\admin-financial-scope-1440-admin.png",
+            "sha256": "886493886b2f9566854becc677fda81ae528a41a56c5118fd7b32e0b546ebd5b",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/admin-financial-scope-1440-admin.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-1440-admin.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\admin-financial-scope-1440-manager-denied.png",
+            "sha256": "7760e34a01bd818028a4d5c4da738d2b5466fdb3f069866f5358512c41713839",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/admin-financial-scope-1440-manager-denied.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/admin-financial-scope-1440-manager-denied.png"
+          }
+        ],
+        "actor_scope": "ADMIN / MANAGER",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/dashboard/revenue",
+            "status": 200
+          },
+          {
+            "actor": "manager",
+            "route": "/admin/dashboard/revenue",
+            "status": 403
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:10:00.266Z",
+        "expected": "Admin metrics usable; Manager cannot access private finance",
+        "actors_observed": [
+          "admin",
+          "manager"
+        ]
+      },
+      {
+        "case": "full-user-journey",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+        "started_utc": "2026-10-29T08:10:00.308Z",
+        "steps": [
+          {
+            "all_UI_actions": [
+              "register",
+              "OTP",
+              "login",
+              "address",
+              "product",
+              "cart",
+              "checkout",
+              "vendor-confirm",
+              "vendor-ready",
+              "admin-assign",
+              "shipper-pickup",
+              "shipping",
+              "COD-delivered",
+              "buyer-review"
+            ],
+            "fake_identity": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\full-user-journey-1440-otp-policy-copy.png",
+            "sha256": "fb13579509394cb60e5bb4a8975470d2f464b297fad88a691c3abafde9ed3011",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/full-user-journey-1440-otp-policy-copy.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-1440-otp-policy-copy.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-candidate\\full-user-journey-1440-completed.png",
+            "sha256": "e03ab9e857e611b77191bc8d1deeae8dd440ebebdb90e869773254ed4cd4592a",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-candidate/full-user-journey-1440-completed.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-candidate/full-user-journey-1440-completed.png"
+          }
+        ],
+        "actor_scope": "NEW BUYER / VENDOR / ADMIN / SHIPPER",
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "routes": [
+          {
+            "actor": "new-buyer/public",
+            "route": "/register",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/login",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/user/addresses",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/products/1",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/user/checkout/view",
+            "status": 200
+          },
+          {
+            "actor": "vendor_a",
+            "route": "/vendor/orders/24",
+            "status": 200
+          },
+          {
+            "actor": "admin",
+            "route": "/admin/orders/24",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/18/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/18/view",
+            "status": 200
+          },
+          {
+            "actor": "shipper_a",
+            "route": "/shipper/shipments/18/view",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/orders/24",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/products/1/reviews",
+            "status": 200
+          }
+        ],
+        "additional_finding": "OTP_UI_COPY_10MIN_VS_SERVER5MIN",
+        "ui_http": [
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/24/confirm",
+            "status": 302
+          },
+          {
+            "actor": "vendor_a",
+            "method": "POST",
+            "route": "/vendor/orders/24/ready",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/24/assign",
+            "status": 201
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/24/pickup",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/24/shipping",
+            "status": 302
+          },
+          {
+            "actor": "shipper_a",
+            "method": "POST",
+            "route": "/shipper/orders/24/delivered",
+            "status": 302
+          }
+        ],
+        "actual": {
+          "id": 24,
+          "orderStatus": "DELIVERED",
+          "orderVersion": 5,
+          "grandTotal": 105000,
+          "inventoryReleased": false,
+          "shipmentId": 18,
+          "shipmentStatus": "DELIVERED",
+          "shipmentVersion": 3,
+          "attempt": 1,
+          "shipperId": 3,
+          "paymentStatus": "PAID",
+          "paymentAmount": 105000,
+          "reviewCount": 1,
+          "historyCount": 5,
+          "itemId": 24
+        },
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:10:08.429Z",
+        "expected": "Register, catalog, cart, checkout, delivery and review controls usable",
+        "actors_observed": [
+          "admin",
+          "new-buyer/public",
+          "shipper_a",
+          "vendor_a"
+        ]
+      }
+    ]
+  },
+  "supplemental": {
+    "browser": "155.0.8059.82",
+    "headless": true,
+    "mode": "Automated real browser UI; not human manual signoff",
+    "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+    "cases": [
+      {
+        "case": "manager-assignment",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:20:24.149Z",
+        "steps": [
+          {
+            "manager_assign": true,
+            "manager_reassign": true,
+            "persisted_facts": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\manager-assignment-375-assigned.png",
+            "sha256": "90848c5b0632f7409bd5431332ab4cdd1be9b0c1ce8ccb404435acefbce095a6",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/manager-assignment-375-assigned.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/manager-assignment-375-assigned.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/manager/orders/1/assign",
+            "status": 201
+          },
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/manager/orders/1/reassign",
+            "status": 200
+          }
+        ],
+        "routes": [
+          {
+            "actor": "manager",
+            "route": "/manager/orders/1",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:20:28.189Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "manager"
+        ]
+      },
+      {
+        "case": "review-validation-duplicate",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:20:28.203Z",
+        "steps": [
+          {
+            "invalid_short_review": 400,
+            "invalid_row_count": 0,
+            "valid_row_count": 1,
+            "duplicate_review": 409,
+            "persisted_facts_unchanged": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\review-validation-duplicate-375-denied.png",
+            "sha256": "a6e24019634b4f7d993c807f3a507f0570ecde88e80c4896db66babb18c7436a",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/review-validation-duplicate-375-denied.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/review-validation-duplicate-375-denied.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/2/review",
+            "status": 400
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/2/review",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "buyer_a",
+            "route": "/order-items/2/review",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/order-items/2/review",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/order-items/2/review",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:20:34.342Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "buyer_a",
+          "new-buyer/public"
+        ]
+      },
+      {
+        "case": "rts-contract-replay",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:20:34.357Z",
+        "steps": [
+          {
+            "same_payload_replay": 302,
+            "different_payload_replay": 409,
+            "persisted_facts_unchanged": true,
+            "contract_source": "ReturnToSenderIT.opsReceiptCancelsReleasesExactlyOnceAndReplaysWithoutChangingMoney"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\rts-contract-replay-375-same-replayed.png",
+            "sha256": "68e272c2ef8fcc5f97389c664a31340c5cc5512061be26f6fdd863babdd675da",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/rts-contract-replay-375-same-replayed.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/rts-contract-replay-375-same-replayed.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\rts-contract-replay-375-different-denied.png",
+            "sha256": "55268026a084b85740c6cc568a69fe22e237ce7c4a2af124dfd59e022b54b0c9",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/rts-contract-replay-375-different-denied.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/rts-contract-replay-375-different-denied.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/3/return-to-sender",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/orders/3",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/admin/orders/3",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/admin/orders/3",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:20:50.982Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "admin",
+          "new-buyer/public"
+        ]
+      },
+      {
+        "case": "keyboard-responsive",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:20:51.003Z",
+        "steps": [
+          {
+            "tool_driven_keyboard": true,
+            "skip_to_main": true,
+            "mobile_menu_keyboard": true,
+            "table_labeled_focusable": true,
+            "table_dimensions": {
+              "left": 0,
+              "width": 351,
+              "scroll": 640
+            },
+            "after_scroll_left": 40,
+            "physical_device_IME_screen_reader": "NOT RUN"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\keyboard-responsive-375-keyboard.png",
+            "sha256": "cb9ef0d70990cd2311dd6300cdd033e80ad73844d078e2c8eead74b061a79cc1",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/keyboard-responsive-375-keyboard.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/keyboard-responsive-375-keyboard.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/dashboard/revenue",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:20:52.819Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "admin"
+        ]
+      },
+      {
+        "case": "manager-assignment",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:20:52.831Z",
+        "steps": [
+          {
+            "manager_assign": true,
+            "manager_reassign": true,
+            "persisted_facts": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\manager-assignment-768-assigned.png",
+            "sha256": "0916146d8530c6900f9a017f64331a7f284f3274a06b6c17d9afcdb8cf7a9a0b",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/manager-assignment-768-assigned.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/manager-assignment-768-assigned.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/manager/orders/4/assign",
+            "status": 201
+          },
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/manager/orders/4/reassign",
+            "status": 200
+          }
+        ],
+        "routes": [
+          {
+            "actor": "manager",
+            "route": "/manager/orders/4",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:20:56.200Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "manager"
+        ]
+      },
+      {
+        "case": "review-validation-duplicate",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:20:56.212Z",
+        "steps": [
+          {
+            "invalid_short_review": 400,
+            "invalid_row_count": 0,
+            "valid_row_count": 1,
+            "duplicate_review": 409,
+            "persisted_facts_unchanged": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\review-validation-duplicate-768-denied.png",
+            "sha256": "17a726da897d883cf1cb29d60d8b8481760c676cd05522db5eb6d1c25ed2a3f1",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/review-validation-duplicate-768-denied.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/review-validation-duplicate-768-denied.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/5/review",
+            "status": 400
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/5/review",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "buyer_a",
+            "route": "/order-items/5/review",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/order-items/5/review",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/order-items/5/review",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:21:02.389Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "buyer_a",
+          "new-buyer/public"
+        ]
+      },
+      {
+        "case": "rts-contract-replay",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:21:02.406Z",
+        "steps": [
+          {
+            "same_payload_replay": 302,
+            "different_payload_replay": 409,
+            "persisted_facts_unchanged": true,
+            "contract_source": "ReturnToSenderIT.opsReceiptCancelsReleasesExactlyOnceAndReplaysWithoutChangingMoney"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\rts-contract-replay-768-same-replayed.png",
+            "sha256": "20e161c9d32e4e7b4b2145ed2de1469d373a0954a37b93f6b04c7c13add6cf47",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/rts-contract-replay-768-same-replayed.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/rts-contract-replay-768-same-replayed.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\rts-contract-replay-768-different-denied.png",
+            "sha256": "c90140a8831c081bd952a77be95bc0fbaa6d1847abb6c2b5bd1f426775fd79fb",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/rts-contract-replay-768-different-denied.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/rts-contract-replay-768-different-denied.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/6/return-to-sender",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/orders/6",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/admin/orders/6",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/admin/orders/6",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:21:12.865Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "admin",
+          "new-buyer/public"
+        ]
+      },
+      {
+        "case": "keyboard-responsive",
+        "width": 768,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:21:12.888Z",
+        "steps": [
+          {
+            "tool_driven_keyboard": true,
+            "skip_to_main": true,
+            "mobile_menu_keyboard": true,
+            "table_labeled_focusable": true,
+            "table_dimensions": {
+              "left": 0,
+              "width": 696,
+              "scroll": 696
+            },
+            "after_scroll_left": 0,
+            "physical_device_IME_screen_reader": "NOT RUN"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\keyboard-responsive-768-keyboard.png",
+            "sha256": "328816f23734c9a49266a717c7fe242bc491694732968ccf69f7dee9bb8b16ce",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/keyboard-responsive-768-keyboard.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/keyboard-responsive-768-keyboard.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/dashboard/revenue",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:21:14.716Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "admin"
+        ]
+      },
+      {
+        "case": "manager-assignment",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:21:14.728Z",
+        "steps": [
+          {
+            "manager_assign": true,
+            "manager_reassign": true,
+            "persisted_facts": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\manager-assignment-1440-assigned.png",
+            "sha256": "d5811226c2979ce4717ebea43c50de490f7e67fb8327cb1f3b06e2c171ec5e8b",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/manager-assignment-1440-assigned.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/manager-assignment-1440-assigned.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/manager/orders/7/assign",
+            "status": 201
+          },
+          {
+            "actor": "manager",
+            "method": "POST",
+            "route": "/manager/orders/7/reassign",
+            "status": 200
+          }
+        ],
+        "routes": [
+          {
+            "actor": "manager",
+            "route": "/manager/orders/7",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:21:17.929Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "manager"
+        ]
+      },
+      {
+        "case": "review-validation-duplicate",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:21:17.940Z",
+        "steps": [
+          {
+            "invalid_short_review": 400,
+            "invalid_row_count": 0,
+            "valid_row_count": 1,
+            "duplicate_review": 409,
+            "persisted_facts_unchanged": true
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\review-validation-duplicate-1440-denied.png",
+            "sha256": "cd446757fc01491f865c4fe459b2001368c314d063e892d3cfa2452306a2f011",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/review-validation-duplicate-1440-denied.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/review-validation-duplicate-1440-denied.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/8/review",
+            "status": 400
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/8/review",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "buyer_a",
+            "route": "/order-items/8/review",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/order-items/8/review",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/order-items/8/review",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:21:24.034Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "buyer_a",
+          "new-buyer/public"
+        ]
+      },
+      {
+        "case": "rts-contract-replay",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:21:24.051Z",
+        "steps": [
+          {
+            "same_payload_replay": 302,
+            "different_payload_replay": 409,
+            "persisted_facts_unchanged": true,
+            "contract_source": "ReturnToSenderIT.opsReceiptCancelsReleasesExactlyOnceAndReplaysWithoutChangingMoney"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\rts-contract-replay-1440-same-replayed.png",
+            "sha256": "25740ec069d7f9ef22045f55e1ab9d8dbcb9abaaf0851e504e1df1f7cd07484a",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/rts-contract-replay-1440-same-replayed.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/rts-contract-replay-1440-same-replayed.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\rts-contract-replay-1440-different-denied.png",
+            "sha256": "f6c6f31bc4cf692ac65d93f9d8955c407b272fa93d54a723ae8b1270bb922779",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/rts-contract-replay-1440-different-denied.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/rts-contract-replay-1440-different-denied.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/admin/orders/9/return-to-sender",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/orders/9",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/admin/orders/9",
+            "status": 200
+          },
+          {
+            "actor": "new-buyer/public",
+            "route": "/admin/orders/9",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:21:35.829Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "admin",
+          "new-buyer/public"
+        ]
+      },
+      {
+        "case": "keyboard-responsive",
+        "width": 1440,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:21:35.851Z",
+        "steps": [
+          {
+            "tool_driven_keyboard": true,
+            "skip_to_main": true,
+            "mobile_menu_keyboard": true,
+            "table_labeled_focusable": true,
+            "table_dimensions": {
+              "left": 0,
+              "width": 1192,
+              "scroll": 1192
+            },
+            "after_scroll_left": 0,
+            "physical_device_IME_screen_reader": "NOT RUN"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental-fresh\\keyboard-responsive-1440-keyboard.png",
+            "sha256": "49cea5d0bf67dd3dc1f97f5189689b63d5f4e576cad2b49b8f9fa4da314db285",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-supplemental-fresh/keyboard-responsive-1440-keyboard.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-supplemental-fresh/keyboard-responsive-1440-keyboard.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "admin",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "admin",
+            "route": "/admin/dashboard/revenue",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:21:37.700Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "admin"
+        ]
+      }
+    ]
+  },
+  "local_upload_persistence": {
+    "browser": "155.0.8059.82",
+    "headless": true,
+    "mode": "Automated real browser UI; not human manual signoff",
+    "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+    "cases": [
+      {
+        "case": "local-upload-restart",
+        "width": 375,
+        "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+        "human_manual_acceptance": "NOT CLAIMED",
+        "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+        "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+        "dataset_manifest_sha256": "06c2a78bcbd44ef79affa54c15354b6e39fa415b69903cac4e9bf2b25dd0e12f",
+        "started_utc": "2026-10-29T08:22:19.755Z",
+        "steps": [
+          {
+            "local_owned_app_restart": true,
+            "same_DB_and_UPLOAD_DIR": true,
+            "media_hash_before": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865",
+            "media_hash_after": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865",
+            "public_image_after_restart": true,
+            "widths": [
+              375,
+              768,
+              1440
+            ],
+            "order_review_facts_unchanged": true,
+            "target_host_TLS_offhost_restore": "NOT RUN"
+          }
+        ],
+        "screenshots": [
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-persistence\\local-upload-restart-375-before.png",
+            "sha256": "b852d3490b43f0e67f2198c22d9dc0250961d38323c677acab6d6019edeed07b",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-persistence/local-upload-restart-375-before.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-persistence/local-upload-restart-375-before.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-persistence\\local-upload-restart-375-after-375.png",
+            "sha256": "b852d3490b43f0e67f2198c22d9dc0250961d38323c677acab6d6019edeed07b",
+            "viewport": 375,
+            "scroll": 375,
+            "overflow": false,
+            "published_file": "browser-post70-persistence/local-upload-restart-375-after-375.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-persistence/local-upload-restart-375-after-375.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-persistence\\local-upload-restart-375-after-768.png",
+            "sha256": "ae3b99e6400aa3242e7dfc5719c4f499023598fff65db905a104276522d2c8a5",
+            "viewport": 768,
+            "scroll": 768,
+            "overflow": false,
+            "published_file": "browser-post70-persistence/local-upload-restart-375-after-768.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-persistence/local-upload-restart-375-after-768.png"
+          },
+          {
+            "file": ".work\\qa03-g01-runtime\\browser-post70-persistence\\local-upload-restart-375-after-1440.png",
+            "sha256": "b6972e052493fc9fb2283c7a96ff77f9519975dfd97bd34b67dc7f32a0f066c3",
+            "viewport": 1440,
+            "scroll": 1440,
+            "overflow": false,
+            "published_file": "browser-post70-persistence/local-upload-restart-375-after-1440.png",
+            "published_url": "https://github.com/hphuc032/Logistic-UTEExpress/blob/3ae2c8286a3f372782a7327bf490cde48f9542f8/docs/testing/qa03-assignment-ui/post70/browser-post70-persistence/local-upload-restart-375-after-1440.png"
+          }
+        ],
+        "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+        "ui_http": [
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/login",
+            "status": 302
+          },
+          {
+            "actor": "buyer_a",
+            "method": "POST",
+            "route": "/order-items/10/review",
+            "status": 302
+          }
+        ],
+        "routes": [
+          {
+            "actor": "buyer_a",
+            "route": "/order-items/10/review",
+            "status": 200
+          },
+          {
+            "actor": "buyer_a",
+            "route": "/products/1/reviews",
+            "status": 200
+          },
+          {
+            "actor": "PUBLIC",
+            "route": "/products/1/reviews",
+            "status": 200
+          },
+          {
+            "actor": "PUBLIC",
+            "route": "/products/1/reviews",
+            "status": 200
+          },
+          {
+            "actor": "PUBLIC",
+            "route": "/products/1/reviews",
+            "status": 200
+          }
+        ],
+        "browser_result": "PASS",
+        "finished_utc": "2026-10-29T08:22:45.586Z",
+        "expected": "See explicit asserted steps/statuses: Manager authority, Review400/409/count, RTS302/409/unchanged facts, keyboard focus/scroll or upload persistence",
+        "actors_observed": [
+          "PUBLIC",
+          "buyer_a"
+        ]
+      }
+    ]
+  },
+  "human_manual_execution": "NOT RUN / NOT CLAIMED",
+  "physical_device_IME_screen_reader": "NOT RUN",
+  "evidence_mode": "Playwright Chrome155 headless +sampled agent visual inspection; not human signoff"
+}

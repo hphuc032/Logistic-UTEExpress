@@ -1,3 +1,5 @@
+> Current QA03 execution/acceptance is recorded in `../qa03-post70-final/report.md` and acceptance-status.json. The source-time narrative below is historical. New89d6762 G02 technical PASS and separate75 automated browser PASS do not imply human/final acceptance or wholeQA03 completion.
+
 # QA-03 integrated demo seed and remaining manual gate
 
 Master Plan source: original `UTEExpress_Master_Project_Plan.docx`, SHA-256
