@@ -1,0 +1,2 @@
+# Preserve exact QA artifact bytes and their recorded SHA-256 values on Windows.
+* -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
