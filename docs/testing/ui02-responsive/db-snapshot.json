@@ -1,0 +1,83 @@
+{
+  "source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+  "jar_sha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+  "checked_utc": "2026-10-29T05:58:50.735902+00:00",
+  "mode": "Read-only DB snapshot; synthetic records advanced exclusively via real owner HTTP contracts; not new browser execution",
+  "snapshot": {
+    "orders": [
+      {
+        "id": 1,
+        "status": "DELIVERED",
+        "buyer_id": 1,
+        "grand_total": 121000.0,
+        "shipping_fee": 20000.0
+      },
+      {
+        "id": 2,
+        "status": "CANCELLED",
+        "buyer_id": 1,
+        "grand_total": 246000.0,
+        "shipping_fee": 20000.0
+      }
+    ],
+    "payments": [
+      {
+        "order_id": 1,
+        "method": "COD",
+        "status": "PAID",
+        "amount": 121000.0
+      },
+      {
+        "order_id": 2,
+        "method": "COD",
+        "status": "UNPAID",
+        "amount": 246000.0
+      }
+    ],
+    "shipments": [
+      {
+        "order_id": 1,
+        "status": "DELIVERED",
+        "assigned_shipper_id": 6
+      }
+    ],
+    "cart_items": 0,
+    "history": [
+      {
+        "order_id": 1,
+        "from": null,
+        "to": "NEW"
+      },
+      {
+        "order_id": 1,
+        "from": "NEW",
+        "to": "CONFIRMED"
+      },
+      {
+        "order_id": 2,
+        "from": null,
+        "to": "NEW"
+      },
+      {
+        "order_id": 2,
+        "from": "NEW",
+        "to": "CANCELLED"
+      },
+      {
+        "order_id": 1,
+        "from": "CONFIRMED",
+        "to": "PICKED_UP"
+      },
+      {
+        "order_id": 1,
+        "from": "PICKED_UP",
+        "to": "SHIPPING"
+      },
+      {
+        "order_id": 1,
+        "from": "SHIPPING",
+        "to": "DELIVERED"
+      }
+    ]
+  }
+}

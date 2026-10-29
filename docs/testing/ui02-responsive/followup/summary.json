@@ -1,0 +1,52 @@
+{
+  "task": "UI-02 supplemental browser/manual evidence",
+  "testedSource": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "branch": "feature/ui-02-responsive-polish",
+  "runtimeSource": "1f375fa01882f09755e6a107e0e13c79f427f671",
+  "browser": "Brave extension through cua_repl; exact engine version NOT VERIFIED",
+  "environment": "Owned disposable PostgreSQL17.6 / Java21 / normal local profile / enabled JWT and CSRF; 27 immutable migrations; synthetic data only",
+  "native": {
+    "375x812": "HP manual Escape; button focus restored/enabled; order NEW/version0; zero cancel POST",
+    "768x1024": "HP manual native Cancel; button focus restored/enabled; order NEW/version0; zero cancel POST",
+    "1440x900": "HP manual Tab/Shift+Tab visible focus and Escape; button focus restored/enabled; order NEW/version0; zero cancel POST",
+    "independentReviewer": "Q\u0110 NOT RUN; this is HP attestation plus automation corroboration",
+    "allCombinationsAtEveryWidth": "NOT RUN; Escape/Cancel/Tab+Shift+Tab distributed as explicitly listed, not all combinations on each viewport",
+    "nativeChromeScreenshot": "NOT CAPTURED; saved post-dismissal real-page screenshots only",
+    "priorAttempt": "Order1 accepted with OK by HP; server POST200 and persisted CANCELLED/version1. Kept separate from all dismissal evidence.",
+    "harness": "Enter dispatch times out while native dialog is modal; a dialog-query attempt reset the REPL. No confirmed automated dismiss outcome is claimed. Manual HP actions closed dialogs; no security-policy bypass or confirm override."
+  },
+  "vendor": {
+    "createHappyPaths": 2,
+    "actualBrowserSubmitViewport": [
+      375,
+      812
+    ],
+    "result": "Two genuine form POST302 -> edit GET200 + success flash + PostgreSQL persistence",
+    "editPageRenderContainment": 6,
+    "viewports": [
+      [
+        375,
+        812
+      ],
+      [
+        768,
+        1024
+      ],
+      [
+        1440,
+        900
+      ]
+    ],
+    "updateDisableActions": "NOT RUN"
+  },
+  "node": {
+    "tests": 40,
+    "pass": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "maven": "No new local Maven/PostgreSQL test run for this documentation/evidence-only delta; previous runs keep original SHA and counts. New PR-head CI must be checked separately.",
+  "originalPacket": "Original 161 hashes /151 JPEGs /240 route checks remain unchanged, not relabelled as this run.",
+  "independentReview": "Pending Q\u0110; no approval, merge, UI-02 completion or QA/release status changes."
+}

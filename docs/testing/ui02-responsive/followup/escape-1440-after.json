@@ -1,0 +1,17 @@
+{
+  "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "verifiedUtc": "2026-10-29T06:54:26.721Z",
+  "method": "HP manual Tab/Shift+Tab visible-focus and Escape attestation in chat; automation DOM/access/DB corroboration; not independent QD review",
+  "after": {
+    "currentState": "Trạng thái hiện tại: NEW",
+    "focus": {
+      "disabled": false,
+      "tag": "BUTTON",
+      "text": "Hủy đơn hàng"
+    },
+    "viewport": [
+      1440,
+      900
+    ]
+  }
+}

@@ -1,0 +1,275 @@
+{
+  "schema": 1,
+  "createdUtc": "2026-10-29T06:57:38.816079+00:00",
+  "testedSource": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+  "runtimeSource": "1f375fa01882f09755e6a107e0e13c79f427f671",
+  "originalManifestSha256": "85883646c1cdeb53e88f94dbf45e47e1182128932cf9654e8d1759e3a32b111a",
+  "originalArtifactsVerifiedUnchanged": 161,
+  "screenshots": [
+    {
+      "path": "cancel-768.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "USER",
+      "route": "/orders/2",
+      "cssViewport": [
+        768,
+        1024
+      ],
+      "stage": "actual browser after manual dismissal",
+      "nativeDialogChromeIncluded": false
+    },
+    {
+      "path": "escape-1440.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "USER",
+      "route": "/orders/2",
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "stage": "actual browser after manual dismissal",
+      "nativeDialogChromeIncluded": false
+    },
+    {
+      "path": "escape-375.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "USER",
+      "route": "/orders/2",
+      "cssViewport": [
+        375,
+        812
+      ],
+      "stage": "actual browser after manual dismissal",
+      "nativeDialogChromeIncluded": false
+    },
+    {
+      "path": "promotion-filled-375.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "VENDOR",
+      "route": "/vendor/products/1/promotions/new",
+      "cssViewport": [
+        375,
+        812
+      ],
+      "stage": "actual filled/success browser page",
+      "nativeDialogChromeIncluded": false
+    },
+    {
+      "path": "promotion-success-1440.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "VENDOR",
+      "route": "/vendor/products/1/promotions/1/edit",
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "stage": "actual filled/success browser page",
+      "nativeDialogChromeIncluded": false
+    },
+    {
+      "path": "promotion-success-375.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "VENDOR",
+      "route": "/vendor/products/1/promotions/1/edit",
+      "cssViewport": [
+        375,
+        812
+      ],
+      "stage": "actual filled/success browser page",
+      "nativeDialogChromeIncluded": false
+    },
+    {
+      "path": "promotion-success-768.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "VENDOR",
+      "route": "/vendor/products/1/promotions/1/edit",
+      "cssViewport": [
+        768,
+        1024
+      ],
+      "stage": "actual filled/success browser page",
+      "nativeDialogChromeIncluded": false
+    },
+    {
+      "path": "voucher-filled-375.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "VENDOR",
+      "route": "/vendor/vouchers/new",
+      "cssViewport": [
+        375,
+        812
+      ],
+      "stage": "actual filled/success browser page",
+      "nativeDialogChromeIncluded": false
+    },
+    {
+      "path": "voucher-success-1440.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "VENDOR",
+      "route": "/vendor/vouchers/1/edit",
+      "cssViewport": [
+        1440,
+        900
+      ],
+      "stage": "actual filled/success browser page",
+      "nativeDialogChromeIncluded": false
+    },
+    {
+      "path": "voucher-success-375.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "VENDOR",
+      "route": "/vendor/vouchers/1/edit",
+      "cssViewport": [
+        375,
+        812
+      ],
+      "stage": "actual filled/success browser page",
+      "nativeDialogChromeIncluded": false
+    },
+    {
+      "path": "voucher-success-768.jpg",
+      "source": "1124a4908d886b4edfa872839ab90208f38e9ff1",
+      "role": "VENDOR",
+      "route": "/vendor/vouchers/1/edit",
+      "cssViewport": [
+        768,
+        1024
+      ],
+      "stage": "actual filled/success browser page",
+      "nativeDialogChromeIncluded": false
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "cancel-768-after.json",
+      "bytes": 466,
+      "sha256": "35d9326a58f8797d77d7425632e42e81d54427f1f3c00b2e558a90e9d4323c48"
+    },
+    {
+      "path": "cancel-768-before.json",
+      "bytes": 234,
+      "sha256": "4d43819121a7fcf238b3a35d5e63c214a7f76f725db8f1e7eca4238e23741899"
+    },
+    {
+      "path": "cancel-768.jpg",
+      "bytes": 126694,
+      "sha256": "7f4d4fdc46b2c5bd299e7d3a98730cfc7119e7f7fc287f0bf6db8066d25e2823"
+    },
+    {
+      "path": "console.json",
+      "bytes": 287,
+      "sha256": "597f7feaece363c8b0e29293f194618eedd76401c08f8d2d4977def763e6a475"
+    },
+    {
+      "path": "csrf-controls.json",
+      "bytes": 445,
+      "sha256": "c197bb0cb1ea62d990b52281ab3d90b8ac45ee9569eaa74b5149e8e0e4151864"
+    },
+    {
+      "path": "db-readback.json",
+      "bytes": 879,
+      "sha256": "ac4e0a2d4dc1a378e785a4331c68e7dcd4382b2e01dc6ecc0f3c20e561c4e329"
+    },
+    {
+      "path": "escape-1440-after.json",
+      "bytes": 477,
+      "sha256": "be0a42fef8580d4f848fd8ff0bb36fa508e04bd6ada0fb0377c7ac8e3cd20463"
+    },
+    {
+      "path": "escape-1440-before.json",
+      "bytes": 169,
+      "sha256": "ea489c8f87b9768f14d7a416c8ad99bae61cafb6a52932a2b7dc202f07e19da7"
+    },
+    {
+      "path": "escape-1440.jpg",
+      "bytes": 152798,
+      "sha256": "e7b7477186ea4da254caf87574933a7731a746641398cecfd84d831966ce30e1"
+    },
+    {
+      "path": "escape-375.jpg",
+      "bytes": 104162,
+      "sha256": "c78a66f337ea1942e470a1c0de6b80506300a2a05808297a5a7a1cd6d80be3b4"
+    },
+    {
+      "path": "escape-375.json",
+      "bytes": 577,
+      "sha256": "78c5dcd3a35f8e1638bef03e88991bec0c95128cd8218ca50ef61035920167c7"
+    },
+    {
+      "path": "native-db-check.json",
+      "bytes": 861,
+      "sha256": "e9e52de2759407e2dab4866ea23ab3f67da084d9c2b8f43f65910049c79b87e3"
+    },
+    {
+      "path": "promotion-browser.json",
+      "bytes": 1781,
+      "sha256": "7dbe0524c404b173f383113285d3f4d1ced1d3aa9b4efaf496110a9c349643a1"
+    },
+    {
+      "path": "promotion-filled-375.jpg",
+      "bytes": 64613,
+      "sha256": "54b39f7d7d491ff200927baf0542b5afe4973dfaafe650b725db88baa4f350a9"
+    },
+    {
+      "path": "promotion-success-1440.jpg",
+      "bytes": 107123,
+      "sha256": "5d61e88ee183449ef84d07a4cbde6017dd61016008fb72b6d47291061c32b7c5"
+    },
+    {
+      "path": "promotion-success-375.jpg",
+      "bytes": 68043,
+      "sha256": "c0e0f70642aef2e3e403ad6fa112cf749f045d4a0f3b7c60dc5eaa6ba51b7168"
+    },
+    {
+      "path": "promotion-success-768.jpg",
+      "bytes": 76751,
+      "sha256": "30586e6ede87d198749e235d0a0a1a8e2fe1853edf2bad6e8eb4f5cf96be91e3"
+    },
+    {
+      "path": "README.md",
+      "bytes": 4246,
+      "sha256": "2e4749aa74389dc3039e8605a3916265be340f20d9f15b54bf1359ea154679de"
+    },
+    {
+      "path": "source-proof.json",
+      "bytes": 991,
+      "sha256": "20e0a8ca8d5a35fc5712866757da1a395a462ddf5cfc119d5d5898b0730af56b"
+    },
+    {
+      "path": "summary.json",
+      "bytes": 2521,
+      "sha256": "e93fb50077191520de8b708e6d2db461192fffd90376ecb82a7520bb2fde9a69"
+    },
+    {
+      "path": "tests.json",
+      "bytes": 337,
+      "sha256": "b346e921e3b855baae452ebe24517010d353e31852f467a5e7f98dfc61f1f508"
+    },
+    {
+      "path": "voucher-browser.json",
+      "bytes": 1569,
+      "sha256": "8df4ac684562eaa12a6e8b5e81d74acdf7a3ab019391e801ff7d25804470f17f"
+    },
+    {
+      "path": "voucher-filled-375.jpg",
+      "bytes": 79229,
+      "sha256": "e5ec1f41318b27025aa8b933a55fb15aecffaf4834c06842cf0432c3b525dcaa"
+    },
+    {
+      "path": "voucher-success-1440.jpg",
+      "bytes": 126592,
+      "sha256": "bb545591d544b64da86628abbe5f95e52cf3eff13e867c3a8d2a7eef036c0086"
+    },
+    {
+      "path": "voucher-success-375.jpg",
+      "bytes": 83893,
+      "sha256": "ab8e10f4887bf3cf383b60044e5fb1501d23f0bc0f4d59fa5ca1892de9a633a1"
+    },
+    {
+      "path": "voucher-success-768.jpg",
+      "bytes": 99349,
+      "sha256": "554b4bd635f4340aa3ae75f6c8bd805098af4fe488dac864aefe0588f0adcad1"
+    }
+  ],
+  "status": "Evidence ready for independent QD review, subject to final publication CI; no approval/completion/merge"
+}

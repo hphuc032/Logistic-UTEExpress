@@ -72,4 +72,32 @@ public class RefundOrderAuthority {
                 Map.of("status", "REFUNDED", "version", Long.toString(version + 1), "relatedId", refundId.toString()),
                 "MANUAL_COD_REFUND"));
     }
+
+    public void requireCancelledPaidEligible(Locked locked,
+            com.uteexpress.payment.dto.CancelledPaidRefundCommand command,Instant paidAt,Instant at) {
+        var o=locked.order();
+        try {
+            new com.uteexpress.checkout.dto.OrderTotals(o.getSubtotal(),o.getDiscountTotal(),o.getShippingFee(),o.getGrandTotal());
+        } catch (ApplicationException invalidSnapshot) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+        if (o.getStatus()!=OrderStatus.CANCELLED || !Objects.equals(o.getVersion(),command.expectedOrderVersion())
+                || locked.request()!=null || o.getDeliveredAt()!=null || o.getCancelledAt()==null
+                || !o.getCancelledAt().equals(o.getInventoryReleasedAt()) || o.getCancelledAt().isAfter(at)
+                || o.getCreatedAt()==null || paidAt.isBefore(o.getCreatedAt()))
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        var entries=history.findByOrderIdOrderByCreatedAtAscIdAsc(o.getId());
+        boolean cancellation=entries.stream().anyMatch(h->h.getToStatus()==OrderStatus.CANCELLED
+                && (h.getFromStatus()==OrderStatus.NEW || h.getFromStatus()==OrderStatus.CONFIRMED
+                    || h.getFromStatus()==OrderStatus.SHIPPING)
+                && h.getActorId()!=null && h.getActorId()>0 && h.getCreatedAt().equals(o.getCancelledAt()));
+        if (!cancellation || entries.stream().anyMatch(h->h.getToStatus()==OrderStatus.DELIVERED))
+            throw new ApplicationException(ErrorCode.CONFLICT);
+    }
+    public void auditCancelledPaid(Long orderId,Long version,Long actor,Long refundId) {
+        audit.append(new AuditEntry(actor,"ORDER_CANCELLED_PAID_REFUNDED","ORDER",orderId,
+                Map.of("status","CANCELLED","version",version.toString()),
+                Map.of("status","CANCELLED","version",version.toString(),"relatedId",refundId.toString()),
+                "MANUAL_CANCELLED_PAID_REFUND"));
+    }
 }

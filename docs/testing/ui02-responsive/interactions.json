@@ -1,0 +1,249 @@
+{
+  "pre_sync_source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+  "pre_sync": [
+    {
+      "id": "registration-invalid",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "time": "2026-10-29T05:27:33.032Z",
+      "actual": {
+        "feedback": 4,
+        "focus": "email",
+        "invalidFields": 4,
+        "passwordsEmpty": true
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "workspace-enter-space",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:28:11.261Z",
+      "actual": {
+        "opened": "true",
+        "closed": "false"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "manager-dashboard-filter",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:28:11.675Z",
+      "actual": {
+        "path": "http://127.0.0.1:62481/manager/dashboard",
+        "h1": "Điều hành vận hành"
+      },
+      "result": "FAIL"
+    },
+    {
+      "id": "manager-dashboard-filter-settled",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:29:14.055Z",
+      "actual": {
+        "path": "http://127.0.0.1:62481/manager/dashboard?from=2026-09-30&to=2026-10-29&shopId=1",
+        "note": "Explicit navigation wait; earlier immediate URL observation retained as harness attempt"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "mobile-nav-keyboard",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:29:15.838Z",
+      "actual": {
+        "open": "true",
+        "closed": "false"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "table-keyboard-buyer",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:29:46.844Z",
+      "actual": {
+        "focusVisible": true,
+        "focused": true,
+        "name": "Sản phẩm và giá đã lưu khi đặt hàng",
+        "outlineWidth": "2.4px",
+        "scrollLeft": 120,
+        "tabindex": "0"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "table-keyboard-vendor",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:29:50.037Z",
+      "actual": {
+        "focusVisible": true,
+        "focused": true,
+        "name": "Bảng dữ liệu — có thể cuộn ngang",
+        "outlineWidth": "2.4px",
+        "scrollLeft": 120,
+        "tabindex": "0"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "table-keyboard-manager",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:29:52.869Z",
+      "actual": {
+        "focusVisible": true,
+        "focused": true,
+        "name": "Bảng dữ liệu — có thể cuộn ngang",
+        "outlineWidth": "2.4px",
+        "scrollLeft": 120,
+        "tabindex": "0"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "table-keyboard-admin",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:29:55.857Z",
+      "actual": {
+        "focusVisible": true,
+        "focused": true,
+        "name": "Bảng dữ liệu — có thể cuộn ngang",
+        "outlineWidth": "2.4px",
+        "scrollLeft": 120,
+        "tabindex": "0"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "table-keyboard-shipper",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:29:57.664Z",
+      "actual": {
+        "focusVisible": true,
+        "focused": true,
+        "name": "Bảng dữ liệu — có thể cuộn ngang",
+        "outlineWidth": "2.4px",
+        "scrollLeft": 120,
+        "tabindex": "0"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "cart-quantity-update",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:30:51.224Z",
+      "actual": {
+        "quantity": "2"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "checkout-server-quote",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:30:55.928Z",
+      "actual": {
+        "text": true
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "place-cod-order-new",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:31:08.121Z",
+      "actual": {
+        "detail": "/orders/2",
+        "newState": true
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "cancel-confirm-dismiss",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:31:54.401Z",
+      "actual": {
+        "newState": true
+      },
+      "result": "FAIL"
+    },
+    {
+      "id": "native-dialog-tool-limitation",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "time": "2026-10-29T05:33:43.006Z",
+      "result": "BLOCKED",
+      "actual": {
+        "error": "Input.dispatchKeyEvent timed out; subsequent getJsDialog returned undefined",
+        "currentOrderStatus": "CANCELLED"
+      },
+      "limitation": "Native dialog dismissal, physical Escape/Tab and focus return were not verified. Earlier word NEW observation matched history, not current state."
+    },
+    {
+      "id": "shipper-pickup",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:33:55.545Z",
+      "actual": {
+        "state": "PICKED_UP",
+        "path": "http://127.0.0.1:62481/shipper/shipments/view"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "shipper-start-shipping",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:33:56.422Z",
+      "actual": {
+        "path": "http://127.0.0.1:62481/shipper/shipments/view"
+      },
+      "result": "PASS"
+    },
+    {
+      "id": "shipper-delivered",
+      "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+      "jarSha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+      "time": "2026-10-29T05:34:29.897Z",
+      "actual": {
+        "path": "http://127.0.0.1:62481/shipper/shipments/view"
+      },
+      "result": "PASS"
+    }
+  ],
+  "post_sync": [
+    {
+      "id": "voucher-validation",
+      "source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+      "jarSha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+      "time": "2026-10-29T05:52:53.821Z",
+      "actual": {
+        "alerts": 1,
+        "hasMain": 1
+      },
+      "result": "PASS"
+    }
+  ],
+  "remaining": [
+    {
+      "id": "native-confirm-physical-keyboard",
+      "result": "BLOCKED",
+      "reason": "Native dialog key dispatch timed out at70b80a2; no controlled dismiss/physical Escape/focus proof. Not rerun at final source."
+    },
+    {
+      "id": "post-sync-remaining-interactions",
+      "result": "BLOCKED",
+      "reason": "Local browser use is disabled in Work settings after successful voucher invalid-POST verification; no alternate browser-control mechanism used."
+    },
+    {
+      "id": "physical-touch-ime-screenreader",
+      "result": "NOT RUN",
+      "reason": "Desktop emulation/DOM and visible focus are not physical hardware or audible accessibility acceptance."
+    }
+  ]
+}
