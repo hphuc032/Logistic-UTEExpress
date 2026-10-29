@@ -61,10 +61,8 @@ public class OperationsOrderController {
         boolean reassign = ready && order.shipment() != null
                 && "ASSIGNED".equals(order.shipment().status()) && order.shipment().pickedUpAt() == null;
         if (assign || reassign) {
-            var shippers = roles.activeShippers().stream()
-                    .filter(shipper -> order.shipment() == null
-                            || !Long.valueOf(shipper.id()).equals(order.shipment().assignedShipperId()))
-                    .toList();
+            var shippers = roles.assignmentShipperOptions(
+                    order.shipment() == null ? null : order.shipment().assignedShipperId());
             model.addAttribute("assignmentShippers", shippers);
             model.addAttribute("assignmentAction", "/" + ops + "/orders/" + id + (assign ? "/assign" : "/reassign"));
             model.addAttribute("assignmentVersionField", assign ? "expectedOrderVersion" : "expectedShipmentVersion");
