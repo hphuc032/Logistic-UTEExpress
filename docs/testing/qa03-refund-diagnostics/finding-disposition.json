@@ -51,10 +51,9 @@
   "production_guard_unchanged": true,
   "guard_git_blob": "485ee89c75c3b69073f8d8a053c5b0696e57164b",
   "next_steps": [
-    "HP review candidate and specify remaining acceptance requirements",
-    "Retain candidate/history; TD review/adoption/integration remains coordinated, not implied",
-    "Fresh exact-head integrated regression after authorized dependency integration",
-    "HP Final Acceptance remains pending"
+    "HP formally decide bounded disposition with documented owners and reopening conditions",
+    "HP separately decide dependency integration/merge acceptance; no approval inferred",
+    "Fresh verification on accepted integrated source after changes as required; QA02/QA03 gates remain separate"
   ],
   "qa02": "IN PROGRESS",
   "qa03": "BLOCKED",
@@ -71,8 +70,23 @@
     "source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
     "report": "../qa03-hp-integration-validation/report.md",
     "execution": "PASS",
-    "td_source_acknowledgement": "PENDING",
+    "td_source_acknowledgement": "CONFIRMED / source and published evidence review only",
     "recommendation": "ACCEPTED RISK proposal only; HP decision pending",
     "not_postmerge_develop": true
-  }
+  },
+  "td_final_confirmation": {
+    "status": "CONFIRMED / SOURCE AND PUBLISHED EVIDENCE REVIEW",
+    "source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+    "received_via": "User-relayed TD message on 2026-10-29 Asia/Saigon; no GitHub review URL supplied or observed",
+    "scope": "TD compared GitHub source and published evidence; not a new independent PostgreSQL execution",
+    "confirmed": [
+      "Ordered composition #68 -> #70 -> #69 and production guard scope",
+      "Clock candidate/source hashes; child-only instrumentation",
+      "2078 Java/PostgreSQL + 33 Node + 23 tooling PASS manifests",
+      "Normal and -2s combined seeds; independent TD process rerun; within-run 34-table fingerprints unchanged",
+      "No new Payment/Refund/inventory/voucher/revenue regression evidenced within tested scope"
+    ],
+    "risk_position": "Agrees with bounded ACCEPTED RISK proposal; HP formal disposition still pending"
+  },
+  "residual_risk_record": "../qa03-hp-integration-validation/residual-risk-proposal.json"
 }

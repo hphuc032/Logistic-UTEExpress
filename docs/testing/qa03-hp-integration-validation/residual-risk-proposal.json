@@ -18,14 +18,40 @@
     "No universal clock discontinuity guarantee",
     "Shared checkpoint same-process, not lost-manifest recovery",
     "Synthetic PAID/ADMIN bootstrap not gateway or deployment assurance",
-    "Local validation stack not merged develop; peer source acknowledgement still pending",
+    "Local validation stack not merged develop; TD source/evidence acknowledgement received; postmerge verification remains separate",
     "G01 manual/browser and remaining QA acceptance gates not implied"
   ],
   "conditions": [
     "HP explicit disposition and remaining scope/requirements",
-    "TD source/technical confirmation and authorized dependency integration",
+    "TD source/evidence confirmation received; separate authorized dependency integration remains pending",
     "Fresh accepted-source verification after integration/change as required",
     "Retain diagnostics; reopen/investigate any new unexplained failure without weakening guards"
   ],
-  "does_not_accept": "Invalid production payment evidence, provider assurance, guard relaxation, QA02/QA03 completion or release readiness"
+  "does_not_accept": "Invalid production payment evidence, provider assurance, guard relaxation, QA02/QA03 completion or release readiness",
+  "preparation_status": "SUBMITTED FOR HP FORMAL DISPOSITION / NOT APPLIED",
+  "hp_review": {
+    "state": "AGREED IN PRINCIPLE / NOT APPLIED",
+    "reviewed_head": "342d73f3475186be12d7eed29cbcedc468a64cb0",
+    "source": "GitHub HP COMMENTED review on PR69; rechecked 2026-10-29 Asia/Saigon"
+  },
+  "responsibilities": {
+    "TD": "Confirm composition, fixture/guard hashes and Payment/Refund/inventory/voucher/revenue invariants; investigate commerce failures",
+    "QD": "Maintain fixture/runner diagnostics, immutable evidence, source-bound manifests and seed rerun checks",
+    "HP": "Decide formal disposition, permitted integration and final acceptance"
+  },
+  "reopen_or_escalate_triggers": [
+    "Any new unexplained CONFLICT on a clean supported seed, including normal or controlled skew; capture sanitized persisted predicates before cleanup",
+    "Payment/refund state, amount, successful evidence attribution, inventory/voucher restoration or revenue invariant mismatch",
+    "Duplicate refund, changed 34-table rerun fingerprint, atomic rollback failure or modified legacy returned-COD ledger",
+    "Source/bytecode/hash mismatch, missing controlled-clock activation marker, timeout or incomplete evidence",
+    "Production eligibility guard relaxation or fixture changes outside the reviewed candidate",
+    "Actual integrated source differs from accepted composition; repeat affected validation before acceptance"
+  ],
+  "trigger_action": "Keep OPEN while pending; if later accepted, reopen immediately on a trigger, preserve failed evidence, block affected acceptance, assign TD/QD and notify HP; never weaken guards to obtain PASS.",
+  "formal_application_preconditions": [
+    "SATISFIED via user-relayed explicit TD five-point source/evidence confirmation; no new independent run",
+    "HP final explicit disposition after reviewing residual scope/owners/reopen triggers",
+    "QD updates canonical documents and hashes only after those confirmations"
+  ],
+  "td_confirmation": "td-confirmation.json"
 }
