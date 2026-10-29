@@ -1,7 +1,7 @@
 {
   "finding": "Q70-S01",
   "severity": "Medium",
-  "status": "ACCEPTED RISK — LIMITED",
+  "status": "OPEN",
   "candidate_status": "Validated test-fixture candidate; historical original cause unproven",
   "candidate_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
   "historical_conflict": {
@@ -112,5 +112,7 @@
     "automatic_approval_or_merge": false,
     "final_qa_acceptance": "PENDING",
     "reopen_on": "New Payment/Refund/concurrency/rollback/financial inconsistency; detailed diagnostic/provenance triggers retained in residual-risk-proposal.json"
-  }
+  },
+  "disposition": "ACCEPTED RISK — LIMITED",
+  "hp_latest_directive_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/69#issuecomment-6488875760"
 }
