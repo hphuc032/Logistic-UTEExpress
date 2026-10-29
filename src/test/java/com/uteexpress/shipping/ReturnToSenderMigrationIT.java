@@ -48,12 +48,14 @@ class ReturnToSenderMigrationIT {
             var checksums=sql.queryForList("SELECT version,checksum FROM uteexpress.flyway_schema_history WHERE version IS NOT NULL ORDER BY version");
             var upgrade=Flyway.configure().dataSource(source).schemas("uteexpress").defaultSchema("uteexpress")
                     .locations("classpath:db/migration").load();
-            assertThat(upgrade.migrate().migrationsExecuted).isEqualTo(1);
+            assertThat(java.util.Arrays.stream(upgrade.info().pending()).map(m->m.getVersion().getVersion()).toList())
+                    .containsExactly("20261027100000","20261028081110");
+            assertThat(upgrade.migrate().migrationsExecuted).isEqualTo(2);
             assertThat(upgrade.validateWithResult().validationSuccessful).isTrue();
             assertThat(upgrade.migrate().migrationsExecuted).isZero();
             assertThat(sql.queryForMap("SELECT * FROM uteexpress.orders WHERE id=?",order)).isEqualTo(beforeOrder);
             assertThat(sql.queryForMap("SELECT * FROM uteexpress.shipments WHERE order_id=?",order)).isEqualTo(beforeShipment);
-            assertThat(sql.queryForList("SELECT version,checksum FROM uteexpress.flyway_schema_history WHERE version IS NOT NULL AND version<>'20261027100000' ORDER BY version")).isEqualTo(checksums);
+            assertThat(sql.queryForList("SELECT version,checksum FROM uteexpress.flyway_schema_history WHERE version IS NOT NULL AND version<='20261023170000' ORDER BY version")).isEqualTo(checksums);
             assertThat(sql.queryForObject("SELECT count(*) FROM uteexpress.shipment_return_receipts",Integer.class)).isZero();
         }
     }
