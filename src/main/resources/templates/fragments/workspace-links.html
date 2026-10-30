@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<!-- One source for the operations navbar and dashboard sidebar. Links never execute mutations. -->
+<th:block th:fragment="operations(ops, admin, linkClass)">
+    <li><a th:class="${linkClass}" th:href="@{/{ops}/dashboard(ops=${ops})}">Tổng quan</a></li>
+    <li><a th:class="${linkClass}" th:href="@{/{ops}/orders(ops=${ops})}">Đơn hàng / phân công giao hàng</a></li>
+    <li><a th:class="${linkClass}" th:href="@{/{ops}/shippers(ops=${ops})}">Shipper đang hoạt động</a></li>
+    <li><a th:class="${linkClass}" th:href="@{/{ops}/shipping/providers(ops=${ops})}">Đơn vị vận chuyển</a></li>
+    <li><a th:class="${linkClass}" th:href="@{/{ops}/shipping/rates(ops=${ops})}">Dịch vụ và phí vận chuyển</a></li>
+    <li><a th:class="${linkClass}" th:href="@{/{ops}/commissions(ops=${ops})}">Chính sách hoa hồng</a></li>
+    <li><a th:class="${linkClass}" th:href="@{/{ops}/categories(ops=${ops})}">Quản lý danh mục</a></li>
+    <li><a th:class="${linkClass}" th:href="@{/{ops}/accounts(ops=${ops})}">Tài khoản</a></li>
+    <li th:if="${admin}"><a th:class="${linkClass}" th:href="@{/admin/shops}">Duyệt cửa hàng</a></li>
+    <li><a th:class="${linkClass}" th:href="@{/{ops}/products(ops=${ops})}">Kiểm duyệt sản phẩm</a></li>
+    <li><a th:class="${linkClass}" th:href="@{/{ops}/shops/moderation(ops=${ops})}">Kiểm duyệt cửa hàng</a></li>
+    <li th:if="${admin}"><a th:class="${linkClass}" th:href="@{/admin/vouchers}">Voucher nền tảng</a></li>
+    <li th:if="${admin}"><a th:class="${linkClass}" th:href="@{/admin/promotions}">Khuyến mãi sản phẩm</a></li>
+    <li th:if="${admin}"><a th:class="${linkClass}" th:href="@{/admin/dashboard/revenue}">Báo cáo tài chính Admin</a></li>
+    <li th:if="${admin}"><a th:class="${linkClass}" th:href="@{/admin/audit-logs}">Nhật ký quản trị</a></li>
+</th:block>
+<th:block th:fragment="vendor">
+    <li><a class="dropdown-item" th:href="@{/vendor/dashboard}">Doanh thu cửa hàng</a></li>
+    <li><a class="dropdown-item" th:href="@{/user/shop}">Cửa hàng của tôi</a></li>
+    <li><a class="dropdown-item" th:href="@{/vendor/products}">Sản phẩm bán</a></li>
+    <li><a class="dropdown-item" th:href="@{/vendor/products/new}">Thêm sản phẩm</a></li>
+    <li><a class="dropdown-item" th:href="@{/vendor/orders}">Đơn hàng bán</a></li>
+    <li><a class="dropdown-item" th:href="@{/vendor/vouchers}">Voucher cửa hàng</a></li>
+    <li><a class="dropdown-item" th:href="@{/vendor/vouchers/new}">Tạo voucher cửa hàng</a></li>
+</th:block>
+<th:block th:fragment="buyer">
+    <li><a class="dropdown-item" th:href="@{/user/cart/view}">Giỏ hàng</a></li>
+    <li><a class="dropdown-item" th:href="@{/user/checkout/view}">Thanh toán sản phẩm đã chọn</a></li>
+    <li><a class="dropdown-item" th:href="@{/orders}">Đơn hàng của tôi</a></li>
+    <li><a class="dropdown-item" th:href="@{/user/addresses}">Địa chỉ nhận hàng</a></li>
+    <li><a class="dropdown-item" th:href="@{/user/favorites}">Sản phẩm yêu thích</a></li>
+    <li><a class="dropdown-item" th:href="@{/user/recently-viewed}">Sản phẩm đã xem</a></li>
+</th:block>
+</body>
+</html>

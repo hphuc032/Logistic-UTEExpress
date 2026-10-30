@@ -113,6 +113,12 @@ they are decorative. Do not make a `<div>` clickable.
 
 ## Security boundary
 
+Authenticated navigation uses role groups rather than a flat row of every link.
+Keep shared operations entries in `fragments/workspace-links.html` so dashboard and
+navbar stay consistent. Use real HTML GET destinations, with record-level actions
+inside their existing detail pages and protected forms. See
+[the navigation map](ui-navigation-map.md) for the current inventory and limits.
+
 Only `/css/**`, `/js/**`, `/images/**` and `/favicon.ico` were added to the public
 security paths. The application still defaults all other unmatched routes to
 authenticated access. Existing role routes, JSON 401/403 handlers and CSRF policy

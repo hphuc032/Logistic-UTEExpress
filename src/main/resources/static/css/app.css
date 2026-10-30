@@ -246,6 +246,43 @@ a:hover {
     box-shadow: 0 0 0 0.22rem rgba(238, 129, 36, 0.34);
 }
 
+/* Role menus keep all workspaces reachable without crowding the header. */
+.app-navigation-menu {
+    max-height: min(70vh, 36rem);
+    max-width: min(24rem, calc(100vw - 2rem));
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.app-navigation-menu .dropdown-item {
+    padding-block: 0.65rem;
+    white-space: normal;
+    overflow-wrap: anywhere;
+}
+
+.app-navigation-menu .dropdown-item:focus-visible {
+    outline: 3px solid var(--ute-orange-500);
+    outline-offset: -3px;
+}
+
+@media (max-width: 991.98px) {
+    .app-navigation-group {
+        width: 100%;
+    }
+
+    .app-navigation-group .dropdown-toggle {
+        text-align: start;
+    }
+
+    .app-navigation-group .dropdown-menu {
+        position: static !important;
+        transform: none !important;
+        width: 100%;
+        max-width: 100%;
+        margin-block: 0.25rem;
+    }
+}
+
 .btn {
     min-height: 2.75rem;
     display: inline-flex;
