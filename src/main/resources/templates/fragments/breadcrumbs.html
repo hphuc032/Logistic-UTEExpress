@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="breadcrumbs(currentLabel)" class="app-breadcrumbs" aria-label="Đường dẫn trang">
+    <ol class="breadcrumb mb-0">
+        <li class="breadcrumb-item"><a th:href="@{/}" href="/">Trang chủ</a></li>
+        <li class="breadcrumb-item active" aria-current="page" th:text="${currentLabel}">Trang hiện tại</li>
+    </ol>
+</nav>
+</body>
+</html>

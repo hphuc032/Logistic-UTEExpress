@@ -1,0 +1,49 @@
+{
+  "browser": "155.0.8059.82",
+  "headless": true,
+  "mode": "Automated real browser UI; not human manual signoff",
+  "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+  "cases": [
+    {
+      "case": "otp-copy-observation",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:07:50.607Z",
+      "steps": [
+        {
+          "actual_UI_copy": "M\u00e3 c\u00f3 hi\u1ec7u l\u1ef1c trong 10 ph\u00fat.",
+          "server_policy_source": "application.yml:77 PT5M; OtpProperties.java:16 max5minutes",
+          "HP_owned_proposal_only": true,
+          "production_change": false
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\otp-browser\\otp-copy-observation-375-current-copy.png",
+          "sha256": "469cacb111979fa2d8f4b76a37ea05317089429ee8a2642bbed72018b3c4e285",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "otp-browser/otp-copy-observation-375-current-copy.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "routes": [
+        {
+          "actor": "PUBLIC",
+          "route": "/verify-otp",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:07:51.511Z",
+      "actors_observed": [
+        "PUBLIC"
+      ]
+    }
+  ]
+}

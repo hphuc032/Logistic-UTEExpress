@@ -1,0 +1,260 @@
+{
+  "browser": "155.0.8059.82",
+  "headless": true,
+  "mode": "Automated real browser UI; not human manual signoff",
+  "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+  "cases": [
+    {
+      "case": "manager-assignment",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:08:14.829Z",
+      "steps": [
+        {
+          "manager_assign": true,
+          "manager_reassign": true,
+          "persisted_facts": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-supplemental\\manager-assignment-375-assigned.png",
+          "sha256": "21210fc73c89eced8194fa4a9ae8be52fc92d64963dce73d9042844e3bc9de6a",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-supplemental/manager-assignment-375-assigned.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T07:08:19.112Z"
+    },
+    {
+      "case": "rts-stale-replay",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:08:19.132Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-supplemental\\rts-stale-replay-375-failure-0.png",
+          "sha256": "88b62dbe9eaaa42fe9bc8e0d34a61b0090832cc7dfee0bf47852e6bae670c89d",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-supplemental/rts-stale-replay-375-failure-0.png"
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "RTS_REPLAY_NOT_CONFLICT",
+      "finished_utc": "2026-10-29T07:08:33.336Z"
+    },
+    {
+      "case": "review-validation-duplicate",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:08:33.357Z",
+      "steps": [
+        {
+          "invalid_short_review": 400,
+          "invalid_row_count": 0,
+          "valid_row_count": 1,
+          "duplicate_review": 409,
+          "persisted_facts_unchanged": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-supplemental\\review-validation-duplicate-375-denied.png",
+          "sha256": "373364f9fc2d7dc27ce1a3afd206faae2b8fb1c4514e09243e776bd776879939",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-supplemental/review-validation-duplicate-375-denied.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T07:08:40.026Z"
+    },
+    {
+      "case": "manager-assignment",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:08:40.045Z",
+      "steps": [
+        {
+          "manager_assign": true,
+          "manager_reassign": true,
+          "persisted_facts": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-supplemental\\manager-assignment-768-assigned.png",
+          "sha256": "041031191111b10336cea3aa9b6c42fb580e9072e49634360995a65fbc4f0b11",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-supplemental/manager-assignment-768-assigned.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T07:08:43.512Z"
+    },
+    {
+      "case": "rts-stale-replay",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:08:43.530Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-supplemental\\rts-stale-replay-768-failure-0.png",
+          "sha256": "b448db2d4914770fc0194595b008e2eef8460a7ac562b656bfa610e8d0b9bb5f",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-supplemental/rts-stale-replay-768-failure-0.png"
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "RTS_REPLAY_NOT_CONFLICT",
+      "finished_utc": "2026-10-29T07:08:51.987Z"
+    },
+    {
+      "case": "review-validation-duplicate",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:08:52.011Z",
+      "steps": [
+        {
+          "invalid_short_review": 400,
+          "invalid_row_count": 0,
+          "valid_row_count": 1,
+          "duplicate_review": 409,
+          "persisted_facts_unchanged": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-supplemental\\review-validation-duplicate-768-denied.png",
+          "sha256": "bef98cc5d6b8b39b0c803546be68eb8fe72f3e98ed2914c7b1172242080e60cf",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-supplemental/review-validation-duplicate-768-denied.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T07:08:58.396Z"
+    },
+    {
+      "case": "manager-assignment",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:08:58.412Z",
+      "steps": [
+        {
+          "manager_assign": true,
+          "manager_reassign": true,
+          "persisted_facts": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-supplemental\\manager-assignment-1440-assigned.png",
+          "sha256": "bf4f226d18131822fb9e4bc48ce8abd467fcddf860faeace5713a92d3c31a343",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser-supplemental/manager-assignment-1440-assigned.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T07:09:02.556Z"
+    },
+    {
+      "case": "rts-stale-replay",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:09:02.579Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-supplemental\\rts-stale-replay-1440-failure-0.png",
+          "sha256": "7bbd8f8b4a0a7a3ca64cdb314e133ac90fcdb4a4269aeab9f35e9a6f8b6b4491",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser-supplemental/rts-stale-replay-1440-failure-0.png"
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "RTS_REPLAY_NOT_CONFLICT",
+      "finished_utc": "2026-10-29T07:09:09.922Z"
+    },
+    {
+      "case": "review-validation-duplicate",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:09:09.942Z",
+      "steps": [
+        {
+          "invalid_short_review": 400,
+          "invalid_row_count": 0,
+          "valid_row_count": 1,
+          "duplicate_review": 409,
+          "persisted_facts_unchanged": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-supplemental\\review-validation-duplicate-1440-denied.png",
+          "sha256": "d2c415c794e4de6f69001b953784d8d419b91d793f61c29380048c20e254e329",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser-supplemental/review-validation-duplicate-1440-denied.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T07:09:16.327Z"
+    }
+  ]
+}

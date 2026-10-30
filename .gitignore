@@ -13,5 +13,6 @@
 application-*.private.yml
 *.log
 /uploads/
+/var/uploads/
 Thumbs.db
 .DS_Store

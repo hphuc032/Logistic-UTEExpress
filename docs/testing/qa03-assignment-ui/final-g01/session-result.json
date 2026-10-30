@@ -1,0 +1,135 @@
+{
+  "session_status": "CLOSED",
+  "owned_container_removed": true,
+  "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+  "fixture_events": [
+    {
+      "setup": "new-order",
+      "id": 1,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 2,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 3,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 4,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 5,
+      "stage": "SHIPPING",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 6,
+      "stage": "SHIPPING",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 7,
+      "stage": "FAILED2",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 8,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 9,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 10,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 11,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 12,
+      "stage": "SHIPPING",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 13,
+      "stage": "SHIPPING",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 14,
+      "stage": "FAILED2",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 15,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 16,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 17,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 18,
+      "stage": "READY",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 19,
+      "stage": "SHIPPING",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 20,
+      "stage": "SHIPPING",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    },
+    {
+      "setup": "new-order",
+      "id": 21,
+      "stage": "FAILED2",
+      "method": "Existing real HTTP checkout/lifecycle APIs; no SQL state mutation"
+    }
+  ],
+  "finished_at_utc": "2026-10-29T09:08:15.889029+00:00",
+  "scope": "UI environment lifecycle only; browser case evidence separate"
+}

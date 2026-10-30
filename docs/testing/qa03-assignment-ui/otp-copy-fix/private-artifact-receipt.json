@@ -1,0 +1,10 @@
+{
+  "archive_name": "FR-01-FR-02-raw-private.zip",
+  "archive_sha256": "b3f0088637968b092d38ce72df130d5e4d61e3e39b343ceb4209d3afc627aaca",
+  "files": 104,
+  "state": "PACKAGED LOCALLY / NOT DELIVERED TO TD",
+  "access": "Private local .work only; choose approved secure channel with TD/HP; not publicly committed",
+  "contains": "Current raw regression XML/logs, separately labeled baseline8a96 XML, exact candidate JAR; no browser session/password/control-token files",
+  "source_sha": "53fbf923009c1d9da2ae0c73440b6a6de14904e5",
+  "jar_sha256": "288cf900108ad655471fa9fb064c0235f10864dcac736cccaedd7d37fff6bc06"
+}

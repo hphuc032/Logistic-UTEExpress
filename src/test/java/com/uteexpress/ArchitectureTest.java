@@ -16,6 +16,13 @@ import static com.tngtech.archunit.library.dependencies.SlicesRuleDefinition.sli
 @AnalyzeClasses(packages = "com.uteexpress", importOptions = ImportOption.DoNotIncludeTests.class)
 class ArchitectureTest {
     @ArchTest
+    static final ArchRule orderEntitiesHaveNoApplicationDependencies = noClasses()
+            .that().resideInAPackage("com.uteexpress.order.entity..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "..repository..", "..service..", "com.uteexpress.security..",
+                    "org.springframework.transaction..", "org.springframework.context..");
+
+    @ArchTest
     static final ArchRule controllersUseServicesAndDtos = noClasses().that().resideInAPackage("..controller..")
             .should().dependOnClassesThat().resideInAnyPackage("..repository..", "..entity..");
 
@@ -54,7 +61,11 @@ class ArchitectureTest {
                 }
                 boolean allowed = !fromModule.equals("common")
                         && (to.startsWith("com.uteexpress." + toModule + ".service")
-                        || to.startsWith("com.uteexpress." + toModule + ".dto"));
+                        || to.startsWith("com.uteexpress." + toModule + ".dto")
+                        // SEC-01's public identity contracts live at the module root.
+                        || java.util.Set.of("com.uteexpress.security.CurrentUserProvider",
+                                "com.uteexpress.security.CurrentUser")
+                                .contains(dependency.getTargetClass().getName()));
                 events.add(new SimpleConditionEvent(dependency, allowed, dependency.getDescription()));
             }
         }

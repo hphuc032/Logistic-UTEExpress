@@ -1,0 +1,28 @@
+{
+  "finding": "Q03-G01-ASSIGNMENT-UI-MISSING",
+  "severity": "High functional UI acceptance blocker; not a demonstrated security vulnerability",
+  "baseline_source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+  "browser": "Installed Chrome155 via bundled Playwright fallback",
+  "type": "Automated real-browser observation plus agent screenshot review; human manual signoff not claimed",
+  "baseline": "CONFIRMED ready Order page exposes no assign/reassign control; existing backend JSON endpoints work",
+  "owner": "QD",
+  "fix_scope": "Advisory Ops read model/template plus same-origin JSON/CSRF client; existing assignment service/controller/security unchanged",
+  "status": "FIX CANDIDATE / verification pending",
+  "screenshots": [
+    {
+      "width": 375,
+      "file": "baseline-missing-assignment-375.png",
+      "sha256": "a9d965433e8629c130a32a9eb4602bc63798c95557fd47af7660f60936ca8ecc"
+    },
+    {
+      "width": 768,
+      "file": "baseline-missing-assignment-768.png",
+      "sha256": "f69afc4fa6cfafd0ec56786f3ae65fd643b5ef35e0882352319caebc43c3c1fa"
+    },
+    {
+      "width": 1440,
+      "file": "baseline-missing-assignment-1440.png",
+      "sha256": "8abb80c5def89a7aa5793d29f11bf87a9aada927be51e042c8b365d017a10902"
+    }
+  ]
+}

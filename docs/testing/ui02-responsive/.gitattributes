@@ -1,0 +1,5 @@
+*.json -text
+*.jsonl -text
+*.txt -text
+*.jpg binary
+.gitattributes -text

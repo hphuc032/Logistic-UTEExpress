@@ -1,0 +1,149 @@
+package com.uteexpress.governance;
+
+import com.uteexpress.governance.service.AuditLogService;
+import com.uteexpress.governance.service.OpsDashboardService;
+import com.uteexpress.identity.service.RegistrationService;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.not;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@SpringBootTest
+@ActiveProfiles("test")
+@AutoConfigureMockMvc
+class OpsDashboardTest {
+    @MockitoBean com.uteexpress.governance.service.OpsDashboardReadService dashboardReports;
+    @MockitoBean com.uteexpress.governance.service.ProductModerationService productModerationService;
+    @MockitoBean com.uteexpress.governance.service.ShopModerationService shopModerationService;
+    @MockitoBean com.uteexpress.catalog.service.ProductService productService;
+    @MockitoBean com.uteexpress.catalog.service.InventoryService inventoryService;
+    @MockitoBean com.uteexpress.governance.service.CategoryQueryService categoryQueryService;
+    @MockitoBean com.uteexpress.shop.service.VendorShopQueryService vendorShopQueryService;
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
+    @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
+    @MockitoBean com.uteexpress.identity.service.AccountIdentityService accountIdentityService;
+    @MockitoBean com.uteexpress.governance.service.AccountGovernanceService accountGovernanceService;
+    @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
+    @MockitoBean com.uteexpress.account.service.AddressService addressService;
+    @MockitoBean com.uteexpress.cart.service.CartService cartService;
+    @MockitoBean com.uteexpress.promotion.service.VoucherService voucherService;
+    @MockitoBean com.uteexpress.promotion.service.VendorVoucherService vendorVoucherService;
+    @MockitoBean com.uteexpress.catalog.service.ProductPromotionManagementService productPromotionManagementService;
+    @MockitoBean com.uteexpress.promotion.service.PromotionManagementService promotionManagementService;
+    @MockitoBean com.uteexpress.order.service.OrderPlacementService orderPlacementService;
+    @MockitoBean com.uteexpress.order.service.BuyerOrderService buyerOrderService;
+    @MockitoBean com.uteexpress.order.service.VendorOrderService vendorOrderService;
+    @MockitoBean com.uteexpress.order.service.VendorOrderAuthority vendorOrderAuthority;
+    @MockitoBean com.uteexpress.order.service.ReturnOrderAuthority returnOrderAuthority;
+    @MockitoBean com.uteexpress.order.service.RefundOrderAuthority refundOrderAuthority;
+    @MockitoBean com.uteexpress.payment.service.ManualCodRefundService manualCodRefundService;
+    @MockitoBean com.uteexpress.order.service.ReturnQueryService returnQueryService;
+    @MockitoBean com.uteexpress.payment.service.PaymentReadService paymentReadService;
+    @MockitoBean com.uteexpress.payment.service.PaymentService paymentService;
+    @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
+    @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
+    @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
+    @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
+    @MockitoBean com.uteexpress.identity.service.PasswordResetService passwordResetService;
+    @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
+    @MockitoBean RegistrationService registrationService;
+    @MockitoBean com.uteexpress.identity.repository.UserRoleRepository userRoleRepository;
+    @MockitoBean com.uteexpress.identity.service.IdentityAuthenticationService identityAuthenticationService;
+    @MockitoBean AuditLogService auditLogService;
+    @Autowired MockMvc mvc;
+    @Autowired OpsDashboardService dashboards;
+
+    @org.junit.jupiter.api.BeforeEach void reportingFixture() {
+        var window = com.uteexpress.governance.dto.OpsReportWindow.resolve(null, null,
+                java.time.Clock.fixed(java.time.Instant.parse("2026-10-25T00:00:00Z"), java.time.ZoneOffset.UTC));
+        var empty = new com.uteexpress.governance.dto.OpsDashboardMetrics.StateTotals(0, java.util.List.of());
+        var metrics = new com.uteexpress.governance.dto.OpsDashboardMetrics(window, null, empty, empty, empty, empty, 0);
+        com.uteexpress.governance.service.OpsDashboardReadService mock = org.springframework.test.util.AopTestUtils.getUltimateTargetObject(dashboardReports);
+        org.mockito.Mockito.doReturn(metrics).when(mock).admin(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any());
+        org.mockito.Mockito.doReturn(metrics).when(mock).manager(org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any(), org.mockito.ArgumentMatchers.any());
+    }
+
+    @Test
+    void guestCannotOpenEitherDashboard() throws Exception {
+        for (String path : new String[]{"/admin/dashboard", "/manager/dashboard"}) {
+            mvc.perform(get(path)).andExpect(status().isUnauthorized());
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"USER", "VENDOR", "MANAGER", "SHIPPER"})
+    void onlyAdminCanOpenAdminDashboard(String role) throws Exception {
+        mvc.perform(get("/admin/dashboard").with(user("ops").roles(role)))
+                .andExpect(status().isForbidden());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"USER", "VENDOR", "ADMIN", "SHIPPER"})
+    void onlyManagerCanOpenManagerDashboard(String role) throws Exception {
+        mvc.perform(get("/manager/dashboard").with(user("ops").roles(role)))
+                .andExpect(status().isForbidden());
+    }
+
+    @Test
+    void adminPageUsesSharedLayoutWithMetricsAndAuditNavigation() throws Exception {
+        mvc.perform(get("/admin/dashboard").with(user("ops").roles("ADMIN")))
+                .andExpect(status().isOk()).andExpect(view().name("governance/dashboard"))
+                .andExpect(content().string(containsString("Quản trị hệ thống")))
+                .andExpect(content().string(containsString("Nhật ký quản trị")))
+                .andExpect(content().string(containsString("Không có đơn phù hợp.")))
+                .andExpect(content().string(containsString("id=\"main-navigation\"")))
+                .andExpect(content().string(containsString("id=\"site-footer\"")))
+                .andExpect(content().string(containsString("href=\"/admin/audit-logs\"")))
+                .andDo(result -> savePreview("admin", result.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8)));
+    }
+
+    @Test
+    void managerPageDoesNotOfferAdminOnlyCapabilities() throws Exception {
+        mvc.perform(get("/manager/dashboard").with(user("ops").roles("MANAGER")))
+                .andExpect(status().isOk()).andExpect(view().name("governance/dashboard"))
+                .andExpect(content().string(containsString("Điều hành vận hành")))
+                .andExpect(content().string(not(containsString("Nhật ký quản trị"))))
+                .andExpect(content().string(not(containsString("Duyệt cửa hàng"))))
+                .andDo(result -> savePreview("manager", result.getResponse().getContentAsString(java.nio.charset.StandardCharsets.UTF_8)));
+    }
+
+    @Test
+    @WithMockUser(roles = "MANAGER")
+    void directAdminServiceCallStillRejectsManager() {
+        assertThatThrownBy(() -> dashboards.adminDashboard()).isInstanceOf(AccessDeniedException.class);
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
+    void directManagerServiceCallRequiresManagerRole() {
+        assertThatThrownBy(() -> dashboards.managerDashboard()).isInstanceOf(AccessDeniedException.class);
+    }
+
+    @Test
+    void dualRoleUserCanUseBothRoutes() throws Exception {
+        for (String path : new String[]{"/admin/dashboard", "/manager/dashboard"}) {
+            mvc.perform(get(path).with(user("ops").roles("ADMIN", "MANAGER")))
+                    .andExpect(status().isOk());
+        }
+    }
+
+    private static void savePreview(String role, String html) throws java.io.IOException {
+        var directory = java.nio.file.Path.of("target", "ui-preview");
+        java.nio.file.Files.createDirectories(directory);
+        java.nio.file.Files.writeString(directory.resolve(role + ".html"), html);
+    }
+}

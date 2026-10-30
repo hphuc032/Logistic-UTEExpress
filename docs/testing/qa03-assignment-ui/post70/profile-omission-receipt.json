@@ -1,0 +1,18 @@
+{
+  "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+  "command": [
+    "mvnw.cmd",
+    "--batch-mode",
+    "--no-transfer-progress",
+    "clean",
+    "verify",
+    "-Dit.test=ShipmentAssignmentIT,ReturnToSenderIT,ShipperFulfillmentIT,ReviewIntegrationIT,NotificationSocketIT,NotificationRecoveryIT,OpsOrderCancellationIT,AdminRevenueIT"
+  ],
+  "started_utc": "2026-10-29T07:59:17.904854+00:00",
+  "finished_utc": "2026-10-29T08:01:18.229750+00:00",
+  "duration_seconds": 120.325,
+  "exit_code": 0,
+  "timed_out": false,
+  "log_sha256": "475cae6d6dd181e7b961722ad6f79499d9a9f6b389c898ab13d2bea8468418f3",
+  "scope": "Unit/package only; postgres-it profile was omitted, zero PostgreSQL cases executed; prior progress label corrected"
+}

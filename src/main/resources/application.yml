@@ -1,17 +1,58 @@
 spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        default_schema: uteexpress
+        jdbc:
+          time_zone: UTC
+  flyway:
+    enabled: true
+    default-schema: uteexpress
+    schemas: uteexpress
+    locations: classpath:db/migration
+    validate-migration-naming: true
+    validate-on-migrate: true
+    baseline-on-migrate: false
+    out-of-order: false
+    clean-disabled: true
+  sql:
+    init:
+      mode: never
   application:
     name: uteexpress
   jackson:
     deserialization:
       fail-on-unknown-properties: true
   thymeleaf:
-    check-template-location: false # UI-01 will introduce shared templates.
+    check-template-location: true
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT:587}
+    username: ${MAIL_USERNAME:}
+    password: ${MAIL_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: ${MAIL_SMTP_AUTH:true}
+          starttls:
+            enable: ${MAIL_STARTTLS:true}
   web:
     error:
       include-message: never
       include-binding-errors: never
       include-stacktrace: never
       include-exception: false
+  servlet:
+    multipart:
+      max-file-size: 6MB
+      max-request-size: 16MB
 server:
   port: ${SERVER_PORT:8080}
 management:
@@ -22,3 +63,26 @@ management:
   endpoint:
     health:
       show-details: never
+uteexpress:
+  security:
+    jwt:
+      issuer: uteexpress
+      audience: uteexpress-web
+      ttl: PT30M
+      clock-skew: PT60S
+      cookie-name: UTEEXPRESS_AUTH
+      cookie-secure: ${JWT_COOKIE_SECURE:true}
+      secret-base64: ${JWT_SECRET_BASE64}
+    otp:
+      ttl: PT5M
+      resend-cooldown: PT1M
+      max-attempts: 5
+      pepper-base64: ${OTP_PEPPER_BASE64}
+    otp-request-limit:
+      window: PT1M
+      max-requests: 20
+      max-clients: 10000
+  mail:
+    from: ${MAIL_FROM}
+  storage:
+    root: ${UPLOAD_DIR:./var/uploads}

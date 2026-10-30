@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<div th:fragment="pageHeader(title, description)" class="app-page-header">
+    <h1 th:text="${title}">Tiêu đề trang</h1>
+    <p th:if="${description}" th:text="${description}">Mô tả trang</p>
+</div>
+
+<div th:fragment="fieldError(message)" class="invalid-feedback" role="alert" th:text="${message}">
+    Giá trị chưa hợp lệ.
+</div>
+
+<div th:fragment="tableContainer(content)" class="app-table-shell">
+    <div class="table-responsive">
+        <th:block th:replace="${content}"></th:block>
+    </div>
+</div>
+
+<div th:fragment="emptyState(title, description)" class="app-empty-state">
+    <span class="app-empty-state-icon" aria-hidden="true">&#8599;</span>
+    <h2 th:text="${title}">Chưa có dữ liệu</h2>
+    <p th:text="${description}">Dữ liệu sẽ xuất hiện tại đây.</p>
+</div>
+
+<span th:fragment="statusBadge(label, statusClass)"
+      class="app-status-badge"
+      th:classappend="${statusClass}"
+      th:text="${label}">Trạng thái</span>
+</body>
+</html>

@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<nav th:fragment="navbar" id="main-navigation" class="navbar navbar-expand-lg app-navbar" aria-label="Điều hướng chính">
+    <div class="container app-container">
+        <a class="navbar-brand app-brand" th:href="@{/}" href="/" aria-label="UTEExpress - Trang chủ">
+            <span class="app-brand-mark" aria-hidden="true">UE</span>
+            <span>UTE<span>Express</span></span>
+        </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#primaryNavbar"
+                aria-controls="primaryNavbar" aria-expanded="false" aria-label="Mở menu điều hướng">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="primaryNavbar">
+            <ul class="navbar-nav mx-auto mb-3 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}" href="/">Trang chủ</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/products}" href="/products">Sản phẩm</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/shops}" href="/shops">Cửa hàng</a>
+                </li>
+            </ul>
+
+            <div class="d-flex flex-column flex-lg-row gap-2 app-navbar-actions"
+                 th:if="${navbarUser == null}">
+                <a class="btn btn-app-ghost" th:href="@{/login}" href="/login">Đăng nhập</a>
+                <a class="btn btn-app-primary" th:href="@{/register}" href="/register">Đăng ký</a>
+            </div>
+            <div class="d-flex flex-column flex-lg-row align-items-lg-center gap-2 app-navbar-actions"
+                 th:if="${navbarUser != null}">
+                <div class="dropdown app-navigation-group" th:if="${buyerFeaturesAvailable}">
+                    <button id="buyer-menu" class="btn btn-app-ghost dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Mua sắm</button>
+                    <ul class="dropdown-menu dropdown-menu-end app-navigation-menu" aria-labelledby="buyer-menu">
+                        <th:block th:replace="~{fragments/workspace-links :: buyer}"></th:block>
+                    </ul>
+                </div>
+                <div class="dropdown app-navigation-group" th:if="${navbarUser.vendor}">
+                    <button id="vendor-menu" class="btn btn-app-ghost dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Kênh người bán</button>
+                    <ul class="dropdown-menu dropdown-menu-end app-navigation-menu" aria-labelledby="vendor-menu">
+                        <th:block th:replace="~{fragments/workspace-links :: vendor}"></th:block>
+                    </ul>
+                </div>
+                <div class="dropdown app-navigation-group" th:if="${navbarUser.manager}">
+                    <button id="manager-menu" class="btn btn-app-ghost dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Vận hành</button>
+                    <ul class="dropdown-menu dropdown-menu-end app-navigation-menu" aria-labelledby="manager-menu">
+                        <th:block th:replace="~{fragments/workspace-links :: operations('manager', false, 'dropdown-item')}"></th:block>
+                    </ul>
+                </div>
+                <div class="dropdown app-navigation-group" th:if="${navbarUser.admin}">
+                    <button id="admin-menu" class="btn btn-app-ghost dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Quản trị</button>
+                    <ul class="dropdown-menu dropdown-menu-end app-navigation-menu" aria-labelledby="admin-menu">
+                        <th:block th:replace="~{fragments/workspace-links :: operations('admin', true, 'dropdown-item')}"></th:block>
+                    </ul>
+                </div>
+                <div class="dropdown app-navigation-group" th:if="${navbarUser.shipper}">
+                    <button id="shipper-menu" class="btn btn-app-ghost dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">Giao hàng</button>
+                    <ul class="dropdown-menu dropdown-menu-end app-navigation-menu" aria-labelledby="shipper-menu">
+                        <li><a class="dropdown-item" th:href="@{/shipper/dashboard}">Tổng quan giao hàng</a></li>
+                        <li><a class="dropdown-item" th:href="@{/shipper/shipments/view}">Chuyến giao được phân công</a></li>
+                    </ul>
+                </div>
+                <div class="dropdown app-navigation-group">
+                    <button id="account-menu" class="btn btn-app-ghost dropdown-toggle app-account-link" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false"
+                            th:text="${navbarUser.displayUsername}">Tài khoản</button>
+                    <ul class="dropdown-menu dropdown-menu-end app-navigation-menu" aria-labelledby="account-menu">
+                        <li th:if="${buyerFeaturesAvailable}"><a class="dropdown-item" th:href="@{/user/profile}">Hồ sơ / đổi mật khẩu</a></li>
+                        <li th:if="${buyerFeaturesAvailable}"><a class="dropdown-item" th:href="@{/user/shop}">Cửa hàng / trạng thái đăng ký</a></li>
+                        <li th:if="${buyerFeaturesAvailable and !navbarUser.vendor}"><a class="dropdown-item" th:href="@{/user/shop/register}">Đăng ký bán hàng</a></li>
+                        <li><a class="dropdown-item" th:href="@{/notifications}">Hộp thư thông báo</a></li>
+                    </ul>
+                </div>
+                <a class="btn btn-app-ghost" th:href="@{/notifications}" href="/notifications"
+                   data-notification-status aria-live="polite">Thông báo</a>
+                <form method="post" th:action="@{/logout}">
+                    <button class="btn btn-app-ghost w-100" type="submit">Đăng xuất</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</nav>
+</body>
+</html>

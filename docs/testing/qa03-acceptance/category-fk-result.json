@@ -1,0 +1,14 @@
+{
+  "source_sha": "e88685213d3af20729d2e78c56568f44e0a2922c",
+  "scope": "Direct FK test on restored synthetic local database, not an HTTP/browser test",
+  "base_dump_sha256": "5efce5b8d8dd073f5141ec3f38fabd47a96f5cde81698ac8d05b0fcad134ced8",
+  "status": "PASS",
+  "sqlstate": "23503",
+  "constraint": "fk_products_category_id",
+  "category_and_product_preserved": true,
+  "fixture_transaction": "ROLLBACK",
+  "sql_sha256": "8795bf06fcc2df1a54875d922944ff0936091bbdc7d1d629ad70e82b16146d11",
+  "output_sha256": "813251b2d3be778119489b0a9f033437ca0151e5d6db624b97f72b215cd671a9",
+  "owned_container_removed": true,
+  "script_sha256": "7f8d45fe726006836b2efae23696e6494b46bb6dc75113d2c7a6c18e4e17799c"
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title th:text="${editMode} ? 'Chỉnh sửa sản phẩm | UTEExpress' : 'Thêm sản phẩm | UTEExpress'">Sản phẩm | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="product-form-title">
+    <div class="app-page-header">
+        <a class="app-back-link" th:href="@{/vendor/products}" href="/vendor/products">← Danh sách sản phẩm</a>
+        <span class="app-eyebrow">Kênh người bán</span>
+        <h1 id="product-form-title" th:text="${editMode} ? 'Chỉnh sửa sản phẩm' : 'Thêm sản phẩm'">Thêm sản phẩm</h1>
+        <p>Giá sử dụng VND nguyên. Tồn kho được bảo vệ bằng optimistic version và khóa giao dịch khi Checkout sử dụng.</p>
+    </div>
+
+    <div class="row g-4 align-items-start">
+        <div th:class="${editMode} ? 'col-lg-7' : 'col-lg-8 mx-auto'">
+            <section class="app-panel">
+                <form method="post" th:object="${productForm}" novalidate
+                      th:action="${editMode} ? @{/vendor/products/{id}/update(id=${product.id})} : @{/vendor/products}">
+                    <input type="hidden" th:if="${editMode}" th:field="*{version}">
+
+                    <div class="mb-3">
+                        <label class="form-label" for="name">Tên sản phẩm <span class="app-required">*</span></label>
+                        <input class="form-control" th:classappend="${#fields.hasErrors('name')} ? 'is-invalid'"
+                               id="name" type="text" th:field="*{name}" maxlength="200" required>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}" role="alert">Tên không hợp lệ.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="description">Mô tả</label>
+                        <textarea class="form-control" th:classappend="${#fields.hasErrors('description')} ? 'is-invalid'"
+                                  id="description" th:field="*{description}" maxlength="4000" rows="6"></textarea>
+                        <div class="invalid-feedback" th:if="${#fields.hasErrors('description')}" th:errors="*{description}" role="alert">Mô tả không hợp lệ.</div>
+                    </div>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label" for="price">Giá VND <span class="app-required">*</span></label>
+                            <input class="form-control" th:classappend="${#fields.hasErrors('price')} ? 'is-invalid'"
+                                   id="price" type="number" th:field="*{price}" min="1" step="1" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('price')}" th:errors="*{price}" role="alert">Giá không hợp lệ.</div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label" for="stock">Tồn kho <span class="app-required">*</span></label>
+                            <input class="form-control" th:classappend="${#fields.hasErrors('stock')} ? 'is-invalid'"
+                                   id="stock" type="number" th:field="*{stock}" min="0" step="1" required>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('stock')}" th:errors="*{stock}" role="alert">Tồn kho không hợp lệ.</div>
+                        </div>
+                        <div class="col-12">
+                            <label class="form-label" for="categoryId">Danh mục đang hoạt động <span class="app-required">*</span></label>
+                            <select class="form-select" th:classappend="${#fields.hasErrors('categoryId')} ? 'is-invalid'"
+                                    id="categoryId" th:field="*{categoryId}" required>
+                                <option value="">Chọn danh mục</option>
+                                <option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}">Danh mục</option>
+                            </select>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('categoryId')}" th:errors="*{categoryId}" role="alert">Danh mục không hợp lệ.</div>
+                        </div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2 mt-4">
+                        <button class="btn btn-app-primary" type="submit" th:text="${editMode} ? 'Lưu thay đổi' : 'Tạo sản phẩm'">Lưu</button>
+                        <a class="btn btn-app-secondary" th:href="@{/vendor/products}" href="/vendor/products">Hủy</a>
+                    </div>
+                </form>
+            </section>
+        </div>
+
+        <div class="col-lg-5" th:if="${editMode}">
+            <section class="app-panel" aria-labelledby="product-images-title">
+                <h2 id="product-images-title" class="h4">Ảnh sản phẩm</h2>
+                <p class="text-secondary">Tối đa 5 ảnh, mỗi ảnh không quá 5 MiB. Chấp nhận JPEG, PNG và WebP.</p>
+
+                <div class="app-product-images mb-4" th:unless="${#lists.isEmpty(product.images)}">
+                    <article class="app-product-image-card" th:each="image : ${product.images}">
+                        <img th:src="@{/vendor/products/{id}/images/{imageId}/content(id=${product.id},imageId=${image.id})}"
+                             th:alt="${image.altText != null ? image.altText : product.name}">
+                        <p class="small text-secondary mb-2" th:text="${image.altText != null ? image.altText : 'Không có mô tả ảnh'}">Mô tả</p>
+                        <form method="post" th:action="@{/vendor/products/{id}/images/{imageId}/delete(id=${product.id},imageId=${image.id})}">
+                            <button class="btn btn-sm btn-outline-danger w-100" type="submit">Xóa ảnh</button>
+                        </form>
+                    </article>
+                </div>
+                <div class="app-empty-compact" th:if="${#lists.isEmpty(product.images)}">Sản phẩm chưa có ảnh.</div>
+
+                <form class="mt-4" method="post" enctype="multipart/form-data"
+                      th:if="${#lists.size(product.images) < maxImages}"
+                      th:action="@{/vendor/products/{id}/images(id=${product.id})}">
+                    <div class="mb-3">
+                        <label class="form-label" for="image">Chọn ảnh</label>
+                        <input class="form-control" id="image" type="file" name="image"
+                               accept="image/jpeg,image/png,image/webp" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="altText">Mô tả ảnh</label>
+                        <input class="form-control" id="altText" type="text" name="altText" maxlength="255">
+                    </div>
+                    <button class="btn btn-app-secondary" type="submit">Tải ảnh lên</button>
+                </form>
+            </section>
+        </div>
+    </div>
+</section></body>
+</html>

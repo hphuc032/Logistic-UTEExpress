@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Duyệt cửa hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="py-4">
+    <a th:href="@{/admin/shops}">← Danh sách chờ duyệt</a>
+    <h1 class="h3 mt-3" th:text="${shop.name}">Cửa hàng</h1>
+    <div class="alert alert-success" th:if="${successMessage}" th:text="${successMessage}"></div>
+    <div class="alert alert-danger" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+    <dl class="row">
+        <dt class="col-sm-3">Trạng thái</dt><dd class="col-sm-9" th:text="${shop.status}"></dd>
+        <dt class="col-sm-3">Chủ tài khoản</dt><dd class="col-sm-9" th:text="${shop.ownerId}"></dd>
+        <dt class="col-sm-3">Slug</dt><dd class="col-sm-9" th:text="${shop.slug}"></dd>
+        <dt class="col-sm-3">Mô tả</dt><dd class="col-sm-9" th:text="${shop.description}"></dd>
+        <dt class="col-sm-3">Địa chỉ lấy hàng</dt><dd class="col-sm-9" th:text="${shop.pickupAddress}"></dd>
+        <dt class="col-sm-3" th:if="${shop.rejectionReason}">Lý do từ chối</dt>
+        <dd class="col-sm-9" th:if="${shop.rejectionReason}" th:text="${shop.rejectionReason}"></dd>
+    </dl>
+    <div th:if="${shop.status == 'PENDING'}" class="row g-3">
+        <div class="col-md-6">
+            <form th:action="@{/admin/shops/{id}/approve(id=${shop.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="version" th:value="${shop.version}">
+                <button type="submit" class="btn btn-success">Duyệt cửa hàng</button>
+            </form>
+        </div>
+        <div class="col-md-6">
+            <form th:action="@{/admin/shops/{id}/reject(id=${shop.id})}" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                <input type="hidden" name="version" th:value="${shop.version}">
+                <label for="reason" class="form-label">Lý do từ chối</label>
+                <textarea id="reason" name="reason" class="form-control" maxlength="1000" required></textarea>
+                <button type="submit" class="btn btn-outline-danger mt-2">Từ chối đơn</button>
+            </form>
+        </div>
+    </div>
+</section></body></html>

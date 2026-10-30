@@ -1,0 +1,43 @@
+name: CI
+
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    name: Maven test and package
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Set up Java 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: Set up Node for notification client tests
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+
+      - name: Shared UI, notification, Buyer cancellation and assignment client tests
+        run: node --test src/test/js/app.test.cjs src/test/js/notifications.test.cjs src/test/js/buyer-cancellation.test.cjs src/test/js/shipment-assignment.test.cjs
+
+      - name: Maven test
+        run: sh ./mvnw --batch-mode --no-transfer-progress test
+
+      - name: Maven package
+        run: sh ./mvnw --batch-mode --no-transfer-progress package

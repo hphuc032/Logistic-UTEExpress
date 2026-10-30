@@ -1,0 +1,66 @@
+package com.uteexpress.order.service;
+
+import com.uteexpress.order.dto.OrderStatusChangedEvent;
+import com.uteexpress.order.dto.OrderTransitionCommand;
+import com.uteexpress.shipping.dto.DeliveryAttemptOperation;
+
+/**
+ * Sole authority for OrderStatus writes. No implementation in ORD-00.
+ * Implementation MUST obtain identity from SEC-01 CurrentUserProvider, resolve the subject
+ * to a persisted user, validate roles/ownership/scope and all guards in docs/order-contracts.md.
+ * Validate expected status/version and trusted evidence again inside the write transaction;
+ * update timestamps, append history and publish the result only after commit.
+ */
+public interface OrderLifecycleService {
+    /** USER-only cancellation of an owned NEW Order in a fresh Order-first transaction. */
+    OrderStatusChangedEvent cancelForBuyer(com.uteexpress.order.dto.BuyerCancellationCommand command);
+    /** Ops attests physical return after two failed attempts; owns an Order-first transaction. */
+    com.uteexpress.order.dto.ReturnToSenderResult confirmReturnToSender(com.uteexpress.order.dto.ReturnToSenderCommand command);
+    com.uteexpress.payment.dto.RefundResult completeRefund(com.uteexpress.payment.dto.ManualRefundCommand command);
+    /** Return mutations own an Order-first transaction and reject an existing transaction. */
+    OrderStatusChangedEvent requestReturn(com.uteexpress.order.dto.RequestReturnCommand command);
+    void approveReturn(com.uteexpress.order.dto.ReturnDecisionCommand command);
+    OrderStatusChangedEvent rejectReturn(com.uteexpress.order.dto.ReturnDecisionCommand command);
+    OrderStatusChangedEvent receiveReturn(com.uteexpress.order.dto.ReceiveReturnCommand command);
+
+    /**
+     * Starts its own Order-first transaction; an existing transaction is rejected.
+     * Fails closed until QD supplies the approved Ops Shipment lock/cancellation hooks.
+     */
+    OrderStatusChangedEvent cancelForOps(com.uteexpress.order.dto.OpsOrderCancellationCommand command);
+
+    /** Internal MANDATORY boundary; both versions are the original source versions. */
+    void prepareShipperTransition(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, com.uteexpress.order.dto.OrderAction action);
+
+    /** Requires persisted Shipment target evidence at original version + 1. */
+    OrderStatusChangedEvent completeShipperTransition(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, com.uteexpress.order.dto.OrderAction action);
+
+    /**
+     * Internal MANDATORY + SHIPPER boundary, using both ORIGINAL versions.
+     * Keeps Order SHIPPING without writes/events; validates QD's persisted source facts.
+     */
+    void prepareShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation);
+
+    /**
+     * Rechecks unchanged Order and persisted Shipment/evidence at original Shipment version + 1.
+     * No caller-supplied facts; reloads QD's persisted operation evidence.
+     */
+    void verifyShipmentOnlyOperation(Long orderId, Long expectedOrderVersion,
+            Long expectedShipmentVersion, DeliveryAttemptOperation operation);
+
+    /** Authenticated callers only; EXPIRE_PAYMENT is rejected with ACCESS_DENIED. */
+    OrderStatusChangedEvent transition(OrderTransitionCommand command);
+
+    /** Vendor preparation only: CONFIRMED stays CONFIRMED, with persisted ready_at. */
+    void markReady(com.uteexpress.order.dto.OrderReadyCommand command);
+
+    /**
+     * Internal scheduler only, never exposed through a controller. Lock/reload the order
+     * and payment attempts; only expired unpaid online NEW orders qualify. actor_id is null.
+     * A late PAID callback must serialize with this operation. Stale/repeated calls conflict.
+     */
+    OrderStatusChangedEvent expireUnpaidOnlineOrder(Long orderId, Long expectedVersion);
+}

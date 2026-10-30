@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Nhật ký quản trị | UTEExpress</title></head>
+<body><section th:fragment="content" aria-label="Nhật ký quản trị">
+    <h1>Nhật ký quản trị</h1>
+    <p>Chỉ đọc · ADMIN · múi giờ <span th:text="${audit.window.timezone}"></span>. Tối đa 366 ngày, 20 bản ghi/trang.</p>
+    <p><a th:href="@{/admin/dashboard}">Về dashboard Admin</a></p>
+    <form method="get" th:action="@{/admin/audit-logs}" class="row g-2 mb-3">
+        <div class="col-12 col-md-3"><label for="from" class="form-label">Từ ngày</label><input class="form-control" id="from" name="from" type="date" th:value="${audit.window.from}" required></div>
+        <div class="col-12 col-md-3"><label for="to" class="form-label">Đến hết ngày</label><input class="form-control" id="to" name="to" type="date" th:value="${audit.window.to}" required></div>
+        <div class="col-12 col-md-3"><label for="action" class="form-label">Action code</label><input class="form-control" id="action" name="action" maxlength="64" th:value="${audit.filter.action}"></div>
+        <div class="col-12 col-md-3"><label for="targetType" class="form-label">Target type</label><input class="form-control" id="targetType" name="targetType" maxlength="64" th:value="${audit.filter.targetType}"></div>
+        <div class="col-12 col-md-3"><label for="actorId" class="form-label">Actor ID</label><input class="form-control" id="actorId" name="actorId" type="number" min="1" th:value="${audit.filter.actorId}"></div>
+        <div class="col-12 col-md-3"><label for="targetId" class="form-label">Target ID</label><input class="form-control" id="targetId" name="targetId" type="number" min="1" th:value="${audit.filter.targetId}"></div>
+        <div class="col-12"><button class="btn btn-app-primary" type="submit">Lọc nhật ký</button></div>
+    </form>
+    <p>Tổng bản ghi phù hợp: <strong th:text="${audit.totalElements}"></strong></p>
+    <p th:if="${audit.content.empty}">Không có nhật ký phù hợp.</p>
+    <div class="table-responsive" th:unless="${audit.content.empty}"><table class="table table-striped">
+        <caption>Thời gian giảm dần; cùng thời điểm sắp theo ID giảm dần.</caption>
+        <thead><tr><th scope="col">ID</th><th scope="col">Actor ID</th><th scope="col">Action</th><th scope="col">Target</th><th scope="col">Reason code</th><th scope="col">Thời điểm (UTC)</th></tr></thead>
+        <tbody><tr th:each="entry : ${audit.content}"><td th:text="${entry.id}"></td><td th:text="${entry.actorId == null ? 'Hệ thống' : entry.actorId}"></td>
+            <td th:text="${entry.action}"></td><td><span th:text="${entry.targetType}"></span> #<span th:text="${entry.targetId}"></span></td>
+            <td th:text="${entry.reason}"></td><td th:text="${entry.createdAt}"></td></tr></tbody>
+    </table></div>
+    <nav aria-label="Phân trang nhật ký" class="d-flex align-items-center gap-3">
+        <a th:if="${audit.hasPrevious}" th:href="@{/admin/audit-logs(from=${audit.window.from},to=${audit.window.to},action=${audit.filter.action},targetType=${audit.filter.targetType},actorId=${audit.filter.actorId},targetId=${audit.filter.targetId},page=${audit.filter.page - 1})}">Trang trước</a>
+        <span>Trang <span th:text="${audit.filter.page + 1}"></span></span>
+        <a th:if="${audit.hasNext}" th:href="@{/admin/audit-logs(from=${audit.window.from},to=${audit.window.to},action=${audit.filter.action},targetType=${audit.filter.targetType},actorId=${audit.filter.actorId},targetId=${audit.filter.targetId},page=${audit.filter.page + 1})}">Trang sau</a>
+    </nav>
+</section></body></html>

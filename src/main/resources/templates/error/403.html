@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Không có quyền truy cập | UTEExpress</title></head>
+<body>
+<main>
+    <section class="app-error-page" aria-labelledby="error-title">
+        <span class="app-error-code" aria-hidden="true">403</span>
+        <p class="app-eyebrow">Quyền truy cập bị giới hạn</p>
+        <h1 id="error-title">Bạn chưa có quyền mở trang này.</h1>
+        <p>Vui lòng sử dụng tài khoản phù hợp hoặc quay lại trang chủ.</p>
+        <a class="btn btn-app-primary" th:href="@{/}" href="/">Về trang chủ</a>
+    </section>
+</main>
+</body>
+</html>

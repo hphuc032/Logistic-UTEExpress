@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Không tìm thấy trang | UTEExpress</title></head>
+<body>
+<main>
+    <section class="app-error-page" aria-labelledby="error-title">
+        <span class="app-error-code" aria-hidden="true">404</span>
+        <p class="app-eyebrow">Không tìm thấy nội dung</p>
+        <h1 id="error-title">Trang bạn cần không tồn tại.</h1>
+        <p>Đường dẫn có thể đã thay đổi hoặc nội dung chưa được cung cấp.</p>
+        <a class="btn btn-app-primary" th:href="@{/}" href="/">Về trang chủ</a>
+    </section>
+</main>
+</body>
+</html>

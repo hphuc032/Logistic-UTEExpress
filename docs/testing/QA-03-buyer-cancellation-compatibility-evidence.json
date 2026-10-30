@@ -1,0 +1,96 @@
+{
+  "scope": "Independent targeted compatibility verification, not full-suite or final business acceptance",
+  "created_utc": "2026-10-27T15:38:46.430149+00:00",
+  "pr63_sha": "8844de24c9ac899d6a078f26ee7cacdd53cd8659",
+  "pr64_sha": "a26a3b0db19c0f2b294face24d7e40340becf38c",
+  "synthetic_local_merge_sha": "654a8a1f7b8417064c13b0bc1d2f3f4aac19e108",
+  "source_tree": "282f00382b77fff91bd21babdeb62a62ac0aef69",
+  "maven_exit_code": 0,
+  "node_exit_code": 0,
+  "unit_tests": 11,
+  "postgresql_tests": 96,
+  "node_tests": 12,
+  "log_sha256": {
+    "maven": "19c0f31e3fa6f998f00707d4d92b53c3a1c043eb5e919db4c9dbd9c96affbee8",
+    "node": "eff1b63400d4dc1e68a736ecdfe40bd2e48d5bd7ccb3baa479333618c579c084"
+  },
+  "diagnostic_occurrences": {
+    "Failed to validate connection": 0,
+    "Connection refused": 0,
+    "Surefire is going to kill self fork JVM": 0
+  },
+  "suites": [
+    {
+      "kind": "unit",
+      "suite": "com.uteexpress.ArchitectureTest",
+      "sha256": "8f7efde3d895442233f9fc6fd4ea485af28332aa535b70f05d485d9e8624b15f",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "unit",
+      "suite": "com.uteexpress.testsupport.PostgresContextCleanupListenerTest",
+      "sha256": "d0bf83bb096f2cb3606882d9cef86e22675ef526ce59e5cb242e649397bdaf9f",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "postgresql",
+      "suite": "com.uteexpress.integration.Int02CommerceFlowIT",
+      "sha256": "00464e7c71a5187e935599339a7308ab0f6747f7b232743af40489852e6b704c",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "postgresql",
+      "suite": "com.uteexpress.integration.ReturnToSenderIT",
+      "sha256": "2eabfe46734803043ecd02c3e974298b03ac840bdaf4bb19bc3a71bd4f7382b6",
+      "tests": 17,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "postgresql",
+      "suite": "com.uteexpress.notification.NotificationRecoveryIT",
+      "sha256": "536b5fc6597c538fe51b987111a3d1c3bfbaacd00e6e5d4c281f5e65bbe5b7fa",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "postgresql",
+      "suite": "com.uteexpress.notification.NotificationSocketIT",
+      "sha256": "f9264fea48a7135776b0ed6e2e69e447cf26aef2a76077f364f4b0f125d56f5b",
+      "tests": 29,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "postgresql",
+      "suite": "com.uteexpress.order.BuyerCancellationIT",
+      "sha256": "9d74a2c8a237d8ef1798488e5b0d29acc3428b15ad8f0d35e73b3e20ba03356c",
+      "tests": 33,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    {
+      "kind": "postgresql",
+      "suite": "com.uteexpress.shipping.ShipmentAssignmentIT",
+      "sha256": "009e4af4e1c8b5d8544f53a9ebfaab1889269ea17194d0449f7b3c126a97ea0c",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  ]
+}

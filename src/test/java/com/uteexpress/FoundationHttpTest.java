@@ -2,6 +2,8 @@ package com.uteexpress;
 
 import com.uteexpress.common.exception.ApplicationException;
 import com.uteexpress.common.exception.ErrorCode;
+import com.uteexpress.identity.service.RegistrationService;
+import com.uteexpress.identity.repository.UserRoleRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import org.junit.jupiter.api.Test;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.context.annotation.Import;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +25,59 @@ import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.user;
 
 @SpringBootTest
+@ActiveProfiles("test")
 @AutoConfigureMockMvc
 @Import(FoundationHttpTest.ErrorFixtureController.class)
 class FoundationHttpTest {
+    @MockitoBean com.uteexpress.promotion.service.VoucherService voucherService;
+    @MockitoBean com.uteexpress.promotion.service.VendorVoucherService vendorVoucherService;
+    @MockitoBean com.uteexpress.catalog.service.ProductPromotionManagementService productPromotionManagementService;
+    @MockitoBean com.uteexpress.promotion.service.PromotionManagementService promotionManagementService;
+    @MockitoBean com.uteexpress.governance.service.ProductModerationService productModerationService;
+    @MockitoBean com.uteexpress.governance.service.ShopModerationService shopModerationService;
+    @MockitoBean com.uteexpress.catalog.service.ProductService productService;
+    @MockitoBean com.uteexpress.catalog.service.InventoryService inventoryService;
+    @MockitoBean com.uteexpress.governance.service.CategoryQueryService categoryQueryService;
+    @MockitoBean com.uteexpress.shop.service.VendorShopQueryService vendorShopQueryService;
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
+    @MockitoBean com.uteexpress.shop.service.ShopApprovalService shopApprovalService;
+    @MockitoBean com.uteexpress.identity.service.AccountIdentityService accountIdentityService;
+    @MockitoBean com.uteexpress.governance.service.AccountGovernanceService accountGovernanceService;
+    @MockitoBean com.uteexpress.identity.service.IdentityAccountGovernanceService identityAccountGovernanceService;
+    @MockitoBean com.uteexpress.account.service.AddressService addressService;
+    @MockitoBean com.uteexpress.cart.service.CartService cartService;
+    @MockitoBean com.uteexpress.order.service.OrderPlacementService orderPlacementService;
+    @MockitoBean com.uteexpress.order.service.BuyerOrderService buyerOrderService;
+    @MockitoBean com.uteexpress.order.service.VendorOrderService vendorOrderService;
+    @MockitoBean com.uteexpress.order.service.VendorOrderAuthority vendorOrderAuthority;
+    @MockitoBean com.uteexpress.order.service.ReturnOrderAuthority returnOrderAuthority;
+    @MockitoBean com.uteexpress.order.service.RefundOrderAuthority refundOrderAuthority;
+    @MockitoBean com.uteexpress.payment.service.ManualCodRefundService manualCodRefundService;
+    @MockitoBean com.uteexpress.order.service.ReturnQueryService returnQueryService;
+    @MockitoBean com.uteexpress.payment.service.PaymentReadService paymentReadService;
+    @MockitoBean com.uteexpress.payment.service.PaymentService paymentService;
+    @MockitoBean com.uteexpress.shop.service.ShopRegistrationService shopRegistrationService;
+    @MockitoBean com.uteexpress.shipping.service.ShippingConfigService shippingConfig;
+    @MockitoBean com.uteexpress.shipping.service.ShippingQuoteService shippingQuote;
+    @MockitoBean com.uteexpress.identity.service.EmailVerificationService emailVerificationService;
+    @MockitoBean com.uteexpress.identity.service.PasswordResetService passwordResetService;
+    @MockitoBean com.uteexpress.governance.service.CategoryService categoryService;
+    @MockitoBean
+    private com.uteexpress.governance.service.AuditLogService auditLogService;
+
+    @MockitoBean
+    private RegistrationService registrationService;
+
+    @MockitoBean
+    private UserRoleRepository userRoleRepository;
+
+    @MockitoBean
+    private com.uteexpress.identity.service.IdentityAuthenticationService identityAuthenticationService;
+
     @Autowired
     private MockMvc mvc;
 
@@ -47,19 +99,21 @@ class FoundationHttpTest {
 
     @Test
     void actuatorEnvironmentIsNotExposed() throws Exception {
-        mvc.perform(get("/actuator/env")).andExpect(status().isNotFound());
+        mvc.perform(get("/actuator/env").with(user("foundation-test"))).andExpect(status().isNotFound());
     }
 
     @Test
     void validRequestBindsToDto() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Foundation\"}"))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.name").value("Foundation"));
     }
 
     @Test
     void beanValidationUsesErrorContractWithoutRejectedValues() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("VALIDATION_FAILED"))
@@ -71,7 +125,8 @@ class FoundationHttpTest {
 
     @Test
     void unknownFieldsAreRejectedInsteadOfMassAssigned() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"Foundation\",\"role\":\"ADMIN\"}"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_REQUEST"));
@@ -79,7 +134,8 @@ class FoundationHttpTest {
 
     @Test
     void malformedJsonDoesNotLeakBody() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.APPLICATION_JSON)
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content("secret-not-json"))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.code").value("INVALID_REQUEST"))
@@ -88,38 +144,40 @@ class FoundationHttpTest {
 
     @Test
     void missingBodyIsBadRequest() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.APPLICATION_JSON))
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isBadRequest()).andExpect(jsonPath("$.status").value(400));
     }
 
     @Test
     void unsupportedContentTypePreserves415() throws Exception {
-        mvc.perform(post("/test-fixtures/validation").contentType(MediaType.TEXT_PLAIN).content("name=test"))
+        mvc.perform(post("/test-fixtures/validation").with(user("foundation-test")).with(csrf())
+                        .contentType(MediaType.TEXT_PLAIN).content("name=test"))
                 .andExpect(status().isUnsupportedMediaType()).andExpect(jsonPath("$.status").value(415));
     }
 
     @Test
     void missingResourceUses404Contract() throws Exception {
-        mvc.perform(get("/test-fixtures/missing"))
+        mvc.perform(get("/test-fixtures/missing").with(user("foundation-test")))
                 .andExpect(status().isNotFound())
                 .andExpect(jsonPath("$.code").value("RESOURCE_NOT_FOUND"));
     }
 
     @Test
     void businessConflictUses409Contract() throws Exception {
-        mvc.perform(get("/test-fixtures/conflict"))
+        mvc.perform(get("/test-fixtures/conflict").with(user("foundation-test")))
                 .andExpect(status().isConflict()).andExpect(jsonPath("$.code").value("CONFLICT"));
     }
 
     @Test
     void unknownRouteUses404Contract() throws Exception {
-        mvc.perform(get("/does-not-exist"))
+        mvc.perform(get("/does-not-exist").with(user("foundation-test")))
                 .andExpect(status().isNotFound()).andExpect(jsonPath("$.code").value("RESOURCE_NOT_FOUND"));
     }
 
     @Test
     void wrongHttpMethodPreserves405AndAllowHeader() throws Exception {
-        mvc.perform(post("/api/v1/foundation"))
+        mvc.perform(post("/api/v1/foundation").with(csrf()))
                 .andExpect(status().isMethodNotAllowed())
                 .andExpect(header().string("Allow", containsString("GET")))
                 .andExpect(jsonPath("$.status").value(405));
@@ -127,7 +185,7 @@ class FoundationHttpTest {
 
     @Test
     void unexpectedFailureDoesNotExposeInternalMessageOrQueryString() throws Exception {
-        mvc.perform(get("/test-fixtures/unexpected?token=private-token"))
+        mvc.perform(get("/test-fixtures/unexpected?token=private-token").with(user("foundation-test")))
                 .andExpect(status().isInternalServerError())
                 .andExpect(jsonPath("$.code").value("INTERNAL_ERROR"))
                 .andExpect(jsonPath("$.path").value("/test-fixtures/unexpected"))
@@ -139,6 +197,7 @@ class FoundationHttpTest {
     // Fixtures are test-only: no validation demo or error-trigger endpoints ship in the application.
     @RestController
     static class ErrorFixtureController {
+    @MockitoBean com.uteexpress.identity.service.VendorRoleGrantService vendorRoleGrantService;
         record TestRequest(@NotBlank String name) { }
 
         @PostMapping("/test-fixtures/validation")

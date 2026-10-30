@@ -1,0 +1,350 @@
+{
+  "source_sha": "e88685213d3af20729d2e78c56568f44e0a2922c",
+  "runner_sha": "e88685213d3af20729d2e78c56568f44e0a2922c",
+  "manifest_sha256": "0dda4941ca1372120b872f8d7dbb26660273d3f8b860802f4c539e9ac0c03b21",
+  "runner_script_sha256": "4005a275ed21d1d657f9f8c5cb0ad663f83be08074fe66cb10926d494a21036f",
+  "raw_log_hashes_verified": true,
+  "all_per_suite_hashes_verified": true,
+  "failsafe_summary_hash_verified": true,
+  "accepted_suite_inventory_unchanged": true,
+  "diagnostic_occurrences": {
+    "Failed to validate connection": 0,
+    "Connection refused": 0,
+    "Surefire is going to kill self fork JVM": 0
+  },
+  "failsafe_dumps": 0,
+  "master_plan_source": "UTEExpress_Master_Project_Plan.docx / master-plan-extracted.txt; D5, N T36-T50 and QA-03 row",
+  "coverage_scope": "Executed automated assertions only; split IDs are not claims to complete the unsplit Master Plan requirement",
+  "mandatory_assertion_mapping": [
+    {
+      "master_test_id": "T36",
+      "suite": "com.uteexpress.engagement.ReviewFoundationTest",
+      "method": "stripsBeforeCheckingBoundsAndKeepsPlainText",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "4403fefea7a245a861ed4d02bc337295c809ce773468458d2cd0583dee400307"
+    },
+    {
+      "master_test_id": "T36",
+      "suite": "com.uteexpress.engagement.ReviewFoundationTest",
+      "method": "rejectsInvalidRating",
+      "executed_cases": 4,
+      "status": "PASS",
+      "xml_sha256": "4403fefea7a245a861ed4d02bc337295c809ce773468458d2cd0583dee400307"
+    },
+    {
+      "master_test_id": "T36",
+      "suite": "com.uteexpress.engagement.ReviewFoundationTest",
+      "method": "unicodeCodePointBoundariesMatchPostgres",
+      "executed_cases": 5,
+      "status": "PASS",
+      "xml_sha256": "4403fefea7a245a861ed4d02bc337295c809ce773468458d2cd0583dee400307"
+    },
+    {
+      "master_test_id": "T36",
+      "suite": "com.uteexpress.engagement.ReviewIntegrationIT",
+      "method": "forbiddenUploadsRollbackBeforeAnyCommittedReview",
+      "executed_cases": 4,
+      "status": "PASS",
+      "xml_sha256": "e405e665b12206617685565ed1a446aa7c89ab7571508ebed48bac0cc7043509"
+    },
+    {
+      "master_test_id": "T36",
+      "suite": "com.uteexpress.engagement.ReviewIntegrationIT",
+      "method": "emojiHttpValidationAndDatabaseCharacterCountAgree",
+      "executed_cases": 4,
+      "status": "PASS",
+      "xml_sha256": "e405e665b12206617685565ed1a446aa7c89ab7571508ebed48bac0cc7043509"
+    },
+    {
+      "master_test_id": "T37",
+      "suite": "com.uteexpress.engagement.ReviewIntegrationIT",
+      "method": "actualWriterRejectsNonDeliveredState",
+      "executed_cases": 5,
+      "status": "PASS",
+      "xml_sha256": "e405e665b12206617685565ed1a446aa7c89ab7571508ebed48bac0cc7043509"
+    },
+    {
+      "master_test_id": "T37",
+      "suite": "com.uteexpress.engagement.ReviewIntegrationIT",
+      "method": "duplicateActualWritersCommitExactlyOneReview",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "e405e665b12206617685565ed1a446aa7c89ab7571508ebed48bac0cc7043509"
+    },
+    {
+      "master_test_id": "T37",
+      "suite": "com.uteexpress.engagement.ReviewIntegrationIT",
+      "method": "realReviewAndReturnSerializeAtOrderInBothSchedules",
+      "executed_cases": 2,
+      "status": "PASS",
+      "xml_sha256": "e405e665b12206617685565ed1a446aa7c89ab7571508ebed48bac0cc7043509"
+    },
+    {
+      "master_test_id": "T39",
+      "suite": "com.uteexpress.engagement.EngagementIT",
+      "method": "favoriteIsIdempotentPerUserAndUnavailableProductCannotBeAdded",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "f4c8dca05ae640167cd1ba493e44ea2b15f21d7b22c736cf563940552f0e2a04"
+    },
+    {
+      "master_test_id": "T39",
+      "suite": "com.uteexpress.engagement.EngagementIT",
+      "method": "viewsRefreshTimestampAndKeepOnlyThirtyPerUser",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "f4c8dca05ae640167cd1ba493e44ea2b15f21d7b22c736cf563940552f0e2a04"
+    },
+    {
+      "master_test_id": "T40",
+      "suite": "com.uteexpress.fulfillment.ShipperFulfillmentIT",
+      "method": "roleCsrfForeignAssignmentAndValidationAreGuarded",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "685241d097df1902c8c6135daa5466be2699c37e1a7052d098d1c6ef5633c6ac"
+    },
+    {
+      "master_test_id": "T40",
+      "suite": "com.uteexpress.governance.AdminRevenueIT",
+      "method": "nonAdminCannotReadFinancialHtmlJsonOrService",
+      "executed_cases": 4,
+      "status": "PASS",
+      "xml_sha256": "0f02e16b0fb0eef8120a59ecc5afee192c529805fefd2ad797f8848167bb6dda"
+    },
+    {
+      "master_test_id": "T40",
+      "suite": "com.uteexpress.governance.AdminRevenueIT",
+      "method": "forgedRoleLockedOrRevokedAdminIsDeniedFromPersistedFacts",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "0f02e16b0fb0eef8120a59ecc5afee192c529805fefd2ad797f8848167bb6dda"
+    },
+    {
+      "master_test_id": "T41-admin",
+      "suite": "com.uteexpress.governance.RoleGovernanceIT",
+      "method": "lastActiveAdminCannotBeRevokedOrLocked",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "f5498ffdcf7e92d16a958b4c9d8231133e13683fcf45283e940677fe3cadf6b5"
+    },
+    {
+      "master_test_id": "T41-admin",
+      "suite": "com.uteexpress.governance.RoleGovernanceIT",
+      "method": "auditFailureRollsBackRoleAndToken",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "f5498ffdcf7e92d16a958b4c9d8231133e13683fcf45283e940677fe3cadf6b5"
+    },
+    {
+      "master_test_id": "T41-manager-deny",
+      "suite": "com.uteexpress.governance.CommissionPolicyIT",
+      "method": "duplicateTimeInvalidRateAndManagerWriteAreRejected",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "06d68ca7b1eec875d55e8a29f308d9fa897bfde50ae1fcea4fce693d3f67be95"
+    },
+    {
+      "master_test_id": "T42-config",
+      "suite": "com.uteexpress.shipping.ShippingConfigIT",
+      "method": "disabledProviderBlocksAllRatesAndCanBeReenabled",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "100fb6277760f48b29721d709a34f87e4e2acd7b8b7b82a7c74e66e28a82b633"
+    },
+    {
+      "master_test_id": "T42-config",
+      "suite": "com.uteexpress.shipping.ShippingConfigIT",
+      "method": "wholeDongValidationDuplicateRouteAndStaleVersion",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "100fb6277760f48b29721d709a34f87e4e2acd7b8b7b82a7c74e66e28a82b633"
+    },
+    {
+      "master_test_id": "T42-config",
+      "suite": "com.uteexpress.shipping.ShippingConfigIT",
+      "method": "databaseConstraintsAndMigrations",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "100fb6277760f48b29721d709a34f87e4e2acd7b8b7b82a7c74e66e28a82b633"
+    },
+    {
+      "master_test_id": "T43",
+      "suite": "com.uteexpress.shipping.ShipmentAssignmentIT",
+      "method": "staleVersionsLockedShipperAndPickupBlockAssignmentChanges",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "2532812d95453006d6203e6df022251b4c7ae53c8bc9d9cbf53032b148aa8e9c"
+    },
+    {
+      "master_test_id": "T43",
+      "suite": "com.uteexpress.shipping.ShipmentAssignmentIT",
+      "method": "shipperCanOnlyReadCurrentAssignmentsAfterReassignment",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "2532812d95453006d6203e6df022251b4c7ae53c8bc9d9cbf53032b148aa8e9c"
+    },
+    {
+      "master_test_id": "T43",
+      "suite": "com.uteexpress.shipping.ShipmentAssignmentIT",
+      "method": "routeRequiresOpsRoleAndCsrf",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "2532812d95453006d6203e6df022251b4c7ae53c8bc9d9cbf53032b148aa8e9c"
+    },
+    {
+      "master_test_id": "T44",
+      "suite": "com.uteexpress.order.ShipperOrderLifecycleIT",
+      "method": "realCoordinatorFailureRetrySecondFailureKeepsOrderAndOtherModulesUntouched",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "20b59d51eab992a701b87d419c50a890d19fa2277a0f229873b31c16f8c6cb17"
+    },
+    {
+      "master_test_id": "T44",
+      "suite": "com.uteexpress.order.ShipperOrderLifecycleIT",
+      "method": "competingAttemptRequestsWaitOnOrderAndCommitOnce",
+      "executed_cases": 2,
+      "status": "PASS",
+      "xml_sha256": "20b59d51eab992a701b87d419c50a890d19fa2277a0f229873b31c16f8c6cb17"
+    },
+    {
+      "master_test_id": "T44",
+      "suite": "com.uteexpress.order.ShipperOrderLifecycleIT",
+      "method": "failureAndDeliverySerializeOnOrderWithExactCommittedEffects",
+      "executed_cases": 2,
+      "status": "PASS",
+      "xml_sha256": "20b59d51eab992a701b87d419c50a890d19fa2277a0f229873b31c16f8c6cb17"
+    },
+    {
+      "master_test_id": "T44",
+      "suite": "com.uteexpress.integration.ReturnToSenderIT",
+      "method": "firstFailureCannotCancelAndTwoFailuresKeepStockUntilOpsAttests",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "7b5dd2bdd916a59e254c92b5538ab2e23918f592a80f796375f07a1164d63a36"
+    },
+    {
+      "master_test_id": "T44",
+      "suite": "com.uteexpress.integration.ReturnToSenderIT",
+      "method": "inboxFailureRollsBackPhysicalReceiptAndReleaseThenRetryAndReplayWriteOnlyOnce",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "7b5dd2bdd916a59e254c92b5538ab2e23918f592a80f796375f07a1164d63a36"
+    },
+    {
+      "master_test_id": "T45",
+      "suite": "com.uteexpress.governance.OpsDashboardReadIT",
+      "method": "aggregatesSeparateStreamsAndShopScopeWithoutItemFanout",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "4033ae0c830b74495a10a395377bd4655f95f539c8d0b62833012a1b637179c2"
+    },
+    {
+      "master_test_id": "T45",
+      "suite": "com.uteexpress.governance.OpsDashboardReadIT",
+      "method": "localDateBoundsIncludeLowerButExcludeUpperIndependentOfJvmTimezone",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "4033ae0c830b74495a10a395377bd4655f95f539c8d0b62833012a1b637179c2"
+    },
+    {
+      "master_test_id": "T45",
+      "suite": "com.uteexpress.governance.AdminRevenueIT",
+      "method": "multiShopScopeSharesVendorFactsWithoutItemOrPaymentFanout",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "0f02e16b0fb0eef8120a59ecc5afee192c529805fefd2ad797f8848167bb6dda"
+    },
+    {
+      "master_test_id": "T45",
+      "suite": "com.uteexpress.governance.AdminRevenueIT",
+      "method": "unknownEvidenceInOneShopDoesNotBecomeKnownZeroOrContaminateAnotherScope",
+      "executed_cases": 5,
+      "status": "PASS",
+      "xml_sha256": "0f02e16b0fb0eef8120a59ecc5afee192c529805fefd2ad797f8848167bb6dda"
+    },
+    {
+      "master_test_id": "T46",
+      "suite": "com.uteexpress.notification.NotificationSocketIT",
+      "method": "handshakeRejectsMissingForgedRevokedTokensAndMissingForeignOrigin",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "384fe4d48ef3506cf1f0e357de8b254d083da61cf484adb0f1395ff43ba382b6"
+    },
+    {
+      "master_test_id": "T46",
+      "suite": "com.uteexpress.notification.NotificationSocketIT",
+      "method": "connectRequiresMaskedCsrf",
+      "executed_cases": 2,
+      "status": "PASS",
+      "xml_sha256": "384fe4d48ef3506cf1f0e357de8b254d083da61cf484adb0f1395ff43ba382b6"
+    },
+    {
+      "master_test_id": "T46",
+      "suite": "com.uteexpress.notification.NotificationSocketIT",
+      "method": "foreignOrBrokerSubscriptionsCloseConnection",
+      "executed_cases": 4,
+      "status": "PASS",
+      "xml_sha256": "384fe4d48ef3506cf1f0e357de8b254d083da61cf484adb0f1395ff43ba382b6"
+    },
+    {
+      "master_test_id": "T46",
+      "suite": "com.uteexpress.notification.NotificationSocketIT",
+      "method": "signedMalformedIdentityClaimsDenyThroughHttpAndSocket",
+      "executed_cases": 7,
+      "status": "PASS",
+      "xml_sha256": "384fe4d48ef3506cf1f0e357de8b254d083da61cf484adb0f1395ff43ba382b6"
+    },
+    {
+      "master_test_id": "T47",
+      "suite": "com.uteexpress.notification.NotificationSocketIT",
+      "method": "privateQueueSendsOnlyAfterCommitWithMinimalPayloadAndReconnectRecovers",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "384fe4d48ef3506cf1f0e357de8b254d083da61cf484adb0f1395ff43ba382b6"
+    },
+    {
+      "master_test_id": "T47",
+      "suite": "com.uteexpress.notification.NotificationSocketIT",
+      "method": "committedGovernanceOrLogoutClosesIdleSocketAndPreventsFurtherPush",
+      "executed_cases": 3,
+      "status": "PASS",
+      "xml_sha256": "384fe4d48ef3506cf1f0e357de8b254d083da61cf484adb0f1395ff43ba382b6"
+    },
+    {
+      "master_test_id": "T47",
+      "suite": "com.uteexpress.notification.NotificationRecoveryIT",
+      "method": "notificationFailureRollsBackBusinessHistoryAndRetryCommitsInboxAtomically",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "7ad679377d247c2427f518052f1e1ed3d322fe5dd38556d53e92105ad24c2efb"
+    },
+    {
+      "master_test_id": "T47",
+      "suite": "com.uteexpress.notification.NotificationRecoveryIT",
+      "method": "inboxJoinsBusinessTransactionAndOuterRollbackRemovesAllRows",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "7ad679377d247c2427f518052f1e1ed3d322fe5dd38556d53e92105ad24c2efb"
+    },
+    {
+      "master_test_id": "T48-migrate",
+      "suite": "com.uteexpress.DatabaseBaselineIT",
+      "method": "cleanDatabaseBootsMigratesAndCanMigrateAgainWithoutChanges",
+      "executed_cases": 1,
+      "status": "PASS",
+      "xml_sha256": "fd2ac1e4e1f2cbdd7255129d758c1c2a75ba578d764dbca9a15c108fc28171fc"
+    },
+    {
+      "master_test_id": "T48-http",
+      "suite": "com.uteexpress.integration.Int02HttpEnvironmentIT",
+      "method": "cleanMigratedApplicationServesRealAuthenticatedRoleJourneysAndLogout",
+      "executed_cases": 5,
+      "status": "PASS",
+      "xml_sha256": "d1087f399734f1ff0809410505c3d2541ba367ef25ad9a32501b39486a2f108d"
+    }
+  ],
+  "master_plan_sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+  "master_plan_extracted_sha256": "109f38246f9fed0cdbc67fd24c3d9532c2a5ed0ec527af31f6f71f664a32b012"
+}

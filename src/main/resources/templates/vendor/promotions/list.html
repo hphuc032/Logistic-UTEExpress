@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::main})}">
+<head><title>Khuyến mãi sản phẩm | UTEExpress</title></head>
+<body><main class="app-page-section">
+    <a class="app-back-link" th:href="@{/vendor/products}">← Sản phẩm cửa hàng</a>
+    <h1>Khuyến mãi sản phẩm</h1><p th:text="${product.name}"></p>
+    <p>Thời gian Việt Nam (UTC+7). Thời điểm kết thúc không nằm trong lịch áp dụng.</p>
+    <a class="btn btn-app-primary mb-3" th:href="@{/vendor/products/{p}/promotions/new(p=${product.id})}">Tạo khuyến mãi</a>
+    <p th:if="${#lists.isEmpty(promotions)}">Chưa có khuyến mãi cho sản phẩm này.</p>
+    <div class="table-responsive"><table class="table align-middle" th:unless="${#lists.isEmpty(promotions)}">
+        <thead><tr><th>Tên</th><th>Giảm (%)</th><th>Bắt đầu</th><th>Kết thúc</th><th>Trạng thái</th><th>Thao tác</th></tr></thead>
+        <tbody><tr th:each="promotion : ${promotions}">
+            <td th:text="${promotion.name}"></td><td th:text="${promotion.discountPercent}"></td>
+            <td th:text="${#temporals.format(promotion.startsAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
+            <td th:text="${#temporals.format(promotion.endsAt, 'dd/MM/yyyy HH:mm:ss')}"></td>
+            <td th:text="${promotion.status}"></td><td>
+                <a class="btn btn-sm btn-app-secondary" th:href="@{/vendor/products/{p}/promotions/{id}/edit(p=${product.id},id=${promotion.id})}">Chỉnh sửa</a>
+                <form th:if="${promotion.active}" class="d-inline" method="post"
+                      th:action="@{/vendor/products/{p}/promotions/{id}/disable(p=${product.id},id=${promotion.id})}">
+                    <input type="hidden" name="version" th:value="${promotion.version}">
+                    <button class="btn btn-sm btn-outline-danger" type="submit">Tắt</button>
+                </form>
+            </td>
+        </tr></tbody>
+    </table></div>
+</main></body></html>

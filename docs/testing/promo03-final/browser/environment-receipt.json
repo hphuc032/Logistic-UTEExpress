@@ -1,0 +1,40 @@
+{
+  "startedUtc": "2026-10-29T19:45:11.066226+00:00",
+  "commands": [],
+  "outputDirectory": "D:\\UTEExpress\\.work\\promo03\\complete-browser-20261029194511",
+  "cleanup": {
+    "applicationExitCode": 1,
+    "ownedContainerRemoveExitCode": 0,
+    "ownedContainerAbsent": true,
+    "unrelatedResourcesDeleted": false
+  },
+  "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+  "tree": "379b6beeb4586176e9a9e873680014359b70f859",
+  "jarSha256": "35ba4e84997e8d354689125a2ed5ecf2f55e1021c459ab784a3f32a8f7f92f78",
+  "runnerSha256": "0ed1ee376379589161dc8b99c127acfae1e2a86d67a258a3c2d954d7c85e2b06",
+  "browserDriverSha256": "bb837e08424edecbeb34e98ce162d32b2ced56337cde32e1f1ffa0aece7daba7",
+  "container": {
+    "id": "9aac01e91d3771ebf1138db7f6f0585fbfcdc9a7a1dca7b90884c1818e3a6429",
+    "name": "uteexpress-promo03-browser-c1595c591a",
+    "image": "postgres:17.6"
+  },
+  "application": {
+    "pid": 27588,
+    "startedUtc": "2026-10-29T19:45:13.068396+00:00",
+    "port": 64089,
+    "readyUtc": "2026-10-29T19:45:32.442828+00:00"
+  },
+  "browserExitCode": 0,
+  "databaseChecks": {
+    "platformVouchers": 3,
+    "disabledVouchers": 3,
+    "promotions": 3,
+    "disabledPromotions": 3,
+    "audits": 18,
+    "orders": 0,
+    "stock": 10
+  },
+  "status": "PASS",
+  "privateAppLogSha256": "b4d3a1260a53982b8576f599b8bb5f89b3b0e280b48b3fc3d2d0952ea8322145",
+  "finishedUtc": "2026-10-29T19:46:56.956187+00:00"
+}

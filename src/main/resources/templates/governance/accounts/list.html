@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Tài khoản | UTEExpress</title></head>
+<body><section th:fragment="content" aria-label="Tài khoản">
+    <a th:href="@{${'/' + ops + '/dashboard'}}" class="btn btn-link px-0 mb-3">← Tổng quan</a>
+    <h1 class="h2">Tài khoản</h1>
+    <p class="text-secondary">Tra cứu thông tin liên hệ và trạng thái tài khoản để hỗ trợ người dùng.</p>
+    <form method="get" th:action="@{${'/' + ops + '/accounts'}}" class="d-flex gap-2 mb-4">
+        <label class="visually-hidden" for="account-query">Tên, email hoặc họ tên</label>
+        <input id="account-query" class="form-control" name="query" maxlength="120" th:value="${query}" placeholder="Tên, email hoặc họ tên">
+        <button class="btn btn-primary" type="submit">Tìm</button>
+    </form>
+    <p th:if="${accounts.empty}">Không tìm thấy tài khoản.</p>
+    <div class="table-responsive" th:unless="${accounts.empty}"><table class="table align-middle">
+        <thead><tr><th scope="col">Tài khoản</th><th scope="col">Liên hệ</th><th scope="col">Trạng thái</th><th scope="col">Chi tiết</th></tr></thead>
+        <tbody><tr th:each="account : ${accounts.content}">
+            <th scope="row" th:text="${account.username}">user</th>
+            <td th:text="${account.email}">email</td><td th:text="${account.status}">ACTIVE</td>
+            <td><a th:href="@{${'/' + ops + '/accounts/' + account.id}}">Xem</a></td>
+        </tr></tbody>
+    </table></div>
+    <nav class="d-flex gap-3 mt-3" aria-label="Phân trang tài khoản">
+        <a th:if="${accounts.hasPrevious()}" th:href="@{${'/' + ops + '/accounts'}(query=${query},page=${accounts.number - 1})}">Trang trước</a>
+        <span th:text="${'Tổng: ' + accounts.totalElements + ' tài khoản'}"></span>
+        <a th:if="${accounts.hasNext()}" th:href="@{${'/' + ops + '/accounts'}(query=${query},page=${accounts.number + 1})}">Trang sau</a>
+    </nav>
+</section></body></html>

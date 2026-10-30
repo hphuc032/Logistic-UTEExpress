@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Không thể xem đơn hàng | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="order-error-title">
+    <h1 id="order-error-title">Không thể xem đơn hàng</h1>
+    <p th:text="${publicMessage}"></p>
+    <p class="text-secondary" th:text="${errorCode}"></p>
+    <a class="btn btn-app-secondary" th:href="@{/orders}">Đơn hàng của tôi</a>
+</section></body></html>

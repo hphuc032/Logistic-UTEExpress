@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:fragment="alerts" class="app-alert-region" aria-label="Thông báo" aria-live="polite">
+    <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="status">
+        <span th:text="${successMessage}">Thao tác đã hoàn tất.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng thông báo"></button>
+    </div>
+    <div th:if="${infoMessage}" class="alert alert-info alert-dismissible fade show" role="status">
+        <span th:text="${infoMessage}">Thông tin mới.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng thông báo"></button>
+    </div>
+    <div th:if="${warningMessage}" class="alert alert-warning alert-dismissible fade show" role="alert">
+        <span th:text="${warningMessage}">Vui lòng kiểm tra lại thông tin.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng thông báo"></button>
+    </div>
+    <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${errorMessage}">Không thể hoàn tất thao tác.</span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Đóng thông báo"></button>
+    </div>
+</section>
+</body>
+</html>

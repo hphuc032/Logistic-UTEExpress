@@ -1,0 +1,75 @@
+name: PR70 full integration gate
+
+on:
+  pull_request:
+    branches: [develop]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
+
+jobs:
+  refund-integration:
+    if: github.event.pull_request.number == 70
+    name: PR70 Java PostgreSQL refund regression
+    runs-on: ubuntu-latest
+    timeout-minutes: 55
+    steps:
+      - name: Checkout exact PR source
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Java 21
+        uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Node 22
+        uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+          package-manager-cache: false
+      - name: Python 3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: '3.13'
+      - name: Full and targeted disposable PostgreSQL regression
+        env:
+          QA70_EXPECTED_HEAD: ${{ github.event.pull_request.head.sha }}
+          # Public encryption recipient only. Private key remains in TD's ignored local evidence folder.
+          QA70_RECIPIENT_CERT: |
+            -----BEGIN CERTIFICATE-----
+            MIID3DCCAkSgAwIBAgIUGY0gcWk8hc3Wb7Jd3Y137nodGtswDQYJKoZIhvcNAQEL
+            BQAwKDEmMCQGA1UEAwwdUFI3MCBsb2NhbCBhcnRpZmFjdCByZWNpcGllbnQwHhcN
+            MjYxMDI5MDUzNDQ1WhcNMjcxMDI5MDU0NDQ1WjAoMSYwJAYDVQQDDB1QUjcwIGxv
+            Y2FsIGFydGlmYWN0IHJlY2lwaWVudDCCAaIwDQYJKoZIhvcNAQEBBQADggGPADCC
+            AYoCggGBAKoO+T+bZWTMWz6Ze20Hl9ckJGEYLPDBpeg+d+GAM+9X1rYLR90Tu7RS
+            HwGaKJvphnixtPAmHbJ0LPMSE9VAiGE7kWU/IASiqs00pFO4LHZVSpFX1qppzZiH
+            3q0f2w78kcuoeaBkol+EDOJOrrSW4QvdggVgIeHFLH+J2ZGb7F+7IcOEVA5Zlyhg
+            IgibnUIchHWHQIK+KxB74maPeP58iajawowYBsuG+9g1ORwQ+ZZlpt/E9Vghx4EA
+            mG2r4lkE7Gbzu9PKGzQA5T2wfjlJJyTje1NzXPMHTQjH8coWHaPDD6+TNKirj+Cw
+            5q+mD0UlIHIYhS3h2/i7vjZnHNWVhOKqqM26zlk2hrDthSGsxmcTsxUq8XwqEX/u
+            L7Y7a4xJR7TkaYQKe8UhpYDZaiEHJlxSbWO+4QWqqAQ2WZ8jCXh3CIBlK1EA7tQE
+            n50CkZJ0B7w1d6HxCCJxbI1hviM9aPpPJoAi05Lzif7f4kBmLgdRkGHDjukaLOFL
+            Nbh0UgTeeQIDAQABMA0GCSqGSIb3DQEBCwUAA4IBgQChp/1xDBWpwJkeRrbp5szw
+            e3XF7YkWK6Y5pBaXyAXlt7ghHN/FW5Z8onW0FO6e71C6MQEElyCRih8tkv7/7fLk
+            wuU+IexIM3FyMUddfy1Wva/kep41leq0y5R8Q2YRuMKABlQ7JqFnyA86EGXI9Tma
+            XuHDQz+I8OY3Xnx3sfdUJWEVFX9j8Z4BowbVSChgkPcYZhAF/bfdEdt6VM80gqj0
+            eM5ucAX4b1+V4rfP4IWJsArlwmic93+emHyly8YwPIVABxcUOdOSAjXlqKLM1n5B
+            Ge6VZ0thWRTFQlifOjhFs0eAeSJ3PjuWz5KkOZaft4TT3EPjb3Em7ZF12zd3aImU
+            2gcoca3MlJfM78BlGLeZR//gBVoTQ1ERTLj7yw9dBUxZcSHQ2T8FVfkxAo/8pIbv
+            G09jSxua0DYL/+wBZanmCq2O4aC0+/Iy0XAkNqrBgyFv9Q3Fk9/Xuc8SIiaIwZlH
+            Ed1L93lcEcdvQx6HENytV9u2AswsOluFriL8BUhOoqU=
+            -----END CERTIFICATE-----
+        run: python -B scripts/qa/pr70_integration_gate.py --execute
+      - name: Retain sanitized evidence and encrypted raw artifacts
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: pr70-integration-${{ github.event.pull_request.head.sha }}-${{ github.run_id }}
+          path: target/qa70-public/
+          if-no-files-found: error
+          retention-days: 30

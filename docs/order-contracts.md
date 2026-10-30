@@ -1,0 +1,708 @@
+# ORD-00 — Checkout / Order / Shipping contracts
+
+Owner: Tiến Đạt. Reviewer: Quốc Đạt. Sprint S0, P0. Dependencies: ARCH-01, SEC-01.
+DB-01 is the compatibility baseline. This is a contract handoff, not ORD-01 implementation.
+The Master Plan is the source of truth; its I7 subtotal semantics are recorded below
+from the finalized team decision. The original Master Plan DOCX is not present in this
+checkout. DB-01 transcribes its E2/E3/E4 inventory.
+
+## Authority and security
+
+`OrderLifecycleService` is the only authority allowed to change an order status.
+Controllers, Shipping, Payment and Admin must call it; never expose `setStatus` to them.
+Initial NEW creation and its history use the ORD-01 lifecycle persistence primitive.
+`OrderTransitionPolicy` only checks graph edges: it neither authorizes an actor nor writes
+data. `OrderPlacementService` is the single production lifecycle bean. It reuses
+`OrderLifecycleServiceImpl` orchestration for CHK-02 creation, ORD-03 vendor operations
+and ORD-05 internal shipper completion. RETURN-01 Phase 1 adds dedicated buyer request
+and vendor approval/rejection boundaries. ORD-04 Phase 2 implements RECEIVE_RETURN through
+its dedicated vendor-attestation boundary. COMPLETE_REFUND remains unimplemented and
+system actions remain denied; Ops uses its separately guarded cancellation boundary.
+
+The future implementation obtains `CurrentUser` from the existing SEC-01
+`CurrentUserProvider`, using the existing `RoleCode`. It must resolve `subject` to the
+persisted `users.id` through the identity boundary, not parse the subject as a number.
+Never receive buyer/vendor/actor IDs, roles, ownership booleans or guard booleans from HTTP.
+An order ID, expected version or address ID is a selection, never evidence of ownership.
+Missing authentication maps to `UNAUTHENTICATED`; wrong actor/scope/ownership to
+`ACCESS_DENIED`; invalid input to `VALIDATION_FAILED`/`INVALID_REQUEST`; stale state,
+failed business guards and duplicate transitions to `CONFLICT`, using ARCH-01
+`ApplicationException`/`ErrorCode`/`ErrorResponse`. Do not leak foreign order details.
+
+Buyer uses the SEC-01 user-facing role policy (USER or VENDOR) plus order ownership;
+Vendor requires VENDOR plus shop ownership; assigned shipper requires SHIPPER plus the
+current assignment; Admin requires ADMIN plus the operation's scope. Ops is a business
+actor in the plan, not a new role. Its exact mapping to MANAGER/ADMIN and scope needs
+reviewer confirmation; until defined, implementations must deny Ops operations.
+Account/shop restrictions must be queried from trusted server data, not from roles alone.
+
+`transition(command)` rejects EXPIRE_PAYMENT even for an authenticated admin.
+`expireUnpaidOnlineOrder(orderId, expectedVersion)` is exclusively for an internal trusted
+scheduler, never a controller endpoint or a user-selectable system identity. This split
+is a contract requirement, not an implemented scheduler/authorization check.
+
+## State machine
+
+`order.dto.OrderStatus` contains exactly NEW, CONFIRMED, PICKED_UP, SHIPPING, DELIVERED,
+CANCELLED, RETURN_REQUESTED, RETURNED, REFUNDED. DELIVERY_FAILED is absent.
+`OrderAction` encodes each from/to pair; the complete actor/guard matrix below is normative.
+No self transition or other edge is allowed, including NEW directly to DELIVERED.
+
+| Action / edge | Actor | Required server-verified conditions |
+| --- | --- | --- |
+| CONFIRM: NEW → CONFIRMED | Vendor | Owns shop; COD valid or online payment PAID with matching total; account/shop unrestricted |
+| CANCEL_NEW: NEW → CANCELLED | Buyer (USER for Q02-F05 endpoint) | Owns order; still unconfirmed; matching expectedOrderVersion |
+| CANCEL_NEW: NEW → CANCELLED | Vendor / Ops | Owns shop or permitted Ops scope; nonblank reason |
+| EXPIRE_PAYMENT: NEW → CANCELLED | System | Online payment expired and unpaid; verify all attempts, no successful PAID attempt |
+| PICK_UP: CONFIRMED → PICKED_UP | Assigned shipper | Current assignment exists; vendor ready_at exists; order not cancelled |
+| CANCEL_CONFIRMED: CONFIRMED → CANCELLED | Vendor / Ops | Correct ownership/scope; no actual pickup; nonblank reason; resolve shipment assignment atomically |
+| START_SHIPPING: PICKED_UP → SHIPPING | Assigned shipper | Current assignment; start first delivery attempt |
+| DELIVER: SHIPPING → DELIVERED | Assigned shipper | Trusted successful delivery; COD collection exactly equals grand_total; update delivered_at |
+| CANCEL_FAILED_DELIVERY: SHIPPING → CANCELLED | Ops | Correct scope; shipment failed under the two-attempt rule; goods physically received back by shop |
+| REQUEST_RETURN: DELIVERED → RETURN_REQUESTED | Buyer | Owns order; server time within 7 days of delivered_at; no previous return request ever |
+| REJECT_RETURN: RETURN_REQUESTED → DELIVERED | Vendor | Owns shop; reject pending return request; nonblank reason |
+| RECEIVE_RETURN: RETURN_REQUESTED → RETURNED | Vendor | Owns shop; return request APPROVED; shop physically received goods |
+| COMPLETE_REFUND: RETURNED → REFUNDED | Admin | Authorized scope; refund SUCCEEDED; nonblank proof_reference; amount equals authorized refund amount; all linked records belong to same order |
+
+Use the original delivered_at for the return window even after rejection; rejection does
+not renew the window. Contract window: `delivered_at <= now <= delivered_at + 7 * 24 hours`
+using Instant/UTC. An existing rejected request still prevents a second request, matching
+DB-01's unique return/order. Reasons required above must be nonblank after trimming.
+Reason length limits await module schema review; never silently truncate history.
+
+CANCELLED is terminal for fulfillment; REFUNDED is terminal. DELIVERED ends fulfillment
+unless its one valid return flow starts. Cancellation refunds, if applicable, are a separate
+payment concern and do not add a CANCELLED → REFUNDED order edge.
+
+### QA-02 cancelled-paid financial completion
+
+HP's QA-02 scope decision includes manual full refund of a valid persisted PAID
+Payment when cancellation preceded delivery. The local implementation and evidence
+are documented in [QA-02 cancelled-paid refund](testing/QA-02-cancelled-paid-refund.md).
+VNPAY Sandbox and callbacks remain deferred to PAY-03.
+
+`POST /admin/orders/{orderId}/refunds/cancelled-paid` requires authenticated ADMIN,
+standard CSRF, exactly one `Idempotency-Key`, and JSON containing only
+`expectedOrderVersion` and `proofReference`. Current persisted ACTIVE ADMIN
+authority is retained through commit. Amount, Payment ID, actor and status are
+server-derived; the full positive whole-VND grand total must equal one valid PAID
+Payment. ONLINE evidence also requires a persisted nonblank provider reference.
+Both payment creation and collection must precede the evidenced cancellation.
+
+Require CANCELLED, the expected version, no delivery marker/history or return,
+matching cancellation history and the existing once-only inventory-release marker.
+The ledger records a distinct `PAY02_CANCELLED_PAID_REFUND_V1` immutable SUCCEEDED
+operation with a cancellation snapshot and no ReturnRequest. Order status/version,
+Payment PAID state, financial snapshots, stock, vouchers and Shipping remain
+unchanged. Ledger and audit are atomic; the financial event is after commit only.
+This produces no second cancellation history or lifecycle notification.
+
+Exact replay requires the original ADMIN, operation, key and canonical payload;
+current authority is checked again. Conflicting requests return 409, absent Orders
+404, unauthorized actors 401/403, and invalid proof/body/key 400. Existing returned-
+COD refund behavior and canonical encoding are preserved. No payment gateway call,
+callback simulation or new production PAID writer is introduced.
+
+In ORD-01, each transition must validate the command (including nonnegative version),
+resolve actor, load and lock/version-check authoritative order and dependent evidence,
+check current status and every guard, then atomically apply status/timestamps and append
+OrderStatusHistory. Recheck inside the transaction, not only before it. Concurrent
+cancellation/pickup/payment callbacks must serialize; a failed guard has no side effects.
+History stores actor_id (null for system), from_status, to_status, reason, created_at from
+a server Clock. Inventory release must be guarded by inventory_released_at on the locked
+order. No public contract takes a mutable entity or promises successful persistence today.
+
+Actions with **no OrderStatus transition**:
+
+- Vendor ready: update ready_at only.
+- Assign/reassign shipper: modify Shipment only.
+- Vendor approves return: ReturnRequest APPROVED; order stays RETURN_REQUESTED.
+- Delivery failure/retry: modify shipment/attempts; order stays SHIPPING.
+
+### Q02-F05 HP-approved Buyer cancellation
+
+HP approved this production correction in the QA-02 task. POST
+`/buyer/orders/{orderId}/cancel` requires authenticated USER authority, current persisted
+active USER eligibility and Order ownership. This endpoint is USER-only; the broader
+USER/VENDOR Buyer policy above still applies to existing reads/return operations.
+It does not grant VENDOR-only actors access to the Buyer cancellation route.
+
+Request placement decision: follow existing JSON command DTO conventions with the
+minimal body `{"expectedOrderVersion":0}`. HP supplied the field and left its placement
+open; this implementation selects JSON body, with no query/header alternative, form
+handler, actor/reason/status/payment/quantity fields or client money. Missing/null/
+negative versions and unknown JSON fields reject. Query parameters cannot override
+the body. Success returns HTTP 200 `{"result":"OK"}` using the existing mutation convention.
+Existing global authentication, CSRF and controller/lifecycle/authority method guards
+remain active; SecurityConfig is unchanged.
+
+Dedicated `OrderLifecycleService.cancelForBuyer` rejects an existing outer transaction,
+then owns a transaction locking/refreshing Buyer-scoped Order before the active Account.
+It rechecks persisted USER authority, NEW state, expected version and absent release/
+cancel/delivery markers. Foreign/missing Order is 404 before state/version disclosure;
+stale, non-NEW and duplicate cancellation is 409. No VendorOrderAuthority or Shop
+ownership path authorizes a Buyer purchase. Expected version plus the Order row lock
+serializes competing requests; replay never restores twice and is a conflict, not a
+new idempotency ledger or successful self transition.
+
+After authorization the lifecycle reuses the existing Order-internal cancellation
+release effect (`OpsOrderAuthority.release`: inventory quantities/marker and voucher
+release only, no Ops authorization/audit). This delegates to the mandatory inventory
+and voucher services; restoration logic is not duplicated. The sole lifecycle writer
+changes Order/history and prepares the inbox in the same transaction. Persistence or
+pre-commit failure rolls back stock/quota/history/inbox together. Committed lifecycle
+events/private socket hints occur only after commit. Payment is neither read as new
+authority nor rewritten: COD UNPAID evidence, money/commission/discount/item snapshots
+and existing cart remain unchanged; no refund, Shipping operation, migration or new
+financial query/formula is introduced. Vendor cancellation and RTS keep their paths.
+
+### ORD-03 vendor implementation
+
+GET `/vendor/orders` and `/vendor/orders/{id}` serve vendor JSON/HTML reads. POST
+`/vendor/orders/{id}/confirm`, `/ready`, `/cancel` accept JSON or form commands with
+`expectedVersion`. No arbitrary target status, actor, shop, inventory or payment fields
+are accepted as authority. JSON unknown fields reject; extra form fields cannot change
+the operation. Existing VENDOR route policy, method authorization and CSRF apply.
+
+The persisted principal account must be active. Shop ownership comes from
+`VendorShopQueryService`: `shops.owner_id = accountId`, with the existing unique one-shop
+per account and APPROVED-shop convention. Reads use shop-scoped database queries,
+bounded pagination and `createdAt DESC, id DESC`; detail children are queried only after
+ownership succeeds. Foreign and missing orders return RESOURCE_NOT_FOUND. Persisted
+timeline/payment facts are projected without inferred entries or payment status.
+
+Vendor CONFIRM allows NEW -> CONFIRMED only. COD requires exactly one matching,
+unexpired UNPAID Payment with no paid_at, preserving PAY-01's single COD record.
+ONLINE permits multiple ONLINE attempts with exactly one matching, unexpired PAID
+attempt with paid_at; earlier unpaid/expired attempts do not prevent confirmation.
+Missing facts or mixed COD/ONLINE attempts reject; no payment method is inferred and
+no historical payment backfill or gateway is added. Pre-PAY-01 orders with no Payment
+remain readable/cancellable, but cannot confirm without authoritative payment evidence.
+Ready requires CONFIRMED,
+matching version and absent ready_at; it updates ready_at/updated_at and version only.
+No READY enum, self-transition, status history row or status-change event is introduced.
+
+Vendor cancellation permits NEW/CONFIRMED -> CANCELLED only. It accepts the controlled
+reason codes OUT_OF_STOCK or UNABLE_TO_FULFILL and stores their server-defined public
+reason text. Unchecked free text does not enter history/events. Under the order lock,
+inventory_released_at must be null; restore uses persisted OrderItem quantities through
+InventoryService.restore, then sets inventory_released_at at the cancellation instant.
+Stock, status, timestamps and exactly one status-history event commit/rollback together.
+PROMO-01 also releases the Order's REDEEMED voucher usage in that transaction after
+the Product/Shop locks, taking Voucher then VoucherUsage locks. RELEASED history is
+retained and excluded from both quotas; original Order/usage discount facts stay intact.
+Legacy Orders without usage remain unchanged; a voucher snapshot missing its expected
+usage is a CONFLICT that rolls back cancellation. Post-delivery returns/refunds never
+restore voucher quota. See [PROMO-01 voucher contract](PROMO-01-vouchers.md).
+Duplicate/stale/late actions conflict with no stock or history change. Cart and Payment
+records are unchanged, including an existing PAID record; refund decisions remain deferred.
+
+Write lock order is owned Order -> active vendor account -> assigned Shipment (cancellation,
+if present) -> either ascending products
+(cancellation) or ascending Payment records (confirm) -> owned Shop. Order and Shop
+are refreshed under their locks; payment guards also refresh locked attempts. Shop is
+locked AFTER inventory to preserve checkout's products-before-shop ordering. Expected
+state/version and @Version remain enforced. History timestamps come from the server
+Clock at PostgreSQL microsecond precision; status-change events publish after commit.
+Optimistic conflicts, including earlier managed snapshots in joined transactions, map
+to CONFLICT. Ready never creates a status-change event.
+
+Vendor cancellation rejects PICKED_UP and every subsequent Order state. ORD-05 calls
+Shipping's `cancelAssignedForVendorOrder` before inventory restoration: no Shipment is
+a no-op, ASSIGNED closes atomically, and physical pickup/later Shipment evidence conflicts.
+Stock/voucher release, Shipment audit, Order history and after-commit events share the
+existing transaction. Vendor authorization continues to deny all shipper actions.
+
+## RETURN-01 Phase 1
+
+Buyer GET/POST `/orders/{id}/return` and Vendor GET
+`/vendor/orders/{id}/return`, POST `/approve` or `/reject` use the existing
+Order route conventions. Buyer routes require USER/VENDOR; vendor routes require VENDOR.
+JSON and form writes retain CSRF and reject forged/unknown fields. Resource IDs come
+only from the route; persisted principal identity and parent ownership scope every lookup.
+
+`requestReturn(RequestReturnCommand)`, `approveReturn(ReturnDecisionCommand)` and
+`rejectReturn(ReturnDecisionCommand)` are dedicated lifecycle methods; generic vendor
+transition/cancellation effects do not handle returns. Every public return mutation
+rejects an existing transaction and starts its own Order-first transaction. Lock Order,
+then existing ReturnRequest, then active Account; vendor decisions also lock/recheck
+approved owned Shop. Persisted roles are rechecked under the Account lock, with no global
+Role lock afterward. Read projections use a repeatable-read snapshot.
+
+Request accepts `expectedVersion` and a nonblank reason, maximum 1000 characters before
+stripping. Compare the actual server UTC Instant with the original inclusive 168-hour
+window before rounding stored times to PostgreSQL microseconds. Missing/future delivery,
+stale version or any previous request conflicts. Insert PENDING and use the existing
+lifecycle writer for RETURN_REQUESTED, one Order version increment/history row and
+after-commit event in the same transaction.
+
+Decisions accept `expectedVersion` and `expectedRequestVersion`; require PENDING evidence
+and RETURN_REQUESTED Order. Approval accepts no reason and changes only ReturnRequest
+status/decision actor/time/version. Rejection requires a nonblank reason of at most 1000
+characters, retains all original request facts, marks REJECTED and uses the shared writer
+for DELIVERED without changing original delivered_at. Approval emits no status event/history.
+Full rejection text is retained in owned return evidence; history/events use the fixed
+"Vendor rejected return" reason so free text cannot embed payment/address data in lifecycle facts.
+
+Database uniqueness is unconditional across statuses. A composite Order/requester FK
+requires requested_by to equal the persisted Order buyer. Phase 1 statuses are PENDING,
+APPROVED and REJECTED. Phase 1 kept received_at/restockable NULL. Phase 2 below adds
+receipt evidence through a new migration. No Payment, Shipment, voucher, inventory
+or cart effect runs. COMPLETE_REFUND remains blocked.
+
+The original Phase 1 schema review notes remain in
+[RETURN-01 implementation](RETURN-01-phase1-report.md). Phase 2 follows the HP-approved
+contract below; changes await TD review before commit.
+
+## ORD-04 Phase 2: RECEIVE_RETURN (HP-approved vendor attestation)
+
+`POST /vendor/orders/{id}/return/receive` accepts JSON or form fields `expectedVersion`,
+`expectedRequestVersion`, `receiptReference`. Both versions are required and nonnegative.
+The reference must be nonblank and at most 255 Java characters before stripping. It
+identifies a handover record, goods-receipt note, return tracking number or traceable
+electronic document for this Order/ReturnRequest. Submitting this operation is the
+Vendor's attestation that physical goods were received and the referenced evidence is
+valid. HP accepts this attestation for Phase 2; it is not independent carrier verification.
+No additional attestation field is accepted. The form explicitly states this commitment.
+
+The active persisted Account must still hold VENDOR and own the APPROVED Shop. The
+dedicated `receiveReturn(ReceiveReturnCommand)` starts the existing return transaction,
+rejecting an outer transaction. It pessimistically locks and refreshes Order then
+ReturnRequest, locks/rechecks Account and Shop, checks both expected versions, requires
+RETURN_REQUESTED and a linked APPROVED request without receipt, then records server
+actor and Clock timestamp. Receipt stays on the unique immutable `order_id` request;
+the same reference text may identify a shared handover document for different Orders.
+Duplicate means another receipt for the same Order/ReturnRequest, not reuse of document text.
+
+The Order becomes RETURNED; ReturnRequest stays APPROVED. Each JPA version increments
+once. One history row and the existing after-commit lifecycle event use the safe fixed
+reason `Vendor attested return receipt`; free-text evidence stays in the owned return
+projection. Rollback removes all writes and emits no event. Duplicate/stale attempts
+conflict; generic `transition(RECEIVE_RETURN)` always conflicts, including callers with
+custom authorization. No Shipping/Ops receipt surrogate is used.
+
+As in Phase 1, a concurrent Shop restriction can return CONFLICT when Hibernate detects
+the changed Shop version while acquiring its lock, or ACCESS_DENIED after refreshed
+eligibility checks. Both paths roll back all receipt effects. Account/role restrictions
+committed before eligibility checks are denied.
+
+Migration `V20261018090000__td_ord04_return_receipt.sql` adds `received_by` (users FK)
+and `receipt_reference VARCHAR(255)`, preserving Phase 1 rows/checksum and `received_at`.
+It replaces the old no-receipt and timestamp checks with all-or-none receipt fields,
+APPROVED-only evidence, `received_at >= decision_at >= requested_at` and
+`updated_at = received_at` for received rows. A trigger prevents overwriting, clearing
+or reassigning successful receipt evidence. Existing unique Order and composite buyer
+FK constraints remain. `restockable` remains nullable and constrained to NULL.
+
+Payment, Shipment, inventory, restocking, vouchers, refunds and cart are unaffected.
+Receipt does not authorize REFUNDED or COMPLETE_REFUND. Owned reads expose receipt
+reference/time, preserving the convention that actor IDs remain internal.
+
+## ORD-05 trusted shipper lifecycle boundary
+
+`prepareShipperTransition(orderId, expectedOrderVersion, expectedShipmentVersion, action)`
+and `completeShipperTransition` accept the same original source versions and only
+PICK_UP, START_SHIPPING or DELIVER. Both require an existing write transaction and
+SHIPPER authority. A dedicated Order guard locks and refreshes Order before calling
+Shipping's service contract, which rechecks the persisted active SHIPPER and current
+assignment. Foreign/reassigned actors receive RESOURCE_NOT_FOUND. No actor, payment,
+timestamp or Shipment evidence DTO is accepted from the caller.
+
+Prepare validates source state/version, ready_at and Shipment source evidence without
+writing Order/history/events. After exactly one Shipment mutation, complete requires
+persisted target evidence at original Shipment version + 1, unchanged original Order
+version and matching Order source state. It uses the standard lifecycle writer for
+timestamps, one version increment, one history row and the existing after-commit event.
+The generic `transition` API remains vendor-only; it is not a shipper bypass.
+
+Delivery also calls MANDATORY `PaymentReadService.requireCollectedCodForDelivery`
+after Order/Shipment locks. It locks and refreshes Payment rows, requires exactly one
+record, COD, PAID, exact persisted grand_total, paid_at present and expired_at absent.
+ONLINE and ambiguous/missing evidence conflict. The outer Shipping coordinator must
+collect COD while Order remains SHIPPING, mutate Shipment and complete Order in one
+transaction, allowing every failure to escape. ORD-05 adds no coordinator, endpoint,
+migration, online-payment fallback or other owner's persistence access.
+
+See [the shared integration boundary](SHIP-02-ORD-05-boundary.md).
+
+## Shipment integration (QD)
+
+`shipping.dto.ShipmentStatus` is persisted by SHIP-01 for assignment; pickup and
+delivery transitions are reserved for SHIP-02.
+
+| Shipment status | Order status / interpretation |
+| --- | --- |
+| ASSIGNED | CONFIRMED |
+| PICKED_UP | PICKED_UP |
+| SHIPPING | SHIPPING |
+| DELIVERY_FAILED | SHIPPING, including while awaiting physical return |
+| DELIVERED | DELIVERED, or subsequent RETURN_REQUESTED / RETURNED / REFUNDED |
+| RETURNED_TO_SENDER | CANCELLED after Ops verifies shop receipt |
+| CANCELLED | CANCELLED |
+
+These are consistency rules, not an automatic status setter. For example, rejected return
+goes back to DELIVERED without a second delivery. Assignment/cancellation/physical-return
+operations must call the lifecycle boundary for the relevant order transition in the same
+transaction. SHIP-01 only creates or reassigns an `ASSIGNED` Shipment while Order stays
+`CONFIRMED`; the later transitions remain deferred to SHIP-02.
+
+`max_attempts = 2`; `attempt_count` starts at zero and increases when each delivery attempt
+starts, not when failure is recorded. Initial PICKED_UP → SHIPPING starts attempt 1.
+After DELIVERY_FAILED, retry starts SHIPPING and increments to 2 without an order
+transition. Every failure requires a nonblank reason. Retry is forbidden at 2 attempts.
+After exhaustion, keep Order SHIPPING until physical return. Only Ops may confirm
+RETURNED_TO_SENDER after shop receipt. Shipper failure alone never restores stock.
+The exact failure eligibility/evidence for Ops remains SHIP-owner policy; ORD-00 does
+not accept a caller-provided `failed=true` or `received=true` as proof.
+
+## Money and checkout
+
+CHK-01 buyer previews use `QuoteRequest` (address and shipping selection only), read
+selected quantities from the authenticated user's CART-02 cart, and return a
+`CheckoutPreview` containing exactly one `CheckoutQuote` in its `quote` field.
+Master Plan / T21: ONE CHECKOUT = ONE SHOP = ONE prospective order. A cart may
+contain multiple shops, but selected items across shops are rejected with CONFLICT;
+the buyer must select one shop for each checkout. One subtotal, one SHIP-00 shipping
+quote and one total are calculated. `CheckoutRequest` is reserved for the later
+place-order flow, not bound by
+the preview endpoints. Preview commission fields are unresolved (`null`). PROMO-02
+calculates persisted percentage Product promotions at one server pricing instant per batch.
+PROMO-01 adds optional server-calculated voucher discounts against that post-promotion subtotal;
+preview never reserves quota or writes usage/payment. CHK-02 must
+revalidate every fact; a preview is neither a reservation nor an order command.
+
+Currency for this contract is VND. `Money` uses BigDecimal exclusively, rounds calculated
+money to whole dong using HALF_UP, then represents it with scale 2 for NUMERIC(19,2).
+For example 10.49 → 10.00 and 10.50 → 11.00. Reject null/negative values **before** rounding,
+including -0.01, and reject NUMERIC(19,2) overflow both before and after rounding.
+This ORD-00 rounding policy fills the decision explicitly delegated by DB-01.
+
+Already quoted/snapshotted amounts must be whole VND; `requireAmount` rejects fractional
+dong instead of silently changing a quote/payment. Catalog and shipping owners must
+return amounts conforming to this policy. Payment validation compares exact values,
+ignoring insignificant BigDecimal scale only; 100.01 cannot pay a 100.00 order.
+
+Calculation contract implemented by checkout:
+
+1. Resolve buyer from SEC-01; validate address ownership and checkout key. Reject empty
+   items, duplicate product IDs, invalid quantities, unavailable products and multiple
+   distinct shop IDs. Never split one checkout into multiple shops implicitly.
+2. Load safe server ProductSnapshots from CatalogQueryService. Lock/check stock through
+   InventoryService in the submit transaction. Browser input has no price or total fields.
+3. Snapshot each product name and unitPrice; validate positive unitPrice. Compute per-unit
+   promotion discount at full precision, then `Money.round` once to discountSnapshot.
+   Require `0 <= discountSnapshot <= unitPrice`; finalUnitPrice = unitPrice - discountSnapshot;
+   lineTotal = finalUnitPrice * quantity. Reject overflow. Do not round again per quantity.
+4. Master Plan I7: `originalLineAmount = unitPriceSnapshot * quantity` (the snapshot DTO
+   names unitPriceSnapshot `unitPrice`); `productPromotionDiscount = originalLineAmount - lineTotal`.
+   `subtotal = SUM(lineTotal)`: merchandise AFTER product-level promotion, never the
+   original catalog-price total. `discountTotal` contains only order-level discounts applied
+   AFTER subtotal; in the current required scope this is the voucher discount. Product
+   promotion discount must NOT be included in discountTotal.
+   Voucher eligibility, including `min_subtotal`, uses this canonical subtotal. A percentage
+   order-level voucher uses subtotal as its merchandise calculation base, after product
+   promotion and before the voucher, excluding shipping. Round the authorized voucher
+   discount once with `Money.round`; enforce `0 <= discountTotal <= subtotal`.
+   PROMO-01 defines voucher eligibility/limits and single-voucher application in
+   [the voucher contract](PROMO-01-vouchers.md). Stacking and allocation remain deferred.
+5. Obtain shippingFee from ShippingQuoteService for the server-resolved destination,
+   shop and selected active provider/service. No zero-fee fallback on quote failure.
+6. `OrderTotals.calculate`: subtotal - discountTotal + shippingFee = grandTotal.
+   All components and paymentAmount are nonnegative. No negative accounting values in this API.
+7. Obtain effective commission policy at server checkoutAt via CommissionQueryService;
+   snapshot its ID, rate and later calculated commissionAmount. Rate must be 0–100.
+   No fallback policy is invented. Commission does not add to the buyer's grandTotal.
+8. Create payment attempts only for exactly grandTotal. Recompute/validate all facts at
+   submit; CheckoutQuote is informational, not a trusted resubmission or price reservation.
+
+For example, original merchandise of 100,000 VND minus a 20,000 VND product promotion
+gives lineTotal and subtotal of 80,000 VND. A 10,000 VND voucher gives discountTotal of
+10,000 VND; with shippingFee of 5,000 VND, grandTotal is 75,000 VND. Subtotal of 100,000
+and discountTotal of 30,000 are incorrect even though they produce the same grandTotal.
+PROMO-02 supplies line promotion calculation; OrderTotals validates supplied
+amounts and arithmetic, not their provenance or aggregation from CheckoutQuote items.
+
+## Commission
+
+The commission base is fixed: `commissionBase = subtotal - discountTotal`.
+This is the final merchandise amount after product promotion and order-level discount.
+`shippingFee` is excluded. Calculate at full BigDecimal precision, then round once:
+
+```text
+commissionAmount = Money.round(commissionBase * ratePercent / 100)
+```
+
+Require `0 <= ratePercent <= 100`. Resolve the effective policy at server `checkoutAt`
+through CommissionQueryService; never invent a fallback policy or accept a commission
+rate/amount from the browser. Snapshot `commissionPolicyId`, `commissionRateSnapshot`
+and `commissionAmount` at checkout. Later policy changes must not alter existing orders.
+Commission does not add to the buyer's total:
+`grandTotal = subtotal - discountTotal + shippingFee`.
+Rate storage precision remains a TD/QD review point; the calculation base is not open.
+No commission calculation implementation is introduced in ORD-00.
+
+Refund entitlement (shipping/discount inclusion,
+full/partial policy) also needs confirmation; the lifecycle must compare trusted authorized
+refund amount with successful refund evidence, never invent or accept a browser amount.
+
+## ORD-04 persisted shipping selection
+
+Every newly constructed Order requires a positive `shippingProviderId` and canonical
+`shippingServiceCode` matching `[A-Z][A-Z0-9_]{0,31}`. Placement re-quotes inside its
+transaction: `ShippingQuote.providerId()` and `ShippingQuote.serviceCode()` become
+`CheckoutQuote.shippingProviderId()` and `CheckoutQuote.shippingServiceSnapshot()`.
+Order copies those trusted facts and `CheckoutQuote.totals().shippingFee()` exactly;
+raw request fields and preview totals are not persistence sources.
+
+`Order.getShippingProviderId()` and `Order.getShippingServiceCode()` expose immutable
+scalar checkout facts for future SHIP-01. The nullable database columns support legacy
+orders only; no defaults, backfill or live provider foreign key are introduced. Existing
+orders remain readable when either fact is null. Future SHIP-01 must detect missing
+facts and fail safely, without inferring a selection from fee or current configuration.
+Configuration changes do not rewrite these snapshots. Same-hash checkout replay returns
+the existing order before re-quoting or any side effect and never fills legacy nulls;
+changed-hash replay retains CONFLICT. Shipment creation/assignment and fulfillment remain
+outside ORD-04.
+
+## Checkout idempotency
+
+CHK-02 implements this contract in `order.service.OrderPlacementService`, retaining
+the existing Order -> Checkout DTO dependency direction. Placement controllers own
+`POST /user/checkout/place-order` (JSON) and `/user/checkout/view/place-order` (form).
+They accept `CheckoutRequest` selections only. For a new checkout, its product/quantity
+set must exactly equal the authenticated buyer's locked, selected cart lines; stale or
+partial selections conflict. All prices, availability, address and shipping are checked
+again through CHK-01 in the placement transaction.
+
+PAY-01 extends new COD placement with one persisted UNPAID Payment attempt in the
+same transaction, using the persisted Order totals. Matching checkout replay returns
+before payment initialization; pre-PAY-01 orders without payment remain unchanged.
+ONLINE remains rejected as INVALID_REQUEST. PROMO-01 extends this contract with
+server-calculated order-level vouchers; PROMO-02 supplies per-unit Product promotion discounts. See
+[PROMO-01 voucher contract](PROMO-01-vouchers.md) for persisted rules, quota locks and snapshots.
+No Shipment or later order-management workflow is created. The placement receipt has
+order ID/code, current status, grand total, creation time and a replay flag.
+
+Canonical hash v1 uses SHA-256 over UTF-8, length-prefixed fields: item count, ascending
+product-ID/quantity pairs, address ID, provider ID, exact validated service code, payment
+method enum name, and canonical voucher code (PROMO-01: strip, ASCII validation,
+Locale.ROOT uppercase; null/blank becomes empty). Existing no-voucher hashes remain identical. Duplicate product
+IDs are invalid. Key whitespace is stripped; the key itself is not a hash field. Key
+length is at most the existing VARCHAR(255). No client hash, totals or identity are accepted.
+
+The active buyer row is locked through AccountIdentityService before the buyer/key
+lookup. This serializes same-buyer placement across application instances using the
+existing database lock, including retries after cart cleanup. The existing database
+UNIQUE constraint remains unchanged. A matching committed hash returns immediately,
+without re-reading address/cart/catalog/shipping/policy or changing stock/cart. Access
+is reauthorized against the current active account on every call. A different valid
+business payload conflicts even if the current cart is empty.
+
+Creation locks the buyer, then cart, then products in ascending ID order through the
+existing InventoryService. Cart mutations use the same cart lock. A single REQUIRED
+transaction re-quotes, resolves commission, decreases the locked stock, persists NEW
+and immutable item snapshots plus initial history through lifecycle authority,
+initializes the COD Payment, and removes only the verified cart item IDs. Any failure
+rolls all effects back. One
+server checkoutAt (UTC, PostgreSQL microsecond precision) is shared by the effective
+commission lookup and Order/history timestamps. The calculation and snapshot fields
+below are unchanged. Later lifecycle operations retain their fail-closed guards.
+
+`CheckoutRequest.checkoutKey` is always scoped to the authenticated buyer, resolved
+server-side through CurrentUserProvider and the identity boundary. The key is not proof
+of ownership. Future persistence must enforce `UNIQUE (buyer_id, checkout_key)`.
+
+The server must build a deterministic canonical request representation and `requestHash`
+from the business-significant checkout fields: product IDs/quantities, address selection,
+shipping provider/service, payment method and optional voucher code. Hash the
+server-normalized payload, with deterministic item ordering and consistent normalization
+of optional values; never trust a client/browser-supplied requestHash. The same normalized
+business request must produce the same hash.
+
+- Same buyer + checkoutKey + requestHash: return the previously created Order / checkout
+  result. Do not create a second Order, decrease stock again, consume a voucher again or
+  create a duplicate Payment. This also applies to concurrent duplicate submissions.
+- Same buyer + checkoutKey with a different normalized payload/requestHash: reject with
+  `CONFLICT`; do not overwrite the original result.
+- Transaction failure/rollback must not leave a falsely completed idempotency result.
+  Persist completion atomically with the checkout effects in the future implementation.
+- Retrying the same request after a network timeout is safe: return the committed result,
+  or allow checkout to proceed if the original transaction rolled back, without duplicate
+  effects. Reauthorize access using the authenticated buyer on every retry.
+
+ORD-00 freezes this contract only; no idempotency entity, table, repository, migration
+or checkout persistence implementation is introduced.
+
+## DTOs, boundaries and ownership
+
+All business IDs are Long. Technical times are Instant. Request records use Jakarta
+validation; future controllers must use @Valid and services must validate internal commands
+as well. Existing JSON unknown-field rejection remains enabled. List snapshots are copied.
+Read snapshots live in their owner's dto package and are internal projections, not HTTP write DTOs.
+
+| Contract | Provider → consumer | Requirement |
+| --- | --- | --- |
+| CatalogQueryService / ProductSnapshot | HP → TD | Server price, shop, name, version; no Product entity; missing/unavailable item rejects batch |
+| InventoryService / StockQuantity | HP → TD | Lock + check, decrease, restore in caller transaction; ascending product lock order; all-or-nothing |
+| ShippingQuoteService / ShippingQuoteCommand / ShippingQuote | QD → TD | Validate address/method/provider; server fee; capture service and rate version |
+| CommissionQueryService / CommissionPolicySnapshot | QD → TD | Effective global policy at checkout time; no persistence implementation |
+| OrderLifecycleService / OrderTransitionCommand | TD → QD, Payment, Admin | Sole order status writer; actor resolved internally; expected status/version prevent stale writes |
+| OrderEligibilityQueryService | TD → QD | Current authenticated buyer owns item and order DELIVERED; QD enforces review uniqueness |
+| CheckoutRequest | Browser → TD | Key, product quantities, address, provider/service, COD/ONLINE method, optional voucher code only |
+| CheckoutQuote / ItemSnapshot / AddressSnapshot / OrderTotals | TD → caller | Immutable checkout snapshots; DB-compatible names, no entities |
+
+Review eligibility for RETURNED/REFUNDED orders is not granted by this boundary. Review
+visibility after a later return is an engagement policy for QD review. REV-01 implements
+the advisory query and a separate `OrderReviewWriteBoundary` transaction coordinator;
+see [REV-01 integration contract](REV-01-order-eligibility.md). QD Review writes must use
+that coordinator, not rely on a previously returned boolean.
+Inventory restore is not authorized by a shipping failure. Later cancellation code must
+lock the order and guard inventory_released_at; return restocking additionally uses the
+trusted ReturnRequest.restockable rule. No inventory business logic is supplied here.
+
+## Event contract
+
+`OrderStatusChangedEvent(eventId, orderId, fromStatus, toStatus, actorId, occurredAt, reason)`
+is an immutable internal fact produced by a successful lifecycle transaction. UUID eventId
+is a correlation/deduplication key, not a replacement for BIGINT business primary keys.
+actorId is resolved from SEC-01 identity and null only for the verified system-expiry path.
+The event includes no CurrentUser/authorities, address, payment data, price list or mutable
+JPA entity. Its reason must not embed full address or payment data either.
+
+Write history in the transaction; dispatch externally only after commit. A rolled-back
+transition emits nothing. Consumers deduplicate by eventId; delivery guarantees/outbox
+are deferred, so ORD-00 does not promise exactly-once delivery. Notification DB, WebSocket,
+Shipping and audit consume this same minimal fact and obtain recipient/details through
+authorized queries. It is not a public WebSocket payload; consumers enforce audience access.
+No event for ready/assignment/return approval/failure/retry because OrderStatus did not change.
+No publisher, listener, notification service, WebSocket or outbox is implemented.
+
+## DB-01 compatibility and review points
+
+Read: DATABASE_SCHEMA.md, DATABASE_CONVENTIONS.md, DB-01-completion-report.md,
+SEED_MANIFEST.md, database-dependencies.json, the sole schema-comment migration and all
+three application YAML files. The baseline creates no Order/Payment/Shipment tables or
+enum CHECKs. There is therefore **no discovered status conflict** with the supplied state
+machine. No migration, seed, schema, database convention or configuration is changed.
+
+| Contract | DB-01 alignment |
+| --- | --- |
+| Long IDs, Instant times | BIGINT identity/FK and TIMESTAMPTZ UTC |
+| OrderStatus / ShipmentStatus | Future VARCHAR + named CHECK, EnumType.STRING; never ordinal |
+| discountTotal / grandTotal | orders.discount_total / orders.grand_total (task's discount / total) |
+| CheckoutQuote snapshots | orders receiver/address, commission fields; order_items product_name_snapshot, unit_price, discount_snapshot, final_unit_price, quantity, line_total |
+| Payment amount | payments.amount; multiple attempts/order; eventual unique successful PAID attempt |
+| Version | expectedVersion checks orders.version; later optimistic/pessimistic implementation |
+| Event/history | order_status_history order_id/from_status/to_status/actor_id nullable/reason/created_at |
+| Return/refund | Unique return/order and refund/order; refund/payment/return same order; preserve E3 unique payment/return references |
+| Promotions/vouchers | PROMO-01 persists voucher rules/usage and order snapshots; PROMO-02 persists percentage Product schedules with overlap protection |
+| Shipment | QD fields attempt_count, max_attempts, failure_reason, shipping_service_snapshot, fee_snapshot |
+
+No full PaymentStatus, ReturnRequestStatus or RefundStatus enum is invented here; the
+required PAID, APPROVED and SUCCEEDED guards are documented for their owners' later tasks.
+The shipping service snapshot format and provider method validation need QD implementation.
+
+**Cần reviewer xác nhận:**
+
+- HP/TD: trusted mapping from CurrentUser.subject to users.id; SEC-01 does not provide it yet.
+- HP/TD/QD: Ops role/scope mapping; do not invent OPS or SYSTEM RoleCode.
+- TD/QD: commission rate storage precision; refund entitlement amount policy.
+- QD: accept ShipmentStatus and quote interface; coordinate commission_policies migration
+  before orders (already flagged by DB-01, a scheduling dependency, not a schema conflict).
+- HP: accept Inventory/Catalog provider boundaries; implementation remains HP-owned.
+- ARCH owner: existing ArchitectureTest only permits cross-module service/dto dependencies,
+  while SEC-01 types live directly in security. Future implementations using CurrentUserProvider
+  need a narrow reviewed architecture-rule accommodation. ORD-00 interfaces carry no actor
+  parameter, so no rule is weakened and no duplicate security mechanism is introduced.
+
+## Deferred work and verification boundary
+
+ORD-01 implements Order/OrderItem/OrderStatusHistory/Payment models, lifecycle persistence,
+transactions/concurrency and their tests. Later tasks implement checkout, cart, payment
+callbacks, refund/return, promotion, shipping, notification and WebSocket workflows.
+No repository, controller, entity, migration, endpoint or UI is added by ORD-00.
+
+Focused tests cover exact vocabularies, every allowed action, every disallowed source/action
+pair, terminal states, money arithmetic/rounding/nonnegative/overflow/payment matching,
+DTO validation/immutability and absence of float/double in the contract API. Existing
+architecture/security/foundation suites must continue passing. These are contract tests,
+not proof of ownership enforcement, transaction safety or PostgreSQL persistence.
+
+## PAY-01 COD boundary and Master Plan sequencing
+
+The authoritative Master Plan excerpt supplied with PAY-01 schedules COD after
+CHK-02 only. ORD-03 depends on ORD-01, ORD-02 and PAY-01; SHIP-01 depends on ORD-03,
+SHIP-00 and ADMIN-02; SHIP-02 depends on SHIP-01 and PAY-01. Shipment assignment is
+therefore a later integration, not a PAY-01 prerequisite. TD owns Payment and QD owns
+Shipment/assignment/fulfillment. No Shipment persistence or future lifecycle is
+introduced here. Earlier completion reports describe their pre-PAY-01 increments.
+
+`payment.service.PaymentService.initializeCodForNewOrder(orderId)` is an internal
+checkout boundary invoked only after explicit COD selection and flushed NEW creation.
+It requires the existing transaction, locks the persisted order, reads its authoritative
+totals, and creates a COD UNPAID record only when there are no attempts. There is no
+HTTP initialization, lazy read initialization or automatic historical backfill.
+
+`PaymentService.collectCod(CodCollectionCommand(orderId, collectedAmount))` is an
+internal trusted fulfillment boundary, with MANDATORY transaction propagation. There
+is no public shipper collection endpoint and no claim of assigned-shipper enforcement.
+The caller must verify current assignment under a Shipment row lock. PAY-01 locks the
+order before its payment rows, refreshes managed payment evidence under the lock, and
+requires SHIPPING plus exactly one unexpired, UNPAID COD record. Both
+the stored payment amount and the collected amount must equal persisted grand_total;
+whole-VND BigDecimal validation rejects fractions rather than rounding evidence.
+Success sets PAID, paid_at and updated_at from the server Clock; no actor/provider
+audit data is invented. Repeated collection returns CONFLICT without changing facts.
+The one-PAID-per-order partial unique index remains unchanged.
+
+SHIP-02 must use one outer write transaction: lock Order, then Shipment and revalidate
+current assignment, then collectCod locks Payment (Order -> Shipment -> Payment).
+Collect while Order is SHIPPING, then perform the fulfillment transition through
+lifecycle authority. DELIVERED is rejected: persisted delivery already requires full
+COD collection, so payment cannot repair unpaid delivery after the fact. Assignment or
+amount/state validation failure must roll back every fulfillment/payment effect;
+never swallow failure or use a separate transaction for COD. The payment return is
+provisional until the outer transaction commits. No production completion operation
+exists today, so PAY-01 does not claim a currently guarded DELIVER endpoint.
+
+Buyer `GET /orders/{orderId}/payments` returns existing PaymentRecordView records
+after server-side ownership and USER/VENDOR authorization. Strict HTML redirects to
+the existing ORD-02 payment table. Foreign/missing orders share the same 404 contract;
+no payment attempts, secrets or inferred historical state are created by reads.
+
+See [PAY-01 completion report](PAY-01-completion-report.md) for implementation,
+verification evidence and remaining SHIP-02 responsibilities.
+
+## INT-02: exhausted delivery and inbox transaction
+
+`confirmReturnToSender` is the dedicated Ops ADMIN/MANAGER boundary for a physically
+received shipment after two recorded delivery failures. It requires the original
+Order/Shipment versions and a nonblank receipt reference; actor and time are server
+derived. Locks remain Order -> Shipment -> Payment, followed by persisted Ops-account
+authorization. Exactly one COD UNPAID payment with the original Order amount is
+required and is never rewritten. A first failure, stale/foreign command or inconsistent
+payment cannot cancel an Order or release stock.
+
+Within one transaction the boundary records immutable physical-receipt evidence,
+marks Shipment RETURNED_TO_SENDER, restores persisted OrderItem inventory once,
+uses the sole lifecycle writer for SHIPPING -> CANCELLED, releases voucher quota
+once, and writes inbox notifications. Failure rolls everything back. Matching original
+versions, actor and canonical receipt reference replay the committed result; changed
+payloads conflict. Receipt evidence is append-only, uniquely tied to one Order and
+Shipment, and does not establish external proof that goods were physically received:
+the authorized Ops actor must make that attestation in the existing detail page.
+The original NEW/CONFIRMED cancellation and quota guards remain unchanged.
+
+HP explicitly authorized the I8 transaction correction in this INT-02 chat.
+After Order/history flush, internal `OrderTransitionPrepared` synchronously invokes
+a MANDATORY notification writer in the same business transaction. Persistence failure
+fails the lifecycle operation. The existing `OrderStatusChangedEvent` and private
+notification hints still publish only after commit; no socket delivery is promised on
+rollback. Reconciliation remains a deduplicated repair path for legacy gaps, not the
+transactional guarantee for new writes. Initial NEW history remains excluded by the
+existing recipient contract. WS JWT/Origin/CSRF/recipient policies are unchanged.
+
+See the four `docs/testing/INT-02-*.md` documents for current source identities,
+Master Plan comparison, concurrency/rollback evidence and review limitations.
+
+Required commands: `.\mvnw.cmd test`, `.\mvnw.cmd package`, `git diff --check`.

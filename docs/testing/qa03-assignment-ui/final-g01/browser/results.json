@@ -1,0 +1,2294 @@
+{
+  "browser": "155.0.8059.82",
+  "headless": true,
+  "mode": "Automated real browser UI; not human manual signoff",
+  "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+  "cases": [
+    {
+      "case": "assignment-reassignment",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:05:08.008Z",
+      "steps": [
+        {
+          "assignment_reassignment": "UI JSON adapter",
+          "locked_shipper_denied": true,
+          "stale_denied": true,
+          "old_assignee_denied": true,
+          "postpickup_control_hidden": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\assignment-reassignment-375-stale.png",
+          "sha256": "e1a8cf58ab2e9da6fbcd98c9c09c0302fca8ec2afa120e0fb29f95a6e8bdc77b",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-375-stale.png"
+        },
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\assignment-reassignment-375-assigned.png",
+          "sha256": "86c9b084fad67d056cb943c1009cbca774c12ee067f2198d069dfc3bf3b09dc7",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-375-assigned.png"
+        },
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\assignment-reassignment-375-after-pickup.png",
+          "sha256": "931c5601852e348c3851da4c9bec274e5128d79e7c6dc1fa93689ee139187be9",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-375-after-pickup.png"
+        }
+      ],
+      "actor_scope": "ADMIN / SHIPPER old+current",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "precondition": {
+        "id": 1,
+        "orderStatus": "CONFIRMED",
+        "orderVersion": 2,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": null,
+        "shipmentStatus": null,
+        "shipmentVersion": null,
+        "attempt": null,
+        "shipperId": null,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 2,
+        "assignmentHistoryCount": 0,
+        "assignmentAuditCount": 0,
+        "refundCount": 0,
+        "itemId": 1
+      },
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/accounts/4/lock",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/1/assign",
+          "status": 403
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/accounts/4/unlock",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/1/assign",
+          "status": 409
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/1/assign",
+          "status": 201
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/1/reassign",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_b",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_b",
+          "method": "POST",
+          "route": "/shipper/orders/1/pickup",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/1",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/accounts/4",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/accounts/4",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/1",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/1",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/1/view",
+          "status": 404
+        },
+        {
+          "actor": "shipper_b",
+          "route": "/shipper/shipments/1/view",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/1",
+          "status": 200
+        }
+      ],
+      "actual": {
+        "id": 1,
+        "orderStatus": "PICKED_UP",
+        "orderVersion": 3,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": 1,
+        "shipmentStatus": "PICKED_UP",
+        "shipmentVersion": 2,
+        "attempt": 0,
+        "shipperId": 4,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 3,
+        "assignmentHistoryCount": 2,
+        "assignmentAuditCount": 3,
+        "refundCount": 0,
+        "itemId": 1
+      },
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:05:17.772Z",
+      "actors_observed": [
+        "admin",
+        "shipper_a",
+        "shipper_b"
+      ]
+    },
+    {
+      "case": "manager-assignment",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:05:17.865Z",
+      "steps": [
+        {
+          "manager_assign": true,
+          "manager_reassign": true,
+          "persisted_facts": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\manager-assignment-375-assigned.png",
+          "sha256": "8cf8f3a665ec9cd102694ce3c0f98bbac1d17a0f63e7d65e051c3f1c396ba83e",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/manager-assignment-375-assigned.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/2/assign",
+          "status": 201
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/2/reassign",
+          "status": 200
+        }
+      ],
+      "routes": [
+        {
+          "actor": "manager",
+          "route": "/manager/orders/2",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:05:21.166Z",
+      "actors_observed": [
+        "manager"
+      ]
+    },
+    {
+      "case": "csrf-duplicate-authorization",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:05:21.178Z",
+      "steps": [
+        {
+          "missing_csrf": 403,
+          "pending_ui_submit_events": 2,
+          "pending_network_POSTs": 1,
+          "cached_server_duplicate": 409,
+          "buyer_vendor_shipper_Ops_denial": true,
+          "order_payment_refund_facts_unchanged": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\csrf-duplicate-authorization-375-csrf-denied.png",
+          "sha256": "87e0f8602523b18e8fc10c10a331c660a40bc15c33389b8ae126f21064d14b75",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/csrf-duplicate-authorization-375-csrf-denied.png"
+        },
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\csrf-duplicate-authorization-375-duplicate-denied.png",
+          "sha256": "2aa312f7cf957ed926320b0774a7ae813923b145fb22518b0fd3f8dbc92621e3",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/csrf-duplicate-authorization-375-duplicate-denied.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/3/assign",
+          "status": 403
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/3/assign",
+          "status": 201
+        },
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "vendor_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/3",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/3",
+          "status": 200
+        },
+        {
+          "actor": "ADMIN cached-page",
+          "route": "/admin/orders/3",
+          "status": 200
+        },
+        {
+          "actor": "buyer_a",
+          "route": "/admin/orders/3",
+          "status": 403
+        },
+        {
+          "actor": "vendor_a",
+          "route": "/admin/orders/3",
+          "status": 403
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/admin/orders/3",
+          "status": 403
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:05:29.791Z",
+      "actors_observed": [
+        "ADMIN cached-page",
+        "admin",
+        "buyer_a",
+        "shipper_a",
+        "vendor_a"
+      ]
+    },
+    {
+      "case": "concurrent-browser-assignment",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:05:29.936Z",
+      "steps": [
+        {
+          "browser_responses": [
+            409,
+            201
+          ],
+          "one_persisted_history_and_audit": true,
+          "order_payment_refund_unchanged": true,
+          "actual_Postgres_lock_contention_verified_separately": "ShipmentAssignmentIT two race tests"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\concurrent-browser-assignment-375-conflict.png",
+          "sha256": "ffa9c13d5598778e4f55dad9f9c74ac46ea4aadf885f8fdfbd6a2a51eb504857",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/concurrent-browser-assignment-375-conflict.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/4/assign",
+          "status": 201
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/4/assign",
+          "status": 409
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/4",
+          "status": 200
+        },
+        {
+          "actor": "manager",
+          "route": "/manager/orders/4",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:05:33.911Z",
+      "actors_observed": [
+        "admin",
+        "manager"
+      ]
+    },
+    {
+      "case": "failure-retry",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:05:33.958Z",
+      "steps": [
+        {
+          "first_failure_retry_second_failure": "UI_SUBMITTED",
+          "order_unchanged": true,
+          "foreign_shipper_denied": true,
+          "no_third_retry": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\failure-retry-375-exhausted.png",
+          "sha256": "4b682c9368efff042452deeb7843f4e4e928139f74373a2d9032c4c66b64193c",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/failure-retry-375-exhausted.png"
+        }
+      ],
+      "actor_scope": "SHIPPER own+foreign",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/5/delivery-failed",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/5/retry",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/5/delivery-failed",
+          "status": 302
+        },
+        {
+          "actor": "shipper_b",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/7/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/7/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/7/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/7/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/7/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_b",
+          "route": "/shipper/shipments/7/view",
+          "status": 404
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:05:42.500Z",
+      "actors_observed": [
+        "shipper_a",
+        "shipper_b"
+      ]
+    },
+    {
+      "case": "attempt2-delivery",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:05:42.553Z",
+      "steps": [
+        {
+          "wrong_COD_rejected": true,
+          "delivered_at_attempt2": true,
+          "payment": "PAID"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\attempt2-delivery-375-delivered.png",
+          "sha256": "b8076f7e4f0ef0b2db1bf34b322e1d87eecb66b8be7773c27f9c73a5b7821e0f",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/attempt2-delivery-375-delivered.png"
+        }
+      ],
+      "actor_scope": "SHIPPER",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/6/delivery-failed",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/6/retry",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/6/delivered",
+          "status": 409
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/6/delivered",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/8/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/8/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/8/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/8/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/8/view",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:05:48.354Z",
+      "actors_observed": [
+        "shipper_a"
+      ]
+    },
+    {
+      "case": "return-to-sender",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:05:48.367Z",
+      "steps": [
+        {
+          "receipt_submitted_via_UI": true,
+          "order": "CANCELLED",
+          "shipment": "RETURNED_TO_SENDER"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\return-to-sender-375-received.png",
+          "sha256": "bd2d2232d1dedc55ef52fba6f83b152c83dfd7f850be51188540fc160927d027",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/return-to-sender-375-received.png"
+        }
+      ],
+      "actor_scope": "ADMIN",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/7/return-to-sender",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/7",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:05:55.670Z",
+      "actors_observed": [
+        "admin"
+      ]
+    },
+    {
+      "case": "keyboard-responsive",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:05:55.685Z",
+      "steps": [
+        {
+          "tool_driven_keyboard": true,
+          "skip_to_main": true,
+          "mobile_menu_keyboard": true,
+          "table_labeled_focusable": true,
+          "table_dimensions": {
+            "left": 0,
+            "width": 351,
+            "scroll": 640
+          },
+          "after_scroll_left": 40,
+          "physical_device_IME_screen_reader": "NOT RUN"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\keyboard-responsive-375-keyboard.png",
+          "sha256": "3f2c886b7843d7ca36f6655040ea37319051cff3e102e7ac48555e0bebc9d669",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser/keyboard-responsive-375-keyboard.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/dashboard/revenue",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:05:57.952Z",
+      "actors_observed": [
+        "admin"
+      ]
+    },
+    {
+      "case": "assignment-reassignment",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:05:57.970Z",
+      "steps": [
+        {
+          "assignment_reassignment": "UI JSON adapter",
+          "locked_shipper_denied": true,
+          "stale_denied": true,
+          "old_assignee_denied": true,
+          "postpickup_control_hidden": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\assignment-reassignment-768-stale.png",
+          "sha256": "019d3ea65bf2235077958524cc3c5badb339b16ae71f854e3e67c20219401f5b",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-768-stale.png"
+        },
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\assignment-reassignment-768-assigned.png",
+          "sha256": "e92ade2fd02c7918fa6c01937fbd631abc2410aec8b0848ae240b4272ceac148",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-768-assigned.png"
+        },
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\assignment-reassignment-768-after-pickup.png",
+          "sha256": "84523d6975dc1067e2e22ee146288a898937c89f80cbf7767bf5e4ee2d6dd7f9",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-768-after-pickup.png"
+        }
+      ],
+      "actor_scope": "ADMIN / SHIPPER old+current",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "precondition": {
+        "id": 8,
+        "orderStatus": "CONFIRMED",
+        "orderVersion": 2,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": null,
+        "shipmentStatus": null,
+        "shipmentVersion": null,
+        "attempt": null,
+        "shipperId": null,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 2,
+        "assignmentHistoryCount": 0,
+        "assignmentAuditCount": 0,
+        "refundCount": 0,
+        "itemId": 8
+      },
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/accounts/4/lock",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/8/assign",
+          "status": 403
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/accounts/4/unlock",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/8/assign",
+          "status": 409
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/8/assign",
+          "status": 201
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/8/reassign",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_b",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_b",
+          "method": "POST",
+          "route": "/shipper/orders/8/pickup",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/8",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/accounts/4",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/accounts/4",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/8",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/8",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/10/view",
+          "status": 404
+        },
+        {
+          "actor": "shipper_b",
+          "route": "/shipper/shipments/10/view",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/8",
+          "status": 200
+        }
+      ],
+      "actual": {
+        "id": 8,
+        "orderStatus": "PICKED_UP",
+        "orderVersion": 3,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": 10,
+        "shipmentStatus": "PICKED_UP",
+        "shipmentVersion": 2,
+        "attempt": 0,
+        "shipperId": 4,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 3,
+        "assignmentHistoryCount": 2,
+        "assignmentAuditCount": 3,
+        "refundCount": 0,
+        "itemId": 8
+      },
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:06:07.408Z",
+      "actors_observed": [
+        "admin",
+        "shipper_a",
+        "shipper_b"
+      ]
+    },
+    {
+      "case": "manager-assignment",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:06:07.496Z",
+      "steps": [
+        {
+          "manager_assign": true,
+          "manager_reassign": true,
+          "persisted_facts": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\manager-assignment-768-assigned.png",
+          "sha256": "a90a552e246600fcfbff09f68254f9b5aca48e941b60c23ad8c7387b3b427114",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/manager-assignment-768-assigned.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/9/assign",
+          "status": 201
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/9/reassign",
+          "status": 200
+        }
+      ],
+      "routes": [
+        {
+          "actor": "manager",
+          "route": "/manager/orders/9",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:06:11.088Z",
+      "actors_observed": [
+        "manager"
+      ]
+    },
+    {
+      "case": "csrf-duplicate-authorization",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:06:11.102Z",
+      "steps": [
+        {
+          "missing_csrf": 403,
+          "pending_ui_submit_events": 2,
+          "pending_network_POSTs": 1,
+          "cached_server_duplicate": 409,
+          "buyer_vendor_shipper_Ops_denial": true,
+          "order_payment_refund_facts_unchanged": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\csrf-duplicate-authorization-768-csrf-denied.png",
+          "sha256": "6cc4b660d5ba8b3488bde18a0433051ee247845f7f8c141d4771efd10641b9d6",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/csrf-duplicate-authorization-768-csrf-denied.png"
+        },
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\csrf-duplicate-authorization-768-duplicate-denied.png",
+          "sha256": "66c513ab4483c325f3392563dbbbbcc8caf56986b115c1dcf79419f431e35ed4",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/csrf-duplicate-authorization-768-duplicate-denied.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/10/assign",
+          "status": 403
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/10/assign",
+          "status": 201
+        },
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "vendor_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/10",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/10",
+          "status": 200
+        },
+        {
+          "actor": "ADMIN cached-page",
+          "route": "/admin/orders/10",
+          "status": 200
+        },
+        {
+          "actor": "buyer_a",
+          "route": "/admin/orders/10",
+          "status": 403
+        },
+        {
+          "actor": "vendor_a",
+          "route": "/admin/orders/10",
+          "status": 403
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/admin/orders/10",
+          "status": 403
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:06:20.987Z",
+      "actors_observed": [
+        "ADMIN cached-page",
+        "admin",
+        "buyer_a",
+        "shipper_a",
+        "vendor_a"
+      ]
+    },
+    {
+      "case": "concurrent-browser-assignment",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:06:21.118Z",
+      "steps": [
+        {
+          "browser_responses": [
+            409,
+            201
+          ],
+          "one_persisted_history_and_audit": true,
+          "order_payment_refund_unchanged": true,
+          "actual_Postgres_lock_contention_verified_separately": "ShipmentAssignmentIT two race tests"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\concurrent-browser-assignment-768-conflict.png",
+          "sha256": "c97cd692765731679d410720ecd4cf213ba4781b9af2789ab111a66e9cb333a7",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/concurrent-browser-assignment-768-conflict.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/11/assign",
+          "status": 201
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/11/assign",
+          "status": 409
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/11",
+          "status": 200
+        },
+        {
+          "actor": "manager",
+          "route": "/manager/orders/11",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:06:25.252Z",
+      "actors_observed": [
+        "admin",
+        "manager"
+      ]
+    },
+    {
+      "case": "failure-retry",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:06:25.303Z",
+      "steps": [
+        {
+          "first_failure_retry_second_failure": "UI_SUBMITTED",
+          "order_unchanged": true,
+          "foreign_shipper_denied": true,
+          "no_third_retry": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\failure-retry-768-exhausted.png",
+          "sha256": "fe973b1df0c91d5de4c964fe1df912642b07fce9b8f745166851c94b7c1796ce",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/failure-retry-768-exhausted.png"
+        }
+      ],
+      "actor_scope": "SHIPPER own+foreign",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/12/delivery-failed",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/12/retry",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/12/delivery-failed",
+          "status": 302
+        },
+        {
+          "actor": "shipper_b",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/16/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/16/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/16/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/16/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/16/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_b",
+          "route": "/shipper/shipments/16/view",
+          "status": 404
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:06:32.774Z",
+      "actors_observed": [
+        "shipper_a",
+        "shipper_b"
+      ]
+    },
+    {
+      "case": "attempt2-delivery",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:06:32.824Z",
+      "steps": [
+        {
+          "wrong_COD_rejected": true,
+          "delivered_at_attempt2": true,
+          "payment": "PAID"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\attempt2-delivery-768-delivered.png",
+          "sha256": "9f3a22d05a1aa929851dab7564dcf2de25b3e16707c688aea699682e9971d43b",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/attempt2-delivery-768-delivered.png"
+        }
+      ],
+      "actor_scope": "SHIPPER",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/13/delivery-failed",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/13/retry",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/13/delivered",
+          "status": 409
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/13/delivered",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/17/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/17/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/17/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/17/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/17/view",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:06:38.601Z",
+      "actors_observed": [
+        "shipper_a"
+      ]
+    },
+    {
+      "case": "return-to-sender",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:06:38.612Z",
+      "steps": [
+        {
+          "receipt_submitted_via_UI": true,
+          "order": "CANCELLED",
+          "shipment": "RETURNED_TO_SENDER"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\return-to-sender-768-received.png",
+          "sha256": "fba8430350d0e0ac97a3af9b83b24ea4588101a8b27e8f1146b39ba7b93323aa",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/return-to-sender-768-received.png"
+        }
+      ],
+      "actor_scope": "ADMIN",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/14/return-to-sender",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/14",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:06:45.755Z",
+      "actors_observed": [
+        "admin"
+      ]
+    },
+    {
+      "case": "keyboard-responsive",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:06:45.771Z",
+      "steps": [
+        {
+          "tool_driven_keyboard": true,
+          "skip_to_main": true,
+          "mobile_menu_keyboard": true,
+          "table_labeled_focusable": true,
+          "table_dimensions": {
+            "left": 0,
+            "width": 696,
+            "scroll": 696
+          },
+          "after_scroll_left": 0,
+          "physical_device_IME_screen_reader": "NOT RUN"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\keyboard-responsive-768-keyboard.png",
+          "sha256": "223fa840651ef1d9dbc4bc51fc719ef0af37c3e76448b4740ce4010bafecb739",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser/keyboard-responsive-768-keyboard.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/dashboard/revenue",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:06:48.046Z",
+      "actors_observed": [
+        "admin"
+      ]
+    },
+    {
+      "case": "assignment-reassignment",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:06:48.065Z",
+      "steps": [
+        {
+          "assignment_reassignment": "UI JSON adapter",
+          "locked_shipper_denied": true,
+          "stale_denied": true,
+          "old_assignee_denied": true,
+          "postpickup_control_hidden": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\assignment-reassignment-1440-stale.png",
+          "sha256": "6338c7f924fc038831ccbb433aa1d20331ce7c53019123f9ac653f88a0b635bc",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-1440-stale.png"
+        },
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\assignment-reassignment-1440-assigned.png",
+          "sha256": "58ad575a4771e42b62bd3d281a721c20c5287d99a1581c5a7314dfffe723a84a",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-1440-assigned.png"
+        },
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\assignment-reassignment-1440-after-pickup.png",
+          "sha256": "97975212bffc54aec4f0ccb65ba5abf1834f5b8223cfaa74851739f46cb6f78a",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/assignment-reassignment-1440-after-pickup.png"
+        }
+      ],
+      "actor_scope": "ADMIN / SHIPPER old+current",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "precondition": {
+        "id": 15,
+        "orderStatus": "CONFIRMED",
+        "orderVersion": 2,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": null,
+        "shipmentStatus": null,
+        "shipmentVersion": null,
+        "attempt": null,
+        "shipperId": null,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 2,
+        "assignmentHistoryCount": 0,
+        "assignmentAuditCount": 0,
+        "refundCount": 0,
+        "itemId": 15
+      },
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/accounts/4/lock",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/15/assign",
+          "status": 403
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/accounts/4/unlock",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/15/assign",
+          "status": 409
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/15/assign",
+          "status": 201
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/15/reassign",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_b",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_b",
+          "method": "POST",
+          "route": "/shipper/orders/15/pickup",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/15",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/accounts/4",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/accounts/4",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/15",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/15",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/19/view",
+          "status": 404
+        },
+        {
+          "actor": "shipper_b",
+          "route": "/shipper/shipments/19/view",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/15",
+          "status": 200
+        }
+      ],
+      "actual": {
+        "id": 15,
+        "orderStatus": "PICKED_UP",
+        "orderVersion": 3,
+        "grandTotal": 185000,
+        "inventoryReleased": false,
+        "shipmentId": 19,
+        "shipmentStatus": "PICKED_UP",
+        "shipmentVersion": 2,
+        "attempt": 0,
+        "shipperId": 4,
+        "paymentStatus": "UNPAID",
+        "paymentAmount": 185000,
+        "reviewCount": 0,
+        "historyCount": 3,
+        "assignmentHistoryCount": 2,
+        "assignmentAuditCount": 3,
+        "refundCount": 0,
+        "itemId": 15
+      },
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:06:58.055Z",
+      "actors_observed": [
+        "admin",
+        "shipper_a",
+        "shipper_b"
+      ]
+    },
+    {
+      "case": "manager-assignment",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:06:58.144Z",
+      "steps": [
+        {
+          "manager_assign": true,
+          "manager_reassign": true,
+          "persisted_facts": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\manager-assignment-1440-assigned.png",
+          "sha256": "c2545434f142af6d102c15bc7586f48f13f3038aa739c2f436bd52f4169e34ff",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/manager-assignment-1440-assigned.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/16/assign",
+          "status": 201
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/16/reassign",
+          "status": 200
+        }
+      ],
+      "routes": [
+        {
+          "actor": "manager",
+          "route": "/manager/orders/16",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:07:01.638Z",
+      "actors_observed": [
+        "manager"
+      ]
+    },
+    {
+      "case": "csrf-duplicate-authorization",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:07:01.653Z",
+      "steps": [
+        {
+          "missing_csrf": 403,
+          "pending_ui_submit_events": 2,
+          "pending_network_POSTs": 1,
+          "cached_server_duplicate": 409,
+          "buyer_vendor_shipper_Ops_denial": true,
+          "order_payment_refund_facts_unchanged": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\csrf-duplicate-authorization-1440-csrf-denied.png",
+          "sha256": "8ce5a74276202e4f5e2ab633e0333a89d4003e6060a569994307968e33f950ff",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/csrf-duplicate-authorization-1440-csrf-denied.png"
+        },
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\csrf-duplicate-authorization-1440-duplicate-denied.png",
+          "sha256": "c9a4e951f2c4632a2ffb518587114a9d3b6d77fb67fb1dc2a6cb6256db1b646c",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/csrf-duplicate-authorization-1440-duplicate-denied.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/17/assign",
+          "status": 403
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/17/assign",
+          "status": 201
+        },
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "vendor_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/17",
+          "status": 200
+        },
+        {
+          "actor": "admin",
+          "route": "/admin/orders/17",
+          "status": 200
+        },
+        {
+          "actor": "ADMIN cached-page",
+          "route": "/admin/orders/17",
+          "status": 200
+        },
+        {
+          "actor": "buyer_a",
+          "route": "/admin/orders/17",
+          "status": 403
+        },
+        {
+          "actor": "vendor_a",
+          "route": "/admin/orders/17",
+          "status": 403
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/admin/orders/17",
+          "status": 403
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:07:10.982Z",
+      "actors_observed": [
+        "ADMIN cached-page",
+        "admin",
+        "buyer_a",
+        "shipper_a",
+        "vendor_a"
+      ]
+    },
+    {
+      "case": "concurrent-browser-assignment",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:07:11.138Z",
+      "steps": [
+        {
+          "browser_responses": [
+            409,
+            201
+          ],
+          "one_persisted_history_and_audit": true,
+          "order_payment_refund_unchanged": true,
+          "actual_Postgres_lock_contention_verified_separately": "ShipmentAssignmentIT two race tests"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\concurrent-browser-assignment-1440-conflict.png",
+          "sha256": "f9661baa99e1d34752d0270c7706801a7eea7fef0eeffc69c09bd252aebf8bef",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/concurrent-browser-assignment-1440-conflict.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/18/assign",
+          "status": 201
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/18/assign",
+          "status": 409
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/18",
+          "status": 200
+        },
+        {
+          "actor": "manager",
+          "route": "/manager/orders/18",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:07:16.161Z",
+      "actors_observed": [
+        "admin",
+        "manager"
+      ]
+    },
+    {
+      "case": "failure-retry",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:07:16.221Z",
+      "steps": [
+        {
+          "first_failure_retry_second_failure": "UI_SUBMITTED",
+          "order_unchanged": true,
+          "foreign_shipper_denied": true,
+          "no_third_retry": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\failure-retry-1440-exhausted.png",
+          "sha256": "6e7de7ebcba8497f20d05c36b8e8e87e887f66b1f839fd210a35dc5ea3c8dabd",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/failure-retry-1440-exhausted.png"
+        }
+      ],
+      "actor_scope": "SHIPPER own+foreign",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/19/delivery-failed",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/19/retry",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/19/delivery-failed",
+          "status": 302
+        },
+        {
+          "actor": "shipper_b",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/25/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/25/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/25/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/25/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/25/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_b",
+          "route": "/shipper/shipments/25/view",
+          "status": 404
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:07:23.553Z",
+      "actors_observed": [
+        "shipper_a",
+        "shipper_b"
+      ]
+    },
+    {
+      "case": "attempt2-delivery",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:07:23.599Z",
+      "steps": [
+        {
+          "wrong_COD_rejected": true,
+          "delivered_at_attempt2": true,
+          "payment": "PAID"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\attempt2-delivery-1440-delivered.png",
+          "sha256": "e4cbcfd94f2673f67e3f1e73b5c0b67454d4e66ebf4366376514ea541f0fa6e4",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/attempt2-delivery-1440-delivered.png"
+        }
+      ],
+      "actor_scope": "SHIPPER",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/20/delivery-failed",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/20/retry",
+          "status": 302
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/20/delivered",
+          "status": 409
+        },
+        {
+          "actor": "shipper_a",
+          "method": "POST",
+          "route": "/shipper/orders/20/delivered",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/26/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/26/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/26/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/26/view",
+          "status": 200
+        },
+        {
+          "actor": "shipper_a",
+          "route": "/shipper/shipments/26/view",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:07:29.795Z",
+      "actors_observed": [
+        "shipper_a"
+      ]
+    },
+    {
+      "case": "return-to-sender",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:07:29.809Z",
+      "steps": [
+        {
+          "receipt_submitted_via_UI": true,
+          "order": "CANCELLED",
+          "shipment": "RETURNED_TO_SENDER"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\return-to-sender-1440-received.png",
+          "sha256": "b38041515b4d9bc04345723ec10168e703722e8d649933a1604cd23c49948b16",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/return-to-sender-1440-received.png"
+        }
+      ],
+      "actor_scope": "ADMIN",
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/21/return-to-sender",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/21",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:07:37.657Z",
+      "actors_observed": [
+        "admin"
+      ]
+    },
+    {
+      "case": "keyboard-responsive",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+      "build_sha256": "b5f06876366ac4b1b7e9596b2ec3e623b6e8dcb1e7e44324bef00a0ecf03283f",
+      "dataset_manifest_sha256": "8ae16165c4e81a36ca6b49182d6e2a6e5b44a568b16d284eea991851ad6b0d2b",
+      "started_utc": "2026-10-29T09:07:37.674Z",
+      "steps": [
+        {
+          "tool_driven_keyboard": true,
+          "skip_to_main": true,
+          "mobile_menu_keyboard": true,
+          "table_labeled_focusable": true,
+          "table_dimensions": {
+            "left": 0,
+            "width": 1192,
+            "scroll": 1192
+          },
+          "after_scroll_left": 0,
+          "physical_device_IME_screen_reader": "NOT RUN"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\pr75-final-8a96\\browser\\keyboard-responsive-1440-keyboard.png",
+          "sha256": "49cea5d0bf67dd3dc1f97f5189689b63d5f4e576cad2b49b8f9fa4da314db285",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser/keyboard-responsive-1440-keyboard.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/dashboard/revenue",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T09:07:40.871Z",
+      "actors_observed": [
+        "admin"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Voucher | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section">
+    <h1>Không thể thực hiện thao tác</h1>
+    <p class="alert alert-danger" role="alert" th:text="${publicMessage}"></p>
+    <a class="btn btn-app-secondary" th:href="@{/vendor/vouchers}">Voucher cửa hàng</a>
+</section></body></html>

@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title th:text="${heading + ' | UTEExpress'}">Đã lưu | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section">
+    <h1 class="h2" th:text="${heading}">Sản phẩm đã lưu</h1>
+    <div th:if="${successMessage}" class="alert alert-success" role="status" th:text="${successMessage}"></div>
+    <p th:if="${#lists.isEmpty(items)}">Chưa có sản phẩm nào.</p>
+    <div th:unless="${#lists.isEmpty(items)}" class="list-group">
+        <div class="list-group-item" th:each="item : ${items}">
+            <a th:if="${item.available}" th:href="@{/products/{id}(id=${item.productId})}"
+               th:text="${item.name}">Sản phẩm</a>
+            <span th:unless="${item.available}" th:text="${item.name}">Không còn hiển thị</span>
+            <span th:if="${item.available}" th:text="${#numbers.formatDecimal(item.price, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></span>
+            <form th:if="${favorites}" method="post" th:action="@{/user/favorites/{id}/remove(id=${item.productId})}">
+                <button class="btn btn-sm btn-outline-secondary" type="submit">Bỏ yêu thích</button>
+            </form>
+        </div>
+    </div>
+</section></body></html>

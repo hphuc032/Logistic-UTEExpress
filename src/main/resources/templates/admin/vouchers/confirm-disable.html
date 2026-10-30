@@ -1,0 +1,8 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head><title>Xác nhận ngừng voucher | UTEExpress</title></head><body><section class="app-page-section">
+<h1>Xác nhận ngừng voucher</h1><p>Lịch sử sử dụng và giá trị các đơn hàng đã tạo được giữ nguyên. Thao tác này ngừng áp dụng cho các lần mua tiếp theo.</p>
+<p><strong th:text="${voucher.code}"></strong></p>
+<form method="post" th:action="@{/admin/vouchers/{id}/disable(id=${voucher.id})}"><input type="hidden" name="version" th:value="${voucher.version}">
+<div class="d-flex flex-wrap gap-3"><button class="btn btn-danger" type="submit">Xác nhận ngừng</button><a class="btn btn-app-secondary" th:href="@{/admin/vouchers}">Hủy, giữ nguyên</a></div></form>
+</section></body></html>

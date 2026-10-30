@@ -1,0 +1,226 @@
+[
+  {
+    "table": "users",
+    "owner": "HP",
+    "dependsOn": []
+  },
+  {
+    "table": "roles",
+    "owner": "HP",
+    "dependsOn": []
+  },
+  {
+    "table": "user_roles",
+    "owner": "HP",
+    "dependsOn": [
+      "users",
+      "roles"
+    ]
+  },
+  {
+    "table": "addresses",
+    "owner": "HP",
+    "dependsOn": [
+      "users"
+    ]
+  },
+  {
+    "table": "otp_tokens",
+    "owner": "HP",
+    "dependsOn": [
+      "users"
+    ]
+  },
+  {
+    "table": "shops",
+    "owner": "HP",
+    "dependsOn": [
+      "users"
+    ]
+  },
+  {
+    "table": "categories",
+    "owner": "QD",
+    "dependsOn": []
+  },
+  {
+    "table": "products",
+    "owner": "HP",
+    "dependsOn": [
+      "shops",
+      "categories"
+    ]
+  },
+  {
+    "table": "product_images",
+    "owner": "HP",
+    "dependsOn": [
+      "products"
+    ]
+  },
+  {
+    "table": "favorites",
+    "owner": "QD",
+    "dependsOn": [
+      "users",
+      "products"
+    ]
+  },
+  {
+    "table": "product_views",
+    "owner": "QD",
+    "dependsOn": [
+      "users",
+      "products"
+    ]
+  },
+  {
+    "table": "carts",
+    "owner": "TD",
+    "dependsOn": [
+      "users"
+    ]
+  },
+  {
+    "table": "cart_items",
+    "owner": "TD",
+    "dependsOn": [
+      "carts",
+      "products"
+    ]
+  },
+  {
+    "table": "orders",
+    "owner": "TD",
+    "dependsOn": [
+      "users",
+      "shops",
+      "commission_policies"
+    ]
+  },
+  {
+    "table": "order_items",
+    "owner": "TD",
+    "dependsOn": [
+      "orders",
+      "products"
+    ]
+  },
+  {
+    "table": "payments",
+    "owner": "TD",
+    "dependsOn": [
+      "orders"
+    ]
+  },
+  {
+    "table": "vouchers",
+    "owner": "TD",
+    "dependsOn": [
+      "shops",
+      "users"
+    ]
+  },
+  {
+    "table": "voucher_usages",
+    "owner": "TD",
+    "dependsOn": [
+      "vouchers",
+      "users",
+      "orders"
+    ]
+  },
+  {
+    "table": "promotions",
+    "owner": "TD",
+    "dependsOn": [
+      "products",
+      "users"
+    ]
+  },
+  {
+    "table": "reviews",
+    "owner": "QD",
+    "dependsOn": [
+      "order_items",
+      "users",
+      "products"
+    ]
+  },
+  {
+    "table": "review_media",
+    "owner": "QD",
+    "dependsOn": [
+      "reviews"
+    ]
+  },
+  {
+    "table": "shipping_providers",
+    "owner": "QD",
+    "dependsOn": []
+  },
+  {
+    "table": "shipping_rates",
+    "owner": "QD",
+    "dependsOn": [
+      "shipping_providers"
+    ]
+  },
+  {
+    "table": "shipments",
+    "owner": "QD",
+    "dependsOn": [
+      "orders",
+      "shipping_providers",
+      "users"
+    ]
+  },
+  {
+    "table": "notifications",
+    "owner": "QD",
+    "dependsOn": [
+      "users",
+      "orders"
+    ]
+  },
+  {
+    "table": "order_status_history",
+    "owner": "TD",
+    "dependsOn": [
+      "orders",
+      "users"
+    ]
+  },
+  {
+    "table": "return_requests",
+    "owner": "TD",
+    "dependsOn": [
+      "orders",
+      "users"
+    ]
+  },
+  {
+    "table": "refunds",
+    "owner": "TD",
+    "dependsOn": [
+      "orders",
+      "payments",
+      "return_requests",
+      "users"
+    ]
+  },
+  {
+    "table": "commission_policies",
+    "owner": "QD",
+    "dependsOn": [
+      "users"
+    ]
+  },
+  {
+    "table": "audit_logs",
+    "owner": "QD",
+    "dependsOn": [
+      "users"
+    ]
+  }
+]

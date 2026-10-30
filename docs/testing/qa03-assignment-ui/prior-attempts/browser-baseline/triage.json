@@ -1,0 +1,10 @@
+{
+  "baseline_cases": 24,
+  "retained_original_results": true,
+  "findings": {
+    "Q03-G01-ASSIGNMENT-UI-MISSING": "Confirmed UI functional gap; present at all3 widths, ownerQD; full-user-journey blocked at assignment",
+    "VALID_REVIEW_NOT_PUBLISHED": "Harness expected wrong redirect; actual successful controller redirects /orders, not public product page. Not an application finding. Requires corrected rerun.",
+    "HARNESS_locator.click": "Inbox locator matched multiple forms; harness error, not application failure. Requires explicit first read action and corrected rerun."
+  },
+  "manual_acceptance": "NOT CLAIMED; Playwright automated browser baseline"
+}

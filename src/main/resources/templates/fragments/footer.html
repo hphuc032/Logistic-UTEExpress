@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer th:fragment="footer" id="site-footer" class="app-footer">
+    <div class="container app-container">
+        <div class="row g-4 align-items-start">
+            <div class="col-12 col-lg-5">
+                <a class="app-brand app-brand-footer" th:href="@{/}" href="/" aria-label="UTEExpress - Trang chủ">
+                    <span class="app-brand-mark" aria-hidden="true">UE</span>
+                    <span>UTE<span>Express</span></span>
+                </a>
+                <p class="app-footer-summary mb-0">
+                    Nền tảng mua sắm và giao nhận được xây dựng cho trải nghiệm rõ ràng, an toàn và thuận tiện.
+                </p>
+            </div>
+            <div class="col-6 col-lg-3 offset-lg-1">
+                <h2 class="app-footer-heading">Khám phá</h2>
+                <ul class="app-footer-links">
+                    <li><a th:href="@{/products}" href="/products">Sản phẩm</a></li>
+                    <li><a th:href="@{/shops}" href="/shops">Cửa hàng</a></li>
+                </ul>
+            </div>
+            <div class="col-6 col-lg-3">
+                <h2 class="app-footer-heading">Tài khoản</h2>
+                <ul class="app-footer-links">
+                    <li><a th:href="@{/login}" href="/login">Đăng nhập</a></li>
+                    <li><a th:href="@{/register}" href="/register">Đăng ký</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="app-footer-bottom">
+            <span>&copy; <span data-current-year>2026</span> UTEExpress</span>
+            <span>Giao đúng nơi, kết nối đúng lúc.</span>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

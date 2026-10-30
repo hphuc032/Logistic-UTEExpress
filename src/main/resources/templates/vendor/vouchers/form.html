@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title th:text="${editMode} ? 'Chỉnh sửa voucher | UTEExpress' : 'Tạo voucher | UTEExpress'"></title></head>
+<body><section th:fragment="content" class="app-page-section">
+    <div class="app-page-header">
+        <a class="app-back-link" th:href="@{/vendor/vouchers}">← Voucher cửa hàng</a>
+        <span class="app-eyebrow">Kênh người bán</span>
+        <h1 th:text="${editMode} ? 'Chỉnh sửa voucher' : 'Tạo voucher'"></h1>
+        <p th:text="|Áp dụng cho cửa hàng ${shop.shopName}. Thời gian theo giờ Việt Nam (UTC+7).|"></p>
+    </div>
+    <div class="app-panel col-lg-8 mx-auto">
+        <p th:if="${editMode and voucher.hasUsage}" class="alert alert-info">
+            Voucher đã được sử dụng: không thể đổi mã, mức giảm hoặc đơn tối thiểu; giới hạn sử dụng chỉ được tăng.
+            Thời hạn và trạng thái vẫn có thể thay đổi. Lượt đã giải phóng không tính vào hạn mức hiện tại.
+        </p>
+        <a th:if="${editMode}" th:href="@{/vendor/vouchers/{id}/edit(id=${voucher.id})}">Tải lại dữ liệu mới nhất</a>
+        <form method="post" th:object="${voucherForm}" novalidate
+              th:action="${editMode} ? @{/vendor/vouchers/{id}/update(id=${voucher.id})} : @{/vendor/vouchers}">
+            <input type="hidden" th:if="${editMode}" th:field="*{version}">
+            <div class="alert alert-danger" th:if="${#fields.hasAnyErrors()}" role="alert">
+                <ul class="mb-0"><li th:each="error : ${#fields.allErrors()}" th:text="${error}"></li></ul>
+            </div>
+            <div class="mb-3"><label class="form-label" for="code">Mã voucher</label>
+                <input class="form-control" id="code" th:field="*{code}" maxlength="64" required th:readonly="${editMode and voucher.hasUsage}">
+            </div>
+            <div class="mb-3"><label class="form-label" for="type">Loại giảm giá</label>
+                <input th:if="${editMode and voucher.hasUsage}" type="hidden" th:field="*{type}">
+                <div th:if="${editMode and voucher.hasUsage}" class="form-control" id="type"
+                     th:text="${voucher.type.name() == 'PERCENTAGE'} ? 'Phần trăm' : 'Số tiền VND'"></div>
+                <select th:unless="${editMode and voucher.hasUsage}" class="form-select" id="type" th:field="*{type}" required>
+                    <option th:each="type : ${types}" th:value="${type}" th:text="${type.name() == 'PERCENTAGE'} ? 'Phần trăm' : 'Số tiền VND'"></option>
+                </select>
+            </div>
+            <div class="mb-3"><label class="form-label" for="value">Mức giảm (% hoặc VND nguyên)</label>
+                <input class="form-control" id="value" type="number" step="any" th:field="*{value}" required th:readonly="${editMode and voucher.hasUsage}">
+            </div>
+            <div class="mb-3"><label class="form-label" for="maxDiscount">Giảm tối đa (VND, để trống nếu không giới hạn)</label>
+                <input class="form-control" id="maxDiscount" type="number" min="0" step="1" th:field="*{maxDiscount}" th:readonly="${editMode and voucher.hasUsage}">
+            </div>
+            <div class="mb-3"><label class="form-label" for="minSubtotal">Tiền sản phẩm tối thiểu (VND, không gồm phí vận chuyển)</label>
+                <input class="form-control" id="minSubtotal" type="number" min="0" step="1" th:field="*{minSubtotal}" required th:readonly="${editMode and voucher.hasUsage}">
+            </div>
+            <div class="mb-3"><label class="form-label" for="startsAt">Bắt đầu (UTC+7)</label>
+                <input class="form-control" id="startsAt" type="datetime-local" th:field="*{startsAt}" required>
+            </div>
+            <div class="mb-3"><label class="form-label" for="endsAt">Kết thúc (UTC+7, không bao gồm thời điểm này)</label>
+                <input class="form-control" id="endsAt" type="datetime-local" th:field="*{endsAt}" required>
+            </div>
+            <div class="mb-3"><label class="form-label" for="totalLimit">Tổng lượt sử dụng</label>
+                <input class="form-control" id="totalLimit" type="number" step="1" th:min="${editMode and voucher.hasUsage} ? ${voucher.totalLimit} : 1" th:field="*{totalLimit}" required>
+            </div>
+            <div class="mb-3"><label class="form-label" for="perUserLimit">Lượt tối đa mỗi khách</label>
+                <input class="form-control" id="perUserLimit" type="number" step="1" th:min="${editMode and voucher.hasUsage} ? ${voucher.perUserLimit} : 1" th:field="*{perUserLimit}" required>
+            </div>
+            <div class="form-check mb-4"><input class="form-check-input" id="active" type="checkbox" th:field="*{active}">
+                <label class="form-check-label" for="active">Bật voucher</label></div>
+            <div class="d-flex gap-2">
+                <button class="btn btn-app-primary" type="submit">Lưu voucher</button>
+                <a class="btn btn-app-secondary" th:href="@{/vendor/vouchers}">Hủy</a>
+            </div>
+        </form>
+    </div>
+</section></body></html>

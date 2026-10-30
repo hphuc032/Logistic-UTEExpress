@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Đơn hàng của tôi | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-labelledby="orders-title">
+    <div class="app-page-header">
+        <h1 id="orders-title">Đơn hàng của tôi</h1>
+        <p>Đơn hàng mới nhất hiển thị trước. Thời gian được hiển thị theo UTC.</p>
+    </div>
+    <div th:if="${orders.totalElements == 0}"
+         th:insert="~{fragments/components :: emptyState('Chưa có đơn hàng', 'Các đơn hàng của bạn sẽ xuất hiện tại đây.')}"></div>
+    <p th:if="${orders.totalElements > 0 and #lists.isEmpty(orders.content)}">Không có đơn hàng ở trang này.</p>
+    <div th:unless="${#lists.isEmpty(orders.content)}" class="app-table-shell">
+        <div class="table-responsive"><table class="table align-middle">
+            <caption>Đơn hàng của bạn</caption>
+            <thead><tr><th scope="col">Mã đơn</th><th scope="col">Ngày tạo (UTC)</th>
+                <th scope="col">Cửa hàng</th><th scope="col">Trạng thái</th><th scope="col">Tổng cộng</th></tr></thead>
+            <tbody><tr th:each="order : ${orders.content}">
+                <th scope="row"><a th:href="@{/orders/{id}(id=${order.id})}" th:text="${order.orderCode}"></a></th>
+                <td><time th:datetime="${order.createdAt}"
+                          th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy HH:mm:ss', 'UTC')}"></time></td>
+                <td th:text="|Shop #${order.shopId}|"></td>
+                <td><span class="app-status-badge" th:text="${order.status}"></span></td>
+                <td class="text-nowrap" th:text="${#numbers.formatDecimal(order.grandTotal, 0, 'POINT', 0, 'COMMA')} + ' ₫'"></td>
+            </tr></tbody>
+        </table></div>
+    </div>
+    <nav class="d-flex flex-wrap align-items-center gap-3 mt-3" aria-label="Phân trang đơn hàng">
+        <a th:if="${orders.hasPrevious}" class="btn btn-app-secondary"
+           th:href="@{/orders(page=${orders.page - 1},size=${orders.size})}">Trang trước</a>
+        <span th:text="|Tổng: ${orders.totalElements} đơn hàng|"></span>
+        <a th:if="${orders.hasNext}" class="btn btn-app-secondary"
+           th:href="@{/orders(page=${orders.page + 1},size=${orders.size})}">Trang sau</a>
+        <a th:if="${orders.page > 0}" th:href="@{/orders(size=${orders.size})}">Về trang đầu</a>
+    </nav>
+</section></body></html>

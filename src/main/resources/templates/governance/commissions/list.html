@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::content})}">
+<head><title>Chính sách hoa hồng | UTEExpress</title></head>
+<body><section th:fragment="content" class="app-page-section" aria-label="Chính sách hoa hồng">
+    <h1>Chính sách hoa hồng</h1>
+    <p>Chính sách có thời điểm bắt đầu mới nhất sẽ áp dụng cho đơn tạo sau thời điểm đó. Đơn cũ giữ nguyên snapshot.</p>
+    <form th:if="${ops == 'admin'}" th:action="@{/{ops}/commissions(ops=${ops})}" method="post" class="card p-3 mb-4">
+        <label for="ratePercent">Tỷ lệ (%)</label>
+        <input id="ratePercent" name="ratePercent" type="number" min="0" max="100" step="0.0001" required>
+        <label for="effectiveFrom">Có hiệu lực từ (UTC)</label>
+        <input id="effectiveFrom" name="effectiveFrom" type="text" placeholder="2026-10-02T00:00:00Z" required>
+        <button class="btn btn-primary mt-3" type="submit">Tạo chính sách</button>
+    </form>
+    <p th:if="${policies.empty}">Chưa có chính sách. Checkout sẽ dừng cho đến khi Admin tạo chính sách.</p>
+    <table th:unless="${policies.empty}" class="table">
+        <thead><tr><th>ID</th><th>Tỷ lệ (%)</th><th>Có hiệu lực từ</th><th>Trạng thái</th></tr></thead>
+        <tbody><tr th:each="policy : ${policies}">
+            <td th:text="${policy.id}"></td>
+            <td th:text="${policy.ratePercent}"></td>
+            <td th:text="${policy.effectiveFrom}"></td>
+            <td th:text="${policy.active ? 'Đang dùng' : 'Đã dừng'}"></td>
+        </tr></tbody>
+    </table>
+</section></body></html>
