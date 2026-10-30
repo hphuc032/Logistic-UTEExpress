@@ -7,16 +7,9 @@
     <div th:replace="~{layout/dashboard :: dashboard(~{::nav}, ~{::section})}">
         <nav aria-label="Menu quản trị">
             <p class="fw-bold mb-3">UTEExpress</p>
-            <ul class="nav flex-column gap-2">
-                <li class="nav-item"><a class="nav-link link-light active text-decoration-underline" aria-current="page"
-                    th:href="@{${dashboard.dashboardPath}}">Tổng quan</a></li>
-                <li class="nav-item"><a class="nav-link link-light" th:href="@{${#strings.replace(dashboard.dashboardPath, '/dashboard', '/shipping/providers')}}">Cấu hình vận chuyển</a></li>
-                <li class="nav-item"><a class="nav-link link-light" th:href="@{${#strings.replace(dashboard.dashboardPath, '/dashboard', '/categories')}}">Quản lý danh mục</a></li>
-                <li class="nav-item"><a class="nav-link link-light" th:href="@{${#strings.replace(dashboard.dashboardPath, '/dashboard', '/accounts')}}">Tài khoản</a></li>
-                <li class="nav-item" th:if="${dashboard.dashboardPath == '/admin/dashboard'}"><a class="nav-link link-light" th:href="@{/admin/shops}">Duyệt cửa hàng</a></li>
-                <li class="nav-item"><a class="nav-link link-light" th:href="@{${#strings.replace(dashboard.dashboardPath, '/dashboard', '/products')}}">Kiểm duyệt sản phẩm</a></li>
-                <li class="nav-item"><a class="nav-link link-light" th:href="@{${#strings.replace(dashboard.dashboardPath, '/dashboard', '/shops/moderation')}}">Kiểm duyệt cửa hàng</a></li>
-                <li class="nav-item" th:if="${dashboard.dashboardPath == '/admin/dashboard'}"><a class="nav-link link-light" th:href="@{/admin/audit-logs}">Nhật ký quản trị</a></li>
+            <ul class="nav flex-column gap-2"
+                th:with="admin=${dashboard.dashboardPath == '/admin/dashboard'}">
+                <th:block th:replace="~{fragments/workspace-links :: operations(${admin ? 'admin' : 'manager'}, ${admin}, 'nav-link link-light')}"></th:block>
                 <li class="nav-item"><a class="nav-link link-light" th:href="@{/}">Về trang chủ</a></li>
             </ul>
         </nav>

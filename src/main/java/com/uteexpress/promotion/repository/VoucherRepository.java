@@ -14,6 +14,13 @@ public interface VoucherRepository extends JpaRepository<Voucher, Long> {
     List<Voucher> findAllByShopIdAndScopeOrderByIdDesc(Long shopId, VoucherScope scope);
     Optional<Voucher> findByIdAndShopIdAndScope(Long id, Long shopId, VoucherScope scope);
 
+    List<Voucher> findAllByScopeAndShopIdIsNullOrderByIdDesc(VoucherScope scope);
+    Optional<Voucher> findByIdAndScopeAndShopIdIsNull(Long id, VoucherScope scope);
+
+    @Lock(LockModeType.PESSIMISTIC_WRITE)
+    @Query("select v from Voucher v where v.id = :id and v.scope = :scope and v.shopId is null")
+    Optional<Voucher> findPlatformForUpdate(Long id, VoucherScope scope);
+
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select v from Voucher v where v.id = :id and v.shopId = :shopId and v.scope = :scope")
     Optional<Voucher> findOwnedForUpdate(Long id, Long shopId, VoucherScope scope);

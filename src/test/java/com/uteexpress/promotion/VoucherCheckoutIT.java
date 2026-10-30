@@ -50,6 +50,7 @@ class VoucherCheckoutIT {
     @Autowired OrderPlacementService placement;
     @Autowired BuyerOrderService buyerOrders;
     @Autowired VoucherService vouchers;
+    @Autowired com.uteexpress.promotion.service.PlatformVoucherManagementService platformManagement;
     @Autowired OrderLifecycleService lifecycle;
     @Autowired VendorOrderService vendorOrders;
     @MockitoSpyBean CartService carts;
@@ -118,6 +119,93 @@ class VoucherCheckoutIT {
         assertThat(released.get("released_at")).isNotNull();
         assertThat(originalUsageFacts(released)).isEqualTo(originalUsageFacts(originalHistory));
         assertThat(historicalOrderFacts(placed.orderId())).isEqualTo(snapshots);
+    }
+
+    @Test void adminCreatedPlatformVoucherUsesExistingCheckoutAndDisablePreservesSnapshotsAndCancellation() throws Exception {
+        jdbc.update("INSERT INTO uteexpress.user_roles(user_id,role_id) SELECT ?,id FROM uteexpress.roles WHERE code='ADMIN'", other);
+        var admin = new UteExpressPrincipal(other, "admin" + other, null, 0,
+                java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_ADMIN")), true);
+        mvc.perform(post("/admin/vouchers").with(user(admin)).with(csrf())
+                        .param("code", "PLAT_ADMIN").param("type", "PERCENTAGE").param("value", "10")
+                        .param("minSubtotal", "0").param("startsAt", "2020-01-01T00:00")
+                        .param("endsAt", "2100-01-01T00:00").param("totalLimit", "1")
+                        .param("perUserLimit", "1").param("active", "true"))
+                .andExpect(status().is3xxRedirection());
+        long id = jdbc.queryForObject("SELECT id FROM uteexpress.vouchers WHERE code='PLAT_ADMIN'", Long.class);
+        authenticate(buyer);
+        var quote = quotes.quote(new QuoteRequest(address, provider, "STANDARD", "PLAT_ADMIN")).quote();
+        assertThat(quote.totals().grandTotal()).isEqualByComparingTo("242000");
+        var placed = placement.placeOrder(request("PLAT_ADMIN"));
+        assertThat(placed.status().name()).isEqualTo("NEW");
+        assertThat((BigDecimal)order(placed.orderId()).get("commission_amount")).isEqualByComparingTo("16028");
+        var snapshots = historicalOrderFacts(placed.orderId());
+        var usage = jdbc.queryForMap("SELECT * FROM uteexpress.voucher_usages WHERE voucher_id=?", id);
+        mvc.perform(post("/admin/vouchers/" + id + "/disable").with(user(admin)).with(csrf()).param("version", "0"))
+                .andExpect(status().is3xxRedirection());
+        authenticate(buyer);
+        carts.addProduct(new AddCartProductRequest(product, 2));
+        var before = state();
+        rejects(() -> placement.placeOrder(command(address, product, 2, "disabled-platform", "PLAT_ADMIN")), ErrorCode.Detail.VOUCHER_INACTIVE);
+        assertThat(state()).isEqualTo(before);
+        assertThat(jdbc.queryForMap("SELECT * FROM uteexpress.voucher_usages WHERE voucher_id=?", id)).isEqualTo(usage);
+        authenticateVendor();
+        lifecycle.transition(new OrderTransitionCommand(placed.orderId(), OrderStatus.NEW,
+                vendorOrders.detail(placed.orderId()).version(), OrderAction.CANCEL_NEW, "OUT_OF_STOCK"));
+        var released = jdbc.queryForMap("SELECT * FROM uteexpress.voucher_usages WHERE voucher_id=?", id);
+        assertThat(released).containsEntry("status", "RELEASED");
+        assertThat(originalUsageFacts(released)).isEqualTo(originalUsageFacts(usage));
+        assertThat(historicalOrderFacts(placed.orderId())).isEqualTo(snapshots);
+    }
+
+    @Test void realCheckoutQuotaTransactionSerializesAdminUpdateAndExposesNewUsageAfterWait() throws Exception {
+        long id = voucher("PLATFORM", 1, 1);
+        jdbc.update("INSERT INTO uteexpress.user_roles(user_id,role_id) SELECT ?,id FROM uteexpress.roles WHERE code='ADMIN'", other);
+        var admin = new UteExpressPrincipal(other, "admin" + other, null, 0,
+                java.util.List.of(new org.springframework.security.core.authority.SimpleGrantedAuthority("ROLE_ADMIN")), true);
+        var form = new PlatformVoucherUpdateForm();
+        form.setCode("SAVE"); form.setType(VoucherType.PERCENTAGE); form.setValue(new BigDecimal("20"));
+        form.setStartsAt(java.time.LocalDateTime.of(2020,1,1,0,0)); form.setEndsAt(java.time.LocalDateTime.of(2100,1,1,0,0));
+        form.setTotalLimit(1L); form.setPerUserLimit(1L); form.setVersion(0L);
+        var reachedCleanup = new java.util.concurrent.CountDownLatch(1);
+        var releaseCheckout = new java.util.concurrent.CountDownLatch(1);
+        CartService target = org.springframework.test.util.AopTestUtils.getUltimateTargetObject(carts);
+        doAnswer(invocation -> {
+            invocation.callRealMethod(); reachedCleanup.countDown();
+            if (!releaseCheckout.await(20, java.util.concurrent.TimeUnit.SECONDS)) throw new AssertionError("Checkout release timeout");
+            return null;
+        }).when(target).removeCheckedOutItems(anyList());
+        try (var executor = java.util.concurrent.Executors.newFixedThreadPool(2)) {
+            var checkout = executor.submit(() -> {
+                authenticate(buyer);
+                try { return placement.placeOrder(request("SAVE")); }
+                finally { clear(); }
+            });
+            assertThat(reachedCleanup.await(20, java.util.concurrent.TimeUnit.SECONDS)).isTrue();
+            var update = executor.submit(() -> {
+                SecurityContextHolder.getContext().setAuthentication(org.springframework.security.authentication.UsernamePasswordAuthenticationToken.authenticated(admin, null, admin.getAuthorities()));
+                try { platformManagement.update(id, form); return null; }
+                catch (ApplicationException error) { return error.errorCode(); }
+                finally { clear(); }
+            });
+            boolean waiting = false;
+            try {
+                long deadline = System.nanoTime() + java.util.concurrent.TimeUnit.SECONDS.toNanos(10);
+                while (!waiting && System.nanoTime() < deadline) {
+                    waiting = jdbc.queryForObject("SELECT count(*) FROM pg_stat_activity WHERE datname=current_database() AND wait_event_type='Lock' AND cardinality(pg_blocking_pids(pid))>0 AND query ILIKE '%vouchers%'", Integer.class) > 0;
+                    if (!waiting) Thread.sleep(20);
+                }
+                assertThat(waiting).as("Admin update blocked by real checkout Voucher lock").isTrue();
+            } finally { releaseCheckout.countDown(); }
+            var placed = checkout.get(20, java.util.concurrent.TimeUnit.SECONDS);
+            assertThat(update.get(20, java.util.concurrent.TimeUnit.SECONDS)).isEqualTo(ErrorCode.CONFLICT);
+            assertThat(placed.grandTotal()).isEqualByComparingTo("242000");
+            assertThat(jdbc.queryForObject("SELECT count(*) FROM uteexpress.voucher_usages WHERE voucher_id=? AND status='REDEEMED'", Long.class, id)).isEqualTo(1);
+            assertThat(jdbc.queryForObject("SELECT value FROM uteexpress.vouchers WHERE id=?", BigDecimal.class, id)).isEqualByComparingTo("10");
+            assertThat(stock()).isEqualTo(98);
+        } finally {
+            releaseCheckout.countDown();
+            doCallRealMethod().when(target).removeCheckedOutItems(anyList());
+        }
     }
 
     @ParameterizedTest @ValueSource(strings = {"SHOP", "PLATFORM"})
