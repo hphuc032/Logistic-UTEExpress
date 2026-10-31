@@ -1,0 +1,10 @@
+{
+  "tested_source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+  "jar_sha256": "a876a4128710d98bd9e348a26b8268f4b823845c2ea50e8fb3a8894dda369b2c",
+  "fixture_class_sha256": "81ba5dd13736ca4b78b4157d5ebd989d489689ad787a781bce8ad48566b9af22",
+  "clock_class_sha256": "0d0f3fb149cf5a9cda0323e78ff89edb557a22860fa60a7de89a09158f862884",
+  "clock_source_sha256": "0a38d078dd3f93f7d8f7225083d89b9c541a732b22e540609b6983fddde4fe23",
+  "production_guard_class_sha256": "4bb46f5e12b2891dc1dfd5a930ebecadcc1a4371880410395a6dc93a77430d94",
+  "clock_and_seed_not_in_production_jar": true,
+  "full_regression_state": "RUNNING; no early PASS"
+}

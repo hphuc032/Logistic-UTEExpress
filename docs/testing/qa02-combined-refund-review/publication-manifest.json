@@ -1,0 +1,46 @@
+{
+  "preparedUtc": "2026-10-28T15:29:16.911669+00:00",
+  "authorization": "TD review publication only; Draft PR; no merge/approval/final acceptance",
+  "testedSourceTreeSha": "bd0644ba373c5273a09e8af4898300dc4bdd8680",
+  "testedSourceIdentityKind": "Git tree of exported byte snapshot, not commit",
+  "publicationBaseSha": "fa48cb69cef92276f0dddf0d2bd396eee098f2f3",
+  "publicationScope": "Only docs/testing/qa02-combined-refund-review; no production/test/migration or complete PR69 runner changes",
+  "publishedHeadAndCi": "See Draft PR; not the historical combined regression",
+  "originalDocuments": {
+    "QA-02-combined-evidence.json": "af06660322d42a1de3b9333ad906d5e0cc53063338fe961af99d5a28a7b597bd",
+    "QA-02-final-acceptance-draft.md": "7c01cca70d953a1b0d504ca6d22316e1ff4f31729f6a599b54324a7fab3a1423",
+    "QD-shared-seed-handoff.md": "d8f773c2e0ab808e363e77881117f56a23837c41333f7ac9c0180e21929c1f71"
+  },
+  "executedQueryBodySha256": "8b09299a4094e125e681d522d7b7a944c081846e7b5bfd485c783585217e1caa",
+  "testedAdapterSha256": "c3c7e53f4a1df63d8210cbb0666e2329a92a7abfccd4adade05d326252a20bf5",
+  "originalSourceFreezeSha256": "ecc699c5fc85bd1dd12c577e60b5f4ecc2841b1dada4afb170f40b2e16989e5e",
+  "sanitization": [
+    {
+      "field": ".upstreamGitHub.prs[2].reviews.reviews[0].author",
+      "action": "retain only public review owner handle"
+    },
+    {
+      "field": ".upstreamGitHubAfterExecution.prs[2].reviews.reviews[0].author",
+      "action": "retain only public review owner handle"
+    }
+  ],
+  "publishedFiles": {
+    ".gitattributes": "8b9c3028d6467ff3be7c793141927841d70f47f52d0590677438f488ca154992",
+    "combined-refund-adapter.reference.py.txt": "c3c7e53f4a1df63d8210cbb0666e2329a92a7abfccd4adade05d326252a20bf5",
+    "QA-02-combined-evidence.json": "b02b1fde6a8fd403c3ab6ebe582de316e8c29ada0b24f2e0aa5ec45a971a5bf6",
+    "QA-02-final-acceptance-draft.md": "7b1ca39a0a4e74eb81ce25a30eb822961d9e73b17b0396648d5e773357fdb37b",
+    "QD-shared-seed-handoff.md": "955741c4c11eebc2a7f02211d4894f1d78da3e69de1717fe150a1a935ed8cda1",
+    "README.md": "94ca0101a7649adb1744e3588ecfefdd48bb291c65b9cc26e57a045b94a7c34c",
+    "refund-operation-invariants.proposal.sql": "60e683baae9303a188c124904daeb9ed6219e4e989555e51c2cf0afa02cfeb49",
+    "source-freeze.json": "ecc699c5fc85bd1dd12c577e60b5f4ecc2841b1dada4afb170f40b2e16989e5e"
+  },
+  "hashNote": "Publication manifest excludes its own hash; raw evidence hashes remain references to private execution artifacts",
+  "remainingGates": [
+    "QD migration and seed adoption review",
+    "HP fixture/bootstrap and checkpoint scope review",
+    "Authorized integration",
+    "Fresh develop combined regression/CI",
+    "HP final acceptance"
+  ],
+  "qa02": "IN PROGRESS"
+}

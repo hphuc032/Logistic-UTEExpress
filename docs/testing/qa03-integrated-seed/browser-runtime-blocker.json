@@ -1,0 +1,31 @@
+{
+  "report_date": "2026-10-28",
+  "base_develop": "72558c7",
+  "gate": "Q03-G01",
+  "status": "NOT RUN / BLOCKED",
+  "viewport_targets_px": [
+    375,
+    768,
+    1440
+  ],
+  "screenshots": [],
+  "attempts": [
+    {
+      "surface": "cua_repl.getState",
+      "outcome": "failed to write kernel assets: The system cannot find the path specified. (os error 3)"
+    },
+    {
+      "surface": "node_repl @oai/sky initialization",
+      "outcome": "same kernel assets OS error 3"
+    },
+    {
+      "surface": "cua_repl reset + getState retry",
+      "outcome": "same OS error 3"
+    },
+    {
+      "surface": "node_repl reset + initialization retry",
+      "outcome": "same OS error 3"
+    }
+  ],
+  "limitations": "No browser was controlled or inspected; no screenshots, viewport or manual Ops PASS claimed. HTTP/API seed rehearsal is separate and is not used as browser acceptance."
+}

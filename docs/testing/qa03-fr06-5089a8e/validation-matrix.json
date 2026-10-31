@@ -1,0 +1,293 @@
+{
+  "kind": "STATIC PREPARATION ONLY",
+  "cases": [
+    {
+      "id": "GATE",
+      "owner": "QĐ + HP",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "FR05 accepted and explicit FR06 authorization; source/tree/runner ownership protocol confirmed",
+      "expected": "Stop PENDING unless authorized",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "HP authorization in current task; QD child evidence explicitly distinct from TD independent verification per revised protocol",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "IDENTITY",
+      "owner": "QĐ",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Pinned source/tree, clean index, main/test/script hashes, built JAR identity; no stale classes",
+      "expected": "Exact identity; no source changes",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "ENV",
+      "owner": "QĐ",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Separate future execution workspace; explicit JDK21, Maven wrapper, UTC and Docker/PG17.6 preflight",
+      "expected": "Record actual runtime; never infer from bare java",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "NORMAL",
+      "owner": "QĐ, TD joint protocol pending",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Combined normal with --include-qa02-refunds, two TD child invocations",
+      "expected": "Wrapper/children exits0; no timeout; normal child has no offset marker",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "SKEW",
+      "owner": "QĐ, TD joint protocol pending",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Separate fresh normal/−2s runs; skew config injected only into TD child",
+      "expected": "Both children show offset−2 marker; shared main unchanged Clock",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "CLEAN_SCHEMA",
+      "owner": "QĐ",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Owned empty DB, all migrations/constraints and complete table set",
+      "expected": "28 SQL migrations; historical 29 history rows includes marker; verify runtime, do not assume",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "OPS_FIXTURES",
+      "owner": "QĐ",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "9 shared Order states, roles, 14 shared products, assignment/failure/RTS/review/inbox",
+      "expected": "Pinned validate() assertions PASS; synthetic context only, not human/browser PASS",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "REFUND_RETURNED",
+      "owner": "TD",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Existing returned-COD ledger digest before/after TD fixtures",
+      "expected": "Order REFUNDED, Payment PAID, correct return receipt; ledger hash unchanged",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "REFUND_CANCELLED",
+      "owner": "TD",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Cancelled-paid operation and original expected versions/chronology",
+      "expected": "Order CANCELLED; Payment PAID; no return reference; guards unchanged; one refund",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "DB_INVARIANTS",
+      "owner": "TD + QĐ",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "FK/constraint validation, stock/voucher quotas/restoration, histories/snapshots",
+      "expected": "No duplicate effects, negativeChecks all PASS, no financial drift",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "SHOP_FINANCE",
+      "owner": "TD",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Shop A Vendor/Admin delivered/collected/refund/commission evidence",
+      "expected": "340000/340000/170000/170000/11900/158100 for pinned same-period fixture",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "GLOBAL_FINANCE",
+      "owner": "TD",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Combined financial projection and deliberate PAID NEW ONLINE ambiguity",
+      "expected": "Delivered720000/refunds550000/netCommission25200; collected/netCollected/afterCommission unavailable(null),unknownEvents1 as expected",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "CHILD_IDENTITY",
+      "owner": "TD",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Two independent application JVM invocations per mode",
+      "expected": "Distinct invocation/process evidence; not in-process callback; owner protocol pending",
+      "status": "QD OS PROCESSES VERIFIED / TD INDEPENDENT PENDING",
+      "actual": "Four distinct QD-runner child JVMs observed; TD verification category is separate and pending",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "FINGERPRINT",
+      "owner": "QĐ computes, TD reviews",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "34 exact tables including flyway_schema_history before/after second TD child + shared checkpoint validation",
+      "expected": "Same table names/counts and global digest within EACH run; never cross-normal/skew digest equality",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "CHECKPOINT",
+      "owner": "QĐ",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Preserve legitimate product edit; shared second_seed validate-and-preserve",
+      "expected": "Second shared HTTP mutation count0; incomplete/missing checkpoint fails closed; no full shared cross-process recovery claim",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Both modes met pinned runner checks; see source-bound receipts",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "CLEANUP",
+      "owner": "QĐ",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Primary app/SMTP stopped; exact owned UUID container removed; cleanup inspect",
+      "expected": "Owned ID/label absent after run; unrelated resources untouched; dump hash≠restore verification",
+      "status": "VERIFIED AFTER READONLY AUDIT / OBSERVER DEVIATION",
+      "actual": "Both exact owned IDs/names absent; normal original false stop preserved",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "EVIDENCE",
+      "owner": "QĐ",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "Source/JAR/scripts/env/commands/exits/UTC/runID/private logs/children/receipts/hashes",
+      "expected": "All original attempts retained; raw secrets private; sanitized manifest hash check",
+      "status": "QD EVIDENCE PASS / PENDING REVIEW",
+      "actual": "Original artifacts retained private; SHA inventory and archive verification produced separately; transfer NOT DELIVERED",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    },
+    {
+      "id": "REVIEW",
+      "owner": "TD then HP",
+      "modes": [
+        "normal",
+        "clock_minus2"
+      ],
+      "check": "TD business/child-process review; HP FR06 decision",
+      "expected": "PENDING REVIEW; never auto-PASS/merge/QA03 COMPLETE",
+      "status": "PENDING",
+      "actual": "TD independent verification and HP acceptance not received",
+      "evidence": [
+        "execution-receipt.json"
+      ],
+      "finding": null
+    }
+  ]
+}

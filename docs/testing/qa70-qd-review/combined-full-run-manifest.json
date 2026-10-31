@@ -1,0 +1,1150 @@
+{
+  "tested_revision": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+  "created_at_utc": "2026-10-28T15:24:49.635910+00:00",
+  "unit": {
+    "classes": 74,
+    "tests": 690,
+    "reports": [
+      {
+        "suite": "com.uteexpress.account.controller.AddressControllerTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d5ff12ecc5b988c8787f688b527417eae4d1c4f8fa1760d4c3b303f63b9bbcd4"
+      },
+      {
+        "suite": "com.uteexpress.account.controller.ProfileControllerTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "265abbb8563998c5cae8cb8e6167bca54ea82e41b8612a66f0cf84d5ecdd9bb4"
+      },
+      {
+        "suite": "com.uteexpress.account.service.AddressServiceTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "421a9fe38b5906180e02b14a67ef1c9628d416bcaf0d4f04c63be395b63ed2e3"
+      },
+      {
+        "suite": "com.uteexpress.account.service.ProfileServiceTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4ea04f800d54db0141175eb58d300127ed0a0238c749d2065924b3547a010a79"
+      },
+      {
+        "suite": "com.uteexpress.ArchitectureTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "03b05dbc093e06e3ec8dc56c305e0c9cb67395b595c390789a9411fd4afbc113"
+      },
+      {
+        "suite": "com.uteexpress.cart.CartServiceTest",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "617f4d9303bdc65005cf3bb3f92013c8754cef729cb84e186c1e71678589703c"
+      },
+      {
+        "suite": "com.uteexpress.catalog.controller.PublicCatalogControllerTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "18da215b05f181126f0f0cfe2d90f3b774395f9e688c91e30b51b30bce0f8d99"
+      },
+      {
+        "suite": "com.uteexpress.catalog.controller.VendorProductControllerTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "1c827fbfaebbeaeb43e6dbeead6bb5c6bd8c831e34a4ba4829dc3a3687916e9a"
+      },
+      {
+        "suite": "com.uteexpress.catalog.entity.ProductModelTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "936e634e5157a6b6b3755579e58e48d9e652ec8f47547170e730aa4f56531961"
+      },
+      {
+        "suite": "com.uteexpress.catalog.ProductDemoActivationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "ca28447426a4e9582f4b0b62ebed231b088d636fa118e6981c2d827d8d8e4e82"
+      },
+      {
+        "suite": "com.uteexpress.catalog.service.DatabaseCatalogQueryServiceTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "a5e4344aadee02dc659396d6d3c410ee97ce85a222626b6f272a267c46b4e5e2"
+      },
+      {
+        "suite": "com.uteexpress.catalog.service.ProductImagePolicyTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "3235babfba4fe63edc7c9e899f09d33f43b74ef253a4e13f4aa1d13869fcb446"
+      },
+      {
+        "suite": "com.uteexpress.catalog.service.ProductServiceTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "5e2419abde1e496f016b731f4e1316e69ac96239834c1e88a7be4a09ce9ab6af"
+      },
+      {
+        "suite": "com.uteexpress.catalog.service.PublicCatalogServiceTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "2c29378d617dcaec06eb3005ca9b38a18214fc1f4abadeb852fd2e0e10b91dca"
+      },
+      {
+        "suite": "com.uteexpress.checkout.CheckoutContractTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b4e7cb79355a5e849de448b86274e629ee01c06409047f1fa65994bb56712158"
+      },
+      {
+        "suite": "com.uteexpress.checkout.CheckoutQuoteServiceTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "f4f471c7557c45135939b345aef5f679b84a4ae9a2f9cbc971ada23bb29ad9d7"
+      },
+      {
+        "suite": "com.uteexpress.checkout.MoneyContractTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "6c59508697e7113e3c916e3e78626521e10560ab9efd7a89c39ec77e5c9c6aa2"
+      },
+      {
+        "suite": "com.uteexpress.common.storage.LocalFileStorageServiceTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "f2f464b8fc0e7eb4d091987fb73b968a8eb672969a72107476cfe4536171d489"
+      },
+      {
+        "suite": "com.uteexpress.engagement.ReviewFoundationTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4a4dcf974d212bb338c1788584bc6053d9c6ebdded7f617e4a5729634ce3676b"
+      },
+      {
+        "suite": "com.uteexpress.FoundationHttpTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "409b73216c7ee0d41ded34693444f583051f700f34a03e8a2d54390594596ed0"
+      },
+      {
+        "suite": "com.uteexpress.governance.AccountGovernanceWebTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "68a21f5d7b97dc47405c40fdc9adc81803c1beb363c28e87578b1c3372175a55"
+      },
+      {
+        "suite": "com.uteexpress.governance.AuditLogServiceTest",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "771583e352c3b2ad76d02c6c78142bce108d6598a95c31d26c0ec8873985e534"
+      },
+      {
+        "suite": "com.uteexpress.governance.CategoryWebTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "02d6a61d64c98fcf5ac2bccb3800eb597199887ab9d9e61e69ab0de07a730d10"
+      },
+      {
+        "suite": "com.uteexpress.governance.ModerationWebTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "da0dbea6064a00f6f4473e74d053c813dc5407d189b31ced87ff404520be4862"
+      },
+      {
+        "suite": "com.uteexpress.governance.OpsDashboardTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "ca3af615d3d9a0f565a4a3caee2bd428dc97be95c938f68601ceb71bdfcab389"
+      },
+      {
+        "suite": "com.uteexpress.governance.OpsReportFilterTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "5ae012708f293ec685c4b7f3d6438f09695175fe9544d675235a4e27b3fe9383"
+      },
+      {
+        "suite": "com.uteexpress.governance.ShopApprovalWebTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "953408f80d8e654047634b46da73f7e955ab8924fcba1995915d3a8f1b2393d5"
+      },
+      {
+        "suite": "com.uteexpress.identity.controller.EmailVerificationControllerTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "616c0915a56dc63f201aed93c05a2d7b5dd15d19bc6e1fc6b0b41583ab77fa5e"
+      },
+      {
+        "suite": "com.uteexpress.identity.controller.PasswordResetControllerTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "7887e3a199dfcec52ecbc5c5b3dbb1153c4a91535ce7f3ad99e4c9c194c3be4b"
+      },
+      {
+        "suite": "com.uteexpress.identity.controller.RegistrationControllerTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "1347945fd834eaf94dceb2e2fdf46f099245dc5dec2b3bde0e49a2e825b3b216"
+      },
+      {
+        "suite": "com.uteexpress.identity.dto.RegisterFormValidationTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "6781880105f66e992a770e92bcaeb7597bf368cb930adaa0d3a4a51ea1b2ea79"
+      },
+      {
+        "suite": "com.uteexpress.identity.dto.ResetPasswordFormValidationTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "1cd7bf74acf3caebcf633cf918506b429bfd249da5109ffa8e4c103f9971cdeb"
+      },
+      {
+        "suite": "com.uteexpress.identity.service.AccountIdentityServiceTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "1167320d9c0d79866dacec51badc2ae9a71ce73710136e2288b7719e7183a318"
+      },
+      {
+        "suite": "com.uteexpress.identity.service.EmailVerificationServiceTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "49056918b4a330c74a83a93f356671dd8dbd539ec82cbc2aa07ce0cfd8187981"
+      },
+      {
+        "suite": "com.uteexpress.identity.service.IdentityAuthenticationServiceTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "66dc0f41248d1c97530d2d41a43f7a66393edace60a48a33dfadc5583c7b4e90"
+      },
+      {
+        "suite": "com.uteexpress.identity.service.OtpSecurityTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "0634e0011740972dd5882c09185d499718fba334455f3e59d78dc358b7055baa"
+      },
+      {
+        "suite": "com.uteexpress.identity.service.PasswordResetServiceTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "18a9eb94e7dc55b377238c9bf5e1def08641c38aa63d9c297e052c92b7aa39e1"
+      },
+      {
+        "suite": "com.uteexpress.identity.service.RegistrationServiceTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "0c47ae499097a1ffb6fbe70812e24e86451832f68850b3af5cc3b41323627c95"
+      },
+      {
+        "suite": "com.uteexpress.identity.service.VerificationMailServiceTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "16c6f891dabade9e6170f56e720353877261d2de133caff5afd3b5234965a774"
+      },
+      {
+        "suite": "com.uteexpress.notification.NotificationCommitPublisherTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4b52e6c00db2611f83f3f7bdf8bb508c60042e8c22c70e10b1d772a4e1ece7a2"
+      },
+      {
+        "suite": "com.uteexpress.notification.SocketObservabilityTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "895ff228f6a1ae1c682756383e52e6c367bea875a1eabaf9ba398baee6cd1230"
+      },
+      {
+        "suite": "com.uteexpress.order.controller.PlaceOrderPageControllerTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "77976fe3cf2f7e3d893febb73a1f71196c9d030627c5e0229c2c0abf119adb3b"
+      },
+      {
+        "suite": "com.uteexpress.order.entity.OrderDomainCoreTest",
+        "tests": 40,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "2c86bd631809d9672bc774221f94eefd779fd1d864b84b6d308866cc84232e98"
+      },
+      {
+        "suite": "com.uteexpress.order.OrderContractTest",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "34384106b148203f834d7b3248f39f8803ae6110e6ac2520039c37419b53e04a"
+      },
+      {
+        "suite": "com.uteexpress.order.service.BuyerOrderServiceTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4e29f6ffd2a51ca0670c55721fb2044a02d3801200212fa2d02af406a1a6787a"
+      },
+      {
+        "suite": "com.uteexpress.order.service.CheckoutRequestHashTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b5ab75eda4a436d125e534624b9a89976592506bdac825c7834a8543630a15e9"
+      },
+      {
+        "suite": "com.uteexpress.order.service.OrderEligibilityServiceTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "842be147a4f3d5085cbb04c47f9a277043c7f3f9260257025ad6972efc897241"
+      },
+      {
+        "suite": "com.uteexpress.order.service.RefundTransitionGuardTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "c21d904aec14a0df025abef61e984dd435a346f56bd6eca1381ee1195e2120b4"
+      },
+      {
+        "suite": "com.uteexpress.order.service.RevenueServiceTest",
+        "tests": 23,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "9b31f835dc99f951544a1ab337ed116d014944435ba318a9147ce2f6ad494bec"
+      },
+      {
+        "suite": "com.uteexpress.order.service.ShipmentOnlyOperationGuardTest",
+        "tests": 40,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "f844507df46aa733a912c414d3248d3aad361aaebb0f75194f503dc590c9852f"
+      },
+      {
+        "suite": "com.uteexpress.order.service.ShipmentOnlyOrderGuardTest",
+        "tests": 41,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d5f5c34590c9d7e805a90e7c7091a418548543eee08ca11b4b769fe90fc3b109"
+      },
+      {
+        "suite": "com.uteexpress.payment.CodPaymentTest",
+        "tests": 12,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4b08e94c956e5e42289e3cbe689cee52fe2c25a3ba11116a360a7621cc500289"
+      },
+      {
+        "suite": "com.uteexpress.payment.ManualRefundContractTest",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "198d7e9fc99521fe7362e989dbeeaf8ab8ccafc78121e1288c383e0a42d34692"
+      },
+      {
+        "suite": "com.uteexpress.payment.service.CancelledPaidRefundPayloadTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "0809cf83c6b542c92807e0adb38f08b0bcc0b3eea5a4ef5dc4d6ed774bbe834d"
+      },
+      {
+        "suite": "com.uteexpress.payment.service.CodRefundEligibilityTest",
+        "tests": 27,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "e70f839e651b0ec19f397c3a08a6a42dbc60c68d6d9f6ff9406b7d025bca2d84"
+      },
+      {
+        "suite": "com.uteexpress.payment.service.ManualRefundPayloadTest",
+        "tests": 46,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "cf1c190c1e888a05188677f4e95345eb41548d540f5d38762eba9382b3c188c9"
+      },
+      {
+        "suite": "com.uteexpress.promotion.PromotionTest",
+        "tests": 14,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "fa75727a47979f10fb06e787b2cf02b31503a9db30a9bef6373afeecfdff0758"
+      },
+      {
+        "suite": "com.uteexpress.promotion.VendorVoucherFormTest",
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d611955ae70e2f6853e9f4d2fd2ab833a4ef1472504cb40b4c0507ff4b90d3db"
+      },
+      {
+        "suite": "com.uteexpress.promotion.VoucherTest",
+        "tests": 21,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "e8379440f42e27b132178d2c68c48355a1b4b12788a92ed7771897c5da0c92ec"
+      },
+      {
+        "suite": "com.uteexpress.security.authentication.UteExpressUserDetailsServiceTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "7b3eb2580bb3537803f106df492dbc0dbe071a2a5ab160396193aceea0ead0b6"
+      },
+      {
+        "suite": "com.uteexpress.security.AuthenticationWebTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "ab8f092987d82049dd8c8b8913fe26bde15c9cf017635e1e8fbda7e17cabe800"
+      },
+      {
+        "suite": "com.uteexpress.security.CsrfCookieWebTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "3e3232a7a3c074ae3fb0871b0cb523cb15f92f87e538ccb1f62bb62db8f1c77e"
+      },
+      {
+        "suite": "com.uteexpress.security.filter.JwtAuthenticationFilterTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "42ba9f5d9baba4842519249853d1cbab4453d4f717b821a51c7dd178e3ecee75"
+      },
+      {
+        "suite": "com.uteexpress.security.JwtSecurityConfigurationTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "af932038a10f26c22ed2f268c1ef152e60e54d0915f58acb040431815a419138"
+      },
+      {
+        "suite": "com.uteexpress.security.JwtTokenServiceTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "23cc137b4fdcf003a7f206f2d992fcda0d887844ad9e7a66508bc3fd217ae92f"
+      },
+      {
+        "suite": "com.uteexpress.security.SecurityFoundationTest",
+        "tests": 13,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4e1b1a1b698c0d385edfd808c6c1a1dd40221c6505aa259d211a4fe4effd0291"
+      },
+      {
+        "suite": "com.uteexpress.security.SocketIdentityServiceTest",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "3fdee533b0c5f24640d5fd4b44d30e4f9b9a06c9c0fbe1ea81690fb6dd327dff"
+      },
+      {
+        "suite": "com.uteexpress.shipping.ShippingConfigWebTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "6b38b6e3be9850fa0c85ef74134ab509c2830023e2bbadc48a15460874765600"
+      },
+      {
+        "suite": "com.uteexpress.shipping.ShippingDemoActivationTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4a5cc9f41ab036939d5ac4cb18d6cb991c860e975d23a2dbeae871a842b3d3aa"
+      },
+      {
+        "suite": "com.uteexpress.shop.controller.ShopRegistrationControllerTest",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "954289351bf758562fff0dab43c770e3a787529318475595fd4bbe49ccc4df70"
+      },
+      {
+        "suite": "com.uteexpress.shop.entity.ShopTest",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "3963a12e0ecbc9d8103acd4c5aad010748e42a5445e595ea840548d4e24deda7"
+      },
+      {
+        "suite": "com.uteexpress.shop.service.ShopRegistrationServiceTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "9c6b6ea45bfc0acd62280d56fb0f203bbae5bae3190bf8b9bd61da759bc3095f"
+      },
+      {
+        "suite": "com.uteexpress.testsupport.PostgresContextCleanupListenerTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "6fabda45ebcf33aab78758f95de9cae8e05c5ac6153b6daa400bbbdc60767ab0"
+      },
+      {
+        "suite": "com.uteexpress.ui.UiLayoutTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "2960f04b68cee2de20628a0dcebe7b6150174545543c2969bb1e3d87a76ee7fe"
+      }
+    ]
+  },
+  "postgresql": {
+    "classes": 65,
+    "tests": 1388,
+    "reports": [
+      {
+        "suite": "com.uteexpress.account.User01ProfileIT",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "bf0d0de308ed88cc9dd5d0bb70a28b9823aea725c1ea2212f3b4bbdb2caf9a12"
+      },
+      {
+        "suite": "com.uteexpress.account.User02AddressIT",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "895eb1957c8413d7fe96eb664b0b69a9c57ecfe43ce1c5d703b47d578ab46122"
+      },
+      {
+        "suite": "com.uteexpress.cart.CartActionsIT",
+        "tests": 33,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d9c377cbbfc2a824ea9addd2c7b980733ff7f1db9969152d57662e5e12a12935"
+      },
+      {
+        "suite": "com.uteexpress.cart.CartDatabaseIT",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "433331e273669a2e3c8ea3f03e76188f1c0ec945f05561e392d706be3028e688"
+      },
+      {
+        "suite": "com.uteexpress.catalog.ProductCatalogIT",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "e01f34ebb4ac7a228cf6cdcadba6588a25fcd41fba0c6da96c8f2221157c9da1"
+      },
+      {
+        "suite": "com.uteexpress.catalog.ProductDiscoveryIT",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d3c21ea47a7f59b6b76f976145a2a448de2aff525a1176bc53d54aa57af051bf"
+      },
+      {
+        "suite": "com.uteexpress.catalog.PublicCatalogIT",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "606d468c444fd3733a87c4991333a29f72d9aa982e78c5ccd89eccb4f685861c"
+      },
+      {
+        "suite": "com.uteexpress.catalog.VendorProductIT",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "cfbac0ca64be660111a7fb724807e1d5a31c92b8543a17ca4697314e52158dbc"
+      },
+      {
+        "suite": "com.uteexpress.checkout.CheckoutQuoteIT",
+        "tests": 43,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "0675f59448d8afd683771d432f9a29b77936453b4a13231b963daad151b9a3d6"
+      },
+      {
+        "suite": "com.uteexpress.DatabaseBaselineIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "62ba56f7297768104fae060905dbdba83f2f255228be6600207ecbc2c5438eee"
+      },
+      {
+        "suite": "com.uteexpress.engagement.EngagementIT",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "03016e715d0782ff21af29cff6a50a97dbec1e1067274882711dab30edd3e323"
+      },
+      {
+        "suite": "com.uteexpress.engagement.ReviewFoundationMigrationIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b93bbde705ef27cbd2acbc4dcd1b113f989ea0d6b4a6f0f2b380ff8f4b467a63"
+      },
+      {
+        "suite": "com.uteexpress.engagement.ReviewIntegrationIT",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "fdada2781d69b728606bf9c848e38ad1c9fee36b1a978c3ee23615c5417077ad"
+      },
+      {
+        "suite": "com.uteexpress.fulfillment.ShipperFulfillmentIT",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b4fbdd41fb33ac7ee36f7891fc4af9ca377113607dfb51d3a0b24e9dab6b5dce"
+      },
+      {
+        "suite": "com.uteexpress.governance.AccountGovernanceIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "c886163766dfa1f1efe38768559486485965d033ba09e24b19afa0072b3f752e"
+      },
+      {
+        "suite": "com.uteexpress.governance.AdminRevenueIT",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "a428f764a5d0b9a8d0af1b04e70829c49ad11cf8f3bc432147b91024376c2ee6"
+      },
+      {
+        "suite": "com.uteexpress.governance.AuditLogIT",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "5f4cdf1c6839d8e4c9773b5adcd535e98cabe578e793e8ca276a43590412a356"
+      },
+      {
+        "suite": "com.uteexpress.governance.CategoryIT",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "f536159853d360a8331eef21651962dec4929a5750a01c8c898d36678f2b9457"
+      },
+      {
+        "suite": "com.uteexpress.governance.CommissionPolicyIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "ed5f9ec35e7143fa362c598fe7065db6ca59100ba9891ca7c8c441842edd7565"
+      },
+      {
+        "suite": "com.uteexpress.governance.ModerationIT",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "094edafe78c08217ba2d02542872bab3df6b7a38fd13083ea746de1cb0c2735e"
+      },
+      {
+        "suite": "com.uteexpress.governance.OperationsOrderIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "533113169bfd3de13d2a7098738c79b17f499a8ecfc8ce52c453f3a8d788ce5f"
+      },
+      {
+        "suite": "com.uteexpress.governance.OpsDashboardReadIT",
+        "tests": 28,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "38e74e4f8da4676ce2d40b8507c6a4333969e1a005b867870994a11a6138a29b"
+      },
+      {
+        "suite": "com.uteexpress.governance.RoleGovernanceIT",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "2638f954d2aaf83f49fe0998a319ade0ef1c2c00a26b66ec6b270333d45f322c"
+      },
+      {
+        "suite": "com.uteexpress.governance.ShopApprovalIT",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4ee5fd1450b17daae933e59f7f19bdb14b11b8aa763f985a47b9935ad9306991"
+      },
+      {
+        "suite": "com.uteexpress.identity.Auth03EmailVerificationIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "1833cdc32c1021cbfacf07173a8ca182620ee569ee2efe59ae15f05cc1761545"
+      },
+      {
+        "suite": "com.uteexpress.identity.Auth04PasswordResetIT",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "ed2497f3464f313579742d332ecafe8cda7439da611191d29661847c948343fa"
+      },
+      {
+        "suite": "com.uteexpress.identity.AuthRegistrationIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b49d520bd6a6d9810eef719347d24ff3824c2ada3d5e6cc14f16db5ff52f5a23"
+      },
+      {
+        "suite": "com.uteexpress.integration.CheckoutFlowIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "dc7cae6c471a49bbfc6cb5ee55ad0f20148507adcf58c786eada030baa4e801a"
+      },
+      {
+        "suite": "com.uteexpress.integration.Int02CommerceFlowIT",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "e200f915fb9b1533cd9434259cf00a885de96f00627c5150a90f0a9caee007b8"
+      },
+      {
+        "suite": "com.uteexpress.integration.Int02HttpEnvironmentIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "0ac970e8bc5898f4f0af16fd04af8268d619cab8969c1210b94782a0002d82f9"
+      },
+      {
+        "suite": "com.uteexpress.integration.PromotionBrowserFormsIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "000de80004a2c26e49f92797250e730e23d8c13ef39b19c2c5cfa14d660fca6f"
+      },
+      {
+        "suite": "com.uteexpress.integration.ReturnToSenderIT",
+        "tests": 17,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "49b80755ec93604e772871138bea6c5f21064eb3f3d9e06d95cd042b9a97bfbf"
+      },
+      {
+        "suite": "com.uteexpress.notification.NotificationIT",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "5d6165dc20219a99edbed512b2baee7417095d2ed8299dda2d1b0ed97fdce84d"
+      },
+      {
+        "suite": "com.uteexpress.notification.NotificationMigrationIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "f7704e746f691e293022b3672e3c54514b94b353d021ffa58ea0c609219e40b5"
+      },
+      {
+        "suite": "com.uteexpress.notification.NotificationRecoveryIT",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "aba87d68496b35b46be58d2ff37b01e1bcfa4d5313d5e31a73d52677518e9aef"
+      },
+      {
+        "suite": "com.uteexpress.notification.NotificationSchedulerIT",
+        "tests": 1,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "c33e0fb5f82f0806899819ad37510665b026721f48cb53cc8dfc474a1cfd9768"
+      },
+      {
+        "suite": "com.uteexpress.notification.NotificationSocketIT",
+        "tests": 29,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "7f2f732fef71eb44c0d133accf1ad375ef39d1f753ad3946e6eef619137a6374"
+      },
+      {
+        "suite": "com.uteexpress.operations.OperationsCancellationIT",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "a65a3d43252050c5911df9f8807e8fcda90bbe7928487bccffc1df496406021e"
+      },
+      {
+        "suite": "com.uteexpress.order.BuyerCancellationIT",
+        "tests": 50,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d0f2e9942f165fae39b3fd7b7926853de711a261b490e0497ba6e873ba63e690"
+      },
+      {
+        "suite": "com.uteexpress.order.BuyerOrderIT",
+        "tests": 35,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "8b5558fb5ba3d0f718d5c10f8c5f1a02003970baed70b77c154012d38ff4d45d"
+      },
+      {
+        "suite": "com.uteexpress.order.CancelledPaidRefundIT",
+        "tests": 61,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "466fcfa96e065f43a2402f2afbc34f900731ff07d3e28678ea791adb3559ca19"
+      },
+      {
+        "suite": "com.uteexpress.order.ManualCodRefundIT",
+        "tests": 62,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b5958b78951d2538c07d44e66820a23db0ec1a2272a9e4a54ff54c87969d83ad"
+      },
+      {
+        "suite": "com.uteexpress.order.OrderDatabaseIT",
+        "tests": 8,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "62ae7a61235c1661966c76f8465f6489debbaf88ef18fe6a10b56dd906be848f"
+      },
+      {
+        "suite": "com.uteexpress.order.OrderEligibilityIT",
+        "tests": 26,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "c5d9b5b73a8a00537b5f09d7d83e75b9d77aa7d94d46b571c74e7d888c66f451"
+      },
+      {
+        "suite": "com.uteexpress.order.PlaceOrderIT",
+        "tests": 56,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "205ad17fc870b41f11cbd5512005f6c95557d7bfcd0f24a347d53e417b958225"
+      },
+      {
+        "suite": "com.uteexpress.order.ReturnManagementIT",
+        "tests": 149,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "1ebf7569e08c181c07b390451fa19bf144d41a1ed01ce9b73e3593fcd71772cd"
+      },
+      {
+        "suite": "com.uteexpress.order.ReturnReceiptMigrationIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "6a60f2be53646b5859b5fa7bf279b487e3434af0e0d8ce496614f9a7ac33c643"
+      },
+      {
+        "suite": "com.uteexpress.order.service.OpsOrderCancellationIT",
+        "tests": 60,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "9c71cb9f610eace49e6b968c9bfd96c03a06e450c5f68bf76b4a66781fd274cc"
+      },
+      {
+        "suite": "com.uteexpress.order.ShipperOrderLifecycleIT",
+        "tests": 92,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "2b60fa5f14c871fb646efc3b707ed0b731342a9202305332aeb87a55c224cc09"
+      },
+      {
+        "suite": "com.uteexpress.order.VendorOrderIT",
+        "tests": 73,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "645327857348cc9e32a6cb3b0df73b48bdbec501bdae9d8bf96e59250e586717"
+      },
+      {
+        "suite": "com.uteexpress.order.VendorRevenueIT",
+        "tests": 46,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "9950c82eb667bd64f270177eb84d02b8d192673abff7a649ffd17d5b25b0e3d4"
+      },
+      {
+        "suite": "com.uteexpress.payment.CancelledPaidRefundMigrationIT",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "bfbae7218387ff34b1ac5bcc2207aad01854d731276282f80e56f582fb35f49f"
+      },
+      {
+        "suite": "com.uteexpress.payment.CodPaymentIT",
+        "tests": 47,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "cff8c205f32d86b83af3c031a3e083db49c1e39ce490c75492a5a1c6fee2c42a"
+      },
+      {
+        "suite": "com.uteexpress.payment.RefundLedgerMigrationIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "0e730df40a5e87e88016a28cf52d574bbd672aaaca3846aeefb549bfdd48f9c6"
+      },
+      {
+        "suite": "com.uteexpress.promotion.ProductPromotionIT",
+        "tests": 59,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d53d62ca13f1907c8fadaf26cdf39d9b22cade42f5f03a442952b40dd8d572e5"
+      },
+      {
+        "suite": "com.uteexpress.promotion.VendorVoucherIT",
+        "tests": 73,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "5c4ba31aee0618356dc398cbe0034c2685b37dcebfc7226dbe425751b93a1a53"
+      },
+      {
+        "suite": "com.uteexpress.promotion.VoucherCheckoutIT",
+        "tests": 57,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "efdf4b8ed90276167f996d2a31e92aca71c6a5892aaee47021270ac654a645f5"
+      },
+      {
+        "suite": "com.uteexpress.security.Auth02AuthenticationIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "5205b55b1d94bd3f4892d5253bbc9d1a7464590560165111173b2f33347827cf"
+      },
+      {
+        "suite": "com.uteexpress.security.SecurityHardeningIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "83f9f61fe13afc658dafa8c01c5fe1ed870571ad70e5216a432974a2b768aa51"
+      },
+      {
+        "suite": "com.uteexpress.shipping.ReturnToSenderMigrationIT",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b3650e13ee89e202a9f8a1521948c379ff922b86053b2eccd4969a9f6b1bdf53"
+      },
+      {
+        "suite": "com.uteexpress.shipping.ShipmentAssignmentIT",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "36dc04057e25dce0215ce69171d74b8a263ebd1070b95aad07ac5f950d84a6a1"
+      },
+      {
+        "suite": "com.uteexpress.shipping.ShipmentAttemptMigrationIT",
+        "tests": 3,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "9caf82547f5ad8e09fa778edfbd4bcb1a2c41f64cc6a8dfee8fa3d4a0339015d"
+      },
+      {
+        "suite": "com.uteexpress.shipping.ShipmentFulfillmentIT",
+        "tests": 25,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "f66ddd8421bb1fd3497861539b9c771978c2b06f8d9eb85796fbefc14f21043c"
+      },
+      {
+        "suite": "com.uteexpress.shipping.ShippingConfigIT",
+        "tests": 9,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "795642a40f4e8e62819cb59ae82ebfbe6153a970b8d7d2b866b995130a8e023e"
+      },
+      {
+        "suite": "com.uteexpress.shop.ShopRegistrationIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4ad0a6390120aab33ead9dc0e319319c8cf7de78d2285a41b552e3cbfd68b606"
+      }
+    ]
+  },
+  "java_total": 2078,
+  "maven_exit_code": 0,
+  "node_exit_code": 0,
+  "failsafe_timeout": false,
+  "summary_sha256": "138674178543a0496a8d8f11fc8726fc05eb065bad68f69852252d0634d0370d",
+  "scope": "Local full-suite rehearsal; not final acceptance, CI approval or runner attestation",
+  "node": {
+    "tests": 12,
+    "pass": 12,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0
+  },
+  "manifest_schema_version": 2,
+  "tested_source_sha": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+  "runner_sha": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+  "runner_script_sha256": "4005a275ed21d1d657f9f8c5cb0ad663f83be08074fe66cb10926d494a21036f",
+  "log_sha256": {
+    "maven": "5070cfe146fe400356a32475f9cb94b987d8411a51a9ab3fd8d7981120fbc45b",
+    "node": "871ee413a062b1dc1e5aad841ff6a2635d4eabe31df27c74493cbcc330dc433d"
+  }
+}

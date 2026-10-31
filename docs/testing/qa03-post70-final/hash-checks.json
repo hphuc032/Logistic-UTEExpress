@@ -1,0 +1,9 @@
+{
+  "source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+  "unit": 709,
+  "postgresql": 1415,
+  "XML_hashes_verified": 144,
+  "maven_node_log_hashes_verified": true,
+  "failsafe_summary_hash_verified": true,
+  "public_raw_artifacts": "NOT PUBLISHED; private raw logs/XML retained locally"
+}

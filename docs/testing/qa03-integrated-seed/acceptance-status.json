@@ -1,0 +1,82 @@
+{
+  "whole_qa03_completed": false,
+  "overall": "BLOCKED",
+  "ready_for_hp_final_acceptance": false,
+  "source_sha": "dbd1ebbb8d271c3dc009c3f186e81eaea82ec65c",
+  "gates": [
+    {
+      "id": "Q03-G01",
+      "status": "PR75 merged / human acceptancePENDING",
+      "reason": "No human signoff inferred from mergedPR or automated prior-source checks",
+      "owner": "QD execution / HP acceptance"
+    },
+    {
+      "id": "Q03-G02",
+      "status": "Latestpost75 FR04\u2013FR07NOTRUN / authorizationPENDING",
+      "source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+      "requirements": [
+        "TD independent compatibility/source read-back",
+        "HP explicit FR01/FR02 acceptance",
+        "HP explicit authorization for FR04\u2013FR07"
+      ],
+      "owner": "TD + QD + HP"
+    }
+  ],
+  "scope_exceptions": [
+    {
+      "id": "ADMIN-06/T41c",
+      "status": "DEFERRED / ACCEPTED SCOPE EXCEPTION",
+      "manager_commission_writes": "DENY ALL",
+      "limited_write_pass": false
+    }
+  ],
+  "release_follow_ups": [
+    {
+      "item": "Clean-host deployment",
+      "status": "NOT RUN"
+    },
+    {
+      "item": "Off-host database and upload restore",
+      "status": "NOT RUN"
+    },
+    {
+      "item": "Production logging and alerting acceptance",
+      "status": "NOT RUN"
+    }
+  ],
+  "current_combined_update": {
+    "source_sha": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+    "report": "../qa70-qd-review/report.md",
+    "status": "BLOCKED acceptance; execution PASS observed with Q70-S01 OPEN"
+  },
+  "latest_diagnostic_update": {
+    "source_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+    "report": "../qa03-refund-diagnostics/report.md",
+    "finding": "Q70-S01 fix candidate verified; pending TD review/adoption",
+    "overall": "BLOCKED acceptance"
+  },
+  "current_finding_disposition": {
+    "finding": "Q70-S01",
+    "status": "OPEN",
+    "severity": "Medium",
+    "candidate": "Validated; HP limited residual risk accepted, not RESOLVED",
+    "reference": "../qa03-refund-diagnostics/finding-disposition.json",
+    "td_new_evidence": "Published PR71 c0b2f76; QD scoped published artifact/source consistency PASS; raw private logs/XML not rehashed/rerun",
+    "authorized_integration_regression": "Local validation f9c6fd6 PASS; final post-merge source verification NOT RUN",
+    "hp_final_acceptance": "PENDING",
+    "published_review_reference": "../qa03-refund-diagnostics/td-published-review.json",
+    "disposition": "ACCEPTED RISK \u2014 LIMITED"
+  },
+  "hp_authorized_validation_update": {
+    "tested_source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+    "execution": "PASS fresh full/normal/controlled",
+    "finding_status": "ACCEPTED RISK \u2014 LIMITED",
+    "recommendation": "HP final bounded disposition applied",
+    "report": "../qa03-hp-integration-validation/report.md",
+    "qa03": "BLOCKED",
+    "td_source_acknowledgement": "CONFIRMED direct GitHub evidence review"
+  },
+  "current_postmerge_packet": "../qa03-post70-final/acceptance-status.json",
+  "current_post75_packet": "../qa03-post75-fr01-fr02/acceptance-status.json",
+  "current_full_G02_on_post75": "NOT RUN / pendingjointFR01FR02 andHPauthorization"
+}

@@ -1,0 +1,649 @@
+{
+  "source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+  "master_plan": "QA03 Ops acceptance;T48 clean DB/migration;T50 broader UI separately candidate/manual",
+  "groups": [
+    {
+      "criterion": "Assignment",
+      "suites": [
+        {
+          "suite": "com.uteexpress.shipping.ShipmentAssignmentIT",
+          "tests": 6,
+          "xml_sha256": "7b2df55a06eb1e19ddaff136e82f12af319cdb9e97549aaf74d0c710749b4e85",
+          "executed_test_methods": [
+            "assignmentUsesPersistedOrderSelectionAndReassignmentAuditsWithoutChangingOrder",
+            "nonOpsRoleCannotAssignOrReassign",
+            "rejectsLegacySelectionUnreadyOrderAndUnqualifiedShipper",
+            "routeRequiresOpsRoleAndCsrf",
+            "shipperCanOnlyReadCurrentAssignmentsAfterReassignment",
+            "staleVersionsLockedShipperAndPickupBlockAssignmentChanges"
+          ]
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "criterion": "FailureRetryBusiness",
+      "suites": [
+        {
+          "suite": "com.uteexpress.fulfillment.ShipperFulfillmentIT",
+          "tests": 16,
+          "xml_sha256": "709363f8b5adc4433effaab973efcffbf6cdd219ed27d63c0411319cc31c5425",
+          "executed_test_methods": [
+            "allAttemptHttpRepresentationsPreserveOrderAndHideExhaustedRetry",
+            "competingCoordinatorDeliveriesCommitOnce",
+            "dashboardCountsCurrentShipmentsOnceAndScopesMixedRoleActor",
+            "dashboardEmptyAndRolesAreGuardedWithoutWrites",
+            "dashboardTracksRealFailureRetryAndDeliveryWithoutRewritingFacts",
+            "httpFlowSynchronizesShipmentOrderAndCollectsCod",
+            "multiRoleVendorWaitsForOrderWithoutBlockingShipperEligibility",
+            "pageFormUsesVersionsAndCsrf",
+            "roleCsrfForeignAssignmentAndValidationAreGuarded",
+            "secondAttemptDeliveryCollectsCodAndDuplicateConflicts",
+            "secondAttemptWrongCodRollsBackAllFulfillmentState",
+            "shipmentOnlyHttpFlowUsesPersistedVersionsAndKeepsAuthorizationGuards",
+            "wrongCodRollsBackAndDuplicateDeliveryConflicts"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.order.ShipperOrderLifecycleIT",
+          "tests": 92,
+          "xml_sha256": "947f27e647fb27cdcfcbca4ced6aacd983e393b1175f92a8fef40a05fff96f27",
+          "executed_test_methods": [
+            "adminRestrictionCommitsBeforeEligibilityAndDeliveryFailsWithoutEffects",
+            "adminRoleRevocationOfAdminShipperWaitsForOuterFulfillmentCommit",
+            "adminShipperAssignmentOnDifferentOrderWaitsForSharedEligibilityWithoutRoleCycle",
+            "allThreeTransitionsUseOriginalVersionsHistoryAndAfterCommitEvents",
+            "attemptEligibilitySerializesWithGovernanceInBothSchedulesForMultiRoleActor",
+            "boundariesRequireExistingTransaction",
+            "cancellationAndPickupSerializeOnActualOrderLockWithStaleManagedSnapshot",
+            "cancellationRejectsPhysicalPickupBeforeInventoryRestoration",
+            "competingAttemptRequestsWaitOnOrderAndCommitOnce",
+            "completionRequiresPersistedShipmentEvidence",
+            "concurrentFullDeliveriesWithIdenticalOriginalVersionsCommitExactlyOnce",
+            "deliveryPrepareAcceptsPersistedAttemptsWithoutMutatingState",
+            "deliveryRejectsInvalidCodEvidenceAndRollsBackShipment",
+            "everyActionRejectsMissingSourceAndTargetEvidence",
+            "failureAndDeliverySerializeOnOrderWithExactCommittedEffects",
+            "forgedPrincipalActionIdAndVersionsDoNotAuthorize",
+            "fulfillmentAccountLockMakesAdminRestrictionWaitUntilOuterCommit",
+            "historyPersistenceFailureRollsBackCollectedCodShipmentAndOrder",
+            "invalidVoucherUsageRollsBackAssignedShipmentStockAndAllLifecycleEvidence",
+            "inventoryFailureRollsBackShipmentClosureAndAudit",
+            "realCoordinatorFailureRetrySecondFailureKeepsOrderAndOtherModulesUntouched",
+            "reassignmentAndPersistedAccountRoleAreRecheckedByBothBoundaries",
+            "refreshedOrderAndPaymentIgnoreEarlierManagedSnapshots",
+            "repeatedVerifyUsesOriginalVersionsAndWritesNothing",
+            "retryAndFailureAuditErrorsRollBackEntireCoordinator",
+            "sameAccountVendorAndAdminAssignmentTargetSerializeBeforeEligibility",
+            "sameAccountVendorAndPickupSerializeWhenOneOwnsAllRequiredLocks",
+            "sameAccountVendorCancellationAndPickupSerializeBeforeEligibility",
+            "shipmentOnlyBoundariesRejectForgedIdentity",
+            "shipmentOnlyBoundariesRequireExistingTransaction",
+            "shipmentOnlyBoundariesRequireShipperRole",
+            "shipmentOnlyReadsDoNotMutateOrAcceptMissingTargetEvidence",
+            "staleDuplicateAndWrongShipperRequestsHaveNoEffects",
+            "staleOrderShipmentAndIncrementedCompleteVersionsConflictWithoutEffects",
+            "vendorCancellationClosesAssignmentAndRestoresStockAtomically",
+            "vendorEligibilityAfterOrderSerializesWithAccountRestriction",
+            "verifyFailureRollsBackRealMutationEvidenceAndAudit",
+            "verifyReloadsPersistedEvidenceAndRejectsMalformedTarget",
+            "wrongAmountDuplicateCollectionAndFailureAfterCompleteRollbackEverything",
+            "wrongPrincipalRolesCannotPrepareOrComplete"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.shipping.ShipmentFulfillmentIT",
+          "tests": 25,
+          "xml_sha256": "f4bca05abb01b76761381b95bb95a683e2b981fa936d6dad18105171d3be9c45",
+          "executed_test_methods": [
+            "concurrentFailureRequestsCommitExactlyOneEvidence",
+            "deliveryAttemptHooksRequireTransactionLiveAssignmentAndBoundedInput",
+            "eligibilityLockLivesUntilOuterTransactionEnds",
+            "failedAuditRollsBackShipmentAndNewFailureEvidence",
+            "failedDeliveryRetryAndExhaustionPreserveOrderAndImmutableEvidence",
+            "failureSchemaRejectsMalformedOrUnlinkedEvidenceAndDuplicateAttempt",
+            "fulfillmentEvidenceMustBePersistedAndMatchesItsState",
+            "internalFulfillmentRequiresTransactionLiveAssignmentAndRole",
+            "opsAbsenceUsesCallerOrderLockAndReadDoesNotLockAccount",
+            "opsAuditFailureRollsBackShipmentMutation",
+            "opsCancellationIsSystemWideAndPreservesOrderAndPayment",
+            "opsCancellationRejectsStaleOrPhysicalEvidenceWithoutEffects",
+            "opsHooksRequireTransactionAndOpsRoleAndExplicitAbsence",
+            "opsShipmentAndAuditRollbackWithOuterFailure",
+            "pickupAndVendorCancellationSerializeOnOrderLock",
+            "provisionalShipmentAndAuditRollbackIfOuterCoordinatorFails",
+            "vendorClosureChecksOwnerAndRollsBackWithOuterCancellation"
+          ]
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "criterion": "ReturnToSender",
+      "suites": [
+        {
+          "suite": "com.uteexpress.integration.ReturnToSenderIT",
+          "tests": 17,
+          "xml_sha256": "0e3d55a5e557f93feabef7dd007f0b99f06cf1ce48f4f1a47645ae06e931ef1e",
+          "executed_test_methods": [
+            "concurrentSameReceiptWaitsForOrderAndCommitOrRollbackHasOneRelease",
+            "firstFailureCannotCancelAndTwoFailuresKeepStockUntilOpsAttests",
+            "httpCsrfUnknownFieldsStaleAndPersistedRoleRestrictionsFailClosed",
+            "inboxFailureRollsBackPhysicalReceiptAndReleaseThenRetryAndReplayWriteOnlyOnce",
+            "inconsistentPaymentNeverGetsRewrittenOrCancels",
+            "intermediateHistoryFailureRollsBackReceiptShipmentStockQuotaAndInboxThenRetries",
+            "nonOpsAndForgedOwnershipHaveNoEffects",
+            "opsReceiptCancelsReleasesExactlyOnceAndReplaysWithoutChangingMoney",
+            "successfulReceiptIsImmutableAndOuterTransactionIsRejected",
+            "terminalMetricUsesRealShipmentPathsNotAttemptsOrOpenFailuresAndIsTenantScoped"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.shipping.ReturnToSenderMigrationIT",
+          "tests": 2,
+          "xml_sha256": "1394425bcf57e380821d35f67e3799892d34ceb851493b10d44e0ce63894cc0a",
+          "executed_test_methods": [
+            "freshApplicationValidatesAndNewMigrationHasNamedParentConstraints",
+            "populatedReviewBaselineUpgradesWithoutRewritingHistoricalRowsOrChecksums"
+          ]
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "criterion": "NotificationWS",
+      "suites": [
+        {
+          "suite": "com.uteexpress.notification.NotificationIT",
+          "tests": 6,
+          "xml_sha256": "4c284f9cfed315993aa28bffd7a4f57adc91550f136d258a9f386e0336d67bc7",
+          "executed_test_methods": [
+            "concurrentDuplicatePublishesOnlyCommittedWinner",
+            "deduplicationOwnershipAndIdempotentRead",
+            "notificationWriteRollsBackWithBusinessTransaction",
+            "orderEventTargetsOnlyBuyerAndShopOwnerAndDeduplicatesRetry",
+            "realtimeHintsFollowCommitAndNeverDuplicateOrEscapeRollback",
+            "rolledBackFirstInsertAllowsWaitingWriterToPublishOnce"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.notification.NotificationMigrationIT",
+          "tests": 1,
+          "xml_sha256": "07542e95a30555a461812f98fdbd90c72e89842a8d9750dbeb0a442e3d17a20c",
+          "executed_test_methods": [
+            "upgradesAnExistingPromo02DatabaseWithoutOutOfOrderMigrations"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.notification.NotificationRecoveryIT",
+          "tests": 7,
+          "xml_sha256": "80d12c66a9f5002453518b02355c5a7cbb85dd8cf3507dfbddfa1c1732cb1d18",
+          "executed_test_methods": [
+            "concurrentWorkersCreateExactlyOneRowPerHistoryAndRecipient",
+            "failedBusinessTransitionLeavesNoNotificationSource",
+            "failedOrderDoesNotBlockOtherOrdersAndRemainsRetryable",
+            "inboxJoinsBusinessTransactionAndOuterRollbackRemovesAllRows",
+            "lateCommitWithLowerHistoryIdIsRecoveredWithoutHighWaterCursor",
+            "notificationFailureRollsBackBusinessHistoryAndRetryCommitsInboxAtomically",
+            "recipientOverlapDeduplicatesAndProjectionUsesPersistedFactsOnly"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.notification.NotificationSchedulerIT",
+          "tests": 1,
+          "xml_sha256": "bbed3fd6552e2a97947025f81107c5fd9a7f4c4e467691933c02b093893d8ee3",
+          "executed_test_methods": [
+            "scheduledWorkerRecoversHistoryWithoutAnInMemoryEvent"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.notification.NotificationSocketIT",
+          "tests": 29,
+          "xml_sha256": "6dcbb7136c31d4578b55eb1e767451aa02a651bf73daf173cb43f5c831ad3280",
+          "executed_test_methods": [
+            "accountLockProtectsDeliveryCallbackAgainstConcurrentAdminLock",
+            "boundsConcurrentSessionsPerAccount",
+            "clientPublishAndForgedIdentityAreRejected",
+            "committedGovernanceOrLogoutClosesIdleSocketAndPreventsFurtherPush",
+            "connectRequiresMaskedCsrf",
+            "foreignOrBrokerSubscriptionsCloseConnection",
+            "handshakeRejectsMissingForgedRevokedTokensAndMissingForeignOrigin",
+            "multipleSessionsTimeOutAndCleanUpWhileGovernanceHoldsAccount",
+            "outboundRechecksRevocationEvenBeforeIdleSweepRuns",
+            "privateQueueSendsOnlyAfterCommitWithMinimalPayloadAndReconnectRecovers",
+            "rejectsBadIssuerAudienceAndSignature",
+            "signedMalformedIdentityClaimsDenyThroughHttpAndSocket",
+            "strictJwtExpiryClosesIdleSessionAndBlocksNewHandshakeEvenWithinClockSkew",
+            "vendorConfirmPublishesCommittedHistoryToBuyerOverRealSocket"
+          ]
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "criterion": "Review",
+      "suites": [
+        {
+          "suite": "com.uteexpress.engagement.ReviewFoundationMigrationIT",
+          "tests": 3,
+          "xml_sha256": "924fd3832da2259f2ff0b65ec7068ef0cf26961cd56b619e004220fc8c1ad9f3",
+          "executed_test_methods": [
+            "upgradePreservesHistoryAndBindsReviewToRealBuyerItemAndProduct"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.engagement.ReviewIntegrationIT",
+          "tests": 25,
+          "xml_sha256": "f03a9a2089267511e24d9fe49120ccc6f0fa379e3d4948e7c752e178ae14d444",
+          "executed_test_methods": [
+            "actualWriterRejectsNonDeliveredState",
+            "buyerDetailLinksToPersistedItemAndJsonCreatesWithoutSensitiveFields",
+            "cleanupFailureRecordsActionableInternalEventWithoutMaskingRollback",
+            "dbAndStoredFilesRollbackTogether",
+            "duplicateActualWritersCommitExactlyOneReview",
+            "emojiHttpValidationAndDatabaseCharacterCountAgree",
+            "forbiddenUploadsRollbackBeforeAnyCommittedReview",
+            "foreignLockedRevokedAndOuterTransactionsCannotWrite",
+            "httpJsonMultipartCsrfRoleAndFieldAllowlistsUseTrustedIdentity",
+            "realBoundaryCreatesServerFactsAndServesEscapedPublicImages",
+            "realReviewAndReturnSerializeAtOrderInBothSchedules",
+            "uncertainCompletionDefersCleanupAndCannotDeleteCommittedMedia"
+          ]
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "criterion": "Migration",
+      "suites": [
+        {
+          "suite": "com.uteexpress.DatabaseBaselineIT",
+          "tests": 1,
+          "xml_sha256": "93c633b9bf95fb17cd0039d904ed6ddd253398bd7df20a85aea4ed656d72adab",
+          "executed_test_methods": [
+            "cleanDatabaseBootsMigratesAndCanMigrateAgainWithoutChanges"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.order.ReturnReceiptMigrationIT",
+          "tests": 3,
+          "xml_sha256": "f414547ef1ec85d1121e6739510c0d6c4066d3339ad61c86dfb1698d57fb2292",
+          "executed_test_methods": [
+            "freshAndPhase1UpgradePreserveAllStatusesAndEnforceReceiptContract"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.payment.CancelledPaidRefundMigrationIT",
+          "tests": 2,
+          "xml_sha256": "2f9c4634c2a4d1b31b6c39e746ef330b4d56daf51dca71dbe4fd91ca261aa7a7",
+          "executed_test_methods": [
+            "freshAndPopulatedLedgerUpgradePreserveOldResultsAndEnforceBothOperations"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.payment.RefundLedgerMigrationIT",
+          "tests": 3,
+          "xml_sha256": "0bb1b0360aeeb19c1ddc9695aee7a18a6b153156b1cb8d32a1b4e8ba59d5cbf2",
+          "executed_test_methods": [
+            "freshAndUpgradePreserveHistoryAndEnforceLedger"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.shipping.ShipmentAttemptMigrationIT",
+          "tests": 3,
+          "xml_sha256": "6056e3f728eaf84a70f4cf7ea53ef6c2b49d62653f11d415bb9885090cae7d59",
+          "executed_test_methods": [
+            "freshAndDeployedUpgradeValidateImmutableEvidenceSchema"
+          ]
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "criterion": "Refund",
+      "suites": [
+        {
+          "suite": "com.uteexpress.order.CancelledPaidRefundIT",
+          "tests": 61,
+          "xml_sha256": "48311ab06aaa656dbe4ee69e775a06ef67c9cb11c7e746cfc6c9bf865067bb93",
+          "executed_test_methods": [
+            "adminRevocationRacesRetainAuthorityThroughCommit",
+            "anonymousCsrfAndForgedAmountIdentityOrReturnFieldsCannotAuthorizeARefund",
+            "contendersShowActualPostgresBlockersAndCommitOnce",
+            "crossPeriodRefundRemainsSignedAndShippingExcluded",
+            "currentPersistedAdminAuthorityIsRequiredOnFirstAttemptAndReplay",
+            "databaseRejectsInconsistentOrderTotalsBeforeRefundCanUseThem",
+            "invalidOnlineEvidenceCannotBecomeKnownCollectedRevenue",
+            "invalidPersistedEvidenceRejectsWithoutEffects",
+            "invalidProofCannotWriteEvidence",
+            "merchandiseCollectionAndRefundNetToZeroWithoutAccruingOrReversingCommission",
+            "missingKeyProofAndUnknownOrderFailSafely",
+            "nonAdminHttpActorsCannotRefundEvenAnOwnedOrder",
+            "priorDeliveryHistoryCannotHideBehindAClearedDeliveryMarker",
+            "realJwtAdminAndRenderedCookieCsrfSucceed",
+            "replayCollisionsCannotCreateAnotherRefund",
+            "rollbackAtFlushedStagesRestoresEverythingAndAllowsRetry",
+            "staleFirstAttemptAndOuterTransactionRejectWithoutReservingAKey",
+            "successKeepsCancelledPaymentAndCancellationEffectsAndReplayFreezesResult",
+            "unsuccessfulAttemptsDoNotMultiplyCollectionOrPreventTheSingleValidPayment"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.order.ManualCodRefundIT",
+          "tests": 62,
+          "xml_sha256": "a95f2b9d8f45e95a56d7beb9d6446cead32c683fb6b0352ee451ff4123c1432c",
+          "executed_test_methods": [
+            "accountFkLocksCoexistWithRefundAndBlockRevocationUntilBothCommit",
+            "adminRevocationRacesRetainAuthorityThroughCommit",
+            "apiAuthorizationUsesPrincipalAndPersistedIdentity",
+            "apiRejectsAnonymousCsrfMissingKeyDuplicateKeyForgedFieldsAndQueryActor",
+            "apiRejectsForgedAdminAndInactiveAdmin",
+            "committedCollisionsConflict",
+            "concurrentRefundsShowRealAdvisoryOrOrderWaitAndCommittedEffects",
+            "everyFlushedStageRollsBackAndDoesNotReserveKey",
+            "fullRefundPreservesDeliveredShipmentRedeemedVoucherAndInventory",
+            "invalidPersistedBusinessFactsFailClosed",
+            "outerTransactionsAndInternalStandaloneCallsAreRejected",
+            "replayRequiresCurrentPersistedAuthorization",
+            "staleOriginalVersionsLeaveNoKey",
+            "successAndReplayUseOriginalEvidenceAndPreserveOtherModules"
+          ]
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "criterion": "Revenue",
+      "suites": [
+        {
+          "suite": "com.uteexpress.governance.AdminRevenueIT",
+          "tests": 26,
+          "xml_sha256": "be2d0251f323e373bdaf9aa046dc8b1ea1c972fff968242d48476c6432746580",
+          "executed_test_methods": [
+            "analyticalQueryCountDoesNotScaleWithShopOrItemCountAndOuterTransactionIsRejected",
+            "anonymousAndRevokedAdminCannotReadAndManagerUiHasNoFinancialLink",
+            "collectionDeliveryReceiptRefundUseIndependentPeriodsAndOriginalCommission",
+            "consistentSnapshotSurvivesConcurrentPaymentChangeAndRevocationButNextReadDenies",
+            "explainActualGlobalAndShopQueriesOnRepresentativeFixture",
+            "forgedRoleLockedOrRevokedAdminIsDeniedFromPersistedFacts",
+            "globalReportingUsesHalfOpenHcmDayBoundaries",
+            "invalidOrUntrustedFiltersAreRejected",
+            "multiShopScopeSharesVendorFactsWithoutItemOrPaymentFanout",
+            "nonAdminCannotReadFinancialHtmlJsonOrService",
+            "nullPolicyWithLegitimateZeroCommissionRemainsAvailable",
+            "projectionsRequireAnExistingReadOnlyRepeatableSnapshotAndExplicitScope",
+            "unknownEvidenceInOneShopDoesNotBecomeKnownZeroOrContaminateAnotherScope"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.order.VendorRevenueIT",
+          "tests": 46,
+          "xml_sha256": "08a682eed7db3aab8ef78f216cc2c77a0bc793bc348e9c774c394e6495c00fd8",
+          "executed_test_methods": [
+            "analyticalStatementCountDoesNotGrowWithItemCount",
+            "databaseRejectsSecondPaidRecordEvenWhenItContradictsSuccessfulEvidence",
+            "equalValueOrdersAndMultipleItemsDoNotMultiplyMoneyAndHistoryIsRetained",
+            "exactLocalDayYearAndUpperBoundsAreHalfOpen",
+            "explainActualQueriesOnRepresentativeSparseAndDenseFixtures",
+            "extraUnpaidAttemptAfterSuccessfulPaymentIsNotAmbiguous",
+            "htmlJsonRolesAndTamperedFiltersAreProtectedAndEscaped",
+            "inconsistentRefundAndMissingReceiptHistoryExposeUnavailableAdjustments",
+            "independentCollectionDeliveryReceiptAndRefundPeriodsUseOriginalSnapshot",
+            "invalidEvidenceDoesNotBecomeACompleteZero",
+            "nullPolicyAndLegitimateZeroRemainCompleteEvenWhenCurrentPolicyChanges",
+            "outerTransactionIsRejectedAndRolledBackEvidenceIsNotReported",
+            "refundCannotAttributeAnUnsuccessfulOrForeignPayment",
+            "refundUsesExactSuccessfulIdAmongEarlierAndLaterUnsuccessfulAttempts",
+            "samePeriodFullRefundAndReceiptCancelOnlyTheirOwnMetrics",
+            "shippingOnlyCollectionAndRefundHaveKnownZeroMerchandise",
+            "signedCashAndCommissionDeltasAreVisibleInCustomPeriodJsonAndHtml",
+            "snapshotSurvivesConcurrentFinancialChangeAndRevocationButNextRequestIsDenied",
+            "stableProductIdTieBreakAndNegativeReturnRankArePreserved",
+            "stalePrincipalCannotOverrideCurrentAuthorization",
+            "unavailableTotalsAreExplicitInHtmlAndJson",
+            "unknownRefundIsNotAZeroAdjustment",
+            "unpaidNewOrdersCountWithoutInventingRevenueAndCancellationUsesOwnTime",
+            "unsuccessfulAttemptsBeforeOnePaidRowAreIgnoredWithoutMixingEvidence"
+          ]
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "criterion": "CheckoutVoucherPromotion",
+      "suites": [
+        {
+          "suite": "com.uteexpress.checkout.CheckoutQuoteIT",
+          "tests": 43,
+          "xml_sha256": "279c74e97cb5717860f1e381243cba2f0a9743895d4624e902078b813c9dc174",
+          "executed_test_methods": [
+            "anyInvalidSelectedItemRejectsWholeQuote",
+            "authenticatedQuoteUsesCurrentServerPriceAndDoesNotWriteAnything",
+            "beanValidationRejectsMalformedSelection",
+            "emptyAndBusinessErrorPagesRenderSafely",
+            "emptyCartAndNoSelectedItemsFailWithoutMutation",
+            "flywayAndQuoteLocksAreReleasedBeforeReturn",
+            "foreignAddressAndForeignAddressOptionsAreRejected",
+            "htmlEscapesProductAndAddressAndOffersPlacementWithoutCreatingAnOrder",
+            "invalidShippingServiceIsRejected",
+            "jsonRejectsInjectionAndFormCannotBindIt",
+            "moderationBlocksSelectedProductWithoutMutation",
+            "multipleSelectedShopsAreRejected",
+            "realLogoutLoginChangesOwnershipAndRevokesOldCookie",
+            "sameShopMultipleSelectedProductsReturnOneQuote",
+            "shippingOptionsFilterInactiveAndUnsupportedRoutesAndQuotesRefreshFee",
+            "unauthenticatedAndCsrfRequestsBlocked",
+            "unrelatedRolesCannotAccessBuyerCheckout",
+            "unselectedUnavailableItemDoesNotEnterQuote",
+            "unsupportedAddressCodeRendersEmptyShippingStateWithoutRedirectLoop",
+            "userBCannotCheckoutUserACartEvenWithValidOwnAddress"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.integration.CheckoutFlowIT",
+          "tests": 1,
+          "xml_sha256": "a2d17bba5e0d17b60c98c967c944ff80c0a60ed63d4127a1b3fc52ff0e7174e5",
+          "executed_test_methods": [
+            "authenticatedBuyerCompletesCatalogToNewOrderFlow"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.integration.PromotionBrowserFormsIT",
+          "tests": 6,
+          "xml_sha256": "c9b2f88d43f5f72c5e15f6f6419bc50dba452971cf4a44ee32f703e6adbfae26",
+          "executed_test_methods": [
+            "csrfAndRoleChecksStillRunBeforeBusinessMutation",
+            "forgedFormOwnershipAndPathIdentifiersRemainRejected",
+            "headersCannotSupplyMissingBusinessFormFields",
+            "realPromotionCreateAndUpdateAcceptNormalTransportHeaders",
+            "realPromotionDisableAcceptsHeadersAndRetainsOwnershipCsrfAndFieldValidation",
+            "realVoucherCreateAndUpdateAcceptNormalTransportHeaders"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.promotion.ProductPromotionIT",
+          "tests": 59,
+          "xml_sha256": "b9db2ddcd9adbabb75791b385e45b597c826c877fd75b5c898d1c84c1cb6f1f0",
+          "executed_test_methods": [
+            "accountLockSerializesConcurrentCreatesAndRejectsOverlap",
+            "adjacencyDisabledAndOtherProductsAreAllowed",
+            "catalogFilteringSortingPaginationAndAllBuyerDisplaysUseEffectivePrices",
+            "checkoutAppliesVoucherAfterPromotionAndPreservesSnapshotsAndReplayAfterDisable",
+            "checkoutRoundsPerUnitBeforeMultiplyingQuantityAndRendersAllPriceColumns",
+            "checkoutWaitsForScheduleInsertThenUsesItsCommitOrRollback",
+            "concurrentDirectSqlOverlapWritersCannotBothCommit",
+            "databaseRejectsEveryOverlappingShape",
+            "databaseRejectsInvalidPercentage",
+            "databaseRejectsInvalidWindowAndForeignKeys",
+            "editDisableAndEnableAreVersionedAndNeverChangeOwnership",
+            "everyRouteEnforcesVendorAndEveryPostEnforcesCsrf",
+            "foreignProductAndMismatchedPromotionPathsAreSafeNotFoundIncludingInvalidForms",
+            "forgedFieldsAreRejectedOnEveryMutation",
+            "fullDiscountCheckoutStillUsesShippingAndZeroMerchandiseCommission",
+            "invalidFormsWriteNothing",
+            "managementOuterRollbackRemovesScheduleAndAllowsRetry",
+            "managementWaitsForCheckoutThenCannotChangeItsHistoricalPrice",
+            "nonSuperuserDatabaseOwnerRunsAllMigrationsAndInstallsExtension",
+            "overflowingPromotedLineRollsBackPlacement",
+            "overlapCreateUpdateAndReenableGiveSafeFeedbackAndPreserveRows",
+            "previewIsAdvisoryAndPlacementRecalculatesChangedPromotion",
+            "productLockSerializesApplicationCreatesIncludingEmptySchedule",
+            "promotionsPreserveVoucherQuotaUnderCompetingBuyers",
+            "realJwtAndRenderedCsrfCreateRoundTrip",
+            "rollbackAfterAllPlacementEffectsLeavesStockQuotaCartAndSnapshotsUntouchedAndCanRetry",
+            "scheduleStartIsInclusiveEndExclusiveAndSingleInstantCoversBatch",
+            "sqlAndJavaPricingAgreeIncludingHalfDongAndPrecision",
+            "unapprovedShopCannotReadOrMutateAndHiddenProductDoesNotBecomePublic",
+            "updateChecksOverlapUsingTheSameMicrosecondPrecisionAsPersistence",
+            "vendorFormCreatesOwnedPromotionAndConvertsVietnamTime",
+            "voucherMinimumSpendUsesPostPromotionSubtotal"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.promotion.VendorVoucherIT",
+          "tests": 73,
+          "xml_sha256": "a51f47728cbe1339a36eede545aaba95d209f37b7d2ea1e580bafd9647ab218c",
+          "executed_test_methods": [
+            "allRoutesFollowVendorSecurityContract",
+            "anyHistoryPreventsRedefinitionOrQuotaReduction",
+            "createDerivesShopCreatorScopeAndNormalizesCodeAndTimezone",
+            "disableIsIdempotentAndDoesNotDeleteHistory",
+            "duplicateCanonicalCodeReturnsFriendlyFormError",
+            "everyMutationRequiresCsrf",
+            "foreignAndPlatformResourcesReturnNotFound",
+            "forgedIdentityAndPlatformScopeAreRejectedOnCreate",
+            "fractionalMoneyIsRejectedOnCreateAndUpdateWithoutPersistence",
+            "historyAllowsQuotaIncreaseAndWindowChangesWithoutChangingUsage",
+            "invalidCreateRedisplaysErrorsWithoutPersistence",
+            "listIncludesOnlyOwnedShopVoucherAndRendersDisableCsrf",
+            "managementWaitsForQuotaLockAndSeesHistoryCommittedWhileWaiting",
+            "realJwtCookieAndRenderedCsrfTokensAuthorizeCreateEditAndDisableForms",
+            "renderedEditFormRoundTripsScaleTwoMoneyWhileUpdatingQuota",
+            "staleVersionReturnsFormConflictWithoutOverwritingNewerData",
+            "unapprovedShopCannotReadOrMutateVouchers",
+            "updateCannotChangeOwnerShopOrScope",
+            "updateOwnedUnusedVoucherPersistsDefinitionAndIncrementsVersion"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.promotion.VoucherCheckoutIT",
+          "tests": 57,
+          "xml_sha256": "c3eb439a7966a0e3f6bad68637069386d94c5f7d5ec206fc9bfae46c4aed8b34",
+          "executed_test_methods": [
+            "bothLimitsRejectAnotherUseAtQuoteAndPlacement",
+            "cancellationReleasesEditedInactiveExpiredVoucherWithoutEligibilityChecks",
+            "cancellationRestoresGlobalAndPerUserQuotaWithoutDeletingHistory",
+            "changedVoucherWithSameKeyConflictsBeforeAnyMutableCheckoutRead",
+            "checkoutReplayAfterCancellationNeverReconsumesQuotaOrRewritesSnapshots",
+            "concurrentBuyersOnIndependentProductsShopsCategoriesCompeteForLastUsage",
+            "concurrentCancellationHasOneLifecycleEffectAndOneRelease",
+            "concurrentDifferentKeysForOneBuyerCannotExceedPerUserLimit",
+            "concurrentSameBuyerReplayConsumesOnce",
+            "corruptVoucherUsageFailsCancellationAndRollsBackInventory",
+            "fixedDiscountLargerThanSubtotalLeavesOnlyAuthoritativeShippingPayable",
+            "historyFailureAfterReleaseRollsBackQuotaStockStatusAndHistory",
+            "htmlVoucherQuoteCarriesCanonicalSelectionThroughPlacementAndShowsActionableErrors",
+            "jsonApiReturnsServerVoucherFactsAndRejectsForgedDiscountBuyerAndShop",
+            "noVoucherAndLegacyOrderRemainReadableWithoutBackfill",
+            "noVoucherCancellationPreservesLegacyBehaviorWithoutInventedUsage",
+            "nonCancellationAndDeniedPostDeliveryReturnNeverReleaseUsage",
+            "outerRollbackDoesNotExposeReleasedQuota",
+            "percentageMaximumAndHalfUpRoundingArePersisted",
+            "placementAndCancellationUseCompatiblePostgresLocksAndNeverExceedQuota",
+            "placementRevalidatesAfterEarlierQuote",
+            "postgresEnforcesCanonicalUniqueCodeUniqueUsageAndOrderBuyerFk",
+            "postgresEnforcesUsageStateAndReleaseTimestampConsistency",
+            "postgresRejectsInvalidPersistedDefinitions",
+            "preDeliveryCancellationReleasesOnceAndPreservesHistoricalFacts",
+            "quoteAndPlacementRejectIneligibleVoucherWithoutWrites",
+            "quoteAndPlacementUsePersistedRulesAndSaveOneUsage",
+            "recordingUsageRequiresCheckedApplicationInSameTransaction",
+            "releaseRequiresExistingLifecycleTransaction",
+            "replayAndHistoricalDisplayIgnoreEditedInactiveVoucherAndNeverRewriteSnapshots",
+            "rollbackAfterUsageOrderPaymentAndCartWritesDoesNotConsumeQuotaAndCanRetry",
+            "vendorFormsCreateEditAndDisableVoucherUsedByRealCheckoutAndCancellation",
+            "voucherApisRetainAuthenticationAndCsrfAndDoNotExposeForeignOrders"
+          ]
+        }
+      ],
+      "result": "PASS"
+    },
+    {
+      "criterion": "Ops",
+      "suites": [
+        {
+          "suite": "com.uteexpress.governance.AccountGovernanceIT",
+          "tests": 3,
+          "xml_sha256": "a91528248a72fc3c1d7880dd87d19530348d05cbec5294b86acf3d04364c6171",
+          "executed_test_methods": [
+            "auditFailureRollsBackLockAndTokenInvalidation",
+            "lockAndUnlockRevokeTokensAndWriteAudit",
+            "staleVersionSelfLockAndWrongRoleDoNotChangeAccount"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.governance.OpsDashboardReadIT",
+          "tests": 28,
+          "xml_sha256": "4893a78a482fcb80cfc4261d4b4dfcc97f1c929e8187d8720c172f1ef8eaea52",
+          "executed_test_methods": [
+            "adminAccountAggregateIsGlobalWhileManagerReceivesNoAccountAggregate",
+            "aggregateQueryCountStaysConstantAndPlansAreRecordedForIsolatedFixture",
+            "aggregatesSeparateStreamsAndShopScopeWithoutItemFanout",
+            "auditCountAndPageUseReadOnlyRepeatableSnapshotDuringConcurrentAppend",
+            "auditFiltersPaginationAndProjectionExcludePrivateSummaries",
+            "invalidAuditFiltersAreRejected",
+            "invalidOrAmbiguousDashboardFiltersAreRejected",
+            "legacyRefundedStatusWithoutLedgerDoesNotFabricateSuccessfulRefundCount",
+            "localDateBoundsIncludeLowerButExcludeUpperIndependentOfJvmTimezone",
+            "nullActorAndEmptyDatasetAreHonestAndMissingShopIsEmpty",
+            "onlyAdminCanReadAudit",
+            "roleAssertionsCannotOverridePersistedRoleOrInactiveAccount",
+            "successfulRefundCountsInCompletionPeriodAndReadDoesNotMutateEvidence"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.governance.RoleGovernanceIT",
+          "tests": 6,
+          "xml_sha256": "022fd0ed1d8212b64c6f12d607a84f69d5f2b1d432f96fc78ba519a4165791e1",
+          "executed_test_methods": [
+            "auditFailureRollsBackRoleAndToken",
+            "grantAndRevokeShipperRotateTokenAndUpdateActiveList",
+            "lastActiveAdminCannotBeRevokedOrLocked",
+            "managerWriteIsDenied",
+            "roleActionsRequireAdminAndCsrfAndRenderUpdatedAccount",
+            "userRoleCanBeGrantedAndRevokedWhileVendorStaysRestricted"
+          ]
+        },
+        {
+          "suite": "com.uteexpress.order.service.OpsOrderCancellationIT",
+          "tests": 60,
+          "xml_sha256": "c85fcc3ff53c2fa185a8d6f879997db918b7ab654544363823c858c323f7bf64",
+          "executed_test_methods": [
+            "cleanAssignedProductionCancellationUsesOriginalShipmentVersion",
+            "expectedPresentCannotAcceptMissingShipment",
+            "failureRollsBackAllProductionEffectsAndNoEventEscapes",
+            "inactivePersistedAccountIsDenied",
+            "inconsistentOrderEvidenceIsRejectedBeforeShippingMutation",
+            "invalidShipmentExpectationContractsAreRejected",
+            "joinedTransactionsAreRejectedEvenWhenCallerAlreadyHoldsAccount",
+            "laterAndTerminalOrderStatesAreRejected",
+            "newAndConfirmedWithoutShipmentCancelExactlyOnce",
+            "newlyAssignedShipmentAndStaleShipmentVersionAreConflicts",
+            "otherRolesCannotEnterProductionBoundary",
+            "persistedOpsRolesAuthorizeProductionBoundary",
+            "physicalOrInconsistentShipmentEvidenceIsRejected",
+            "productionCallsBothShippingHooksForAuthoritativeAbsence",
+            "productionCancellationSerializesWithRealContendersInBothDirections",
+            "shippingHookFailureRollsBackEntireProductionCancellation",
+            "staleAuthenticatedRoleDoesNotOverridePersistedRevocation",
+            "staleOrderVersionOrStatusRejectsBeforeEffects",
+            "unauthenticatedActorIsDenied",
+            "voucherUsageReleasesOnceAndHistoricalSnapshotSurvives"
+          ]
+        }
+      ],
+      "result": "PASS"
+    }
+  ],
+  "counting": "Groups overlap; do not sum these groups as new tests. Full Java total remains2124."
+}

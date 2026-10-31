@@ -1,0 +1,9 @@
+{
+  "source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "archive_sha256": "3b5e97348dc76ecb5c75ac4ae28a7e1211ce4da0837c8524f62f259629161d84",
+  "manifest_sha256": "6cf8f34852c64e627ba863ac0c38c4af718c41191d9713b5ad3deed3ab837142",
+  "artifact_count": 182,
+  "archive_and_individual_verification": "PASS",
+  "transfer": "NOT DELIVERED",
+  "raw_files": "LOCAL PRIVATE ONLY; no raw logs/XML/JAR committed"
+}

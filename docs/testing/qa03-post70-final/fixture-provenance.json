@@ -1,0 +1,12 @@
+{
+  "source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+  "production_JAR_sha256": "af9526dad815e3af881a3e13ec41ef6d42bc231ad1ee74c738e39c26157a6893",
+  "test_fixture_source_sha256": "a8d19d54dbaeb39319f933d506df91e9eeffef41d92c30c44cb334d6373923cb",
+  "clock_source_sha256": "0a38d078dd3f93f7d8f7225083d89b9c541a732b22e540609b6983fddde4fe23",
+  "compiled_fixture_sha256": {
+    "qa02/investigation/ClockSkewConfiguration.class": "0d0f3fb149cf5a9cda0323e78ff89edb557a22860fa60a7de89a09158f862884",
+    "qa02/seed/RefundAcceptanceSeed.class": "81ba5dd13736ca4b78b4157d5ebd989d489689ad787a781bce8ad48566b9af22"
+  },
+  "scope": "Test classpath only; controlled Clock in TD child only; production JAR excludes qa02 fixture/instrumentation",
+  "fixture_timestamp": "Synthetic PAID uses persisted payment.created_at; production refund guards unchanged"
+}

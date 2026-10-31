@@ -1,0 +1,67 @@
+import pathlib, subprocess, os, json, datetime, time, hashlib, shutil, xml.etree.ElementTree as ET
+root=pathlib.Path.cwd(); out=root/'.work/fr04';out.mkdir(parents=True,exist_ok=True)
+source='5089a8ed17e5f8486e44847a99b309ff13d0d3b8'
+env=os.environ.copy();env['JAVA_HOME']=r'C:\Program Files\Java\jdk-21';env['PATH']=env['JAVA_HOME']+'\\bin;'+env['PATH'];env['DOCKER_HOST']='npipe:////./pipe/docker_engine';env['PYTHONDONTWRITEBYTECODE']='1';env['JAVA_TOOL_OPTIONS']='-Duser.timezone=UTC';env['MAVEN_OPTS']='-Duser.timezone=UTC'
+def git(*args):return subprocess.check_output(['git',*args],text=True).strip()
+def now():return datetime.datetime.now(datetime.timezone.utc).isoformat()
+def write(n,v):(out/n).write_text(json.dumps(v,indent=2)+'\n',encoding='utf-8')
+def digest(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+facts={'source':source,'tree':git('rev-parse','HEAD^{tree}'),'started_utc':now(),'scope':'FR04 full regression only; no FR05/06/07','attempt':1,'commands':[]}
+write('progress.json',facts)
+assert git('rev-parse','HEAD')==source and facts['tree']=='89c3882d470f81466b902cd3a38d7f3f272c889b'
+assert git('status','--porcelain')==''
+facts['clean_before']=True
+facts['objects']={p:git('rev-parse','HEAD:'+p) for p in ['src/main','src/test','scripts/qa','pom.xml','.mvn/wrapper/maven-wrapper.properties','.github/workflows']}
+facts['timezone']={'JAVA_TOOL_OPTIONS':env['JAVA_TOOL_OPTIONS'],'MAVEN_OPTS':env['MAVEN_OPTS'],'surefire_and_failsafe':'both committed pom systemPropertyVariables user.timezone UTC'}
+write('source-environment-before.json',facts)
+def run(name,cmd,timeout):
+ started=now();t=time.monotonic();log=out/(name+'.private.log')
+ with log.open('wb') as f:
+  try:
+   p=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,env=env,cwd=root,timeout=timeout);code=p.returncode;timed=False
+  except subprocess.TimeoutExpired:code=None;timed=True
+ rec={'name':name,'command':cmd,'started_utc':started,'finished_utc':now(),'duration_seconds':round(time.monotonic()-t,3),'exit_code':code,'timed_out':timed,'log_sha256':digest(log)}
+ facts['commands'].append(rec);write(name+'-receipt.json',rec);write('progress.json',facts)
+ print(name+': exit='+str(code),flush=True)
+ if code!=0:raise RuntimeError('STOP_AT_'+name)
+ return log
+try:
+ for n,c in [('java-version',['java','-version']),('maven-version',['cmd','/d','/c','mvnw.cmd','-version']),('node-version',['node','--version']),('python-version',['python','--version']),('docker-version',['docker','version']),('docker-info',['docker','info'])]:run(n,c,60)
+ run('containers-before',['docker','ps','-a','--no-trunc','--format','{{.ID}} {{.Image}} {{.Names}}'],60)
+ previous=root.parent/'review-auth01/.work/qa03-post75-sync'
+ helper=out/'FR02Preflight.java';shutil.copyfile(previous/'FR02Preflight.java',helper)
+ assert digest(helper)=='3b81d3d3e1a589fc169d816eaec7699b12e68828f977312ceb774ea8cd68a528'
+ cp=(previous/'test-classpath.txt').read_text().strip();q=lambda v:'"'+str(v).replace('\\','/')+'"'
+ (out/'javac.args').write_text('-cp\n'+q(cp)+'\n-d\n'+q(out)+'\n'+q(helper)+'\n')
+ (out/'java.args').write_text('-Duser.timezone=UTC\n-cp\n'+q(str(out.resolve()).replace('\\','/')+';'+cp)+'\nFR02Preflight\n'+source+'\n'+q(out/'auth-preflight.json')+'\n')
+ run('preflight-compile',['javac','@.work/fr04/javac.args'],90)
+ run('auth-preflight',['java','@.work/fr04/java.args'],180)
+ a=json.loads((out/'auth-preflight.json').read_text());assert a['status']=='PASS' and a['wrong_password_denied'] and a['owned_container_removed']
+ write('source-environment-before-tests.json',{**facts,'auth_preflight':a})
+ run('full-maven',['cmd','/d','/c','mvnw.cmd','--batch-mode','--no-transfer-progress','-Duser.timezone=UTC','-Ppostgres-it','clean','verify'],2400)
+ assert git('status','--porcelain')==''
+ nodes=sorted(str(p.relative_to(root)).replace('\\','/') for p in (root/'src/test/js').glob('*.test.cjs'))
+ run('full-node',['node','--test',*nodes],180)
+ run('tooling',['python','-B','-m','unittest','discover','-s','scripts/qa/tests','-v'],180)
+ suites={}
+ for folder in ['surefire-reports','failsafe-reports']:
+  paths=sorted((root/'target'/folder).glob('TEST-*.xml'));total={k:0 for k in ['tests','failures','errors','skipped']};files=[]
+  for p in paths:
+   e=ET.parse(p).getroot()
+   for k in total:total[k]+=int(e.attrib.get(k,0))
+   dest=out/'xml'/folder/p.name;dest.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(p,dest)
+   files.append({'name':p.name,'sha256':digest(dest),'counts':{k:int(e.attrib.get(k,0)) for k in total}})
+  suites[folder]={'totals':total,'files':files}
+ assert suites['failsafe-reports']['totals']['tests']>0
+ facts['suites']=suites
+ if any(v['totals'][k] for v in suites.values() for k in ['failures','errors','skipped']):raise RuntimeError('JAVA_NONZERO_FAILURE_OR_SKIP')
+ facts['status']='TECHNICAL_PASS_PENDING_TD_HP_REVIEW'
+except Exception as e:
+ facts['status']='STOPPED_FAIL_OR_BLOCKED';facts['failure']=str(e)
+finally:
+ facts['clean_after']=git('status','--porcelain')=='';facts['finished_utc']=now()
+ try:run('containers-after',['docker','ps','-a','--no-trunc','--format','{{.ID}} {{.Image}} {{.Names}}'],60)
+ except Exception as e:facts['cleanup_inspection_failure']=str(e)
+ write('result.json',facts)
+ print('FR04_STATUS='+facts['status'],flush=True)
+

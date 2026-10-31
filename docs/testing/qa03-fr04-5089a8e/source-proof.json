@@ -1,0 +1,35 @@
+{
+  "source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "publication": "6a899eb8e90d45f63919f4b4a9e1b43533ba00ff",
+  "develop": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "objects": {
+    "src/main": {
+      "source": "a350de2a50fef5f586a52158f4f3882194149fbe",
+      "publication": "a350de2a50fef5f586a52158f4f3882194149fbe"
+    },
+    "src/test": {
+      "source": "aae12f6d037f97e81fd3df48e7c39da201ced853",
+      "publication": "aae12f6d037f97e81fd3df48e7c39da201ced853"
+    },
+    "scripts/qa": {
+      "source": "a126f47ea5a4dca54654b67493b957aee4f68bf2",
+      "publication": "a126f47ea5a4dca54654b67493b957aee4f68bf2"
+    },
+    "pom.xml": {
+      "source": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+      "publication": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f"
+    },
+    ".mvn": {
+      "source": "19109738bacf2030de5bc45e1b4d4d45897b6fcd",
+      "publication": "19109738bacf2030de5bc45e1b4d4d45897b6fcd"
+    },
+    ".github/workflows": {
+      "source": "d5555952658117250bcbcd841f66d5f537d3f4a2",
+      "publication": "d5555952658117250bcbcd841f66d5f537d3f4a2"
+    }
+  },
+  "production_same_as_develop": true,
+  "migration_object": "31a7ad4f5c882528c94a376ae76a78710de32f06",
+  "publication_executable_diff": "",
+  "master_plan_sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a"
+}

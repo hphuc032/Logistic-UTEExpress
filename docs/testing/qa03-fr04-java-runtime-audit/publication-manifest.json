@@ -1,0 +1,27 @@
+{
+  "scope": "sanitized audit docs only; no rerun",
+  "executed_source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "files": [
+    {
+      "path": "docs/testing/qa03-fr04-java-runtime-audit/.gitattributes",
+      "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8",
+      "bytes": 30
+    },
+    {
+      "path": "docs/testing/qa03-fr04-java-runtime-audit/audit-receipt.json",
+      "sha256": "94b302126f45e90d6da9529c5ae684e1e069267ee892086f50fea52c7ed1c83e",
+      "bytes": 113826
+    },
+    {
+      "path": "docs/testing/qa03-fr04-java-runtime-audit/current-resolution-probe.json",
+      "sha256": "9fd57583b2db627b2a3ba7cdeda2545f61e6f103beecc01eb46144d269bcf65c",
+      "bytes": 1514
+    },
+    {
+      "path": "docs/testing/qa03-fr04-java-runtime-audit/report.md",
+      "sha256": "1b7acf95b1f041b2944f6030fbfef1cb177a31cb67468ed1fd61da80b57a8118",
+      "bytes": 4205
+    }
+  ],
+  "hash_basis": "staged Git bytes, excludes self"
+}

@@ -1,0 +1,18 @@
+{
+  "finding": "Q70-S01",
+  "source_sha": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+  "attempt": "run-9b427dbb1046",
+  "seed_exit_code": 1,
+  "td_application_exit": "nonzero; exact code was not retained by the original helper",
+  "exception": "ApplicationException CONFLICT",
+  "frames": [
+    "CancelledPaidRefundPayments.lockPaid:46",
+    "CancelledPaidRefundService.complete:36",
+    "RefundAcceptanceSeed.create:149"
+  ],
+  "private_td_log_sha256": "9bdfb3bc2ab88551216abb70affeaf098e292d5a1a97da6799d90e439c28f4eb",
+  "exact_first_failed_predicate": "NOT CAPTURED",
+  "clock_mismatch_root_cause": "HYPOTHESIS ONLY, not confirmed",
+  "later_same_source_attempt": "run-d671ae0ae88e PASS; not a replacement for failed attempt",
+  "disposition": "OPEN, TD investigation or explicit HP disposition required"
+}

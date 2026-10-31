@@ -1,0 +1,33 @@
+{
+  "recorded_utc": "2026-10-29T13:24:56.944410+00:00",
+  "OS": "Windows-11-10.0.26200-SP0",
+  "machine": "AMD64",
+  "JAVA_HOME": "C:\\Program Files\\Java\\jdk-21",
+  "DOCKER_HOST": "npipe:////./pipe/docker_engine",
+  "versions": {
+    "java": {
+      "exit_code": 0,
+      "observed_output": "java version \"21.0.2\" 2024-01-16 LTS\r\nJava(TM) SE Runtime Environment (build 21.0.2+13-LTS-58)\r\nJava HotSpot(TM) 64-Bit Server VM (build 21.0.2+13-LTS-58, mixed mode, sharing)"
+    },
+    "maven": {
+      "exit_code": 0,
+      "observed_output": "Apache Maven 3.9.11 (3e54c93a704957b63ee3494413a2b544fd3d825b)"
+    },
+    "node": {
+      "exit_code": 0,
+      "observed_output": "v22.21.0"
+    },
+    "python": {
+      "exit_code": 0,
+      "observed_output": "Python 3.13.9"
+    },
+    "docker": {
+      "exit_code": 0,
+      "observed_output": "29.4.1"
+    },
+    "postgres_image": {
+      "exit_code": 0,
+      "observed_output": "sha256:00bc86618629af00d2937fdc5a5d63db3ff8450acf52f0636ec813c7f4902929"
+    }
+  }
+}

@@ -1,0 +1,69 @@
+{
+  "source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+  "runs": [
+    {
+      "run_id": "run-9cf67ceff50e",
+      "source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+      "clock_mode": 0,
+      "started_at_utc": "2026-10-28T17:53:45.515913+00:00",
+      "finished_at_utc": "2026-10-28T17:57:45.551876+00:00",
+      "wrapper_exit": 0,
+      "wrapper_timeout": false,
+      "owned_container_removed": true,
+      "fingerprint_equal_within_run": true,
+      "table_count": 34,
+      "order_count": 15,
+      "refund_count": 3,
+      "children": [
+        {
+          "invocation": 1,
+          "exit": 0,
+          "controlled_marker": false,
+          "cancelled_paid_rows_with_valid_timing": 2,
+          "returned_cod_refund_rows": 1
+        },
+        {
+          "invocation": 2,
+          "exit": 0,
+          "controlled_marker": false,
+          "cancelled_paid_rows_with_valid_timing": 2,
+          "returned_cod_refund_rows": 1
+        }
+      ],
+      "result_sha256": "0b343bf3cec9e84ed003023f74d1d3549c5e9c0b9a8a903dfe1cbcd37fe9eb43"
+    },
+    {
+      "run_id": "run-a26593cef3ef",
+      "source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+      "clock_mode": -2,
+      "started_at_utc": "2026-10-28T17:57:46.217112+00:00",
+      "finished_at_utc": "2026-10-28T18:01:41.265968+00:00",
+      "wrapper_exit": 0,
+      "wrapper_timeout": false,
+      "owned_container_removed": true,
+      "fingerprint_equal_within_run": true,
+      "table_count": 34,
+      "order_count": 15,
+      "refund_count": 3,
+      "children": [
+        {
+          "invocation": 1,
+          "exit": 0,
+          "controlled_marker": true,
+          "cancelled_paid_rows_with_valid_timing": 2,
+          "returned_cod_refund_rows": 1
+        },
+        {
+          "invocation": 2,
+          "exit": 0,
+          "controlled_marker": true,
+          "cancelled_paid_rows_with_valid_timing": 2,
+          "returned_cod_refund_rows": 1
+        }
+      ],
+      "result_sha256": "e1dffefdd23f1f4075a155dc4cf97ed45fb2b8fc893944313b3a6dbee079b7b8"
+    }
+  ],
+  "cross_database_fingerprints_compared_for_equality": false,
+  "reason": "Separate disposable databases have independent timestamps/identities; equality is asserted only before/after each own rerun."
+}

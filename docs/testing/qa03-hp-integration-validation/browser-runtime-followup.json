@@ -1,0 +1,20 @@
+{
+  "node_repl_cua": "Initialization failed kernel assets os3; one reset; internal path unknown",
+  "fallback": "Verified installed Chrome155 and bundled Playwright; explicitly authorized by user",
+  "actual_source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+  "automated_browser": {
+    "cases": 24,
+    "pass": 24,
+    "widths": [
+      375,
+      768,
+      1440
+    ],
+    "evidence_pr": 75
+  },
+  "human_manual_execution": "NOT RUN / NOT CLAIMED",
+  "agent_visual_review": "6 representative original screenshots inspected, not all pixels",
+  "owned_environment_cleanup": "CLOSED / owned_container_removed true",
+  "current_gate": "HP acceptance pending; candidate review/merge required",
+  "no_fake_images": true
+}
