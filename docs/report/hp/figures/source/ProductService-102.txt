@@ -1,0 +1,13 @@
+    public ProductView update(Long productId, @NotNull @Valid ProductUpdateRequest request) {
+        VendorShopData shop = approvedShop();
+        CategoryOption category = categories.requireActiveCategory(request.getCategoryId());
+        Product product = owned(productId, shop.shopId());
+        requireVersion(product, request.getVersion());
+        product.updateDetails(category.id(), request.getName(), request.getDescription(), request.getPrice(),
+                request.getStock(), now());
+        return view(persist(product), category);
+    }
+
+    @Transactional
+    public void hide(Long productId, Long expectedVersion) {
+        VendorShopData shop = approvedShop();

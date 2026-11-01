@@ -1,0 +1,13 @@
+    public ProductDetailView product(Long productId) {
+        requirePositiveId(productId);
+        ProductDetailView product = catalog.findPublicProduct(productId)
+                .orElseThrow(PublicCatalogService::notFound);
+        return product.withImages(catalog.findPublicProductImages(productId));
+    }
+
+    @Transactional(readOnly = true)
+    public List<PublicShopSummary> shops() {
+        return List.copyOf(catalog.findPublicShops());
+    }
+
+    @Transactional(readOnly = true)

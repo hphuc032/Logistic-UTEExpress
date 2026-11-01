@@ -1,0 +1,336 @@
+{
+  "renderer": "Microsoft Word 16.0 ExportAsFixedFormat + bundled Poppler pdftoppm",
+  "canonicalRenderer": "BLOCKED — bundled renderer cannot locate LibreOffice; actual fallback rendering succeeded",
+  "checkedUtc": "2026-11-01T15:16:36.744469+00:00",
+  "docxSha256": "7c1dea46ad61fb8efdb96f2ef258ef278cdc26d2eacd03986491544cc5d83125",
+  "pdfSha256": "c0af6b23bf9c548022de6372f07a1cc8421ad5a43c4b85bff06f82320ab6e5af",
+  "pageCount": 76,
+  "rasterDpi": 84,
+  "pagePixels": [
+    695,
+    983
+  ],
+  "pageImages": [
+    {
+      "page": 1,
+      "sha256": "6bc7b9f2c5782866ce3fcfb6afb0101031615bf94e14c037245baaa1daeb1bef"
+    },
+    {
+      "page": 2,
+      "sha256": "ce421c346861baf3479e930acf8559288c703770421f6aef069ca9825ec6782c"
+    },
+    {
+      "page": 3,
+      "sha256": "72170e4c57a64876fc22319ad7e32d15f04e3a3e2fefef469c6a61717f9f47a5"
+    },
+    {
+      "page": 4,
+      "sha256": "7f117957aaa9ac815ecd8c3a4c75e7edb97d24584a1bcca6d0834b6a4a0848c0"
+    },
+    {
+      "page": 5,
+      "sha256": "1d118e02f2afbc0a793c2b32edc40e21caaab398452d0c0dc3ba4fc4f0de0ebe"
+    },
+    {
+      "page": 6,
+      "sha256": "35940e7c2ef5eb047b794bf81a481e038ec0bb99427f9aca53003488c2f7e93e"
+    },
+    {
+      "page": 7,
+      "sha256": "b3182a5769344a4a534dad5b9f74a07af380551c7f7f4d900cb6287e4a052749"
+    },
+    {
+      "page": 8,
+      "sha256": "107bf16a8cee01c6e1036ebdecce77d4888d039adf6273bc35d180ef7de2783f"
+    },
+    {
+      "page": 9,
+      "sha256": "7d432c586a08cd36c8e6106ffa53c3cd3855e029c332c33b1026402ed72324c6"
+    },
+    {
+      "page": 10,
+      "sha256": "61e7877dce9a9fadb4e0870068816bee4f0d27c8a8b49a8939717c75d618d87e"
+    },
+    {
+      "page": 11,
+      "sha256": "67c393a1209ebf69ec70e7d417a76834289e0840a465b4e38701c0303fc4de61"
+    },
+    {
+      "page": 12,
+      "sha256": "e7ea9785850986007a71df85af374de83d46dd7a973df4711123dd04b28f333f"
+    },
+    {
+      "page": 13,
+      "sha256": "091a5ef6f2e1df6e37676a2ffac9131dc0c34f5c45d66177f20bf5d9d6350d08"
+    },
+    {
+      "page": 14,
+      "sha256": "cccebe4e47c657cf2bf174a3f4b7107e8e82de6492c476a21c645dace9923db3"
+    },
+    {
+      "page": 15,
+      "sha256": "8004bdc99618a784bf04e4fd392d9c2b1b3d0ec9e8c8dc10adf66a62e0895490"
+    },
+    {
+      "page": 16,
+      "sha256": "88f54fe6a6b658851120cf030cb83d3db70028c42e0d2182b015c6f07fd71499"
+    },
+    {
+      "page": 17,
+      "sha256": "784582d42183c671727c0748decc683867be020ca7d19a148d0b229a9b7547ef"
+    },
+    {
+      "page": 18,
+      "sha256": "36ef24d2e1679c019fb268e28c339eb09e962e9b154971f79c1d06ae06de636d"
+    },
+    {
+      "page": 19,
+      "sha256": "40a3b76c789151fe0df877f4c749fff65a171be0ed086ff0221311010d9c79f6"
+    },
+    {
+      "page": 20,
+      "sha256": "be882e85d44b226bb468e2ea2a7cd1a60d01d10541e24eb4db40a60396565183"
+    },
+    {
+      "page": 21,
+      "sha256": "b687c86f09cc79c099326182292f49a3cf6a1d7318a5828cc2ea2c7d69cbc680"
+    },
+    {
+      "page": 22,
+      "sha256": "1e81656107813f068fbc8308c987116e3a7e35cfd804a7ef0e2531b29d30d847"
+    },
+    {
+      "page": 23,
+      "sha256": "673bfc84fdc0d5f2fc1ad80b7cf590cae7d0268061d6b7a3750c78634162f0ff"
+    },
+    {
+      "page": 24,
+      "sha256": "d4b8bb1ce18cf720515a69fd3c5812f8fcb45c1a93d84b97e1626d12d9fea336"
+    },
+    {
+      "page": 25,
+      "sha256": "80cb488e9cee90316a390098964d85c2b2a2a6e9c588afbe20a858d9339009e3"
+    },
+    {
+      "page": 26,
+      "sha256": "bf2e433dfc663d086444b178fcfcf6037eccb9a6350cb6ebdb960effe9b19cb4"
+    },
+    {
+      "page": 27,
+      "sha256": "c523e2d27418e11ba0564652b13d2c3e2e264da2d75e5f4ea54ffa8a6791959d"
+    },
+    {
+      "page": 28,
+      "sha256": "c91e3d298a922c8f4fe55550005c89a480315c3821477b5475bc4c379eba7198"
+    },
+    {
+      "page": 29,
+      "sha256": "975c22c58673523c555240ef181584abe9613cf0bac5fb7d68b8e98422816b45"
+    },
+    {
+      "page": 30,
+      "sha256": "14f1480083a6ea137399eccd46baaebd5b442a849779436c1bdf98f1f3d7929c"
+    },
+    {
+      "page": 31,
+      "sha256": "e346c497a92f6e3bb70c912afcc05ba7deb1066b9d1f2a1ffef79ee737e5c642"
+    },
+    {
+      "page": 32,
+      "sha256": "c153dcec7a1fc99ae191fb91268d24967e61b773d00bcc6f7ed4984057e80f52"
+    },
+    {
+      "page": 33,
+      "sha256": "5a97851f0f83d881542bb5a243e8983dae9dcb2db398b53782ba1f6b53d29d4d"
+    },
+    {
+      "page": 34,
+      "sha256": "49e18a2519d36d2643a03ec97ca2a952f45308da3cff14c68c1a07d6b8c6979e"
+    },
+    {
+      "page": 35,
+      "sha256": "957f78dd704749acec2e5f5175903b5b47311f7f4edd138592faac0a5ff6282c"
+    },
+    {
+      "page": 36,
+      "sha256": "daeaf5ec94a4d77684aa493b2e5b435c87f98999918a101ec3003d759f695861"
+    },
+    {
+      "page": 37,
+      "sha256": "d8346a34bbb8f1073c3afe695e2d8c75d462d8e8388d99828e29608816cfc680"
+    },
+    {
+      "page": 38,
+      "sha256": "c7eb8d4b4f3ea495737b10c9e9c28715f6a767d6f0226cca87cb860636d1d8e7"
+    },
+    {
+      "page": 39,
+      "sha256": "01f3988309190bc141fec20d55e780d55b02bf4597b20f54504b2fd779d71703"
+    },
+    {
+      "page": 40,
+      "sha256": "7e2eb97d2349b896d217ee5b00a1f4e5d80d3fd2fb53ba6603b8928e50898f85"
+    },
+    {
+      "page": 41,
+      "sha256": "a4f83367168f765b9a271783a2eec36cc4decd78c7156a893aafa84e7c5b212a"
+    },
+    {
+      "page": 42,
+      "sha256": "67f9f33d0872ec08813970f5a9411739cf84dc533a19eb1286277f946c943310"
+    },
+    {
+      "page": 43,
+      "sha256": "75ecf83e589bdc7a62a749f307dfe2c42fc608d1a90bf867d06283c9716796e6"
+    },
+    {
+      "page": 44,
+      "sha256": "333bfbfc79a61920e5e09941b8a711e5ace55db03c2f938d9e1f1dda6f17a564"
+    },
+    {
+      "page": 45,
+      "sha256": "695383368277bb9b0849d99025b9a5145df8d885c87408e00864b43ec07d750f"
+    },
+    {
+      "page": 46,
+      "sha256": "6141fa5d3eabca42676124562e3833dcd8ddbb354d9d5c35478d567c61c11258"
+    },
+    {
+      "page": 47,
+      "sha256": "29a24950c5c3ab13fbce0a5633002f40c27d3af66cf811338f8de4a85c587309"
+    },
+    {
+      "page": 48,
+      "sha256": "f21c13482945fe3ff716c0d0ba597901db650e8ba8a90082437fec7232ea7f32"
+    },
+    {
+      "page": 49,
+      "sha256": "39ad2153e76d11f42cf0cbf498e936e4307fc528e625223728e036496a329796"
+    },
+    {
+      "page": 50,
+      "sha256": "46f9893ef6f5ed4e0b2a552285e0f1ee55fe1c6adaef633704a86cbe186e63d3"
+    },
+    {
+      "page": 51,
+      "sha256": "c5c93f569bbe4b804bf938af0b1824a8a1074accf43a717bd83fa7ea86caa191"
+    },
+    {
+      "page": 52,
+      "sha256": "e1fb539777ae52e4c824d6b1d4ba6968c1b4c30e1e2ce2c30e56ae5cf608d82c"
+    },
+    {
+      "page": 53,
+      "sha256": "22f9a321c98aa0cf710d2501e484479ae05d7b162dd3a9e369475ee1c621d26a"
+    },
+    {
+      "page": 54,
+      "sha256": "86c96208ceb99b5a96918f63482e78ffb9f6b1483a7f40d7180627a43c4fee34"
+    },
+    {
+      "page": 55,
+      "sha256": "20c5a452eadab2e3f4e6d09a75f62bc1fe713d6358c5388741144f146a0c296c"
+    },
+    {
+      "page": 56,
+      "sha256": "53892bb2e32b66f47311ff93b091d2462936884906b26c9fd16e3721b15d6add"
+    },
+    {
+      "page": 57,
+      "sha256": "341803e3f89cc9ccebb1d035002e6ded3dd5f4dcc4e987b9abbcc2884796e8a6"
+    },
+    {
+      "page": 58,
+      "sha256": "d2a8932b0ffe8caaf6423bb1c3c2f9bc3c589e3fa987b7198f9175539fd5d7bc"
+    },
+    {
+      "page": 59,
+      "sha256": "c8dc98863804939278807289b2a85a3e739172df881aee86bf093caf4a972b2d"
+    },
+    {
+      "page": 60,
+      "sha256": "35d1cd33c3a6446d99b4a22041e2a35388f0ee0082925df3cb27cf981b4085e0"
+    },
+    {
+      "page": 61,
+      "sha256": "464ccd28bdf1aa02cbbcdd6a955888bca9b6d0d269893bda4d0c18bb6b4eaf36"
+    },
+    {
+      "page": 62,
+      "sha256": "bd0e5a9c86222ce57f6b4eb1d26b613f92982c65a404fcc74cf20c552febdf13"
+    },
+    {
+      "page": 63,
+      "sha256": "547f973e16a72e1ffddbb0571a9c248d4ecb932be0aa44e149534dc5f8564f6e"
+    },
+    {
+      "page": 64,
+      "sha256": "31eee247129b6b12ca5fc2dbf25a51743ae09372ca31f3684bc86430bd8605a7"
+    },
+    {
+      "page": 65,
+      "sha256": "babd3e9f4ac5bad299aaea80d4a40d094e0f3180c8dd465006dcbb84f5824339"
+    },
+    {
+      "page": 66,
+      "sha256": "e3d110d5cd62c6d0a47b29ede5481e3cc72b0f6914dc7a63a3138d3452481356"
+    },
+    {
+      "page": 67,
+      "sha256": "162a9e85b6f737a9e2ec4faf53519d9e876509ca65bfa786c77a2d46dbdfd03c"
+    },
+    {
+      "page": 68,
+      "sha256": "0d21be4db7ac04c9f9b427a93415954abc32a29b03a45d2ba616fa0afa6a854f"
+    },
+    {
+      "page": 69,
+      "sha256": "c76558f10338593c9de3151d07969c4da5f32c8f25b29e29c864dcbce1719642"
+    },
+    {
+      "page": 70,
+      "sha256": "1bf3d515bbaaf7b7354e70c422d76011ad12937c3e8835216547f97041cab0d0"
+    },
+    {
+      "page": 71,
+      "sha256": "c50122e6d95395136c6d28fb8a3b816ccce1fe0de50dc1b706ed54449431d495"
+    },
+    {
+      "page": 72,
+      "sha256": "8deba87eeb031b85d95177b752a505f4155421e477a59c8299dd78bd73e75882"
+    },
+    {
+      "page": 73,
+      "sha256": "c6f5af221920dffbe2c81945a0c33c132df0275c2f1945f8fb8ec1f859561321"
+    },
+    {
+      "page": 74,
+      "sha256": "167af52ed6c5652c436b222d28d09ff1c6909435ffb3069374fcc8a88606caa0"
+    },
+    {
+      "page": 75,
+      "sha256": "e3d1e3d97986a2ee89ad84a611d5725e3f44b629947d6650c1ae019503ff14ed"
+    },
+    {
+      "page": 76,
+      "sha256": "61a0b0187cbf7ac98b56c34092ea9fa7ac96070fdb0a9a284a8eb1bbb15ebdc9"
+    }
+  ],
+  "visualInspection": "All76 final page PNGs inspected at their native raster size in38 two-page sheets; captions, diagrams, tables, TOC and header/footer reviewed",
+  "layout": "PASS — no missing images, overlapping text or clipped diagrams observed",
+  "readabilityLimit": "Historical full-page UI images and the JSON diagnostic remain small on A4; consult original image files at full resolution. Human print/readability acceptance is pending.",
+  "pdfTextFonts": [
+    "/BCDEEE+TimesNewRomanPS-BoldItalicMT",
+    "/BCDFEE+TimesNewRomanPS-BoldItalicMT",
+    "/BCDGEE+TimesNewRomanPSMT",
+    "/BCDHEE+TimesNewRomanPSMT",
+    "/BCDIEE+TimesNewRomanPS-ItalicMT",
+    "/BCDJEE+TimesNewRomanPS-ItalicMT",
+    "/BCDKEE+TimesNewRomanPS-BoldMT",
+    "/BCDLEE+TimesNewRomanPS-BoldMT",
+    "/BCDMEE+Cambria"
+  ],
+  "toc": "Updated by Word; Heading1-2; editable field retained",
+  "humanAcceptance": "HUMAN PENDING",
+  "qaPdfAndPng": "Internal QA artifacts retained outside Git, not replacements for editable DOCX"
+}

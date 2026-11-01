@@ -1,0 +1,13 @@
+    public ProductSearchPage search(ProductSearchCriteria requested) {
+        ProductSearchCriteria criteria = requested == null ? new ProductSearchCriteria() : requested.normalized();
+        validate(criteria);
+        ProductSort sort = ProductSort.fromParameter(criteria.getSort());
+        var pricingAt = clock.instant().truncatedTo(java.time.temporal.ChronoUnit.MICROS);
+        long totalItems = catalog.countPublicProducts(criteria, pricingAt);
+        long offset = (long) criteria.getPage() * criteria.getSize();
+        List<ProductCard> products = offset >= totalItems
+                ? List.of()
+                : catalog.findPublicProducts(criteria, sort, criteria.getSize(), offset, pricingAt);
+        long totalPages = totalItems == 0 ? 0 : 1 + (totalItems - 1) / criteria.getSize();
+        return new ProductSearchPage(products, criteria, totalItems, criteria.getPage(), criteria.getSize(),
+                totalPages, criteria.getPage() > 0, (long) criteria.getPage() + 1 < totalPages);

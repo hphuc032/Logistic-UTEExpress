@@ -1,0 +1,13 @@
+        document.querySelectorAll("[data-current-year]").forEach((element) => {
+            element.textContent = String(new Date().getFullYear());
+        });
+
+        // Native scrolling keeps every column/action available on narrow screens.
+        // Give keyboard users the same access without changing table semantics.
+        document.querySelectorAll(".table-responsive").forEach((region) => {
+            if (!region.hasAttribute("tabindex")) {
+                region.setAttribute("tabindex", "0");
+            }
+            if (!region.hasAttribute("role")) {
+                region.setAttribute("role", "region");
+            }

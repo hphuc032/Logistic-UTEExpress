@@ -1,0 +1,417 @@
+You are the senior application security engineer for:
+
+https://github.com/hphuc032/Logistic-UTEExpress
+
+TASK:
+SEC-02 — Security Hardening
+
+Owner: Hoàng Phúc (HP)
+Reviewer: Quốc Đạt (QD)
+Priority: P0
+Branch:
+fix/sec-02-security-hardening
+
+Master Plan scope:
+- ownership audit
+- DTO / mass-assignment tampering audit
+- CSRF audit
+- upload security audit
+- WebSocket authentication/security CONTRACT audit
+- Definition of Done: mid-project Security Gate
+
+Dependencies:
+- INT-01 MUST already be merged
+- ADMIN-01 must already exist
+
+This is a SECURITY HARDENING task.
+Do not turn SEC-02 into a feature-development task.
+
+==================================================
+PHASE 0 — HARD GATE
+==================================================
+
+Before editing:
+
+1. fetch origin
+2. verify INT-01 is merged into develop
+3. update local develop
+4. verify clean worktree
+5. create:
+   fix/sec-02-security-hardening
+
+If INT-01 is not merged:
+STOP and report the dependency blocker.
+Do not implement SEC-02 on an old base.
+
+==================================================
+PHASE 1 — SECURITY INVENTORY
+==================================================
+
+Audit every current externally reachable controller/service boundary.
+
+Build a compact matrix:
+
+Route / Service
+Actor/Role
+Ownership source
+Client-controlled IDs
+State guard
+CSRF requirement
+Sensitive fields
+Upload?
+Finding
+Fix/Test
+
+Cover at minimum:
+
+PUBLIC
+USER / buyer
+VENDOR
+MANAGER
+ADMIN
+SHIPPER where implemented
+
+Modules currently present in develop, including:
+- authentication/JWT
+- profile/avatar
+- address
+- shop
+- product/images
+- catalog
+- cart
+- checkout
+- buyer orders
+- vendor orders
+- payment
+- governance/admin
+- shipping configuration
+- engagement
+
+==================================================
+A. OWNERSHIP / IDOR / BOLA
+==================================================
+
+Project invariant:
+
+ACCESS = ROLE + OWNERSHIP + BUSINESS STATE
+
+Audit that:
+- userId/buyerId is derived from principal
+- vendor/shop is derived from persisted identity
+- addresses are owner scoped
+- cart is owner scoped
+- buyer orders are owner scoped
+- vendor orders are shop scoped
+- product mutations require owned shop
+- governance actions require the correct Ops role
+- foreign/missing resource behavior does not leak sensitive facts
+
+Prefer scoped queries such as:
+findByIdAndBuyerId / findByIdAndShopId
+where appropriate.
+
+Client-provided:
+userId
+buyerId
+ownerId
+vendorId
+shopId
+
+must never be sufficient to establish authorization.
+
+Add regression tests for ID swapping.
+
+==================================================
+B. DTO / MASS ASSIGNMENT / TAMPERING
+==================================================
+
+Audit ALL request DTOs and form bindings.
+
+Entity objects must not be bound directly from browser forms.
+
+Client must not be able to control server-owned fields such as:
+- role
+- account status
+- emailVerifiedAt
+- tokenVersion
+- shop approval/moderation status
+- product moderation status
+- ownerId
+- buyerId
+- vendorId
+- shopId when ownership is server-derived
+- price snapshot
+- subtotal
+- shipping fee
+- grand total
+- commission policy/rate/amount
+- payment status
+- paid amount
+- order status
+- inventoryReleasedAt
+- lifecycle timestamps
+- audit actor
+- history actor
+- request hash
+
+Use DTO whitelisting.
+For JSON endpoints, ensure unknown dangerous fields cannot silently become authority.
+
+Add tampering tests.
+
+==================================================
+C. CSRF
+==================================================
+
+JWT is stored in browser cookie, therefore CSRF stays enabled.
+
+Audit all unsafe methods:
+POST
+PUT
+PATCH
+DELETE
+
+Requirements:
+- Thymeleaf forms include CSRF.
+- AJAX uses CSRF header.
+- login/logout security remains coherent.
+- no global csrf.disable().
+- no broad ignored route such as /api/**.
+- any exact server-to-server callback exemption must have a documented reason and its own signature/idempotency validation.
+
+Regression tests must prove unsafe mutations fail without CSRF and pass with valid CSRF where the role/ownership is correct.
+
+Do not weaken CSRF to fix tests.
+
+==================================================
+D. XSS / INPUT / QUERY HARDENING
+==================================================
+
+Audit rendered user-controlled text:
+- profile/shop/product
+- address
+- order snapshots
+- cancellation reason
+- engagement
+- admin/audit pages
+
+Requirements:
+- use th:text for user content
+- no unsafe th:utext for untrusted content
+- JS notification/text rendering must eventually use textContent, not innerHTML
+- parameterized DB queries
+- sort names are whitelisted
+- validation has useful size/range limits
+
+Do not add a generic sanitizer as a substitute for correct output encoding.
+
+==================================================
+E. UPLOAD SECURITY
+==================================================
+
+Audit every CURRENT file upload route, especially avatar/product images.
+
+Verify:
+- allowed extension whitelist
+- MIME validation
+- actual file/content validation where supported
+- file size limit
+- count limit
+- image dimensions where current contract requires it
+- generated storage key / no path traversal
+- filename not trusted as filesystem path
+- no executable/script content served as active content
+- ownership checked before replacing/deleting an uploaded file
+- invalid uploads leave no partial DB/file state
+- safe deletion/replacement semantics
+
+Do not implement future Review video upload in SEC-02.
+
+Add malicious upload tests for realistic current upload surfaces.
+
+==================================================
+F. JWT / AUTHENTICATION HARDENING
+==================================================
+
+Audit current JWT implementation without redesigning it.
+
+Expected contract:
+- HttpOnly cookie
+- Secure according to environment policy
+- SameSite=Lax or existing agreed equivalent
+- token expiry enforced
+- persisted current account rechecked
+- tokenVersion checked
+- current persisted roles are authoritative
+- logout/reset password/role change/account lock invalidate old JWT according to existing design
+- no parallel session authentication mechanism bypassing JWT
+
+Do not introduce refresh token tables or Redis/denylist unless the Master Plan explicitly changes.
+
+==================================================
+G. WEBSOCKET SECURITY CONTRACT
+==================================================
+
+IMPORTANT:
+SEC-02 defines/hardens the SECURITY CONTRACT.
+Do NOT prematurely implement WS-01/WS-02 feature scope if it does not yet exist.
+
+Inspect current WebSocket/STOMP code, if any.
+
+Required final contract for future/current socket implementation:
+- handshake /ws authenticates from valid JWT cookie
+- STOMP CONNECT requires valid CSRF token
+- allowed Origin is explicit
+- server establishes Principal
+- client cannot choose arbitrary recipientId
+- private destination:
+  /user/queue/notifications
+- client cannot subscribe another user's queue/topic
+- client cannot publish directly into protected broker destinations
+- no address/phone/payment details in notification payload
+- inbound frames re-check authentication as required
+- expired/revoked/locked/role-changed JWT cannot retain privileged socket access
+
+If WS implementation is not yet present:
+- document the enforceable contract
+- add reusable security boundary/config only if it is required now and does not implement the future feature
+- do not invent notifications, shipment events, or realtime business logic
+
+Master requires WS-02 later to depend on SEC-02, so SEC-02 must leave a clear security contract for QD.
+
+==================================================
+H. ADMIN / GOVERNANCE AUDIT
+==================================================
+
+Because ADMIN-01 is a dependency, audit:
+- lock/unlock authorization
+- last-admin protections currently present
+- audit actor from principal
+- role mutation restrictions
+- token invalidation on security-sensitive account changes
+- Manager vs Admin separation
+- no direct order.status edit through operations/governance paths
+
+Do not implement ADMIN-07 future functionality here.
+
+==================================================
+REQUIRED SECURITY REGRESSION TESTS
+==================================================
+
+Add focused tests proving, where applicable:
+
+1. foreign resource ID swapping blocked
+2. role-only without ownership blocked
+3. DTO dangerous-field injection rejected/ignored safely
+4. CSRF-less mutation = 403
+5. invalid upload rejected
+6. path traversal filename cannot control storage path
+7. hidden server-owned values cannot change persisted state
+8. old JWT invalid after security-sensitive account mutation
+9. locked account cannot continue authenticated operations
+10. non-authorized Ops role cannot mutate Admin-only resources
+
+Do not duplicate hundreds of existing tests.
+Reuse current PostgreSQL integration tests and add missing security regression cases.
+
+==================================================
+DOCUMENTATION / EVIDENCE
+==================================================
+
+Create:
+
+docs/SEC-02-security-hardening.md
+
+Include:
+- audited attack surface
+- ownership matrix
+- DTO/mass-assignment findings
+- CSRF findings
+- upload findings
+- JWT findings
+- WebSocket security contract
+- actual vulnerabilities/mismatches fixed
+- tests and evidence
+- deferred items owned by future tasks
+
+Classify findings:
+HIGH
+MEDIUM
+LOW
+INFORMATIONAL
+
+Do not claim a vulnerability if code was already secure.
+A clean audit result is acceptable if backed by tests.
+
+==================================================
+DO NOT
+==================================================
+
+Do not:
+- implement SHIP-01/02
+- implement WS-01/02 business features
+- implement Return/Refund
+- implement Review
+- implement VNPAY
+- redesign authentication
+- disable CSRF
+- add client-owned authorization IDs
+- bind Entities directly
+- create unnecessary migrations
+- broad-refactor unrelated modules
+- weaken tests to get green
+
+==================================================
+VERIFICATION
+==================================================
+
+Java 21:
+
+.\mvnw.cmd clean test
+.\mvnw.cmd package
+.\mvnw.cmd -Ppostgres-it clean verify
+git diff --check
+
+Then inspect:
+git status
+git diff --stat
+git diff
+
+No generated files, secrets, logs, IDE files or target artifacts.
+
+==================================================
+GIT / PR
+==================================================
+
+Commit only after all gates pass.
+
+Push:
+fix/sec-02-security-hardening
+
+Create PR to:
+develop
+
+Suggested title:
+SEC-02: harden ownership, DTO, CSRF and security contracts
+
+PR must include:
+- findings by severity
+- exact fixes
+- regression tests
+- exact full-suite results
+- WebSocket security contract
+- intentionally deferred future features
+
+Do not merge the PR yourself.
+Do not direct-push develop/main.
+
+Final report:
+1. base develop SHA
+2. branch
+3. security findings
+4. fixes
+5. tests/results
+6. remaining risks
+7. deferred future tasks
+8. commit SHA
+9. PR URL

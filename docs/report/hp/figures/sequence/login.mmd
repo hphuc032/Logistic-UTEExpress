@@ -1,0 +1,11 @@
+sequenceDiagram
+participant A0 as Browser
+participant A1 as LoginController
+participant A2 as LoginService
+participant A3 as Auth provider / Identity
+A0->>A1: POST login và CSRF
+A1->>A2: login LoginCommand
+A2->>A3: Provider xác minh BCrypt ACTIVE
+A3->>A2: Principal và roles hiện tại
+A2->>A1: JWT HS256 LoginOutcome
+A1->>A0: HttpOnly cookie và redirect

@@ -1,0 +1,40 @@
+{
+  "checkedUtc": "2026-11-01T15:16:36.819391+00:00",
+  "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+  "docxSha256": "7c1dea46ad61fb8efdb96f2ef258ef278cdc26d2eacd03986491544cc5d83125",
+  "zip": "PASS",
+  "docxReopen": "PASS",
+  "figures": 68,
+  "embeddedUniqueMedia": 67,
+  "sourceExcerptEntries": 19,
+  "sourceBlobsUnchangedSinceHistorical": true,
+  "currentCaptures": 14,
+  "partialAttemptCaptures": 10,
+  "historicalUiCaptures": 5,
+  "selectedUiIllustrations": 19,
+  "unfilledScreenshotSections": 0,
+  "wordPages": 76,
+  "fullJavaNodePostgresRegressionRerun": false,
+  "freshBuildCommand": "mvnw.cmd -DskipTests package",
+  "freshBuild": "PASS; tests explicitly skipped, not test PASS",
+  "browserAcceptance": "Capture-only evidence with per-function limits; no human acceptance signed",
+  "remaining": [
+    "HP/QD content and print acceptance",
+    "Instructor cover details/template not provided",
+    "Full prompt/model history incomplete",
+    "Fresh clean-host/full demo rehearsal NOT RUN",
+    "Public SMTP/timing and operational/release gates NOT RUN or owner-deferred"
+  ],
+  "gitDiffCheck": "PASS — executed before staging",
+  "documentationValidator": {
+    "result": "PASS",
+    "jsonFilesAtExecution": 29,
+    "originalFilesVerifiedInGit": 130,
+    "historicalManifestMembers": 129,
+    "currentManifestMembersAtExecution": 180,
+    "sourceExcerpts": 19,
+    "embeddedPlacements": 68,
+    "embeddedMedia": 67,
+    "markdownLinkErrors": 0
+  }
+}

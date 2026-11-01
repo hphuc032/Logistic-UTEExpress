@@ -1,0 +1,408 @@
+[
+  {
+    "path": "screenshots/interaction-register-invalid-anonymous-_register-768.jpg",
+    "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+    "jar_sha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+    "route": "/register",
+    "role": "anonymous",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "case_ids": [
+      "interaction-register-invalid-anonymous-_register-768"
+    ],
+    "provenance": "Case record records source and JAR.",
+    "sha256": "b00e3a92ad2fca3c70c5c1264d1aef83eab25ef569bf1ee608f84880f3bab0bf",
+    "image_pixels": [
+      752,
+      1592
+    ],
+    "image_geometry_note": "Full-page renderer image may exclude scrollbar pixels or extend to the overflowing document. Exact CSS viewport is independently recorded from innerWidth/innerHeight; image size is not relabelled as viewport.",
+    "function": "4.1",
+    "copiedPath": "figures/screenshots/interaction-register-invalid-anonymous-_register-768.jpg",
+    "originalIndex": "docs/testing/ui02-responsive/screenshots.json",
+    "newCaptureInDoc01": false,
+    "currentSnapshot": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "compatibilityNote": "Historical illustration only. Not a new action/browser acceptance run at the documentation source.",
+    "uiPathsChangedSinceCapture": []
+  },
+  {
+    "path": "screenshots/post-sync-final-anonymous-_login-1440.jpg",
+    "source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+    "jar_sha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+    "route": "/login",
+    "role": "anonymous",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "case_ids": [
+      "post-sync-final-anonymous-_login-1440"
+    ],
+    "provenance": "Case record records source and JAR.",
+    "sha256": "8a8ed25ada8db7a7a6d57f686bf1fa32bc77704f254b797465e21c746362f5e6",
+    "image_pixels": [
+      1424,
+      1123
+    ],
+    "image_geometry_note": "Full-page renderer image may exclude scrollbar pixels or extend to the overflowing document. Exact CSS viewport is independently recorded from innerWidth/innerHeight; image size is not relabelled as viewport.",
+    "function": "4.2",
+    "copiedPath": "figures/screenshots/post-sync-final-anonymous-_login-1440.jpg",
+    "originalIndex": "docs/testing/ui02-responsive/screenshots.json",
+    "newCaptureInDoc01": false,
+    "currentSnapshot": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "compatibilityNote": "Historical illustration only. Not a new action/browser acceptance run at the documentation source.",
+    "uiPathsChangedSinceCapture": []
+  },
+  {
+    "path": "screenshots/post-sync-final-buyer-_products_1-1440.jpg",
+    "source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+    "jar_sha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+    "route": "/products/1",
+    "role": "buyer",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "case_ids": [
+      "post-sync-final-buyer-_products_1-1440"
+    ],
+    "provenance": "Case record records source and JAR.",
+    "sha256": "22b59f1d2dc7cc86faf5611fe77cb05cd812be476cc34e8b079f01b89801615f",
+    "image_pixels": [
+      1424,
+      1680
+    ],
+    "image_geometry_note": "Full-page renderer image may exclude scrollbar pixels or extend to the overflowing document. Exact CSS viewport is independently recorded from innerWidth/innerHeight; image size is not relabelled as viewport.",
+    "function": "5.8",
+    "copiedPath": "figures/screenshots/post-sync-final-buyer-_products_1-1440.jpg",
+    "originalIndex": "docs/testing/ui02-responsive/screenshots.json",
+    "newCaptureInDoc01": false,
+    "currentSnapshot": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "compatibilityNote": "Historical illustration only. Not a new action/browser acceptance run at the documentation source.",
+    "uiPathsChangedSinceCapture": []
+  },
+  {
+    "path": "screenshots/interaction-checkout-receipt-buyer-_user_checkout_view-768.jpg",
+    "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+    "jar_sha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+    "route": "/user/checkout/view",
+    "role": "buyer",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "case_ids": [
+      "interaction-checkout-receipt-buyer-_user_checkout_view-768"
+    ],
+    "provenance": "Case record records source and JAR.",
+    "sha256": "2ace48cad8070a78ba9652a23212947bffd63637329defffe2fc84153439b239",
+    "image_pixels": [
+      752,
+      1464
+    ],
+    "image_geometry_note": "Full-page renderer image may exclude scrollbar pixels or extend to the overflowing document. Exact CSS viewport is independently recorded from innerWidth/innerHeight; image size is not relabelled as viewport.",
+    "function": "5.10",
+    "copiedPath": "figures/screenshots/interaction-checkout-receipt-buyer-_user_checkout_view-768.jpg",
+    "originalIndex": "docs/testing/ui02-responsive/screenshots.json",
+    "newCaptureInDoc01": false,
+    "currentSnapshot": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "compatibilityNote": "Historical illustration only. Not a new action/browser acceptance run at the documentation source.",
+    "uiPathsChangedSinceCapture": []
+  },
+  {
+    "path": "screenshots/post-sync-final-manager-_manager_dashboard-768.jpg",
+    "source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+    "jar_sha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+    "route": "/manager/dashboard",
+    "role": "manager",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "case_ids": [
+      "post-sync-final-manager-_manager_dashboard-768"
+    ],
+    "provenance": "Case record records source and JAR.",
+    "sha256": "2825a1b27e7b40dbb48794a51d54f4c0196396ae3fb3672e7e392fc6f2ce92d0",
+    "image_pixels": [
+      752,
+      2050
+    ],
+    "image_geometry_note": "Full-page renderer image may exclude scrollbar pixels or extend to the overflowing document. Exact CSS viewport is independently recorded from innerWidth/innerHeight; image size is not relabelled as viewport.",
+    "function": "5.11",
+    "copiedPath": "figures/screenshots/post-sync-final-manager-_manager_dashboard-768.jpg",
+    "originalIndex": "docs/testing/ui02-responsive/screenshots.json",
+    "newCaptureInDoc01": false,
+    "currentSnapshot": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "compatibilityNote": "Historical illustration only. Not a new action/browser acceptance run at the documentation source.",
+    "uiPathsChangedSinceCapture": []
+  },
+  {
+    "function": "4.3",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-3.png",
+    "route": "/user/profile",
+    "role": "USER",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:42.831Z",
+    "browser": "156.0.8078.74",
+    "observation": "Protected profile rendered after actual password login and JWT cookie restoration.",
+    "limitations": "No token/cookie values captured; screenshot alone does not prove every JWT negative case.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "ecce0cbfd7921325b65014323abc0c0321688dd611eded17a2bae74a927ad795"
+  },
+  {
+    "function": "5.1",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-1.png",
+    "route": "/user/profile",
+    "role": "USER",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:42.903Z",
+    "browser": "156.0.8078.74",
+    "observation": "Own profile form and display identity rendered.",
+    "limitations": "No profile mutation or foreign-owner acceptance inferred.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "ecce0cbfd7921325b65014323abc0c0321688dd611eded17a2bae74a927ad795"
+  },
+  {
+    "function": "5.2",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-2.png",
+    "route": "/user/profile",
+    "role": "USER",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:43.010Z",
+    "browser": "156.0.8078.74",
+    "observation": "Password-change form rendered with all password inputs empty.",
+    "limitations": "Password-change transaction not executed in this capture.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "6cc66268de2302b87b0b22e3eb4a2dd943ebdb53f108b52af198d15324b85f37"
+  },
+  {
+    "function": "5.3",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-3.png",
+    "route": "/user/profile",
+    "role": "USER",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:44.887Z",
+    "browser": "156.0.8078.74",
+    "observation": "Real fixture avatar upload redirected and own content endpoint returned 200.",
+    "limitations": "Isolated synthetic fixture only; deployed ACL and all hostile uploads not tested.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "ed4ca2e9ee42740740f8bee5beafdaa333bedd0d5660873106fc7bd646d2dc49"
+  },
+  {
+    "function": "5.4",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-4.png",
+    "route": "/user/addresses",
+    "role": "USER",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:46.729Z",
+    "browser": "156.0.8078.74",
+    "observation": "Address create POST302/GET200; first address shows default state.",
+    "limitations": "DB default and ownership source reviewed; no full address concurrency suite rerun.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "4b33243e8020889ba1d4997338c56ef645f3aa8c014f5dc7fe26f8a27dc56718"
+  },
+  {
+    "function": "5.5",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-5.png",
+    "route": "/user/shop/register",
+    "role": "USER",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:47.596Z",
+    "browser": "156.0.8078.74",
+    "observation": "Shop application form rendered for current USER without an owned shop.",
+    "limitations": "No shop approval or application submission is claimed.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "7f37bfa22d41b01809e43874e88a7d28bd6a3556cb5dcd2fceac04f86f055dec"
+  },
+  {
+    "function": "4.4",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-4.png",
+    "route": "/login?logout=true",
+    "role": "anonymous",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:48.382Z",
+    "browser": "156.0.8078.74",
+    "observation": "Real POST logout redirected to login; later protected GET returned 401.",
+    "limitations": "No raw JWT replay was captured; cross-device invalidation is source/test evidence, not screenshot proof.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "d466bb9e0ca77c8ba77a0f2f1b33e95f0ab087689fc0a2af3c9acbe4d7fcb0b5"
+  },
+  {
+    "function": "4.5",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-5.png",
+    "route": "/verify-otp/resend",
+    "role": "anonymous",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:49.906Z",
+    "browser": "156.0.8078.74",
+    "observation": "Verification/resend UI after real CSRF-protected POST200, matching controller view contract; code field empty.",
+    "limitations": "Loopback Mailpit only; no public SMTP, activation or raw OTP screenshot.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "da88c385e09b1837b5b80e7949354bf79af6cbaf84f0c2f3c45ac4017241cd25"
+  },
+  {
+    "function": "4.6",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-6.png",
+    "route": "/reset-password?requested=true",
+    "role": "anonymous",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:51.316Z",
+    "browser": "156.0.8078.74",
+    "observation": "Unknown-email request received generic redirect/reset requested message.",
+    "limitations": "Single response does not prove timing indistinguishability.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "d2ea9f06428eaec27ee234fdcaeaf1e76497beb2b3b8d0e76bfdab3e784fa485"
+  },
+  {
+    "function": "4.7",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-7.png",
+    "route": "/reset-password",
+    "role": "anonymous",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:52.009Z",
+    "browser": "156.0.8078.74",
+    "observation": "Reset form rendered, OTP and password fields empty.",
+    "limitations": "Successful reset transaction not executed; refer to existing AUTH-04 tests.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "cc65a451288870cecfeb24972f1251557ee540a7277b23452c19b920b88154bc"
+  },
+  {
+    "function": "4.8",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-8.png",
+    "route": "/user/profile",
+    "role": "anonymous",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:52.662Z",
+    "browser": "156.0.8078.74",
+    "observation": "Protected GET401 visible; separate unsafe request without CSRF returned403.",
+    "limitations": "Single 401/403 example, not all RBAC or OTP rate-limit controls.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "9292ccf0b3c324d8aa583b66ff9dcfbf0c9818e16723b30b14994453ae0b9323"
+  },
+  {
+    "function": "5.6",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-6.png",
+    "route": "/vendor/products",
+    "role": "VENDOR",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:55.078Z",
+    "browser": "156.0.8078.74",
+    "observation": "Owned shop product list rendered from isolated PostgreSQL fixture.",
+    "limitations": "No create/update/delete CRUD journey claimed.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "2b495d48c2c8065a7cf088000d0d2b8cc97187bd09fc04bdce7ec02d0a601d70"
+  },
+  {
+    "function": "5.7",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-7.png",
+    "route": "/vendor/products/1/edit",
+    "role": "VENDOR",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:56.755Z",
+    "browser": "156.0.8078.74",
+    "observation": "Image upload POST302 and own image GET200; management UI displayed.",
+    "limitations": "Foreign image/visibility matrix not rerun; source contract retained.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "ece1aa58db4fa5fe8e03df8182f03b6b04eeb66c350aad77ac0ae96691b2e147"
+  },
+  {
+    "function": "5.9",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-9.png",
+    "route": "/products?q=DOC01&sort=priceAsc&page=0&size=6",
+    "role": "public as VENDOR",
+    "viewport": {
+      "width": 1280,
+      "height": 900
+    },
+    "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+    "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+    "capturedUtc": "2026-11-01T15:03:57.629Z",
+    "browser": "156.0.8078.74",
+    "observation": "Actual filtered/sorted catalog with page size6 from 13 fixture products.",
+    "limitations": "Screenshot illustrates query/results; full search matrix not rerun.",
+    "status": "PASS",
+    "newCaptureInDoc01": true,
+    "sha256": "3e6943d6316845f49451f057fc10f6489c94acebe5529d1e7cd39c4b77a58136"
+  }
+]

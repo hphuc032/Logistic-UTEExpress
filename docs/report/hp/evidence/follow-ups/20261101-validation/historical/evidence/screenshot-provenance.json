@@ -1,0 +1,142 @@
+[
+  {
+    "path": "screenshots/interaction-register-invalid-anonymous-_register-768.jpg",
+    "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+    "jar_sha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+    "route": "/register",
+    "role": "anonymous",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "case_ids": [
+      "interaction-register-invalid-anonymous-_register-768"
+    ],
+    "provenance": "Case record records source and JAR.",
+    "sha256": "b00e3a92ad2fca3c70c5c1264d1aef83eab25ef569bf1ee608f84880f3bab0bf",
+    "image_pixels": [
+      752,
+      1592
+    ],
+    "image_geometry_note": "Full-page renderer image may exclude scrollbar pixels or extend to the overflowing document. Exact CSS viewport is independently recorded from innerWidth/innerHeight; image size is not relabelled as viewport.",
+    "function": "4.1",
+    "copiedPath": "figures/screenshots/interaction-register-invalid-anonymous-_register-768.jpg",
+    "originalIndex": "docs/testing/ui02-responsive/screenshots.json",
+    "newCaptureInDoc01": false,
+    "currentSnapshot": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "compatibilityNote": "Historical illustration only. Not a new action/browser acceptance run at the documentation source.",
+    "uiPathsChangedSinceCapture": []
+  },
+  {
+    "path": "screenshots/post-sync-final-anonymous-_login-1440.jpg",
+    "source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+    "jar_sha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+    "route": "/login",
+    "role": "anonymous",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "case_ids": [
+      "post-sync-final-anonymous-_login-1440"
+    ],
+    "provenance": "Case record records source and JAR.",
+    "sha256": "8a8ed25ada8db7a7a6d57f686bf1fa32bc77704f254b797465e21c746362f5e6",
+    "image_pixels": [
+      1424,
+      1123
+    ],
+    "image_geometry_note": "Full-page renderer image may exclude scrollbar pixels or extend to the overflowing document. Exact CSS viewport is independently recorded from innerWidth/innerHeight; image size is not relabelled as viewport.",
+    "function": "4.2",
+    "copiedPath": "figures/screenshots/post-sync-final-anonymous-_login-1440.jpg",
+    "originalIndex": "docs/testing/ui02-responsive/screenshots.json",
+    "newCaptureInDoc01": false,
+    "currentSnapshot": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "compatibilityNote": "Historical illustration only. Not a new action/browser acceptance run at the documentation source.",
+    "uiPathsChangedSinceCapture": []
+  },
+  {
+    "path": "screenshots/post-sync-final-buyer-_products_1-1440.jpg",
+    "source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+    "jar_sha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+    "route": "/products/1",
+    "role": "buyer",
+    "viewport": {
+      "height": 900,
+      "width": 1440
+    },
+    "case_ids": [
+      "post-sync-final-buyer-_products_1-1440"
+    ],
+    "provenance": "Case record records source and JAR.",
+    "sha256": "22b59f1d2dc7cc86faf5611fe77cb05cd812be476cc34e8b079f01b89801615f",
+    "image_pixels": [
+      1424,
+      1680
+    ],
+    "image_geometry_note": "Full-page renderer image may exclude scrollbar pixels or extend to the overflowing document. Exact CSS viewport is independently recorded from innerWidth/innerHeight; image size is not relabelled as viewport.",
+    "function": "5.8",
+    "copiedPath": "figures/screenshots/post-sync-final-buyer-_products_1-1440.jpg",
+    "originalIndex": "docs/testing/ui02-responsive/screenshots.json",
+    "newCaptureInDoc01": false,
+    "currentSnapshot": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "compatibilityNote": "Historical illustration only. Not a new action/browser acceptance run at the documentation source.",
+    "uiPathsChangedSinceCapture": []
+  },
+  {
+    "path": "screenshots/interaction-checkout-receipt-buyer-_user_checkout_view-768.jpg",
+    "source": "70b80a2df8fb64920997a00eff17c4351f6f5904",
+    "jar_sha256": "e54391082c9046b6db24149a1bf822bbe738e04517c071e27212adf943df167d",
+    "route": "/user/checkout/view",
+    "role": "buyer",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "case_ids": [
+      "interaction-checkout-receipt-buyer-_user_checkout_view-768"
+    ],
+    "provenance": "Case record records source and JAR.",
+    "sha256": "2ace48cad8070a78ba9652a23212947bffd63637329defffe2fc84153439b239",
+    "image_pixels": [
+      752,
+      1464
+    ],
+    "image_geometry_note": "Full-page renderer image may exclude scrollbar pixels or extend to the overflowing document. Exact CSS viewport is independently recorded from innerWidth/innerHeight; image size is not relabelled as viewport.",
+    "function": "5.10",
+    "copiedPath": "figures/screenshots/interaction-checkout-receipt-buyer-_user_checkout_view-768.jpg",
+    "originalIndex": "docs/testing/ui02-responsive/screenshots.json",
+    "newCaptureInDoc01": false,
+    "currentSnapshot": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "compatibilityNote": "Historical illustration only. Not a new action/browser acceptance run at the documentation source.",
+    "uiPathsChangedSinceCapture": []
+  },
+  {
+    "path": "screenshots/post-sync-final-manager-_manager_dashboard-768.jpg",
+    "source": "1f375fa01882f09755e6a107e0e13c79f427f671",
+    "jar_sha256": "0d5f8d204eccbf5325bff5334150efe7ae4cbfc6b36e54321422f824d7a738e9",
+    "route": "/manager/dashboard",
+    "role": "manager",
+    "viewport": {
+      "height": 1024,
+      "width": 768
+    },
+    "case_ids": [
+      "post-sync-final-manager-_manager_dashboard-768"
+    ],
+    "provenance": "Case record records source and JAR.",
+    "sha256": "2825a1b27e7b40dbb48794a51d54f4c0196396ae3fb3672e7e392fc6f2ce92d0",
+    "image_pixels": [
+      752,
+      2050
+    ],
+    "image_geometry_note": "Full-page renderer image may exclude scrollbar pixels or extend to the overflowing document. Exact CSS viewport is independently recorded from innerWidth/innerHeight; image size is not relabelled as viewport.",
+    "function": "5.11",
+    "copiedPath": "figures/screenshots/post-sync-final-manager-_manager_dashboard-768.jpg",
+    "originalIndex": "docs/testing/ui02-responsive/screenshots.json",
+    "newCaptureInDoc01": false,
+    "currentSnapshot": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "compatibilityNote": "Historical illustration only. Not a new action/browser acceptance run at the documentation source.",
+    "uiPathsChangedSinceCapture": []
+  }
+]

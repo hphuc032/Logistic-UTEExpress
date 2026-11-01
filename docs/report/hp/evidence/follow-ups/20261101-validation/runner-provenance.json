@@ -1,0 +1,32 @@
+{
+  "executedRunnerFiles": [
+    {
+      "name": "capture.cjs",
+      "sha256": "a9d9b18c35e5bdf1c3b34137365409d88f8df1419170fbd54077e67fbcb6f33a"
+    },
+    {
+      "name": "capture_environment.py",
+      "sha256": "51f316d06a109a9fbba70f3993ce77101e01126132948e22d15114757e2cd023"
+    },
+    {
+      "name": "audit_source.py",
+      "sha256": "96e67a86a8897ea17096fa4ee717154f091cb0fee03fe35f46de77c165550918"
+    }
+  ],
+  "publishedReferenceFiles": [
+    {
+      "name": "capture.cjs",
+      "sha256": "a9d9b18c35e5bdf1c3b34137365409d88f8df1419170fbd54077e67fbcb6f33a"
+    },
+    {
+      "name": "capture_environment.py",
+      "sha256": "4e4b7789bb79a7039f2257f9d6267b55bfb3f3c2f4c31e4c59aa9da5b83b6d16"
+    },
+    {
+      "name": "audit_source.py",
+      "sha256": "96e67a86a8897ea17096fa4ee717154f091cb0fee03fe35f46de77c165550918"
+    }
+  ],
+  "difference": "Published environment reference adds a replay guard after execution. It refuses to overwrite an existing attempt. Actual executed bytes are hashed separately; no application assertion changed.",
+  "privateConfigurationPublished": false
+}

@@ -1,0 +1,2225 @@
+Bạn là Senior Spring Boot Engineer + PostgreSQL Query Engineer
++ Application Security Engineer.
+
+PROJECT:
+UTEExpress
+
+REPOSITORY:
+https://github.com/hphuc032/Logistic-UTEExpress
+
+TASK:
+PROD-02 — Product Discovery
+
+OWNER:
+Hoàng Phúc
+
+REVIEWER:
+Tiến Đạt
+
+SPRINT:
+S2
+
+PRIORITY:
+P1
+
+TARGET:
+develop
+
+BRANCH:
+feature/prod-02-search-filter
+
+
+==================================================
+0. OBJECTIVE
+==================================================
+
+Hoàn thiện Product Discovery cho public catalog.
+
+PROD-02 phải mở rộng PROD-01 với:
+
+1. Search theo tên Product
+2. Filter theo Shop
+3. Filter theo Category
+4. Filter khoảng giá
+5. Pagination
+6. Sort whitelist
+7. Newest ranking
+8. Best-selling ranking bằng dữ liệu Order thật
+9. Top-rated ranking CHỈ nếu có nguồn Review/rating thật
+10. Query params được giữ qua pagination
+11. SQL injection / sort injection protection
+12. Public visibility rules không regression
+13. Responsive Thymeleaf UI
+14. PostgreSQL integration tests
+15. Không phá Cart/Checkout/Vendor/Admin contracts
+
+
+==================================================
+1. MASTER CONTRACT
+==================================================
+
+Master Plan:
+
+PROD-02
+S2
+Discovery
+
+Scope:
+
+Search
+Filter
+Pagination
+Sort
+New
+Best-selling
+Top-rated
+
+Owner:
+HP
+
+Reviewer:
+TD
+
+Priority:
+P1
+
+Dependencies:
+
+PROD-01
+ORD-01
+
+Branch:
+
+feature/prod-02-search-filter
+
+Deliverable:
+
+Discovery UI/query
+
+
+==================================================
+2. MASTER GUEST REQUIREMENT
+==================================================
+
+Guest discovery phải hỗ trợ:
+
+Search/filter:
+- Product name
+- Shop
+- Category
+- price range
+
+Sorting:
+- price
+- newest
+- best selling
+- top rated
+
+Pagination.
+
+Public access.
+
+
+==================================================
+3. CURRENT BASELINE
+==================================================
+
+Snapshot khi prompt được viết:
+
+develop:
+6c047577b322e3148ce460eb64ae6737c2419115
+
+Latest relevant merge:
+PROD-01 PR #25
+
+But NEVER assume this is still latest.
+
+Start with:
+
+git fetch origin
+git switch develop
+git pull --ff-only origin develop
+
+git status
+git log -12 --oneline
+
+
+==================================================
+4. HARD PRECONDITIONS
+==================================================
+
+Verify latest develop contains:
+
+PROD-01
+ORD-01
+VENDOR-02
+ADMIN-05
+CART-02
+
+Verify current files include:
+
+catalog/controller/PublicCatalogController.java
+catalog/service/PublicCatalogService.java
+catalog/repository/CatalogReadRepository.java
+catalog/dto/ProductCard.java
+
+order domain / orders / order_items
+
+If PROD-01 or ORD-01 is missing:
+
+STOP.
+
+Return:
+
+PROD-02 BLOCKED:
+<missing dependency>
+
+
+==================================================
+5. BRANCH
+==================================================
+
+Run:
+
+git branch -a
+
+If:
+
+feature/prod-02-search-filter
+
+already exists:
+
+DO NOT overwrite it.
+
+Inspect existing branch and report.
+
+Otherwise:
+
+git switch -c feature/prod-02-search-filter
+
+
+==================================================
+6. INSPECT BEFORE CODING
+==================================================
+
+Inspect latest:
+
+src/main/java/com/uteexpress/catalog/**
+src/main/java/com/uteexpress/order/**
+src/main/java/com/uteexpress/shop/**
+src/main/java/com/uteexpress/governance/**
+src/main/java/com/uteexpress/security/**
+
+Inspect:
+
+PublicCatalogController
+PublicCatalogService
+CatalogReadRepository
+CatalogQueryService
+ProductCard
+ProductDetailView
+
+Product
+ProductStatus
+ShopStatus
+
+Order
+OrderItem
+OrderStatus
+
+all catalog/public templates
+
+SecurityConfig
+
+ArchitectureTest
+
+Flyway migrations
+
+all PostgreSQL integration tests.
+
+
+==================================================
+7. RETURN PLAN BEFORE IMPLEMENTATION
+==================================================
+
+Before editing code output:
+
+PROD-02 IMPLEMENTATION PLAN
+
+A. latest develop SHA
+B. PROD-01 status
+C. ORD-01 status
+D. current public visibility predicate
+E. current Product listing implementation
+F. search criteria design
+G. pagination design
+H. sort whitelist
+I. bestSelling data source
+J. topRated data source
+K. SQL/query design
+L. DTO changes
+M. Controller changes
+N. UI changes
+O. T17 tests
+P. migration decision
+Q. expected files changed
+
+Then implement.
+
+
+==================================================
+8. DO NOT REBUILD PROD-01
+==================================================
+
+PROD-01 already implemented:
+
+GET /
+GET /products
+GET /products/{id}
+GET /categories/{slug}
+GET /shops
+GET /shops/{slug}
+
+public images
+Home
+Product detail
+Shop page
+Category page
+basic Product list
+demo seed
+
+Extend these.
+
+Do NOT create a second:
+
+PublicCatalogController
+Public Product entity
+Catalog database model
+Product table
+
+
+==================================================
+9. CURRENT PUBLIC VISIBILITY
+==================================================
+
+Keep ONE authoritative visibility rule:
+
+p.status = 'ACTIVE'
+AND s.status = 'APPROVED'
+AND c.active = TRUE
+
+Every discovery query must use it.
+
+Therefore automatically exclude:
+
+HIDDEN Product
+MODERATED Product
+PENDING Shop
+REJECTED Shop
+SUSPENDED Shop
+disabled Category
+
+Do not weaken this.
+
+
+==================================================
+10. PRODUCTSEARCHCRITERIA
+==================================================
+
+Create a request/read DTO conceptually:
+
+ProductSearchCriteria
+
+Recommended fields:
+
+String q
+String shop
+String category
+BigDecimal minPrice
+BigDecimal maxPrice
+String sort
+int page
+int size
+
+Do not bind Entity.
+
+
+==================================================
+11. PARAMETER SEMANTICS
+==================================================
+
+Recommended public URL:
+
+GET /products
+
+Example:
+
+/products?q=phone
+&shop=demo-shop
+&category=electronics
+&minPrice=100000
+&maxPrice=500000
+&sort=priceAsc
+&page=0
+&size=12
+
+Use existing route.
+
+Do not create unnecessary:
+
+/search
+/api/search
+
+unless architecture requires it.
+
+
+==================================================
+12. SEARCH — PRODUCT NAME
+==================================================
+
+q searches Product name.
+
+Requirements:
+
+- trim
+- empty => no name filter
+- case-insensitive
+- parameterized
+- no SQL concatenation
+
+PostgreSQL options:
+
+LOWER(p.name) LIKE LOWER(:pattern)
+
+or:
+
+p.name ILIKE :pattern
+
+Use escaped parameter input.
+
+Do not dynamically concatenate q into SQL.
+
+
+==================================================
+13. SEARCH LENGTH
+==================================================
+
+Use a defensible maximum.
+
+Recommended:
+
+q <= 120 chars
+
+Trim before use.
+
+Oversized input:
+
+safe validation error
+or canonicalized rejection according project conventions.
+
+Do not allow huge arbitrary search strings.
+
+
+==================================================
+14. SHOP FILTER
+==================================================
+
+Parameter:
+
+shop=<slug>
+
+Filter:
+
+s.slug = :shopSlug
+
+Shop still must satisfy:
+
+APPROVED
+
+Unknown Shop:
+
+valid empty result
+
+unless existing UI contract prefers safe not-found.
+
+For `/products` filtering,
+empty result is preferable.
+
+
+==================================================
+15. CATEGORY FILTER
+==================================================
+
+Parameter:
+
+category=<slug>
+
+Filter:
+
+c.slug = :categorySlug
+
+Category still must:
+
+active = TRUE
+
+Unknown category in `/products` filter:
+
+empty result.
+
+Existing:
+
+/categories/{slug}
+
+can keep its 404 behavior.
+
+
+==================================================
+16. PRICE FILTER
+==================================================
+
+Parameters:
+
+minPrice
+maxPrice
+
+Use:
+
+BigDecimal
+
+Never:
+
+double
+float
+
+Rules:
+
+minPrice >= 0
+maxPrice >= 0
+
+if both:
+minPrice <= maxPrice
+
+Current project uses whole VND.
+
+Reject fractional VND.
+
+Do not silently round.
+
+
+==================================================
+17. PRICE SQL
+==================================================
+
+Optional conditions:
+
+p.price >= :minPrice
+
+p.price <= :maxPrice
+
+Only append logical query fragments from server code.
+
+Values always parameter-bound.
+
+
+==================================================
+18. SORT WHITELIST
+==================================================
+
+Master security contract requires exact whitelist:
+
+priceAsc
+priceDesc
+newest
+bestSelling
+topRated
+
+Never use:
+
+ORDER BY :sort
+
+Never concatenate arbitrary user input into ORDER BY.
+
+Map sort input through a server enum/allowlist.
+
+Example:
+
+PRICE_ASC
+→ p.price ASC, p.id ASC
+
+PRICE_DESC
+→ p.price DESC, p.id DESC
+
+NEWEST
+→ p.created_at DESC, p.id DESC
+
+BEST_SELLING
+→ sold_quantity DESC, p.created_at DESC, p.id DESC
+
+TOP_RATED
+→ rating DESC, rating_count DESC, p.created_at DESC, p.id DESC
+
+Tie-breakers MUST be deterministic.
+
+
+==================================================
+19. DEFAULT SORT
+==================================================
+
+Default:
+
+newest
+
+unless latest PROD-01 contract already defines another default.
+
+Document actual decision.
+
+
+==================================================
+20. INVALID SORT
+==================================================
+
+Input:
+
+sort=drop-table
+sort=name desc; delete...
+sort=random
+
+must NOT enter SQL.
+
+Preferred behavior:
+
+fallback to newest
+
+or safe validation failure.
+
+Choose one consistent behavior and test it.
+
+Do NOT echo raw sort into SQL.
+
+
+==================================================
+21. PAGINATION
+==================================================
+
+Use zero-based page unless existing project uses one-based.
+
+Recommended:
+
+page default = 0
+size default = 12
+
+size whitelist / bounded range:
+
+minimum 1
+maximum 48
+
+Never let client request:
+
+size=1000000
+
+
+==================================================
+22. PAGINATION QUERY
+==================================================
+
+Use:
+
+LIMIT :limit
+OFFSET :offset
+
+or Spring Pageable equivalent.
+
+Offset calculation must protect against:
+
+negative values
+integer overflow
+
+Page metadata should contain at least:
+
+page
+size
+totalItems
+totalPages
+hasPrevious
+hasNext
+
+
+==================================================
+23. PAGE RESULT DTO
+==================================================
+
+If project already has a generic PageView/PageResult:
+
+reuse it.
+
+Otherwise add a catalog-owned DTO such as:
+
+ProductSearchPage
+
+containing:
+
+List<ProductCard> products
+ProductSearchCriteria criteria
+long totalItems
+int page
+int size
+int totalPages
+boolean hasPrevious
+boolean hasNext
+
+Do not introduce a huge generic framework for one page.
+
+
+==================================================
+24. COUNT QUERY
+==================================================
+
+Pagination requires an accurate count.
+
+Count query MUST use exactly the same:
+
+visibility
+search
+shop filter
+category filter
+price filters
+
+as the Product query.
+
+Do not produce:
+
+page says 100 records
+while query actually returns 30.
+
+
+==================================================
+25. QUERY PARAM PRESERVATION
+==================================================
+
+Pagination links must keep:
+
+q
+shop
+category
+minPrice
+maxPrice
+sort
+size
+
+Only page changes.
+
+Example:
+
+page 1 → page 2
+
+must not drop the filters.
+
+
+==================================================
+26. FILTER FORM
+==================================================
+
+Update:
+
+products/list.html
+
+Include:
+
+search box
+Shop select
+Category select
+min price
+max price
+sort select
+submit/reset
+
+Current selected values must remain visible
+after submit.
+
+
+==================================================
+27. CATEGORY/SHOP OPTIONS
+==================================================
+
+Use existing public:
+
+approved Shops
+active Categories
+
+for filter options.
+
+Do not expose:
+
+SUSPENDED Shops
+disabled Categories
+
+
+==================================================
+28. HOME PAGE
+==================================================
+
+Do not turn Home into full discovery UI unless useful.
+
+Home can keep PROD-01 behavior.
+
+Main discovery should remain:
+
+GET /products
+
+
+==================================================
+29. PRODUCTCARD COMPATIBILITY
+==================================================
+
+Current ProductCard contains:
+
+id
+name
+price
+stock
+shopSlug
+shopName
+categorySlug
+categoryName
+thumbnailImageId
+
+Prefer retaining backward compatibility.
+
+Do not add ranking-only fields unless actually needed by UI.
+
+
+==================================================
+30. BEST-SELLING — REAL DATA ONLY
+==================================================
+
+ORD-01 provides:
+
+orders
+order_items
+
+Do NOT create:
+
+sales_count column
+fake random sales
+Product.soldCount persisted field
+
+Compute ranking from Order data.
+
+
+==================================================
+31. BEST-SELLING DEFINITION
+==================================================
+
+Recommended current interpretation:
+
+sold_quantity =
+SUM(order_items.quantity)
+
+for successfully delivered Orders only:
+
+orders.status = 'DELIVERED'
+
+Do NOT count:
+
+NEW
+CONFIRMED
+PICKED_UP
+SHIPPING
+CANCELLED
+RETURNED
+REFUNDED
+
+Reason:
+only completed, non-returned delivery represents a successful current sale.
+
+If latest Order contract has changed:
+
+inspect and adapt.
+
+Document exact ranking semantics.
+
+
+==================================================
+32. BEST-SELLING SQL
+==================================================
+
+Use aggregate/subquery/CTE.
+
+Conceptually:
+
+LEFT JOIN (
+  SELECT oi.product_id,
+         SUM(oi.quantity) AS sold_quantity
+  FROM order_items oi
+  JOIN orders o ON o.id = oi.order_id
+  WHERE o.status = 'DELIVERED'
+  GROUP BY oi.product_id
+) sales ON sales.product_id = p.id
+
+ORDER BY
+COALESCE(sales.sold_quantity, 0) DESC
+
+Tie-break:
+
+p.created_at DESC
+p.id DESC
+
+
+==================================================
+33. BEST-SELLING MUST NOT HIDE ZERO SALES
+==================================================
+
+Products with zero sales are still public.
+
+They should rank after sold Products.
+
+Use LEFT JOIN / COALESCE.
+
+Do not accidentally INNER JOIN and remove them.
+
+
+==================================================
+34. RETURN/REFUND SEMANTICS
+==================================================
+
+Do not count RETURNED/REFUNDED Orders as successful sold quantity.
+
+If future state changes make ranking semantics ambiguous:
+
+document it.
+
+Do not alter Order status machine.
+
+
+==================================================
+35. ORDER MODULE BOUNDARY
+==================================================
+
+Catalog discovery is a read projection.
+
+Do NOT import:
+
+OrderRepository
+Order entity
+
+into Controller.
+
+Prefer CatalogReadRepository SQL read projection over:
+
+orders
+order_items
+
+This avoids cross-module service cycles.
+
+Do not mutate Order.
+
+
+==================================================
+36. TOP-RATED — CRITICAL RULE
+==================================================
+
+Master requests:
+
+topRated
+
+BUT:
+
+Review is QD-owned and later in the project.
+
+Before implementing topRated:
+
+inspect latest repo for a REAL source:
+
+reviews table
+ReviewRepository
+Review service/read contract
+
+If a real rating source exists:
+
+implement topRated using it.
+
+If it does NOT exist:
+
+DO NOT:
+
+- create reviews table
+- create Review entity
+- create fake ratings
+- use random rating
+- hardcode stars
+- abuse order quantity as rating
+- add fake average_rating Product column
+
+
+==================================================
+37. TOP-RATED BLOCKER BEHAVIOR
+==================================================
+
+If Review source does not exist:
+
+continue implementing all other PROD-02 features.
+
+Do NOT stop the entire task.
+
+Report:
+
+TOP_RATED BLOCKED BY REVIEW DATA SOURCE
+
+Document:
+
+- Master requires topRated
+- Review module is not yet available
+- implementation intentionally deferred
+- no fake data introduced
+
+Do not expose `topRated` in UI until it has truthful semantics.
+
+If owner explicitly decides otherwise later,
+that will be a separate integration update.
+
+
+==================================================
+38. IF REVIEWS EXIST
+==================================================
+
+If real reviews table exists,
+only count publicly visible/approved reviews according to
+the Review module's real visibility contract.
+
+Never guess ReviewStatus names.
+
+Inspect schema first.
+
+Ranking concept:
+
+AVG(r.rating) DESC
+COUNT(r.id) DESC
+
+then newest/id tie breakers.
+
+Products with no reviews:
+
+rating = 0
+
+remain available.
+
+
+==================================================
+39. NEWEST
+==================================================
+
+Use:
+
+p.created_at DESC
+p.id DESC
+
+Do not use updated_at for "newest".
+
+
+==================================================
+40. PRICE ASC/DESC
+==================================================
+
+priceAsc:
+
+p.price ASC
+p.id ASC
+
+priceDesc:
+
+p.price DESC
+p.id DESC
+
+Tie-break deterministic.
+
+
+==================================================
+41. PUBLIC VISIBILITY STILL FIRST
+==================================================
+
+Search/sort must NEVER surface:
+
+HIDDEN
+MODERATED
+SUSPENDED-shop
+disabled-category
+
+even if:
+
+name matches
+sales high
+rating high
+
+
+==================================================
+42. T17
+==================================================
+
+Master T17:
+
+Catalog Query
+
+Must verify:
+
+filter
+sort
+page
+hidden excluded
+SQL injection resistant
+
+PROD-02 is where T17 should become complete.
+
+
+==================================================
+43. T17 SEARCH TEST
+==================================================
+
+Seed products:
+
+"Gaming Laptop"
+"Laptop Stand"
+"Phone Case"
+
+q=laptop
+
+Expected:
+
+Gaming Laptop
+Laptop Stand
+
+not Phone Case.
+
+Case-insensitive.
+
+
+==================================================
+44. T17 SHOP FILTER
+==================================================
+
+Products across:
+
+Shop A
+Shop B
+
+shop=shop-a
+
+only Shop A Products.
+
+
+==================================================
+45. T17 CATEGORY FILTER
+==================================================
+
+Products across:
+
+Category A
+Category B
+
+category=a
+
+only Category A.
+
+
+==================================================
+46. T17 PRICE RANGE
+==================================================
+
+Prices:
+
+100000
+200000
+300000
+
+min=150000
+max=250000
+
+Expected:
+
+200000 only.
+
+
+==================================================
+47. COMBINED FILTER TEST
+==================================================
+
+Test:
+
+q
+shop
+category
+minPrice
+maxPrice
+
+combined.
+
+Every condition must apply simultaneously.
+
+
+==================================================
+48. PAGINATION TEST
+==================================================
+
+Create > page size products.
+
+Verify:
+
+page0
+page1
+
+contain different deterministic items.
+
+No duplicates between pages.
+
+totalItems correct.
+
+totalPages correct.
+
+
+==================================================
+49. FILTER PRESERVATION TEST
+==================================================
+
+MVC/template test pagination links.
+
+Given:
+
+q=laptop
+category=electronics
+sort=priceAsc
+size=12
+
+Next link must retain all params.
+
+
+==================================================
+50. SORT TEST — PRICE
+==================================================
+
+Verify:
+
+priceAsc
+
+strict expected order.
+
+Verify:
+
+priceDesc
+
+strict expected order.
+
+
+==================================================
+51. SORT TEST — NEWEST
+==================================================
+
+Products with different created_at.
+
+Verify newest first.
+
+Tie same timestamp with ID deterministic.
+
+
+==================================================
+52. SORT TEST — BESTSELLING
+==================================================
+
+Product A:
+2 delivered items
+
+Product B:
+5 delivered items
+
+Product C:
+10 cancelled items
+
+Expected:
+
+B
+A
+C
+
+Cancelled must not inflate ranking.
+
+
+==================================================
+53. BESTSELLING RETURN TEST
+==================================================
+
+If an Order is:
+
+RETURNED
+or REFUNDED
+
+its quantities must not rank as successful delivered sales.
+
+Test this explicitly.
+
+
+==================================================
+54. SORT INJECTION TEST
+==================================================
+
+Inputs such as:
+
+sort=price desc; drop table products
+sort=1
+sort=foobar
+
+must:
+
+never alter SQL structure
+never produce SQL syntax execution
+
+Database remains intact.
+
+
+==================================================
+55. SEARCH SQL INJECTION TEST
+==================================================
+
+q="' OR 1=1 --"
+
+must behave as search text.
+
+It must NOT return all Products because of SQL manipulation.
+
+
+==================================================
+56. PRICE VALIDATION TEST
+==================================================
+
+Reject/fail safely:
+
+minPrice=-1
+maxPrice=-1
+minPrice > maxPrice
+fractional VND
+
+No server 500.
+
+
+==================================================
+57. PAGINATION VALIDATION
+==================================================
+
+Handle safely:
+
+page=-1
+size=0
+size=-100
+size=999999999
+
+No expensive unlimited query.
+
+
+==================================================
+58. MODERATION REGRESSION
+==================================================
+
+Product MODERATED:
+
+never appears in search.
+
+Shop SUSPENDED:
+
+its Products never appear.
+
+Product HIDDEN:
+
+never appears.
+
+
+==================================================
+59. CART CONTRACT REGRESSION
+==================================================
+
+Do not break:
+
+CatalogQueryService.findCartProducts(...)
+
+CatalogQueryService.requirePurchasableProducts(...)
+
+CART-02 depends on them.
+
+Discovery should be added around:
+
+PublicCatalogService
+CatalogReadRepository
+
+without changing commerce behavior unnecessarily.
+
+
+==================================================
+60. PRODUCT DETAIL REGRESSION
+==================================================
+
+Existing:
+
+GET /products/{id}
+
+must still work.
+
+No change to public image security.
+
+No regression to Shop/Category pages.
+
+
+==================================================
+61. CONTROLLER
+==================================================
+
+PublicCatalogController should remain thin.
+
+Controller responsibilities:
+
+bind ProductSearchCriteria
+call service
+put result/options in Model
+return template
+
+Do NOT:
+
+inject JdbcTemplate
+inject repository
+build SQL
+parse Order data
+
+
+==================================================
+62. SERVICE
+==================================================
+
+PublicCatalogService owns:
+
+criteria normalization
+validation
+sort whitelist mapping
+page bounds
+read use case
+
+Repository owns SQL.
+
+Do not let template decide sorting logic.
+
+
+==================================================
+63. REPOSITORY
+==================================================
+
+CatalogReadRepository may build a dynamic query,
+BUT dynamic parts must be server-controlled.
+
+Allowed dynamic pieces:
+
+WHERE fragment chosen by server
+ORDER BY fragment from enum whitelist
+
+All user values:
+
+named parameters.
+
+
+==================================================
+64. QUERY BUILDER
+==================================================
+
+Do not introduce QueryDSL/Elasticsearch
+just for this task.
+
+A small clear query builder is acceptable.
+
+Example:
+
+StringBuilder where = ...
+
+MapSqlParameterSource params = ...
+
+if normalized q != null:
+  append server constant SQL fragment
+  addValue(...)
+
+Sort:
+
+switch enum
+
+Never append client raw string.
+
+
+==================================================
+65. N+1
+==================================================
+
+Do not introduce:
+
+one query per Product
+
+for Shop
+Category
+Thumbnail
+Sales count
+
+Use projection query.
+
+
+==================================================
+66. PERFORMANCE
+==================================================
+
+No premature optimization,
+but discovery query must remain reasonable.
+
+Potential indexes already exist.
+
+Before adding migration/index:
+
+inspect PostgreSQL schema and EXPLAIN only if needed.
+
+Do not add indexes blindly.
+
+
+==================================================
+67. MIGRATION
+==================================================
+
+Expected:
+
+PROD-02 migration = NONE
+
+Search/filter/ranking should work over existing:
+
+products
+shops
+categories
+order_items
+orders
+
+If topRated has no Review data:
+
+do not create Review migration.
+
+If a genuinely necessary index is identified:
+
+explain with query evidence before creating migration.
+
+Never edit merged migrations.
+
+
+==================================================
+68. SEARCH UI
+==================================================
+
+Update products/list.html.
+
+Suggested UX:
+
+[ Search Product... ]
+
+Shop:
+[ All shops ▼ ]
+
+Category:
+[ All categories ▼ ]
+
+Price:
+[ Min ] [ Max ]
+
+Sort:
+[ Newest ▼ ]
+
+Options currently truthful:
+
+Newest
+Price low → high
+Price high → low
+Best selling
+
+Add:
+
+Top rated
+
+ONLY when real rating data exists.
+
+
+==================================================
+69. RESET
+==================================================
+
+Provide:
+
+Clear filters
+
+link to:
+
+/products
+
+No JS required.
+
+
+==================================================
+70. PAGINATION UI
+==================================================
+
+Display:
+
+Previous
+page numbers where reasonable
+Next
+
+Preserve query params.
+
+Disable unavailable previous/next.
+
+Responsive Bootstrap.
+
+
+==================================================
+71. EMPTY RESULT
+==================================================
+
+If filters return zero:
+
+show friendly:
+
+"No products found"
+
+Keep filter controls visible.
+
+No exception.
+
+
+==================================================
+72. XSS
+==================================================
+
+Keep:
+
+th:text
+
+Do not use:
+
+th:utext
+
+for:
+
+Product name
+Shop name
+Category name
+search query
+
+
+==================================================
+73. PUBLIC SECURITY
+==================================================
+
+GET /products remains public.
+
+Do not change authentication rules.
+
+No mutation added.
+
+Do not disable CSRF globally.
+
+
+==================================================
+74. URL ENCODING
+==================================================
+
+Pagination/filter links must URL-encode:
+
+q
+shop/category values
+
+Do not construct unsafe HTML attributes manually.
+
+
+==================================================
+75. DTO WHITELIST
+==================================================
+
+ProductSearchCriteria contains only discovery fields.
+
+Do not accept:
+
+status
+ownerId
+shopId
+version
+createdAt SQL field
+rawOrderBy
+
+
+==================================================
+76. STATUS FILTER
+==================================================
+
+Do NOT add:
+
+?status=
+
+for Guest.
+
+Public always uses valid visibility predicate.
+
+Guest cannot request:
+
+HIDDEN
+MODERATED
+
+
+==================================================
+77. RAW SQL COLUMN FILTER
+==================================================
+
+Do NOT support generic:
+
+?field=
+?column=
+?orderBy=
+
+All allowed fields are explicit.
+
+
+==================================================
+78. SHOP/CATEGORY ROUTES
+==================================================
+
+Existing:
+
+/shops/{slug}
+/categories/{slug}
+
+must continue working.
+
+Do not move all browsing exclusively into /products.
+
+
+==================================================
+79. DEMO DATA
+==================================================
+
+PROD-01 already seeded 12 public Products across multiple Shops.
+
+Reuse them for discovery demo.
+
+If ranking tests need sales:
+
+use PostgreSQL test fixtures.
+
+Do not pollute demo production-like seed with fake completed Orders
+unless current demo conventions explicitly call for it.
+
+
+==================================================
+80. ORDER FIXTURES
+==================================================
+
+Best-selling integration tests may create:
+
+User
+Shop
+Products
+Orders
+OrderItems
+
+inside test DB.
+
+Use current Order constraints correctly.
+
+Do not weaken constraints for easier testing.
+
+
+==================================================
+81. TOP RATED DEMO
+==================================================
+
+If Review module unavailable:
+
+do not show fake Top Rated demo.
+
+Document dependency.
+
+
+==================================================
+82. ARCHITECTURE
+==================================================
+
+ArchitectureTest must remain green.
+
+No:
+
+Controller → Repository
+Controller → Entity
+
+Do not weaken ArchUnit rules.
+
+
+==================================================
+83. POSTGRESQL IT
+==================================================
+
+Use real PostgreSQL Testcontainers.
+
+Verify:
+
+search
+filter
+combined filter
+price range
+pagination
+price sort
+newest
+bestSelling
+visibility
+SQL injection resistance
+
+TopRated:
+PASS only if actual Review source exists.
+
+Otherwise:
+document BLOCKED truthfully.
+
+
+==================================================
+84. FULL REGRESSION
+==================================================
+
+Run all existing tests.
+
+Critical regression areas:
+
+PROD-01
+VENDOR-02
+ADMIN-05
+CART-02
+ORD-01
+AUTH
+Architecture
+
+
+==================================================
+85. QUALITY GATE
+==================================================
+
+Java 21.
+
+Run:
+
+.\mvnw.cmd clean test
+
+.\mvnw.cmd package
+
+.\mvnw.cmd -Ppostgres-it clean verify
+
+git diff --check
+
+git status
+
+All implemented scope must pass.
+
+Never report copied historical test counts.
+
+
+==================================================
+86. SYNC BEFORE PUSH
+==================================================
+
+Before final push:
+
+git fetch origin
+
+Compare:
+
+feature/prod-02-search-filter
+vs
+origin/develop
+
+If develop moved:
+
+merge/rebase latest develop
+resolve carefully
+rerun ALL gates.
+
+
+==================================================
+87. TEAM SAFETY
+==================================================
+
+Do not overwrite work from TD/QD.
+
+Particularly do not casually modify:
+
+Order entity/state machine
+Review future contracts
+Cart
+ADMIN moderation
+SecurityConfig
+
+No entire-file --ours/--theirs conflict resolution
+without inspection.
+
+
+==================================================
+88. OUT OF SCOPE
+==================================================
+
+Do NOT implement:
+
+Review CRUD
+Review media
+Favorite
+Recently viewed
+Promotion
+Discount pricing
+Voucher
+Checkout
+Order lifecycle
+Revenue dashboard
+Recommendation engine
+Elasticsearch
+Redis search
+AI recommendation
+Product variants
+
+
+==================================================
+89. DOCUMENTATION
+==================================================
+
+Create:
+
+docs/PROD-02-completion-report.md
+
+Document:
+
+- query criteria
+- search semantics
+- price validation
+- filters
+- pagination
+- page size bounds
+- sort whitelist
+- newest semantics
+- bestSelling semantics
+- topRated status
+- visibility
+- SQL injection protection
+- sort injection protection
+- tests
+- migration decision
+- deferred Review integration if applicable
+
+
+==================================================
+90. COMMIT STRATEGY
+==================================================
+
+Suggested:
+
+feat(catalog): add public product discovery criteria
+
+feat(catalog): add secure sorting and pagination
+
+feat(catalog): add best-selling ranking
+
+test(catalog): cover discovery queries and injection safety
+
+docs(catalog): document PROD-02 discovery
+
+Do not fake-split commits.
+
+
+==================================================
+91. PUSH
+==================================================
+
+After gates:
+
+git push -u origin feature/prod-02-search-filter
+
+No force push unless owner approves.
+
+
+==================================================
+92. CREATE PR
+==================================================
+
+PR:
+
+feature/prod-02-search-filter
+        ↓
+develop
+
+Title:
+
+PROD-02: implement product search filters and ranking
+
+
+==================================================
+93. PR BODY
+==================================================
+
+Use actual outcomes.
+
+## Scope
+
+Public Product discovery with search, filters,
+pagination and safe ranking.
+
+## Search
+
+- product name
+- Shop
+- Category
+- price range
+
+## Pagination
+
+Default size:
+Max size:
+Query parameters preserved:
+
+## Sort
+
+- newest
+- priceAsc
+- priceDesc
+- bestSelling
+- topRated: IMPLEMENTED / BLOCKED
+
+## Best Selling
+
+Data source:
+Successful statuses counted:
+Returned/refunded treatment:
+
+## Top Rated
+
+Real Review source:
+Status:
+
+If blocked:
+Explain Review module dependency.
+Do not claim implemented.
+
+## Security
+
+- parameterized SQL
+- sort whitelist
+- visibility predicate preserved
+- invalid status unavailable publicly
+- XSS-safe rendering
+
+## Verification
+
+clean test:
+package:
+postgres-it:
+git diff --check:
+
+Unit/MVC:
+PostgreSQL:
+Total:
+Failures:
+Errors:
+
+## T17
+
+search:
+filter:
+pagination:
+sort:
+hidden exclusion:
+SQL injection:
+sort injection:
+
+## Database
+
+Migration:
+NONE / actual file
+
+
+==================================================
+94. CI
+==================================================
+
+After PR:
+
+check CI for exact current head.
+
+Old CI is not valid if a new commit was pushed.
+
+If fail:
+
+inspect
+fix
+push
+check new head.
+
+
+==================================================
+95. DO NOT MERGE
+==================================================
+
+Agent MUST NOT merge.
+
+No direct push:
+
+develop
+main
+
+Stop:
+
+PR created
+CI checked
+READY FOR REVIEW
+
+
+==================================================
+96. FINAL REPORT
+==================================================
+
+Return:
+
+PROD-02 TASK COMPLETION REPORT
+
+BRANCH:
+Base:
+Base SHA:
+Head:
+PR:
+PR URL:
+
+PRECONDITIONS:
+PROD-01:
+ORD-01:
+ADMIN-05:
+CART-02:
+
+DISCOVERY:
+Search by name:
+Shop filter:
+Category filter:
+Min price:
+Max price:
+Combined filters:
+
+PAGINATION:
+Page base:
+Default size:
+Max size:
+Total count:
+Params preserved:
+Deterministic:
+
+SORT:
+newest:
+priceAsc:
+priceDesc:
+bestSelling:
+topRated:
+
+BEST SELLING:
+Source:
+Order statuses:
+Delivered counted:
+Cancelled counted:
+Returned counted:
+Refunded counted:
+Zero-sale products:
+
+TOP RATED:
+Review table exists:
+Real Review data source:
+Implemented:
+Blocked reason:
+
+SECURITY:
+Parameterized values:
+Sort whitelist:
+Raw orderBy accepted:
+SQL injection:
+Sort injection:
+Hidden excluded:
+Moderated excluded:
+Suspended Shop excluded:
+Disabled Category excluded:
+XSS:
+
+T17:
+Search:
+Filter:
+Page:
+Sort:
+Visibility:
+Injection:
+
+REGRESSION:
+PROD-01:
+VENDOR-02:
+CART-02:
+ADMIN-05:
+ORD-01:
+Architecture:
+
+MIGRATION:
+Required:
+File:
+Reason:
+
+BUILD:
+clean test:
+package:
+postgres-it:
+git diff --check:
+
+TEST COUNTS:
+Unit/MVC:
+PostgreSQL:
+Total:
+Failures:
+Errors:
+Skipped:
+
+CI:
+Exact head:
+Status:
+Run URL:
+
+DIRECT DEVELOP COMMIT:
+NO
+
+DIRECT MAIN COMMIT:
+NO
+
+MERGED:
+NO
+
+READY FOR REVIEW:
+YES / NO
+
+READY FOR MERGE:
+NO
+
+
+==================================================
+97. STOP / OWNER REVIEW CONDITIONS
+==================================================
+
+Request owner review if:
+
+- PROD-01 missing
+- ORD-01 missing
+- branch already contains unknown work
+- Catalog visibility would need weakening
+- implementing Discovery breaks Cart contract
+- arbitrary client ORDER BY is required
+- a merged migration would need editing
+- Product search requires Entity exposure
+- Review module would need to be created by HP
+- fake rating would be necessary
+- ArchitectureTest would need weakening
+
+Do not hide gaps.
+Do not fake rankings.
+Do not fake test success.
+Do not merge.

@@ -1,0 +1,13 @@
+    public AddressView setDefault(@NotNull Long addressId) {
+        Long userId = ownerId();
+        lockAccount(userId);
+        Address target = owned(addressId, userId);
+        if (target.isDefaultAddress()) {
+            return view(target);
+        }
+        Instant changedAt = now();
+        addresses.clearDefaultForUser(userId, changedAt);
+        target = owned(addressId, userId);
+        target.makeDefault(changedAt);
+        return view(addresses.saveAndFlush(target));
+    }

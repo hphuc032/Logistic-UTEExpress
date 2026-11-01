@@ -1,0 +1,13 @@
+    public ShopView register(@NotNull @Valid ShopRegistrationRequest request) {
+        Long ownerId = ownerId();
+        if (shops.existsByOwnerId(ownerId)) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }
+
+        String name = request.name().trim();
+        String slug = request.slug().trim().toLowerCase(Locale.ROOT);
+        String description = blankToNull(request.description());
+        String pickupAddress = request.pickupAddress().trim();
+        if (shops.existsBySlug(slug)) {
+            throw new ApplicationException(ErrorCode.CONFLICT);
+        }

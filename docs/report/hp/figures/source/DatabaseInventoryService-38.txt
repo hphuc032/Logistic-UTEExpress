@@ -1,0 +1,13 @@
+    public void lockAndCheck(List<StockQuantity> quantities) {
+        List<StockQuantity> requested = canonical(quantities);
+        if (TransactionSynchronizationManager.hasResource(LOCKED_BATCH_RESOURCE)) {
+            throw new ApplicationException(ErrorCode.INVALID_REQUEST);
+        }
+        List<Long> ids = requested.stream().map(StockQuantity::productId).toList();
+        List<Product> locked = products.findAllByIdForUpdate(ids);
+        if (locked.size() != requested.size()) throw new ApplicationException(ErrorCode.RESOURCE_NOT_FOUND);
+        catalog.requirePurchasableProducts(new HashSet<>(ids));
+
+        Map<Long, Product> byId = new LinkedHashMap<>();
+        locked.forEach(product -> byId.put(product.getId(), product));
+        for (StockQuantity item : requested) {

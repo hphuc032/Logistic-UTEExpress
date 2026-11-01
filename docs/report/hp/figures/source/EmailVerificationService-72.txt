@@ -1,0 +1,13 @@
+    public EmailVerificationResult verify(String identifier, String code) {
+        if (identifier == null || identifier.isBlank()
+                || code == null || !code.matches("^[0-9]{6}$")) {
+            return EmailVerificationResult.INVALID;
+        }
+        Optional<UserEntity> resolved = findUserForUpdate(normalize(identifier));
+        if (resolved.isEmpty() || resolved.get().getStatus() != UserStatus.PENDING_VERIFICATION) {
+            return EmailVerificationResult.INVALID;
+        }
+
+        UserEntity user = resolved.get();
+        Optional<OtpTokenEntity> latest = tokens
+                .findFirstByUser_IdAndPurposeOrderBySentAtDescIdDesc(user.getId(), PURPOSE);

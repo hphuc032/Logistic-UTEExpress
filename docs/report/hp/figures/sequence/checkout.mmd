@@ -1,0 +1,12 @@
+sequenceDiagram
+participant A0 as Buyer
+participant A1 as Checkout / Order (TD)
+participant A2 as Catalog services (HP)
+participant A3 as PostgreSQL
+A0->>A1: Selected cart own address shipping
+A1->>A2: Read server product/pricing snapshot
+A1->>A2: lockAndCheck StockQuantity
+A2->>A3: Locks và stock availability
+A1->>A2: decrease cùng transaction
+A1->>A3: Order NEW COD snapshot cleanup
+A3->>A0: Commit receipt hoặc rollback

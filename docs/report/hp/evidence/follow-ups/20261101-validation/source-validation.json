@@ -1,0 +1,1075 @@
+{
+  "checkedUtc": "2026-11-01T15:05:05.097681+00:00",
+  "acceptedSource": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+  "historicalSource": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+  "functions": [
+    {
+      "function": "4.1",
+      "routes": "GET /register; POST /register",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/identity/controller/RegistrationController.java",
+          "sha256": "17416291d3f4d5c21da13efdd6c9002ccfa15d765f0bef0cef3770efe4c406b1",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/identity/service/RegistrationService.java",
+          "sha256": "03c47719d6124240f1612afe0db6f58a9010c2f362b58ee254cb5ab8f06a636b",
+          "unchangedSinceHistorical": true,
+          "anchor": "public RegistrationOutcome register(",
+          "anchorLine": 36
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "AuthRegistrationIT",
+          "path": "src/test/java/com/uteexpress/identity/AuthRegistrationIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "RegistrationControllerTest",
+          "path": "src/test/java/com/uteexpress/identity/controller/RegistrationControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "RegistrationServiceTest",
+          "path": "src/test/java/com/uteexpress/identity/service/RegistrationServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "4.2",
+      "routes": "GET /login; POST /login",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/security/controller/LoginController.java",
+          "sha256": "426db525102c55280e543de0c60ccc973744b4c35e65ac1516a37484a4a23993",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/security/service/LoginService.java",
+          "sha256": "1ff6076e15065e0cca27faaf33b00fca9040c1f19d3c7a9580da85d1fa1aca2a",
+          "unchangedSinceHistorical": true,
+          "anchor": "public LoginOutcome login(",
+          "anchorLine": 27
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "Auth02AuthenticationIT",
+          "path": "src/test/java/com/uteexpress/security/Auth02AuthenticationIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "AuthenticationWebTest",
+          "path": "src/test/java/com/uteexpress/security/AuthenticationWebTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "JwtAuthenticationFilterTest",
+          "path": "src/test/java/com/uteexpress/security/filter/JwtAuthenticationFilterTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "4.3",
+      "routes": "Không có endpoint JWT riêng; JwtAuthenticationFilter áp dụng trên request trong SecurityFilterChain.",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/security/filter/JwtAuthenticationFilter.java",
+          "sha256": "6afce6ab375362866292ea3ab1c3acb72413ebbe84adeec492fc2e3b1e9b8e7e",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/security/filter/JwtAuthenticationFilter.java",
+          "sha256": "6afce6ab375362866292ea3ab1c3acb72413ebbe84adeec492fc2e3b1e9b8e7e",
+          "unchangedSinceHistorical": true,
+          "anchor": "private void authenticate(",
+          "anchorLine": 52
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "JwtSecurityConfigurationTest",
+          "path": "src/test/java/com/uteexpress/security/JwtSecurityConfigurationTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "JwtAuthenticationFilterTest",
+          "path": "src/test/java/com/uteexpress/security/filter/JwtAuthenticationFilterTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "Auth02AuthenticationIT",
+          "path": "src/test/java/com/uteexpress/security/Auth02AuthenticationIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "4.4",
+      "routes": "POST /logout (Spring Security LogoutFilter, không phải MVC controller)",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/security/SecurityConfig.java",
+          "sha256": "f1f9d91b00fe447a0fd9f4689305ac6284ee5ffb7974b5a05fd94da523688c5a",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/security/web/TokenVersionLogoutHandler.java",
+          "sha256": "7d7105721908a749730c9d921e10b5561fee0d00b0e82cd13dc740d8bc932349",
+          "unchangedSinceHistorical": true,
+          "anchor": "public void logout(",
+          "anchorLine": 20
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "Auth02AuthenticationIT",
+          "path": "src/test/java/com/uteexpress/security/Auth02AuthenticationIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "AuthenticationWebTest",
+          "path": "src/test/java/com/uteexpress/security/AuthenticationWebTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "CsrfCookieWebTest",
+          "path": "src/test/java/com/uteexpress/security/CsrfCookieWebTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "4.5",
+      "routes": "GET /verify-otp; POST /verify-otp; POST /verify-otp/resend",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/identity/controller/EmailVerificationController.java",
+          "sha256": "105156c824c04385c30321d0892780bc1be0e34e247364a7da39211ba191576a",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/identity/service/EmailVerificationService.java",
+          "sha256": "fbca0c23bb022be7ba09871ef96f571503a84721cd52774279cdc448de359776",
+          "unchangedSinceHistorical": true,
+          "anchor": "public EmailVerificationResult verify(",
+          "anchorLine": 72
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "Auth03EmailVerificationIT",
+          "path": "src/test/java/com/uteexpress/identity/Auth03EmailVerificationIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "Qa01OtpSecurityIT",
+          "path": "src/test/java/com/uteexpress/security/Qa01OtpSecurityIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "OtpSecurityTest",
+          "path": "src/test/java/com/uteexpress/identity/service/OtpSecurityTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "EmailVerificationControllerTest",
+          "path": "src/test/java/com/uteexpress/identity/controller/EmailVerificationControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "4.6",
+      "routes": "GET /forgot-password; POST /forgot-password",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/identity/controller/PasswordResetController.java",
+          "sha256": "9af50181245cba66bb699408bc4ff0756a52ec8b24dfcdfd1ea6d60f5fcc0998",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/identity/service/PasswordResetService.java",
+          "sha256": "ec6811caf5a6aa66957e3ae92a83adfcfbf73bf1a12a91f419ad634ad9fc9c03",
+          "unchangedSinceHistorical": true,
+          "anchor": "public EmailDispatchResult sendResetCode(",
+          "anchorLine": 55
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "PasswordResetControllerTest",
+          "path": "src/test/java/com/uteexpress/identity/controller/PasswordResetControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "PasswordResetServiceTest",
+          "path": "src/test/java/com/uteexpress/identity/service/PasswordResetServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "Auth04PasswordResetIT",
+          "path": "src/test/java/com/uteexpress/identity/Auth04PasswordResetIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "4.7",
+      "routes": "GET /reset-password; POST /reset-password",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/identity/controller/PasswordResetController.java",
+          "sha256": "9af50181245cba66bb699408bc4ff0756a52ec8b24dfcdfd1ea6d60f5fcc0998",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/identity/service/PasswordResetService.java",
+          "sha256": "ec6811caf5a6aa66957e3ae92a83adfcfbf73bf1a12a91f419ad634ad9fc9c03",
+          "unchangedSinceHistorical": true,
+          "anchor": "public PasswordResetResult resetPassword(",
+          "anchorLine": 76
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "Auth04PasswordResetIT",
+          "path": "src/test/java/com/uteexpress/identity/Auth04PasswordResetIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "PasswordResetServiceTest",
+          "path": "src/test/java/com/uteexpress/identity/service/PasswordResetServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "PasswordResetControllerTest",
+          "path": "src/test/java/com/uteexpress/identity/controller/PasswordResetControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "4.8",
+      "routes": "Cross-cutting: public allowlist và /user/**, /vendor/**, /admin/**, /manager/**, /shipper/**; không thêm endpoint nghiệp vụ.",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/security/SecurityConfig.java",
+          "sha256": "f1f9d91b00fe447a0fd9f4689305ac6284ee5ffb7974b5a05fd94da523688c5a",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/security/filter/OtpRequestLimitFilter.java",
+          "sha256": "f346de6bce719e0264230225c8692f73d96b7c4fe8bc38cb7bc7e816d0f3b86b",
+          "unchangedSinceHistorical": true,
+          "anchor": "@Override protected void doFilterInternal(",
+          "anchorLine": 33
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "SecurityFoundationTest",
+          "path": "src/test/java/com/uteexpress/security/SecurityFoundationTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "SecurityHardeningIT",
+          "path": "src/test/java/com/uteexpress/security/SecurityHardeningIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "OtpRequestLimitFilterTest",
+          "path": "src/test/java/com/uteexpress/security/OtpRequestLimitFilterTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "OtpRequestRateLimiterTest",
+          "path": "src/test/java/com/uteexpress/security/OtpRequestRateLimiterTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "Qa01OtpSecurityIT",
+          "path": "src/test/java/com/uteexpress/security/Qa01OtpSecurityIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.1",
+      "routes": "GET /user/profile; POST /user/profile",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/account/controller/ProfileController.java",
+          "sha256": "aed7ef7441ff4eaeb0b3a7471c42fb76ab7574b89adf1b21ddfcb0fa630eec87",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/account/service/ProfileService.java",
+          "sha256": "a45050fc490693fa609c49f98f268850161b772013e17e994c31e6018e7c477b",
+          "unchangedSinceHistorical": true,
+          "anchor": "public ProfileView updateProfile(",
+          "anchorLine": 45
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "User01ProfileIT",
+          "path": "src/test/java/com/uteexpress/account/User01ProfileIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "ProfileControllerTest",
+          "path": "src/test/java/com/uteexpress/account/controller/ProfileControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "ProfileServiceTest",
+          "path": "src/test/java/com/uteexpress/account/service/ProfileServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.2",
+      "routes": "POST /user/password",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/account/controller/ProfileController.java",
+          "sha256": "aed7ef7441ff4eaeb0b3a7471c42fb76ab7574b89adf1b21ddfcb0fa630eec87",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/identity/service/AccountIdentityService.java",
+          "sha256": "57328c9748ba1335a73fe9d61ee7823ebe0265db87c81d527f41086467f3dc2c",
+          "unchangedSinceHistorical": true,
+          "anchor": "public void changePassword(",
+          "anchorLine": 50
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "User01ProfileIT",
+          "path": "src/test/java/com/uteexpress/account/User01ProfileIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "ProfileControllerTest",
+          "path": "src/test/java/com/uteexpress/account/controller/ProfileControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "ProfileServiceTest",
+          "path": "src/test/java/com/uteexpress/account/service/ProfileServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.3",
+      "routes": "GET /user/avatar; POST /user/avatar",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/account/controller/ProfileController.java",
+          "sha256": "aed7ef7441ff4eaeb0b3a7471c42fb76ab7574b89adf1b21ddfcb0fa630eec87",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/account/service/ProfileService.java",
+          "sha256": "a45050fc490693fa609c49f98f268850161b772013e17e994c31e6018e7c477b",
+          "unchangedSinceHistorical": true,
+          "anchor": "public void updateAvatar(",
+          "anchorLine": 49
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "User01ProfileIT",
+          "path": "src/test/java/com/uteexpress/account/User01ProfileIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "LocalFileStorageServiceTest",
+          "path": "src/test/java/com/uteexpress/common/storage/LocalFileStorageServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "SecurityHardeningIT",
+          "path": "src/test/java/com/uteexpress/security/SecurityHardeningIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.4",
+      "routes": "GET /user/addresses; POST /user/addresses; POST /user/addresses/{id}/update; POST /user/addresses/{id}/delete; POST /user/addresses/{id}/default",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/account/controller/AddressController.java",
+          "sha256": "70e7af9b22de19079194bc7cd36200bc1d99751b12d70976f33b3f3505537414",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/account/service/AddressService.java",
+          "sha256": "aefe568249291e3255e270f545885f37e71819ddf60e327b7d6226973c6defcf",
+          "unchangedSinceHistorical": true,
+          "anchor": "public AddressView setDefault(",
+          "anchorLine": 86
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "User02AddressIT",
+          "path": "src/test/java/com/uteexpress/account/User02AddressIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "AddressServiceTest",
+          "path": "src/test/java/com/uteexpress/account/service/AddressServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "AddressControllerTest",
+          "path": "src/test/java/com/uteexpress/account/controller/AddressControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.5",
+      "routes": "GET /user/shop; GET /user/shop/register; POST /user/shop/register",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/shop/controller/ShopRegistrationController.java",
+          "sha256": "551afb94285fc779e51ffc66b93f30fc064ac80ac7ce139e50fb038e8d38b5e1",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/shop/service/ShopRegistrationService.java",
+          "sha256": "001a39483091c5fb61741cbe601299c423ccda7d17032a9ba7643f8fc6763375",
+          "unchangedSinceHistorical": true,
+          "anchor": "public ShopView register(",
+          "anchorLine": 44
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "ShopRegistrationIT",
+          "path": "src/test/java/com/uteexpress/shop/ShopRegistrationIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "ShopRegistrationControllerTest",
+          "path": "src/test/java/com/uteexpress/shop/controller/ShopRegistrationControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "ShopRegistrationServiceTest",
+          "path": "src/test/java/com/uteexpress/shop/service/ShopRegistrationServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "ShopApprovalIT (QĐ boundary)",
+          "path": "src/test/java/com/uteexpress/governance/ShopApprovalIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.6",
+      "routes": "GET /vendor/products; GET /vendor/products/new; GET /vendor/products/{id}/edit; POST /vendor/products; POST /vendor/products/{id}/update; POST /vendor/products/{id}/delete",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/catalog/controller/VendorProductController.java",
+          "sha256": "c1a3358e67e06df6e7be1fc0049b5c314b5dbd330d16ca6fdf5a920d9c42e3af",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/catalog/service/ProductService.java",
+          "sha256": "f225d7800c84cae840343d7453e3aa17c059cd7f70145ce18efa5613bb253320",
+          "unchangedSinceHistorical": true,
+          "anchor": "public ProductView update(",
+          "anchorLine": 102
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "VendorProductIT",
+          "path": "src/test/java/com/uteexpress/catalog/VendorProductIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "ProductServiceTest",
+          "path": "src/test/java/com/uteexpress/catalog/service/ProductServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "VendorProductControllerTest",
+          "path": "src/test/java/com/uteexpress/catalog/controller/VendorProductControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "ProductModelTest",
+          "path": "src/test/java/com/uteexpress/catalog/entity/ProductModelTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.7",
+      "routes": "POST /vendor/products/{id}/images; POST /vendor/products/{id}/images/{imageId}/delete; GET /vendor/products/{id}/images/{imageId}/content; GET /products/{productId}/images/{imageId}/content",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/catalog/controller/VendorProductController.java",
+          "sha256": "c1a3358e67e06df6e7be1fc0049b5c314b5dbd330d16ca6fdf5a920d9c42e3af",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/catalog/service/ProductService.java",
+          "sha256": "f225d7800c84cae840343d7453e3aa17c059cd7f70145ce18efa5613bb253320",
+          "unchangedSinceHistorical": true,
+          "anchor": "public ProductImageView addImage(",
+          "anchorLine": 122
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "VendorProductIT",
+          "path": "src/test/java/com/uteexpress/catalog/VendorProductIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "PublicCatalogIT",
+          "path": "src/test/java/com/uteexpress/catalog/PublicCatalogIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "ProductImagePolicyTest",
+          "path": "src/test/java/com/uteexpress/catalog/service/ProductImagePolicyTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "LocalFileStorageServiceTest",
+          "path": "src/test/java/com/uteexpress/common/storage/LocalFileStorageServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.8",
+      "routes": "GET /; GET /products; GET /products/{id}; GET /categories/{slug}; GET /shops; GET /shops/{slug}",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/catalog/controller/PublicCatalogController.java",
+          "sha256": "3917acbd1a33c3914f9544087b4e1e4a60bd8394a482eaa5c11fa255b8b7adee",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/catalog/service/PublicCatalogService.java",
+          "sha256": "3559a0a4038e24257d0374463ba72a5a3214129340ddd311f2679f70f789820e",
+          "unchangedSinceHistorical": true,
+          "anchor": "public ProductDetailView product(",
+          "anchorLine": 76
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "PublicCatalogIT",
+          "path": "src/test/java/com/uteexpress/catalog/PublicCatalogIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "PublicCatalogControllerTest",
+          "path": "src/test/java/com/uteexpress/catalog/controller/PublicCatalogControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "PublicCatalogServiceTest",
+          "path": "src/test/java/com/uteexpress/catalog/service/PublicCatalogServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.9",
+      "routes": "GET /products với q, shop, category, minPrice, maxPrice, sort, page, size",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/catalog/controller/PublicCatalogController.java",
+          "sha256": "3917acbd1a33c3914f9544087b4e1e4a60bd8394a482eaa5c11fa255b8b7adee",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/catalog/service/PublicCatalogService.java",
+          "sha256": "3559a0a4038e24257d0374463ba72a5a3214129340ddd311f2679f70f789820e",
+          "unchangedSinceHistorical": true,
+          "anchor": "public ProductSearchPage search(",
+          "anchorLine": 55
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "ProductDiscoveryIT",
+          "path": "src/test/java/com/uteexpress/catalog/ProductDiscoveryIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "PublicCatalogControllerTest",
+          "path": "src/test/java/com/uteexpress/catalog/controller/PublicCatalogControllerTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "PublicCatalogServiceTest",
+          "path": "src/test/java/com/uteexpress/catalog/service/PublicCatalogServiceTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.10",
+      "routes": "InventoryService là biên service, không có HTTP controller riêng. Checkout/Order của TD gọi trong transaction nghiệp vụ.",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/catalog/service/InventoryService.java",
+          "sha256": "8954ce1c6917e735e1e5e108a64e9eaffa6d7befd26eb4fe7e5da48bc59e082c",
+          "unchangedSinceHistorical": true,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/java/com/uteexpress/catalog/service/DatabaseInventoryService.java",
+          "sha256": "68dadbdf481136791b72f44513aadff41ff9375f170dc2f7191047a3e2cc235a",
+          "unchangedSinceHistorical": true,
+          "anchor": "public void lockAndCheck(",
+          "anchorLine": 38
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "ProductCatalogIT",
+          "path": "src/test/java/com/uteexpress/catalog/ProductCatalogIT.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "INT-01 evidence và các Checkout/Order IT của TD",
+          "path": null,
+          "present": null,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    },
+    {
+      "function": "5.11",
+      "routes": "Shared templates/static phục vụ các route hiện có; NavbarAuthenticationAdvice bổ sung model, không là business endpoint.",
+      "files": [
+        {
+          "kind": "controller",
+          "path": "src/main/java/com/uteexpress/security/controller/NavbarAuthenticationAdvice.java",
+          "sha256": "2694d165c348fa399555e42bf70d6f5fca264e6086f4891bb32930d55e2344a6",
+          "unchangedSinceHistorical": false,
+          "anchor": null,
+          "anchorLine": null
+        },
+        {
+          "kind": "service",
+          "path": "src/main/resources/static/js/app.js",
+          "sha256": "74aaf1672fde9de5265270556d915b446f78fa82300d2ecda04d27d46f97ab4a",
+          "unchangedSinceHistorical": true,
+          "anchor": "document.querySelectorAll(",
+          "anchorLine": 5
+        }
+      ],
+      "testReferences": [
+        {
+          "original": "UiLayoutTest",
+          "path": "src/test/java/com/uteexpress/ui/UiLayoutTest.java",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "src/test/js/app.test.cjs (7 mới)",
+          "path": "src/test/js/app.test.cjs",
+          "present": true,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        },
+        {
+          "original": "CI171 có40 Node/705 Java",
+          "path": null,
+          "present": null,
+          "execution": "NOT RUN by source audit; narrative/CI references retain historical provenance"
+        }
+      ]
+    }
+  ],
+  "excerpts": [
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/RegistrationService.java",
+      "startLine": 36,
+      "endLine": 48,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "03c47719d6124240f1612afe0db6f58a9010c2f362b58ee254cb5ab8f06a636b",
+      "figure": "figures\\source\\RegistrationService-36.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "03c47719d6124240f1612afe0db6f58a9010c2f362b58ee254cb5ab8f06a636b",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/service/LoginService.java",
+      "startLine": 27,
+      "endLine": 38,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "1ff6076e15065e0cca27faaf33b00fca9040c1f19d3c7a9580da85d1fa1aca2a",
+      "figure": "figures\\source\\LoginService-27.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "1ff6076e15065e0cca27faaf33b00fca9040c1f19d3c7a9580da85d1fa1aca2a",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/filter/JwtAuthenticationFilter.java",
+      "startLine": 52,
+      "endLine": 64,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "6afce6ab375362866292ea3ab1c3acb72413ebbe84adeec492fc2e3b1e9b8e7e",
+      "figure": "figures\\source\\JwtAuthenticationFilter-52.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "6afce6ab375362866292ea3ab1c3acb72413ebbe84adeec492fc2e3b1e9b8e7e",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/web/TokenVersionLogoutHandler.java",
+      "startLine": 20,
+      "endLine": 27,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "7d7105721908a749730c9d921e10b5561fee0d00b0e82cd13dc740d8bc932349",
+      "figure": "figures\\source\\TokenVersionLogoutHandler-20.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "7d7105721908a749730c9d921e10b5561fee0d00b0e82cd13dc740d8bc932349",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/EmailVerificationService.java",
+      "startLine": 72,
+      "endLine": 84,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "fbca0c23bb022be7ba09871ef96f571503a84721cd52774279cdc448de359776",
+      "figure": "figures\\source\\EmailVerificationService-72.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "fbca0c23bb022be7ba09871ef96f571503a84721cd52774279cdc448de359776",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/PasswordResetService.java",
+      "startLine": 55,
+      "endLine": 67,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "ec6811caf5a6aa66957e3ae92a83adfcfbf73bf1a12a91f419ad634ad9fc9c03",
+      "figure": "figures\\source\\PasswordResetService-55.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "ec6811caf5a6aa66957e3ae92a83adfcfbf73bf1a12a91f419ad634ad9fc9c03",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/PasswordResetService.java",
+      "startLine": 76,
+      "endLine": 88,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "ec6811caf5a6aa66957e3ae92a83adfcfbf73bf1a12a91f419ad634ad9fc9c03",
+      "figure": "figures\\source\\PasswordResetService-76.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "ec6811caf5a6aa66957e3ae92a83adfcfbf73bf1a12a91f419ad634ad9fc9c03",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/security/filter/OtpRequestLimitFilter.java",
+      "startLine": 33,
+      "endLine": 43,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "f346de6bce719e0264230225c8692f73d96b7c4fe8bc38cb7bc7e816d0f3b86b",
+      "figure": "figures\\source\\OtpRequestLimitFilter-33.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "f346de6bce719e0264230225c8692f73d96b7c4fe8bc38cb7bc7e816d0f3b86b",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/service/ProfileService.java",
+      "startLine": 45,
+      "endLine": 57,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "a45050fc490693fa609c49f98f268850161b772013e17e994c31e6018e7c477b",
+      "figure": "figures\\source\\ProfileService-45.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "a45050fc490693fa609c49f98f268850161b772013e17e994c31e6018e7c477b",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/identity/service/AccountIdentityService.java",
+      "startLine": 50,
+      "endLine": 62,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "57328c9748ba1335a73fe9d61ee7823ebe0265db87c81d527f41086467f3dc2c",
+      "figure": "figures\\source\\AccountIdentityService-50.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "57328c9748ba1335a73fe9d61ee7823ebe0265db87c81d527f41086467f3dc2c",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/service/ProfileService.java",
+      "startLine": 49,
+      "endLine": 61,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "a45050fc490693fa609c49f98f268850161b772013e17e994c31e6018e7c477b",
+      "figure": "figures\\source\\ProfileService-49.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "a45050fc490693fa609c49f98f268850161b772013e17e994c31e6018e7c477b",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/account/service/AddressService.java",
+      "startLine": 86,
+      "endLine": 98,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "aefe568249291e3255e270f545885f37e71819ddf60e327b7d6226973c6defcf",
+      "figure": "figures\\source\\AddressService-86.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "aefe568249291e3255e270f545885f37e71819ddf60e327b7d6226973c6defcf",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shop/service/ShopRegistrationService.java",
+      "startLine": 44,
+      "endLine": 56,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "001a39483091c5fb61741cbe601299c423ccda7d17032a9ba7643f8fc6763375",
+      "figure": "figures\\source\\ShopRegistrationService-44.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "001a39483091c5fb61741cbe601299c423ccda7d17032a9ba7643f8fc6763375",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/ProductService.java",
+      "startLine": 102,
+      "endLine": 114,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "f225d7800c84cae840343d7453e3aa17c059cd7f70145ce18efa5613bb253320",
+      "figure": "figures\\source\\ProductService-102.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "f225d7800c84cae840343d7453e3aa17c059cd7f70145ce18efa5613bb253320",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/ProductService.java",
+      "startLine": 122,
+      "endLine": 134,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "f225d7800c84cae840343d7453e3aa17c059cd7f70145ce18efa5613bb253320",
+      "figure": "figures\\source\\ProductService-122.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "f225d7800c84cae840343d7453e3aa17c059cd7f70145ce18efa5613bb253320",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/PublicCatalogService.java",
+      "startLine": 76,
+      "endLine": 88,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "3559a0a4038e24257d0374463ba72a5a3214129340ddd311f2679f70f789820e",
+      "figure": "figures\\source\\PublicCatalogService-76.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "3559a0a4038e24257d0374463ba72a5a3214129340ddd311f2679f70f789820e",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/PublicCatalogService.java",
+      "startLine": 55,
+      "endLine": 67,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "3559a0a4038e24257d0374463ba72a5a3214129340ddd311f2679f70f789820e",
+      "figure": "figures\\source\\PublicCatalogService-55.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "3559a0a4038e24257d0374463ba72a5a3214129340ddd311f2679f70f789820e",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/catalog/service/DatabaseInventoryService.java",
+      "startLine": 38,
+      "endLine": 50,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "68dadbdf481136791b72f44513aadff41ff9375f170dc2f7191047a3e2cc235a",
+      "figure": "figures\\source\\DatabaseInventoryService-38.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "68dadbdf481136791b72f44513aadff41ff9375f170dc2f7191047a3e2cc235a",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    },
+    {
+      "path": "src/main/resources/static/js/app.js",
+      "startLine": 5,
+      "endLine": 17,
+      "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "sha256": "33878f951f4be137e2c592da0003a14a1233c54c0e77dc6190e345dd9b45f16a",
+      "figure": "figures\\source\\app-5.png",
+      "verifiedAgainst": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "wholeBlobUnchanged": true,
+      "currentBlobSha256": "74aaf1672fde9de5265270556d915b446f78fa82300d2ecda04d27d46f97ab4a",
+      "historicalHashByteConvention": "Original file bytes, allowing explicitly verified CRLF checkout representation; Git blob hash recorded separately"
+    }
+  ],
+  "fullRegressionRerun": false,
+  "masterPlan": {
+    "path": "D:\\JavaWeb\\Project\\UTEExpress_Master_Project_Plan.docx",
+    "sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+    "matchesOriginalHash": true,
+    "relevantRows": [
+      "DOC-01",
+      "QA-03, DOC-01, DOC-02"
+    ]
+  }
+}

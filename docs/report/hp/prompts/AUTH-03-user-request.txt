@@ -1,0 +1,2059 @@
+Bạn là Senior Spring Boot Security Engineer phụ trách AUTH-03 của project UTEExpress.
+
+REPOSITORY:
+https://github.com/hphuc032/Logistic-UTEExpress
+
+OWNER:
+Hoàng Phúc
+
+TASK:
+AUTH-03 — Email OTP Verification / Account Activation
+
+SPRINT:
+S1
+
+PRIORITY:
+P0
+
+TARGET BRANCH:
+develop
+
+TASK BRANCH:
+feature/auth-03-email-otp
+
+
+==================================================
+1. CURRENT REPOSITORY STATE
+==================================================
+
+Tại thời điểm giao task, develop đã có:
+
+ARCH-01   ✅
+QA-00     ✅
+SEC-01    ✅
+DB-01     ✅
+UI-01     ✅
+ORD-00    ✅
+AUTH-01   ✅
+AUTH-02   ✅
+ADMIN-00  ✅
+ADMIN-04  ✅
+ORD-01    ✅
+
+Develop đã có:
+
+- Java 21
+- Spring Boot 4.1.1
+- Maven Wrapper / Maven 3.9.11
+- Spring MVC
+- Thymeleaf
+- Bootstrap
+- Spring Security
+- PostgreSQL
+- Flyway
+- Testcontainers PostgreSQL 17.6
+- BCrypt PasswordEncoder
+- JWT authentication
+- HttpOnly JWT cookie
+- stateless SecurityContext
+- CSRF CookieCsrfTokenRepository
+- login bằng email hoặc username
+- CurrentAccountIdProvider
+- users
+- roles
+- user_roles
+- audit_logs
+- categories
+- order domain tables
+
+AUTH-01 hiện tạo user:
+
+status = PENDING_VERIFICATION
+email_verified_at = NULL
+token_version = 0
+role = USER
+
+AUTH-02 chỉ cho:
+
+UserStatus.ACTIVE
+
+được authenticate.
+
+UserStatus hiện có:
+
+PENDING_VERIFICATION
+ACTIVE
+LOCKED
+DISABLED
+
+SecurityConfig đã reserve public endpoint:
+
+/verify-otp
+
+AUTH-03 phải hoàn thiện khoảng trống:
+
+PENDING_VERIFICATION
+        ↓
+Email OTP
+        ↓
+Verify thành công
+        ↓
+ACTIVE
+email_verified_at = now
+        ↓
+AUTH-02 login hoạt động
+
+
+==================================================
+2. FIRST ACTION — INSPECT BEFORE CODING
+==================================================
+
+Không code ngay.
+
+Trước tiên:
+
+git fetch origin
+git switch develop
+git pull --ff-only origin develop
+
+Sau đó kiểm tra:
+
+git status
+git log -1 --oneline
+
+Branch AUTH-03 PHẢI được tạo từ latest develop:
+
+git switch -c feature/auth-03-email-otp
+
+Không base trên:
+
+feature/ship-00-rates
+feature/admin-04-categories
+feature/ord-01-domain-core
+hoặc feature branch khác.
+
+Inspect ít nhất:
+
+pom.xml
+
+src/main/java/com/uteexpress/identity/
+- entity/UserEntity.java
+- entity/UserStatus.java
+- repository/UserRepository.java
+- repository/UserRoleRepository.java
+- service/RegistrationService.java
+- service/IdentityAuthenticationService.java
+- controller/RegistrationController.java
+- dto/RegisterForm.java
+- dto/RegistrationOutcome.java
+
+src/main/java/com/uteexpress/security/
+- SecurityConfig.java
+- LoginController / authentication components
+- CurrentAccountIdProvider
+- JWT/filter configuration
+
+src/main/resources/
+- application.yml
+- application-local.yml
+- application-prod.yml
+- templates/auth/register.html
+- templates/auth/login.html
+- shared UI fragments
+
+db/migration/
+
+docs/
+- security.md
+- DATABASE_SCHEMA.md
+- DATABASE_CONVENTIONS.md
+- AUTH-01-completion-report.md
+- AUTH-02-completion-report.md
+
+tests liên quan AUTH-01/AUTH-02.
+
+Sau khi inspect, trả trước:
+
+AUTH-03 IMPLEMENTATION PLAN
+
+bao gồm:
+
+A. Current registration flow
+B. Current authentication/activation boundary
+C. OTP database design
+D. OTP purpose model
+E. OTP generation
+F. OTP hashing
+G. OTP expiration
+H. Failed-attempt policy
+I. Resend/cooldown policy
+J. Registration → OTP integration
+K. Email sending architecture
+L. Verification transaction
+M. User activation transaction
+N. Enumeration-resistance behavior
+O. CSRF behavior
+P. Test strategy
+Q. Existing-test impact
+R. Files expected to change
+
+Sau đó mới code.
+
+
+==================================================
+3. AUTH-03 SCOPE
+==================================================
+
+AUTH-03 PHẢI triển khai:
+
+1. otp_tokens persistence
+2. Flyway migration cho otp_tokens
+3. email verification OTP purpose
+4. cryptographically secure OTP generation
+5. OTP hash storage
+6. OTP expiration
+7. failed-attempt counter
+8. maximum attempts
+9. resend OTP
+10. resend cooldown
+11. email delivery bằng Spring Mail
+12. registration → email verification flow
+13. GET /verify-otp
+14. POST /verify-otp
+15. POST /verify-otp/resend
+16. activate PENDING_VERIFICATION account
+17. set email_verified_at
+18. one-time token semantics
+19. tests
+20. PostgreSQL/Testcontainers integration
+21. documentation
+
+
+==================================================
+4. STRICTLY OUT OF SCOPE
+==================================================
+
+KHÔNG làm:
+
+- forgot password
+- reset password
+- password-reset OTP
+- AUTH-04
+- password change
+- MFA
+- TOTP
+- SMS OTP
+- OAuth
+- Google login
+- refresh token
+- JWT redesign
+- session authentication
+- Redis
+- account lockout policy
+- global rate limiting
+- captcha
+- Admin user management
+- profile
+- address
+- Vendor logic
+- WebSocket
+- Order changes
+- Shipping changes
+
+AUTH-04 sẽ reuse OTP infrastructure cho reset password sau.
+
+Do not implement RESET_PASSWORD purpose behavior now.
+
+
+==================================================
+5. EXISTING DATABASE CONTRACT
+==================================================
+
+DB plan đã định nghĩa:
+
+otp_tokens
+
+fields:
+
+- user_id
+- purpose
+- code_hash
+- expires_at
+- consumed_at
+- attempts
+- sent_at
+
+FK:
+
+user_id -> users.id
+
+Owner:
+
+Hoàng Phúc
+
+
+==================================================
+6. FLYWAY MIGRATION
+==================================================
+
+Không sửa bất kỳ migration đã merge nào.
+
+Current merged max migration phải được inspect lại.
+
+Tại thời điểm giao task hiện có migration mới nhất dạng:
+
+V20260923090000__td_ord01_domain_core.sql
+
+AUTH-03 migration PHẢI:
+
+- unique
+- sort AFTER maximum merged Flyway version
+- giữ đúng naming convention
+
+Ví dụ:
+
+V20260923090100__hp_auth03_email_otp.sql
+
+Nhưng Agent phải inspect thực tế trước khi chọn version.
+
+Nếu migration mới khác đã merge sau khi task bắt đầu:
+đổi version AUTH-03 trước khi push.
+
+Không enable:
+
+out-of-order
+baseline-on-migrate
+ddl-auto=update/create
+
+Hibernate vẫn:
+
+ddl-auto=validate
+
+
+==================================================
+7. OTP_TOKENS TABLE
+==================================================
+
+Recommended schema:
+
+otp_tokens
+
+- id BIGINT identity PK
+- user_id BIGINT NOT NULL
+- purpose VARCHAR(...)
+- code_hash VARCHAR(...)
+- expires_at TIMESTAMPTZ NOT NULL
+- consumed_at TIMESTAMPTZ NULL
+- attempts INTEGER NOT NULL DEFAULT 0
+- sent_at TIMESTAMPTZ NOT NULL
+
+FK:
+
+user_id → users(id)
+
+No cascade delete.
+
+Purpose hiện tại:
+
+EMAIL_VERIFICATION
+
+Dùng VARCHAR + CHECK.
+
+Không dùng PostgreSQL enum.
+
+Index recommended:
+
+(user_id, purpose, sent_at DESC)
+
+Constraints phải validate:
+
+attempts >= 0
+
+expires_at > sent_at
+
+consumed_at is null
+OR consumed_at >= sent_at
+
+code_hash not blank
+
+purpose only contains approved AUTH-03 value.
+
+Không tạo fake RESET_PASSWORD behavior.
+
+
+==================================================
+8. OTP PURPOSE
+==================================================
+
+Tạo enum/application contract rõ ràng.
+
+Ví dụ:
+
+OtpPurpose.EMAIL_VERIFICATION
+
+Không dùng raw arbitrary purpose từ HTTP.
+
+Browser không bao giờ gửi:
+
+purpose=...
+
+rồi quyết định business action.
+
+Purpose phải server-owned.
+
+
+==================================================
+9. OTP FORMAT
+==================================================
+
+OTP:
+
+6 chữ số.
+
+Examples:
+
+004271
+938114
+
+Leading zeros hợp lệ.
+
+Generate bằng:
+
+java.security.SecureRandom
+
+Không dùng:
+
+Random
+Math.random()
+timestamp
+user ID
+email hash
+
+Recommended:
+
+SecureRandom.nextInt(1_000_000)
+
+format:
+
+"%06d"
+
+
+==================================================
+10. OTP GENERATOR TESTABILITY
+==================================================
+
+Không hardcode SecureRandom static xuyên business logic.
+
+Tách abstraction nhỏ, ví dụ:
+
+OtpCodeGenerator
+
+production implementation:
+SecureRandom
+
+tests:
+deterministic stub
+
+Điều này giúp test chính xác:
+
+123456
+
+mà production vẫn secure.
+
+
+==================================================
+11. NEVER STORE RAW OTP
+==================================================
+
+DATABASE KHÔNG ĐƯỢC lưu:
+
+123456
+
+Chỉ lưu hash.
+
+Không log raw OTP.
+
+Không audit raw OTP.
+
+Không trả OTP trong HTTP response.
+
+Không đưa OTP vào:
+
+URL
+query string
+HTML
+JavaScript
+localStorage
+sessionStorage
+
+
+==================================================
+12. OTP HASHING
+==================================================
+
+OTP 6 chữ số có entropy thấp.
+
+Không dùng plain:
+
+SHA256(code)
+
+vì database compromise có thể brute-force 1,000,000 values.
+
+Use keyed HMAC:
+
+HmacSHA256
+
+với server-side secret / pepper.
+
+Configuration:
+
+OTP_PEPPER_BASE64
+
+Decoded pepper:
+
+>= 32 bytes.
+
+Recommended input to MAC:
+
+userId
+purpose
+OTP
+
+Ví dụ canonical input concept:
+
+<userId>:<purpose>:<code>
+
+Store HMAC result dưới dạng:
+
+lowercase hex 64 chars
+hoặc Base64 cố định.
+
+Nếu dùng hex:
+DB code_hash length phù hợp.
+
+Verification phải dùng constant-time comparison:
+
+MessageDigest.isEqual(...)
+
+Không implement custom encryption.
+
+Không reversible-encrypt OTP.
+
+
+==================================================
+13. OTP PEPPER CONFIGURATION
+==================================================
+
+Add application configuration concept:
+
+uteexpress:
+  security:
+    otp:
+      ttl: PT10M
+      resend-cooldown: PT1M
+      max-attempts: 5
+      pepper-base64: ${OTP_PEPPER_BASE64}
+
+Default design:
+
+OTP TTL = 10 phút
+Resend cooldown = 60 giây
+Max attempts = 5
+
+Các giá trị phải config-driven,
+không rải magic numbers khắp code.
+
+Production startup phải reject:
+
+missing pepper
+invalid Base64
+decoded key < 32 bytes
+
+Không log pepper.
+
+
+==================================================
+14. TEST OTP SECRET
+==================================================
+
+Tests được phép dùng TEST-ONLY OTP pepper.
+
+Có thể cấu hình cho Surefire/Failsafe
+tương tự JWT_SECRET_BASE64 hiện tại.
+
+Phải rõ đây là:
+
+test-only
+
+Không dùng test secret làm production default.
+
+
+==================================================
+15. SPRING MAIL
+==================================================
+
+Thêm dependency:
+
+spring-boot-starter-mail
+
+Dùng version do Spring Boot BOM quản lý.
+
+Không pin version riêng nếu không cần.
+
+Không thêm email SDK vendor riêng.
+
+Không hardcode Gmail.
+
+
+==================================================
+16. MAIL CONFIG
+==================================================
+
+Config bằng environment variables.
+
+Recommended:
+
+MAIL_HOST
+MAIL_PORT
+MAIL_USERNAME
+MAIL_PASSWORD
+MAIL_FROM
+
+Có thể thêm:
+
+MAIL_SMTP_AUTH
+MAIL_STARTTLS
+
+nếu cần.
+
+Không commit credential thật.
+
+Update:
+
+.env.example
+
+chỉ placeholder.
+
+Production mail credentials phải đến từ ENV.
+
+
+==================================================
+17. EMAIL FORMAT
+==================================================
+
+AUTH-03 chỉ cần email text đơn giản.
+
+Subject concept:
+
+UTEExpress - Mã xác minh email
+
+Body phải có:
+
+- OTP code
+- expiry duration
+- cảnh báo không chia sẻ mã
+
+Không cần HTML email nếu không cần.
+
+Không đưa:
+
+password
+password hash
+JWT
+tokenVersion
+internal DB ID
+
+vào email.
+
+
+==================================================
+18. EMAIL RECIPIENT
+==================================================
+
+Email recipient PHẢI lấy từ persisted UserEntity/account.
+
+Không tin email arbitrary từ form để quyết định người nhận
+sau khi user đã được resolve.
+
+Flow:
+
+identifier
+→ resolve persisted user
+→ use persisted user.email
+→ send OTP there.
+
+
+==================================================
+19. REGISTRATION INTEGRATION
+==================================================
+
+AUTH-01 hiện:
+
+POST /register
+→ RegistrationService.register(...)
+→ PENDING_VERIFICATION
+
+AUTH-03 phải nối tiếp:
+
+registration success
+→ issue/send EMAIL_VERIFICATION OTP
+→ redirect user sang verification page
+
+Không chuyển user ACTIVE ngay khi register.
+
+
+==================================================
+20. REGISTRATION TRANSACTION BOUNDARY
+==================================================
+
+KHÔNG để SMTP failure rollback account creation.
+
+Registration DB transaction phải hoàn thành độc lập.
+
+Recommended architecture:
+
+RegistrationService.register(...)
+COMMIT
+
+sau đó:
+
+EmailVerificationService.sendVerificationCode(...)
+
+OTP issuance và email delivery phải được thiết kế
+để lỗi SMTP không xóa user vừa đăng ký.
+
+Nếu email gửi thất bại:
+
+- account vẫn PENDING_VERIFICATION
+- user vẫn có thể dùng resend
+- không 500 với exception SMTP thô
+- UI hiển thị safe/generic retry message
+
+Không claim email sent nếu MailSender thực tế failed.
+
+
+==================================================
+21. OTP ISSUANCE TRANSACTION
+==================================================
+
+Tách OTP issuance khỏi HTTP controller.
+
+Recommended components:
+
+OtpCodeGenerator
+OtpHashService
+OtpTokenService
+EmailVerificationService
+VerificationMailService
+
+Không bắt buộc đúng tên,
+nhưng separation phải rõ.
+
+OtpTokenService issue flow:
+
+1. normalize identifier
+2. resolve user
+3. require PENDING_VERIFICATION
+4. inspect latest EMAIL_VERIFICATION token
+5. enforce resend cooldown
+6. generate secure OTP
+7. hash OTP
+8. save token
+9. commit
+10. hand internal delivery object to mail service
+
+Raw OTP chỉ sống trong memory đủ để gửi mail.
+
+
+==================================================
+22. UNKNOWN/INACTIVE ACCOUNT RESEND
+==================================================
+
+Public resend endpoint phải tránh account enumeration.
+
+For:
+
+unknown identifier
+ACTIVE
+LOCKED
+DISABLED
+
+HTTP/UI response không được tiết lộ account existence/status.
+
+Ví dụ generic:
+
+"Nếu tài khoản hợp lệ và cần xác minh, mã xác minh sẽ được gửi đến email đã đăng ký."
+
+Không trả:
+
+"Email không tồn tại"
+"Tài khoản đã bị khóa"
+"Tài khoản đã active"
+
+cho anonymous caller.
+
+
+==================================================
+23. RESEND COOLDOWN
+==================================================
+
+Default:
+
+60 seconds.
+
+Nếu latest token sent_at còn trong cooldown:
+
+KHÔNG tạo token mới.
+
+KHÔNG gửi email mới.
+
+Public response vẫn generic.
+
+Không cần global rate limiting trong AUTH-03.
+
+SEC-02 mới xử lý broader abuse controls.
+
+
+==================================================
+24. MULTIPLE OTP TOKENS
+==================================================
+
+Resend có thể tạo token row mới.
+
+Verification PHẢI chỉ chấp nhận:
+
+latest EMAIL_VERIFICATION token
+
+cho user đó.
+
+Khi token mới được issue:
+
+code cũ không còn hợp lệ về business semantics,
+dù row cũ chưa consumed.
+
+Do not silently verify any historical unexpired code.
+
+
+==================================================
+25. OTP VERIFICATION INPUT
+==================================================
+
+Create form DTO.
+
+Ví dụ:
+
+VerifyOtpForm
+
+fields only:
+
+identifier
+code
+
+Validation:
+
+identifier:
+- not blank
+- safe max length
+
+code:
+- exactly 6 digits
+
+Regex:
+
+^[0-9]{6}$
+
+Browser không được bind:
+
+userId
+purpose
+status
+attempts
+expiresAt
+consumedAt
+emailVerifiedAt
+tokenVersion
+
+
+==================================================
+26. MASS ASSIGNMENT PROTECTION
+==================================================
+
+Use @InitBinder allowed fields
+hoặc equivalent explicit DTO binding.
+
+Only:
+
+identifier
+code
+
+Resend form:
+
+identifier only.
+
+Unknown extra fields phải bị ignore/reject safely.
+
+Tests cần thử:
+
+status=ACTIVE
+userId=1
+attempts=0
+purpose=RESET_PASSWORD
+
+không được ảnh hưởng business logic.
+
+
+==================================================
+27. VERIFY TRANSACTION
+==================================================
+
+Verification phải transactional.
+
+Flow:
+
+1. normalize identifier
+2. resolve user
+3. only PENDING_VERIFICATION can be activated
+4. load latest EMAIL_VERIFICATION OTP with locking
+5. reject consumed
+6. reject expired
+7. reject attempts >= max
+8. hash submitted code
+9. constant-time compare
+10. if wrong:
+    increment attempts atomically
+11. if correct:
+    mark token consumed
+    set user status ACTIVE
+    set email_verified_at = server now
+12. commit atomically
+
+Token success + activation phải nằm cùng DB transaction.
+
+
+==================================================
+28. CONCURRENCY
+==================================================
+
+Avoid double activation / race.
+
+Use appropriate locking.
+
+Recommended:
+
+PESSIMISTIC_WRITE
+
+on latest OTP and/or relevant user row
+during verification.
+
+Two simultaneous correct submissions:
+
+- must not corrupt attempts
+- must not activate twice inconsistently
+- one successful verification is enough
+- second request should safely see already-completed state
+
+Do not rely only on browser behavior.
+
+
+==================================================
+29. FAILED ATTEMPTS
+==================================================
+
+Default max:
+
+5.
+
+Wrong code:
+
+attempts = attempts + 1
+
+At max attempts:
+
+token becomes unusable.
+
+Do not reset attempts from browser.
+
+Do not accept:
+
+attempts
+maxAttempts
+
+from request.
+
+After max attempts:
+
+user may request new OTP subject to resend policy.
+
+
+==================================================
+30. EXPIRED TOKEN
+==================================================
+
+Default TTL:
+
+10 minutes.
+
+Expired OTP:
+
+must never activate user.
+
+Do not extend expiry when code is submitted.
+
+User must resend.
+
+
+==================================================
+31. ONE-TIME USE
+==================================================
+
+Successful token:
+
+consumed_at = now
+
+Consumed OTP must never work again.
+
+Test this explicitly.
+
+
+==================================================
+32. USER ENTITY ACTIVATION
+==================================================
+
+Add narrow domain method to UserEntity,
+for example concept:
+
+activateEmail(Instant now)
+
+Rules:
+
+only:
+
+PENDING_VERIFICATION → ACTIVE
+
+sets:
+
+status = ACTIVE
+email_verified_at = now
+
+Do not allow AUTH-03 to:
+
+ACTIVE → ...
+LOCKED → ACTIVE
+DISABLED → ACTIVE
+
+Do not expose generic public setter:
+
+setStatus(...)
+
+
+==================================================
+33. USER VERSION / UPDATED_AT
+==================================================
+
+Activation must preserve:
+
+@Version optimistic locking semantics
+updated_at semantics
+
+Do not bypass entity version accidentally
+with unsafe native update unless carefully justified.
+
+No browser-controlled version required for OTP verification.
+
+
+==================================================
+34. TOKEN_VERSION
+==================================================
+
+AUTH-03 normally does NOT need to increment token_version.
+
+Reason:
+
+PENDING_VERIFICATION accounts cannot authenticate,
+therefore should have no valid AUTH-02 JWT.
+
+Do not modify JWT design.
+
+If Agent believes activation must increment tokenVersion:
+
+STOP
+OWNER REVIEW REQUIRED
+
+before implementing.
+
+
+==================================================
+35. GET /verify-otp
+==================================================
+
+Public GET.
+
+Render:
+
+templates/auth/verify-otp.html
+
+Use UI-01 shared layout.
+
+Fields:
+
+identifier
+OTP code
+
+Include:
+
+resend form/button
+
+No raw internal values.
+
+Optional server-generated prefill of identifier
+from registration redirect is acceptable.
+
+All user-controlled text rendered with:
+
+th:text / escaped binding
+
+No th:utext for user input.
+
+
+==================================================
+36. POST /verify-otp
+==================================================
+
+Public but CSRF protected.
+
+Valid correct OTP:
+
+activate account
+
+then redirect:
+
+/login?verified=true
+
+or equivalent safe redirect.
+
+No arbitrary redirect query.
+
+No open redirect.
+
+
+==================================================
+37. LOGIN PAGE INTEGRATION
+==================================================
+
+AUTH-02 login page may be updated narrowly.
+
+GET /login?verified=true
+
+may show:
+
+"Xác minh email thành công. Bạn có thể đăng nhập."
+
+Do not alter JWT/auth logic.
+
+Do not automatically log user in after OTP verification.
+
+User should explicitly login.
+
+
+==================================================
+38. POST /verify-otp/resend
+==================================================
+
+Public but CSRF protected.
+
+Input:
+
+identifier only.
+
+Always enumeration-safe.
+
+Response concept:
+
+"If the account is eligible, a verification code has been sent or is still within the resend cooldown."
+
+Do not reveal:
+
+user exists
+status
+exact cooldown state for unknown account
+
+
+==================================================
+39. SECURITYCONFIG
+==================================================
+
+Current SecurityConfig has:
+
+"/verify-otp"
+
+public.
+
+If resend endpoint is:
+
+/verify-otp/resend
+
+add it explicitly.
+
+Prefer:
+
+"/verify-otp",
+"/verify-otp/resend"
+
+over a broad wildcard unless justified.
+
+DO NOT:
+
+csrf.disable()
+
+CSRF must remain enabled.
+
+
+==================================================
+40. CSRF TESTS
+==================================================
+
+POST /verify-otp without CSRF:
+
+403
+
+POST /verify-otp with CSRF:
+
+reaches controller
+
+POST /verify-otp/resend without CSRF:
+
+403
+
+POST /verify-otp/resend with CSRF:
+
+processed
+
+Anonymous GET verify page:
+
+200
+
+
+==================================================
+41. ENUMERATION RESISTANCE
+==================================================
+
+Public behavior should not let attacker distinguish easily:
+
+unknown identifier
+pending account
+active account
+locked account
+disabled account
+
+especially resend endpoint.
+
+Verification failure message should be generic, e.g.:
+
+"Mã xác minh không hợp lệ hoặc đã hết hạn."
+
+Avoid:
+
+"User not found"
+"Email chưa đăng ký"
+"Account locked"
+"OTP exists but is wrong"
+
+
+==================================================
+42. ERROR HANDLING
+==================================================
+
+Never expose:
+
+SQL
+constraint name
+mail password
+SMTP stacktrace
+OTP hash
+OTP pepper
+raw OTP
+internal entity state
+repository exception
+
+Mail failures:
+
+safe user-facing message.
+
+Malformed input:
+
+validation message.
+
+Database conflict:
+
+safe generic handling.
+
+
+==================================================
+43. LOGGING
+==================================================
+
+Never log:
+
+raw OTP
+code_hash
+OTP pepper
+MAIL_PASSWORD
+password
+JWT
+cookie contents
+
+Acceptable safe logs:
+
+OTP delivery failed for userId=<id>
+
+but avoid email/PII unless necessary.
+
+
+==================================================
+44. MAIL TESTING
+==================================================
+
+Automated tests MUST NOT send real Internet email.
+
+Use:
+
+@MockitoBean JavaMailSender
+
+or equivalent capturing fake.
+
+Verify:
+
+- correct persisted email recipient
+- subject expected
+- body contains generated test OTP
+- body contains no password/JWT
+- MailException handled safely
+
+Do not add GreenMail/MailHog dependency unless necessary.
+
+Mailpit/MailHog may be documented for optional local manual testing,
+but not required for CI.
+
+
+==================================================
+45. POSTGRESQL INTEGRATION TESTS
+==================================================
+
+Use Testcontainers PostgreSQL 17.6.
+
+Must test real:
+
+Flyway
+JPA
+transactions
+locking
+constraints
+
+
+==================================================
+46. REQUIRED DATABASE TESTS
+==================================================
+
+At minimum test:
+
+otp_tokens migration exists
+
+FK user_id → users
+
+invalid user_id fails
+
+purpose CHECK
+
+attempts cannot be negative
+
+expires_at must be after sent_at
+
+Flyway validate success
+
+second migrate executes 0 migrations
+
+Hibernate validate succeeds
+
+
+==================================================
+47. REQUIRED OTP INTEGRATION TESTS
+==================================================
+
+Test:
+
+1. issue OTP for PENDING user
+   → row persisted
+
+2. raw OTP != code_hash
+
+3. DB does not contain raw OTP
+
+4. correct OTP
+   → user ACTIVE
+
+5. correct OTP
+   → email_verified_at not null
+
+6. successful OTP
+   → consumed_at set
+
+7. consumed OTP reuse
+   → rejected
+
+8. wrong OTP
+   → attempts increments
+
+9. max attempts
+   → correct code no longer works
+
+10. expired token
+    → rejected
+
+11. resend before cooldown
+    → no new token
+
+12. resend after cooldown
+    → new token
+
+13. after resend:
+    old code rejected
+    new code accepted
+
+14. ACTIVE account resend
+    → no new verification token
+
+15. LOCKED/DISABLED account
+    → never activated
+
+16. concurrent/double verification
+    → no inconsistent activation
+
+
+==================================================
+48. REGISTER → VERIFY → LOGIN ACCEPTANCE TEST
+==================================================
+
+This is the most important end-to-end integration.
+
+Using test mail sender:
+
+1. POST/register valid user
+2. user persisted as PENDING_VERIFICATION
+3. OTP issuance occurs
+4. mail captured
+5. extract TEST OTP from captured mail
+6. AUTH-02 login before verify
+   → denied
+7. verify correct OTP
+8. user becomes ACTIVE
+9. AUTH-02 login after verify
+   → success
+10. JWT cookie issued normally
+
+Do not bypass AUTH-02 authentication in this acceptance test.
+
+
+==================================================
+49. SMTP FAILURE TEST
+==================================================
+
+Simulate JavaMailSender throwing MailException.
+
+After successful registration:
+
+- user MUST still exist
+- status remains PENDING_VERIFICATION
+- no raw exception leaks to UI
+- resend path remains available
+
+Registration must not rollback because SMTP is unavailable.
+
+
+==================================================
+50. RESEND ENUMERATION TEST
+==================================================
+
+Compare HTTP-visible behavior for:
+
+- unknown identifier
+- ACTIVE account
+- PENDING account under cooldown
+
+Should remain intentionally generic.
+
+Do not reveal user existence via response text.
+
+
+==================================================
+51. OTP HASH TESTS
+==================================================
+
+Use deterministic test values.
+
+Verify:
+
+same:
+userId + purpose + code
+→ same HMAC
+
+different user:
+→ different HMAC
+
+different purpose:
+→ different HMAC
+
+different code:
+→ different HMAC
+
+invalid/short pepper:
+→ startup/config failure
+
+raw OTP not equal hash.
+
+
+==================================================
+52. TIME TESTABILITY
+==================================================
+
+OTP expiry/cooldown tests must not rely on:
+
+Thread.sleep(60000)
+
+Use injectable Clock
+or equivalent deterministic time abstraction.
+
+Do not create flaky real-time tests.
+
+If existing JWT Clock bean can be safely reused,
+inspect architecture first.
+
+Do not create duplicate ambiguous Clock beans.
+
+
+==================================================
+53. EXISTING TEST PROFILE
+==================================================
+
+application-test.yml excludes persistence.
+
+Do not break existing HTTP tests.
+
+If AUTH-03 controllers/services create new required beans,
+mock them in existing test contexts where appropriate.
+
+Do not add H2.
+
+Do not use production @Profile hacks
+solely to make tests green.
+
+
+==================================================
+54. ARCHITECTURE RULES
+==================================================
+
+Respect:
+
+Controller → Service → Repository
+
+Controller must not access:
+
+Entity
+Repository
+
+DTO must not expose Entity.
+
+Do not weaken ArchitectureTest broadly.
+
+If a legitimate AUTH-03 dependency violates ArchUnit:
+
+STOP and report:
+
+OWNER REVIEW REQUIRED
+
+before changing architecture rule.
+
+
+==================================================
+55. TRANSACTION DESIGN
+==================================================
+
+Required atomic boundary:
+
+successful OTP verification:
+
+OtpToken consumed
++
+User activation
+
+same transaction.
+
+Mail delivery:
+
+must NOT be part of the registration transaction.
+
+Do not hold unrelated business transactions open
+around SMTP if avoidable.
+
+
+==================================================
+56. NO SESSION STATE
+==================================================
+
+AUTH-02 security is stateless.
+
+AUTH-03 must not introduce authentication/session state.
+
+Do not store verification state in:
+
+HttpSession
+
+OTP state belongs in PostgreSQL.
+
+
+==================================================
+57. NO OTP IN COOKIE
+==================================================
+
+Do not store raw OTP in:
+
+cookie
+JWT
+session
+browser storage
+
+Only identifier/code submission via verified CSRF form.
+
+
+==================================================
+58. MAIL ADDRESS SAFETY
+==================================================
+
+Do not allow header injection.
+
+Mail subject/from are server-controlled.
+
+Recipient comes from persisted normalized account record.
+
+Do not let request choose:
+
+from
+subject
+template
+reply-to
+
+
+==================================================
+59. DOCUMENTATION
+==================================================
+
+Update:
+
+docs/security.md
+
+Create:
+
+docs/AUTH-03-completion-report.md
+
+Document:
+
+- OTP purpose
+- TTL
+- max attempts
+- resend cooldown
+- HMAC hashing
+- OTP pepper environment variable
+- SMTP environment variables
+- registration integration
+- verification flow
+- ACTIVE transition
+- enumeration-safe responses
+- AUTH-04 deferred
+
+
+==================================================
+60. ENV EXAMPLE
+==================================================
+
+Update:
+
+.env.example
+
+Add placeholders only.
+
+Example concept:
+
+OTP_PEPPER_BASE64=replace_with_base64_32_byte_secret
+
+MAIL_HOST=smtp.example.com
+MAIL_PORT=587
+MAIL_USERNAME=replace_me
+MAIL_PASSWORD=replace_me
+MAIL_FROM=no-reply@example.com
+
+No real secrets.
+
+
+==================================================
+61. DEPENDENCY SNAPSHOT
+==================================================
+
+If pom.xml changes for Spring Mail:
+
+update:
+
+docs/dependencies.txt
+
+using deliberate Maven dependency tree regeneration
+consistent with current project process.
+
+
+==================================================
+62. MANUAL LOCAL TEST
+==================================================
+
+Document how developer may use:
+
+real SMTP
+OR local Mailpit/MailHog
+
+without committing credentials.
+
+Do not require external SMTP for unit/integration CI.
+
+
+==================================================
+63. REGRESSION COMMANDS
+==================================================
+
+Run:
+
+.\mvnw.cmd clean test
+
+.\mvnw.cmd package
+
+with Docker running:
+
+.\mvnw.cmd -Ppostgres-it verify
+
+Then:
+
+git diff --check
+git status
+
+All existing modules must remain green.
+
+
+==================================================
+64. POSTGRES-IT IS MERGE GATE
+==================================================
+
+AUTH-03 introduces:
+
+- new table
+- FK
+- persistence
+- transaction behavior
+- account state transition
+
+Therefore:
+
+postgres-it PASS is mandatory.
+
+If Docker unavailable:
+
+READY FOR REVIEW may be YES
+
+READY FOR MERGE = NO
+
+
+==================================================
+65. AUTH-03 ACCEPTANCE CHECKLIST
+==================================================
+
+Before PR verify:
+
+[ ] branch created from latest develop
+[ ] otp_tokens migration after current max
+[ ] raw OTP never stored
+[ ] SecureRandom used
+[ ] OTP = 6 digits
+[ ] HMAC-SHA256 used
+[ ] pepper >= 32 bytes
+[ ] TTL config-driven
+[ ] max attempts config-driven
+[ ] resend cooldown config-driven
+[ ] only latest OTP valid
+[ ] consumed OTP unusable
+[ ] expired OTP unusable
+[ ] max-attempt OTP unusable
+[ ] CSRF remains enabled
+[ ] verify POST CSRF protected
+[ ] resend POST CSRF protected
+[ ] unknown account response generic
+[ ] ACTIVE/LOCKED/DISABLED not activated
+[ ] PENDING → ACTIVE only
+[ ] email_verified_at set
+[ ] registration remains if SMTP fails
+[ ] no OTP/password/JWT logged
+[ ] no raw OTP in browser response
+[ ] AUTH-02 login works after verification
+[ ] login fails before verification
+[ ] no AUTH-04 implementation
+[ ] no reset-password behavior
+[ ] no session auth introduced
+
+
+==================================================
+66. COMMIT STRATEGY
+==================================================
+
+Use meaningful commits.
+
+Suggested:
+
+feat(auth): add email verification OTP persistence
+
+feat(auth): implement OTP verification and activation
+
+feat(auth): integrate registration email delivery
+
+test(auth): cover email OTP lifecycle
+
+docs(auth): document AUTH-03 verification flow
+
+Do not fake-split tiny changes.
+
+
+==================================================
+67. PUSH
+==================================================
+
+Push only feature branch:
+
+git push -u origin feature/auth-03-email-otp
+
+Do not push directly to:
+
+develop
+main
+
+
+==================================================
+68. CREATE PR
+==================================================
+
+Create:
+
+feature/auth-03-email-otp
+        ↓
+develop
+
+Title:
+
+AUTH-03: implement email OTP verification
+
+
+==================================================
+69. PR BODY
+==================================================
+
+Use structure:
+
+## Scope
+
+Email OTP verification and account activation.
+
+## Implemented
+
+- otp_tokens persistence
+- email verification OTP
+- secure 6-digit OTP generation
+- HMAC OTP hashing
+- expiration
+- attempt limits
+- resend cooldown
+- Spring Mail delivery
+- verification UI
+- PENDING_VERIFICATION → ACTIVE
+- email_verified_at
+- registration integration
+
+## Security
+
+- raw OTP never persisted
+- OTP pepper from environment
+- CSRF enabled
+- generic enumeration-safe responses
+- consumed/expired/max-attempt OTP rejected
+- ACTIVE/LOCKED/DISABLED cannot be activated
+- no password/JWT secrets in email/logs
+
+## Deferred
+
+- forgot password → AUTH-04
+- reset password → AUTH-04
+- global abuse/rate limiting → SEC-02
+
+## Verification
+
+List only ACTUAL results.
+
+Never claim PASS if command was not run.
+
+
+==================================================
+70. DO NOT MERGE
+==================================================
+
+Agent MUST NOT merge PR.
+
+No direct commit to:
+
+develop
+main
+
+No:
+
+develop → main PR
+
+
+==================================================
+71. FINAL REPORT FORMAT
+==================================================
+
+Return:
+
+AUTH-03 TASK COMPLETION REPORT
+
+Branch:
+Base:
+Base SHA:
+Head:
+PR:
+PR URL:
+
+DATABASE:
+Migration:
+Table:
+FK:
+Purpose constraint:
+Flyway validate:
+Hibernate validate:
+
+OTP:
+Format:
+Generator:
+Length:
+TTL:
+Max attempts:
+Resend cooldown:
+Latest-token-only:
+One-time use:
+
+HASHING:
+Algorithm:
+Pepper source:
+Minimum pepper size:
+Raw OTP persisted: NO
+Constant-time compare:
+
+EMAIL:
+Dependency:
+Sender:
+SMTP config source:
+Registration auto-send:
+SMTP failure behavior:
+Real email used in tests: NO
+
+REGISTRATION:
+Initial status:
+After registration:
+SMTP failure rolls back user: NO
+
+VERIFICATION:
+Endpoint GET:
+Endpoint POST:
+Resend endpoint:
+CSRF:
+Success transition:
+email_verified_at:
+Login before verification:
+Login after verification:
+
+ENUMERATION:
+Unknown identifier:
+ACTIVE:
+LOCKED:
+DISABLED:
+Public response generic:
+
+SECURITY:
+Session introduced: NO
+JWT changed: NO
+Raw OTP logged: NO
+Raw OTP returned: NO
+AUTH-04 implemented: NO
+
+FILES CREATED:
+- ...
+
+FILES MODIFIED:
+- ...
+
+TESTS:
+OTP unit:
+Hashing:
+Controller:
+CSRF:
+Mail:
+Persistence:
+Attempts:
+Expiry:
+Resend:
+Concurrency:
+Register→verify→login:
+SMTP failure:
+PostgreSQL integration:
+Architecture regression:
+
+BUILD:
+clean test:
+package:
+postgres-it:
+git diff --check:
+
+CI:
+Status:
+Run URL:
+
+DEFERRED:
+AUTH-04:
+SEC-02:
+
+OWNER REVIEW REQUIRED:
+- ...
+
+MAIN MODIFIED:
+NO
+
+DEVELOP DIRECT COMMIT:
+NO
+
+MERGED:
+NO
+
+READY FOR REVIEW:
+YES / NO
+
+READY FOR MERGE:
+YES / NO
+
+READY FOR MERGE MUST BE NO unless:
+
+- clean test PASS
+- package PASS
+- postgres-it PASS
+- CI PASS
+- migration correct
+- no unresolved security blocker
+- no raw OTP persistence/leak

@@ -1,0 +1,47 @@
+{
+  "startedUtc": "2026-11-01T15:03:11.984910+00:00",
+  "scope": "DOC01 isolated screenshots; not full functional regression",
+  "testsRerun": false,
+  "containers": [
+    {
+      "id": "298ae04ecba559de13273419c0316f1478febf7a6f30da724430ffa376aa8f41",
+      "removedAndAbsent": true
+    },
+    {
+      "id": "7c5af9766a4cb4ee934786c48f53cb46f769cd71bab985bc8601723317a936e6",
+      "removedAndAbsent": true
+    }
+  ],
+  "productionDataAccessed": false,
+  "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+  "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+  "migrations": {
+    "count": 28,
+    "latest": "20261028081110",
+    "success": true
+  },
+  "hibernateValidation": "PASS — real app boot with ddl-auto=validate",
+  "before": {
+    "users": 3,
+    "addresses": 0,
+    "product_images": 0,
+    "otp_tokens": 0,
+    "orders": 0,
+    "payments": 0
+  },
+  "browserExitCode": 0,
+  "after": {
+    "users": 3,
+    "addresses": 1,
+    "product_images": 1,
+    "otp_tokens": 1,
+    "orders": 0,
+    "payments": 0
+  },
+  "status": "PASS",
+  "ownedJava": {
+    "pid": 15072,
+    "stopped": true
+  },
+  "finishedUtc": "2026-11-01T15:03:59.883690+00:00"
+}

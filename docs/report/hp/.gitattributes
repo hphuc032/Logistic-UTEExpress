@@ -1,0 +1,10 @@
+# Preserve original prompt bytes; keep generated text/evidence reproducible across OSes.
+* text eol=lf
+*.json text eol=lf
+*.svg text eol=lf
+*.mmd text eol=lf
+figures/source/*.txt text eol=lf
+prompts/*.txt -text whitespace=blank-at-eol,blank-at-eof,space-before-tab,cr-at-eol
+*.docx binary
+*.png binary
+*.jpg binary

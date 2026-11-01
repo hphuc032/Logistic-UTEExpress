@@ -1,0 +1,93 @@
+{
+  "observedAt": "2026-10-29",
+  "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+  "pullRequests": [
+    {
+      "number": 66,
+      "title": "QA-01: verify security acceptance and remediate OTP controls",
+      "state": "closed",
+      "draft": false,
+      "merged": true,
+      "head": "026a29deb6695e23380d0a95c5da68564add004e",
+      "merge": "b538dbc3af17ff80802fa33eea187705c40059fe",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/66"
+    },
+    {
+      "number": 72,
+      "title": "docs: close QA-01 application-security acceptance with deferred gates",
+      "state": "closed",
+      "draft": false,
+      "merged": true,
+      "head": "df4adf42cdcfb3ce89a9ec4b574f764d074b2c73",
+      "merge": "fb7dcebd434c6887396881e9b34df1bf12d8250e",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/72"
+    },
+    {
+      "number": 74,
+      "title": "UI-02: polish responsive layouts and publish browser acceptance evidence",
+      "state": "closed",
+      "draft": false,
+      "merged": true,
+      "head": "4699762b730d0fe7ff99fa30d13075807d5f2e60",
+      "merge": "6315cc3bf831a7c2c05a89c69d7b1a3f5a96c5bd",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/74"
+    },
+    {
+      "number": 69,
+      "title": "test(qa03): post70 integrated seed and source-bound Ops acceptance evidence",
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "19b7e4bdc811b7c6059ce742eb35995830f23f6b",
+      "merge": "415886f4c4b42cead969a778bd0031efbdc659ac",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/69"
+    },
+    {
+      "number": 73,
+      "title": "docs(report): prepare DOC-03 QD chapter and source index (Draft)",
+      "state": "open",
+      "draft": true,
+      "merged": false,
+      "head": "6fa2e04d1ce3a5d2a0155a05fcf00b10b7912a4b",
+      "merge": "5910b8f7be160e4190f05c62502d536dead18704",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/73"
+    },
+    {
+      "number": 70,
+      "title": "fix: support cancelled-paid refunds for QA-02",
+      "state": "closed",
+      "draft": false,
+      "merged": true,
+      "head": "0f54c66c98f2441fa506e0fc1cf6e51fb27fb169",
+      "merge": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/70"
+    }
+  ],
+  "pr70FinalIntegration": {
+    "runId": 40835952516,
+    "jobId": 123320655073,
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40835952516",
+    "head": "0f54c66c98f2441fa506e0fc1cf6e51fb27fb169",
+    "status": "completed",
+    "conclusion": "success",
+    "logEvidence": [
+      "Exact ref 0f54c66c98f2441fa506e0fc1cf6e51fb27fb169",
+      "Starting full-maven",
+      "Starting targeted-refund",
+      "PR70 PASS; sanitized evidence and encrypted raw archive retained"
+    ],
+    "limitation": "No raw encrypted archive decryption or new count inferred by DOC-01; old source-bound counts remain separate."
+  },
+  "standardCi": {
+    "runId": 40835952619,
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40835952619",
+    "status": "success",
+    "head": "0f54c66c98f2441fa506e0fc1cf6e51fb27fb169"
+  },
+  "toolingCi": {
+    "runId": 40835952644,
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40835952644",
+    "status": "success",
+    "head": "0f54c66c98f2441fa506e0fc1cf6e51fb27fb169"
+  }
+}

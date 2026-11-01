@@ -1,0 +1,19 @@
+{
+  "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+  "zipIntegrity": "PASS",
+  "pythonDocxReopen": "PASS",
+  "embeddedImagePlacements": 68,
+  "distinctEmbeddedMedia": 67,
+  "all68ExternalFigureHashesFoundInsideDocx": true,
+  "sourceExcerptEntriesVerified": 19,
+  "newScreenshotFunctions": 14,
+  "historicalScreenshots": 5,
+  "missingFunctionScreenshots": 0,
+  "imageDecode": "PASS",
+  "A4": "210 x297mm; checked section size",
+  "pageNumbers": "PAGE fields present and76 rendered pages",
+  "visualRender": "PASS — Word fallback,76pages; see follow-up scope/limitations",
+  "humanAcceptance": "HUMAN PENDING",
+  "referenceErrors": [],
+  "historicalValidation": "follow-ups/20261101-validation/historical/evidence/structural-validation.json"
+}

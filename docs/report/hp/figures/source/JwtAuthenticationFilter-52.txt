@@ -1,0 +1,13 @@
+    private void authenticate(String token, HttpServletRequest request) {
+        try {
+            JwtIdentity identity = tokens.decode(token);
+            AuthAccountSnapshot account = identities.findByUserId(identity.userId()).orElse(null);
+            if (account == null || !account.active()
+                    || account.tokenVersion() != identity.tokenVersion()) {
+                SecurityContextHolder.clearContext();
+                return;
+            }
+
+            UteExpressPrincipal principal = principalFactory.create(account, false);
+            UsernamePasswordAuthenticationToken authentication =
+                    UsernamePasswordAuthenticationToken.authenticated(

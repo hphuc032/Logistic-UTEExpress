@@ -1,0 +1,13 @@
+    public RegistrationOutcome register(RegistrationCommand command) {
+        String email = command.email().trim();
+        String username = command.username().trim();
+        String normalizedEmail = normalize(email);
+        String normalizedUsername = normalize(username);
+
+        if (userRepository.existsByNormalizedEmail(normalizedEmail)
+                || userRepository.existsByNormalizedUsername(normalizedUsername)) {
+            throw new RegistrationConflictException();
+        }
+
+        RoleEntity userRole = roleRepository.findByCode(DEFAULT_ROLE_CODE)
+                .orElseThrow(() -> new IllegalStateException("Required registration role is missing."));
