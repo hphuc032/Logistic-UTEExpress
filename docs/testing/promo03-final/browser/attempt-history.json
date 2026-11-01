@@ -1,0 +1,74 @@
+[
+  {
+    "directory": "complete-browser-20261029193830",
+    "status": "FAIL",
+    "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+    "environmentReceiptSha256": "e4baabee8fea48ac6bb1a32fde32faaf56d2fb0a909d06d86ec5c39321ce1f69",
+    "browserResultsSha256": "3794bf2787571cc723425b9bee7681893207ac6de0d75269c68e2f939fefa95f",
+    "counts": {
+      "PASS": 0,
+      "FAIL": 1
+    },
+    "cleanup": {
+      "applicationExitCode": 1,
+      "ownedContainerRemoveExitCode": 0,
+      "ownedContainerAbsent": true,
+      "unrelatedResourcesDeleted": false
+    },
+    "cause": "Harness: expand mobile workspace menu before click"
+  },
+  {
+    "directory": "complete-browser-20261029193956",
+    "status": "FAIL",
+    "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+    "environmentReceiptSha256": "4f285679416ae04e52a483ed899a26399d0180e6a5efcf115976dbec4052d559",
+    "browserResultsSha256": "0676cca2511cbe24b6226a793b4195544b9661a2c1ff28c8ae4665d2fc553df0",
+    "counts": {
+      "PASS": 0,
+      "FAIL": 1
+    },
+    "cleanup": {
+      "applicationExitCode": 1,
+      "ownedContainerRemoveExitCode": 0,
+      "ownedContainerAbsent": true,
+      "unrelatedResourcesDeleted": false
+    },
+    "cause": "Harness: scope CSRF selector to main form instead of matching logout form too"
+  },
+  {
+    "directory": "complete-browser-20261029194113",
+    "status": "PASS",
+    "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+    "environmentReceiptSha256": "e1dcb3230feaf2cb984d8e5de28dfdf8218bbc6245e7847b530ca12e7d16f0a3",
+    "browserResultsSha256": "ffa641ccc356c8dc5072a356859c66a28d429dffadfd60c34323b7598a1fc7bb",
+    "counts": {
+      "PASS": 33,
+      "FAIL": 0
+    },
+    "cleanup": {
+      "applicationExitCode": 1,
+      "ownedContainerRemoveExitCode": 0,
+      "ownedContainerAbsent": true,
+      "unrelatedResourcesDeleted": false
+    },
+    "cause": null
+  },
+  {
+    "directory": "complete-browser-20261029194511",
+    "status": "PASS",
+    "source": "15fb1dda4656892cbb477b4c0e47753bed6a66fc",
+    "environmentReceiptSha256": "09dc4fac13574ff928ef44c36ab83762ad7d8a4a08cba7c6e198a7074d459dbf",
+    "browserResultsSha256": "606b3459a9712ef2a3ff524949cc904596e1d8fb24891e29884a302f908b948a",
+    "counts": {
+      "PASS": 33,
+      "FAIL": 0
+    },
+    "cleanup": {
+      "applicationExitCode": 1,
+      "ownedContainerRemoveExitCode": 0,
+      "ownedContainerAbsent": true,
+      "unrelatedResourcesDeleted": false
+    },
+    "cause": null
+  }
+]

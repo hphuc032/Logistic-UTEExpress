@@ -15,7 +15,7 @@
         <a th:href="@{/products}">Xem tất cả</a>
     </div>
     <div th:if="${#lists.isEmpty(shop.products)}"
-         th:replace="~{fragments/components :: emptyState('Chưa có sản phẩm', 'Cửa hàng hiện chưa có sản phẩm công khai.')}"></div>
+         th:insert="~{fragments/components :: emptyState('Chưa có sản phẩm', 'Cửa hàng hiện chưa có sản phẩm công khai.')}"></div>
     <div class="row g-4" th:unless="${#lists.isEmpty(shop.products)}">
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3" th:each="product : ${shop.products}">
             <article th:replace="~{fragments/catalog :: productCard(${product})}"></article>

@@ -1,0 +1,10 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout/base :: layout(~{::title}, ~{::section})}">
+<head><title>Quản trị khuyến mãi | UTEExpress</title></head><body><section class="app-page-section">
+<a class="app-back-link" th:href="@{/admin/dashboard}">← Dashboard Admin</a>
+<h1>Khuyến mãi sản phẩm</h1><p>Chọn sản phẩm để quản lý lịch giảm giá. Tạo/sửa yêu cầu sản phẩm ACTIVE và cửa hàng APPROVED; lịch cũ vẫn có thể xem và tắt.</p>
+<form method="get" th:action="@{/admin/promotions}" class="d-flex gap-2 mb-3"><label class="visually-hidden" for="q">Tìm sản phẩm</label><input id="q" name="q" class="form-control" maxlength="100" th:value="${catalog.query}" placeholder="Tên sản phẩm"><button class="btn btn-app-primary">Tìm</button></form>
+<p th:if="${#lists.isEmpty(catalog.items)}">Không có sản phẩm phù hợp.</p>
+<div class="table-responsive"><table class="table"><thead><tr><th>Sản phẩm</th><th>Cửa hàng</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody><tr th:each="product : ${catalog.items}"><td th:text="${product.name}"></td><td th:text="${product.shopId}"></td><td th:text="${product.status}"></td><td><a class="btn btn-sm btn-app-secondary" th:href="@{/admin/promotions/products/{id}(id=${product.id})}">Quản lý lịch</a></td></tr></tbody></table></div>
+<nav aria-label="Phân trang sản phẩm" class="d-flex gap-3"><a th:if="${catalog.hasPrevious}" th:href="@{/admin/promotions(q=${catalog.query},page=${catalog.page - 1})}">Trang trước</a><a th:if="${catalog.hasNext}" th:href="@{/admin/promotions(q=${catalog.query},page=${catalog.page + 1})}">Trang sau</a></nav>
+</section></body></html>
