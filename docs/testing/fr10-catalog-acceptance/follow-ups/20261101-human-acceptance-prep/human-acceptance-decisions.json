@@ -1,0 +1,493 @@
+{
+  "decisionSource": "Direct HP responses to three explicit manual-check questions in this conversation",
+  "reviewer": "HP (requesting project owner)",
+  "reportedBrowser": "brave",
+  "browserVersion": null,
+  "device": null,
+  "os": null,
+  "metadataLimitation": "HP supplied only the browser name. Version, device and OS were not supplied and are not inferred.",
+  "responsesReceivedNoLaterThanUtc": "2026-11-01T06:57:21Z",
+  "timestampSource": "clock tool observation after receipt; not claimed as exact observation or signature time",
+  "browserResponseReceivedNoLaterThanUtc": "2026-11-01T06:58:14Z",
+  "browserQuestionItemId": "[\"request_user_input_async\",\"call_98df3d92a9b24f0f832144c8d38a2660\",0]",
+  "browserAnswerVerbatim": "brave",
+  "testedSource": "4d57f30d7309a6d297b945b48e2d8b5a97a07cb7",
+  "jarSha256": "0a57193273f330b028c134b196977b626c643b7582de3e7a8aefcc23046acc36",
+  "manualSessionBaseUrl": "http://127.0.0.1:62551",
+  "sessionReadyUtc": "2026-11-01T06:55:24.172606+00:00",
+  "sessionClosedUtc": "2026-11-01T06:57:44.011243+00:00",
+  "answers": [
+    {
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "items": "H01–H12",
+      "answer": "Đã tự kiểm tra: H01–H12 đều PASS",
+      "questionItemId": "[\"request_user_input_async\",\"call_ef035426009343dead032b4afeef6fa8\",0]"
+    },
+    {
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "items": "H01–H12",
+      "answer": "Đã tự kiểm tra: H01–H12 đều PASS",
+      "questionItemId": "[\"request_user_input_async\",\"call_ef035426009343dead032b4afeef6fa8\",1]"
+    },
+    {
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "items": "H01–H12",
+      "answer": "Đã tự kiểm tra: H01–H12 đều PASS",
+      "questionItemId": "[\"request_user_input_async\",\"call_ef035426009343dead032b4afeef6fa8\",2]"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "H01-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H01-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H01-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H02-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H02-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H02-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H03-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H03-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H03-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H04-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H04-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H04-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H05-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H05-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H05-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H06-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H06-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H06-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H07-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H07-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H07-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H08-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H08-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H08-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H09-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H09-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H09-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H10-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H10-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H10-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H11-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H11-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H11-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H12-375",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H12-768",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    },
+    {
+      "id": "H12-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "result": "PASS",
+      "reviewer": "HP",
+      "actualObserved": "HP explicitly reported all H01–H12 checks PASS at this viewport after the manual instructions. No additional observation detail was supplied.",
+      "individualObservationTimestamp": null,
+      "signature": null
+    }
+  ],
+  "summary": {
+    "pass": 36,
+    "fail": 0,
+    "blocked": 0,
+    "notRun": 0
+  },
+  "signatureBoundary": "No handwritten/digital signature supplied or generated. These are explicit chat decisions only.",
+  "independentAuthorizedReview": "PENDING; this human self-report is not TD independent verification",
+  "finalFR10Acceptance": "NOT DECLARED",
+  "readyStatusAuthorization": "NOT REQUESTED; required independent review not yet present",
+  "mergeAuthorization": "NOT SUPPLIED; requires separate AUTHORIZE MERGE PR #77"
+}

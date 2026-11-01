@@ -1,0 +1,1211 @@
+{
+  "checkedUtc": "2026-11-01T06:51:08.552197+00:00",
+  "pr": {
+    "number": 77,
+    "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/77",
+    "title": "FR-10: document Catalog browser acceptance and open empty-state finding",
+    "state": "open",
+    "draft": true,
+    "head": "451506f9bf535f33f286a613a1b48aa2d5bd5cc7",
+    "headBranch": "codex/fr-10-catalog-acceptance",
+    "base": "4d57f30d7309a6d297b945b48e2d8b5a97a07cb7",
+    "baseBranch": "develop",
+    "mergeable": true,
+    "mergeableState": "blocked",
+    "author": "hphuc032"
+  },
+  "commits": [
+    {
+      "sha": "2b7d4eb780f4d48f5684a1a999a9d92c4e82f203",
+      "subject": "test: FR-10 record Catalog browser evidence and manual gates"
+    },
+    {
+      "sha": "2efd30767c9c24c5354c7f656d5b0826b979a9dc",
+      "subject": "Merge remote-tracking branch 'origin/develop' into codex/fr-10-catalog-acceptance"
+    },
+    {
+      "sha": "451506f9bf535f33f286a613a1b48aa2d5bd5cc7",
+      "subject": "test(fr10): verify Catalog fix on latest develop with preserved evidence"
+    }
+  ],
+  "files": [
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/.gitattributes",
+      "status": "added",
+      "additions": 3,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/README.md",
+      "status": "added",
+      "additions": 46,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/acceptance-status.json",
+      "status": "added",
+      "additions": 44,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/artifact-manifest.json",
+      "status": "added",
+      "additions": 535,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/browser-results.json",
+      "status": "added",
+      "additions": 1493,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/database-observation.json",
+      "status": "added",
+      "additions": 281,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/dataset-manifest.json",
+      "status": "added",
+      "additions": 161,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/execution-receipt.json",
+      "status": "added",
+      "additions": 3511,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-CATEGORY-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-CATEGORY-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-CATEGORY-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-EMPTY-CATEGORY-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-EMPTY-CATEGORY-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-EMPTY-CATEGORY-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-EMPTY-SHOP-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-EMPTY-SHOP-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-EMPTY-SHOP-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-ESCAPING-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-ESCAPING-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-ESCAPING-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-HOME-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-HOME-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-HOME-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-KEYBOARD-MENU-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-KEYBOARD-MENU-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-KEYBOARD-MENU-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-MEDIA-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-MEDIA-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-MEDIA-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-MEDIA-FOREIGN-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-MEDIA-FOREIGN-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-MEDIA-FOREIGN-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NAVIGATION-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NAVIGATION-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NAVIGATION-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NONPUBLIC-CATEGORY-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NONPUBLIC-CATEGORY-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NONPUBLIC-CATEGORY-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NONPUBLIC-PRODUCT-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NONPUBLIC-PRODUCT-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NONPUBLIC-PRODUCT-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NONPUBLIC-SHOP-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NONPUBLIC-SHOP-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-NONPUBLIC-SHOP-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-PRODUCT-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-PRODUCT-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-PRODUCT-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SAFE-ERROR-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SAFE-ERROR-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SAFE-ERROR-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SECURITY-SMOKE-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SECURITY-SMOKE-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SECURITY-SMOKE-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SHOP-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SHOP-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SHOP-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SHOPS-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SHOPS-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-SHOPS-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-ZERO-STOCK-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-ZERO-STOCK-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/screenshots/CAT-ZERO-STOCK-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/baseline-1/source-proof.json",
+      "status": "added",
+      "additions": 15,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/browser-results.json",
+      "status": "added",
+      "additions": 249,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/database-observation.json",
+      "status": "added",
+      "additions": 281,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/dataset-manifest.json",
+      "status": "added",
+      "additions": 161,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/execution-receipt.json",
+      "status": "added",
+      "additions": 3511,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-CATEGORY-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-CATEGORY-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-CATEGORY-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-HOME-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-HOME-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-HOME-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-SHOP-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-SHOP-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-SHOP-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-SHOPS-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-SHOPS-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/screenshots/CAT-POPULATED-SHOPS-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/empty-state-3/source-proof.json",
+      "status": "added",
+      "additions": 18,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/menu-recheck-2/browser-results.json",
+      "status": "added",
+      "additions": 114,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/menu-recheck-2/database-observation.json",
+      "status": "added",
+      "additions": 281,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/menu-recheck-2/dataset-manifest.json",
+      "status": "added",
+      "additions": 161,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/menu-recheck-2/execution-receipt.json",
+      "status": "added",
+      "additions": 3511,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/menu-recheck-2/screenshots/CAT-KEYBOARD-MENU-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/menu-recheck-2/screenshots/CAT-KEYBOARD-MENU-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/menu-recheck-2/screenshots/CAT-KEYBOARD-MENU-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/attempts/menu-recheck-2/source-proof.json",
+      "status": "added",
+      "additions": 18,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/browser-results.json",
+      "status": "added",
+      "additions": 1940,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/coverage-matrix.md",
+      "status": "added",
+      "additions": 74,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/dependency-matrix.md",
+      "status": "added",
+      "additions": 21,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/execution-receipt.json",
+      "status": "added",
+      "additions": 84,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/findings.md",
+      "status": "added",
+      "additions": 37,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/.gitattributes",
+      "status": "added",
+      "additions": 3,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/README.md",
+      "status": "added",
+      "additions": 38,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/artifact-manifest.json",
+      "status": "added",
+      "additions": 948,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/browser-results.json",
+      "status": "added",
+      "additions": 1830,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/database-observation.json",
+      "status": "added",
+      "additions": 281,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/dataset-manifest.json",
+      "status": "added",
+      "additions": 161,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/execution-receipt.json",
+      "status": "added",
+      "additions": 3601,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-CATEGORY-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-CATEGORY-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-CATEGORY-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-EMPTY-CATEGORY-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-EMPTY-CATEGORY-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-EMPTY-CATEGORY-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-EMPTY-SHOP-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-EMPTY-SHOP-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-EMPTY-SHOP-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-ESCAPING-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-ESCAPING-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-ESCAPING-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-HOME-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-HOME-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-HOME-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-KEYBOARD-MENU-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-KEYBOARD-MENU-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-KEYBOARD-MENU-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-MEDIA-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-MEDIA-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-MEDIA-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-MEDIA-FOREIGN-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-MEDIA-FOREIGN-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-MEDIA-FOREIGN-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NAVIGATION-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NAVIGATION-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NAVIGATION-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NONPUBLIC-CATEGORY-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NONPUBLIC-CATEGORY-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NONPUBLIC-CATEGORY-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NONPUBLIC-PRODUCT-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NONPUBLIC-PRODUCT-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NONPUBLIC-PRODUCT-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NONPUBLIC-SHOP-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NONPUBLIC-SHOP-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-NONPUBLIC-SHOP-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-CATEGORY-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-CATEGORY-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-CATEGORY-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-HOME-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-HOME-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-HOME-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-SHOP-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-SHOP-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-SHOP-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-SHOPS-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-SHOPS-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-POPULATED-SHOPS-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-PRODUCT-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-PRODUCT-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-PRODUCT-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SAFE-ERROR-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SAFE-ERROR-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SAFE-ERROR-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SECURITY-SMOKE-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SECURITY-SMOKE-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SECURITY-SMOKE-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SHOP-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SHOP-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SHOP-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SHOPS-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SHOPS-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-SHOPS-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-ZERO-STOCK-1440.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-ZERO-STOCK-375.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/screenshots/CAT-ZERO-STOCK-768.png",
+      "status": "added",
+      "additions": 0,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/attempt-1/source-proof.json",
+      "status": "added",
+      "additions": 22,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/coverage-matrix.md",
+      "status": "added",
+      "additions": 76,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/historical-preservation.json",
+      "status": "added",
+      "additions": 446,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/human-acceptance-checklist.md",
+      "status": "added",
+      "additions": 147,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/regression-results.json",
+      "status": "added",
+      "additions": 688,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/report-addendum.md",
+      "status": "added",
+      "additions": 130,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/runner/catalog-browser.cjs",
+      "status": "added",
+      "additions": 135,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/runner/run_catalog_acceptance_v2.py",
+      "status": "added",
+      "additions": 113,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/follow-ups/20261101-4d57f30/validate_packet.py",
+      "status": "added",
+      "additions": 85,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/github-snapshot.json",
+      "status": "added",
+      "additions": 79,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/human-acceptance-checklist.md",
+      "status": "added",
+      "additions": 147,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/latest-dependency-observation.json",
+      "status": "added",
+      "additions": 46,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/prior-runners/attempt-1/catalog-browser.cjs",
+      "status": "added",
+      "additions": 122,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/prior-runners/attempt-1/run_catalog_acceptance.py",
+      "status": "added",
+      "additions": 109,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/prior-runners/attempt-2/catalog-browser.cjs",
+      "status": "added",
+      "additions": 124,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/prior-runners/attempt-2/run_catalog_acceptance.py",
+      "status": "added",
+      "additions": 109,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/regression-results.json",
+      "status": "added",
+      "additions": 75,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/report.md",
+      "status": "added",
+      "additions": 50,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/runner/catalog-browser.cjs",
+      "status": "added",
+      "additions": 135,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/runner/run_catalog_acceptance.py",
+      "status": "added",
+      "additions": 109,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/source-proof.json",
+      "status": "added",
+      "additions": 72,
+      "deletions": 0
+    },
+    {
+      "path": "docs/testing/fr10-catalog-acceptance/validation.json",
+      "status": "added",
+      "additions": 17,
+      "deletions": 0
+    }
+  ],
+  "comments": [],
+  "inlineComments": [],
+  "checks": [
+    {
+      "name": "PR70 Java PostgreSQL refund regression",
+      "status": "completed",
+      "conclusion": "skipped",
+      "html_url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/41281723267/job/124774829581"
+    },
+    {
+      "name": "Maven test and package",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/41281723157/job/124774828039"
+    }
+  ],
+  "protection": {
+    "requiredChecks": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_status_checks",
+      "strict": true,
+      "contexts": [
+        "Maven test and package"
+      ],
+      "contexts_url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_status_checks/contexts",
+      "checks": [
+        {
+          "context": "Maven test and package",
+          "app_id": 15368
+        }
+      ]
+    },
+    "reviews": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_pull_request_reviews",
+      "dismiss_stale_reviews": true,
+      "require_code_owner_reviews": false,
+      "require_last_push_approval": false,
+      "required_approving_review_count": 1
+    },
+    "enforceAdmins": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/enforce_admins",
+      "enabled": true
+    }
+  },
+  "permittedMergeStrategies": {
+    "allow_merge_commit": true,
+    "allow_squash_merge": true,
+    "allow_rebase_merge": true
+  },
+  "reviewThreads": [],
+  "reviews": []
+}
