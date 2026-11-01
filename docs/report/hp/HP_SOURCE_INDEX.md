@@ -1,3 +1,13 @@
+# Đối chiếu source hiện tại ngày 01/11/2026
+
+Accepted develop `a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473`. [Audit 19 chức năng và anchors hiện tại](evidence/follow-ups/20261101-validation/source-validation.json). 19 whole Git blobs của các trích code lịch sử không đổi; hình/excerpts bên dưới vẫn mang SHA cũ, không được relabel thành capture mới. `app.js` historical SHA dùng CRLF checkout bytes; audit ghi riêng SHA của LF Git blob.
+
+14 [ảnh mới và giới hạn](evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json) dùng source/JAR mới; 5 ảnh UI-02 vẫn là lịch sử. Mục 5.2 được làm rõ: `AccountIdentityService.changePassword` gọi `UserEntity.changePassword` rồi delegate `resetPassword`. Navigation hiện có role-aware workspace links. Admin product-promotion/PLATFORM voucher đã được merge qua PR78; ownership phần commerce và policy không thay đổi. ProductSort vẫn chỉ 4 lựa chọn, chưa có highestRated; flow shop editing/logo/banner vẫn chưa hiện thực.
+
+Git governance hiện tại: [live audit](evidence/follow-ups/20261101-validation/github-live-audit.json) ghi approval0 và conversation resolution ON theo quyết định HP, CI/strict/Admin/force-push protections giữ nguyên. Review/merge của PR76 vẫn HUMAN PENDING.
+
+## Chỉ mục trích dẫn lịch sử được bảo toàn
+
 # HP source index
 
 Snapshot `6a26370659a2fa7b95c6a1d00d2598820de6bb34`. Master Plan `18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a`.

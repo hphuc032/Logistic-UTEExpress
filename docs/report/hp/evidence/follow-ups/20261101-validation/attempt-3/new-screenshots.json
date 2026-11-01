@@ -1,0 +1,273 @@
+{
+  "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+  "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+  "captureOnlyNotFullRegression": true,
+  "screenshots": [
+    {
+      "function": "4.3",
+      "path": "figures/screenshots/current/attempt-3/doc01-4-3.png",
+      "route": "/user/profile",
+      "role": "USER",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:42.831Z",
+      "browser": "156.0.8078.74",
+      "observation": "Protected profile rendered after actual password login and JWT cookie restoration.",
+      "limitations": "No token/cookie values captured; screenshot alone does not prove every JWT negative case.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "ecce0cbfd7921325b65014323abc0c0321688dd611eded17a2bae74a927ad795"
+    },
+    {
+      "function": "5.1",
+      "path": "figures/screenshots/current/attempt-3/doc01-5-1.png",
+      "route": "/user/profile",
+      "role": "USER",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:42.903Z",
+      "browser": "156.0.8078.74",
+      "observation": "Own profile form and display identity rendered.",
+      "limitations": "No profile mutation or foreign-owner acceptance inferred.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "ecce0cbfd7921325b65014323abc0c0321688dd611eded17a2bae74a927ad795"
+    },
+    {
+      "function": "5.2",
+      "path": "figures/screenshots/current/attempt-3/doc01-5-2.png",
+      "route": "/user/profile",
+      "role": "USER",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:43.010Z",
+      "browser": "156.0.8078.74",
+      "observation": "Password-change form rendered with all password inputs empty.",
+      "limitations": "Password-change transaction not executed in this capture.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "6cc66268de2302b87b0b22e3eb4a2dd943ebdb53f108b52af198d15324b85f37"
+    },
+    {
+      "function": "5.3",
+      "path": "figures/screenshots/current/attempt-3/doc01-5-3.png",
+      "route": "/user/profile",
+      "role": "USER",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:44.887Z",
+      "browser": "156.0.8078.74",
+      "observation": "Real fixture avatar upload redirected and own content endpoint returned 200.",
+      "limitations": "Isolated synthetic fixture only; deployed ACL and all hostile uploads not tested.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "ed4ca2e9ee42740740f8bee5beafdaa333bedd0d5660873106fc7bd646d2dc49"
+    },
+    {
+      "function": "5.4",
+      "path": "figures/screenshots/current/attempt-3/doc01-5-4.png",
+      "route": "/user/addresses",
+      "role": "USER",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:46.729Z",
+      "browser": "156.0.8078.74",
+      "observation": "Address create POST302/GET200; first address shows default state.",
+      "limitations": "DB default and ownership source reviewed; no full address concurrency suite rerun.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "4b33243e8020889ba1d4997338c56ef645f3aa8c014f5dc7fe26f8a27dc56718"
+    },
+    {
+      "function": "5.5",
+      "path": "figures/screenshots/current/attempt-3/doc01-5-5.png",
+      "route": "/user/shop/register",
+      "role": "USER",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:47.596Z",
+      "browser": "156.0.8078.74",
+      "observation": "Shop application form rendered for current USER without an owned shop.",
+      "limitations": "No shop approval or application submission is claimed.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "7f37bfa22d41b01809e43874e88a7d28bd6a3556cb5dcd2fceac04f86f055dec"
+    },
+    {
+      "function": "4.4",
+      "path": "figures/screenshots/current/attempt-3/doc01-4-4.png",
+      "route": "/login?logout=true",
+      "role": "anonymous",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:48.382Z",
+      "browser": "156.0.8078.74",
+      "observation": "Real POST logout redirected to login; later protected GET returned 401.",
+      "limitations": "No raw JWT replay was captured; cross-device invalidation is source/test evidence, not screenshot proof.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "d466bb9e0ca77c8ba77a0f2f1b33e95f0ab087689fc0a2af3c9acbe4d7fcb0b5"
+    },
+    {
+      "function": "4.5",
+      "path": "figures/screenshots/current/attempt-3/doc01-4-5.png",
+      "route": "/verify-otp/resend",
+      "role": "anonymous",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:49.906Z",
+      "browser": "156.0.8078.74",
+      "observation": "Verification/resend UI after real CSRF-protected POST200, matching controller view contract; code field empty.",
+      "limitations": "Loopback Mailpit only; no public SMTP, activation or raw OTP screenshot.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "da88c385e09b1837b5b80e7949354bf79af6cbaf84f0c2f3c45ac4017241cd25"
+    },
+    {
+      "function": "4.6",
+      "path": "figures/screenshots/current/attempt-3/doc01-4-6.png",
+      "route": "/reset-password?requested=true",
+      "role": "anonymous",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:51.316Z",
+      "browser": "156.0.8078.74",
+      "observation": "Unknown-email request received generic redirect/reset requested message.",
+      "limitations": "Single response does not prove timing indistinguishability.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "d2ea9f06428eaec27ee234fdcaeaf1e76497beb2b3b8d0e76bfdab3e784fa485"
+    },
+    {
+      "function": "4.7",
+      "path": "figures/screenshots/current/attempt-3/doc01-4-7.png",
+      "route": "/reset-password",
+      "role": "anonymous",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:52.009Z",
+      "browser": "156.0.8078.74",
+      "observation": "Reset form rendered, OTP and password fields empty.",
+      "limitations": "Successful reset transaction not executed; refer to existing AUTH-04 tests.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "cc65a451288870cecfeb24972f1251557ee540a7277b23452c19b920b88154bc"
+    },
+    {
+      "function": "4.8",
+      "path": "figures/screenshots/current/attempt-3/doc01-4-8.png",
+      "route": "/user/profile",
+      "role": "anonymous",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:52.662Z",
+      "browser": "156.0.8078.74",
+      "observation": "Protected GET401 visible; separate unsafe request without CSRF returned403.",
+      "limitations": "Single 401/403 example, not all RBAC or OTP rate-limit controls.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "9292ccf0b3c324d8aa583b66ff9dcfbf0c9818e16723b30b14994453ae0b9323"
+    },
+    {
+      "function": "5.6",
+      "path": "figures/screenshots/current/attempt-3/doc01-5-6.png",
+      "route": "/vendor/products",
+      "role": "VENDOR",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:55.078Z",
+      "browser": "156.0.8078.74",
+      "observation": "Owned shop product list rendered from isolated PostgreSQL fixture.",
+      "limitations": "No create/update/delete CRUD journey claimed.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "2b495d48c2c8065a7cf088000d0d2b8cc97187bd09fc04bdce7ec02d0a601d70"
+    },
+    {
+      "function": "5.7",
+      "path": "figures/screenshots/current/attempt-3/doc01-5-7.png",
+      "route": "/vendor/products/1/edit",
+      "role": "VENDOR",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:56.755Z",
+      "browser": "156.0.8078.74",
+      "observation": "Image upload POST302 and own image GET200; management UI displayed.",
+      "limitations": "Foreign image/visibility matrix not rerun; source contract retained.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "ece1aa58db4fa5fe8e03df8182f03b6b04eeb66c350aad77ac0ae96691b2e147"
+    },
+    {
+      "function": "5.9",
+      "path": "figures/screenshots/current/attempt-3/doc01-5-9.png",
+      "route": "/products?q=DOC01&sort=priceAsc&page=0&size=6",
+      "role": "public as VENDOR",
+      "viewport": {
+        "width": 1280,
+        "height": 900
+      },
+      "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+      "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+      "capturedUtc": "2026-11-01T15:03:57.629Z",
+      "browser": "156.0.8078.74",
+      "observation": "Actual filtered/sorted catalog with page size6 from 13 fixture products.",
+      "limitations": "Screenshot illustrates query/results; full search matrix not rerun.",
+      "status": "PASS",
+      "newCaptureInDoc01": true,
+      "sha256": "3e6943d6316845f49451f057fc10f6489c94acebe5529d1e7cd39c4b77a58136"
+    }
+  ]
+}

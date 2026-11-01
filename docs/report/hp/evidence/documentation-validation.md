@@ -1,4 +1,59 @@
-# DOC-01 — Kiểm tra tài liệu phần HP
+# DOC-01 current validation ngày 01/11/2026
+
+**READY FOR HUMAN REVIEW — PR76 vẫn DRAFT, chưa approve/merge hoặc final acceptance.**
+Phần cập nhật này thay thế các nhãn missing/render blocker của snapshot29/10 bên dưới; không sửa hoặc relabel kết quả lịch sử.
+
+## Current source và nội dung
+
+- Original HEAD `7dc3a885a4358c212fd77f93434dcad22fd1243a`; accepted develop mới `a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473`; sync bằng merge thường, không conflict/rewrite/force-push.
+- Master Plan gốc mở lại được và hash `18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a` không đổi. Năm chương1/2/4/5/12, HP owner/QĐ reviewer, dependency QA-01 giữ đúng Plan.
+- [Source audit](follow-ups/20261101-validation/source-validation.json) kiểm tra19 mục: controller/entry/service path, anchor/line, hash và test references. **19 source-excerpt entries không đổi whole Git blob** giữa source cũ/mới; `app.js` historical hash dùng CRLF checkout bytes đã kiểm tra riêng, không thay hash để che khác biệt.
+- Rà modular monolith/ba tầng/DTO/persistence; registration/JWT/logout/OTP/reset/CSRF; profile/avatar/address/default; shop/product/image ownership, catalog visibility/search/sort/page/inventory; team/Git. Làm rõ `AccountIdentityService.changePassword → UserEntity.changePassword → resetPassword`; cập nhật navigation/source context và actual solo governance (approval0, conversation resolution ON, required CI/strict/Admin/no-force/no-delete giữ nguyên). DOC01 chỉ đọc settings, không đổi policy.
+- Shop profile/logo/banner editing và highestRated vẫn chưa có flow; không dựng chức năng từ tên dự kiến. Không coi draft shared seed hoặc PAY03 trên branch khác đã nằm trong source được chấp nhận. Không gán independent PostgreSQL execution cho QĐ hoặc đóng QA/release.
+- Source index/setup/demo có addendum nguồn mới. [Original130 hashes](follow-ups/20261101-validation/original-publication-hashes.json) và các commit cũ giữ nguyên; các file cập nhật có [bản lịch sử nguyên byte](follow-ups/20261101-validation/historical/). DOCX gốc còn tại original commit. Hình/source/test receipts cũ giữ source/operator riêng.
+
+## 14 ảnh bổ sung thực tế
+
+[Attempt3 provenance](follow-ups/20261101-validation/attempt-3/new-screenshots.json) ghi route/role/viewport/source/JAR/browser/time/hash và limits cho14 mục4.3–4.8,5.1–5.7,5.9. [Checklist missing](missing-screenshots.json) hiện không còn mục thiếu file hình; **không đồng nghĩa toàn bộ functional/human acceptance PASS**.
+
+- Java21 dựng clean detached source `a83c4aa` bằng `mvnw.cmd -DskipTests package`: **BUILD PASS, tests skipped**, không ghi là test PASS.
+- JAR SHA256 `7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b`.
+- Chrome thật,1280×900, PostgreSQL17.6/Mailpit loopback riêng; anonymous/USER/VENDOR; dữ liệu hư cấu, không truy cập Render/production.
+- Quan sát login→JWT-restored protected profile, logout→login/401, resend POST200, generic forgot redirect, reset form, protected401/missing-CSRF403, avatar upload/read, first address/default, shop form, Vendor list, product image upload/read và catalog query. Form/reset/list không chứng minh CRUD/reset full journey; từng record ghi rõ giới hạn.
+- [Attempt1/2](follow-ups/20261101-validation/attempt-notes.md) giữ BLOCKED: runner ghép sai absolute redirect, rồi expectation302 sai với resend view200. Giữ10 partial screenshots, không sửa ứng dụng hoặc nới assertion; attempt3 dùng đúng contract và chụp14/14.
+- Có **29 genuine screenshot files**:5 lịch sử +24 files qua3attempts; DOCX chọn **19 UI illustrations** (5 cũ+14 mới). Không gọi29 là29 độc lập functional tests.
+- Mỗi attempt chạy28 migrations và Hibernate validate khi boot DB riêng. Đây **không phải full postgres-it**. Sáu owned containers/ba JVMs đã dọn đúngID và xác nhận absent. Fixture avatar/address/image/OTP/logout mutation có chủ đích; không tuyên bố mọi DB fingerprint bất biến. Orders/Payments giữ0.
+
+## Current validation
+
+| Check | Kết quả thực tế |
+| --- | --- |
+| ZIP / python-docx reopen | PASS |
+| Images | 68 placements/67 distinct embedded media; cả68 figure hashes có trong DOCX, decode và relationships hợp lệ; Word deduplicate một ảnh giống byte |
+| Source excerpts | 19 entries/anchors/transcripts xác minh; test paths chỉ kiểm tra hiện diện, narrative/CI references giữ provenance riêng |
+| A4/TNR/heading/header/footer/PAGE/TOC | Có và render được; dọn theme font override/đường kẻ tiêu đề, sửa cột đầu; TOC hai cấp được Word update |
+| Packaged renderer | BLOCKED do thiếu LibreOffice, không đổi failure thành PASS |
+| Legitimate fallback renderer | PASS — Microsoft Word16.0 ExportAsFixedFormat + bundled Poppler,76 trang; DOCX vẫn editable |
+| Visual QA | Xem76/76 PNG trang cuối ở native raster84DPI qua38 cặp trang; không thấy ảnh hỏng/text overlap/diagram bị cắt |
+| Print/readability acceptance | HUMAN PENDING — một số historical full-page UI và JSON diagnostic nhỏ trên A4; xem file gốc full-resolution và HP chọn cách trình bày trước nộp |
+| JSON/Markdown/manifest/Git diff | Validator chạy trước commit; kết quả cuối được ghi trong handoff/PR metadata |
+| Full Java/Node/postgres-it local | NOT RUN trong pha tài liệu; CI publication được đọc riêng, không thay receipt cũ |
+
+[Render receipt](follow-ups/20261101-validation/word-render-validation.json) giữ DOCX/PDF/hash76 PNG, phương pháp và giới hạn. [Structural record](structural-validation.json) và [manifest hiện tại](artifact-manifest.json) phân biệt lịch sử/mới. PDF/page PNG giữ ngoài Git cho QA, không thay deliverable editable DOCX.
+
+## Remaining human gates
+
+- **HUMAN PENDING**: HP/QĐ nội dung, chapter ownership, diagram/ảnh, print readability; PR76 chưa có approval, tiếp tục Draft.
+- **NOT PROVIDED**: mẫu bìa chính thức/trường/lớp/học phần/giảng viên; không bịa.
+- **NOT VERIFIED**: toàn bộ prompt/model history của nhóm chưa đủ;8 prompt gốc giữ nguyên byte.
+- **NOT RUN**: clean-host/full demo/public SMTP rehearsal và video có mặt thành viên. Mailpit capture không đóng gate này.
+- SCA, SMTP/timing, TLS/proxy/trusted IP/cookie/ACL, distributed/restart/load, backup/shared seed/QA/release giữ owner/gate riêng; không đổi QA01 overall,QA02/03,REL01/02.
+
+**READY FOR HUMAN REVIEW**, chưa phải bản nộp đã nghiệm thu. Exact-head CI và working-tree clean được kiểm tra sau push; không lấy CI cũ làm kết quả HEAD mới.
+
+---
+
+# Historical validation snapshot 29/10/2026 retained verbatim below
 
 Ngày đối chiếu: **29/10/2026**. Trạng thái: **PARTIAL — MISSING EVIDENCE**.
 Đây là hồ sơ biên soạn và kiểm tra tài liệu, không phải nghiệm thu release hoặc một lần chạy lại application regression.

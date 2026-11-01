@@ -1,0 +1,380 @@
+[
+  {
+    "number": "2.1",
+    "title": "Ngữ cảnh hệ thống",
+    "path": "figures\\architecture\\context.png",
+    "source": "Source 6a26370659a2fa7b95c6a1d00d2598820de6bb34; pom.xml, SecurityConfig và modules tại src/main/java/com/uteexpress",
+    "sha256": "94898420dad05682f48fbc678589768490eea4023da55b1b1d26bad1ddbd7bb9"
+  },
+  {
+    "number": "2.2",
+    "title": "Kiến trúc ứng dụng",
+    "path": "figures\\architecture\\application.png",
+    "source": "Source 6a26370659a2fa7b95c6a1d00d2598820de6bb34; pom.xml, SecurityConfig và modules tại src/main/java/com/uteexpress",
+    "sha256": "cb8e5e72e600e9f5589e361cde15bf570e5740cfde825f4f9d0c42f338ecabcc"
+  },
+  {
+    "number": "2.3",
+    "title": "Ba tầng và hợp đồng module",
+    "path": "figures\\architecture\\layers.png",
+    "source": "Source 6a26370659a2fa7b95c6a1d00d2598820de6bb34; pom.xml, SecurityConfig và modules tại src/main/java/com/uteexpress",
+    "sha256": "8d6bf0c92ac2dc7c77e3be1c6e7fdb1409d6ec75a7c98829e14cef3d1068896c"
+  },
+  {
+    "number": "2.4",
+    "title": "Luồng bảo mật trên request",
+    "path": "figures\\architecture\\security.png",
+    "source": "Source 6a26370659a2fa7b95c6a1d00d2598820de6bb34; pom.xml, SecurityConfig và modules tại src/main/java/com/uteexpress",
+    "sha256": "b2ba41b892b8d4fcbbdda1428d086d60522a1c2bb257cb8058c58e3264ce1032"
+  },
+  {
+    "number": "2.5",
+    "title": "Tương tác database",
+    "path": "figures\\architecture\\database.png",
+    "source": "Source 6a26370659a2fa7b95c6a1d00d2598820de6bb34; pom.xml, SecurityConfig và modules tại src/main/java/com/uteexpress",
+    "sha256": "5473cef3029a2de8eb7bee0df60aab78a581f8d942a2a9ce108488f8c87c7e8f"
+  },
+  {
+    "number": "2.6",
+    "title": "Quan hệ persistence phần HP và tham chiếu Category của QĐ",
+    "path": "figures\\architecture\\hp-erd.png",
+    "source": "Migration HP và QĐ tại 6a26370659a2fa7b95c6a1d00d2598820de6bb34; ERD giới hạn, không thay chương3 của QĐ",
+    "sha256": "e46d90b48324e4470322bdbb3ad842e7e99a9e626f6b10b3b771896f4a258f5c"
+  },
+  {
+    "number": "4.1",
+    "title": "Hoạt động đăng ký tài khoản",
+    "path": "figures\\activity\\4-1.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "02bdf32fac9eaf5b6d6232a1213d75f29c3617e0ac6c1e98b688442e2e259bdf"
+  },
+  {
+    "number": "4.2",
+    "title": "Mã nguồn RegistrationService",
+    "path": "figures\\source\\RegistrationService-36.png",
+    "source": "src/main/java/com/uteexpress/identity/service/RegistrationService.java:36–48 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "27e3b769962f0aa76addf5c815e7079d3f206be001be6ba4c2f55dcaf87d427d"
+  },
+  {
+    "number": "4.3",
+    "title": "Giao diện thật liên quan đăng ký tài khoản",
+    "path": "figures\\screenshots\\interaction-register-invalid-anonymous-_register-768.jpg",
+    "source": "UI-02 /register; viewport 768×1024; source 70b80a2df8fb64920997a00eff17c4351f6f5904; interaction-register-invalid-anonymous-_register-768.jpg; xem screenshot-provenance.json; không chụp mới ở DOC-01",
+    "sha256": "b00e3a92ad2fca3c70c5c1264d1aef83eab25ef569bf1ee608f84880f3bab0bf"
+  },
+  {
+    "number": "4.4",
+    "title": "Hoạt động đăng nhập bằng email hoặc username",
+    "path": "figures\\activity\\4-2.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "fc2df64316327447521441bf4817bcf9bb7d429b4e22eff1ca98ab5865a72371"
+  },
+  {
+    "number": "4.5",
+    "title": "Mã nguồn LoginService",
+    "path": "figures\\source\\LoginService-27.png",
+    "source": "src/main/java/com/uteexpress/security/service/LoginService.java:27–38 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "7facfe4b2555b76247378a8a67668fe328d1be10c9cc244a7b4bfa0dfbf59458"
+  },
+  {
+    "number": "4.6",
+    "title": "Trình tự đăng nhập bằng email hoặc username",
+    "path": "figures\\sequence\\login.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; boundary và source tại mục này",
+    "sha256": "75c696cede7d688f7251948a1332351a8c53d285a5a6e27f825550de06f21259"
+  },
+  {
+    "number": "4.7",
+    "title": "Giao diện thật liên quan đăng nhập bằng email hoặc username",
+    "path": "figures\\screenshots\\post-sync-final-anonymous-_login-1440.jpg",
+    "source": "UI-02 /login; viewport 1440×900; source 1f375fa01882f09755e6a107e0e13c79f427f671; post-sync-final-anonymous-_login-1440.jpg; xem screenshot-provenance.json; không chụp mới ở DOC-01",
+    "sha256": "8a8ed25ada8db7a7a6d57f686bf1fa32bc77704f254b797465e21c746362f5e6"
+  },
+  {
+    "number": "4.8",
+    "title": "Hoạt động xác thực jwt trên từng request",
+    "path": "figures\\activity\\4-3.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "418d497ae9e49255c9767642d59cdd6f2fb8cb954d606b447432de8d44555395"
+  },
+  {
+    "number": "4.9",
+    "title": "Mã nguồn JwtAuthenticationFilter",
+    "path": "figures\\source\\JwtAuthenticationFilter-52.png",
+    "source": "src/main/java/com/uteexpress/security/filter/JwtAuthenticationFilter.java:52–64 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "e45b207a082506205ee4d3998dcbf8878bf650d9eea687df2f4835fa5970bcc0"
+  },
+  {
+    "number": "4.10",
+    "title": "Trình tự xác thực jwt trên từng request",
+    "path": "figures\\sequence\\jwt.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; boundary và source tại mục này",
+    "sha256": "220c16dddb709c9796a52e4f3632d411078fc74e94e249dec115f9455ce5448c"
+  },
+  {
+    "number": "4.11",
+    "title": "Hoạt động đăng xuất và thu hồi jwt",
+    "path": "figures\\activity\\4-4.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "0f282547cddf3acf119e5d82442ccd71e30c05121909c23bf768edbfc0da9b35"
+  },
+  {
+    "number": "4.12",
+    "title": "Mã nguồn TokenVersionLogoutHandler",
+    "path": "figures\\source\\TokenVersionLogoutHandler-20.png",
+    "source": "src/main/java/com/uteexpress/security/web/TokenVersionLogoutHandler.java:20–27 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "26343852f7f2f06b6ac06fedab031ce51386c2468b28822f9267307f1269417f"
+  },
+  {
+    "number": "4.13",
+    "title": "Hoạt động xác minh email và gửi lại otp",
+    "path": "figures\\activity\\4-5.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "1543f046c6c7a8ae1ee70a40ee843b9c710db13fa0004f62a72650f11cbfc2bd"
+  },
+  {
+    "number": "4.14",
+    "title": "Mã nguồn EmailVerificationService",
+    "path": "figures\\source\\EmailVerificationService-72.png",
+    "source": "src/main/java/com/uteexpress/identity/service/EmailVerificationService.java:72–84 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "e89e01009f11fb2ea00eea1379fd14c3c7fd88032a21dafeb25aa2451151e477"
+  },
+  {
+    "number": "4.15",
+    "title": "Trình tự xác minh email và gửi lại otp",
+    "path": "figures\\sequence\\otp.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; boundary và source tại mục này",
+    "sha256": "9a9e8d744ba6cb76b1ce1bd4facbe761ea38035c1915530742759481cdd9f6dd"
+  },
+  {
+    "number": "4.16",
+    "title": "Hoạt động yêu cầu khôi phục mật khẩu",
+    "path": "figures\\activity\\4-6.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "419648f3682f6175846cfcf601f4cd22b37c1cec9380dbe709bd62a4b1fa3e8d"
+  },
+  {
+    "number": "4.17",
+    "title": "Mã nguồn PasswordResetService",
+    "path": "figures\\source\\PasswordResetService-55.png",
+    "source": "src/main/java/com/uteexpress/identity/service/PasswordResetService.java:55–67 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "fcead49f0912fa0adc9171f74530099d2de5bd14e9083df2cbad8a1392839916"
+  },
+  {
+    "number": "4.18",
+    "title": "Hoạt động đặt lại mật khẩu bằng otp",
+    "path": "figures\\activity\\4-7.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "3a9d1636e67f73f3f0450dcbc4c5f172e430710e4624b8a626a64def693f8725"
+  },
+  {
+    "number": "4.19",
+    "title": "Mã nguồn PasswordResetService",
+    "path": "figures\\source\\PasswordResetService-76.png",
+    "source": "src/main/java/com/uteexpress/identity/service/PasswordResetService.java:76–88 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "2665754384019455e240860030625bdd1777f463e92b59df76b97b8e2b57e374"
+  },
+  {
+    "number": "4.20",
+    "title": "Trình tự đặt lại mật khẩu bằng otp",
+    "path": "figures\\sequence\\reset.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; boundary và source tại mục này",
+    "sha256": "7658810c80d7f1bbabe50e93d542df32d59deb764da6e846afb722281c3f69a7"
+  },
+  {
+    "number": "4.21",
+    "title": "Hoạt động phân quyền csrf và ngân sách otp",
+    "path": "figures\\activity\\4-8.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "d242ba8aa7d32be2133fa08c857057f1ed75a48ac28ece91399638f20f709e4e"
+  },
+  {
+    "number": "4.22",
+    "title": "Mã nguồn OtpRequestLimitFilter",
+    "path": "figures\\source\\OtpRequestLimitFilter-33.png",
+    "source": "src/main/java/com/uteexpress/security/filter/OtpRequestLimitFilter.java:33–43 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "dbde5d00988d8ab066c4793396634d261631239b13ec30c937c59581b748fa3b"
+  },
+  {
+    "number": "5.1",
+    "title": "Hoạt động hồ sơ cá nhân",
+    "path": "figures\\activity\\5-1.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "ae4229bbd509959ba29c23d99cc3c429563d4b6500fefa6514c1276aed5198a8"
+  },
+  {
+    "number": "5.2",
+    "title": "Mã nguồn ProfileService",
+    "path": "figures\\source\\ProfileService-45.png",
+    "source": "src/main/java/com/uteexpress/account/service/ProfileService.java:45–57 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "ff7d455d2d4ae3ef16618702b1a415e3a46ccfef579c9d970bcf82bb00d75e5e"
+  },
+  {
+    "number": "5.3",
+    "title": "Hoạt động đổi mật khẩu khi đã đăng nhập",
+    "path": "figures\\activity\\5-2.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "1c8a49129d690fa8a4597454046f71135af4c3c6ac6f96eb03b626f6654914d1"
+  },
+  {
+    "number": "5.4",
+    "title": "Mã nguồn AccountIdentityService",
+    "path": "figures\\source\\AccountIdentityService-50.png",
+    "source": "src/main/java/com/uteexpress/identity/service/AccountIdentityService.java:50–62 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "7748c33671610ecba9a13f035e83ce0c356b00b3416fd7cf84e74caf7060e70b"
+  },
+  {
+    "number": "5.5",
+    "title": "Hoạt động ảnh đại diện và storage an toàn",
+    "path": "figures\\activity\\5-3.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "a477a19e8a050c8708d690d07d049113eb46db386dd5271af1ca768ae8c125b1"
+  },
+  {
+    "number": "5.6",
+    "title": "Mã nguồn ProfileService",
+    "path": "figures\\source\\ProfileService-49.png",
+    "source": "src/main/java/com/uteexpress/account/service/ProfileService.java:49–61 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "5f1725c0b2749ef5b3558a0e510d9f90c894ced2dfec8d80f08f62c522436fda"
+  },
+  {
+    "number": "5.7",
+    "title": "Hoạt động địa chỉ và địa chỉ mặc định",
+    "path": "figures\\activity\\5-4.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "ad1eb26f7be5c2434a36e53150bc2bcbbc8d2855f23d712224c068e4e699e3d9"
+  },
+  {
+    "number": "5.8",
+    "title": "Mã nguồn AddressService",
+    "path": "figures\\source\\AddressService-86.png",
+    "source": "src/main/java/com/uteexpress/account/service/AddressService.java:86–98 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "3b703cc190521a137bdf5fa0e2250a5cfccd7e45bcfddc8258aefa60e1b4b46d"
+  },
+  {
+    "number": "5.9",
+    "title": "Hoạt động đăng ký và theo dõi cửa hàng",
+    "path": "figures\\activity\\5-5.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "6fff68fc7e182f6ffa77be69dd5da32a2289d241a78f100e9bce63ad3743c1a3"
+  },
+  {
+    "number": "5.10",
+    "title": "Mã nguồn ShopRegistrationService",
+    "path": "figures\\source\\ShopRegistrationService-44.png",
+    "source": "src/main/java/com/uteexpress/shop/service/ShopRegistrationService.java:44–56 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "4b226fee98252dcb8b0aea8643fc43fdd628d5e59cb86c3fca6a7f20b4003b21"
+  },
+  {
+    "number": "5.11",
+    "title": "Hoạt động quản lý sản phẩm của vendor",
+    "path": "figures\\activity\\5-6.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "e2ecde5d5cf8b5ef405248133f9fd4b32a932047d08fe6818d10c7f84fa6149d"
+  },
+  {
+    "number": "5.12",
+    "title": "Mã nguồn ProductService",
+    "path": "figures\\source\\ProductService-102.png",
+    "source": "src/main/java/com/uteexpress/catalog/service/ProductService.java:102–114 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "4548ed4d111a7b285945bec74a50128837b4f8ef6ea913d4332ffead74fef2e6"
+  },
+  {
+    "number": "5.13",
+    "title": "Hoạt động ảnh sản phẩm và quyền đọc ảnh",
+    "path": "figures\\activity\\5-7.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "6bd86846e676280e267fc5321936b5ec9e60d0b290abcf7a6b4c9ed4dcb99b8c"
+  },
+  {
+    "number": "5.14",
+    "title": "Mã nguồn ProductService",
+    "path": "figures\\source\\ProductService-122.png",
+    "source": "src/main/java/com/uteexpress/catalog/service/ProductService.java:122–134 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "363dbbc35a210becfcb0f26493995de10167e1975634ef77282918ab68418831"
+  },
+  {
+    "number": "5.15",
+    "title": "Hoạt động catalog công khai và chi tiết",
+    "path": "figures\\activity\\5-8.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "77b64742a363d1a0d0067ddb154026ee533a95c4d4b94b648815fa49875076fc"
+  },
+  {
+    "number": "5.16",
+    "title": "Mã nguồn PublicCatalogService",
+    "path": "figures\\source\\PublicCatalogService-76.png",
+    "source": "src/main/java/com/uteexpress/catalog/service/PublicCatalogService.java:76–88 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "0a58bc97206cd0c554b6df1eeb46b4d04a5264eb1895e335e402a9e4dcb9735f"
+  },
+  {
+    "number": "5.17",
+    "title": "Giao diện thật liên quan catalog công khai và chi tiết",
+    "path": "figures\\screenshots\\post-sync-final-buyer-_products_1-1440.jpg",
+    "source": "UI-02 /products/1; viewport 1440×900; source 1f375fa01882f09755e6a107e0e13c79f427f671; post-sync-final-buyer-_products_1-1440.jpg; xem screenshot-provenance.json; không chụp mới ở DOC-01",
+    "sha256": "22b59f1d2dc7cc86faf5611fe77cb05cd812be476cc34e8b079f01b89801615f"
+  },
+  {
+    "number": "5.18",
+    "title": "Hoạt động tìm kiếm lọc sắp xếp và phân trang",
+    "path": "figures\\activity\\5-9.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "0be1e18e340a75ccd219dfa0e3ff4ab7e8053410b18d7a3f5e366822acdb906e"
+  },
+  {
+    "number": "5.19",
+    "title": "Mã nguồn PublicCatalogService",
+    "path": "figures\\source\\PublicCatalogService-55.png",
+    "source": "src/main/java/com/uteexpress/catalog/service/PublicCatalogService.java:55–67 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "7dc6fba85b18cdd74cccd811c7ac77c8eda3cab5cc3c9fef7499cdb823a06b8e"
+  },
+  {
+    "number": "5.20",
+    "title": "Hoạt động inventory contract và tích hợp checkout",
+    "path": "figures\\activity\\5-10.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "c5dd557204830f657e35da1844d583f85c11f78304ea915671be6a84ea3687e7"
+  },
+  {
+    "number": "5.21",
+    "title": "Mã nguồn DatabaseInventoryService",
+    "path": "figures\\source\\DatabaseInventoryService-38.png",
+    "source": "src/main/java/com/uteexpress/catalog/service/DatabaseInventoryService.java:38–50 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "7e354ddec8135ede954493116495e4f9b45e6dfadeccf890112787367facd3c6"
+  },
+  {
+    "number": "5.22",
+    "title": "Trình tự inventory contract và tích hợp checkout",
+    "path": "figures\\sequence\\checkout.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; boundary và source tại mục này",
+    "sha256": "e4dde4cd56058f60cd09976389e42547e711d760b4f9ffcd7668268b89b275ce"
+  },
+  {
+    "number": "5.23",
+    "title": "Giao diện thật liên quan inventory contract và tích hợp checkout",
+    "path": "figures\\screenshots\\interaction-checkout-receipt-buyer-_user_checkout_view-768.jpg",
+    "source": "UI-02 /user/checkout/view; viewport 768×1024; source 70b80a2df8fb64920997a00eff17c4351f6f5904; interaction-checkout-receipt-buyer-_user_checkout_view-768.jpg; xem screenshot-provenance.json; không chụp mới ở DOC-01",
+    "sha256": "2ace48cad8070a78ba9652a23212947bffd63637329defffe2fc84153439b239"
+  },
+  {
+    "number": "5.24",
+    "title": "Hoạt động shared ui và responsive",
+    "path": "figures\\activity\\5-11.png",
+    "source": "6a26370659a2fa7b95c6a1d00d2598820de6bb34; service/controller nêu trong mục",
+    "sha256": "19ea28c598559104b05b706815a8fd85efd4ec1735030fd01d849333f8b5a508"
+  },
+  {
+    "number": "5.25",
+    "title": "Mã nguồn app",
+    "path": "figures\\source\\app-5.png",
+    "source": "src/main/resources/static/js/app.js:5–17 @6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+    "sha256": "51aa23533ba9b84aff8cf13eef538baa508ec5061c78107bd333c17845c77a96"
+  },
+  {
+    "number": "5.26",
+    "title": "Giao diện thật liên quan shared ui và responsive",
+    "path": "figures\\screenshots\\post-sync-final-manager-_manager_dashboard-768.jpg",
+    "source": "UI-02 /manager/dashboard; viewport 768×1024; source 1f375fa01882f09755e6a107e0e13c79f427f671; post-sync-final-manager-_manager_dashboard-768.jpg; xem screenshot-provenance.json; không chụp mới ở DOC-01",
+    "sha256": "2825a1b27e7b40dbb48794a51d54f4c0196396ae3fb3672e7e392fc6f2ce92d0"
+  }
+]

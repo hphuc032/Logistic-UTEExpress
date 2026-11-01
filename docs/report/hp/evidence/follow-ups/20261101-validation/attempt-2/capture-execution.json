@@ -1,0 +1,48 @@
+{
+  "startedUtc": "2026-11-01T15:01:40.924346+00:00",
+  "scope": "DOC01 isolated screenshots; not full functional regression",
+  "testsRerun": false,
+  "containers": [
+    {
+      "id": "31afd4d9ba09358a5edd44e4213c84608a1d6e6d206322b111435e89c96f75dc",
+      "removedAndAbsent": true
+    },
+    {
+      "id": "99cf9b75d43bb7873c51ab6ec5af6e606c7b2f4501fd4a40a876c89ed72ac13c",
+      "removedAndAbsent": true
+    }
+  ],
+  "productionDataAccessed": false,
+  "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
+  "jarSha256": "7392d65248ea6f62585a1e21d1a36cad3bb0d4178fbb18daea56dd687100a66b",
+  "migrations": {
+    "count": 28,
+    "latest": "20261028081110",
+    "success": true
+  },
+  "hibernateValidation": "PASS — real app boot with ddl-auto=validate",
+  "before": {
+    "users": 3,
+    "addresses": 0,
+    "product_images": 0,
+    "otp_tokens": 0,
+    "orders": 0,
+    "payments": 0
+  },
+  "browserExitCode": 1,
+  "after": {
+    "users": 3,
+    "addresses": 1,
+    "product_images": 0,
+    "otp_tokens": 1,
+    "orders": 0,
+    "payments": 0
+  },
+  "status": "BLOCKED",
+  "reason": "Browser capture failed; see local capture.log; partial evidence preserved",
+  "ownedJava": {
+    "pid": 16276,
+    "stopped": true
+  },
+  "finishedUtc": "2026-11-01T15:02:21.832623+00:00"
+}

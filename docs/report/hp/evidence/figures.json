@@ -376,5 +376,103 @@
     "path": "figures\\screenshots\\post-sync-final-manager-_manager_dashboard-768.jpg",
     "source": "UI-02 /manager/dashboard; viewport 768×1024; source 1f375fa01882f09755e6a107e0e13c79f427f671; post-sync-final-manager-_manager_dashboard-768.jpg; xem screenshot-provenance.json; không chụp mới ở DOC-01",
     "sha256": "2825a1b27e7b40dbb48794a51d54f4c0196396ae3fb3672e7e392fc6f2ce92d0"
+  },
+  {
+    "number": "4.BS3",
+    "title": "Giao diện bổ sung mục 4.3",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-3.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /user/profile",
+    "sha256": "ecce0cbfd7921325b65014323abc0c0321688dd611eded17a2bae74a927ad795"
+  },
+  {
+    "number": "4.BS4",
+    "title": "Giao diện bổ sung mục 4.4",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-4.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /login?logout=true",
+    "sha256": "d466bb9e0ca77c8ba77a0f2f1b33e95f0ab087689fc0a2af3c9acbe4d7fcb0b5"
+  },
+  {
+    "number": "4.BS5",
+    "title": "Giao diện bổ sung mục 4.5",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-5.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /verify-otp/resend",
+    "sha256": "da88c385e09b1837b5b80e7949354bf79af6cbaf84f0c2f3c45ac4017241cd25"
+  },
+  {
+    "number": "4.BS6",
+    "title": "Giao diện bổ sung mục 4.6",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-6.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /reset-password?requested=true",
+    "sha256": "d2ea9f06428eaec27ee234fdcaeaf1e76497beb2b3b8d0e76bfdab3e784fa485"
+  },
+  {
+    "number": "4.BS7",
+    "title": "Giao diện bổ sung mục 4.7",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-7.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /reset-password",
+    "sha256": "cc65a451288870cecfeb24972f1251557ee540a7277b23452c19b920b88154bc"
+  },
+  {
+    "number": "4.BS8",
+    "title": "Giao diện bổ sung mục 4.8",
+    "path": "figures/screenshots/current/attempt-3/doc01-4-8.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /user/profile",
+    "sha256": "9292ccf0b3c324d8aa583b66ff9dcfbf0c9818e16723b30b14994453ae0b9323"
+  },
+  {
+    "number": "5.BS1",
+    "title": "Giao diện bổ sung mục 5.1",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-1.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /user/profile",
+    "sha256": "ecce0cbfd7921325b65014323abc0c0321688dd611eded17a2bae74a927ad795"
+  },
+  {
+    "number": "5.BS2",
+    "title": "Giao diện bổ sung mục 5.2",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-2.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /user/profile",
+    "sha256": "6cc66268de2302b87b0b22e3eb4a2dd943ebdb53f108b52af198d15324b85f37"
+  },
+  {
+    "number": "5.BS3",
+    "title": "Giao diện bổ sung mục 5.3",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-3.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /user/profile",
+    "sha256": "ed4ca2e9ee42740740f8bee5beafdaa333bedd0d5660873106fc7bd646d2dc49"
+  },
+  {
+    "number": "5.BS4",
+    "title": "Giao diện bổ sung mục 5.4",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-4.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /user/addresses",
+    "sha256": "4b33243e8020889ba1d4997338c56ef645f3aa8c014f5dc7fe26f8a27dc56718"
+  },
+  {
+    "number": "5.BS5",
+    "title": "Giao diện bổ sung mục 5.5",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-5.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /user/shop/register",
+    "sha256": "7f37bfa22d41b01809e43874e88a7d28bd6a3556cb5dcd2fceac04f86f055dec"
+  },
+  {
+    "number": "5.BS6",
+    "title": "Giao diện bổ sung mục 5.6",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-6.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /vendor/products",
+    "sha256": "2b495d48c2c8065a7cf088000d0d2b8cc97187bd09fc04bdce7ec02d0a601d70"
+  },
+  {
+    "number": "5.BS7",
+    "title": "Giao diện bổ sung mục 5.7",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-7.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /vendor/products/1/edit",
+    "sha256": "ece1aa58db4fa5fe8e03df8182f03b6b04eeb66c350aad77ac0ae96691b2e147"
+  },
+  {
+    "number": "5.BS9",
+    "title": "Giao diện bổ sung mục 5.9",
+    "path": "figures/screenshots/current/attempt-3/doc01-5-9.png",
+    "source": "DOC01 new capture a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473 /products?q=DOC01&sort=priceAsc&page=0&size=6",
+    "sha256": "3e6943d6316845f49451f057fc10f6489c94acebe5529d1e7cd39c4b77a58136"
   }
 ]

@@ -1,3 +1,5 @@
+> Cập nhật 01/11/2026: source được đối chiếu `a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473`; 28 migrations không đổi. DOC-01 đã boot riêng source này với PostgreSQL17.6 và Mailpit loopback để chụp ảnh. Đây không phải clean-host rehearsal, public SMTP hoặc release acceptance. PR69/73 vẫn OPEN/DRAFT tại live read-back; chưa có full seed acceptance. Bản runbook/storyboard bên dưới giữ lịch sử soạn thảo, không phải receipt thực thi.
+
 # Kịch bản video và storyboard phần HP
 
 Master Plan phầnP quy định demo nhóm khoảng14 phút; phần HP0:00–3:45, không tự chiếm thời lượng TD/QĐ. Không quay mặt hay ghi video tự động trong DOC-01. Lời thoại dưới đây là kịch bản mới soạn, không phải biên bản demo đã chạy.

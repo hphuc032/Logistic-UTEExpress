@@ -1,0 +1,27 @@
+{
+  "zipIntegrity": "PASS",
+  "pythonDocxReopen": "PASS",
+  "embeddedImages": 54,
+  "figureCaptions": 54,
+  "chapterHeadings": [
+    "Phạm vi ghép báo cáo và mục lục",
+    "CHƯƠNG 1 ĐỀ TÀI VÀ PHẠM VI",
+    "CHƯƠNG 2 KIẾN TRÚC VÀ CẤU TRÚC PROJECT",
+    "CHƯƠNG 4 IDENTITY VÀ SECURITY",
+    "CHƯƠNG 5 SHOP VÀ CATALOG",
+    "CHƯƠNG 12 QUẢN LÝ NHÓM VÀ GIT",
+    "PHỤ LỤC A HƯỚNG DẪN SETUP VÀ CHUẨN BỊ DEMO",
+    "PHỤ LỤC B KIỂM THỬ VÀ ACCEPTANCE",
+    "PHỤ LỤC C KỊCH BẢN DEMO PHẦN HP",
+    "PHỤ LỤC D TÀI LIỆU THAM KHẢO VÀ PROMPT"
+  ],
+  "wordApprox": 13158,
+  "TOC": "Field present; update in Word, pagination NOT VERIFIED",
+  "pageNumbers": "PAGE field present",
+  "A4": "210 x 297 mm",
+  "visualRender": "BLOCKED — packaged renderer cannot find soffice.exe on PATH; no page PNG/PDF produced",
+  "screenshotCopiesHashVerified": 5,
+  "sourceExcerptHashesVerified": 19,
+  "promptCopiesHashVerified": 8,
+  "referenceErrors": []
+}

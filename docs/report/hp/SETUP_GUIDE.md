@@ -1,3 +1,5 @@
+> Cập nhật 01/11/2026: source được đối chiếu `a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473`; 28 migrations không đổi. DOC-01 đã boot riêng source này với PostgreSQL17.6 và Mailpit loopback để chụp ảnh. Đây không phải clean-host rehearsal, public SMTP hoặc release acceptance. PR69/73 vẫn OPEN/DRAFT tại live read-back; chưa có full seed acceptance. Bản runbook/storyboard bên dưới giữ lịch sử soạn thảo, không phải receipt thực thi.
+
 # Hướng dẫn setup UTEExpress phần HP
 
 Source được mô tả: 6a26370659a2fa7b95c6a1d00d2598820de6bb34, ngày29/10/2026. Đây là runbook; DOC-01 không tuyên bố đã boot máy sạch, chạy SMTP thật hay hoàn thành REL-01.

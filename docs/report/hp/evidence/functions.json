@@ -261,7 +261,7 @@
     ],
     "paragraphs": [
       "Người dùng phải chứng minh mật khẩu hiện tại. ProfileController.changePassword không đọc repository; nó gọi ProfileService rồi AccountIdentityService.changePassword. Mật khẩu mới dùng cùng PasswordPolicy với AUTH-04, xác nhận ở lớp form, không đi qua chuẩn hóa identifier.",
-      "Identity service khóa user, kiểm tra ACTIVE, PasswordEncoder.matches mật khẩu cũ và encode mật khẩu mới. UserEntity.resetPassword cập nhật hash/version trong cùng transaction. Mismatch trả lỗi tại currentPassword nhưng không echo giá trị password vào HTML; success chuyển /login?passwordChanged=true.",
+      "Identity service khóa user, kiểm tra ACTIVE, PasswordEncoder.matches mật khẩu cũ và encode mật khẩu mới. AccountIdentityService gọi UserEntity.changePassword, delegate tới resetPassword để cập nhật hash/version trong cùng transaction. Mismatch trả lỗi tại currentPassword nhưng không echo giá trị password vào HTML; success chuyển /login?passwordChanged=true.",
       "JWT trên các browser dùng version trước khi đổi đều mất hiệu lực ở bước xác thực kế tiếp. Đây không phải quên mật khẩu: người đã login cần mật khẩu cũ, còn AUTH-04 cần OTP riêng. Không bổ sung password history, MFA, OAuth hay refresh token vào DOC-01."
     ],
     "relations": "PasswordChangeForm; CurrentPasswordMismatchException; PasswordPolicy; UserEntity; PasswordEncoder.",

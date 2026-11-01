@@ -2,71 +2,127 @@
   {
     "function": "4.3 Xác thực JWT trên từng request",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-4-3.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "No token/cookie values captured; screenshot alone does not prove every JWT negative case.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "4.4 Đăng xuất và thu hồi JWT",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-4-4.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "No raw JWT replay was captured; cross-device invalidation is source/test evidence, not screenshot proof.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "4.5 Xác minh email và gửi lại OTP",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-4-5.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "Loopback Mailpit only; no public SMTP, activation or raw OTP screenshot.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "4.6 Yêu cầu khôi phục mật khẩu",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-4-6.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "Single response does not prove timing indistinguishability.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "4.7 Đặt lại mật khẩu bằng OTP",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-4-7.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "Successful reset transaction not executed; refer to existing AUTH-04 tests.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "4.8 Phân quyền CSRF và ngân sách OTP",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-4-8.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "Single 401/403 example, not all RBAC or OTP rate-limit controls.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "5.1 Hồ sơ cá nhân",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-5-1.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "No profile mutation or foreign-owner acceptance inferred.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "5.2 Đổi mật khẩu khi đã đăng nhập",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-5-2.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "Password-change transaction not executed in this capture.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "5.3 Ảnh đại diện và storage an toàn",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-5-3.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "Isolated synthetic fixture only; deployed ACL and all hostile uploads not tested.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "5.4 Địa chỉ và địa chỉ mặc định",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-5-4.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "DB default and ownership source reviewed; no full address concurrency suite rerun.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "5.5 Đăng ký và theo dõi cửa hàng",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-5-5.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "No shop approval or application submission is claimed.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "5.6 Quản lý sản phẩm của Vendor",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-5-6.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "No create/update/delete CRUD journey claimed.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "5.7 Ảnh sản phẩm và quyền đọc ảnh",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-5-7.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "Foreign image/visibility matrix not rerun; source contract retained.",
+    "humanAcceptance": "HUMAN PENDING"
   },
   {
     "function": "5.9 Tìm kiếm lọc sắp xếp và phân trang",
     "expected": "Ảnh màn hình/thao tác đúng route tại source được chọn",
-    "status": "MISSING SCREENSHOT"
+    "status": "PASS — genuine screenshot captured; scope limited to recorded observation",
+    "evidence": "figures/screenshots/current/attempt-3/doc01-5-9.png",
+    "provenance": "evidence/follow-ups/20261101-validation/attempt-3/new-screenshots.json",
+    "limitations": "Screenshot illustrates query/results; full search matrix not rerun.",
+    "humanAcceptance": "HUMAN PENDING"
   }
 ]
