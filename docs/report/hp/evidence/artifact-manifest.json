@@ -3,7 +3,7 @@
   "source": "a83c4aa03fb3806bd5aba47f0f9fa5ccf0f0b473",
   "originalPublicationHead": "7dc3a885a4358c212fd77f93434dcad22fd1243a",
   "date": "2026-11-01",
-  "status": "READY FOR HUMAN REVIEW — HUMAN ACCEPTANCE PENDING",
+  "status": "HP AUTHORIZED REPOSITORY INTEGRATION — HUMAN/SUBMISSION ACCEPTANCE NOT ATTESTED",
   "historicalManifest": "evidence/follow-ups/20261101-validation/historical/evidence/artifact-manifest.json",
   "excludes": [
     "evidence/artifact-manifest.json (self-reference)"
@@ -17,13 +17,28 @@
     },
     {
       "path": "evidence/documentation-validation.md",
-      "bytes": 15873,
-      "sha256": "3b6d708de0ee2f0067ec73dc8d5a542f275bfca108329fe9b66371672dc86eef"
+      "bytes": 16556,
+      "sha256": "626660b4a0705b8c242b2c3ee960c14e4d477f41397db0446d8904bd2518511e"
     },
     {
       "path": "evidence/figures.json",
       "bytes": 23449,
       "sha256": "4a137bea06d82eedba4e6e21145a8345120b04760d94f04c8b89273570310148"
+    },
+    {
+      "path": "evidence/follow-ups/20261101-owner-merge/merge-readiness.md",
+      "bytes": 2630,
+      "sha256": "cc05669dc17694b83c74742d21353cfd1414dc98337f7842b51390bff7e01790"
+    },
+    {
+      "path": "evidence/follow-ups/20261101-owner-merge/owner-merge-instruction.json",
+      "bytes": 984,
+      "sha256": "bc29d059ad1f87518619422b3e2ec5acf486e3b22133c039d52155cca0be3889"
+    },
+    {
+      "path": "evidence/follow-ups/20261101-owner-merge/prior-artifact-manifest.json",
+      "bytes": 32367,
+      "sha256": "74f21d7de3c7466997df5951a4390362b80f148fa7f2066803eda8d21577cbc1"
     },
     {
       "path": "evidence/follow-ups/20261101-validation/attempt-1/capture-execution.json",
@@ -866,6 +881,11 @@
       "sha256": "0d50c58604f68c9b6a245c6ca55f5de90a9f60d0cff0cbdf3b7ae054cfdd29b3"
     },
     {
+      "path": "HP_FIGURE_REVIEW_GUIDE.md",
+      "bytes": 3405,
+      "sha256": "0ea5dcd2a1d189aea84b7c48c64c194e01f0655448a983c2882ff6d0f8c44de3"
+    },
+    {
       "path": "HP_SOURCE_INDEX.md",
       "bytes": 19118,
       "sha256": "6cd0cb695507038db02816ac2293b93fd4fa4a84bd91d5ee74b2e6837470410d"
@@ -915,5 +935,6 @@
       "bytes": 7693,
       "sha256": "857fc0b89010274c2c0f0001cd80df909a09101385363a72bdc2c83550647174"
     }
-  ]
+  ],
+  "ownerAuthorization": "evidence/follow-ups/20261101-owner-merge/owner-merge-instruction.json"
 }

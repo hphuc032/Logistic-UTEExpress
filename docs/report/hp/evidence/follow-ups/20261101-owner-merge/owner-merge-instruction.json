@@ -1,0 +1,21 @@
+{
+  "owner": "HP",
+  "instructionVerbatim": "Hãy hoàn thành cho xong và merge luôn",
+  "source": "Direct user message following the PR76 documentation completion report",
+  "receivedNoLaterThanUtc": "2026-11-01T15:30:44Z",
+  "timeBoundary": "Clock observation after receipt, not a review or signature timestamp",
+  "mergeAuthorized": true,
+  "readyTransitionAuthorizedAsMergePrerequisite": true,
+  "agentInterpretation": "Repository integration of the documented DOC01 packet; supersedes the earlier do-not-merge/keep-Draft direction for this action",
+  "independentReviewClaimed": false,
+  "humanPrintOrContentAcceptanceAttested": false,
+  "signature": null,
+  "submissionReadinessClaimed": false,
+  "broaderQAOrReleaseGatesChanged": false,
+  "remainingUnverified": [
+    "HP/QD final content and print acceptance",
+    "Instructor cover details and official template",
+    "Complete group prompt/model history",
+    "Clean-host/full demo/public SMTP rehearsal and video"
+  ]
+}

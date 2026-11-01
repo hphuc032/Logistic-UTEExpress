@@ -1,3 +1,14 @@
+# Current owner instruction for repository integration
+
+HP subsequently instructed **Hãy hoàn thành cho xong và merge luôn**. The
+[owner authorization and limits](follow-ups/20261101-owner-merge/merge-readiness.md)
+supersede the earlier Draft/no-merge direction for integrating this documentation
+packet after technical gates pass. This instruction is **not** evidence of a
+performed human inspection, independent approval, final submission acceptance or
+broader QA/release completion. The human/cover/prompt/rehearsal limitations below
+remain visible. Use the [full-resolution figure guide](../HP_FIGURE_REVIEW_GUIDE.md)
+when reviewing images that are small in the A4 layout.
+
 # DOC-01 current validation ngày 01/11/2026
 
 **READY FOR HUMAN REVIEW — PR76 vẫn DRAFT, chưa approve/merge hoặc final acceptance.**
