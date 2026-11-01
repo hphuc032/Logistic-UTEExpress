@@ -1,0 +1,72 @@
+{
+  "source": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "tree": "797bf319420e7a82f5d2ff89859f998ae9117b35",
+  "acceptedDevelop": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "jarSha256": "683a7dbf248c9e074e92aa14cdb4f81d21fdae00050b89402368679888ca68bf",
+  "primaryHeadBefore": "7dc3a885a4358c212fd77f93434dcad22fd1243a",
+  "primaryIndexSha256Before": "58d36bd519b3354e63838d6b68dc1690f6e0168290db214c5235066c0653f76e",
+  "cleanExecutionWorktreeBefore": true,
+  "readinessChecklist": "NOT LOCATED in fetched refs; Master Plan and HP clarification govern this packet",
+  "g02ExecutedSource": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8; historical, not this execution",
+  "primaryHeadAfter": "7dc3a885a4358c212fd77f93434dcad22fd1243a",
+  "primaryIndexSha256After": "58d36bd519b3354e63838d6b68dc1690f6e0168290db214c5235066c0653f76e",
+  "cleanExecutionWorktreeAfter": true,
+  "scope": "Master Plan functional FR-10 Catalog, not QA release FR10 human-gate shorthand",
+  "masterPlan": {
+    "path": "D:/JavaWeb/Project/UTEExpress_Master_Project_Plan.docx",
+    "sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+    "row": "FR-10 | Catalog | Home, category, product/shop detail | Public | P0 | HP | TD | dependency FR-09"
+  },
+  "humanClarification": {
+    "source": "HP response in current conversation",
+    "localDate": "2026-10-30",
+    "verbatim": "FR-10 Catalog theo Master Plan"
+  },
+  "attempts": [
+    {
+      "attempt": "baseline-1",
+      "summary": {
+        "PASS": 52,
+        "FAIL": 2,
+        "BLOCKED": 0,
+        "NOT RUN": 0
+      },
+      "startedUtc": "2026-10-29T17:12:59.814Z",
+      "finishedUtc": "2026-10-29T17:14:00.059Z",
+      "resultPath": "attempts/baseline-1/browser-results.json",
+      "receipt": "attempts/baseline-1/execution-receipt.json",
+      "sourceProof": "attempts/baseline-1/source-proof.json"
+    },
+    {
+      "attempt": "menu-recheck-2",
+      "summary": {
+        "PASS": 3,
+        "FAIL": 0,
+        "BLOCKED": 0,
+        "NOT RUN": 0
+      },
+      "startedUtc": "2026-10-29T17:16:57.702Z",
+      "finishedUtc": "2026-10-29T17:17:05.935Z",
+      "resultPath": "attempts/menu-recheck-2/browser-results.json",
+      "receipt": "attempts/menu-recheck-2/execution-receipt.json",
+      "sourceProof": "attempts/menu-recheck-2/source-proof.json"
+    },
+    {
+      "attempt": "empty-state-3",
+      "summary": {
+        "PASS": 0,
+        "FAIL": 12,
+        "BLOCKED": 0,
+        "NOT RUN": 0
+      },
+      "startedUtc": "2026-10-29T17:19:46.768Z",
+      "finishedUtc": "2026-10-29T17:19:59.811Z",
+      "resultPath": "attempts/empty-state-3/browser-results.json",
+      "receipt": "attempts/empty-state-3/execution-receipt.json",
+      "sourceProof": "attempts/empty-state-3/source-proof.json"
+    }
+  ],
+  "publication": "Evidence commit is separate; tested source remains a5620f1. No execution is relabelled as a publication-HEAD run.",
+  "pr69AtExecutionPreflight": "c5ce35c94b10fa9015277512e5ab0d7e0641a5dc OPEN/DRAFT; never executed here",
+  "currentPR69Observation": "latest-dependency-observation.json; new doc-only3ba76d3, source a5620f1 unchanged"
+}

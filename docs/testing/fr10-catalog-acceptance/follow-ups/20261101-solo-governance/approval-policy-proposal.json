@@ -1,0 +1,36 @@
+{
+  "status": "PROPOSAL ONLY; NO SETTINGS MODIFICATION AUTHORIZED OR APPLIED",
+  "reason": "HP declares one active developer and no independent human reviewer; HP remains development/QA/acceptance/merge owner. An author cannot satisfy their own required GitHub approval.",
+  "endpoint": "PATCH /repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_pull_request_reviews",
+  "current": {
+    "required_approving_review_count": 1
+  },
+  "proposedBody": {
+    "required_approving_review_count": 0
+  },
+  "scope": "All PRs into develop, not only PR #77",
+  "unchanged": {
+    "requiredCheck": "Maven test and package",
+    "requiredCheckAppId": 15368,
+    "strictUpToDate": true,
+    "enforceAdmins": true,
+    "allowForcePushes": false,
+    "allowDeletions": false,
+    "dismissStaleReviews": true,
+    "requireCodeOwnerReviews": false,
+    "requireLastPushApproval": false
+  },
+  "conversationResolution": {
+    "current": false,
+    "requestedProtectionInTask": true,
+    "changeIncludedInApprovalCountProposal": false,
+    "disposition": "Separate explicit HP authorization needed to enable; no current unresolved threads. This gap is not silently treated as enabled."
+  },
+  "mergeQueue": {
+    "enabled": false,
+    "evidence": "Repository mergeQueue(branch:develop) returned null; effective rules array empty"
+  },
+  "settingsAuthorization": null,
+  "draftAuthorization": null,
+  "mergeAuthorization": null
+}

@@ -1,0 +1,88 @@
+{
+  "checkedUtc": "2026-11-01T14:26:28.409933+00:00",
+  "head": "eb1c4a36e23cd30befee4e6c00382debe873ad8b",
+  "base": "4d57f30d7309a6d297b945b48e2d8b5a97a07cb7",
+  "draft": true,
+  "state": "open",
+  "mergeable": true,
+  "mergeableState": "blocked",
+  "protection": {
+    "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection",
+    "required_status_checks": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_status_checks",
+      "strict": true,
+      "contexts": [
+        "Maven test and package"
+      ],
+      "contexts_url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_status_checks/contexts",
+      "checks": [
+        {
+          "context": "Maven test and package",
+          "app_id": 15368
+        }
+      ]
+    },
+    "required_pull_request_reviews": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_pull_request_reviews",
+      "dismiss_stale_reviews": true,
+      "require_code_owner_reviews": false,
+      "require_last_push_approval": false,
+      "required_approving_review_count": 1
+    },
+    "required_signatures": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_signatures",
+      "enabled": false
+    },
+    "enforce_admins": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/enforce_admins",
+      "enabled": true
+    },
+    "required_linear_history": {
+      "enabled": false
+    },
+    "allow_force_pushes": {
+      "enabled": false
+    },
+    "allow_deletions": {
+      "enabled": false
+    },
+    "block_creations": {
+      "enabled": false
+    },
+    "required_conversation_resolution": {
+      "enabled": false
+    },
+    "lock_branch": {
+      "enabled": false
+    },
+    "allow_fork_syncing": {
+      "enabled": false
+    }
+  },
+  "rules": [],
+  "mergeQueueQuery": {
+    "data": {
+      "repository": {
+        "mergeQueue": null
+      }
+    }
+  },
+  "comments": [],
+  "inlineComments": [],
+  "checks": [
+    {
+      "name": "PR70 Java PostgreSQL refund regression",
+      "status": "completed",
+      "conclusion": "skipped",
+      "html_url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/41283142026/job/124778981216"
+    },
+    {
+      "name": "Maven test and package",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/41283141985/job/124778980074"
+    }
+  ],
+  "reviews": [],
+  "reviewThreads": []
+}

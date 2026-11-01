@@ -1,0 +1,3511 @@
+{
+  "startedUtc": "2026-10-29T17:18:47.722263+00:00",
+  "scope": "Master Plan FR-10 Catalog only, HP clarification in current chat",
+  "commands": [
+    {
+      "label": "git source guard",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "startedUtc": "2026-10-29T17:18:47.722263+00:00",
+      "finishedUtc": "2026-10-29T17:18:47.761653+00:00",
+      "exit": 0
+    },
+    {
+      "label": "git source guard",
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD^{tree}"
+      ],
+      "startedUtc": "2026-10-29T17:18:47.761653+00:00",
+      "finishedUtc": "2026-10-29T17:18:47.803019+00:00",
+      "exit": 0
+    },
+    {
+      "label": "git source guard",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "startedUtc": "2026-10-29T17:18:47.803019+00:00",
+      "finishedUtc": "2026-10-29T17:18:47.865578+00:00",
+      "exit": 0
+    },
+    {
+      "label": "Java version",
+      "argv": [
+        "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+        "-version"
+      ],
+      "startedUtc": "2026-10-29T17:18:47.981406+00:00",
+      "finishedUtc": "2026-10-29T17:18:48.072642+00:00",
+      "exit": 0
+    },
+    {
+      "label": "Node version",
+      "argv": [
+        "C:\\Users\\Phuc\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "--version"
+      ],
+      "startedUtc": "2026-10-29T17:18:48.072642+00:00",
+      "finishedUtc": "2026-10-29T17:18:48.105666+00:00",
+      "exit": 0
+    },
+    {
+      "label": "Docker version",
+      "argv": [
+        "docker",
+        "version",
+        "--format",
+        "{{.Client.Version}} / {{.Server.Version}}"
+      ],
+      "startedUtc": "2026-10-29T17:18:48.105666+00:00",
+      "finishedUtc": "2026-10-29T17:18:48.347372+00:00",
+      "exit": 0
+    },
+    {
+      "label": "create own disposable PostgreSQL only",
+      "argv": [
+        "docker",
+        "run",
+        "--detach",
+        "--name",
+        "uteexpress-fr10-52850996d2f1",
+        "--label",
+        "uteexpress.task=fr10-catalog",
+        "--publish",
+        "127.0.0.1::5432",
+        "--env",
+        "POSTGRES_DB=fr10_catalog",
+        "--env",
+        "POSTGRES_USER=fr10",
+        "--env",
+        "POSTGRES_PASSWORD",
+        "postgres:17.6"
+      ],
+      "startedUtc": "2026-10-29T17:18:48.347372+00:00",
+      "finishedUtc": "2026-10-29T17:18:48.842362+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned DB readiness",
+      "argv": [
+        "docker",
+        "exec",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "pg_isready",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog"
+      ],
+      "startedUtc": "2026-10-29T17:18:48.842362+00:00",
+      "finishedUtc": "2026-10-29T17:18:49.140202+00:00",
+      "exit": 2
+    },
+    {
+      "label": "owned DB readiness",
+      "argv": [
+        "docker",
+        "exec",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "pg_isready",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog"
+      ],
+      "startedUtc": "2026-10-29T17:18:49.391809+00:00",
+      "finishedUtc": "2026-10-29T17:18:49.660723+00:00",
+      "exit": 2
+    },
+    {
+      "label": "owned DB readiness",
+      "argv": [
+        "docker",
+        "exec",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "pg_isready",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog"
+      ],
+      "startedUtc": "2026-10-29T17:18:49.912209+00:00",
+      "finishedUtc": "2026-10-29T17:18:50.181636+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned loopback port",
+      "argv": [
+        "docker",
+        "port",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "5432/tcp"
+      ],
+      "startedUtc": "2026-10-29T17:18:50.181636+00:00",
+      "finishedUtc": "2026-10-29T17:18:50.344298+00:00",
+      "exit": 0
+    },
+    {
+      "label": "catalog app boot; SMTP health deliberately out of scope",
+      "argv": [
+        "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+        "-Duser.timezone=UTC",
+        "-jar",
+        "C:\\Users\\Phuc\\.codex\\worktrees\\fr10-human-acceptance\\UTEExpress\\target\\uteexpress-0.1.0-SNAPSHOT.jar",
+        "--spring.profiles.active=local"
+      ],
+      "startedUtc": "2026-10-29T17:18:50.346419+00:00",
+      "readyUtc": "2026-10-29T17:19:05.817143+00:00",
+      "pid": 14924,
+      "httpHealth": 200,
+      "demoSeeder": false
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:05.817143+00:00",
+      "finishedUtc": "2026-10-29T17:19:06.091247+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:06.151630+00:00",
+      "finishedUtc": "2026-10-29T17:19:06.508947+00:00",
+      "exit": 0
+    },
+    {
+      "label": "catalog app boot; SMTP health deliberately out of scope",
+      "argv": [
+        "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+        "-Duser.timezone=UTC",
+        "-jar",
+        "C:\\Users\\Phuc\\.codex\\worktrees\\fr10-human-acceptance\\UTEExpress\\target\\uteexpress-0.1.0-SNAPSHOT.jar",
+        "--spring.profiles.active=local,demo",
+        "--uteexpress.demo.catalog.enabled=true"
+      ],
+      "startedUtc": "2026-10-29T17:19:06.509940+00:00",
+      "readyUtc": "2026-10-29T17:19:20.775563+00:00",
+      "pid": 2432,
+      "httpHealth": 200,
+      "demoSeeder": true
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:20.775563+00:00",
+      "finishedUtc": "2026-10-29T17:19:21.044913+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:21.044913+00:00",
+      "finishedUtc": "2026-10-29T17:19:21.351486+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:21.351486+00:00",
+      "finishedUtc": "2026-10-29T17:19:21.635069+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:21.635069+00:00",
+      "finishedUtc": "2026-10-29T17:19:21.903399+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:21.903399+00:00",
+      "finishedUtc": "2026-10-29T17:19:22.171673+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:22.171673+00:00",
+      "finishedUtc": "2026-10-29T17:19:22.465364+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:22.465364+00:00",
+      "finishedUtc": "2026-10-29T17:19:22.741819+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:22.741819+00:00",
+      "finishedUtc": "2026-10-29T17:19:23.003946+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:23.003946+00:00",
+      "finishedUtc": "2026-10-29T17:19:23.303944+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:23.303944+00:00",
+      "finishedUtc": "2026-10-29T17:19:23.565361+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:23.565361+00:00",
+      "finishedUtc": "2026-10-29T17:19:23.838073+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:23.838073+00:00",
+      "finishedUtc": "2026-10-29T17:19:24.167065+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:24.167065+00:00",
+      "finishedUtc": "2026-10-29T17:19:24.460759+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:24.460759+00:00",
+      "finishedUtc": "2026-10-29T17:19:24.745695+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:24.745695+00:00",
+      "finishedUtc": "2026-10-29T17:19:25.009090+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:25.009090+00:00",
+      "finishedUtc": "2026-10-29T17:19:25.268539+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:25.270549+00:00",
+      "finishedUtc": "2026-10-29T17:19:25.536885+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:25.536885+00:00",
+      "finishedUtc": "2026-10-29T17:19:25.828889+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:25.828889+00:00",
+      "finishedUtc": "2026-10-29T17:19:26.119725+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:26.119725+00:00",
+      "finishedUtc": "2026-10-29T17:19:26.403618+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:26.403618+00:00",
+      "finishedUtc": "2026-10-29T17:19:26.684636+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:26.684636+00:00",
+      "finishedUtc": "2026-10-29T17:19:26.954852+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:26.954852+00:00",
+      "finishedUtc": "2026-10-29T17:19:27.212817+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:27.212817+00:00",
+      "finishedUtc": "2026-10-29T17:19:27.478931+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:27.478931+00:00",
+      "finishedUtc": "2026-10-29T17:19:27.760295+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:27.760295+00:00",
+      "finishedUtc": "2026-10-29T17:19:28.076780+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:28.076780+00:00",
+      "finishedUtc": "2026-10-29T17:19:28.350804+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:28.350804+00:00",
+      "finishedUtc": "2026-10-29T17:19:28.639842+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:28.639842+00:00",
+      "finishedUtc": "2026-10-29T17:19:28.916759+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:28.916759+00:00",
+      "finishedUtc": "2026-10-29T17:19:29.212657+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:29.212657+00:00",
+      "finishedUtc": "2026-10-29T17:19:29.507584+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:29.507584+00:00",
+      "finishedUtc": "2026-10-29T17:19:29.776721+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:29.776721+00:00",
+      "finishedUtc": "2026-10-29T17:19:30.051049+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:30.051049+00:00",
+      "finishedUtc": "2026-10-29T17:19:30.329145+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:30.329145+00:00",
+      "finishedUtc": "2026-10-29T17:19:30.609009+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:30.609009+00:00",
+      "finishedUtc": "2026-10-29T17:19:30.874604+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:30.874604+00:00",
+      "finishedUtc": "2026-10-29T17:19:31.165991+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:31.165991+00:00",
+      "finishedUtc": "2026-10-29T17:19:31.434091+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:31.434801+00:00",
+      "finishedUtc": "2026-10-29T17:19:31.703051+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:31.703051+00:00",
+      "finishedUtc": "2026-10-29T17:19:31.962345+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:31.962345+00:00",
+      "finishedUtc": "2026-10-29T17:19:32.230748+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:32.230748+00:00",
+      "finishedUtc": "2026-10-29T17:19:32.494636+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:32.494636+00:00",
+      "finishedUtc": "2026-10-29T17:19:32.832036+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:32.832036+00:00",
+      "finishedUtc": "2026-10-29T17:19:33.105780+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:33.105780+00:00",
+      "finishedUtc": "2026-10-29T17:19:33.346597+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:33.346597+00:00",
+      "finishedUtc": "2026-10-29T17:19:33.616371+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:33.616371+00:00",
+      "finishedUtc": "2026-10-29T17:19:33.858472+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:33.858472+00:00",
+      "finishedUtc": "2026-10-29T17:19:34.138576+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:34.138576+00:00",
+      "finishedUtc": "2026-10-29T17:19:34.421413+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:34.421413+00:00",
+      "finishedUtc": "2026-10-29T17:19:34.668223+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:34.668223+00:00",
+      "finishedUtc": "2026-10-29T17:19:34.946089+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:34.946089+00:00",
+      "finishedUtc": "2026-10-29T17:19:35.218647+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:35.218647+00:00",
+      "finishedUtc": "2026-10-29T17:19:35.483653+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:35.483653+00:00",
+      "finishedUtc": "2026-10-29T17:19:35.751006+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:35.751006+00:00",
+      "finishedUtc": "2026-10-29T17:19:36.027012+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:36.027012+00:00",
+      "finishedUtc": "2026-10-29T17:19:36.291789+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:36.291789+00:00",
+      "finishedUtc": "2026-10-29T17:19:36.579896+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:36.579896+00:00",
+      "finishedUtc": "2026-10-29T17:19:36.851786+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:36.851786+00:00",
+      "finishedUtc": "2026-10-29T17:19:37.132713+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:37.132713+00:00",
+      "finishedUtc": "2026-10-29T17:19:37.398306+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:37.398306+00:00",
+      "finishedUtc": "2026-10-29T17:19:37.671340+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:37.671340+00:00",
+      "finishedUtc": "2026-10-29T17:19:37.938374+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:37.938374+00:00",
+      "finishedUtc": "2026-10-29T17:19:38.198704+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:38.198704+00:00",
+      "finishedUtc": "2026-10-29T17:19:38.457356+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:38.457356+00:00",
+      "finishedUtc": "2026-10-29T17:19:38.723966+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:38.723966+00:00",
+      "finishedUtc": "2026-10-29T17:19:39.009123+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:39.009123+00:00",
+      "finishedUtc": "2026-10-29T17:19:39.326070+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:39.326070+00:00",
+      "finishedUtc": "2026-10-29T17:19:39.622472+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:39.622472+00:00",
+      "finishedUtc": "2026-10-29T17:19:39.907342+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:39.907342+00:00",
+      "finishedUtc": "2026-10-29T17:19:40.170645+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:40.170645+00:00",
+      "finishedUtc": "2026-10-29T17:19:40.446086+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:40.446086+00:00",
+      "finishedUtc": "2026-10-29T17:19:40.749314+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:40.749314+00:00",
+      "finishedUtc": "2026-10-29T17:19:41.022132+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:41.022132+00:00",
+      "finishedUtc": "2026-10-29T17:19:41.298855+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:41.298855+00:00",
+      "finishedUtc": "2026-10-29T17:19:41.600913+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:41.600913+00:00",
+      "finishedUtc": "2026-10-29T17:19:41.942110+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:41.942110+00:00",
+      "finishedUtc": "2026-10-29T17:19:42.216798+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:42.216798+00:00",
+      "finishedUtc": "2026-10-29T17:19:42.546270+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:42.546270+00:00",
+      "finishedUtc": "2026-10-29T17:19:42.822110+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:42.822110+00:00",
+      "finishedUtc": "2026-10-29T17:19:43.104623+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:43.104623+00:00",
+      "finishedUtc": "2026-10-29T17:19:43.369850+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:43.369850+00:00",
+      "finishedUtc": "2026-10-29T17:19:43.663746+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:43.663746+00:00",
+      "finishedUtc": "2026-10-29T17:19:43.937022+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:43.937022+00:00",
+      "finishedUtc": "2026-10-29T17:19:44.215552+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:44.215552+00:00",
+      "finishedUtc": "2026-10-29T17:19:44.486847+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:44.487862+00:00",
+      "finishedUtc": "2026-10-29T17:19:44.753673+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:44.753673+00:00",
+      "finishedUtc": "2026-10-29T17:19:45.008529+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:45.008529+00:00",
+      "finishedUtc": "2026-10-29T17:19:45.296352+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:45.296352+00:00",
+      "finishedUtc": "2026-10-29T17:19:45.576742+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:45.576742+00:00",
+      "finishedUtc": "2026-10-29T17:19:45.892516+00:00",
+      "exit": 0
+    },
+    {
+      "label": "Playwright Catalog matrix",
+      "argv": [
+        "C:\\Users\\Phuc\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe",
+        "D:\\UTEExpress\\.work\\fr10-prep\\catalog-browser.cjs",
+        "<private generated config>"
+      ],
+      "startedUtc": "2026-10-29T17:19:45.999832+00:00",
+      "finishedUtc": "2026-10-29T17:19:59.848094+00:00",
+      "exit": 1
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:19:59.848094+00:00",
+      "finishedUtc": "2026-10-29T17:20:00.125110+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:00.125110+00:00",
+      "finishedUtc": "2026-10-29T17:20:00.391101+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:00.391101+00:00",
+      "finishedUtc": "2026-10-29T17:20:00.659118+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:00.659118+00:00",
+      "finishedUtc": "2026-10-29T17:20:00.997914+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:00.997914+00:00",
+      "finishedUtc": "2026-10-29T17:20:01.265153+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:01.265153+00:00",
+      "finishedUtc": "2026-10-29T17:20:01.525140+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:01.525140+00:00",
+      "finishedUtc": "2026-10-29T17:20:01.772222+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:01.772222+00:00",
+      "finishedUtc": "2026-10-29T17:20:02.052621+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:02.052621+00:00",
+      "finishedUtc": "2026-10-29T17:20:02.314828+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:02.314828+00:00",
+      "finishedUtc": "2026-10-29T17:20:02.565798+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:02.565798+00:00",
+      "finishedUtc": "2026-10-29T17:20:02.849703+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:02.849703+00:00",
+      "finishedUtc": "2026-10-29T17:20:03.121051+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:03.121051+00:00",
+      "finishedUtc": "2026-10-29T17:20:03.386938+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:03.386938+00:00",
+      "finishedUtc": "2026-10-29T17:20:03.650392+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:03.650392+00:00",
+      "finishedUtc": "2026-10-29T17:20:03.910748+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:03.910748+00:00",
+      "finishedUtc": "2026-10-29T17:20:04.158884+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:04.158884+00:00",
+      "finishedUtc": "2026-10-29T17:20:04.416549+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:04.416549+00:00",
+      "finishedUtc": "2026-10-29T17:20:04.670521+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:04.670521+00:00",
+      "finishedUtc": "2026-10-29T17:20:04.920284+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:04.920284+00:00",
+      "finishedUtc": "2026-10-29T17:20:05.182306+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:05.182306+00:00",
+      "finishedUtc": "2026-10-29T17:20:05.462275+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:05.462275+00:00",
+      "finishedUtc": "2026-10-29T17:20:05.743889+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:05.743889+00:00",
+      "finishedUtc": "2026-10-29T17:20:06.037763+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:06.037763+00:00",
+      "finishedUtc": "2026-10-29T17:20:06.398082+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:06.398082+00:00",
+      "finishedUtc": "2026-10-29T17:20:06.670015+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:06.670015+00:00",
+      "finishedUtc": "2026-10-29T17:20:06.926616+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:06.926616+00:00",
+      "finishedUtc": "2026-10-29T17:20:07.206027+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:07.206027+00:00",
+      "finishedUtc": "2026-10-29T17:20:07.512016+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:07.512016+00:00",
+      "finishedUtc": "2026-10-29T17:20:07.799210+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:07.799210+00:00",
+      "finishedUtc": "2026-10-29T17:20:08.057819+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:08.058323+00:00",
+      "finishedUtc": "2026-10-29T17:20:08.335506+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:08.335506+00:00",
+      "finishedUtc": "2026-10-29T17:20:08.598495+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:08.598495+00:00",
+      "finishedUtc": "2026-10-29T17:20:08.858165+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:08.858165+00:00",
+      "finishedUtc": "2026-10-29T17:20:09.124713+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:09.124713+00:00",
+      "finishedUtc": "2026-10-29T17:20:09.379675+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:09.379675+00:00",
+      "finishedUtc": "2026-10-29T17:20:09.638639+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:09.638639+00:00",
+      "finishedUtc": "2026-10-29T17:20:09.901148+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:09.901148+00:00",
+      "finishedUtc": "2026-10-29T17:20:10.159642+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:10.159642+00:00",
+      "finishedUtc": "2026-10-29T17:20:10.426688+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:10.426688+00:00",
+      "finishedUtc": "2026-10-29T17:20:10.689628+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:10.689628+00:00",
+      "finishedUtc": "2026-10-29T17:20:10.950601+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:10.950601+00:00",
+      "finishedUtc": "2026-10-29T17:20:11.232804+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:11.232804+00:00",
+      "finishedUtc": "2026-10-29T17:20:11.631269+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:11.631269+00:00",
+      "finishedUtc": "2026-10-29T17:20:11.981121+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:11.981121+00:00",
+      "finishedUtc": "2026-10-29T17:20:12.247185+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:12.247185+00:00",
+      "finishedUtc": "2026-10-29T17:20:12.523123+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:12.523123+00:00",
+      "finishedUtc": "2026-10-29T17:20:12.775550+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:12.775550+00:00",
+      "finishedUtc": "2026-10-29T17:20:13.038882+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:13.038882+00:00",
+      "finishedUtc": "2026-10-29T17:20:13.323559+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:13.323559+00:00",
+      "finishedUtc": "2026-10-29T17:20:13.586180+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:13.586180+00:00",
+      "finishedUtc": "2026-10-29T17:20:13.846135+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:13.846135+00:00",
+      "finishedUtc": "2026-10-29T17:20:14.128005+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:14.128005+00:00",
+      "finishedUtc": "2026-10-29T17:20:14.393360+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:14.393360+00:00",
+      "finishedUtc": "2026-10-29T17:20:14.647345+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:14.647345+00:00",
+      "finishedUtc": "2026-10-29T17:20:14.905659+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:14.905659+00:00",
+      "finishedUtc": "2026-10-29T17:20:15.163862+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:15.163862+00:00",
+      "finishedUtc": "2026-10-29T17:20:15.427523+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:15.427523+00:00",
+      "finishedUtc": "2026-10-29T17:20:15.703971+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:15.703971+00:00",
+      "finishedUtc": "2026-10-29T17:20:15.990066+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:15.990066+00:00",
+      "finishedUtc": "2026-10-29T17:20:16.251014+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:16.251014+00:00",
+      "finishedUtc": "2026-10-29T17:20:16.649914+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:16.650421+00:00",
+      "finishedUtc": "2026-10-29T17:20:16.948581+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:16.949125+00:00",
+      "finishedUtc": "2026-10-29T17:20:17.359188+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:17.359188+00:00",
+      "finishedUtc": "2026-10-29T17:20:17.717990+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:17.717990+00:00",
+      "finishedUtc": "2026-10-29T17:20:18.107261+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:18.107261+00:00",
+      "finishedUtc": "2026-10-29T17:20:18.440776+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:18.440776+00:00",
+      "finishedUtc": "2026-10-29T17:20:18.751230+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:18.751230+00:00",
+      "finishedUtc": "2026-10-29T17:20:19.021153+00:00",
+      "exit": 0
+    },
+    {
+      "label": "owned PostgreSQL fixture/read query",
+      "argv": [
+        "docker",
+        "exec",
+        "-i",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+        "psql",
+        "-U",
+        "fr10",
+        "-d",
+        "fr10_catalog",
+        "-v",
+        "ON_ERROR_STOP=1",
+        "-Atq"
+      ],
+      "startedUtc": "2026-10-29T17:20:19.021153+00:00",
+      "finishedUtc": "2026-10-29T17:20:19.308279+00:00",
+      "exit": 0
+    },
+    {
+      "label": "git source guard",
+      "argv": [
+        "git",
+        "status",
+        "--porcelain"
+      ],
+      "startedUtc": "2026-10-29T17:20:19.353309+00:00",
+      "finishedUtc": "2026-10-29T17:20:19.416506+00:00",
+      "exit": 0
+    },
+    {
+      "label": "remove exact owned FR10 container only",
+      "argv": [
+        "docker",
+        "rm",
+        "--force",
+        "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f"
+      ],
+      "startedUtc": "2026-10-29T17:20:19.455912+00:00",
+      "finishedUtc": "2026-10-29T17:20:19.869520+00:00",
+      "exit": 0
+    },
+    {
+      "label": "verify exact owned container absent",
+      "argv": [
+        "docker",
+        "ps",
+        "--all",
+        "--quiet",
+        "--filter",
+        "id=3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f"
+      ],
+      "startedUtc": "2026-10-29T17:20:19.869520+00:00",
+      "finishedUtc": "2026-10-29T17:20:20.037530+00:00",
+      "exit": 0
+    }
+  ],
+  "privateArtifacts": "Outside repository, retained locally; no raw credentials/session data published",
+  "cleanup": {
+    "ownedJavaStopped": true,
+    "ownedContainerRemoved": true
+  },
+  "testsSkippedInBuild": true,
+  "versions": {
+    "Java version": "java version \"21\" 2023-09-19 LTS\nJava(TM) SE Runtime Environment (build 21+35-LTS-2513)\nJava HotSpot(TM) 64-Bit Server VM (build 21+35-LTS-2513, mixed mode, sharing)",
+    "Node version": "v24.22.1",
+    "Docker version": "29.4.3 / 29.4.3"
+  },
+  "ownedContainer": {
+    "id": "3cda2b39ae8f6162f1fafcbf03aff730e61525dd24133f34129234d09b4f4a0f",
+    "name": "uteexpress-fr10-52850996d2f1",
+    "image": "postgres:17.6",
+    "database": "fr10_catalog"
+  },
+  "browserExit": 1,
+  "technicalResult": "FAIL; see browser-results.json",
+  "finishedUtc": "2026-10-29T17:20:20.037530+00:00",
+  "privateArtifactHashes": [
+    {
+      "name": "browser-config.json",
+      "bytes": 959,
+      "sha256": "aae1abb83c4013de6fd4229fd22d49c6b3de42c99b986caf76fafcf8383ced91"
+    },
+    {
+      "name": "browser-stdout.log",
+      "bytes": 369,
+      "sha256": "ee73dec699f8297b5ccdaa2c533e15cbcc339afc03736b7ae518a22a069001c2"
+    },
+    {
+      "name": "command-0008.log",
+      "bytes": 42,
+      "sha256": "3246f25f357d56adfed2bbc979fbdbd8854db377e897c378b57a7e29963284d9"
+    },
+    {
+      "name": "command-0009.log",
+      "bytes": 42,
+      "sha256": "3246f25f357d56adfed2bbc979fbdbd8854db377e897c378b57a7e29963284d9"
+    },
+    {
+      "name": "demo-app.log",
+      "bytes": 7869,
+      "sha256": "81a9646721c6f9738dade24b799d6f41b015d43dde81e9d9d798079e3d545ce8"
+    },
+    {
+      "name": "migrate-app.log",
+      "bytes": 13692,
+      "sha256": "e97910fa44c3dcb709227937320c65d1231abf14a3ccb750270618670676f449"
+    },
+    {
+      "name": "uploads/products/5ed446de-a257-40a2-8379-b99ac8190a37.png",
+      "bytes": 74,
+      "sha256": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865"
+    }
+  ]
+}

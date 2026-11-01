@@ -1,0 +1,15 @@
+{
+  "source": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "tree": "797bf319420e7a82f5d2ff89859f998ae9117b35",
+  "acceptedDevelop": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "jarSha256": "683a7dbf248c9e074e92aa14cdb4f81d21fdae00050b89402368679888ca68bf",
+  "primaryHeadBefore": "7dc3a885a4358c212fd77f93434dcad22fd1243a",
+  "primaryIndexSha256Before": "58d36bd519b3354e63838d6b68dc1690f6e0168290db214c5235066c0653f76e",
+  "cleanExecutionWorktreeBefore": true,
+  "readinessChecklist": "NOT LOCATED in fetched refs; Master Plan and HP clarification govern this packet",
+  "pr69": "c5ce35c94b10fa9015277512e5ab0d7e0641a5dc OPEN/DRAFT; never executed here",
+  "g02ExecutedSource": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8; historical, not this execution",
+  "primaryHeadAfter": "7dc3a885a4358c212fd77f93434dcad22fd1243a",
+  "primaryIndexSha256After": "58d36bd519b3354e63838d6b68dc1690f6e0168290db214c5235066c0653f76e",
+  "cleanExecutionWorktreeAfter": true
+}

@@ -1,0 +1,114 @@
+{
+  "mode": "AUTOMATED_BROWSER; HUMAN PENDING",
+  "source": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "jarSha256": "683a7dbf248c9e074e92aa14cdb4f81d21fdae00050b89402368679888ca68bf",
+  "startedUtc": "2026-10-29T17:16:57.702Z",
+  "browser": "156.0.8078.48",
+  "cases": [
+    {
+      "id": "CAT-KEYBOARD-MENU-375",
+      "title": "Keyboard focus and responsive public navbar are operable",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 375,
+        "height": 812
+      },
+      "startedUtc": "2026-10-29T17:16:58.299Z",
+      "humanResult": null,
+      "observations": {
+        "focus": {
+          "tag": "A",
+          "text": "Chuyển đến nội dung chính",
+          "outline": "solid",
+          "shadow": "rgba(11, 37, 64, 0.12) 0px 16px 40px 0px"
+        },
+        "stateWhenLinkVisible": "navbar-collapse collapsing",
+        "geometry": {
+          "viewport": 375,
+          "scroll": 375
+        }
+      },
+      "status": "PASS",
+      "route": "/",
+      "events": [
+        {
+          "kind": "console-error",
+          "message": "Failed to load resource: the server responded with a status of 404 ()"
+        }
+      ],
+      "screenshot": "screenshots/CAT-KEYBOARD-MENU-375.png",
+      "screenshotSha256": "76196bf964083b9d390517914c47364e905305858a2496a2de9ea9c1cdb2a7ae",
+      "finishedUtc": "2026-10-29T17:17:01.287Z"
+    },
+    {
+      "id": "CAT-KEYBOARD-MENU-768",
+      "title": "Keyboard focus and responsive public navbar are operable",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 768,
+        "height": 1024
+      },
+      "startedUtc": "2026-10-29T17:17:01.554Z",
+      "humanResult": null,
+      "observations": {
+        "focus": {
+          "tag": "A",
+          "text": "Chuyển đến nội dung chính",
+          "outline": "solid",
+          "shadow": "rgba(11, 37, 64, 0.12) 0px 16px 40px 0px"
+        },
+        "stateWhenLinkVisible": "navbar-collapse collapsing",
+        "geometry": {
+          "viewport": 768,
+          "scroll": 768
+        }
+      },
+      "status": "PASS",
+      "route": "/",
+      "events": [],
+      "screenshot": "screenshots/CAT-KEYBOARD-MENU-768.png",
+      "screenshotSha256": "445eec95ef77d916536c153c067bc7d44bbde7343018f64164d8fedabd4941b8",
+      "finishedUtc": "2026-10-29T17:17:03.900Z"
+    },
+    {
+      "id": "CAT-KEYBOARD-MENU-1440",
+      "title": "Keyboard focus and responsive public navbar are operable",
+      "category": "browser-ui",
+      "role": "ANONYMOUS",
+      "viewport": {
+        "width": 1440,
+        "height": 900
+      },
+      "startedUtc": "2026-10-29T17:17:04.137Z",
+      "humanResult": null,
+      "observations": {
+        "focus": {
+          "tag": "A",
+          "text": "Chuyển đến nội dung chính",
+          "outline": "solid",
+          "shadow": "rgba(11, 37, 64, 0.12) 0px 16px 40px 0px"
+        },
+        "stateWhenLinkVisible": null,
+        "geometry": {
+          "viewport": 1440,
+          "scroll": 1440
+        }
+      },
+      "status": "PASS",
+      "route": "/",
+      "events": [],
+      "screenshot": "screenshots/CAT-KEYBOARD-MENU-1440.png",
+      "screenshotSha256": "7d9ed2401ea532ff307b82557a790365fa6736f37cd8cbfbace8dc1fdfc80a6b",
+      "finishedUtc": "2026-10-29T17:17:05.448Z"
+    }
+  ],
+  "finishedUtc": "2026-10-29T17:17:05.935Z",
+  "summary": {
+    "PASS": 3,
+    "FAIL": 0,
+    "BLOCKED": 0,
+    "NOT RUN": 0
+  }
+}

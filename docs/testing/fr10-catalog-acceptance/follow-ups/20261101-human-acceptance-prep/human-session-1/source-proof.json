@@ -1,0 +1,23 @@
+{
+  "source": "4d57f30d7309a6d297b945b48e2d8b5a97a07cb7",
+  "tree": "f1e7a707a348f7cb77e70d5cf82e22131a631ae1",
+  "acceptedDevelop": "4d57f30d7309a6d297b945b48e2d8b5a97a07cb7",
+  "jarSha256": "0a57193273f330b028c134b196977b626c643b7582de3e7a8aefcc23046acc36",
+  "driverSha256": "0f29a86e9dc1382a72c774fd6558293f5791e414803a62c47403d85a9a90efbb",
+  "environmentRunnerSha256": "ab12ac62c96e883da0527b324b8d210820e66ab2aed784e0990f777de9bce038",
+  "runnerVersion": "human-session-1",
+  "browserDriverExecuted": false,
+  "primaryRepository": "D:\\UTEExpress",
+  "primaryStatusBefore": "",
+  "caseFilter": null,
+  "primaryHeadBefore": "00f631cd7c0c2507186719b78d5bb18ef534f3d6",
+  "primaryIndexSha256Before": "e8777d557a208278ef841bcdf9849f10b037cd184aa937952a42d97066e3841a",
+  "cleanExecutionWorktreeBefore": true,
+  "readinessChecklist": "NOT LOCATED in fetched refs; Master Plan and HP clarification govern this packet",
+  "pr69": "Out of scope; never executed or changed here",
+  "g02ExecutedSource": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8; historical, not this execution",
+  "primaryHeadAfter": "00f631cd7c0c2507186719b78d5bb18ef534f3d6",
+  "primaryIndexSha256After": "e8777d557a208278ef841bcdf9849f10b037cd184aa937952a42d97066e3841a",
+  "cleanExecutionWorktreeAfter": true,
+  "primaryStatusAfter": ""
+}
