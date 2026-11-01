@@ -1,0 +1,28 @@
+{
+  "status": "SELF-REVIEWED BY HP — INDEPENDENT REVIEW NOT AVAILABLE (SOLO DEVELOPER)",
+  "soleActiveDeveloperAndAcceptanceOwner": "HP, as explicitly declared in the current solo workflow task",
+  "technicalSelfReviewConfirmed": true,
+  "confirmationSource": "Direct HP answer to request_user_input_async call_e572451b66ed4b5daf61d17e85d69875 item 0",
+  "confirmationVerbatim": "Xác nhận HP technical self-review",
+  "receivedNoLaterThanUtc": "2026-11-01T14:30:22Z",
+  "timestampBoundary": "Clock-tool observation after receipt, not an invented review/signature time",
+  "humanAcceptance": {
+    "reportedPass": 36,
+    "source": "Preserved three viewport-specific HP chat replies"
+  },
+  "evidenceClassification": {
+    "complete": 27,
+    "automationLimited": 9
+  },
+  "independentHumanReview": "NOT AVAILABLE",
+  "independentTDApprovalExists": false,
+  "signature": null,
+  "testsRerunThisTask": false,
+  "fullPostgresITRerun": false,
+  "settingsAuthorizations": [
+    "Cho phép chỉ đổi approval 1 → 0",
+    "Cho phép bật conversation resolution"
+  ],
+  "draftAuthorization": null,
+  "mergeAuthorization": null
+}

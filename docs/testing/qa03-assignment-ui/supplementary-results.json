@@ -1,0 +1,21 @@
+{
+  "source_sha": "55384056538968f9e54bb2fcf1f525272c60b157",
+  "unit": 705,
+  "pg": 1354,
+  "java_total": 2059,
+  "full_runner_exit": 0,
+  "timeout": false,
+  "node": {
+    "tests": 41,
+    "exit": 0,
+    "log_sha256": "3bc84c03cd457fdf7e23ee625deded23d4c05241186f718957cfb5ab28a3d471"
+  },
+  "tooling": {
+    "tests": 17,
+    "exit": 0,
+    "log_sha256": "1b8173fbe10f89cc494382cb571047bae7e3e8bc78d054de5b2a09fd03261995"
+  },
+  "all_full_XML_and_log_hashes_checked": true,
+  "jar_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+  "prior_attempt": "2d550f4 failed ArchitectureTest; retained .work/assignment-ui-attempt1, assertion unchanged"
+}

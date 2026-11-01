@@ -1,0 +1,710 @@
+{
+  "browser": "155.0.8059.82",
+  "headless": true,
+  "mode": "Automated real browser UI; not human manual signoff",
+  "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+  "cases": [
+    {
+      "case": "assignment-reassignment",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:18:40.860Z",
+      "steps": [
+        {
+          "order": 2,
+          "ready_order": true,
+          "assignment_controls": 0
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\assignment-reassignment-375-ready.png",
+          "sha256": "a9d965433e8629c130a32a9eb4602bc63798c95557fd47af7660f60936ca8ecc",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\assignment-reassignment-375-failure.png",
+          "sha256": "a9d965433e8629c130a32a9eb4602bc63798c95557fd47af7660f60936ca8ecc",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "Q03-G01-ASSIGNMENT-UI-MISSING",
+      "finished_utc": "2026-10-29T06:18:43.827Z"
+    },
+    {
+      "case": "failure-retry",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:18:43.863Z",
+      "steps": [
+        {
+          "first_failure_retry_second_failure": "UI_SUBMITTED",
+          "order_unchanged": true,
+          "foreign_shipper_denied": true,
+          "no_third_retry": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\failure-retry-375-exhausted.png",
+          "sha256": "a49efcc68b3e3b31d7c17a109604a96026ca2cd614132ce4bc9929c475578a8d",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:18:51.021Z"
+    },
+    {
+      "case": "attempt2-delivery",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:18:51.084Z",
+      "steps": [
+        {
+          "wrong_COD_rejected": true,
+          "delivered_at_attempt2": true,
+          "payment": "PAID"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\attempt2-delivery-375-delivered.png",
+          "sha256": "ad9c83a7ca741e4df2a944ce9128ac2beacffb3a4537cfed9cbe365b3d0e3192",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:18:56.694Z"
+    },
+    {
+      "case": "return-to-sender",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:18:56.708Z",
+      "steps": [
+        {
+          "receipt_submitted_via_UI": true,
+          "order": "CANCELLED",
+          "shipment": "RETURNED_TO_SENDER"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\return-to-sender-375-received.png",
+          "sha256": "59027ef834dafec5e94c9fac36c91899ec431c8eb6b48d100c7d4684633f5240",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:19:03.192Z"
+    },
+    {
+      "case": "notification-two-sessions",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:03.210Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\notification-two-sessions-375-failure.png",
+          "sha256": "8d74e316978adf145508122c72a085e6cb4d5e47f023f8c0d1a835d404d85102",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\notification-two-sessions-375-failure.png",
+          "sha256": "3a73efb8c7003ef9718e51836a01e77e4a5526447f346af4de91c58d809b99df",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\notification-two-sessions-375-failure.png",
+          "sha256": "567f9ed8cc4d5e47d4afc606f62a558c489048b4970b53be355acf8938c8a0e3",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        }
+      ],
+      "browser_result": "BLOCKED",
+      "finding": "HARNESS_locator.click: Error: strict mode violation: locator('form[action$=\"/read\"]:first-of-type').locator('button[type=submit]') resolved to 14 elements:\n    1) <button type=\"submit\" class=\"btn btn-sm btn-outline-primary\">Đánh dấu đã đọc</button>",
+      "finished_utc": "2026-10-29T06:19:10.277Z"
+    },
+    {
+      "case": "review-media",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:10.386Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\review-media-375-failure.png",
+          "sha256": "919746228391f76eef7e804684b7a6a5d7357ddc4c51311f6c3e0c057401305b",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "VALID_REVIEW_NOT_PUBLISHED",
+      "finished_utc": "2026-10-29T06:19:15.390Z"
+    },
+    {
+      "case": "admin-financial-scope",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:15.407Z",
+      "steps": [
+        {
+          "admin_UI": true,
+          "manager_denied": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\admin-financial-scope-375-admin.png",
+          "sha256": "a993264815e8629ff1f5bec687affc32034a04e161015fb0c0eb9b8ab560ae50",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\admin-financial-scope-375-manager-denied.png",
+          "sha256": "d676fa47a06270fb283456b113b6fafcdeee55326ad71a6106b40785fbbee692",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:19:17.547Z"
+    },
+    {
+      "case": "full-user-journey",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:17.608Z",
+      "steps": [
+        {
+          "note": "Full all-UI journey not claimed; reaches missing Ops assignment capability. Checkout prerequisite arranged by existing real HTTP fixture, not counted as UI journey."
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\full-user-journey-375-assignment-blocker.png",
+          "sha256": "66e5913b602b3db631b96ad2b1ff1cc899d6960c5396d90c54b02d0e35aa77b9",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false
+        }
+      ],
+      "browser_result": "BLOCKED",
+      "finding": "Q03-G01-ASSIGNMENT-UI-MISSING",
+      "finished_utc": "2026-10-29T06:19:19.861Z"
+    },
+    {
+      "case": "assignment-reassignment",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:19.873Z",
+      "steps": [
+        {
+          "order": 9,
+          "ready_order": true,
+          "assignment_controls": 0
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\assignment-reassignment-768-ready.png",
+          "sha256": "f69afc4fa6cfafd0ec56786f3ae65fd643b5ef35e0882352319caebc43c3c1fa",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\assignment-reassignment-768-failure.png",
+          "sha256": "f69afc4fa6cfafd0ec56786f3ae65fd643b5ef35e0882352319caebc43c3c1fa",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "Q03-G01-ASSIGNMENT-UI-MISSING",
+      "finished_utc": "2026-10-29T06:19:22.107Z"
+    },
+    {
+      "case": "failure-retry",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:22.121Z",
+      "steps": [
+        {
+          "first_failure_retry_second_failure": "UI_SUBMITTED",
+          "order_unchanged": true,
+          "foreign_shipper_denied": true,
+          "no_third_retry": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\failure-retry-768-exhausted.png",
+          "sha256": "72ae80ad21a4354eb4b2fb5fa114b07266a9edd234039949aae3192c21de8922",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:19:29.213Z"
+    },
+    {
+      "case": "attempt2-delivery",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:29.265Z",
+      "steps": [
+        {
+          "wrong_COD_rejected": true,
+          "delivered_at_attempt2": true,
+          "payment": "PAID"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\attempt2-delivery-768-delivered.png",
+          "sha256": "1b4b4e086a55385c348af308966381620151e8e85eb1921e295d1b6e35dd2832",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:19:34.924Z"
+    },
+    {
+      "case": "return-to-sender",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:34.937Z",
+      "steps": [
+        {
+          "receipt_submitted_via_UI": true,
+          "order": "CANCELLED",
+          "shipment": "RETURNED_TO_SENDER"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\return-to-sender-768-received.png",
+          "sha256": "a90d8f1b81cf3c91ec6ba5a8b02dacf9e1732ba48eb963c285d5bc6602f90037",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:19:41.405Z"
+    },
+    {
+      "case": "notification-two-sessions",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:41.418Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\notification-two-sessions-768-failure.png",
+          "sha256": "f706e2d1886ba09f7febe5022a40ea668fca4e433e73ccba4c96747a0c3da93e",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\notification-two-sessions-768-failure.png",
+          "sha256": "da8da8505b599cec25f4277bb63a6fbec1131a58b6473180a98efc5f51c82ebe",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\notification-two-sessions-768-failure.png",
+          "sha256": "cafe772c7013d8b22b8d870190ea674f0f954631028dd6318497c20489e566cb",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        }
+      ],
+      "browser_result": "BLOCKED",
+      "finding": "HARNESS_locator.click: Error: strict mode violation: locator('form[action$=\"/read\"]:first-of-type').locator('button[type=submit]') resolved to 32 elements:\n    1) <button type=\"submit\" class=\"btn btn-sm btn-outline-primary\">Đánh dấu đã đọc</button>",
+      "finished_utc": "2026-10-29T06:19:48.371Z"
+    },
+    {
+      "case": "review-media",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:48.482Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\review-media-768-failure.png",
+          "sha256": "92b79e2e1cceb8bb95be0e0b16a2ba75b510cda5d003ca55d13211449d1ba1d2",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "VALID_REVIEW_NOT_PUBLISHED",
+      "finished_utc": "2026-10-29T06:19:53.736Z"
+    },
+    {
+      "case": "admin-financial-scope",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:53.755Z",
+      "steps": [
+        {
+          "admin_UI": true,
+          "manager_denied": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\admin-financial-scope-768-admin.png",
+          "sha256": "6b8f266bd0a06a35d99ec21a7ea7fe3b30a7eb5cb072332783256af6c87044ba",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\admin-financial-scope-768-manager-denied.png",
+          "sha256": "5b131e83a9ca327992be81b58713f85a216bed4c71c674230eb1a89e5fa8d5d8",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:19:55.909Z"
+    },
+    {
+      "case": "full-user-journey",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:55.949Z",
+      "steps": [
+        {
+          "note": "Full all-UI journey not claimed; reaches missing Ops assignment capability. Checkout prerequisite arranged by existing real HTTP fixture, not counted as UI journey."
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\full-user-journey-768-assignment-blocker.png",
+          "sha256": "9e93440d5dae708e0d1119320071501fc698fa1f39cd8ba7a549a56daac663d4",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false
+        }
+      ],
+      "browser_result": "BLOCKED",
+      "finding": "Q03-G01-ASSIGNMENT-UI-MISSING",
+      "finished_utc": "2026-10-29T06:19:58.165Z"
+    },
+    {
+      "case": "assignment-reassignment",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:19:58.181Z",
+      "steps": [
+        {
+          "order": 16,
+          "ready_order": true,
+          "assignment_controls": 0
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\assignment-reassignment-1440-ready.png",
+          "sha256": "8abb80c5def89a7aa5793d29f11bf87a9aada927be51e042c8b365d017a10902",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\assignment-reassignment-1440-failure.png",
+          "sha256": "8abb80c5def89a7aa5793d29f11bf87a9aada927be51e042c8b365d017a10902",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "Q03-G01-ASSIGNMENT-UI-MISSING",
+      "finished_utc": "2026-10-29T06:20:02.699Z"
+    },
+    {
+      "case": "failure-retry",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:20:02.711Z",
+      "steps": [
+        {
+          "first_failure_retry_second_failure": "UI_SUBMITTED",
+          "order_unchanged": true,
+          "foreign_shipper_denied": true,
+          "no_third_retry": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\failure-retry-1440-exhausted.png",
+          "sha256": "d4e011f82f22c168e2a2125e1883da7ba6110e0bc554de1f05c971a8bb75b381",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:20:09.652Z"
+    },
+    {
+      "case": "attempt2-delivery",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:20:09.696Z",
+      "steps": [
+        {
+          "wrong_COD_rejected": true,
+          "delivered_at_attempt2": true,
+          "payment": "PAID"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\attempt2-delivery-1440-delivered.png",
+          "sha256": "edcf326d510c05f9764677a14cad5f3ae3ce9bb7b1e780d92766b0cf3950f7da",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:20:16.378Z"
+    },
+    {
+      "case": "return-to-sender",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:20:16.390Z",
+      "steps": [
+        {
+          "receipt_submitted_via_UI": true,
+          "order": "CANCELLED",
+          "shipment": "RETURNED_TO_SENDER"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\return-to-sender-1440-received.png",
+          "sha256": "3bd9e1f8c4f6000e428e5e586ab7a8239b7ecaa7bca5c71a1d0edcf5ed6e9745",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:20:23.446Z"
+    },
+    {
+      "case": "notification-two-sessions",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:20:23.460Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\notification-two-sessions-1440-failure.png",
+          "sha256": "c03af69246f8b0190bad2ed3004b8f05ebf91971bc97ee68cd128f9e3fcedfd3",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\notification-two-sessions-1440-failure.png",
+          "sha256": "9e839012fe15138c9f920904953dd23f6783ebc2aa133ba24c0b610e6e254a7d",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\notification-two-sessions-1440-failure.png",
+          "sha256": "acc8acf587127d6c1bc386638df45ed901448e4e6bfa766ac54d08310c4c5fa6",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        }
+      ],
+      "browser_result": "BLOCKED",
+      "finding": "HARNESS_locator.click: Error: strict mode violation: locator('form[action$=\"/read\"]:first-of-type').locator('button[type=submit]') resolved to 50 elements:\n    1) <button type=\"submit\" class=\"btn btn-sm btn-outline-primary\">Đánh dấu đã đọc</button>",
+      "finished_utc": "2026-10-29T06:20:30.913Z"
+    },
+    {
+      "case": "review-media",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:20:31.006Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\review-media-1440-failure.png",
+          "sha256": "d50e34b1bf7cac7caecc4ac3520d6a0ade96873af3de4eaec723b1bddd857440",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "VALID_REVIEW_NOT_PUBLISHED",
+      "finished_utc": "2026-10-29T06:20:36.606Z"
+    },
+    {
+      "case": "admin-financial-scope",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:20:36.627Z",
+      "steps": [
+        {
+          "admin_UI": true,
+          "manager_denied": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\admin-financial-scope-1440-admin.png",
+          "sha256": "b33e0f122fc2e2bebc86d5aa945f5a7eb38eb158e7fe5012350134747649d48c",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\admin-financial-scope-1440-manager-denied.png",
+          "sha256": "6d3d38e8c6bf698bf290f065260fb1d19ab517e452816e3ea8f2fa50453d0699",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T06:20:38.774Z"
+    },
+    {
+      "case": "full-user-journey",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "a34e8cc3f0c0ecca4bbd08fd9f92b1d9c9247fd9",
+      "build_sha256": "f123c15ebed3d2a679fafd19b8386caaf6b56076233af0ee156d44fefbbe5fa9",
+      "started_utc": "2026-10-29T06:20:38.818Z",
+      "steps": [
+        {
+          "note": "Full all-UI journey not claimed; reaches missing Ops assignment capability. Checkout prerequisite arranged by existing real HTTP fixture, not counted as UI journey."
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-baseline\\full-user-journey-1440-assignment-blocker.png",
+          "sha256": "2c485f67d80fa19b18a634cf912836515e5f29d2d2d126a2fa161e6909304219",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false
+        }
+      ],
+      "browser_result": "BLOCKED",
+      "finding": "Q03-G01-ASSIGNMENT-UI-MISSING",
+      "finished_utc": "2026-10-29T06:20:41.839Z"
+    }
+  ]
+}

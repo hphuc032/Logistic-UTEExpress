@@ -1,0 +1,122 @@
+{
+  "browser": "155.0.8059.82",
+  "headless": true,
+  "mode": "Automated real browser UI; not human manual signoff",
+  "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+  "cases": [
+    {
+      "case": "rts-contract-replay",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:11:03.838Z",
+      "steps": [
+        {
+          "same_payload_replay": 302,
+          "different_payload_replay": 409,
+          "persisted_facts_unchanged": true,
+          "contract_source": "ReturnToSenderIT.opsReceiptCancelsReleasesExactlyOnceAndReplaysWithoutChangingMoney"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-rts-contract\\rts-contract-replay-375-same-replayed.png",
+          "sha256": "8969b4e48149eb135498ba2dd6bbf39b7a957b8ab0a72273811d1b199ec5f983",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-rts-contract/rts-contract-replay-375-same-replayed.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-rts-contract\\rts-contract-replay-375-different-denied.png",
+          "sha256": "55268026a084b85740c6cc568a69fe22e237ce7c4a2af124dfd59e022b54b0c9",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-rts-contract/rts-contract-replay-375-different-denied.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T07:11:20.841Z"
+    },
+    {
+      "case": "rts-contract-replay",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:11:20.867Z",
+      "steps": [
+        {
+          "same_payload_replay": 302,
+          "different_payload_replay": 409,
+          "persisted_facts_unchanged": true,
+          "contract_source": "ReturnToSenderIT.opsReceiptCancelsReleasesExactlyOnceAndReplaysWithoutChangingMoney"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-rts-contract\\rts-contract-replay-768-same-replayed.png",
+          "sha256": "0c367d2cdc9f3f9c0f22011e038d8f9ee9a0f1336b43a4779d2de46029606cee",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-rts-contract/rts-contract-replay-768-same-replayed.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-rts-contract\\rts-contract-replay-768-different-denied.png",
+          "sha256": "c90140a8831c081bd952a77be95bc0fbaa6d1847abb6c2b5bd1f426775fd79fb",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-rts-contract/rts-contract-replay-768-different-denied.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T07:11:33.179Z"
+    },
+    {
+      "case": "rts-contract-replay",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "59a1df394d7ed586ed38425ce839f0757415c8c7",
+      "build_sha256": "1734d75b33caa6fb11d842eff702915947f4353de90d887005788043053771ba",
+      "dataset_manifest_sha256": "885113217b38547575e29ce00621f3de7feccb2d4b78927818a1c0583717f0d0",
+      "started_utc": "2026-10-29T07:11:33.205Z",
+      "steps": [
+        {
+          "same_payload_replay": 302,
+          "different_payload_replay": 409,
+          "persisted_facts_unchanged": true,
+          "contract_source": "ReturnToSenderIT.opsReceiptCancelsReleasesExactlyOnceAndReplaysWithoutChangingMoney"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-rts-contract\\rts-contract-replay-1440-same-replayed.png",
+          "sha256": "f7d1180cd0761edb69623cf56d77e3510c2651e6dced54a1793e53f1e4ebe920",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser-rts-contract/rts-contract-replay-1440-same-replayed.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-rts-contract\\rts-contract-replay-1440-different-denied.png",
+          "sha256": "f6c6f31bc4cf692ac65d93f9d8955c407b272fa93d54a723ae8b1270bb922779",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser-rts-contract/rts-contract-replay-1440-different-denied.png"
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T07:11:45.320Z"
+    }
+  ]
+}

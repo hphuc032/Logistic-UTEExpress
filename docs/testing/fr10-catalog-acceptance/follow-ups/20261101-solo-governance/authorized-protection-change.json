@@ -1,0 +1,132 @@
+{
+  "startedUtc": "2026-11-01T14:31:28.298472+00:00",
+  "finishedUtc": "2026-11-01T14:31:31.372992+00:00",
+  "ownerAuthorizationSource": "Direct HP replies in current conversation; questions call_e572451b66ed4b5daf61d17e85d69875 items 1 and 2",
+  "authorizationVerbatim": [
+    "Cho phép chỉ đổi approval 1 → 0",
+    "Cho phép bật conversation resolution"
+  ],
+  "authorizationReceivedNoLaterThanUtc": "2026-11-01T14:30:22Z",
+  "before": {
+    "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection",
+    "required_status_checks": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_status_checks",
+      "strict": true,
+      "contexts": [
+        "Maven test and package"
+      ],
+      "contexts_url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_status_checks/contexts",
+      "checks": [
+        {
+          "context": "Maven test and package",
+          "app_id": 15368
+        }
+      ]
+    },
+    "required_pull_request_reviews": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_pull_request_reviews",
+      "dismiss_stale_reviews": true,
+      "require_code_owner_reviews": false,
+      "require_last_push_approval": false,
+      "required_approving_review_count": 1
+    },
+    "required_signatures": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_signatures",
+      "enabled": false
+    },
+    "enforce_admins": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/enforce_admins",
+      "enabled": true
+    },
+    "required_linear_history": {
+      "enabled": false
+    },
+    "allow_force_pushes": {
+      "enabled": false
+    },
+    "allow_deletions": {
+      "enabled": false
+    },
+    "block_creations": {
+      "enabled": false
+    },
+    "required_conversation_resolution": {
+      "enabled": false
+    },
+    "lock_branch": {
+      "enabled": false
+    },
+    "allow_fork_syncing": {
+      "enabled": false
+    }
+  },
+  "after": {
+    "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection",
+    "required_status_checks": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_status_checks",
+      "strict": true,
+      "contexts": [
+        "Maven test and package"
+      ],
+      "contexts_url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_status_checks/contexts",
+      "checks": [
+        {
+          "context": "Maven test and package",
+          "app_id": 15368
+        }
+      ]
+    },
+    "required_pull_request_reviews": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_pull_request_reviews",
+      "dismiss_stale_reviews": true,
+      "require_code_owner_reviews": false,
+      "require_last_push_approval": false,
+      "required_approving_review_count": 0
+    },
+    "required_signatures": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/required_signatures",
+      "enabled": false
+    },
+    "enforce_admins": {
+      "url": "https://api.github.com/repos/hphuc032/Logistic-UTEExpress/branches/develop/protection/enforce_admins",
+      "enabled": true
+    },
+    "required_linear_history": {
+      "enabled": false
+    },
+    "allow_force_pushes": {
+      "enabled": false
+    },
+    "allow_deletions": {
+      "enabled": false
+    },
+    "block_creations": {
+      "enabled": false
+    },
+    "required_conversation_resolution": {
+      "enabled": true
+    },
+    "lock_branch": {
+      "enabled": false
+    },
+    "allow_fork_syncing": {
+      "enabled": false
+    }
+  },
+  "changes": [
+    {
+      "field": "required_conversation_resolution.enabled",
+      "before": false,
+      "after": true
+    },
+    {
+      "field": "required_pull_request_reviews.required_approving_review_count",
+      "before": 1,
+      "after": 0
+    }
+  ],
+  "onlyAuthorizedFieldsChanged": true,
+  "draftChanged": false,
+  "merged": false,
+  "scope": "All PRs into develop; explicit solo-governance policy exception, not administrator merge bypass"
+}

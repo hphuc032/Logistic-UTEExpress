@@ -1,0 +1,17 @@
+{
+  "attempt": "corrected",
+  "retained_results": true,
+  "automated_browser_cases": 24,
+  "pass": 19,
+  "blocked": 5,
+  "manual_acceptance": "NOT CLAIMED",
+  "harness_corrections": [
+    "Expand collapsed mobile navbar before clicking logout",
+    "Select checkout method=post rather than GET and POST forms together",
+    "Use unique failure screenshot filenames per context to avoid overwrite"
+  ],
+  "application_findings": [
+    "Assignment UI fixed in candidate5538405; not merged/accepted",
+    "OTP help text10min differs from server5min; ownerHP copy/UI follow-up"
+  ]
+}

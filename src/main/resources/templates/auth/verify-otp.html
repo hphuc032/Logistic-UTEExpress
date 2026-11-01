@@ -39,7 +39,7 @@
                            inputmode="numeric" autocomplete="one-time-code"
                            minlength="6" maxlength="6" pattern="[0-9]{6}" required
                            aria-describedby="code-help code-error">
-                    <div id="code-help" class="form-text">Mã có hiệu lực trong 10 phút.</div>
+                    <div id="code-help" class="form-text">Mã có hiệu lực tối đa 5 phút.</div>
                     <div id="code-error" class="invalid-feedback"
                          th:if="${#fields.hasErrors('code')}"
                          th:errors="*{code}" role="alert">Mã xác minh không hợp lệ.</div>

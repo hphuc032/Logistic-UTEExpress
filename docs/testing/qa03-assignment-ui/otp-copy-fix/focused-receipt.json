@@ -1,0 +1,121 @@
+{
+  "source_sha": "53fbf923009c1d9da2ae0c73440b6a6de14904e5",
+  "tree": "8ba39ba27ed69771a96efd54c2c6e4d189e3d404",
+  "command": [
+    "mvnw.cmd",
+    "--batch-mode",
+    "--no-transfer-progress",
+    "-Ppostgres-it",
+    "-Dtest=ArchitectureTest,EmailVerificationControllerTest,EmailVerificationServiceTest,OtpSecurityTest,OtpRequestRateLimiterTest,OtpRequestLimitFilterTest",
+    "-Dit.test=Auth03EmailVerificationIT,Qa01OtpSecurityIT,Qa01CookieCsrfIT,ShipmentAssignmentIT,ShipperFulfillmentIT",
+    "clean",
+    "verify"
+  ],
+  "started_utc": "2026-10-29T09:25:37.437260+00:00",
+  "finished_utc": "2026-10-29T09:27:57.768218+00:00",
+  "duration_seconds": 140.331,
+  "exit_code": 0,
+  "timed_out": false,
+  "log_sha256": "9f863df5e72f16328fd3f35308f63361c69ec4c9cb7dd54ef17c7fa8ec3528ad",
+  "clean_worktree_before": true,
+  "clean_worktree_after": true,
+  "unit": {
+    "tests": 28,
+    "reports": [
+      {
+        "suite": "com.uteexpress.ArchitectureTest",
+        "tests": 7,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "24ba4798483aa7afad293639233f79350be1944266b99105caf110c29ed85493"
+      },
+      {
+        "suite": "com.uteexpress.identity.controller.EmailVerificationControllerTest",
+        "tests": 6,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "ca04dac74885671b1b9d017b11ac8e55e45ec8118e7fd8b6254bfe64d199627a"
+      },
+      {
+        "suite": "com.uteexpress.identity.service.EmailVerificationServiceTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "7e7a74d0842907d580edc9e24e9b84f906613ed6b995210ce4320e3bf68f6970"
+      },
+      {
+        "suite": "com.uteexpress.identity.service.OtpSecurityTest",
+        "tests": 4,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "b083e719cd5debebe61acbd4ad3aee279d89f5f86d5f56b249f0cdd7521cc536"
+      },
+      {
+        "suite": "com.uteexpress.security.OtpRequestLimitFilterTest",
+        "tests": 2,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "d9d0e33e047fd70159d87f29f283cefe8d9f0d90fb4686d3838d77d4ec66e99f"
+      },
+      {
+        "suite": "com.uteexpress.security.OtpRequestRateLimiterTest",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "3998ad7221824f8a86cec316179898282c72c48e5bc695f3a0240bb2d233945a"
+      }
+    ]
+  },
+  "postgresql": {
+    "tests": 57,
+    "reports": [
+      {
+        "suite": "com.uteexpress.fulfillment.ShipperFulfillmentIT",
+        "tests": 16,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "2b95c6a3854ba8de1d11121d6009a8194504e075a308ef47165d1ad042010bde"
+      },
+      {
+        "suite": "com.uteexpress.identity.Auth03EmailVerificationIT",
+        "tests": 5,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "4c2254c016b9f0861b3876b6c3ca8e0881b03ee605949b42c3f52829cadae61f"
+      },
+      {
+        "suite": "com.uteexpress.security.Qa01CookieCsrfIT",
+        "tests": 15,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "09c7290110a78e45efff1805f4fce3924dee2b973566c6c566bb1788a252d13b"
+      },
+      {
+        "suite": "com.uteexpress.security.Qa01OtpSecurityIT",
+        "tests": 11,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "9b6d278df19367a8c506d3e37f88fadaa269d9958fb0b68dc0765c7d3204564d"
+      },
+      {
+        "suite": "com.uteexpress.shipping.ShipmentAssignmentIT",
+        "tests": 10,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0,
+        "sha256": "867426800b9dfe29272f4d0db77761d734743e4eff739f4dfa85cf70e53715eb"
+      }
+    ]
+  },
+  "result": "PASS"
+}

@@ -27,6 +27,24 @@ public class RoleGovernanceService {
         this.audit = audit;
     }
 
+    /**
+     * Current actor only. Fresh scalar read under the account lock also covers callers
+     * whose outer JPA transaction has already cached an older account snapshot.
+     * No Role row is locked afterward, so grant/revoke lock ordering is preserved.
+     */
+    @PreAuthorize("hasAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority())")
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.MANDATORY)
+    public Long requireCurrentActiveAdministratorForUpdate() {
+        Long actor = currentAccount.currentAccountId().filter(id -> id > 0)
+                .orElseThrow(() -> new ApplicationException(ErrorCode.UNAUTHENTICATED));
+        var persisted = roles.lockAccount(actor);
+        if (persisted == null || !"ACTIVE".equals(persisted.status())
+                || !roles.rolesFor(actor).contains(ManagedRole.ADMIN.name())) {
+            throw new ApplicationException(ErrorCode.ACCESS_DENIED);
+        }
+        return actor;
+    }
+
     @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority(), T(com.uteexpress.security.RoleCode).MANAGER.authority())")
     @Transactional(readOnly = true)
     public Set<String> rolesFor(Long accountId) {
@@ -38,6 +56,16 @@ public class RoleGovernanceService {
     @Transactional(readOnly = true)
     public List<RoleGovernanceRepository.ActiveShipper> activeShippers() {
         return roles.activeShippers();
+    }
+
+    /** UI projection only; keep repository row types out of controllers. */
+    @PreAuthorize("hasAnyAuthority(T(com.uteexpress.security.RoleCode).ADMIN.authority(), T(com.uteexpress.security.RoleCode).MANAGER.authority())")
+    @Transactional(readOnly = true)
+    public List<com.uteexpress.governance.dto.AssignmentShipperOption> assignmentShipperOptions(Long excludeId) {
+        return roles.activeShippers().stream()
+                .filter(row -> excludeId == null || row.id() != excludeId.longValue())
+                .map(row -> new com.uteexpress.governance.dto.AssignmentShipperOption(row.id(), row.username()))
+                .toList();
     }
 
     /** Serialize assignment with SHIPPER grants/revocations and account locks. */

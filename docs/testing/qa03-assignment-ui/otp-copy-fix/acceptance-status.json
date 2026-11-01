@@ -1,0 +1,41 @@
+{
+  "executed_source_sha": "53fbf923009c1d9da2ae0c73440b6a6de14904e5",
+  "executed_tree": "8ba39ba27ed69771a96efd54c2c6e4d189e3d404",
+  "OTP_COPY": "FIXED IN CANDIDATE under HP authorization / owner acceptance PENDING",
+  "production_delta_from_3c4c001": [
+    "src/main/resources/templates/auth/verify-otp.html:42 \u2014 one help-text line"
+  ],
+  "backend_application_yml_OtpProperties_security_policy_business_refund_changed": false,
+  "verified": {
+    "focused_unit": 28,
+    "focused_PostgreSQL": 57,
+    "PostgreSQL_classes": 5,
+    "Node": 48,
+    "tooling": 17,
+    "browser": 18,
+    "widths": [
+      375,
+      768,
+      1440
+    ],
+    "XML_hashes_checked": 11,
+    "zero_failures_errors_skips": true,
+    "exit0_no_timeout": true,
+    "clean_worktree_before_after": true,
+    "owned_cleanup": true
+  },
+  "pending": [
+    "TD exact publication-head review and FR-01/FR-02 disposition",
+    "Private raw/JAR archive delivery and TD receipt/reproduction",
+    "Genuine human G01 checks remain NOT RUN/unsigned",
+    "HP final acceptance/merge decision and branch protection"
+  ],
+  "other_branches_unchanged": {
+    "69": "19b7e4bdc811b7c6059ce742eb35995830f23f6b",
+    "71": "c0b2f769e4af5b34b7711829284a776776adc409"
+  },
+  "CI": "Check exact publication HEAD separately; not inferred from earlier head",
+  "G02_on_unmerged_PR75": "NOT RUN in this task",
+  "QA03_COMPLETE": false,
+  "approve_merge_forcepush": false
+}

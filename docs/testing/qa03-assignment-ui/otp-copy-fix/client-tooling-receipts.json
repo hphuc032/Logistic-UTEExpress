@@ -1,0 +1,41 @@
+{
+  "source_sha": "53fbf923009c1d9da2ae0c73440b6a6de14904e5",
+  "suites": [
+    {
+      "suite": "node",
+      "command": [
+        "node",
+        "--test",
+        "src\\test\\js\\app.test.cjs",
+        "src\\test\\js\\buyer-cancellation.test.cjs",
+        "src\\test\\js\\notifications.test.cjs",
+        "src\\test\\js\\shipment-assignment.test.cjs"
+      ],
+      "started_utc": "2026-10-29T09:27:42.525304+00:00",
+      "finished_utc": "2026-10-29T09:27:42.917848+00:00",
+      "duration_seconds": 0.393,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "278429e6c07b771c9d5e6095ece2507c9aeb40d1c2ca678e665ba3e072c1de42"
+    },
+    {
+      "suite": "tooling",
+      "command": [
+        "python",
+        "-B",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "scripts/qa/tests",
+        "-v"
+      ],
+      "started_utc": "2026-10-29T09:27:42.932930+00:00",
+      "finished_utc": "2026-10-29T09:27:44.230729+00:00",
+      "duration_seconds": 1.298,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "30b16098045f1341fbb35fd68c01a69db0a2874a9cf37e4aa709a7536110f02b"
+    }
+  ]
+}

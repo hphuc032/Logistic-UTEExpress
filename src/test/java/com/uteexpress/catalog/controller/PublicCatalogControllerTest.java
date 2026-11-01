@@ -121,6 +121,28 @@ class PublicCatalogControllerTest {
     }
 
     @Test
+    void populatedDiscoveryPagesNeverRenderTheEmptyState() throws Exception {
+        for (String route : List.of("/", "/shops", "/shops/shop-a", "/categories/dong-goi")) {
+            mvc.perform(get(route)).andExpect(status().isOk())
+                    .andExpect(content().string(not(containsString("app-empty-state"))))
+                    .andExpect(content().string(containsString(route.equals("/shops") ? "Shop A" : "Hộp giao hàng")));
+        }
+    }
+
+    @Test
+    void genuinelyEmptyDiscoveryPagesStillRenderHelpfulEmptyStates() throws Exception {
+        when(catalog.home()).thenReturn(new PublicHomeView(List.of(), List.of(), List.of()));
+        when(catalog.shops()).thenReturn(List.of());
+        when(catalog.shop("shop-a")).thenReturn(new PublicShopView("shop-a", "Shop A", "Cửa hàng mẫu", List.of()));
+        when(catalog.category("dong-goi")).thenReturn(new PublicCategoryView("dong-goi", "Đóng gói", List.of()));
+        for (String route : List.of("/", "/shops", "/shops/shop-a", "/categories/dong-goi")) {
+            mvc.perform(get(route)).andExpect(status().isOk())
+                    .andExpect(content().string(containsString("app-empty-state")))
+                    .andExpect(content().string(containsString(route.equals("/shops") ? "Chưa có cửa hàng" : "Chưa có sản phẩm")));
+        }
+    }
+
+    @Test
     void vendorControlledTextIsEscapedInProductDetail() throws Exception {
         String attack = "<script>alert('catalog')</script>";
         ProductDetailView malicious = new ProductDetailView(12L, attack, attack, new BigDecimal("10000"), 1,

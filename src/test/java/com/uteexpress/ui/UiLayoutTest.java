@@ -19,6 +19,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.regex.Pattern;
+
+import com.uteexpress.security.RoleCode;
+import com.uteexpress.security.authentication.UteExpressPrincipal;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.http.server.PathContainer;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.web.util.pattern.PathPatternParser;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.not;
@@ -84,6 +98,9 @@ class UiLayoutTest {
     @Autowired
     private MockMvc mvc;
 
+    @Autowired
+    private RequestMappingHandlerMapping requestMappingHandlerMapping;
+
     @BeforeEach
     void publicHome() {
         when(publicCatalogService.home()).thenReturn(new PublicHomeView(List.of(), List.of(), List.of()));
@@ -146,6 +163,97 @@ class UiLayoutTest {
         mvc.perform(get("/actuator/health"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.status").value("UP"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"USER", "VENDOR", "MANAGER", "ADMIN", "SHIPPER"})
+    void navigationShowsOnlyAvailableRoleWorkspacesAndLinksToExistingPages(String role) throws Exception {
+        String html = mvc.perform(get("/").with(user(principal(role))))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        assertWorkspace(html, "vendor", role.equals("VENDOR"));
+        assertWorkspace(html, "manager", role.equals("MANAGER"));
+        assertWorkspace(html, "admin", role.equals("ADMIN"));
+        assertWorkspace(html, "shipper", role.equals("SHIPPER"));
+        boolean buyer = Set.of("USER", "VENDOR").contains(role);
+        assertThat(html.contains("id=\"buyer-menu\"")).isEqualTo(buyer);
+        if (buyer) {
+            assertThat(html).contains("href=\"/user/checkout/view\"", "href=\"/user/shop\"",
+                    "href=\"/user/profile\"", "href=\"/orders\"");
+        }
+        if (role.equals("USER")) assertThat(html).contains("href=\"/user/shop/register\"");
+        if (role.equals("VENDOR")) assertThat(html).contains("href=\"/vendor/dashboard\"",
+                "href=\"/vendor/products/new\"", "href=\"/vendor/vouchers/new\"");
+        if (Set.of("ADMIN", "MANAGER").contains(role)) {
+            String prefix = "/" + role.toLowerCase(java.util.Locale.ROOT);
+            for (String page : List.of("/orders", "/shippers", "/shipping/providers", "/shipping/rates", "/commissions")) {
+                assertThat(html).contains("href=\"" + prefix + page + "\"");
+            }
+        }
+        if (role.equals("MANAGER")) assertThat(html).doesNotContain("href=\"/admin/");
+        if (role.equals("ADMIN")) assertThat(html).contains("href=\"/admin/vouchers\"",
+                "href=\"/admin/promotions\"", "href=\"/admin/dashboard/revenue\"");
+        assertThat(html).contains("action=\"/logout\"", "name=\"_csrf\"");
+        assertAllNavigationLinksHaveGetHandlers(html);
+    }
+
+    @Test
+    void multipleRolesKeepEachWorkspaceAvailableWithoutLeakingUsernameMarkup() throws Exception {
+        String html = mvc.perform(get("/").with(user(principal("USER", "VENDOR", "MANAGER", "ADMIN", "SHIPPER"))))
+                .andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        for (String role : List.of("buyer", "vendor", "manager", "admin", "shipper")) {
+            assertThat(html).contains("id=\"" + role + "-menu\"");
+        }
+        assertThat(html).contains("&lt;nav-user&gt;").doesNotContain("<nav-user>");
+        assertAllNavigationLinksHaveGetHandlers(html);
+    }
+
+    @Test
+    void anonymousNavigationKeepsRoleMenusPrivateAndOffersEmailVerificationFromLogin() throws Exception {
+        String html = mvc.perform(get("/")).andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString();
+        assertThat(html).contains("href=\"/login\"", "href=\"/register\"");
+        for (String role : List.of("buyer", "vendor", "manager", "admin", "shipper", "account")) {
+            assertThat(html).doesNotContain("id=\"" + role + "-menu\"");
+        }
+        mvc.perform(get("/login")).andExpect(status().isOk())
+                .andExpect(content().string(containsString("href=\"/verify-otp\"")));
+    }
+
+    @Test
+    void navigationDoesNotChangeEndpointAuthorizationOrLogoutCsrf() throws Exception {
+        mvc.perform(get("/manager/orders")).andExpect(status().isUnauthorized());
+        mvc.perform(get("/manager/orders").with(user(principal("USER"))))
+                .andExpect(status().isForbidden());
+        mvc.perform(get("/admin/commissions").with(user(principal("MANAGER"))))
+                .andExpect(status().isForbidden());
+        mvc.perform(org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post("/logout")
+                        .with(user(principal("USER"))))
+                .andExpect(status().isForbidden());
+    }
+
+    private void assertWorkspace(String html, String role, boolean present) {
+        assertThat(html.contains("id=\"" + role + "-menu\"")).isEqualTo(present);
+    }
+
+    private UteExpressPrincipal principal(String... roles) {
+        return new UteExpressPrincipal(42L, "<nav-user>", null, 0L,
+                Arrays.stream(roles).map(RoleCode::valueOf)
+                        .map(code -> new org.springframework.security.core.authority.SimpleGrantedAuthority(code.authority()))
+                        .toList(), true);
+    }
+
+    private void assertAllNavigationLinksHaveGetHandlers(String html) {
+        String navigation = html.substring(html.indexOf("<nav"), html.indexOf("</nav>") + 6);
+        var links = Pattern.compile("href=\"(/[^\"]*)\"").matcher(navigation);
+        while (links.find()) {
+            String path = links.group(1);
+            boolean found = requestMappingHandlerMapping.getHandlerMethods().keySet().stream()
+                    .filter(info -> info.getMethodsCondition().getMethods().isEmpty()
+                            || info.getMethodsCondition().getMethods().contains(RequestMethod.GET))
+                    .flatMap(info -> info.getPatternValues().stream())
+                    .anyMatch(pattern -> new PathPatternParser().parse(pattern).matches(PathContainer.parsePath(path)));
+            assertThat(found).as("Navigation target has an existing GET handler: %s", path).isTrue();
+        }
     }
 
     @Controller

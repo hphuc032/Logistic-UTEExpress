@@ -1,0 +1,161 @@
+{
+  "executed_source_sha": "53fbf923009c1d9da2ae0c73440b6a6de14904e5",
+  "executed_tree": "8ba39ba27ed69771a96efd54c2c6e4d189e3d404",
+  "accepted_develop_sha": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+  "master_plan_sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+  "scope": "OTP-only source fix + docs-only publication; fresh focused execution, not full/G02/human acceptance",
+  "files": [
+    {
+      "path": "acceptance-status.json",
+      "sha256": "c6c14b23fff67f568d2171d704ca19b929019b79d89ab6a6b87686755e17e58d"
+    },
+    {
+      "path": "browser/assignment-reassignment-1440-after-pickup.png",
+      "sha256": "c13d9c801520efcd65924c61c2d2585965224b3b6bc2fb8a0d7bf8103d4e21ed"
+    },
+    {
+      "path": "browser/assignment-reassignment-1440-assigned.png",
+      "sha256": "18716e2c354e6d28f161fd531b6594b4c57125aa090bb14e81a5a9ef4e9b35a6"
+    },
+    {
+      "path": "browser/assignment-reassignment-1440-stale.png",
+      "sha256": "6322d2575491609c354450ba1705c35f1db305274284df397543dae2151bc250"
+    },
+    {
+      "path": "browser/assignment-reassignment-375-after-pickup.png",
+      "sha256": "4dc2e4e3b77c19d1bb847d84d7ac21bc76a299e7be0ac511370b892a6e38fcdf"
+    },
+    {
+      "path": "browser/assignment-reassignment-375-assigned.png",
+      "sha256": "ff9c962ad839573cedb01df96c75be2750e5acc757e4578910e7b2d5924988fe"
+    },
+    {
+      "path": "browser/assignment-reassignment-375-stale.png",
+      "sha256": "797f9a9a266868110fa0be15731664a73dbaa0209d08452460f5f18feaa03dd7"
+    },
+    {
+      "path": "browser/assignment-reassignment-768-after-pickup.png",
+      "sha256": "8fb8648418be276bfb850b22ba99692140a3268dfac43d25926d9d2312ef4ac4"
+    },
+    {
+      "path": "browser/assignment-reassignment-768-assigned.png",
+      "sha256": "b6bdd86893286462ae6d58872496732e9951525cdd1f6c2f8ca9f41ad0f0b8ef"
+    },
+    {
+      "path": "browser/assignment-reassignment-768-stale.png",
+      "sha256": "84bb2ce1857d889f85ed1a95615f25c6753324926378ff24684a4e8d3eca102f"
+    },
+    {
+      "path": "browser/concurrent-browser-assignment-1440-conflict.png",
+      "sha256": "067edbe51489fbf3732378476d36eb4cb702434d70daf2acbdd92ed6ff9b1f0e"
+    },
+    {
+      "path": "browser/concurrent-browser-assignment-375-conflict.png",
+      "sha256": "36699294fc2a4af433ab171ad3348d667d73d81603d5bba2ec6c56f168511f94"
+    },
+    {
+      "path": "browser/concurrent-browser-assignment-768-conflict.png",
+      "sha256": "797be68822132bca8ea1d2001bfbc6c36b8e397c6f728acec9d0c8bb7225b2a8"
+    },
+    {
+      "path": "browser/csrf-duplicate-authorization-1440-csrf-denied.png",
+      "sha256": "adaf0032c65f2d645884b01e9dd49d4ca5d2c40cd98ca9ece40f81df26a7ecb5"
+    },
+    {
+      "path": "browser/csrf-duplicate-authorization-1440-duplicate-denied.png",
+      "sha256": "e5f3d539361d8fd92dad60632033b1e8c374d2639581e5e4ce2cd431e33b49bc"
+    },
+    {
+      "path": "browser/csrf-duplicate-authorization-375-csrf-denied.png",
+      "sha256": "041a42055fb3aeedaa795987923caa3070dc88a2d5781f86d68ae38ee37d0c6f"
+    },
+    {
+      "path": "browser/csrf-duplicate-authorization-375-duplicate-denied.png",
+      "sha256": "2aaf16649b7461a1c09488213d17a8625a4739a4639a2ad78d7490ad26b94049"
+    },
+    {
+      "path": "browser/csrf-duplicate-authorization-768-csrf-denied.png",
+      "sha256": "f1cc6ae68410e43fc7ccec9eaf98113622f692cfcb62f26ec4070a870b6a4764"
+    },
+    {
+      "path": "browser/csrf-duplicate-authorization-768-duplicate-denied.png",
+      "sha256": "10cb7e3305d139bf13515cb342235974bffafa182956fb6a4b7f569ea5381579"
+    },
+    {
+      "path": "browser/keyboard-responsive-1440-keyboard.png",
+      "sha256": "4741661ffa37c237911024e2acc51b995fd8eb6b433e39e5ced5bb14af516ec3"
+    },
+    {
+      "path": "browser/keyboard-responsive-375-keyboard.png",
+      "sha256": "2db9b4eff13b669862f6538cb369f4402777bd525ad8b976dae3aa8e69cc1125"
+    },
+    {
+      "path": "browser/keyboard-responsive-768-keyboard.png",
+      "sha256": "a8c038188254028017f9209080d1dba5998b724f5f116e5073efb6a89cdff8d2"
+    },
+    {
+      "path": "browser/manager-assignment-1440-assigned.png",
+      "sha256": "5a62466382a541512cdbaeff676e5911fb14255cf1d3d609bcf9d1ec68f3fc36"
+    },
+    {
+      "path": "browser/manager-assignment-375-assigned.png",
+      "sha256": "55b36310ac1bec62e2fe1837b94d7a32104c5dec0bf1e9fc80e0588a2e44f2e4"
+    },
+    {
+      "path": "browser/manager-assignment-768-assigned.png",
+      "sha256": "36be576abeaf10030a1ed15510b2075a561eeee1848197f29769f50b7a85e4d1"
+    },
+    {
+      "path": "browser/otp-corrected-render-1440-fixed-copy.png",
+      "sha256": "3330b0ee8ce2acf0e2581ffe92adc31b739b3b2924af8887d0498b083f5c34dd"
+    },
+    {
+      "path": "browser/otp-corrected-render-375-fixed-copy.png",
+      "sha256": "21cb1086e8967af4ab1244dd8ad0198b088cdf29a44d31a7be0a4abaedf4837a"
+    },
+    {
+      "path": "browser/otp-corrected-render-768-fixed-copy.png",
+      "sha256": "d4b6a0581d7ff77f982a6f024e81b8a1a3d381d4e03a3ac415c429a4ae42e62f"
+    },
+    {
+      "path": "browser/results.json",
+      "sha256": "5b85cc719e1b2d2b7adb0fa9bab4751c6803f531ff79559d744785c2271fa78f"
+    },
+    {
+      "path": "client-tooling-receipts.json",
+      "sha256": "cd710f2507e6582ac3d4ce22ea45e5cb78ca8c34c1e112404b37efd4acb4fc88"
+    },
+    {
+      "path": "dataset-manifest.json",
+      "sha256": "7de254912cb1626ee71bb6e9432bfcc8116fc7a9afb1f5a906d28a5590d70cc4"
+    },
+    {
+      "path": "focused-receipt.json",
+      "sha256": "74d3f6545bc7f798646efe297db2e898f90d08555d9f7f99eae93cbebb974329"
+    },
+    {
+      "path": "FR-01-FR-02-handoff.json",
+      "sha256": "e4c353a02f455f2882a2b44d295d46e291f40b9b83b32e6f9acc85552f3df400"
+    },
+    {
+      "path": "FR-01-FR-02-handoff.md",
+      "sha256": "28345cd091926a56db95de1d989a18d2dc46ff10ae727cea6c7860b54eb670ce"
+    },
+    {
+      "path": "human-G01-checklist.md",
+      "sha256": "fdf8ca7266b6838d02c04c26daea9aee4d3d5a277c4707e411d3f7d1235c1a01"
+    },
+    {
+      "path": "private-artifact-receipt.json",
+      "sha256": "9021f0cc835da32a0e86567ebb050e958f5aad1b47bba752b16073f1b7400858"
+    },
+    {
+      "path": "report.md",
+      "sha256": "21c2de2097849c90b4d38b6cf63c3ea54eb4c2f9ef9b58d25a2d89a02334f6b2"
+    },
+    {
+      "path": "session-result.json",
+      "sha256": "eba50a6012bc8206b897927e9af9cb68060f89a447e1beb0a567ac43686417de"
+    }
+  ]
+}

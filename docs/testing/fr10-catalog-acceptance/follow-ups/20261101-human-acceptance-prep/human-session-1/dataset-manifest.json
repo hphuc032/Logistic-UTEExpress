@@ -1,0 +1,161 @@
+{
+  "fixture": {
+    "product": 1,
+    "hidden": 13,
+    "zeroStock": 2,
+    "image": 1,
+    "hiddenImage": 2,
+    "imageSha256": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865",
+    "nonpublicProducts": [
+      13,
+      14,
+      15,
+      16
+    ],
+    "xss": 17,
+    "xssName": "<script>window.__fr10Xss=1</script>",
+    "scope": "Catalog-only SQL prerequisites matching PublicCatalogIT + real ProductDemoSeeder. Disabled non-login owners. No Order/Payment state or full shared seed.",
+    "publicCategory": "demo-category",
+    "publicShop": "demo-shop"
+  },
+  "before": {
+    "addresses": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "audit_logs": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "cart_items": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "carts": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "categories": {
+      "rows": 4,
+      "sha256": "9aeb0fc5521f593c6f1e5d003eb532556f33f060caed0fe6ac705ca860b0da71"
+    },
+    "commission_policies": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "favorites": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "flyway_schema_history": {
+      "rows": 29,
+      "sha256": "d13e5131febc4c9eaa6825c4f45a117cf9410977c9f87d1709f666f64ae81f8d"
+    },
+    "notifications": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "order_items": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "order_status_history": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "orders": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "otp_tokens": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "payments": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "product_images": {
+      "rows": 2,
+      "sha256": "a3c495534e615d29e7c0e26c2bf365022a3f15a9b1dee7fe61dc9c94ad117a3c"
+    },
+    "product_views": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "products": {
+      "rows": 17,
+      "sha256": "4eeac79699ad794044818432a704588142ede22f18a164b5794c09c02e2b8f8f"
+    },
+    "promotions": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "refunds": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "return_requests": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "review_media": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "reviews": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "roles": {
+      "rows": 5,
+      "sha256": "5169299a172daebc2136c35c5abc66c703a7a6d10b68a70daeaf00a427051ea7"
+    },
+    "shipment_assignment_history": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "shipment_delivery_failures": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "shipment_return_receipts": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "shipments": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "shipping_providers": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "shipping_rates": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "shops": {
+      "rows": 6,
+      "sha256": "eaa27dc2613444614006a2a758290b3bd1a54b750c4812ed4a9ee29aa3daef37"
+    },
+    "user_roles": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "users": {
+      "rows": 6,
+      "sha256": "373cd4766abe0da8269e1421db2583073aa70aea4f124a4d59aabea959de733e"
+    },
+    "voucher_usages": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    "vouchers": {
+      "rows": 0,
+      "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  },
+  "source": "4d57f30d7309a6d297b945b48e2d8b5a97a07cb7",
+  "realSharedSeedAcceptanceClaimed": false
+}

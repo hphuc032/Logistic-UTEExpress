@@ -1,0 +1,5 @@
+--- a/src/main/resources/templates/auth/verify-otp.html
++++ b/src/main/resources/templates/auth/verify-otp.html
+@@ -42 +42 @@
+-                    <div id="code-help" class="form-text">Mã có hiệu lực trong 10 phút.</div>
++                    <div id="code-help" class="form-text">Mã có hiệu lực tối đa 5 phút.</div>

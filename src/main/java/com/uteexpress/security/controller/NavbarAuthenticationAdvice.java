@@ -15,9 +15,14 @@ public class NavbarAuthenticationAdvice {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()
                 && authentication.getPrincipal() instanceof UteExpressPrincipal principal) {
-            boolean vendor = principal.getAuthorities().stream()
-                    .anyMatch(authority -> authority.getAuthority().equals(RoleCode.VENDOR.authority()));
-            return new NavbarUser(principal.displayUsername(), vendor);
+            var authorities = principal.getAuthorities().stream()
+                    .map(org.springframework.security.core.GrantedAuthority::getAuthority)
+                    .collect(java.util.stream.Collectors.toSet());
+            return new NavbarUser(principal.displayUsername(),
+                    authorities.contains(RoleCode.VENDOR.authority()),
+                    authorities.contains(RoleCode.MANAGER.authority()),
+                    authorities.contains(RoleCode.ADMIN.authority()),
+                    authorities.contains(RoleCode.SHIPPER.authority()));
         }
         return null;
     }

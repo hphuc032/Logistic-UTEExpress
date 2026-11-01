@@ -1,0 +1,45 @@
+{
+  "source_sha": "8a96ec06d15012f233161465b937898cec4ccff3",
+  "status": "READY FOR TD/HP DECISION \u2014 technical evidence published, human acceptance PENDING",
+  "unit": 709,
+  "targeted_postgresql": 313,
+  "targeted_classes": 10,
+  "Node": 48,
+  "tooling": 17,
+  "automated_browser_cases": 24,
+  "OTP_UI_observation": 1,
+  "failures_errors_skips": 0,
+  "timed_out": false,
+  "scope": "Not full PostgreSQL; not human manual acceptance; no G02 execution on this unmerged candidate",
+  "findings": [
+    {
+      "id": "ASSIGNMENT-RACE-COVERAGE",
+      "status": "CLOSED technical coverage gap",
+      "owner": "QD",
+      "evidence": "Two new PostgreSQL tests observe both requests actually blocked on Order; one commit/oneCONFLICT, no duplicate history/audit or Order/finance changes"
+    },
+    {
+      "id": "CI-ASSIGNMENT8",
+      "status": "Workflow includes all8; latest publication CI/log verification required",
+      "owner": "QD",
+      "evidence": ".github/workflows/ci.yml:36-37 and Node48 receipt"
+    },
+    {
+      "id": "OTP-COPY",
+      "severity": "Low",
+      "status": "OPEN / HP-owned proposal only",
+      "owner": "HP Auth/UI",
+      "evidence": "OTP-copy-proposal.md +actual375px screenshot; no source edit"
+    },
+    {
+      "id": "G01-HUMAN",
+      "status": "PENDING",
+      "owner": "Genuine human QD observer / HP acceptance",
+      "evidence": "human-acceptance.md unsigned, all24rows NOTRUN"
+    }
+  ],
+  "TD_required": "Confirm latest-head Order/Payment/Refund compatibility and synchronized UI/API/test delta",
+  "HP_required": "Decide OTP correction/disposition, human G01 acceptance and whether PR75 may merge under protection",
+  "PR69_G02": "No changes or new G02 runs in this task;75 stays separate",
+  "approve_merge_forcepush_QAcomplete": false
+}

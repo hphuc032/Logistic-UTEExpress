@@ -10,7 +10,7 @@
         <p>Các sản phẩm đang được bán bởi cửa hàng đã duyệt.</p>
     </div>
     <div th:if="${#lists.isEmpty(category.products)}"
-         th:replace="~{fragments/components :: emptyState('Chưa có sản phẩm', 'Danh mục này hiện chưa có sản phẩm công khai.')}"></div>
+         th:insert="~{fragments/components :: emptyState('Chưa có sản phẩm', 'Danh mục này hiện chưa có sản phẩm công khai.')}"></div>
     <div class="row g-4" th:unless="${#lists.isEmpty(category.products)}">
         <div class="col-12 col-sm-6 col-lg-4 col-xl-3" th:each="product : ${category.products}">
             <article th:replace="~{fragments/catalog :: productCard(${product})}"></article>

@@ -1,0 +1,622 @@
+{
+  "browser": "155.0.8059.82",
+  "headless": true,
+  "mode": "Automated real browser UI; not human manual signoff",
+  "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+  "cases": [
+    {
+      "case": "manager-assignment",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:04.194Z",
+      "steps": [
+        {
+          "manager_assign": true,
+          "manager_reassign": true,
+          "persisted_facts": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\manager-assignment-375-assigned.png",
+          "sha256": "573e8e48278e1eb45185296e21a0041f14b2f9c1a26969af8b4969e60a8a391e",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/manager-assignment-375-assigned.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/25/assign",
+          "status": 201
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/25/reassign",
+          "status": 200
+        }
+      ],
+      "routes": [
+        {
+          "actor": "manager",
+          "route": "/manager/orders/25",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T08:13:08.016Z"
+    },
+    {
+      "case": "review-validation-duplicate",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:08.034Z",
+      "steps": [
+        {
+          "invalid_short_review": 400,
+          "invalid_row_count": 0,
+          "valid_row_count": 1,
+          "duplicate_review": 409,
+          "persisted_facts_unchanged": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\review-validation-duplicate-375-denied.png",
+          "sha256": "4eafa01fc482eb98d3f3521dde3b085563932e8f995d919d37953435437ebad3",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/review-validation-duplicate-375-denied.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/order-items/26/review",
+          "status": 400
+        },
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/order-items/26/review",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "buyer_a",
+          "route": "/order-items/26/review",
+          "status": 200
+        },
+        {
+          "actor": "buyer_a",
+          "route": "/order-items/26/review",
+          "status": 200
+        },
+        {
+          "actor": "new-buyer/public",
+          "route": "/order-items/26/review",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T08:13:14.715Z"
+    },
+    {
+      "case": "rts-contract-replay",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:14.730Z",
+      "steps": [
+        {
+          "same_payload_replay": 302,
+          "different_payload_replay": 409,
+          "persisted_facts_unchanged": true,
+          "contract_source": "ReturnToSenderIT.opsReceiptCancelsReleasesExactlyOnceAndReplaysWithoutChangingMoney"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\rts-contract-replay-375-same-replayed.png",
+          "sha256": "c44213c1f9e0e4ea59f793041a7186a52526795afe15c8d7cb035edeceb6b47b",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/rts-contract-replay-375-same-replayed.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\rts-contract-replay-375-different-denied.png",
+          "sha256": "55268026a084b85740c6cc568a69fe22e237ce7c4a2af124dfd59e022b54b0c9",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/rts-contract-replay-375-different-denied.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/27/return-to-sender",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/27",
+          "status": 200
+        },
+        {
+          "actor": "new-buyer/public",
+          "route": "/admin/orders/27",
+          "status": 200
+        },
+        {
+          "actor": "new-buyer/public",
+          "route": "/admin/orders/27",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T08:13:30.815Z"
+    },
+    {
+      "case": "keyboard-responsive",
+      "width": 375,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:30.841Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\keyboard-responsive-375-failure-0.png",
+          "sha256": "aeff0133abb9a8baef3175aacbd4a6c110d09841c44b2a49b65b3cd686b0656c",
+          "viewport": 375,
+          "scroll": 375,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/keyboard-responsive-375-failure-0.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/dashboard/revenue",
+          "status": 200
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "KEYBOARD_MENU_NOT_CLOSED",
+      "finished_utc": "2026-10-29T08:13:31.947Z"
+    },
+    {
+      "case": "manager-assignment",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:31.960Z",
+      "steps": [
+        {
+          "manager_assign": true,
+          "manager_reassign": true,
+          "persisted_facts": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\manager-assignment-768-assigned.png",
+          "sha256": "fcb18dd185eabfb70e4b8228ad6731536a99e26cf0a6ffba4ff27bd9a81b2ac3",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/manager-assignment-768-assigned.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/28/assign",
+          "status": 201
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/28/reassign",
+          "status": 200
+        }
+      ],
+      "routes": [
+        {
+          "actor": "manager",
+          "route": "/manager/orders/28",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T08:13:35.125Z"
+    },
+    {
+      "case": "review-validation-duplicate",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:35.136Z",
+      "steps": [
+        {
+          "invalid_short_review": 400,
+          "invalid_row_count": 0,
+          "valid_row_count": 1,
+          "duplicate_review": 409,
+          "persisted_facts_unchanged": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\review-validation-duplicate-768-denied.png",
+          "sha256": "cdf2427797e121f422336760c2230925ea2d21c7daf0f7329278a9a3508794ef",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/review-validation-duplicate-768-denied.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/order-items/29/review",
+          "status": 400
+        },
+        {
+          "actor": "buyer_a",
+          "method": "POST",
+          "route": "/order-items/29/review",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "buyer_a",
+          "route": "/order-items/29/review",
+          "status": 200
+        },
+        {
+          "actor": "buyer_a",
+          "route": "/order-items/29/review",
+          "status": 200
+        },
+        {
+          "actor": "new-buyer/public",
+          "route": "/order-items/29/review",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T08:13:41.446Z"
+    },
+    {
+      "case": "rts-contract-replay",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:41.473Z",
+      "steps": [
+        {
+          "same_payload_replay": 302,
+          "different_payload_replay": 409,
+          "persisted_facts_unchanged": true,
+          "contract_source": "ReturnToSenderIT.opsReceiptCancelsReleasesExactlyOnceAndReplaysWithoutChangingMoney"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\rts-contract-replay-768-same-replayed.png",
+          "sha256": "0f5ba8447cddfc20efbde4e485da9fd91674109c0710556825d916a5c6fb6d76",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/rts-contract-replay-768-same-replayed.png"
+        },
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\rts-contract-replay-768-different-denied.png",
+          "sha256": "c90140a8831c081bd952a77be95bc0fbaa6d1847abb6c2b5bd1f426775fd79fb",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/rts-contract-replay-768-different-denied.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/admin/orders/30/return-to-sender",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/orders/30",
+          "status": 200
+        },
+        {
+          "actor": "new-buyer/public",
+          "route": "/admin/orders/30",
+          "status": 200
+        },
+        {
+          "actor": "new-buyer/public",
+          "route": "/admin/orders/30",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T08:13:53.570Z"
+    },
+    {
+      "case": "keyboard-responsive",
+      "width": 768,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:53.600Z",
+      "steps": [],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\keyboard-responsive-768-failure-0.png",
+          "sha256": "392412bbff47b25f7f1abc9f45bc7c81cf33b2a3e0b449dcc3c9b7805ff1a990",
+          "viewport": 768,
+          "scroll": 768,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/keyboard-responsive-768-failure-0.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/dashboard/revenue",
+          "status": 200
+        }
+      ],
+      "browser_result": "FAIL",
+      "finding": "KEYBOARD_MENU_NOT_CLOSED",
+      "finished_utc": "2026-10-29T08:13:54.729Z"
+    },
+    {
+      "case": "manager-assignment",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:54.743Z",
+      "steps": [
+        {
+          "manager_assign": true,
+          "manager_reassign": true,
+          "persisted_facts": true
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\manager-assignment-1440-assigned.png",
+          "sha256": "b9c5ee5d9f8ee79eed85be229c3403adef06f3c10f4cfe7c058b21c73944bcbb",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/manager-assignment-1440-assigned.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/31/assign",
+          "status": 201
+        },
+        {
+          "actor": "manager",
+          "method": "POST",
+          "route": "/manager/orders/31/reassign",
+          "status": 200
+        }
+      ],
+      "routes": [
+        {
+          "actor": "manager",
+          "route": "/manager/orders/31",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T08:13:57.917Z"
+    },
+    {
+      "case": "review-validation-duplicate",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:57.929Z",
+      "steps": [],
+      "screenshots": [],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "browser_result": "BLOCKED",
+      "finding": "HARNESS_CONTROL_500_SeedError",
+      "finished_utc": "2026-10-29T08:13:57.966Z"
+    },
+    {
+      "case": "rts-contract-replay",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:57.967Z",
+      "steps": [],
+      "screenshots": [],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "browser_result": "BLOCKED",
+      "finding": "HARNESS_CONTROL_500_SeedError",
+      "finished_utc": "2026-10-29T08:13:58.010Z"
+    },
+    {
+      "case": "keyboard-responsive",
+      "width": 1440,
+      "evidence_mode": "AUTOMATED_BROWSER_UI_WITH_AGENT_REVIEW_PENDING",
+      "human_manual_acceptance": "NOT CLAIMED",
+      "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+      "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+      "dataset_manifest_sha256": "25044489b914ba2cec9a90c13b35d75a9bf9ce5b1a50807bfeb4d5a9f6ebf5ed",
+      "started_utc": "2026-10-29T08:13:58.011Z",
+      "steps": [
+        {
+          "tool_driven_keyboard": true,
+          "skip_to_main": true,
+          "mobile_menu_keyboard": true,
+          "table_labeled_focusable": true,
+          "table_dimensions": {
+            "left": 0,
+            "width": 1192,
+            "scroll": 1192
+          },
+          "after_scroll_left": 0,
+          "physical_device_IME_screen_reader": "NOT RUN"
+        }
+      ],
+      "screenshots": [
+        {
+          "file": ".work\\qa03-g01-runtime\\browser-post70-supplemental\\keyboard-responsive-1440-keyboard.png",
+          "sha256": "69323895b15a73b313e69dcd54a5166c89a77dbc188f508fd9f46588e8447ebf",
+          "viewport": 1440,
+          "scroll": 1440,
+          "overflow": false,
+          "published_file": "browser-post70-supplemental/keyboard-responsive-1440-keyboard.png"
+        }
+      ],
+      "candidate_scope": "PR75 unmerged, includes accepted develop6a26370; not accepted develop itself",
+      "ui_http": [
+        {
+          "actor": "admin",
+          "method": "POST",
+          "route": "/login",
+          "status": 302
+        }
+      ],
+      "routes": [
+        {
+          "actor": "admin",
+          "route": "/admin/dashboard/revenue",
+          "status": 200
+        }
+      ],
+      "browser_result": "PASS",
+      "finished_utc": "2026-10-29T08:13:59.407Z"
+    }
+  ]
+}

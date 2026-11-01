@@ -28,7 +28,7 @@
 
                 <div class="col-lg-7">
                     <div th:if="${#lists.isEmpty(addresses)}"
-                         th:replace="~{fragments/components :: emptyState('Chưa có địa chỉ', 'Thêm địa chỉ đầu tiên để chuẩn bị cho bước thanh toán.')}"></div>
+                         th:insert="~{fragments/components :: emptyState('Chưa có địa chỉ', 'Thêm địa chỉ đầu tiên để chuẩn bị cho bước thanh toán.')}"></div>
 
                     <div class="d-grid gap-3" th:unless="${#lists.isEmpty(addresses)}">
                         <article class="app-address-card" th:each="address : ${addresses}">

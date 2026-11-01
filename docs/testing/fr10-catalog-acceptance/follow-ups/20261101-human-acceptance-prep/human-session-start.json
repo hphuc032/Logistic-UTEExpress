@@ -1,0 +1,30 @@
+{
+  "mode": "HUMAN_SESSION_READY; NO ACCEPTANCE CLAIMED",
+  "source": "4d57f30d7309a6d297b945b48e2d8b5a97a07cb7",
+  "jarSha256": "0a57193273f330b028c134b196977b626c643b7582de3e7a8aefcc23046acc36",
+  "baseUrl": "http://127.0.0.1:62551",
+  "applicationPid": 34708,
+  "fixture": {
+    "product": 1,
+    "hidden": 13,
+    "zeroStock": 2,
+    "image": 1,
+    "hiddenImage": 2,
+    "imageSha256": "f61eb2acfd02f7a571aa5df0c35ae878fb96d6b9c0eb9c3b0beefa70df111865",
+    "nonpublicProducts": [
+      13,
+      14,
+      15,
+      16
+    ],
+    "xss": 17,
+    "xssName": "<script>window.__fr10Xss=1</script>",
+    "scope": "Catalog-only SQL prerequisites matching PublicCatalogIT + real ProductDemoSeeder. Disabled non-login owners. No Order/Payment state or full shared seed.",
+    "publicCategory": "demo-category",
+    "publicShop": "demo-shop"
+  },
+  "stopFile": "D:\\UTEExpress\\.work\\fr10-pr77-human-prep\\session-1\\stop-requested",
+  "startedUtc": "2026-11-01T06:55:24.172606+00:00",
+  "leaseSeconds": 5400,
+  "humanDecisions": null
+}

@@ -1,0 +1,9 @@
+{
+  "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+  "result": "PASS / local missing-required-ENV denied clearly",
+  "actual_required_property": "MAIL_HOST",
+  "evidence": "missing-env-receipt.json and raw log hash",
+  "initial_classifier": "BLOCKED because it looked only for DB_URL; server correctly reported MAIL_HOST first",
+  "not_claimed": "DB_URL-specific validation, valid production startup, target-host, TLS or production SMTP acceptance",
+  "production_config_change": false
+}

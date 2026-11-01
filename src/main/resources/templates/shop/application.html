@@ -41,6 +41,11 @@
             <p class="alert alert-info mt-4 mb-0" th:if="${shop.status == 'PENDING'}">
                 Đơn đăng ký cửa hàng đang chờ xét duyệt. Quyền Vendor chưa được cấp trong giai đoạn này.
             </p>
+            <div class="d-flex flex-wrap gap-2 mt-4" th:if="${shop.status == 'APPROVED' and navbarUser != null and navbarUser.vendor}">
+                <a class="btn btn-app-primary" th:href="@{/vendor/products}">Quản lý sản phẩm</a>
+                <a class="btn btn-app-secondary" th:href="@{/vendor/orders}">Đơn hàng bán</a>
+                <a class="btn btn-app-secondary" th:href="@{/shops/{slug}(slug=${shop.slug})}">Xem cửa hàng công khai</a>
+            </div>
         </div>
     </article>
 </section></body>

@@ -1,0 +1,55 @@
+{
+  "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+  "source_tree": "bf84f456a0d9e8e6a6d38e5c2e6c898b738eb991",
+  "accepted_develop_sha": "6a26370659a2fa7b95c6a1d00d2598820de6bb34",
+  "candidate_unmerged": true,
+  "original_candidate": "bce97146ec0f208e9fda533255858c9182aade5c",
+  "sync": "Normal merge, backup ref retained, no conflict; UI02 details/CSS/JS/layout kept",
+  "tests": {
+    "unit": 709,
+    "targeted_postgres": 188,
+    "postgres_classes": 8,
+    "node": 48,
+    "tooling": 17,
+    "full_postgres_candidate": "NOT RUN on this source; do not reuse old2059 as current full evidence"
+  },
+  "browser_attempts": {
+    "browser-post70-candidate": {
+      "PASS": 24,
+      "FAIL": 0,
+      "BLOCKED": 0
+    },
+    "browser-post70-supplemental": {
+      "PASS": 8,
+      "FAIL": 2,
+      "BLOCKED": 2
+    },
+    "browser-post70-supplemental-fresh": {
+      "PASS": 12,
+      "FAIL": 0,
+      "BLOCKED": 0
+    },
+    "browser-post70-persistence": {
+      "PASS": 1,
+      "FAIL": 0,
+      "BLOCKED": 0
+    }
+  },
+  "human_manual": "NOT RUN / NOT CLAIMED",
+  "automated_status": "G01 AUTOMATED PASS / HUMAN ACCEPTANCE PENDING",
+  "local_restart": "Same owned DB/UPLOAD_DIR; real HTTP media SHA256 unchanged; not host restart/offhost backup/TLS acceptance",
+  "sampled_agent_visual_review": [
+    "browser-post70-candidate/assignment-reassignment-375-assigned.png",
+    "browser-post70-supplemental-fresh/keyboard-responsive-768-keyboard.png",
+    "browser-post70-persistence/local-upload-restart-375-after-1440.png"
+  ],
+  "driver_sha256": {
+    "g01-browser-post70.cjs": "aaf5a434646bcf0bc9b3fc48a47c3cd3999361fc2842f7176501eec3a65187e0",
+    "g01-browser-post70-supplemental.cjs": "da503b0d4b4d622ec398ed7a9221fc58179d94f0a8ed540e9ffc04376d7daa2a",
+    "g01-browser-post70-supplemental-fresh.cjs": "8151a9b10f9ee7d00c5c1c2d92c90a6323b6f601b96b9b50b15635905480a33b",
+    "g01-browser-post70-persistence.cjs": "b1dceb225d2dbf8e81c158a857d176f79aa8877c0540cb9e3b076b67159d1e68",
+    "ui_environment.py": "5e2fa98db026e9b4f36e6ed119f0bd99b4cd0edb4fdf6278b3c4e4cb57639581",
+    "ui_environment_restart.py": "db297728fefad87c37c1864976386ae173704e90c83e9d056ca1b9fb0150d1eb",
+    "seed-source-inspection.py": "35fe190a782e4f7ca27f26f8cb2be3bd1c037f0e93394fe4c4c5b086987744c9"
+  }
+}

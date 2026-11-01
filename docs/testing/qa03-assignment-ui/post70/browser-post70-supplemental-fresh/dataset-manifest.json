@@ -1,0 +1,36 @@
+{
+  "source_sha": "db3c87690a84c313b7ce9abece107b0230ce96c2",
+  "build_sha256": "9f84b4055d04c6d5298304c16942cc23fa6f964a388f0a143b83e978cfa1b3ac",
+  "fixture_driver_sha256": "35fe190a782e4f7ca27f26f8cb2be3bd1c037f0e93394fe4c4c5b086987744c9",
+  "actors": {
+    "admin": 1,
+    "manager": 2,
+    "shipper_a": 3,
+    "shipper_b": 4,
+    "buyer_a": 5,
+    "buyer_b": 6,
+    "vendor_a": 7,
+    "vendor_b": 8,
+    "pending": 9,
+    "rejected": 10
+  },
+  "products": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14
+  ],
+  "setup": "Existing disposable Seed.start/fixtures via real HTTP, only explicit initial ADMIN role bootstrap",
+  "scope": "G01 UI environment, not G02 final combined seed",
+  "created_at_utc": "2026-10-29T08:19:22.555295+00:00"
+}
