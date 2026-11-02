@@ -1,0 +1,11 @@
+{
+  "source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "command": [
+    "javac",
+    "@.work\\qa03-post75-sync\\javac.args"
+  ],
+  "exit_code": 0,
+  "started_utc": "2026-10-29T13:23:17.180386+00:00",
+  "duration_seconds": 2.772,
+  "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

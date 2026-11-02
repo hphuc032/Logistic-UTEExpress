@@ -1,0 +1,25 @@
+{
+  "kind": "APPEND-ONLY ACCEPTANCE DOCS; FR07 STATIC SUPPORT ONLY",
+  "source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+  "files": [
+    {
+      "path": "docs/testing/qa03-fr06-acceptance-20261030/.gitattributes",
+      "bytes": 30,
+      "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-acceptance-20261030/acceptance-record.json",
+      "bytes": 6711,
+      "sha256": "1e5f57ab0eb8d2d1e88db7084c5127cf0b381a35369a705ab1569e3c447a8e97"
+    },
+    {
+      "path": "docs/testing/qa03-fr06-acceptance-20261030/report.md",
+      "bytes": 4217,
+      "sha256": "231bed17af60bd1cd59e49cf45b30cfcc3193c25d859a36458cdf0afc211b079"
+    }
+  ],
+  "hash_basis": "staged Git bytes, excludes self",
+  "historical_FR06_11_files_unchanged": true,
+  "FR07_execution_by_QD": "NOT RUN"
+}

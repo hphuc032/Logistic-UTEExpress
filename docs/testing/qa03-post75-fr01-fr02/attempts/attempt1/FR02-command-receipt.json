@@ -1,0 +1,15 @@
+{
+  "source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "command": [
+    "java",
+    "@.work\\qa03-post75-sync\\java.args"
+  ],
+  "started_utc": "2026-10-29T13:23:19.954564+00:00",
+  "finished_utc": "2026-10-29T13:23:28.747237+00:00",
+  "duration_seconds": 8.793,
+  "exit_code": 1,
+  "timed_out": false,
+  "log_sha256": "0aeab346976b196124643cb2d2dc72368048dc12d5b8ecae431ef644952e7dbd",
+  "helper_source_sha256": "841a35e5b118645c4cfc1142ff53976e5419b07be2fe554ef6bd2500ac72e375",
+  "test_classpath_sha256": "a154ec6a750952f4e1e8e610975ea4be8eef7b326ab5c3ed78500f5a63d5a9b1"
+}

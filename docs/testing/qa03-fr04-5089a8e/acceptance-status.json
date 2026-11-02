@@ -1,0 +1,12 @@
+{
+  "FR01": "ACCEPTED per HP decision supplied for this task",
+  "FR02": "ACCEPTED independent preflight per HP decision supplied for this task",
+  "FR04": "TECHNICAL EXECUTION GREEN / PENDING TD REVIEW AND HP DECISION",
+  "FR05": "NOT RUN; TD owner",
+  "FR06": "NOT RUN; QD owner, TD independent child-process reruns",
+  "FR07": "NOT RUN; TD owner",
+  "G01_human": "PENDING",
+  "Q70_S01": "OPEN / Medium — ACCEPTED RISK — LIMITED",
+  "QA03": "BLOCKED / NOT COMPLETE",
+  "PR69": "DRAFT; no approval/merge"
+}

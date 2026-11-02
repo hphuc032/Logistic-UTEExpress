@@ -1,0 +1,329 @@
+{
+  "scope": "FR06 QD-owned combined normal/-2s only",
+  "source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+  "publication_before": "735a8af1d27412330cfd09ec3d228258c2193774",
+  "started_utc": "2026-10-29T16:32:35.452563+00:00",
+  "commands": [
+    {
+      "name": "explicit-java-version",
+      "command": [
+        "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+        "-version"
+      ],
+      "started_utc": "2026-10-29T16:32:36.152385+00:00",
+      "finished_utc": "2026-10-29T16:32:36.281358+00:00",
+      "duration_seconds": 0.129,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "686d528f1c68b17717fd0be35eff08c951c1111359408a62b893d6790f56b8dc"
+    },
+    {
+      "name": "maven-version",
+      "command": [
+        "cmd",
+        "/d",
+        "/c",
+        "mvnw.cmd",
+        "-version"
+      ],
+      "started_utc": "2026-10-29T16:32:36.298760+00:00",
+      "finished_utc": "2026-10-29T16:32:37.722195+00:00",
+      "duration_seconds": 1.423,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "ee2f79f7aa50b8db5e5e0ffc87a5e54021db1931749b9b79d9f500ef38b0242a"
+    },
+    {
+      "name": "node-version",
+      "command": [
+        "node",
+        "--version"
+      ],
+      "started_utc": "2026-10-29T16:32:37.725550+00:00",
+      "finished_utc": "2026-10-29T16:32:37.775771+00:00",
+      "duration_seconds": 0.05,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "2a0d4de5abb327d8e92eff6db4dcc81a9b02c5f1542dadf2e25fe71cc4802de6"
+    },
+    {
+      "name": "python-version",
+      "command": [
+        "C:\\Users\\T14GEN5\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "--version"
+      ],
+      "started_utc": "2026-10-29T16:32:37.785339+00:00",
+      "finished_utc": "2026-10-29T16:32:37.815205+00:00",
+      "duration_seconds": 0.03,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "829ac2581a6275b79e6369c6c1130807da7060f355fb83e37c8cb8ae5dc9b4cf"
+    },
+    {
+      "name": "docker-version",
+      "command": [
+        "docker",
+        "version"
+      ],
+      "started_utc": "2026-10-29T16:32:37.826377+00:00",
+      "finished_utc": "2026-10-29T16:32:37.950119+00:00",
+      "duration_seconds": 0.124,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "bcc9d4cd68680751f9f4caa3c3c211881509ceec7998fe1d5884d2511a3768a4"
+    },
+    {
+      "name": "docker-info",
+      "command": [
+        "docker",
+        "info"
+      ],
+      "started_utc": "2026-10-29T16:32:37.965218+00:00",
+      "finished_utc": "2026-10-29T16:32:38.404853+00:00",
+      "duration_seconds": 0.44,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "207235380f5b0832617180e38e64c60d586adf4c0d6b8b3030e835484135ca82"
+    },
+    {
+      "name": "build-only",
+      "command": [
+        "cmd",
+        "/d",
+        "/c",
+        "mvnw.cmd",
+        "--batch-mode",
+        "--no-transfer-progress",
+        "-DskipTests",
+        "clean",
+        "package",
+        "dependency:build-classpath",
+        "-Dmdep.includeScope=test",
+        "-Dmdep.outputFile=.work/fr06/test-classpath.txt"
+      ],
+      "started_utc": "2026-10-29T16:32:38.408975+00:00",
+      "finished_utc": "2026-10-29T16:33:14.723520+00:00",
+      "duration_seconds": 36.315,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "e9dd9c30dc71581d5e12b3f2d3458a57caa011565e2afaaf2b7c674c8ed5eb06"
+    },
+    {
+      "name": "preflight-compile",
+      "command": [
+        "C:\\Program Files\\Java\\jdk-21\\bin\\javac.exe",
+        "@.work/fr06/javac.args"
+      ],
+      "started_utc": "2026-10-29T16:33:14.959235+00:00",
+      "finished_utc": "2026-10-29T16:33:18.867711+00:00",
+      "duration_seconds": 3.908,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "c75c2bd75aaf6bc00e05146070515fd6774ac441e73027488bcb206146059b12"
+    },
+    {
+      "name": "auth-preflight",
+      "command": [
+        "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+        "@.work/fr06/java.args"
+      ],
+      "started_utc": "2026-10-29T16:33:18.884759+00:00",
+      "finished_utc": "2026-10-29T16:33:29.164243+00:00",
+      "duration_seconds": 10.279,
+      "exit_code": 0,
+      "timed_out": false,
+      "log_sha256": "e4950c3a34e671a2aa6e820d4b8a2312acd84e8baa6f0e121c89380a34976ff0"
+    }
+  ],
+  "runs": [
+    {
+      "mode": "normal",
+      "clock_skew_seconds": 0,
+      "source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+      "tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+      "command": [
+        "C:\\Users\\T14GEN5\\AppData\\Local\\Programs\\Python\\Python313\\python.exe",
+        "-B",
+        "scripts/qa/rehearse_integrated_seed.py",
+        "--checkout",
+        "C:\\Users\\T14GEN5\\Documents\\workspace-spring-tools-for-eclipse-5.3.0.RELEASE\\PROJECT CU\u1ed0I KH\u00d3A\\qa03-fr06-5089",
+        "--disposable-demo",
+        "--include-qa02-refunds",
+        "--refund-clock-skew-seconds",
+        "0"
+      ],
+      "started_utc": "2026-10-29T16:33:29.701037+00:00",
+      "role": "QD runner execution, NOT TD independent execution",
+      "processes": [
+        {
+          "pid": 13824,
+          "ppid": 19904,
+          "exe": "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+          "executable_sha256": "ef94c79783d01753cc19bdafbedf1641a77e66913e5a8321b570717ff90b7046",
+          "command": [
+            "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+            "-Duser.timezone=UTC",
+            "-jar",
+            "C:\\Users\\T14GEN5\\Documents\\workspace-spring-tools-for-eclipse-5.3.0.RELEASE\\PROJECT CU\u1ed0I KH\u00d3A\\qa03-fr06-5089\\target\\uteexpress-0.1.0-SNAPSHOT.jar",
+            "--spring.profiles.active=local,demo",
+            "--spring.config.location=classpath:/application.yml",
+            "--spring.datasource.url=jdbc:postgresql://127.0.0.1:40920/qa02_refund_seed",
+            "--spring.datasource.username=postgres",
+            "--server.address=127.0.0.1",
+            "--server.port=40922",
+            "--management.health.mail.enabled=false"
+          ],
+          "role": "shared_primary",
+          "process_created_utc": "2026-10-29T16:33:35.582292+00:00",
+          "first_seen_utc": "2026-10-29T16:33:35.781437+00:00",
+          "last_seen_utc": "2026-10-29T16:36:36.576131+00:00"
+        },
+        {
+          "pid": 43088,
+          "ppid": 19904,
+          "exe": "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+          "executable_sha256": "ef94c79783d01753cc19bdafbedf1641a77e66913e5a8321b570717ff90b7046",
+          "command": [
+            "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+            "-Duser.timezone=UTC",
+            "-Dloader.path=C:\\Users\\T14GEN5\\Documents\\workspace-spring-tools-for-eclipse-5.3.0.RELEASE\\PROJECT CU\u1ed0I KH\u00d3A\\qa03-fr06-5089\\.work\\qa03-integrated-seed\\run-8e6f5f6a7249\\qa02-test-classes",
+            "-Dloader.main=qa02.seed.RefundAcceptanceSeed",
+            "-cp",
+            "C:\\Users\\T14GEN5\\Documents\\workspace-spring-tools-for-eclipse-5.3.0.RELEASE\\PROJECT CU\u1ed0I KH\u00d3A\\qa03-fr06-5089\\target\\uteexpress-0.1.0-SNAPSHOT.jar",
+            "org.springframework.boot.loader.launch.PropertiesLauncher",
+            "--spring.profiles.active=local,demo",
+            "--spring.config.location=classpath:/application.yml",
+            "--server.address=127.0.0.1",
+            "--server.port=0",
+            "--management.health.mail.enabled=false",
+            "--uteexpress.demo.shipping.enabled=false",
+            "--uteexpress.demo.catalog.enabled=false"
+          ],
+          "role": "refund_child",
+          "process_created_utc": "2026-10-29T16:35:08.002833+00:00",
+          "first_seen_utc": "2026-10-29T16:35:08.292241+00:00",
+          "last_seen_utc": "2026-10-29T16:35:32.569917+00:00"
+        },
+        {
+          "pid": 4240,
+          "ppid": 19904,
+          "exe": "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+          "executable_sha256": "ef94c79783d01753cc19bdafbedf1641a77e66913e5a8321b570717ff90b7046",
+          "command": [
+            "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+            "-Duser.timezone=UTC",
+            "-Dloader.path=C:\\Users\\T14GEN5\\Documents\\workspace-spring-tools-for-eclipse-5.3.0.RELEASE\\PROJECT CU\u1ed0I KH\u00d3A\\qa03-fr06-5089\\.work\\qa03-integrated-seed\\run-8e6f5f6a7249\\qa02-test-classes",
+            "-Dloader.main=qa02.seed.RefundAcceptanceSeed",
+            "-cp",
+            "C:\\Users\\T14GEN5\\Documents\\workspace-spring-tools-for-eclipse-5.3.0.RELEASE\\PROJECT CU\u1ed0I KH\u00d3A\\qa03-fr06-5089\\target\\uteexpress-0.1.0-SNAPSHOT.jar",
+            "org.springframework.boot.loader.launch.PropertiesLauncher",
+            "--spring.profiles.active=local,demo",
+            "--spring.config.location=classpath:/application.yml",
+            "--server.address=127.0.0.1",
+            "--server.port=0",
+            "--management.health.mail.enabled=false",
+            "--uteexpress.demo.shipping.enabled=false",
+            "--uteexpress.demo.catalog.enabled=false"
+          ],
+          "role": "refund_child",
+          "process_created_utc": "2026-10-29T16:35:55.267550+00:00",
+          "first_seen_utc": "2026-10-29T16:35:55.615666+00:00",
+          "last_seen_utc": "2026-10-29T16:36:14.788454+00:00"
+        }
+      ],
+      "ownership_observation": {
+        "id": "324c877ddd2a827f275fb6d4d22e93d47811766ea984d41957c91b2bfc638100",
+        "name": "/qa03-seed-0536b3dce0",
+        "image": "sha256:00bc86618629af00d2937fdc5a5d63db3ff8450acf52f0636ec813c7f4902929",
+        "created": "2026-10-29T16:33:30.599236715Z",
+        "labels": {
+          "uteexpress.qa03": "disposable"
+        },
+        "ports": {
+          "5432/tcp": [
+            {
+              "HostIp": "127.0.0.1",
+              "HostPort": "40920"
+            }
+          ]
+        },
+        "observed_utc": "2026-10-29T16:33:36.087310+00:00",
+        "matched_owned_primary_db_port": 40920,
+        "owned_primary_pid": 13824
+      },
+      "observer_errors": [],
+      "runner_pid": 19904,
+      "exit_code": 0,
+      "timed_out": false,
+      "finished_utc": "2026-10-29T16:36:38.268187+00:00",
+      "duration_seconds": 188.567,
+      "wrapper_log_sha256": "52661251741ae5143627fd4526e24bbe69781c0f59224907ba41f16967cfe97e",
+      "generated_directories": [
+        "C:\\Users\\T14GEN5\\Documents\\workspace-spring-tools-for-eclipse-5.3.0.RELEASE\\PROJECT CU\u1ed0I KH\u00d3A\\qa03-fr06-private-20261029\\seed-runs\\run-8e6f5f6a7249"
+      ],
+      "result_path": "C:\\Users\\T14GEN5\\Documents\\workspace-spring-tools-for-eclipse-5.3.0.RELEASE\\PROJECT CU\u1ed0I KH\u00d3A\\qa03-fr06-private-20261029\\seed-runs\\run-8e6f5f6a7249\\result.json",
+      "runner_status": "PASS",
+      "runner_exit_code": 0,
+      "failure_code": null,
+      "result_sha256": "ca5c1e94f7979a1982d1bace1d9d57a2d605c2d5ea3e3069819fa8465d1c94f4",
+      "runner_reported_cleanup": true,
+      "cleanup_verification": {
+        "owned_id": "324c877ddd2a827f275fb6d4d22e93d47811766ea984d41957c91b2bfc638100",
+        "observed_utc": "2026-10-29T16:36:38.477498+00:00",
+        "inspect_exit_code": 1,
+        "absent": false
+      }
+    }
+  ],
+  "TD_independent_verification": "PENDING; QD-launched children are not TD execution",
+  "FR07": "NOT RUN",
+  "status": "STOPPED_FAIL_OR_BLOCKED",
+  "authorization": "HP FR04 accepted, FR05 accepted with historical cleanup limitation, FR06 authorized per current task",
+  "clean_before": true,
+  "objects": {
+    "src/main": "a350de2a50fef5f586a52158f4f3882194149fbe",
+    "src/test": "aae12f6d037f97e81fd3df48e7c39da201ced853",
+    "scripts/qa": "a126f47ea5a4dca54654b67493b957aee4f68bf2",
+    "pom.xml": "89ba1f2c4fdbd5aafc0e9dfe909034b52990452f",
+    ".github/workflows": "d5555952658117250bcbcd841f66d5f537d3f4a2"
+  },
+  "explicit_java_exe": "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+  "java_exe_sha256": "ef94c79783d01753cc19bdafbedf1641a77e66913e5a8321b570717ff90b7046",
+  "runtime_env": {
+    "JAVA_HOME": "C:\\Program Files\\Java\\jdk-21",
+    "JAVA_TOOL_OPTIONS": "-Duser.timezone=UTC",
+    "MAVEN_OPTS": "-Duser.timezone=UTC",
+    "DOCKER_HOST": "npipe:////./pipe/docker_engine"
+  },
+  "jar_sha256": "c04cc185c133cdea5faafc23bbc991951440ad629adee479f9c03fedcb5204c0",
+  "auth_preflight": {
+    "source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+    "started_utc": "2026-10-29T16:33:19.313360400Z",
+    "JVM_timezone": "UTC",
+    "clean_before": true,
+    "docker_testcontainers_ping": true,
+    "owned_container_id": "429a27165ded18540257c0d9eb5bd285252c50c804a0e7e11038ab0c6de7f525",
+    "owned_container_name": "qa03-fr02-c02e26a46b47",
+    "testcontainers_host": "localhost",
+    "default_host_SQL": "PASS",
+    "SQL_host_used": "127.0.0.1",
+    "SQL_stage": "wrong_password",
+    "postgresql_server_version": "17.6 (Debian 17.6-2.pgdg13+1)",
+    "SQL_authentication": "PASS",
+    "owned_database": "qa03_fr02_c02e26a46b47",
+    "wrong_password_SQLSTATE": "28P01",
+    "wrong_password_denied": true,
+    "host_auth_policy": "scram-sha-256",
+    "port_binding": "127.0.0.1 ephemeral",
+    "clean_after": true,
+    "owned_container_removed": true,
+    "finished_utc": "2026-10-29T16:33:28.561349Z",
+    "scope": "FR02 Docker/Testcontainers/SQL auth preflight only; no Flyway, application lifecycle, combined seed, regression or rerun",
+    "status": "PASS",
+    "exit_code": 0
+  },
+  "failure_code": "CLEANUP_NOT_VERIFIED_normal",
+  "clean_after": true,
+  "finished_utc": "2026-10-29T16:36:38.582004+00:00"
+}

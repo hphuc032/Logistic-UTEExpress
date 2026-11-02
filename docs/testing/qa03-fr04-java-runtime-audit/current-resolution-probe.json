@@ -1,0 +1,44 @@
+{
+  "scope": "CURRENT diagnostic only; not FR04 rerun, not proof of historical executable path",
+  "started_utc": "2026-10-29T15:28:50.168101+00:00",
+  "parent_resolution": "C:\\Program Files\\Common Files\\Oracle\\Java\\javapath\\java.EXE",
+  "supplied_child_path_resolution": "C:\\Program Files\\Java\\jdk-21\\bin\\java.EXE",
+  "JAVA_HOME": "C:\\Program Files\\Java\\jdk-21",
+  "commands": [
+    {
+      "name": "bare-java",
+      "command": [
+        "java",
+        "-XshowSettings:properties",
+        "-version"
+      ],
+      "exit_code": 0,
+      "facts": [
+        "java.home = C:\\Program Files\\Java\\jdk-24",
+        "java.vendor = Oracle Corporation",
+        "java.version = 24.0.2",
+        "user.timezone = UTC",
+        "java version \"24.0.2\" 2025-07-15"
+      ],
+      "log_sha256": "150defd15fe52c311d48a33128c7dd9ff5612026bbc82f698eb8c79a841aa058"
+    },
+    {
+      "name": "explicit-jdk21",
+      "command": [
+        "C:\\Program Files\\Java\\jdk-21\\bin\\java.exe",
+        "-XshowSettings:properties",
+        "-version"
+      ],
+      "exit_code": 0,
+      "facts": [
+        "java.home = C:\\Program Files\\Java\\jdk-21",
+        "java.vendor = Oracle Corporation",
+        "java.version = 21.0.2",
+        "user.timezone = UTC",
+        "java version \"21.0.2\" 2024-01-16 LTS"
+      ],
+      "log_sha256": "60dd1fc976e8c4002a59ef221601a1e4634fb963aed157c8ffe539f859594615"
+    }
+  ],
+  "finished_utc": "2026-10-29T15:28:50.710184+00:00"
+}

@@ -1,0 +1,77 @@
+{
+  "reviewed_pr71_head": "c0b2f769e4af5b34b7711829284a776776adc409",
+  "scope": "Published artifact/source/internal consistency review; not a new PostgreSQL execution or recomputation of private raw logs/XML",
+  "published_manifest_hashes_verified": 8,
+  "sha256sums_entries_verified": 9,
+  "runs_checked": [
+    {
+      "label": "naturalBefore",
+      "run_id": "run-33d1426d83b2",
+      "source_sha": "ff83d5494d4db25533c62b120fbf86fc574de22c",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_utc": "2026-10-28T16:12:13.256166+00:00",
+      "finished_utc": "2026-10-28T16:14:22.552410+00:00",
+      "wrapper_timeout_recorded": false
+    },
+    {
+      "label": "controlledBefore",
+      "run_id": "run-f5162d53820c",
+      "source_sha": "ff83d5494d4db25533c62b120fbf86fc574de22c",
+      "status": "FAIL",
+      "exit_code": 1,
+      "started_utc": "2026-10-28T16:17:06.903449+00:00",
+      "finished_utc": "2026-10-28T16:18:42.183435+00:00",
+      "wrapper_timeout_recorded": null
+    },
+    {
+      "label": "naturalAfter",
+      "run_id": "run-b92c16b015e9",
+      "source_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_utc": "2026-10-28T16:15:33.732294+00:00",
+      "finished_utc": "2026-10-28T16:17:37.981483+00:00",
+      "wrapper_timeout_recorded": false
+    },
+    {
+      "label": "controlledAfter",
+      "run_id": "run-45c69b98c79b",
+      "source_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+      "status": "PASS",
+      "exit_code": 0,
+      "started_utc": "2026-10-28T16:20:24.806674+00:00",
+      "finished_utc": "2026-10-28T16:22:27.117557+00:00",
+      "wrapper_timeout_recorded": null
+    }
+  ],
+  "focused_unit": 11,
+  "focused_postgresql": 205,
+  "focused_run_id": null,
+  "focused_run_id_note": "No run ID recorded in the focused test receipt; exact source, UTC interval and artifact hashes are retained",
+  "candidate_reference_diff_exact_match": true,
+  "qd_pre_fix_reproduction_log_hash_matches": true,
+  "fixture_bytecode_hashes_match_qd_record": true,
+  "local_guard_class_sha_matches_published": true,
+  "historical_first_predicate": "NOT CAPTURED / original exact root cause UNPROVEN",
+  "finding_status": "OPEN",
+  "severity": "Medium",
+  "raw_xml_logs_recomputed": false,
+  "controlled_wrapper_timeout_note": "Not recorded at wrapper level; child timedOut=false preserved, not inferred",
+  "result": "PASS scoped consistency review",
+  "focused_source_unchanged": true,
+  "failsafe_timeout_raw": "false",
+  "failsafe_timeout_normalized": false,
+  "ci": {
+    "workflow": "CI",
+    "run_number": 148,
+    "run_id": 40731274701,
+    "head_sha": "c0b2f769e4af5b34b7711829284a776776adc409",
+    "conclusion": "success",
+    "scope": "Maven/Node publication CI, not PostgreSQL execution"
+  },
+  "review_date_client": "2026-10-29",
+  "local_candidate_current_head_before_docs": "aa9d89c38fcf1b7fb714b69c23d8c8668421ba27",
+  "raw_logs_xml_reexecuted_or_rehashed": false,
+  "pr71_publication_application_objects_match_develop_fa48cb6": true
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "arguments": [],
+    "expected_exit": 2,
+    "actual_exit": 2,
+    "status": "PASS",
+    "scope": "Refuse missing explicit demo opt-in or missing ENV password before creating resources"
+  },
+  {
+    "arguments": [
+      "--disposable-demo"
+    ],
+    "expected_exit": 1,
+    "actual_exit": 1,
+    "status": "PASS",
+    "scope": "Refuse missing explicit demo opt-in or missing ENV password before creating resources"
+  }
+]

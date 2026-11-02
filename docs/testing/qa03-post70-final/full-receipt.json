@@ -1,0 +1,16 @@
+{
+  "source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+  "tree": "11929f0afac30d8ad998cb97f0287902557059d2",
+  "command": [
+    "python",
+    "scripts/qa/verify_operations.py",
+    "--checkout",
+    "."
+  ],
+  "started_utc": "2026-10-29T08:11:27.806317+00:00",
+  "finished_utc": "2026-10-29T08:26:49.395739+00:00",
+  "duration_seconds": 921.589,
+  "exit_code": 0,
+  "timed_out": false,
+  "log_sha256": "dbc749e289a15d043321749e6b55a8ce71fed3306aa2d08c10d48a24ff486ce2"
+}

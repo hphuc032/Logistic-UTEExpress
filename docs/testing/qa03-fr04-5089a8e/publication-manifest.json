@@ -1,0 +1,51 @@
+{
+  "source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+  "testcontainers_versions_from_fresh_log": [
+    "2.0.5"
+  ],
+  "files": [
+    {
+      "path": "docs/testing/qa03-fr04-5089a8e/.gitattributes",
+      "bytes": 30,
+      "sha256": "f06202a408fef9b9ea69bb6b1cb8160dbb0378c5bb67a444d510d231813824c8"
+    },
+    {
+      "path": "docs/testing/qa03-fr04-5089a8e/acceptance-status.json",
+      "bytes": 524,
+      "sha256": "0c629ec27ef17dbe4b7b0f4b353de72c4d8e271c08f900381fd1ed8dd2ae64fa"
+    },
+    {
+      "path": "docs/testing/qa03-fr04-5089a8e/execution-receipt.json",
+      "bytes": 64133,
+      "sha256": "2afb819c914e7af92c90fb5ed7e0f64cde5a41f5ae936fd15cc50acb5139e035"
+    },
+    {
+      "path": "docs/testing/qa03-fr04-5089a8e/private-package-receipt.json",
+      "bytes": 418,
+      "sha256": "8e9b955463699d93e1774fa8afbe42c357f9af61548fc29e6b4f9ce45324255b"
+    },
+    {
+      "path": "docs/testing/qa03-fr04-5089a8e/raw-artifact-hashes.json",
+      "bytes": 37790,
+      "sha256": "6cf8f34852c64e627ba863ac0c38c4af718c41191d9713b5ad3deed3ab837142"
+    },
+    {
+      "path": "docs/testing/qa03-fr04-5089a8e/report.md",
+      "bytes": 4046,
+      "sha256": "80a5725266293465fd6d702c8cb51547a8ec906ede42e0ff3b93f537a5036077"
+    },
+    {
+      "path": "docs/testing/qa03-fr04-5089a8e/runner.reference.py.txt",
+      "bytes": 5274,
+      "sha256": "71966ba58be22db55680ac44b5c84ec08ffcb3ed87d2a22a75afd9ef81f17403"
+    },
+    {
+      "path": "docs/testing/qa03-fr04-5089a8e/source-proof.json",
+      "bytes": 1364,
+      "sha256": "1f6bf6cdf07454c93f746d3b028136f2ba2425a69283b74ed4a9be10de494ffd"
+    }
+  ],
+  "hash_basis": "staged Git object bytes, excludes self",
+  "verdict": "PENDING REVIEW"
+}

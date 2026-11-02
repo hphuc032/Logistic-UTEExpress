@@ -1,0 +1,64 @@
+import java.nio.file.*;
+import java.sql.*;
+import java.time.Instant;
+import java.util.*;
+import org.testcontainers.postgresql.PostgreSQLContainer;
+import org.testcontainers.DockerClientFactory;
+import com.github.dockerjava.api.model.*;
+import com.github.dockerjava.api.exception.NotFoundException;
+
+public class FR02Preflight {
+    static String git(String... arguments) throws Exception {
+        var command = new ArrayList<String>(); command.add("git"); command.addAll(List.of(arguments));
+        var p = new ProcessBuilder(command).redirectErrorStream(true).start();
+        String s = new String(p.getInputStream().readAllBytes(), java.nio.charset.StandardCharsets.UTF_8).trim();
+        if (p.waitFor() != 0) throw new IllegalStateException("GIT_PREFLIGHT_FAILED"); return s;
+    }
+    static void require(boolean ok, String code) { if (!ok) throw new IllegalStateException(code); }
+    static String quote(String s) { return "\"" + s.replace("\\", "\\\\").replace("\"", "\\\"").replace("\r", "\\r").replace("\n", "\\n") + "\""; }
+    static String json(Map<String,Object> values) {
+        return values.entrySet().stream().map(e -> quote(e.getKey()) + ":" + (e.getValue() instanceof Boolean || e.getValue() instanceof Number ? e.getValue().toString() : quote(String.valueOf(e.getValue())))).collect(java.util.stream.Collectors.joining(",", "{", "}"));
+    }
+    public static void main(String[] args) throws Exception {
+        String expected = args[0]; Path receipt = Path.of(args[1]); var facts = new LinkedHashMap<String,Object>();
+        facts.put("source_sha", expected); facts.put("started_utc", Instant.now().toString()); facts.put("JVM_timezone",java.util.TimeZone.getDefault().getID());
+        PostgreSQLContainer pg = null; String id = null; boolean pass = false, cleaned = false;
+        try {
+            require(git("rev-parse", "HEAD").equals(expected), "SOURCE_MISMATCH");
+            require(git("status", "--porcelain").isEmpty(), "DIRTY_WORKTREE_OR_INDEX"); facts.put("clean_before", true);
+            DockerClientFactory.instance().client().pingCmd().exec(); facts.put("docker_testcontainers_ping", true);
+            String run = UUID.randomUUID().toString().replace("-", "").substring(0,12);
+            String database = "qa03_fr02_" + run, name = "qa03-fr02-" + run;
+            byte[] secret = new byte[32]; new java.security.SecureRandom().nextBytes(secret);
+            String password = Base64.getUrlEncoder().withoutPadding().encodeToString(secret);
+            pg = new PostgreSQLContainer("postgres:17.6").withDatabaseName(database).withUsername("qa03_probe").withPassword(password)
+                    .withEnv("POSTGRES_HOST_AUTH_METHOD", "scram-sha-256").withLabel("uteexpress.qa.owner", "qa03-fr02")
+                    .withCreateContainerCmdModifier(cmd -> { cmd.withName(name); cmd.getHostConfig().withPortBindings(new PortBinding(Ports.Binding.bindIpAndPort("127.0.0.1",0),new ExposedPort(5432))); });
+            pg.start(); id = pg.getContainerId(); facts.put("owned_container_id", id); facts.put("owned_container_name", name);
+            require(Set.of("localhost", "127.0.0.1").contains(pg.getHost()), "NONLOCAL_DOCKER_HOST");
+            facts.put("testcontainers_host", pg.getHost());
+            String jdbcUrl = pg.getJdbcUrl().replace("//localhost:", "//127.0.0.1:");
+            try (var original = DriverManager.getConnection(pg.getJdbcUrl(), pg.getUsername(), password)) { facts.put("default_host_SQL", "PASS"); }
+            catch (SQLException failure) { facts.put("default_host_SQL", "BLOCKED"); facts.put("default_host_SQLSTATE", String.valueOf(failure.getSQLState())); if (failure.getCause()!=null) facts.put("default_host_cause_type",failure.getCause().getClass().getSimpleName()); }
+            facts.put("SQL_host_used", "127.0.0.1");
+            facts.put("SQL_stage", "correct_password");
+            try (var c = DriverManager.getConnection(jdbcUrl, pg.getUsername(), password); var statement = c.createStatement(); var r = statement.executeQuery("SELECT current_user,current_database(),current_setting('server_version')")) {
+                require(r.next(), "NO_SQL_RESULT"); require(r.getString(1).equals("qa03_probe") && r.getString(2).equals(database), "DATABASE_OWNERSHIP_MISMATCH");
+                require(r.getString(3).startsWith("17."), "NOT_POSTGRESQL17"); facts.put("postgresql_server_version", r.getString(3)); facts.put("SQL_authentication", "PASS"); facts.put("owned_database", database);
+            }
+            boolean rejected = false;
+            facts.put("SQL_stage", "wrong_password");
+            try (var wrong = DriverManager.getConnection(jdbcUrl, pg.getUsername(), "wrong-" + run)) { }
+            catch (SQLException failure) { require("28P01".equals(failure.getSQLState()), "UNEXPECTED_AUTH_FAILURE_STATE"); rejected = true; facts.put("wrong_password_SQLSTATE", failure.getSQLState()); }
+            require(rejected, "WRONG_PASSWORD_ACCEPTED"); facts.put("wrong_password_denied", true); facts.put("host_auth_policy", "scram-sha-256"); facts.put("port_binding", "127.0.0.1 ephemeral");
+            require(git("rev-parse", "HEAD").equals(expected) && git("status", "--porcelain").isEmpty(), "SOURCE_CHANGED_DURING_PREFLIGHT"); facts.put("clean_after", true); pass = true;
+        } catch (Exception failure) { facts.put("failure_type", failure.getClass().getSimpleName()); if(failure instanceof SQLException sql){ facts.put("SQLSTATE",String.valueOf(sql.getSQLState())); if(sql instanceof org.postgresql.util.PSQLException pgFailure && pgFailure.getServerErrorMessage()!=null){ String message=pgFailure.getServerErrorMessage().getMessage(); if(message!=null && message.startsWith("invalid value for parameter \"TimeZone\"")) facts.put("safe_timezone_error",message); } if(sql.getCause()!=null) facts.put("SQL_cause_type",sql.getCause().getClass().getSimpleName()); } if (failure instanceof IllegalStateException && failure.getMessage().matches("[A-Z_]+")) facts.put("safe_failure_code", failure.getMessage()); }
+        finally {
+            if (pg != null) { try { pg.stop(); } catch (Exception failure) { facts.put("cleanup_error_type", failure.getClass().getSimpleName()); } }
+            if (id != null) { try { DockerClientFactory.instance().client().inspectContainerCmd(id).exec(); } catch (NotFoundException removed) { cleaned = true; } catch (Exception failure) { facts.put("cleanup_verification_error_type", failure.getClass().getSimpleName()); } }
+        }
+        facts.put("owned_container_removed", cleaned); facts.put("finished_utc", Instant.now().toString()); facts.put("scope", "FR02 Docker/Testcontainers/SQL auth preflight only; no Flyway, application lifecycle, combined seed, regression or rerun");
+        facts.put("status", pass && cleaned ? "PASS" : "BLOCKED"); facts.put("exit_code", pass && cleaned ? 0 : 1); Files.writeString(receipt, json(facts));
+        System.out.println("FR02_PREFLIGHT=" + json(facts)); System.exit(pass && cleaned ? 0 : 1);
+    }
+}

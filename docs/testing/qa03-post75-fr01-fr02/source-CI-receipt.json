@@ -1,0 +1,25 @@
+{
+  "source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "recorded_utc": "2026-10-29T13:51:50.757420+00:00",
+  "runs": [
+    {
+      "id": 40881248445,
+      "name": "CI",
+      "conclusion": "success",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40881248445"
+    },
+    {
+      "id": 40881248498,
+      "name": "QA evidence tooling",
+      "conclusion": "success",
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/actions/runs/40881248498"
+    },
+    {
+      "id": 40881248314,
+      "name": "PR70-only integration gate",
+      "conclusion": "skipped",
+      "scope": "Not applicable to PR69"
+    }
+  ],
+  "scope": "Normal PR CI, not FR04 fullG02 PostgreSQL/seed acceptance"
+}

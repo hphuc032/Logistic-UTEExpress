@@ -1,0 +1,31 @@
+{
+  "tested_source_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+  "Q70-S01": "OPEN",
+  "original_pr70_head_unchanged": "688884cd33f4b2f4dc62f5d33a4c4002e9146660",
+  "production_guard_changes": false,
+  "root_cause": "Synthetic test fixture uses mismatched DB/JVM timestamp sources; confirmed paid_at after cancelled_at.",
+  "full_java_postgresql": 2078,
+  "node_tests": 33,
+  "tooling_tests": 20,
+  "combined_seed": "PASS on candidate, first/rerun and fingerprint invariants",
+  "Q03-G01": "NOT RUN / BLOCKED: supported Computer Use still fails initialization",
+  "pending_hp_decisions": [
+    "initial shared ADMIN bootstrap",
+    "same-process shared checkpoint scope"
+  ],
+  "pending_reviews": [
+    "HP candidate review and remaining acceptance requirements",
+    "Coordinated TD adoption/integration",
+    "Authorized dependency integration then fresh exact-head regression"
+  ],
+  "qa02": "IN PROGRESS",
+  "qa03": "BLOCKED",
+  "ready_for_hp_final_acceptance": false,
+  "approved_or_merged_by_qd": false,
+  "Q70-S01_severity": "Medium",
+  "candidate_validation": "Retained candidate; QD verification completed and TD independent validation reported, not closure",
+  "td_controlled_skew_evidence": "Published at PR71 c0b2f76; scoped artifact/source consistency PASS; private raw XML/logs not independently rehashed or rerun",
+  "canonical_finding_disposition": "finding-disposition.json",
+  "hp_final_acceptance": "PENDING",
+  "td_evidence_review_reference": "td-published-review.json"
+}

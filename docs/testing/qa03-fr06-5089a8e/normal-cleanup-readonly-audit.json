@@ -1,0 +1,55 @@
+{
+  "scope": "read-only exact owned ID/name; no repair/seed retry",
+  "owned_id": "324c877ddd2a827f275fb6d4d22e93d47811766ea984d41957c91b2bfc638100",
+  "owned_name": "/qa03-seed-0536b3dce0",
+  "checks": [
+    {
+      "command": [
+        "docker",
+        "inspect",
+        "--format",
+        "{{.Id}}",
+        "324c877ddd2a827f275fb6d4d22e93d47811766ea984d41957c91b2bfc638100"
+      ],
+      "observed_utc": "2026-10-29T16:37:48.882708+00:00",
+      "exit_code": 1,
+      "stdout": "\n",
+      "stderr": "error: no such object: 324c877ddd2a827f275fb6d4d22e93d47811766ea984d41957c91b2bfc638100\n",
+      "log_sha256": "ff4ead06ec78c119360fe8abf83adfaf518feda6d3f81986c8dd56aac9082aed"
+    },
+    {
+      "command": [
+        "docker",
+        "ps",
+        "-a",
+        "--no-trunc",
+        "--filter",
+        "id=324c877ddd2a827f275fb6d4d22e93d47811766ea984d41957c91b2bfc638100",
+        "--format",
+        "{{json .}}"
+      ],
+      "observed_utc": "2026-10-29T16:37:49.097853+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "log_sha256": "a3680b6601c39b586ea892ad2bbaa58a7f72b62a64f73917b09aa8c5f188110e"
+    },
+    {
+      "command": [
+        "docker",
+        "ps",
+        "-a",
+        "--no-trunc",
+        "--filter",
+        "name=^qa03-seed-0536b3dce0$",
+        "--format",
+        "{{json .}}"
+      ],
+      "observed_utc": "2026-10-29T16:37:49.327946+00:00",
+      "exit_code": 0,
+      "stdout": "",
+      "stderr": "",
+      "log_sha256": "a3680b6601c39b586ea892ad2bbaa58a7f72b62a64f73917b09aa8c5f188110e"
+    }
+  ]
+}

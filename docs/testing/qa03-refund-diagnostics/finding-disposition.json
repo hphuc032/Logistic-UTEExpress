@@ -1,0 +1,118 @@
+{
+  "finding": "Q70-S01",
+  "severity": "Medium",
+  "status": "OPEN",
+  "candidate_status": "Validated test-fixture candidate; historical original cause unproven",
+  "candidate_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+  "historical_conflict": {
+    "exact_predicate": "NOT CAPTURED",
+    "exact_root_cause": "UNPROVEN",
+    "note": "Controlled reproductions do not retrospectively establish the original failure predicate."
+  },
+  "qd_reproduction": {
+    "source_sha": "ff83d5494d4db25533c62b120fbf86fc574de22c",
+    "evidence": "reproduced-fail-result.json",
+    "mechanism": "Captured synthetic paid_at after cancelled_at; mixed DB/JVM timestamp sources",
+    "verification": "QD source-bound artifacts verified"
+  },
+  "td_independent_update": {
+    "source": "TD published sanitized investigation packet at PR71 c0b2f769e4af5b34b7711829284a776776adc409",
+    "pre_fix_sha": "ff83d5494d4db25533c62b120fbf86fc574de22c",
+    "candidate_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+    "external_java_clock_skew_seconds": -2,
+    "reported_unit_tests": 11,
+    "reported_postgresql_tests": 205,
+    "reported_outcome": "Pre-fix CONFLICT at lockPaid:46; candidate PASS under same skew including independent-process rerun; both refund operations and 34-table fingerprints PASS",
+    "raw_manifest_reference": "https://github.com/hphuc032/Logistic-UTEExpress/blob/c0b2f769e4af5b34b7711829284a776776adc409/docs/testing/qa02-q70-s01-investigation/publication-manifest.json",
+    "raw_artifacts_independently_verified_by_qd": false,
+    "artifact_status": "8 published manifest hashes and 9 SHA256SUMS entries/source/run consistency checked; private raw logs/XML not rehashed or rerun",
+    "publication_status": "PUBLISHED / QD SCOPED ARTIFACT REVIEW PASS",
+    "reported_td_local_paths": [
+      ".work/qa02-q70s01-investigation/REPORT.md",
+      ".work/qa02-q70s01-investigation/evidence/checksums.json"
+    ],
+    "local_paths_accessible_in_qd_workspace": false,
+    "published_pr71_head": "c0b2f769e4af5b34b7711829284a776776adc409",
+    "publication_artifacts_verified_by_qd": true,
+    "prior_pr71_exclusion": {
+      "head": "ed29202cc072e763d011189cd00ac613d564d237",
+      "reason": "Historical export packet only; new controlled evidence added at c0b2f76"
+    },
+    "review_receipt": "td-published-review.json"
+  },
+  "historical_td_packet": {
+    "original_commit": "ed29202cc072e763d011189cd00ac613d564d237",
+    "imported_documentation_commit": "a4f88ec",
+    "tested_tree": "bd0644ba373c5273a09e8af4898300dc4bdd8680",
+    "identity_kind": "exported Git tree, not a tested publication commit",
+    "published_file_checksums_verified": 8,
+    "controlled_skew_update_in_packet": false
+  },
+  "production_guard_unchanged": true,
+  "guard_git_blob": "485ee89c75c3b69073f8d8a053c5b0696e57164b",
+  "next_steps": [
+    "Complete #68 owner review/CSRF-validation/CI gate and request HP merge decision",
+    "After HP merges #68, check #70 migration/old ledger compatibility and request HP merge decision",
+    "After #68/#70 merge, sync #69 and run final integrated regression/normal/-2s seeds; HP explicitly accept synthetic bootstrap/checkpoint scope"
+  ],
+  "qa02": "IN PROGRESS",
+  "qa03": "BLOCKED",
+  "hp_final_acceptance": "PENDING",
+  "PAY03_VNPAY": "DEFERRED",
+  "approval_or_merge_implied": false,
+  "hp_integration_validation_authorization": {
+    "source": "User-relayed HP decision on 2026-10-29",
+    "scope": "Candidate accepted for integration validation only",
+    "finding_stays_open": true,
+    "merge_or_final_acceptance_authorized": false
+  },
+  "fresh_integration_validation": {
+    "source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+    "report": "../qa03-hp-integration-validation/report.md",
+    "execution": "PASS",
+    "td_source_acknowledgement": "CONFIRMED / source and published evidence review only",
+    "recommendation": "ACCEPTED RISK proposal only; HP decision pending",
+    "not_postmerge_develop": true
+  },
+  "td_final_confirmation": {
+    "status": "CONFIRMED / SOURCE AND PUBLISHED EVIDENCE REVIEW",
+    "source_sha": "f9c6fd68e1273a8e8ab3b9deb8e13876ce0b17d5",
+    "received_via": "Direct GitHub comment independently retrieved and author verified as Tender0603; initial user-relayed receipt retained in Git history",
+    "scope": "TD compared GitHub source and published evidence; not a new independent PostgreSQL execution",
+    "confirmed": [
+      "Ordered composition #68 -> #70 -> #69 and production guard scope",
+      "Clock candidate/source hashes; child-only instrumentation",
+      "2078 Java/PostgreSQL + 33 Node + 23 tooling PASS manifests",
+      "Normal and -2s combined seeds; independent TD process rerun; within-run 34-table fingerprints unchanged",
+      "No new Payment/Refund/inventory/voucher/revenue regression evidenced within tested scope"
+    ],
+    "risk_position": "Agrees with bounded ACCEPTED RISK proposal; HP formal disposition still pending",
+    "github_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/70#issuecomment-6485644464",
+    "github_comment_id": 6485644464,
+    "github_author": "Tender0603",
+    "github_created_at": "2026-10-29T01:49:28Z",
+    "verification_date": "2026-10-29 Asia/Saigon",
+    "limits": "TD did not independently rebuild/byte-compare JAR/classes or rerun PostgreSQL; acknowledgement of published provenance/results only"
+  },
+  "residual_risk_record": "../qa03-hp-integration-validation/residual-risk-proposal.json",
+  "hp_final_risk_decision": {
+    "authority": "HP",
+    "provenance": "User-relayed explicit HP FINAL DECISION on 2026-10-29 Asia/Saigon; no direct GitHub decision URL supplied",
+    "disposition": "ACCEPTED RISK — LIMITED",
+    "original_severity": "Medium",
+    "resolved": false,
+    "scope": "Only unknown exact predicate/root cause of original historical disposable-fixture CONFLICT",
+    "retain_historical_fail": true,
+    "production_guard_relaxation": false,
+    "integration_order": [
+      68,
+      70,
+      69
+    ],
+    "automatic_approval_or_merge": false,
+    "final_qa_acceptance": "PENDING",
+    "reopen_on": "New Payment/Refund/concurrency/rollback/financial inconsistency; detailed diagnostic/provenance triggers retained in residual-risk-proposal.json"
+  },
+  "disposition": "ACCEPTED RISK — LIMITED",
+  "hp_latest_directive_url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/69#issuecomment-6488875760"
+}

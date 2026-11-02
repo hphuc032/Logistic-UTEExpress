@@ -1,0 +1,26 @@
+{
+  "finding": "Q70-S01",
+  "reproduced_source_sha": "ff83d5494d4db25533c62b120fbf86fc574de22c",
+  "status": "DIAGNOSED / FIX CANDIDATE",
+  "observed_invalid_prerequisites": [
+    {
+      "order_id": 12,
+      "paid_after_cancel_microseconds": 8521
+    },
+    {
+      "order_id": 13,
+      "paid_after_cancel_microseconds": 7173
+    }
+  ],
+  "failed_capture_status": "CAPTURED",
+  "failed_child_exit_code": 1,
+  "root_cause": "Synthetic PAID timestamp uses PostgreSQL CURRENT_TIMESTAMP while cancellation is generated from Java Clock; persisted paid_at exceeds cancelled_at. Production guard correctly rejects invalid chronology.",
+  "fix_scope": "Only TD-owned test fixture: synthetic paid_at/updated_at use persisted Payment.created_at; no production guard or assertion relaxation",
+  "historical_first_failure": "Still had no direct predicate capture; this is new reproduction evidence",
+  "td_review_required": true,
+  "original_test_fixture_blob": "4374db3ac31e5c01ae18f857c54621e8aba0ce63",
+  "fixed_test_fixture_blob": "c39de96535be47a0a061ba56d0a1756dd881fe29",
+  "failed_staged_fixture_class_sha256": "7c400c833e74551fcba54d767a6d56db49f92470ae9537eec3ace440f1c39adb",
+  "fixed_staged_fixture_class_sha256": "81ba5dd13736ca4b78b4157d5ebd989d489689ad787a781bce8ad48566b9af22",
+  "after_fix": "Two independent TD child invocations exit0; all cancelled/PAID fixture timing predicates valid; combined fingerprint unchanged. Pending TD review/adoption."
+}

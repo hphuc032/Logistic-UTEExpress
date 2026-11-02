@@ -1,0 +1,23 @@
+{
+  "versioned_SQL_inventory": 28,
+  "seed_success_history_counter": 29,
+  "read_only_controlled_DB_observation": "SCHEMA1 +SQL28; exact SQL observation UTC not retained",
+  "logs": [
+    {
+      "run_id": "run-95b528ce406c",
+      "app_log_sha256": "fb82d07549ee2f47e2709588850e59710939e6eba85e300b6b645b1eefa05c30",
+      "safe_Flyway_log_lines": [
+        "2026-10-29T08:27:03.417Z  INFO 32128 --- [uteexpress] [           main] o.f.core.internal.database.base.Schema   : Creating schema \"uteexpress\" ...",
+        "2026-10-29T08:27:05.423Z  INFO 32128 --- [uteexpress] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 28 migrations to schema \"uteexpress\", now at version v20261028081110 (execution time 00:00.605s)"
+      ]
+    },
+    {
+      "run_id": "run-3138bd73d978",
+      "app_log_sha256": "60700cfc79cee144c80e799c8c65c2dcd23d454ab007ff93664773968a9299c0",
+      "safe_Flyway_log_lines": [
+        "2026-10-29T08:30:00.871Z  INFO 13684 --- [uteexpress] [           main] o.f.core.internal.database.base.Schema   : Creating schema \"uteexpress\" ...",
+        "2026-10-29T08:30:02.544Z  INFO 13684 --- [uteexpress] [           main] o.f.core.internal.command.DbMigrate      : Successfully applied 28 migrations to schema \"uteexpress\", now at version v20261028081110 (execution time 00:00.477s)"
+      ]
+    }
+  ]
+}

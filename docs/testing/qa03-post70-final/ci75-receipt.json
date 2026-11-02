@@ -1,0 +1,10 @@
+{
+  "pr": 75,
+  "publication_head": "3ae2c8286a3f372782a7327bf490cde48f9542f8",
+  "run_id": 40842071379,
+  "conclusion": "SUCCESS",
+  "Node_tests_observed": 48,
+  "private_zip_sha256": "df488e34b58ba9347f4c91f1c47120d3552af380a2d25e2b21c85c122fdd7483",
+  "raw_logs_publication": "NOT PUBLISHED",
+  "postgresql_in_this_workflow": "NOT RUN; local188targeted evidence separate"
+}

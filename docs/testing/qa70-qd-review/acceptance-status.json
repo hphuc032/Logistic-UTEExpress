@@ -1,0 +1,20 @@
+{
+  "reviewed_pr70_head": "688884cd33f4b2f4dc62f5d33a4c4002e9146660",
+  "combined_tested_source_sha": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+  "database_review": "PASS scoped independent",
+  "combined_execution": "PASS observed; earlier same-source FAIL retained",
+  "open_findings": [
+    "Q70-S01"
+  ],
+  "pending_hp_decisions": [
+    "initial shared ADMIN bootstrap",
+    "same-process shared checkpoint scope"
+  ],
+  "qa02": "IN PROGRESS",
+  "qa03": "BLOCKED",
+  "ready_for_hp_final_acceptance": false,
+  "github_approved": false,
+  "merged": false,
+  "browser_manual": "NOT RUN/BLOCKED",
+  "PAY03_VNPAY": "DEFERRED"
+}

@@ -1,0 +1,7 @@
+{
+  "source_sha": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+  "pr70_head": "688884cd33f4b2f4dc62f5d33a4c4002e9146660",
+  "jar_sha256": "544c6c2ab0854d6fef4c2d9ee0bafe5743e267a800c579770196c7c68e75a3b0",
+  "td_test_fixture_class_sha256": "7c400c833e74551fcba54d767a6d56db49f92470ae9537eec3ace440f1c39adb",
+  "state": "Package completed; full failsafe regression running; no early full PASS claim"
+}

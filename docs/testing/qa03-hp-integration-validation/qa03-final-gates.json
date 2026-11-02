@@ -1,0 +1,46 @@
+{
+  "qa03": "BLOCKED / NOT COMPLETED",
+  "master_plan_sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+  "client_date": "2026-10-29",
+  "priority": "QA03 only; DOC03 draft73 paused",
+  "q70_s01": {
+    "status": "OPEN",
+    "severity": "Medium",
+    "disposition": "ACCEPTED RISK \u2014 LIMITED",
+    "not_resolved": true
+  },
+  "gates": [
+    {
+      "id": "Q03-G01",
+      "status": "HUMAN ACCEPTANCE PENDING",
+      "owner": "QD execution / HP acceptance",
+      "PR75": "MERGED",
+      "PR75_merge_sha": "a5620f1971d3b684d9b05d7444f5e90442404656",
+      "latest_prior_automated_source": "53fbf923009c1d9da2ae0c73440b6a6de14904e5",
+      "prior_evidence": "../qa03-assignment-ui/otp-copy-fix/report.md",
+      "current_source_browser_execution": "NOT RUN in FR preflight stage; prior source evidence remains separately labeled",
+      "human_signoff": "NOT RECORDED"
+    },
+    {
+      "id": "Q03-G02",
+      "status": "Post75 FR04\u2013FR07 NOT RUN / blocked pending FR01/FR02 joint acceptance and HP authorization",
+      "current_source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+      "historical_post70_source": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+      "historical_evidence": "../qa03-post70-final/report.md",
+      "remaining": "TD independent source/runner read-back; HP accepts FR01/FR02 and explicitly authorizes next gates"
+    }
+  ],
+  "qa02": "IN PROGRESS",
+  "hp_scope_decisions_pending": [
+    "Synthetic initial ADMIN bootstrap and synthetic PAID prerequisite scope",
+    "Shared checkpoint-backed same-process rerun scope; do not claim cross-process lost-checkpoint recovery"
+  ],
+  "release_followups": "Target-host/TLS/upload persistence/off-host restore/production observability NOT RUN, separate release scope",
+  "no_approval_merge_or_completion_by_qd": true,
+  "current_develop_sha": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "executed_QA03_source_sha": "89d676221c3e2a2303a09536adb14ec3aa65033b",
+  "current_packet": "../qa03-post75-fr01-fr02/report.md",
+  "current_integrated_source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "current_FR_stage": "FR01 localidentityVERIFIED / jointPENDING; FR02 localUTCpreflightPASS / acceptancePENDING",
+  "FR04_FR07": "NOT AUTHORIZED / NOT RUN"
+}

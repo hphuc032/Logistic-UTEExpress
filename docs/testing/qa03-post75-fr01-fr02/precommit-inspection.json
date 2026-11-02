@@ -1,0 +1,158 @@
+{
+  "accepted_develop_sha": "a5620f1971d3b684d9b05d7444f5e90442404656",
+  "pre_sync_head": "19b7e4bdc811b7c6059ce742eb35995830f23f6b",
+  "backup_ref": "backup/qa03-before-pr75-sync-19b7e4b",
+  "normal_merge_conflicts": false,
+  "staged_production_diff_vs_develop": [],
+  "remaining_QA_files": [
+    ".gitignore",
+    "scripts/qa/rehearse_integrated_seed.py",
+    "scripts/qa/tests/test_refund_seed_diagnostics.py",
+    "src/test/java/qa02/investigation/ClockSkewConfiguration.java",
+    "src/test/java/qa02/seed/RefundAcceptanceSeed.java"
+  ],
+  "migration_versions_unique": true,
+  "migration_count": 28,
+  "migration_identity": {
+    "V20260920143000__qd_db01_schema_baseline.sql": {
+      "worktree_sha256": "a241a457141e6e34ee11fe7a7e9bf591b540a715ce8c708033cbe1debc1a3941",
+      "git_index_blob": "3bb4c484cda2e4b396457711d5dd2dc3cbaf95f9",
+      "accepted_develop_blob": "3bb4c484cda2e4b396457711d5dd2dc3cbaf95f9"
+    },
+    "V20260921070156__hp_auth01_identity.sql": {
+      "worktree_sha256": "ac644e830983f72ce3237c09b03778dd185920ca76b803049bbf5efbbfb877a5",
+      "git_index_blob": "350c8d09a9dbba4a9b6145627f478937daead198",
+      "accepted_develop_blob": "350c8d09a9dbba4a9b6145627f478937daead198"
+    },
+    "V20260921081035__qd_admin00_audit_logs.sql": {
+      "worktree_sha256": "3cd187338e33e8ab6414fc621cb667c516e4ac929d01841bf7ac84b1306d8e2c",
+      "git_index_blob": "c663c822aefed91ae94507591cf997a50dc8a854",
+      "accepted_develop_blob": "c663c822aefed91ae94507591cf997a50dc8a854"
+    },
+    "V20260922090000__qd_admin04_categories.sql": {
+      "worktree_sha256": "f75bc99129719b34164a69e367f6687931d141db90521d0679a068554a9d5bcb",
+      "git_index_blob": "711e80837104fcf6b1aee642f2409a4c78be3c1d",
+      "accepted_develop_blob": "711e80837104fcf6b1aee642f2409a4c78be3c1d"
+    },
+    "V20260923090000__td_ord01_domain_core.sql": {
+      "worktree_sha256": "345c62905f5fc1761c1bcc0f14ba7da975414c6f7975274a11ffa4c0cd4b3a5a",
+      "git_index_blob": "26f4261c6dce8c0dd542dd886e75451f93f1b6a1",
+      "accepted_develop_blob": "26f4261c6dce8c0dd542dd886e75451f93f1b6a1"
+    },
+    "V20260923090100__hp_auth03_email_otp.sql": {
+      "worktree_sha256": "a5f0256f419bb19c4c762ee1b611e4923dcf29f05b44584598cac3a1b111cc3f",
+      "git_index_blob": "c19385997b4eb2f00f6f47f07518b4abaed67c74",
+      "accepted_develop_blob": "c19385997b4eb2f00f6f47f07518b4abaed67c74"
+    },
+    "V20260923100000__qd_ship00_providers_rates.sql": {
+      "worktree_sha256": "4fa9fcec259779ad94dba9d29186b550c8feae0c1bbb021f380034f898d09c7e",
+      "git_index_blob": "e12fbcfb0a35a454c801d45be23426d2ba8cfdaf",
+      "accepted_develop_blob": "e12fbcfb0a35a454c801d45be23426d2ba8cfdaf"
+    },
+    "V20260923100100__hp_vendor01_shops.sql": {
+      "worktree_sha256": "9c1e31911b37e913da642cd71a480efb805e0e9df905b4b6a118c63f09677b78",
+      "git_index_blob": "6d20d71095bfe6a0aadda7d98197559369e490e8",
+      "accepted_develop_blob": "6d20d71095bfe6a0aadda7d98197559369e490e8"
+    },
+    "V20260924005244__hp_prod00_catalog_foundation.sql": {
+      "worktree_sha256": "9cca5d0678a5d214d5ab0cc5f1936548dad6d05e6a12d6446b7ded0eb3e2a95a",
+      "git_index_blob": "3ec58fe3c47261d8abda92e6b860c23894483f56",
+      "accepted_develop_blob": "3ec58fe3c47261d8abda92e6b860c23894483f56"
+    },
+    "V20260925022804__td_cart01_foundation.sql": {
+      "worktree_sha256": "0061c769782bd983dcbaa6a2680891c43d95531aca7d88424058524106d16303",
+      "git_index_blob": "c5f0f2e2e1ea75f728c650f16060edfd5aa03fe2",
+      "accepted_develop_blob": "c5f0f2e2e1ea75f728c650f16060edfd5aa03fe2"
+    },
+    "V20260926035526__hp_auth04_password_reset.sql": {
+      "worktree_sha256": "fc62277b6762093a342c49c0816c0b2898a8198ff8554cfb7e6e892310a58d0e",
+      "git_index_blob": "0070fa535cfb59b1f36eeb119f274f1618e0b359",
+      "accepted_develop_blob": "0070fa535cfb59b1f36eeb119f274f1618e0b359"
+    },
+    "V20260926085003__hp_user01_profile.sql": {
+      "worktree_sha256": "dfa4db850991c95dba9b0eaabb9f4bc9daed7e4ae81bbacdf6a0432b18f42dfa",
+      "git_index_blob": "1d8c79dc6f4b6cbfa95bf06450a7507570f3e8b2",
+      "accepted_develop_blob": "1d8c79dc6f4b6cbfa95bf06450a7507570f3e8b2"
+    },
+    "V20260927123343__hp_user02_addresses.sql": {
+      "worktree_sha256": "73304b16065d4f6b9744d4525bb809ec353247c80977b9dabbdf51f268b7a2bf",
+      "git_index_blob": "bb649f3c169c63c11ad624c13a49c40b4c1ff454",
+      "accepted_develop_blob": "bb649f3c169c63c11ad624c13a49c40b4c1ff454"
+    },
+    "V20260928090000__qd_admin05_moderation.sql": {
+      "worktree_sha256": "0250865da420d8bfa8b239634253bcde7582a7d1bc6fd983d8daee360c7e930a",
+      "git_index_blob": "e5bc09fe2da21cc5287767a23a47101199ee8e36",
+      "accepted_develop_blob": "e5bc09fe2da21cc5287767a23a47101199ee8e36"
+    },
+    "V20260930100000__qd_eng01_favorites_recent.sql": {
+      "worktree_sha256": "a6976386318d9b9057494499737a6e52730c6dd33351e633252600c9f721ae4f",
+      "git_index_blob": "5074df9a3cb3aa7f1939f23bd74305c2341669f5",
+      "accepted_develop_blob": "5074df9a3cb3aa7f1939f23bd74305c2341669f5"
+    },
+    "V20261002100000__qd_admin06_commission_policy.sql": {
+      "worktree_sha256": "8f04e9655751e8a47494da1c0ba09b917dda2c856e163f021aae24800f029497",
+      "git_index_blob": "dfe877044f38ccd28e4aed371d421150882c7307",
+      "accepted_develop_blob": "dfe877044f38ccd28e4aed371d421150882c7307"
+    },
+    "V20261006090000__td_ord04_shipping_snapshot.sql": {
+      "worktree_sha256": "93dd7f644ead082e203c025a3f685a1a1ba187f4095911d0598ad1b564998b81",
+      "git_index_blob": "41e7d5dac7c929b193416efd8c40b7655350a501",
+      "accepted_develop_blob": "41e7d5dac7c929b193416efd8c40b7655350a501"
+    },
+    "V20261007090000__td_promo01_vouchers.sql": {
+      "worktree_sha256": "303b5978d70ce507eb1da609b26eb179efb9839a5ff1299c038576532452b9e1",
+      "git_index_blob": "e5507f4641c985fe87df42bab7432502b17dfdcf",
+      "accepted_develop_blob": "e5507f4641c985fe87df42bab7432502b17dfdcf"
+    },
+    "V20261007100000__qd_ship01_shipments.sql": {
+      "worktree_sha256": "4ec2a3f168becafd9a0cbb7516b49a27ee8a6d768804a57221c0f77b37955eb0",
+      "git_index_blob": "04b4c11bc4588b2749b87c6cb3608e8945818d29",
+      "accepted_develop_blob": "04b4c11bc4588b2749b87c6cb3608e8945818d29"
+    },
+    "V20261008090000__td_promo02_product_promotions.sql": {
+      "worktree_sha256": "2f3a7cbff0fcc5f8d7aa901c542b865a8af0db234d5658fa47ad42bfa1c1fa68",
+      "git_index_blob": "de410cd3492c7686caa6becdd406fb35f7118895",
+      "accepted_develop_blob": "de410cd3492c7686caa6becdd406fb35f7118895"
+    },
+    "V20261008100000__qd_ws01_notifications.sql": {
+      "worktree_sha256": "98f7acdb109e37382654b1e06b43aada927227c312e0e0cd3b2adb1ef8c7d11b",
+      "git_index_blob": "0c90e400450e1a5d321406c1482c093d150538dd",
+      "accepted_develop_blob": "0c90e400450e1a5d321406c1482c093d150538dd"
+    },
+    "V20261013090000__td_return01_management.sql": {
+      "worktree_sha256": "7990fe405cc5b23a2d13e84aaa73076d70fd7ad963a3ab6d75993af476ab55a5",
+      "git_index_blob": "d1a1ca7be5296af1ab22f62a756875ba3076d8d2",
+      "accepted_develop_blob": "d1a1ca7be5296af1ab22f62a756875ba3076d8d2"
+    },
+    "V20261018090000__td_ord04_return_receipt.sql": {
+      "worktree_sha256": "69fdb05bae4a7ddd91e17a80dae34cb475d6d2dc620951863ed2c1477044f84e",
+      "git_index_blob": "72d88e378164691f0f2543ed67a59a8cbf2486e8",
+      "accepted_develop_blob": "72d88e378164691f0f2543ed67a59a8cbf2486e8"
+    },
+    "V20261018110000__qd_ship03_delivery_failures.sql": {
+      "worktree_sha256": "1af037bcbb909cadd8b33dd705b6698de91cad7b5da4f120635464190ecfab2f",
+      "git_index_blob": "2f20b0800114fa08865bf993e6638caf321dbc5e",
+      "accepted_develop_blob": "2f20b0800114fa08865bf993e6638caf321dbc5e"
+    },
+    "V20261022090000__td_pay02_refund_ledger.sql": {
+      "worktree_sha256": "4d547b491933268c69d0022f2bc0fdb2d622a913b08dfcbb0e6b8fbfc9bacdee",
+      "git_index_blob": "b4d1c1d5c8661a70789d8d05a044119b1daf7407",
+      "accepted_develop_blob": "b4d1c1d5c8661a70789d8d05a044119b1daf7407"
+    },
+    "V20261023170000__qd_rev01_review_foundation.sql": {
+      "worktree_sha256": "e29eede1d50a4c36e95277644d33da2252cf6a0e40f2c9f70e2260de7e3229ea",
+      "git_index_blob": "bd1020adfa84accbeea44bec77411cb3b4859634",
+      "accepted_develop_blob": "bd1020adfa84accbeea44bec77411cb3b4859634"
+    },
+    "V20261027100000__hp_int02_return_to_sender.sql": {
+      "worktree_sha256": "34647570bd13f061eccf1ecab0e80bc1eea3f7ffe3bc1b1ad4eb45d2b4e342cf",
+      "git_index_blob": "9f2fdb3e58785994da635d17c42863b4d9ed1e7a",
+      "accepted_develop_blob": "9f2fdb3e58785994da635d17c42863b4d9ed1e7a"
+    },
+    "V20261028081110__td_qa02_cancelled_paid_refunds.sql": {
+      "worktree_sha256": "5897c9479e22542d2f7c997eda05e163de7de5fb1670cc052a54caeed3a2a3cc",
+      "git_index_blob": "6f645aede8c6caf1edfb153ceab344c082389719",
+      "accepted_develop_blob": "6f645aede8c6caf1edfb153ceab344c082389719"
+    }
+  }
+}

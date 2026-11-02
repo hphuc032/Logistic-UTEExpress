@@ -1,0 +1,2824 @@
+{
+  "audited_utc": "2026-10-29T15:30:24.247988+00:00",
+  "source": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "tree": "89c3882d470f81466b902cd3a38d7f3f272c889b",
+  "original_publication": "1cf656d2b0a8853f91ccd58bc794c9ab395d0e23",
+  "archive_original_path": "C:\\Users\\T14GEN5\\Documents\\workspace-spring-tools-for-eclipse-5.3.0.RELEASE\\PROJECT CU\u1ed0I KH\u00d3A\\qa03-fr04-5089\\.work\\fr04\\FR04-original-private.zip",
+  "archive_sha256": "3b5e97348dc76ecb5c75ac4ae28a7e1211ce4da0837c8524f62f259629161d84",
+  "original_manifest_sha256": "6cf8f34852c64e627ba863ac0c38c4af718c41191d9713b5ad3deed3ab837142",
+  "archive_crc": "PASS",
+  "artifacts_verified": 182,
+  "xml_verified": 144,
+  "unit_xml": 77,
+  "integration_xml": 67,
+  "unit_tests": 709,
+  "integration_tests": 1419,
+  "references": {
+    "full-maven.private.log": "86c1c469b463d5a715627cbacf55127d554d60979b1395c382ced5aa1847ac1e",
+    "java-version.private.log": "7bf8f15581821fa62f06382cea3d6c77e1d1480ccbf60d0c2d86cbf73df1f70d",
+    "maven-version.private.log": "ee2f79f7aa50b8db5e5e0ffc87a5e54021db1931749b9b79d9f500ef38b0242a",
+    "run_fr04.py": "71966ba58be22db55680ac44b5c84ec08ffcb3ed87d2a22a75afd9ef81f17403",
+    "source-environment-before.json": "1b98e28aac7b2f34d740af186e68304b8f33844882e7efc4da9377aa9eb119b6"
+  },
+  "findings": {
+    "bare_java_version": "PROVEN 24.0.2 in original version log",
+    "maven_version_invocation": "PROVEN 21.0.2 with runtime JDK21 in original wrapper-version log",
+    "full_maven_parent_major": "PROVEN Java21 major: original enforcer RequireJavaVersion passed under pinned [21,22) rule",
+    "full_maven_parent_exact_patch_path": "SUPPORTED by same runner JAVA_HOME, wrapper launcher and version command; independent process executable telemetry NOT CAPTURED",
+    "surefire_failsafe_runtime": "DIRECTLY PROVEN 21.0.2 Oracle JDK21 UTC in all144 original XML; Spring startup log corroborates both fork groups",
+    "historical_bare_java_executable_path": "NOT VERIFIED: no original process executable path or inherited parent PATH snapshot",
+    "original_auth_preflight_helper_java_version": "NOT VERIFIED: original helper receipt has timezone but not runtime version; bare java inference is not a direct runtime receipt",
+    "current_probe": "Reproduces Java24 bare invocation vs explicitJava21; current diagnostic only, not historical telemetry"
+  },
+  "limitations": [
+    "Original blanket environment label Java21 must be read as Maven/test JVM identity, not all bare Java subprocesses. Original receipts retained unchanged.",
+    "No original artifacts regenerated; no FR04/05/06/07 rerun. TD raw review and HP disposition remain pending.",
+    "Private archive transfer NOT DELIVERED; requires group-approved channel and TD acknowledgement."
+  ],
+  "artifact_checks": [
+    {
+      "path": "auth-preflight-receipt.json",
+      "sha256": "9f8f658cb396749bf83308e71710423a58d090d2fd38b0133ec440ba769f3a4b",
+      "verified": true
+    },
+    {
+      "path": "auth-preflight.json",
+      "sha256": "543c64d0778b5f92e42c611d514c38642730b106571efeef4ff49e1a511cf450",
+      "verified": true
+    },
+    {
+      "path": "auth-preflight.private.log",
+      "sha256": "2c029bc975ed0b92d4a536de84459ea55fb6f53922905de10f6b553192219390",
+      "verified": true
+    },
+    {
+      "path": "collect_fr04.py",
+      "sha256": "512b3d3058f02bcda2c69e530ce0007ef47d71ed6beec73fbae4d026c193ef43",
+      "verified": true
+    },
+    {
+      "path": "containers-after-receipt.json",
+      "sha256": "09e1bc49df3aff8861f689841a6cf41a1cd6eab3cd26fc2dedca140838a5def2",
+      "verified": true
+    },
+    {
+      "path": "containers-after.private.log",
+      "sha256": "cdc931672c75831bf5a3277bbc02e26d3b44724b4c5133751136f8593a226765",
+      "verified": true
+    },
+    {
+      "path": "containers-before-receipt.json",
+      "sha256": "2c8fe89216832224c7819f242f2a695f53b6bc532150dad90cc9e9bd38d51868",
+      "verified": true
+    },
+    {
+      "path": "containers-before.private.log",
+      "sha256": "7a2771f280140b30ce6287768c0ba756cd5402ed0597dd23e7de53a48aafeb35",
+      "verified": true
+    },
+    {
+      "path": "docker-info-receipt.json",
+      "sha256": "f87eef19089e965f4481571ef63d59ba09265e111a871546ec615b4c1259af0e",
+      "verified": true
+    },
+    {
+      "path": "docker-info.private.log",
+      "sha256": "207235380f5b0832617180e38e64c60d586adf4c0d6b8b3030e835484135ca82",
+      "verified": true
+    },
+    {
+      "path": "docker-version-receipt.json",
+      "sha256": "225b071163bfef27617406a5fbb2f27974ecb343ff1833a50291f94f191046b0",
+      "verified": true
+    },
+    {
+      "path": "docker-version.private.log",
+      "sha256": "bcc9d4cd68680751f9f4caa3c3c211881509ceec7998fe1d5884d2511a3768a4",
+      "verified": true
+    },
+    {
+      "path": "FR02Preflight.class",
+      "sha256": "502989c4314da31daa0eee47ef2d0af676cc0e1d45651a779874032a2f62c7bc",
+      "verified": true
+    },
+    {
+      "path": "FR02Preflight.java",
+      "sha256": "3b81d3d3e1a589fc169d816eaec7699b12e68828f977312ceb774ea8cd68a528",
+      "verified": true
+    },
+    {
+      "path": "full-maven-receipt.json",
+      "sha256": "71fdb08dcd9d6218af1a8f41da14aeb3042163f8b92e74ff9b894b4f3311c688",
+      "verified": true
+    },
+    {
+      "path": "full-maven.private.log",
+      "sha256": "86c1c469b463d5a715627cbacf55127d554d60979b1395c382ced5aa1847ac1e",
+      "verified": true
+    },
+    {
+      "path": "full-node-receipt.json",
+      "sha256": "ce8a459acf24a8c7577d2df9ba486350ca51a82dd719a327988745ee34a23733",
+      "verified": true
+    },
+    {
+      "path": "full-node.private.log",
+      "sha256": "5ec43fe5649fa7fcc13e1ddb3226101f22e3f666dc5b03d8b13257a64371bbcb",
+      "verified": true
+    },
+    {
+      "path": "java-version-receipt.json",
+      "sha256": "3787a8df7069451ed7795e7a16f67e849af0404d0fc9a74c38274bc16c153c7c",
+      "verified": true
+    },
+    {
+      "path": "java-version.private.log",
+      "sha256": "7bf8f15581821fa62f06382cea3d6c77e1d1480ccbf60d0c2d86cbf73df1f70d",
+      "verified": true
+    },
+    {
+      "path": "java.args",
+      "sha256": "4d67be90292b829d1c1d8f9049415231e10977e66c3aa5bea36f8434c24fc176",
+      "verified": true
+    },
+    {
+      "path": "javac.args",
+      "sha256": "23358fb70031aafa5895c52ee85f2b8b9899c0d4e791e179041a36e8edeb2aad",
+      "verified": true
+    },
+    {
+      "path": "maven-version-receipt.json",
+      "sha256": "151cfcf9368662626d7cab4d4104ca7b5df3583a7d8a919b7eb7d88d42007f9c",
+      "verified": true
+    },
+    {
+      "path": "maven-version.private.log",
+      "sha256": "ee2f79f7aa50b8db5e5e0ffc87a5e54021db1931749b9b79d9f500ef38b0242a",
+      "verified": true
+    },
+    {
+      "path": "node-version-receipt.json",
+      "sha256": "3a0e41d4b409a85e6801caacd9bd4c0343c4e56461bafc1e3c1d20a70de4e7d7",
+      "verified": true
+    },
+    {
+      "path": "node-version.private.log",
+      "sha256": "2a0d4de5abb327d8e92eff6db4dcc81a9b02c5f1542dadf2e25fe71cc4802de6",
+      "verified": true
+    },
+    {
+      "path": "preflight-compile-receipt.json",
+      "sha256": "eb231c55f68e5a1b9fb40c4b23de0bda94405cfab0fd6bfdccc456d988cb7095",
+      "verified": true
+    },
+    {
+      "path": "preflight-compile.private.log",
+      "sha256": "c75c2bd75aaf6bc00e05146070515fd6774ac441e73027488bcb206146059b12",
+      "verified": true
+    },
+    {
+      "path": "progress.json",
+      "sha256": "2bcdf91b8610531fa026577156084717eca9694d6b041a04f677512c6ff614a4",
+      "verified": true
+    },
+    {
+      "path": "python-version-receipt.json",
+      "sha256": "ca21390eb299dd242695da937487abf7c2d84de447e4746424b71f623e63d071",
+      "verified": true
+    },
+    {
+      "path": "python-version.private.log",
+      "sha256": "829ac2581a6275b79e6369c6c1130807da7060f355fb83e37c8cb8ae5dc9b4cf",
+      "verified": true
+    },
+    {
+      "path": "result.json",
+      "sha256": "2bcdf91b8610531fa026577156084717eca9694d6b041a04f677512c6ff614a4",
+      "verified": true
+    },
+    {
+      "path": "run_fr04.py",
+      "sha256": "71966ba58be22db55680ac44b5c84ec08ffcb3ed87d2a22a75afd9ef81f17403",
+      "verified": true
+    },
+    {
+      "path": "source-environment-before-tests.json",
+      "sha256": "4709d5bf69c36391b082e6a385ec8c6f8538c6f7ff5e0f84f0de289d9b1ca416",
+      "verified": true
+    },
+    {
+      "path": "source-environment-before.json",
+      "sha256": "1b98e28aac7b2f34d740af186e68304b8f33844882e7efc4da9377aa9eb119b6",
+      "verified": true
+    },
+    {
+      "path": "source-proof.json",
+      "sha256": "1f6bf6cdf07454c93f746d3b028136f2ba2425a69283b74ed4a9be10de494ffd",
+      "verified": true
+    },
+    {
+      "path": "tooling-receipt.json",
+      "sha256": "f3307764581e800c8142aa3c6e455b246e55c30016d3c595e0e3657591a6986e",
+      "verified": true
+    },
+    {
+      "path": "tooling.private.log",
+      "sha256": "0ed12e99077b1bf945fe0aea83f15a5d5ead2e841f08fc1ed04c3d7f6019995e",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.account.User01ProfileIT.xml",
+      "sha256": "51808f09c2f6786d4758b39fcc6b8f93f746e72d48e98a811571c787a88e0a18",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.account.User02AddressIT.xml",
+      "sha256": "9bdd4b2abb3a7d31f224e73c10e375dd4da11a01bd8e96b55ca03ee3f55653d9",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.cart.CartActionsIT.xml",
+      "sha256": "7e8e28d558fb41507f5bacb77b8703abb569b39114790a5ff580b9cd1abda3b1",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.cart.CartDatabaseIT.xml",
+      "sha256": "b21a5f371bf378a470f116c361ae4eeaf7aae2a90d200eaeac0a3fa6036d6dc2",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.catalog.ProductCatalogIT.xml",
+      "sha256": "f4e42d17925c3ccd0ef31e89226fe3ec689b1e8c1ce3f8ee643fb29e3de967c4",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.catalog.ProductDiscoveryIT.xml",
+      "sha256": "d43fde3e578ff1c506fb990b61a179922e5b0bcccbbdce99a23eb5afa6f792e5",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.catalog.PublicCatalogIT.xml",
+      "sha256": "623989c66ec618ab8ee04db82fda424693a2f7e63ad479565718eec18210da6e",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.catalog.VendorProductIT.xml",
+      "sha256": "57fc5d3c2bccfcced6a735454ccebe68df643ecdab1084df96f3612273d20588",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.checkout.CheckoutQuoteIT.xml",
+      "sha256": "d000dd0d762d76fc7908758b3609b40f2e33464ce46d14780c0c6be81a3a1d1c",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.DatabaseBaselineIT.xml",
+      "sha256": "11b2efe98d175d4fb6f2935bb428a58205b2b8785c5d4e16906b628f5313f648",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.engagement.EngagementIT.xml",
+      "sha256": "56078f78bc1e585faea131edf370dc269a6f97d71e7c52f79524201d4b77b1d4",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.engagement.ReviewFoundationMigrationIT.xml",
+      "sha256": "a632526cb2fde7a57048d4c0713798a94b2c4e149161637ef23a6219b0070148",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.engagement.ReviewIntegrationIT.xml",
+      "sha256": "5190571463266a28c0fef770b4a3649cbae85c7c364bd4e87fa6e5166f772a43",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.fulfillment.ShipperFulfillmentIT.xml",
+      "sha256": "5b45bfb3dd2c8aca0c579bc908770a9330475879f3fc4c8ed5f799f782f894df",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.AccountGovernanceIT.xml",
+      "sha256": "00d9db1b3986fa7cc4beb66b5de198df184683bf1ece20f339126d0bf4ac76a3",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.AdminRevenueIT.xml",
+      "sha256": "bd97d22c2eff69c5c91ee75d6fa51d15cb50720225abc52da53345e85bea690c",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.AuditLogIT.xml",
+      "sha256": "feb6fe57d3911837eba348b4c833713a5d1d38bd2286d02e87730a621b625ac6",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.CategoryIT.xml",
+      "sha256": "5c270998a287cdb79e23235bef9ef9e25c8fab16a20b64ca29aa9e1c9da876a3",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.CommissionPolicyIT.xml",
+      "sha256": "c9e95d1be4be4bc1575f0ea74bb8baf45f85475a3dc39339d3aa710b487ee242",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.ModerationIT.xml",
+      "sha256": "17c89343cbc26ed81406424f740a984ed168c04b17073cfae3380da22e2b1d5f",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.OperationsOrderIT.xml",
+      "sha256": "805169ea2655850b6c9cc4deb0810e64c8249df73aefadfee17bdf73175449ee",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.OpsDashboardReadIT.xml",
+      "sha256": "e978433ce11dc3e04dd2f963a01a2ca3acd18a8a6f369eabe5901a6c791d83d5",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.RoleGovernanceIT.xml",
+      "sha256": "bca5051be9d6d141dee971156c7b732c948c9ec57961f98dc78582e9519ccaa7",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.ShopApprovalIT.xml",
+      "sha256": "cceffe3f59df89767006d8a8ee7eb767f8ab493d6d04722d4cfc28d89affe292",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.identity.Auth03EmailVerificationIT.xml",
+      "sha256": "24bb8e15cd0ac7f9ffe946d92456d0c45e95234f57078e428e599a12fa951144",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.identity.Auth04PasswordResetIT.xml",
+      "sha256": "5bbbec3a346f3b4ed627f7feea7b50b21985d47739d170349ff1346c48b8699e",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.identity.AuthRegistrationIT.xml",
+      "sha256": "cc5591dbb571e7e04feaf54a8a01df45896cd0999f9116fd8fc3613e73aeeb18",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.integration.CheckoutFlowIT.xml",
+      "sha256": "90d1f7036bac47f28b26e9e4d95d2e38c7ca8bbd624ed6f27dff758043a700ca",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.integration.Int02CommerceFlowIT.xml",
+      "sha256": "dc946b67afd5a96b7ae2ab40f0739dedf56519546b8043a08c462896bedd00a3",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.integration.Int02HttpEnvironmentIT.xml",
+      "sha256": "cf71ef34a8f0048c655e1a28d72017823a983107ae761eab92bd17e703f7b396",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.integration.PromotionBrowserFormsIT.xml",
+      "sha256": "41489f9463d10c1aad7b23e9ced6ec2166f494c569fa790011c02a5e79f7c8e5",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.integration.ReturnToSenderIT.xml",
+      "sha256": "495c18de850a1ec06080d249871a81fc9aca447aa71c44bcfd9c857a03d654d0",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.notification.NotificationIT.xml",
+      "sha256": "d31a2bf6be27c8b7ae5c5f57b84888f77b9cf3b1c4cf7132c6c9b0032b823cc3",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.notification.NotificationMigrationIT.xml",
+      "sha256": "7c8351eeb18acc37c4b140066ba2a09d80c27e342cc61173ec0184f83484c46a",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.notification.NotificationRecoveryIT.xml",
+      "sha256": "86d62c0e14902c13baf49e8b606ff0c620572d36094e24e4aac50d06f70f862c",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.notification.NotificationSchedulerIT.xml",
+      "sha256": "fc07232567831cf91324254e1b4cc549b21aaeb42a6695f8f1f26b89ca18f0b0",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.notification.NotificationSocketIT.xml",
+      "sha256": "8abc9d804322da95b875e60eee5a44d613aeea70da40f5af0482551ee6f764f3",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.operations.OperationsCancellationIT.xml",
+      "sha256": "f31c38af26d522883032c34123d85255aebd11d268548da5e05b2465a8983581",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.BuyerCancellationIT.xml",
+      "sha256": "d99a8e531cb9c5c403f6da982a3f46821efb0ff36ea7fd5307ff927e88495d7e",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.BuyerOrderIT.xml",
+      "sha256": "8f73b851b60b33bd3d8b8d35af13e90a5923a6aa31a1e7b10a8f43989612a6b3",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.CancelledPaidRefundIT.xml",
+      "sha256": "f1d36d4ecc4a57215c3e8ee6852901a3dd61e7664f33f5756de69ac98f19442a",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.ManualCodRefundIT.xml",
+      "sha256": "2470f532b6fb6e9264f62f66feb0c7759d1ff35b0cdfd1fdd7e416f66c50d092",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.OrderDatabaseIT.xml",
+      "sha256": "a9c0fb7e53088d9a5a4a1dbf3b01c4239f9bab1692cc6c17d5bf0ac94542689f",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.OrderEligibilityIT.xml",
+      "sha256": "713e0e7eefadc583994860ed2d35b1ac0a17c0c5fbd51a56638039e8e3dbdfd3",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.PlaceOrderIT.xml",
+      "sha256": "33eed64adf6cedd8b8a2b9d6dfb11edc3ec21bb50ca2d2f6a285350bdc9b1ad8",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.ReturnManagementIT.xml",
+      "sha256": "58b918d52cba1c7d10de4342b2b7fd89e0a8533e6a20d439af3bdfbc388b16c3",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.ReturnReceiptMigrationIT.xml",
+      "sha256": "d743bc9d16725400022612b2f90601ab8d0eda714eb36acffa323751ae360508",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.service.OpsOrderCancellationIT.xml",
+      "sha256": "944321b8f03fa7abea39e03d2702d7b23ed1ac62bd3c2e443bd4901493a86197",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.ShipperOrderLifecycleIT.xml",
+      "sha256": "de36b4c39263d944b26b6c0628c34399256bffa97855b74315220008c7932c98",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.VendorOrderIT.xml",
+      "sha256": "ce98de9f17cadfc18ce70fe399fedc17b33cae4be5e9db8623b12d06b668560d",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.VendorRevenueIT.xml",
+      "sha256": "7a7081ef07d9bf976efa5396e24f9888aeaa9b682b018e2849986cad6cd91cbe",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.payment.CancelledPaidRefundMigrationIT.xml",
+      "sha256": "a525b07ac29a6512169a31c60368b716719d0da75fedf2284a36477cb6dc8be7",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.payment.CodPaymentIT.xml",
+      "sha256": "00c65c7a5a18eb9dfe68c5edeb6f112eca05a12bae68cf90696063876e32e943",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.payment.RefundLedgerMigrationIT.xml",
+      "sha256": "60283eb60237691a39bdecc0719dc4bc7cb0f0b1aea4e506cbca135f41ee6071",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.promotion.ProductPromotionIT.xml",
+      "sha256": "d5f67c980e3a8087e0a772bc032eab87ae0fd935c5873c480c34abb4ee624551",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.promotion.VendorVoucherIT.xml",
+      "sha256": "a043c217cd7358f63dd94d6f63cc99db1454a9a74af536e446157bf34d4a9115",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.promotion.VoucherCheckoutIT.xml",
+      "sha256": "38062c1bd8f950bef60f08673a1469a03a3b7c584456bb96b3b6f964169d1635",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.security.Auth02AuthenticationIT.xml",
+      "sha256": "b6fb6387102b547d758d919d9e2e34a4aeffc54fba2c91af1096438cbe9a4bfb",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.security.Qa01CookieCsrfIT.xml",
+      "sha256": "8747f0b35d0b686b34555aa947e90d8719345beee29cba0064c085ba6fc0e094",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.security.Qa01OtpSecurityIT.xml",
+      "sha256": "7150d8b1751703cf9a147a40cc5e5eefc6faad1a75891cafe8b5cda6e0405a25",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.security.SecurityHardeningIT.xml",
+      "sha256": "fd364f1b1fe51f44843ac8398dc4b4ce329fc05af5cfb5b09ff5d5e04c637ce1",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shipping.ReturnToSenderMigrationIT.xml",
+      "sha256": "8707a49d48350eba1f0f9152635f04afdbbdd9c2c4d8a5ceb9f856a98577e091",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shipping.ShipmentAssignmentIT.xml",
+      "sha256": "3091595e31fdcba805c3065f88e2f8617affa85b143cad1252dffd21f2e8a204",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shipping.ShipmentAttemptMigrationIT.xml",
+      "sha256": "25756a403fc1b00f50359602d274cfd67d72aaca93bc2f83e2af983ef6702ac6",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shipping.ShipmentFulfillmentIT.xml",
+      "sha256": "92170fd3071bfe7a9055ca3ee5c64a1279a31eb37fb2cde323e5b09ca2faf374",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shipping.ShippingConfigIT.xml",
+      "sha256": "98a2d08fee422050e2c29ba0ba87d8ba3daa2053021e3eaad56fa1ffdf08c2bc",
+      "verified": true
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shop.ShopRegistrationIT.xml",
+      "sha256": "67e1255fe946962849db0c5b83ed7d8bca534ab272faeaa1a73882f94086f2e6",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.account.controller.AddressControllerTest.xml",
+      "sha256": "8fb8d28150211add76d39ea879e6eb0d1e4369d9e657bdddc353fbb5372a0c79",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.account.controller.ProfileControllerTest.xml",
+      "sha256": "47749a1c1795b5577035cda10b131716cdcc87bf040defa9723b2af9b55f6aae",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.account.service.AddressServiceTest.xml",
+      "sha256": "78706a9f692cce5b7c6ec7d50a62426d5ae2c505e35877c720a525500158071e",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.account.service.ProfileServiceTest.xml",
+      "sha256": "37b6bdf4dbe049d6b1a3af5aa46135f94bcafdd08b699eec316397cc8175852a",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.ArchitectureTest.xml",
+      "sha256": "513dd1f5faeb908d5dc442e2788ce7bab24b47c2b8c27dceacae29c4463cb0da",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.cart.CartServiceTest.xml",
+      "sha256": "2c98e7fe24e022c9130e2b2977417a69efaf0b05af370c5e28fbd56d3d4626fb",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.controller.PublicCatalogControllerTest.xml",
+      "sha256": "27cddbc34d4b8374da454ee4f4a0862ce6eaf9776204e6a75c6d03476d8fef8d",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.controller.VendorProductControllerTest.xml",
+      "sha256": "650522f52c94fc13f2f0a0f8afbc5df5ade06983b3fc7ec280c75983b98ce946",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.controller.VendorProductPromotionBindingTest.xml",
+      "sha256": "f4649c96e4eb20c4751cbfb6d658f7957d198b16b9f30b0a417976875a0b0f58",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.entity.ProductModelTest.xml",
+      "sha256": "72a937202d45ab613698bed2b212474688c8cea64423110ffe57f127227d89bd",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.ProductDemoActivationTest.xml",
+      "sha256": "ed72bc9c1f2c1708bbf3e7d900fcfe869ea3a0b628a42fa8803232721d566886",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.service.DatabaseCatalogQueryServiceTest.xml",
+      "sha256": "60003781ea6f1319e7ee9384efa94c1e9f6200426269ff6185344c57c7bc0ab7",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.service.ProductImagePolicyTest.xml",
+      "sha256": "c0272e33ffce78f1e28e756d2ea0569e1bc75a896c286c4b2f5528768ba56fd2",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.service.ProductServiceTest.xml",
+      "sha256": "e2e91f07687ce218f9cf6b8ce46a69f814a6082de7f097abd6d4c75a09533440",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.service.PublicCatalogServiceTest.xml",
+      "sha256": "23c2231bc55d6490aa53eacdd5278a64131c0bf6ac7e7c702e069609106fa49f",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.checkout.CheckoutContractTest.xml",
+      "sha256": "457efdf5d0123999e5c237212a878cf87d5476010e0c5d3eaf9cf6847dcea45b",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.checkout.CheckoutQuoteServiceTest.xml",
+      "sha256": "c8db9a0b70fd612402ff4637020eeeff98c0d20bb72e7aaac6e8c16217811643",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.checkout.MoneyContractTest.xml",
+      "sha256": "32569111a5b6c0aee3fc2f617be79df1db642d03d94d1818381e02bb7920fba9",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.common.storage.LocalFileStorageServiceTest.xml",
+      "sha256": "00f9f47c4a1da8021098383ec10c3805cee03f47210efa7a5c2a0243a4253811",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.engagement.ReviewFoundationTest.xml",
+      "sha256": "f34339b94f77d2e8a9ce2fe1ed481f70fda19419e7e6d93b74f30fe79091affa",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.FoundationHttpTest.xml",
+      "sha256": "23b5e0d54f2aeadbb48102ec0bcfbfb3bb7b4f5828cc1aeda582b4eb7f056d0a",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.AccountGovernanceWebTest.xml",
+      "sha256": "76b602e9a55c18fcdb238ad019c8c2e98fe9049a93c2a6cf8f4c813c30038be6",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.AuditLogServiceTest.xml",
+      "sha256": "55a602cef4d5705c0292130eae259b34050ea55960b2202ff7b14ddabac3ef9e",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.CategoryWebTest.xml",
+      "sha256": "939d92fd1346303d92b5982ac80078bdfc3788a3915f40654376a06260117d66",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.ModerationWebTest.xml",
+      "sha256": "364c4847a4ee6f9664dd3423dff67a8289bf6cc03d22b4f654e9f5e2273f1efc",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.OpsDashboardTest.xml",
+      "sha256": "e58bfaafb207d7192239de6dc9471b1a02f426266ca310106633b46ecdc1c60a",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.OpsReportFilterTest.xml",
+      "sha256": "f1948c0d1afd78d9894114d0d680f5d5400357f22efd3eb15468074fcb7b4142",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.ShopApprovalWebTest.xml",
+      "sha256": "2e0ad8ac9f00384a51e92d7c80e3daf4028a66b28d39544c74540f13ac6bb69b",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.controller.EmailVerificationControllerTest.xml",
+      "sha256": "9b7bce9f406117fe7e040c5408e7ff3b7ede28e3cd7c17fe766cbc3b2ca4b340",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.controller.PasswordResetControllerTest.xml",
+      "sha256": "f2c8add0041936eadae6ef4e35c4ba5c1b270d46efb99be8b9dd82099512166c",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.controller.RegistrationControllerTest.xml",
+      "sha256": "4e053c5ae94a02034d936fdd04bc85e9836e0f1f6b83609ede8ea05413a79705",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.dto.RegisterFormValidationTest.xml",
+      "sha256": "2e18a65da41c372c4764997b71605d62104fa991ada82b7eedcef27071702dd0",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.dto.ResetPasswordFormValidationTest.xml",
+      "sha256": "ebe56475ec1e5ef7672104c00340d858c78e84c04555c74cac87126c98e4616f",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.AccountIdentityServiceTest.xml",
+      "sha256": "eb2cd5f40d0ad5bbfe11af7f8479852a9d11f6feb00d871697b060a26dafff0f",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.EmailVerificationServiceTest.xml",
+      "sha256": "570975a698d75d39148f33b53407e3a631e6f80a5ff0f5aa084301118840ab0d",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.IdentityAuthenticationServiceTest.xml",
+      "sha256": "9092e062e3ee01a49caf39151f0f4b9192b8504a456752a7bb5a36e9a229d79f",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.OtpSecurityTest.xml",
+      "sha256": "ed51ea9bae66eb6a2bfc8a763180d05dd1e6445f896c3dc16c4a3bc4f7827485",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.PasswordResetServiceTest.xml",
+      "sha256": "c04a589d3629a67f824e9b741477144a13d52d7b85cbbc8c4bae0b24d3bc4069",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.RegistrationServiceTest.xml",
+      "sha256": "9253c5abdae64d32ae3f1b41503049fbd126609e621354a4f55eef229ceefdde",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.VerificationMailServiceTest.xml",
+      "sha256": "99f7c9a0e98e4c82dad454fc2f65b2cf42151da5839e827adbc5b6c1a6f0afc7",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.notification.NotificationCommitPublisherTest.xml",
+      "sha256": "e58aaf562795923abe1473e843b384ed784f8b47b39aec3a2f1c5fa3f2814085",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.notification.SocketObservabilityTest.xml",
+      "sha256": "0ced5069c807978a91244da2897d85ce33f8f33f62efaea135af0d889a5fcb0b",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.controller.PlaceOrderPageControllerTest.xml",
+      "sha256": "3bb2a736e96fd6ab9fe21a093fe4b660a0dcd98a09b630842cf97641f9cda222",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.entity.OrderDomainCoreTest.xml",
+      "sha256": "af781cc1a66d0da03adfa571dfd76dea524c662fad9205fc23b1fa8c24221a45",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.OrderContractTest.xml",
+      "sha256": "d0abba84f4915aa63fffc94cffe4c8e9bf44923a5ac810644506dcdacbb20920",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.BuyerOrderServiceTest.xml",
+      "sha256": "0ecbef19df46cb5f9a60260d817cbb75ce6aad7d9a5e0716369666850b3a034b",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.CheckoutRequestHashTest.xml",
+      "sha256": "884a0e013d147a963bdbb0d064f83b940a8d96071f090a32deb82bd8ef1e59d7",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.OrderEligibilityServiceTest.xml",
+      "sha256": "dfc27a245767e46d4921976f87212dc9010a8f51a7f8d9c7fc3a0d25dc9b354d",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.RefundTransitionGuardTest.xml",
+      "sha256": "0d63b959d47b40f7373a67d542747acae88422a0c4f92052b66c528adff21a23",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.RevenueServiceTest.xml",
+      "sha256": "835da7b97fb259e9ee8df58a73d5d79408ee61a33add1f5d36296418c3c6123e",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.ShipmentOnlyOperationGuardTest.xml",
+      "sha256": "9614ffb9461e5293ec7097b9ee41a166fd1c85f7b679c61a6021a7b8d20f0523",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.ShipmentOnlyOrderGuardTest.xml",
+      "sha256": "59167d399bb45f3a6b082873ff2d33c99616bf705e0e7114ac1b917308eb8813",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.payment.CodPaymentTest.xml",
+      "sha256": "d29d5ebe254e1105269fd84b6e06fe4fe8792a4a2b3a2fd724c7856309c1b208",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.payment.ManualRefundContractTest.xml",
+      "sha256": "cc962aa495d745b6d0b64923a2666d0be24506eb61249e75d407b93b4e05e3f0",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.payment.service.CancelledPaidRefundPayloadTest.xml",
+      "sha256": "51612648e71ed257346143397fe864fca450bde924831a1b58c0050e7aa4eff6",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.payment.service.CodRefundEligibilityTest.xml",
+      "sha256": "deeb2e8859bfe2d9eacd3c0e1a21be8514a2316419148c1869f9d7b767e792fd",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.payment.service.ManualRefundPayloadTest.xml",
+      "sha256": "1fe8a54cc39a86aae648a1eafa0fc390ceb7822178ab64c5b6b5d1b0c9113ce5",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.promotion.PromotionTest.xml",
+      "sha256": "1597673a6da8848237eb294f1b0e28b763fb0594bfd5403175e5581455651d4a",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.promotion.VendorVoucherFormTest.xml",
+      "sha256": "ec449bfe4d9928f71552f010e8b288ddf93b1217f796d4192fba66f0bcebbd9b",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.promotion.VoucherTest.xml",
+      "sha256": "8959a2a4bdb9f358976cab6b8ceb24a1d8ee089adf00761ec673cbfd70d1bd58",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.authentication.UteExpressUserDetailsServiceTest.xml",
+      "sha256": "9556aed9f41936f75678a31f4f28a941fecf9c6ad1d9fb6369e99df8a02ac91a",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.AuthenticationWebTest.xml",
+      "sha256": "a13fd215c927efa2fc1d2d00377266ccbec3bba60f458580769a80c725d5db4f",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.CsrfCookieWebTest.xml",
+      "sha256": "b909c3509b1ebf0edc2eab02e1f95003b35d3318252cb90def8411ad18034dcb",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.filter.JwtAuthenticationFilterTest.xml",
+      "sha256": "a69324ae4143b619c04fd2fb5da158c4a46c93ca2f175c35a23385986ea499d4",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.JwtSecurityConfigurationTest.xml",
+      "sha256": "690956c893c5d7f52df19c38dfbab6e94c7c8c42c040926b2f298443a3d8bb02",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.JwtTokenServiceTest.xml",
+      "sha256": "866e5a437c4d98a853030d78b9a8e686fdef45dfb1b7f98b8932944adaa2d894",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.OtpRequestLimitFilterTest.xml",
+      "sha256": "f2d27cb201c690c13dee5d79e24639d56950c3be95af5a80f53cacb6a4930565",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.OtpRequestRateLimiterTest.xml",
+      "sha256": "c243f4f43ae0e4cea86734b2a0bf152df715b5ea202a999b94559acdd464e980",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.SecurityFoundationTest.xml",
+      "sha256": "fd55a4d91051a6d7d3e6657dd43a5f480306582ee61434259b581377ca5b7ccf",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.SocketIdentityServiceTest.xml",
+      "sha256": "44a035edf8440533fe826f53ec02115ecda3ae67509af2068f13c5da902a5f32",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.shipping.ShippingConfigWebTest.xml",
+      "sha256": "29bd3a8a6ae2e6855d08948b651760083de57f503b8066a1e81fbb7b2f373bde",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.shipping.ShippingDemoActivationTest.xml",
+      "sha256": "136910d2e69656b19119aae293014330dc97c9fd37c7dc9bc0701af1abd178db",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.shop.controller.ShopRegistrationControllerTest.xml",
+      "sha256": "3a879edd24905aef7eb2549b914250e97d074b69a97cafd54e71c5fa9807daa8",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.shop.entity.ShopTest.xml",
+      "sha256": "a5ff3b6687397f9ad843fc6dbbcb183e2b1e07ea8adda5d92436a1bf873003d0",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.shop.service.ShopRegistrationServiceTest.xml",
+      "sha256": "6acdca283432ae98edd2028ca2033d811e667080ae75bb9a8caf7f62022457f5",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.testsupport.PostgresContextCleanupListenerTest.xml",
+      "sha256": "f7d4dba5b6a60687802a804633fc6e6f43f21f3aecae8224fc4d799790ab441c",
+      "verified": true
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.ui.UiLayoutTest.xml",
+      "sha256": "9f0c8eabf2d82e2af9c2a64119a54be0958c1c947064e1dd13e7717cff61946d",
+      "verified": true
+    }
+  ],
+  "xml_runtime_evidence": [
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.account.User01ProfileIT.xml",
+      "sha256": "51808f09c2f6786d4758b39fcc6b8f93f746e72d48e98a811571c787a88e0a18",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.account.User02AddressIT.xml",
+      "sha256": "9bdd4b2abb3a7d31f224e73c10e375dd4da11a01bd8e96b55ca03ee3f55653d9",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.cart.CartActionsIT.xml",
+      "sha256": "7e8e28d558fb41507f5bacb77b8703abb569b39114790a5ff580b9cd1abda3b1",
+      "tests": 33,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.cart.CartDatabaseIT.xml",
+      "sha256": "b21a5f371bf378a470f116c361ae4eeaf7aae2a90d200eaeac0a3fa6036d6dc2",
+      "tests": 10,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.catalog.ProductCatalogIT.xml",
+      "sha256": "f4e42d17925c3ccd0ef31e89226fe3ec689b1e8c1ce3f8ee643fb29e3de967c4",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.catalog.ProductDiscoveryIT.xml",
+      "sha256": "d43fde3e578ff1c506fb990b61a179922e5b0bcccbbdce99a23eb5afa6f792e5",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.catalog.PublicCatalogIT.xml",
+      "sha256": "623989c66ec618ab8ee04db82fda424693a2f7e63ad479565718eec18210da6e",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.catalog.VendorProductIT.xml",
+      "sha256": "57fc5d3c2bccfcced6a735454ccebe68df643ecdab1084df96f3612273d20588",
+      "tests": 9,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.checkout.CheckoutQuoteIT.xml",
+      "sha256": "d000dd0d762d76fc7908758b3609b40f2e33464ce46d14780c0c6be81a3a1d1c",
+      "tests": 43,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.DatabaseBaselineIT.xml",
+      "sha256": "11b2efe98d175d4fb6f2935bb428a58205b2b8785c5d4e16906b628f5313f648",
+      "tests": 1,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.engagement.EngagementIT.xml",
+      "sha256": "56078f78bc1e585faea131edf370dc269a6f97d71e7c52f79524201d4b77b1d4",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.engagement.ReviewFoundationMigrationIT.xml",
+      "sha256": "a632526cb2fde7a57048d4c0713798a94b2c4e149161637ef23a6219b0070148",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.engagement.ReviewIntegrationIT.xml",
+      "sha256": "5190571463266a28c0fef770b4a3649cbae85c7c364bd4e87fa6e5166f772a43",
+      "tests": 25,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.fulfillment.ShipperFulfillmentIT.xml",
+      "sha256": "5b45bfb3dd2c8aca0c579bc908770a9330475879f3fc4c8ed5f799f782f894df",
+      "tests": 16,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.AccountGovernanceIT.xml",
+      "sha256": "00d9db1b3986fa7cc4beb66b5de198df184683bf1ece20f339126d0bf4ac76a3",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.AdminRevenueIT.xml",
+      "sha256": "bd97d22c2eff69c5c91ee75d6fa51d15cb50720225abc52da53345e85bea690c",
+      "tests": 26,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.AuditLogIT.xml",
+      "sha256": "feb6fe57d3911837eba348b4c833713a5d1d38bd2286d02e87730a621b625ac6",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.CategoryIT.xml",
+      "sha256": "5c270998a287cdb79e23235bef9ef9e25c8fab16a20b64ca29aa9e1c9da876a3",
+      "tests": 8,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.CommissionPolicyIT.xml",
+      "sha256": "c9e95d1be4be4bc1575f0ea74bb8baf45f85475a3dc39339d3aa710b487ee242",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.ModerationIT.xml",
+      "sha256": "17c89343cbc26ed81406424f740a984ed168c04b17073cfae3380da22e2b1d5f",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.OperationsOrderIT.xml",
+      "sha256": "805169ea2655850b6c9cc4deb0810e64c8249df73aefadfee17bdf73175449ee",
+      "tests": 1,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.OpsDashboardReadIT.xml",
+      "sha256": "e978433ce11dc3e04dd2f963a01a2ca3acd18a8a6f369eabe5901a6c791d83d5",
+      "tests": 28,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.RoleGovernanceIT.xml",
+      "sha256": "bca5051be9d6d141dee971156c7b732c948c9ec57961f98dc78582e9519ccaa7",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.governance.ShopApprovalIT.xml",
+      "sha256": "cceffe3f59df89767006d8a8ee7eb767f8ab493d6d04722d4cfc28d89affe292",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.identity.Auth03EmailVerificationIT.xml",
+      "sha256": "24bb8e15cd0ac7f9ffe946d92456d0c45e95234f57078e428e599a12fa951144",
+      "tests": 5,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.identity.Auth04PasswordResetIT.xml",
+      "sha256": "5bbbec3a346f3b4ed627f7feea7b50b21985d47739d170349ff1346c48b8699e",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.identity.AuthRegistrationIT.xml",
+      "sha256": "cc5591dbb571e7e04feaf54a8a01df45896cd0999f9116fd8fc3613e73aeeb18",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.integration.CheckoutFlowIT.xml",
+      "sha256": "90d1f7036bac47f28b26e9e4d95d2e38c7ca8bbd624ed6f27dff758043a700ca",
+      "tests": 1,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.integration.Int02CommerceFlowIT.xml",
+      "sha256": "dc946b67afd5a96b7ae2ab40f0739dedf56519546b8043a08c462896bedd00a3",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.integration.Int02HttpEnvironmentIT.xml",
+      "sha256": "cf71ef34a8f0048c655e1a28d72017823a983107ae761eab92bd17e703f7b396",
+      "tests": 5,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.integration.PromotionBrowserFormsIT.xml",
+      "sha256": "41489f9463d10c1aad7b23e9ced6ec2166f494c569fa790011c02a5e79f7c8e5",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.integration.ReturnToSenderIT.xml",
+      "sha256": "495c18de850a1ec06080d249871a81fc9aca447aa71c44bcfd9c857a03d654d0",
+      "tests": 17,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.notification.NotificationIT.xml",
+      "sha256": "d31a2bf6be27c8b7ae5c5f57b84888f77b9cf3b1c4cf7132c6c9b0032b823cc3",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.notification.NotificationMigrationIT.xml",
+      "sha256": "7c8351eeb18acc37c4b140066ba2a09d80c27e342cc61173ec0184f83484c46a",
+      "tests": 1,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.notification.NotificationRecoveryIT.xml",
+      "sha256": "86d62c0e14902c13baf49e8b606ff0c620572d36094e24e4aac50d06f70f862c",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.notification.NotificationSchedulerIT.xml",
+      "sha256": "fc07232567831cf91324254e1b4cc549b21aaeb42a6695f8f1f26b89ca18f0b0",
+      "tests": 1,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.notification.NotificationSocketIT.xml",
+      "sha256": "8abc9d804322da95b875e60eee5a44d613aeea70da40f5af0482551ee6f764f3",
+      "tests": 29,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.operations.OperationsCancellationIT.xml",
+      "sha256": "f31c38af26d522883032c34123d85255aebd11d268548da5e05b2465a8983581",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.BuyerCancellationIT.xml",
+      "sha256": "d99a8e531cb9c5c403f6da982a3f46821efb0ff36ea7fd5307ff927e88495d7e",
+      "tests": 50,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.BuyerOrderIT.xml",
+      "sha256": "8f73b851b60b33bd3d8b8d35af13e90a5923a6aa31a1e7b10a8f43989612a6b3",
+      "tests": 35,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.CancelledPaidRefundIT.xml",
+      "sha256": "f1d36d4ecc4a57215c3e8ee6852901a3dd61e7664f33f5756de69ac98f19442a",
+      "tests": 61,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.ManualCodRefundIT.xml",
+      "sha256": "2470f532b6fb6e9264f62f66feb0c7759d1ff35b0cdfd1fdd7e416f66c50d092",
+      "tests": 62,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.OrderDatabaseIT.xml",
+      "sha256": "a9c0fb7e53088d9a5a4a1dbf3b01c4239f9bab1692cc6c17d5bf0ac94542689f",
+      "tests": 8,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.OrderEligibilityIT.xml",
+      "sha256": "713e0e7eefadc583994860ed2d35b1ac0a17c0c5fbd51a56638039e8e3dbdfd3",
+      "tests": 26,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.PlaceOrderIT.xml",
+      "sha256": "33eed64adf6cedd8b8a2b9d6dfb11edc3ec21bb50ca2d2f6a285350bdc9b1ad8",
+      "tests": 56,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.ReturnManagementIT.xml",
+      "sha256": "58b918d52cba1c7d10de4342b2b7fd89e0a8533e6a20d439af3bdfbc388b16c3",
+      "tests": 149,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.ReturnReceiptMigrationIT.xml",
+      "sha256": "d743bc9d16725400022612b2f90601ab8d0eda714eb36acffa323751ae360508",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.service.OpsOrderCancellationIT.xml",
+      "sha256": "944321b8f03fa7abea39e03d2702d7b23ed1ac62bd3c2e443bd4901493a86197",
+      "tests": 60,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.ShipperOrderLifecycleIT.xml",
+      "sha256": "de36b4c39263d944b26b6c0628c34399256bffa97855b74315220008c7932c98",
+      "tests": 92,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.VendorOrderIT.xml",
+      "sha256": "ce98de9f17cadfc18ce70fe399fedc17b33cae4be5e9db8623b12d06b668560d",
+      "tests": 73,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.order.VendorRevenueIT.xml",
+      "sha256": "7a7081ef07d9bf976efa5396e24f9888aeaa9b682b018e2849986cad6cd91cbe",
+      "tests": 46,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.payment.CancelledPaidRefundMigrationIT.xml",
+      "sha256": "a525b07ac29a6512169a31c60368b716719d0da75fedf2284a36477cb6dc8be7",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.payment.CodPaymentIT.xml",
+      "sha256": "00c65c7a5a18eb9dfe68c5edeb6f112eca05a12bae68cf90696063876e32e943",
+      "tests": 47,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.payment.RefundLedgerMigrationIT.xml",
+      "sha256": "60283eb60237691a39bdecc0719dc4bc7cb0f0b1aea4e506cbca135f41ee6071",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.promotion.ProductPromotionIT.xml",
+      "sha256": "d5f67c980e3a8087e0a772bc032eab87ae0fd935c5873c480c34abb4ee624551",
+      "tests": 59,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.promotion.VendorVoucherIT.xml",
+      "sha256": "a043c217cd7358f63dd94d6f63cc99db1454a9a74af536e446157bf34d4a9115",
+      "tests": 73,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.promotion.VoucherCheckoutIT.xml",
+      "sha256": "38062c1bd8f950bef60f08673a1469a03a3b7c584456bb96b3b6f964169d1635",
+      "tests": 57,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.security.Auth02AuthenticationIT.xml",
+      "sha256": "b6fb6387102b547d758d919d9e2e34a4aeffc54fba2c91af1096438cbe9a4bfb",
+      "tests": 5,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.security.Qa01CookieCsrfIT.xml",
+      "sha256": "8747f0b35d0b686b34555aa947e90d8719345beee29cba0064c085ba6fc0e094",
+      "tests": 15,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.security.Qa01OtpSecurityIT.xml",
+      "sha256": "7150d8b1751703cf9a147a40cc5e5eefc6faad1a75891cafe8b5cda6e0405a25",
+      "tests": 11,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.security.SecurityHardeningIT.xml",
+      "sha256": "fd364f1b1fe51f44843ac8398dc4b4ce329fc05af5cfb5b09ff5d5e04c637ce1",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shipping.ReturnToSenderMigrationIT.xml",
+      "sha256": "8707a49d48350eba1f0f9152635f04afdbbdd9c2c4d8a5ceb9f856a98577e091",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shipping.ShipmentAssignmentIT.xml",
+      "sha256": "3091595e31fdcba805c3065f88e2f8617affa85b143cad1252dffd21f2e8a204",
+      "tests": 10,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shipping.ShipmentAttemptMigrationIT.xml",
+      "sha256": "25756a403fc1b00f50359602d274cfd67d72aaca93bc2f83e2af983ef6702ac6",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shipping.ShipmentFulfillmentIT.xml",
+      "sha256": "92170fd3071bfe7a9055ca3ee5c64a1279a31eb37fb2cde323e5b09ca2faf374",
+      "tests": 25,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shipping.ShippingConfigIT.xml",
+      "sha256": "98a2d08fee422050e2c29ba0ba87d8ba3daa2053021e3eaad56fa1ffdf08c2bc",
+      "tests": 9,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/failsafe-reports/TEST-com.uteexpress.shop.ShopRegistrationIT.xml",
+      "sha256": "67e1255fe946962849db0c5b83ed7d8bca534ab272faeaa1a73882f94086f2e6",
+      "tests": 5,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.account.controller.AddressControllerTest.xml",
+      "sha256": "8fb8d28150211add76d39ea879e6eb0d1e4369d9e657bdddc353fbb5372a0c79",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.account.controller.ProfileControllerTest.xml",
+      "sha256": "47749a1c1795b5577035cda10b131716cdcc87bf040defa9723b2af9b55f6aae",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.account.service.AddressServiceTest.xml",
+      "sha256": "78706a9f692cce5b7c6ec7d50a62426d5ae2c505e35877c720a525500158071e",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.account.service.ProfileServiceTest.xml",
+      "sha256": "37b6bdf4dbe049d6b1a3af5aa46135f94bcafdd08b699eec316397cc8175852a",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.ArchitectureTest.xml",
+      "sha256": "513dd1f5faeb908d5dc442e2788ce7bab24b47c2b8c27dceacae29c4463cb0da",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.cart.CartServiceTest.xml",
+      "sha256": "2c98e7fe24e022c9130e2b2977417a69efaf0b05af370c5e28fbd56d3d4626fb",
+      "tests": 17,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.controller.PublicCatalogControllerTest.xml",
+      "sha256": "27cddbc34d4b8374da454ee4f4a0862ce6eaf9776204e6a75c6d03476d8fef8d",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.controller.VendorProductControllerTest.xml",
+      "sha256": "650522f52c94fc13f2f0a0f8afbc5df5ade06983b3fc7ec280c75983b98ce946",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.controller.VendorProductPromotionBindingTest.xml",
+      "sha256": "f4649c96e4eb20c4751cbfb6d658f7957d198b16b9f30b0a417976875a0b0f58",
+      "tests": 11,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.entity.ProductModelTest.xml",
+      "sha256": "72a937202d45ab613698bed2b212474688c8cea64423110ffe57f127227d89bd",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.ProductDemoActivationTest.xml",
+      "sha256": "ed72bc9c1f2c1708bbf3e7d900fcfe869ea3a0b628a42fa8803232721d566886",
+      "tests": 1,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.service.DatabaseCatalogQueryServiceTest.xml",
+      "sha256": "60003781ea6f1319e7ee9384efa94c1e9f6200426269ff6185344c57c7bc0ab7",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.service.ProductImagePolicyTest.xml",
+      "sha256": "c0272e33ffce78f1e28e756d2ea0569e1bc75a896c286c4b2f5528768ba56fd2",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.service.ProductServiceTest.xml",
+      "sha256": "e2e91f07687ce218f9cf6b8ce46a69f814a6082de7f097abd6d4c75a09533440",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.catalog.service.PublicCatalogServiceTest.xml",
+      "sha256": "23c2231bc55d6490aa53eacdd5278a64131c0bf6ac7e7c702e069609106fa49f",
+      "tests": 10,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.checkout.CheckoutContractTest.xml",
+      "sha256": "457efdf5d0123999e5c237212a878cf87d5476010e0c5d3eaf9cf6847dcea45b",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.checkout.CheckoutQuoteServiceTest.xml",
+      "sha256": "c8db9a0b70fd612402ff4637020eeeff98c0d20bb72e7aaac6e8c16217811643",
+      "tests": 23,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.checkout.MoneyContractTest.xml",
+      "sha256": "32569111a5b6c0aee3fc2f617be79df1db642d03d94d1818381e02bb7920fba9",
+      "tests": 5,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.common.storage.LocalFileStorageServiceTest.xml",
+      "sha256": "00f9f47c4a1da8021098383ec10c3805cee03f47210efa7a5c2a0243a4253811",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.engagement.ReviewFoundationTest.xml",
+      "sha256": "f34339b94f77d2e8a9ce2fe1ed481f70fda19419e7e6d93b74f30fe79091affa",
+      "tests": 13,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.FoundationHttpTest.xml",
+      "sha256": "23b5e0d54f2aeadbb48102ec0bcfbfb3bb7b4f5828cc1aeda582b4eb7f056d0a",
+      "tests": 14,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.AccountGovernanceWebTest.xml",
+      "sha256": "76b602e9a55c18fcdb238ad019c8c2e98fe9049a93c2a6cf8f4c813c30038be6",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.AuditLogServiceTest.xml",
+      "sha256": "55a602cef4d5705c0292130eae259b34050ea55960b2202ff7b14ddabac3ef9e",
+      "tests": 9,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.CategoryWebTest.xml",
+      "sha256": "939d92fd1346303d92b5982ac80078bdfc3788a3915f40654376a06260117d66",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.ModerationWebTest.xml",
+      "sha256": "364c4847a4ee6f9664dd3423dff67a8289bf6cc03d22b4f654e9f5e2273f1efc",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.OpsDashboardTest.xml",
+      "sha256": "e58bfaafb207d7192239de6dc9471b1a02f426266ca310106633b46ecdc1c60a",
+      "tests": 14,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.OpsReportFilterTest.xml",
+      "sha256": "f1948c0d1afd78d9894114d0d680f5d5400357f22efd3eb15468074fcb7b4142",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.governance.ShopApprovalWebTest.xml",
+      "sha256": "2e0ad8ac9f00384a51e92d7c80e3daf4028a66b28d39544c74540f13ac6bb69b",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.controller.EmailVerificationControllerTest.xml",
+      "sha256": "9b7bce9f406117fe7e040c5408e7ff3b7ede28e3cd7c17fe766cbc3b2ca4b340",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.controller.PasswordResetControllerTest.xml",
+      "sha256": "f2c8add0041936eadae6ef4e35c4ba5c1b270d46efb99be8b9dd82099512166c",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.controller.RegistrationControllerTest.xml",
+      "sha256": "4e053c5ae94a02034d936fdd04bc85e9836e0f1f6b83609ede8ea05413a79705",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.dto.RegisterFormValidationTest.xml",
+      "sha256": "2e18a65da41c372c4764997b71605d62104fa991ada82b7eedcef27071702dd0",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.dto.ResetPasswordFormValidationTest.xml",
+      "sha256": "ebe56475ec1e5ef7672104c00340d858c78e84c04555c74cac87126c98e4616f",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.AccountIdentityServiceTest.xml",
+      "sha256": "eb2cd5f40d0ad5bbfe11af7f8479852a9d11f6feb00d871697b060a26dafff0f",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.EmailVerificationServiceTest.xml",
+      "sha256": "570975a698d75d39148f33b53407e3a631e6f80a5ff0f5aa084301118840ab0d",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.IdentityAuthenticationServiceTest.xml",
+      "sha256": "9092e062e3ee01a49caf39151f0f4b9192b8504a456752a7bb5a36e9a229d79f",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.OtpSecurityTest.xml",
+      "sha256": "ed51ea9bae66eb6a2bfc8a763180d05dd1e6445f896c3dc16c4a3bc4f7827485",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.PasswordResetServiceTest.xml",
+      "sha256": "c04a589d3629a67f824e9b741477144a13d52d7b85cbbc8c4bae0b24d3bc4069",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.RegistrationServiceTest.xml",
+      "sha256": "9253c5abdae64d32ae3f1b41503049fbd126609e621354a4f55eef229ceefdde",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.identity.service.VerificationMailServiceTest.xml",
+      "sha256": "99f7c9a0e98e4c82dad454fc2f65b2cf42151da5839e827adbc5b6c1a6f0afc7",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.notification.NotificationCommitPublisherTest.xml",
+      "sha256": "e58aaf562795923abe1473e843b384ed784f8b47b39aec3a2f1c5fa3f2814085",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.notification.SocketObservabilityTest.xml",
+      "sha256": "0ced5069c807978a91244da2897d85ce33f8f33f62efaea135af0d889a5fcb0b",
+      "tests": 1,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.controller.PlaceOrderPageControllerTest.xml",
+      "sha256": "3bb2a736e96fd6ab9fe21a093fe4b660a0dcd98a09b630842cf97641f9cda222",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.entity.OrderDomainCoreTest.xml",
+      "sha256": "af781cc1a66d0da03adfa571dfd76dea524c662fad9205fc23b1fa8c24221a45",
+      "tests": 40,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.OrderContractTest.xml",
+      "sha256": "d0abba84f4915aa63fffc94cffe4c8e9bf44923a5ac810644506dcdacbb20920",
+      "tests": 3,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.BuyerOrderServiceTest.xml",
+      "sha256": "0ecbef19df46cb5f9a60260d817cbb75ce6aad7d9a5e0716369666850b3a034b",
+      "tests": 8,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.CheckoutRequestHashTest.xml",
+      "sha256": "884a0e013d147a963bdbb0d064f83b940a8d96071f090a32deb82bd8ef1e59d7",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.OrderEligibilityServiceTest.xml",
+      "sha256": "dfc27a245767e46d4921976f87212dc9010a8f51a7f8d9c7fc3a0d25dc9b354d",
+      "tests": 14,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.RefundTransitionGuardTest.xml",
+      "sha256": "0d63b959d47b40f7373a67d542747acae88422a0c4f92052b66c528adff21a23",
+      "tests": 10,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.RevenueServiceTest.xml",
+      "sha256": "835da7b97fb259e9ee8df58a73d5d79408ee61a33add1f5d36296418c3c6123e",
+      "tests": 23,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.ShipmentOnlyOperationGuardTest.xml",
+      "sha256": "9614ffb9461e5293ec7097b9ee41a166fd1c85f7b679c61a6021a7b8d20f0523",
+      "tests": 40,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.order.service.ShipmentOnlyOrderGuardTest.xml",
+      "sha256": "59167d399bb45f3a6b082873ff2d33c99616bf705e0e7114ac1b917308eb8813",
+      "tests": 41,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.payment.CodPaymentTest.xml",
+      "sha256": "d29d5ebe254e1105269fd84b6e06fe4fe8792a4a2b3a2fd724c7856309c1b208",
+      "tests": 12,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.payment.ManualRefundContractTest.xml",
+      "sha256": "cc962aa495d745b6d0b64923a2666d0be24506eb61249e75d407b93b4e05e3f0",
+      "tests": 10,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.payment.service.CancelledPaidRefundPayloadTest.xml",
+      "sha256": "51612648e71ed257346143397fe864fca450bde924831a1b58c0050e7aa4eff6",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.payment.service.CodRefundEligibilityTest.xml",
+      "sha256": "deeb2e8859bfe2d9eacd3c0e1a21be8514a2316419148c1869f9d7b767e792fd",
+      "tests": 27,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.payment.service.ManualRefundPayloadTest.xml",
+      "sha256": "1fe8a54cc39a86aae648a1eafa0fc390ceb7822178ab64c5b6b5d1b0c9113ce5",
+      "tests": 46,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.promotion.PromotionTest.xml",
+      "sha256": "1597673a6da8848237eb294f1b0e28b763fb0594bfd5403175e5581455651d4a",
+      "tests": 14,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.promotion.VendorVoucherFormTest.xml",
+      "sha256": "ec449bfe4d9928f71552f010e8b288ddf93b1217f796d4192fba66f0bcebbd9b",
+      "tests": 28,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.promotion.VoucherTest.xml",
+      "sha256": "8959a2a4bdb9f358976cab6b8ceb24a1d8ee089adf00761ec673cbfd70d1bd58",
+      "tests": 21,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.authentication.UteExpressUserDetailsServiceTest.xml",
+      "sha256": "9556aed9f41936f75678a31f4f28a941fecf9c6ad1d9fb6369e99df8a02ac91a",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.AuthenticationWebTest.xml",
+      "sha256": "a13fd215c927efa2fc1d2d00377266ccbec3bba60f458580769a80c725d5db4f",
+      "tests": 8,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.CsrfCookieWebTest.xml",
+      "sha256": "b909c3509b1ebf0edc2eab02e1f95003b35d3318252cb90def8411ad18034dcb",
+      "tests": 1,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.filter.JwtAuthenticationFilterTest.xml",
+      "sha256": "a69324ae4143b619c04fd2fb5da158c4a46c93ca2f175c35a23385986ea499d4",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.JwtSecurityConfigurationTest.xml",
+      "sha256": "690956c893c5d7f52df19c38dfbab6e94c7c8c42c040926b2f298443a3d8bb02",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.JwtTokenServiceTest.xml",
+      "sha256": "866e5a437c4d98a853030d78b9a8e686fdef45dfb1b7f98b8932944adaa2d894",
+      "tests": 7,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.OtpRequestLimitFilterTest.xml",
+      "sha256": "f2d27cb201c690c13dee5d79e24639d56950c3be95af5a80f53cacb6a4930565",
+      "tests": 2,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.OtpRequestRateLimiterTest.xml",
+      "sha256": "c243f4f43ae0e4cea86734b2a0bf152df715b5ea202a999b94559acdd464e980",
+      "tests": 5,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.SecurityFoundationTest.xml",
+      "sha256": "fd55a4d91051a6d7d3e6657dd43a5f480306582ee61434259b581377ca5b7ccf",
+      "tests": 13,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.security.SocketIdentityServiceTest.xml",
+      "sha256": "44a035edf8440533fe826f53ec02115ecda3ae67509af2068f13c5da902a5f32",
+      "tests": 25,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.shipping.ShippingConfigWebTest.xml",
+      "sha256": "29bd3a8a6ae2e6855d08948b651760083de57f503b8066a1e81fbb7b2f373bde",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.shipping.ShippingDemoActivationTest.xml",
+      "sha256": "136910d2e69656b19119aae293014330dc97c9fd37c7dc9bc0701af1abd178db",
+      "tests": 1,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.shop.controller.ShopRegistrationControllerTest.xml",
+      "sha256": "3a879edd24905aef7eb2549b914250e97d074b69a97cafd54e71c5fa9807daa8",
+      "tests": 8,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.shop.entity.ShopTest.xml",
+      "sha256": "a5ff3b6687397f9ad843fc6dbbcb183e2b1e07ea8adda5d92436a1bf873003d0",
+      "tests": 1,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.shop.service.ShopRegistrationServiceTest.xml",
+      "sha256": "6acdca283432ae98edd2028ca2033d811e667080ae75bb9a8caf7f62022457f5",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.testsupport.PostgresContextCleanupListenerTest.xml",
+      "sha256": "f7d4dba5b6a60687802a804633fc6e6f43f21f3aecae8224fc4d799790ab441c",
+      "tests": 4,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    },
+    {
+      "path": "xml/surefire-reports/TEST-com.uteexpress.ui.UiLayoutTest.xml",
+      "sha256": "9f0c8eabf2d82e2af9c2a64119a54be0958c1c947064e1dd13e7717cff61946d",
+      "tests": 6,
+      "runtime": {
+        "java.version": "21.0.2",
+        "java.home": "C:\\Program Files\\Java\\jdk-21",
+        "java.vendor": "Oracle Corporation",
+        "java.vm.version": "21.0.2+13-LTS-58",
+        "java.specification.version": "21",
+        "user.timezone": "UTC"
+      }
+    }
+  ]
+}

@@ -1,0 +1,23 @@
+{
+  "reviewed_head": "321ccf33528fbd214cf9d5399cadbc19df218148",
+  "verdict": "SCOPED DATABASE/COMPATIBILITY PASS; not APPROVED",
+  "ci_run": 40827082904,
+  "artifact_id": 12877307823,
+  "ci_full_java": 2124,
+  "ci_unit": 709,
+  "ci_pg": 1415,
+  "node": 33,
+  "tooling": 17,
+  "artifact_checksums_verified": 2,
+  "independent_local_scope": "709unit+205PG on158c9c9, not a new local run on321ccf3",
+  "delta": "Only CI script base64 transport of already-sanitized execution metadata and already-public encrypted CMS ciphertext",
+  "runtime_test_POM_migrations_workflow_equal_to158": true,
+  "raw_CI_plaintext_rehashed": false,
+  "encrypted_archive_decrypted": false,
+  "q70_s01": {
+    "status": "OPEN",
+    "severity": "Medium",
+    "disposition": "ACCEPTED RISK \u2014 LIMITED"
+  },
+  "no_approve_merge": true
+}

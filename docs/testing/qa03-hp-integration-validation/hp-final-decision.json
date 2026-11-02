@@ -1,0 +1,18 @@
+{
+  "authority": "HP",
+  "provenance": "User-relayed explicit HP FINAL DECISION on 2026-10-29 Asia/Saigon; no direct GitHub decision URL supplied",
+  "disposition": "ACCEPTED RISK — LIMITED",
+  "original_severity": "Medium",
+  "resolved": false,
+  "scope": "Only unknown exact predicate/root cause of original historical disposable-fixture CONFLICT",
+  "retain_historical_fail": true,
+  "production_guard_relaxation": false,
+  "integration_order": [
+    68,
+    70,
+    69
+  ],
+  "automatic_approval_or_merge": false,
+  "final_qa_acceptance": "PENDING",
+  "reopen_on": "New Payment/Refund/concurrency/rollback/financial inconsistency; detailed diagnostic/provenance triggers retained in residual-risk-proposal.json"
+}

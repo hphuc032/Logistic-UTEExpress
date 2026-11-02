@@ -139,9 +139,10 @@ public final class RefundAcceptanceSeed {
         } else {
             if(!kind.equals("cancelled-unpaid-negative")) {
                 // Deliberately synthetic prerequisite, never a production PAID writer or simulated gateway callback.
+                // Use the persisted application timestamp: DB/JVM clock skew must not place PAID after cancellation.
                 jdbc.update("""
-                        UPDATE uteexpress.payments SET method='ONLINE',status='PAID',paid_at=CURRENT_TIMESTAMP,
-                            updated_at=CURRENT_TIMESTAMP,provider_reference=?,amount=?
+                        UPDATE uteexpress.payments SET method='ONLINE',status='PAID',paid_at=created_at,
+                            updated_at=created_at,provider_reference=?,amount=?
                         WHERE order_id=? AND status='UNPAID' AND method='COD'
                         ""","QA02_SYNTHETIC_"+kind,new BigDecimal("205000"),order);
             }

@@ -1,0 +1,15 @@
+{
+  "source_sha": "5089a8ed17e5f8486e44847a99b309ff13d0d3b8",
+  "command": [
+    "java",
+    "@.work\\qa03-post75-sync\\java-UTC.args"
+  ],
+  "started_utc": "2026-10-29T13:43:00.678887+00:00",
+  "finished_utc": "2026-10-29T13:43:08.795433+00:00",
+  "duration_seconds": 8.117,
+  "exit_code": 0,
+  "timed_out": false,
+  "log_sha256": "14246e95eb2e62d0be2dabfe20fc5eb99042345efe6d182f506f43ed9ade3cf8",
+  "helper_source_sha256": "3b81d3d3e1a589fc169d816eaec7699b12e68828f977312ceb774ea8cd68a528",
+  "JVM_timezone_override": "UTC"
+}

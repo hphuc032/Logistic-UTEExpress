@@ -1,0 +1,7 @@
+{
+  "runner_and_build_source_sha": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+  "jar_sha256": "0ee04a1167bf4130b0f5f0dd09eb418f4f6a2fd70494b17e23c0f3996a4abb7d",
+  "test_fixture_class_sha256": "81ba5dd13736ca4b78b4157d5ebd989d489689ad787a781bce8ad48566b9af22",
+  "package_complete": true,
+  "full_regression": "RUNNING; no early PASS claim"
+}
