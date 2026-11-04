@@ -1,0 +1,125 @@
+{
+  "status": "DOC03 DRAFT / not completed",
+  "source_base_sha": "fb7dcebd434c6887396881e9b34df1bf12d8250e",
+  "master_plan_sha256": "18523e581e6e2b5d2aa29d709aa4d344927e3d3a2ce21983481c4442aab68b7a",
+  "source_files": [
+    {
+      "path": "docs/MASTER_TASK_BOARD.md",
+      "git_blob": "53170f8f044b8e160939976c4abe564cda71909d",
+      "sha256_git_bytes": "29f98a6522e4097792cf32aeb6dc50adf71d77a2eb16a8559d7527b00f3ca004"
+    },
+    {
+      "path": "docs/governance-audit.md",
+      "git_blob": "b1c7df27485d5743fd8f64e0712f131809f64877",
+      "sha256_git_bytes": "d441abcd55219ce76f6ae405baf0a2aff157e4b0b8b33eaa6d3f9a95f27d5f27"
+    },
+    {
+      "path": "docs/ADMIN-02-role-governance.md",
+      "git_blob": "f412e3be9833f0bd8fac68db630bf3354d399609",
+      "sha256_git_bytes": "367a2bd2bcd88316052b0a425268af8090dc04ed73a07da7c866623eea4c0a32"
+    },
+    {
+      "path": "docs/ENG-01-favorites-recent.md",
+      "git_blob": "d75d35695adaf22658d76367e17f138a382dc2ff",
+      "sha256_git_bytes": "63c3868f330e997a4532c7c1039d9b96032d5520c61096a95804a250e7186408"
+    },
+    {
+      "path": "docs/SHIP-04-dashboard.md",
+      "git_blob": "c7e3aae41ea3ee5d80565895a01c05e5f554670c",
+      "sha256_git_bytes": "c52fb7aabee1a3c69015e1355866c5a4380f8b1abe5839dacd6eade2d41b520a"
+    },
+    {
+      "path": "docs/WS-02-implementation-status.md",
+      "git_blob": "ab21cec0c3bf709c0bfcc9733d4bbcb606dd6b4e",
+      "sha256_git_bytes": "27f029f5809bae7647fd80a633a83462c00a19902f8ac35d129cc6ed99604d6c"
+    },
+    {
+      "path": "docs/REV-01-integration-report.md",
+      "git_blob": "dfa516007067e44210b7f7309ecfd915348f9673",
+      "sha256_git_bytes": "c3342f0603478f34d2e04a50d8f0de1d60588b91d318227ad7cd8ac52b9025bc"
+    },
+    {
+      "path": "docs/REV-01-media-reconciliation-runbook.md",
+      "git_blob": "42441a3bf449ecd1b3f8ca2cd170179e123631d5",
+      "sha256_git_bytes": "587f322fd8f0cd4b3ebd649744faccf9cf77ebf2e3b33c0bbb4f73ee5d87d275"
+    },
+    {
+      "path": "docs/DASH-02-admin-financial.md",
+      "git_blob": "620f0f2a1318d16037eb3803907e8771b943ce78",
+      "sha256_git_bytes": "795d6c47320535b404fcfcf396bcfad5b9891882b2b8ebdceb3eea8ea5136ded"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/fulfillment/service/DeliveryAttemptCoordinator.java",
+      "git_blob": "b78ef43934e550e3488ff5bce3502f85fca2e909",
+      "sha256_git_bytes": "25b0737b31a83d00f9bfcfdfefedd726784e22768d55d09e53eaed35babfd059"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/shipping/service/ShipmentAttemptService.java",
+      "git_blob": "62bc33976ca92b08a3c42f27d6d017d7c355fe8b",
+      "sha256_git_bytes": "27d75bc5a9fc5bc59847dcee9a2bc43aa057d15055bf36a47e2dad905c547f9b"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/order/service/OrderEligibilityService.java",
+      "git_blob": "2d08696ef93e38f22eb0f81e7879f44f7c07056b",
+      "sha256_git_bytes": "3c5a10dac9acfb55e720b23c09bd56a31727ff19ce36f481c7d46587faf41511"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/service/OrderTransitionNotificationWriter.java",
+      "git_blob": "3cc11911061b24cb0ac4b9357f1fba2f5070c157",
+      "sha256_git_bytes": "ed79bee938874d51af72faf436500fabbeeb421d7d01d569773a3910afbe6694"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/service/NotificationCommitPublisher.java",
+      "git_blob": "626010945dae4dfd99da7995aa3e1372e325fb05",
+      "sha256_git_bytes": "dc19e4a6fdf7d4799d97c814b026e2924c6340918a9984f32f7960d70ef41c7c"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/notification/repository/NotificationRepository.java",
+      "git_blob": "eb14f113e40370c0064c2bdd539f9f4122b1bb7f",
+      "sha256_git_bytes": "8a30ce5475a2e3074ea6408722ef35a4e7b081a38b9703c274704f00789919e3"
+    },
+    {
+      "path": "src/main/java/com/uteexpress/engagement/dto/ReviewContent.java",
+      "git_blob": "8e4f91db56d6fcb991996351d7b599d759f8168b",
+      "sha256_git_bytes": "29907537b4409765ee37ab2022b5597886f17c0c79c40fc6749c3927ba3edbeb"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261007100000__qd_ship01_shipments.sql",
+      "git_blob": "04b4c11bc4588b2749b87c6cb3608e8945818d29",
+      "sha256_git_bytes": "707c8483250e45685c3b205b8aa1651f5651fdd17a62d644a2dc49ca490ee3e3"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261008100000__qd_ws01_notifications.sql",
+      "git_blob": "0c90e400450e1a5d321406c1482c093d150538dd",
+      "sha256_git_bytes": "b20acb55c2b34a27a6bdeb53917cd02dec8005da7f613f57476f403f8634dc92"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261018110000__qd_ship03_delivery_failures.sql",
+      "git_blob": "2f20b0800114fa08865bf993e6638caf321dbc5e",
+      "sha256_git_bytes": "8e3d10f2fe26c908bf619ffb79d54c07d548b3441f8111e3b0b3c951781bf58a"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261023170000__qd_rev01_review_foundation.sql",
+      "git_blob": "bd1020adfa84accbeea44bec77411cb3b4859634",
+      "sha256_git_bytes": "4965c8a574aad08662c78e74cef88e80019b86e3ed813e383c48116836dc4a5c"
+    },
+    {
+      "path": "src/main/resources/db/migration/V20261027100000__hp_int02_return_to_sender.sql",
+      "git_blob": "9f2fdb3e58785994da635d17c42863b4d9ed1e7a",
+      "sha256_git_bytes": "9a0354adf78d7586ba6ecd205e8ee3ee29c3ce08d9221e50bbc77b76fd7864b2"
+    }
+  ],
+  "new_application_tests_executed": false,
+  "manual_screenshots_added": 0,
+  "reviewers": {
+    "TD": "Order/Payment/transaction attribution and DOC02 consolidation",
+    "HP": "Security/UI/acceptance and DOC01 consolidation"
+  },
+  "remaining_dependencies": [
+    "QA03 G01/G02 acceptance",
+    "DOC01 handoff",
+    "DOC02 handoff",
+    "Final integrated source evidence",
+    "Rendered report/diagram review"
+  ]
+}
