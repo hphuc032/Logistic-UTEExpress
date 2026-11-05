@@ -1,0 +1,155 @@
+{
+  "preparedUtc": "2026-10-28T16:46:52.709071+00:00",
+  "purpose": "Sanitized QD/HP review proposal only; stop before staging, committing, pushing or editing PR #71",
+  "proposedRepositoryDestination": "docs/testing/qa02-q70-s01-investigation/",
+  "proposedBranch": "review/qa02-combined-refund-evidence",
+  "existingPublicationHead": "ed29202cc072e763d011189cd00ac613d564d237",
+  "finding": "Q70-S01",
+  "severity": "Medium",
+  "findingStatus": "OPEN",
+  "qa02": "IN PROGRESS",
+  "hpFinalAcceptance": "NOT SUPPLIED",
+  "vnpaySandbox": "PAY-03 DEFERRED",
+  "exactSourceRefs": {
+    "originalCombined": "1d8f923b77f4dc747b4a72874b61364f33abcf36",
+    "qdHistoricalPublication": "6cdddd249b4f7d2dd206f39487e7e35a59479b61",
+    "before": "ff83d5494d4db25533c62b120fbf86fc574de22c",
+    "after": "d06320f43cb54f79db1bc17df3eb36da3fc71ceb",
+    "latestQdPublication": "e344ce748c65f97b94a1f0932806c14f85fb069c",
+    "production70": "688884cd33f4b2f4dc62f5d33a4c4002e9146660",
+    "evidence71": "ed29202cc072e763d011189cd00ac613d564d237"
+  },
+  "inspectionSnapshot": [
+    {
+      "number": 69,
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/69",
+      "headSha": "e344ce748c65f97b94a1f0932806c14f85fb069c",
+      "baseSha": "fa48cb69cef92276f0dddf0d2bd396eee098f2f3",
+      "draft": true,
+      "state": "open",
+      "merged": false
+    },
+    {
+      "number": 70,
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/70",
+      "headSha": "688884cd33f4b2f4dc62f5d33a4c4002e9146660",
+      "baseSha": "fa48cb69cef92276f0dddf0d2bd396eee098f2f3",
+      "draft": false,
+      "state": "open",
+      "merged": false
+    },
+    {
+      "number": 71,
+      "url": "https://github.com/hphuc032/Logistic-UTEExpress/pull/71",
+      "headSha": "ed29202cc072e763d011189cd00ac613d564d237",
+      "baseSha": "fa48cb69cef92276f0dddf0d2bd396eee098f2f3",
+      "draft": true,
+      "state": "open",
+      "merged": false
+    }
+  ],
+  "snapshotNote": "Historical investigation-time metadata; no live PR-state refresh or mutation performed during packet preparation",
+  "originalRetainedArtifacts": {
+    "originalInvestigationReport": {
+      "sha256": "cd4e04d15380888a49e6e8e754c250f63997496cb6f6bb8126c3e229c402e244",
+      "includedRaw": false
+    },
+    "originalInvestigationSummary": {
+      "sha256": "15504aad42024488ae367af529a44b7bc4d4c74475d1725046bc6bfbe12e7133",
+      "includedRaw": false
+    },
+    "originalFocusedTestReceipt": {
+      "sha256": "7695e5fddb835595e3df10d21eb083204642d8e869ba8b5078124e9efae6c5d5",
+      "includedRaw": false
+    },
+    "originalSourceReview": {
+      "sha256": "1819610ee71b932357276eadb566769bda616861a8b67cbabf2c4f78d2288280",
+      "includedRaw": false
+    },
+    "originalFailureDiagnostics": {
+      "sha256": "c57713984aa571b0a523f60685858bce636c45af8d64987dd33a88809f8f26c2",
+      "includedRaw": false
+    },
+    "qdNewReproduction": {
+      "sha256": "d5f7323cd2557b1be163638bbc4031d7ca185f34409c75e2cd73fcedf26b0246",
+      "includedRaw": false
+    },
+    "qdRootCauseFollowup": {
+      "sha256": "6aa0a0bad3fef6d4882922cc9b2faa4a33db32f83391e1e325adfcd68f9beba5",
+      "includedRaw": false
+    },
+    "reviewSnapshot": {
+      "sha256": "6132dcf529ec17e597e6d2428e1a4beac579969d18c86ccbf1884f0e10bb4983",
+      "includedRaw": false
+    },
+    "originalClockConfiguration": {
+      "sha256": "0a38d078dd3f93f7d8f7225083d89b9c541a732b22e540609b6983fddde4fe23",
+      "includedRaw": true,
+      "publishedAs": "ClockSkewConfiguration.reference.java.txt"
+    },
+    "naturalBeforeResult": {
+      "sha256": "56613b98baba9ba7b5f52f810ace65c5b986333f8af7fa654506cbf627ff35e8",
+      "includedRaw": false
+    },
+    "controlledBeforeResult": {
+      "sha256": "8da74cd65b819389275ee24c21f030911171961b0ee4b0ef76746d06f8de728d",
+      "includedRaw": false
+    },
+    "naturalAfterResult": {
+      "sha256": "2d766d55641ba1bc186f472d4a733f637a708f1cf7c936a5509257c9af2144e8",
+      "includedRaw": false
+    },
+    "controlledAfterResult": {
+      "sha256": "bf657d1c9faeb98d8e918ea65d67261b292710ceb9d6f6257c4344055de2d89f",
+      "includedRaw": false
+    },
+    "originalClockProbeReceipt": {
+      "sha256": "8e6984918f2fbd01e34e7ba459868b777e7d560ddc3641a8bf692f2048bf7061",
+      "includedRaw": false
+    },
+    "originalClockMeasurements": {
+      "sha256": "acb0cc0cc09151a3978dd9b4798334ee86ed0a822d366396c11c3f6edeee3cde",
+      "includedRaw": false
+    }
+  },
+  "sanitization": {
+    "method": "Explicit field allowlists and newly written summaries; original evidence unmodified",
+    "removedOrExcluded": [
+      "absolute and local machine paths",
+      "container identifiers and host ports",
+      "raw logs and XML",
+      "HTTP and SMTP payloads",
+      "account profile metadata",
+      "credentials, reusable authentication values and account hashes",
+      "binaries and full source trees"
+    ],
+    "retained": [
+      "exact Git SHAs and object identities",
+      "recorded run IDs only",
+      "synthetic scenario IDs, amounts, states, predicate booleans and UTC times",
+      "source/result/log/XML SHA-256 provenance",
+      "expected failure and missing-predicate limitations"
+    ]
+  },
+  "publishedFiles": {
+    ".gitattributes": "705fd4d6451a31d36b3df7de96f83f30ac976c9b4a6d1e51671d8e2f33e2d0da",
+    "ClockSkewConfiguration.reference.java.txt": "0a38d078dd3f93f7d8f7225083d89b9c541a732b22e540609b6983fddde4fe23",
+    "Q70-S01-clock-comparison.json": "18b1c53a258f472e9f8ba74baa134c196688748014730ce4a1bc24e89b47be7a",
+    "Q70-S01-focused-test-results.json": "36ac2a828e3022c051e28a017ebb53cf3252aee2677b6e2b66b978b45375283a",
+    "Q70-S01-investigation-report.md": "56d8496f952ed4d90de052c5526d5f80ba20de9b4b8d05e993b8f99b68990a41",
+    "Q70-S01-run-evidence.json": "b07ff4c9c8e859721a348bd70a0ae49cda652bc802903137238f8a6906707d1a",
+    "README.md": "1be009881b9e52ea4bda8c04cff49914ca02dab32f8d2e4414556e1af9d8e612",
+    "timestamp-fix.reference.diff.txt": "286d012b5317f9a24d0b5be8f454b33d6ec5fd0bdc25fbe52c21190ed373e2d8"
+  },
+  "checksumExclusions": [
+    "publication-manifest.json",
+    "SHA256SUMS.txt"
+  ],
+  "bytePolicy": "Original investigation bytes unchanged; new summaries UTF-8 LF; exact configuration reference bytes preserved; scoped -text prevents later Git normalization",
+  "remainingGates": [
+    "QD/HP evidence review",
+    "TD review and authorized candidate adoption",
+    "TD/HP disposition before finding closure",
+    "Existing integration/regression and HP final acceptance gates"
+  ]
+}

@@ -1,0 +1,383 @@
+{
+  "runId": null,
+  "runIdAvailability": "No semantic run ID recorded; source artifact hashes and timestamps identify this measurement",
+  "startedUtc": "2026-10-28T16:17:46.153692+00:00",
+  "finishedUtc": "2026-10-28T16:17:49.968359+00:00",
+  "javaVersion": "21.0.12.1",
+  "clock": "Clock.systemUTC",
+  "jvmTimezone": "UTC",
+  "databaseImage": "postgres:17.6",
+  "readOnlyProbe": true,
+  "sourceSha256": "51bddfad415cd5bfa2d30bf8b712f4d4c536e6c1003013e920c137aa1e91d113",
+  "result": "PASS",
+  "jdbcReadinessRetries": 0,
+  "ownedDisposableContainerRemoved": true,
+  "sampleCount": 50,
+  "samples": [
+    {
+      "javaBefore": "2026-10-28T16:17:49.300492800Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.304689Z",
+      "javaAfter": "2026-10-28T16:17:49.311881500Z",
+      "databaseAheadOfJavaAfterMicros": -7192,
+      "bracketMicros": 11388
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.313968900Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.314531Z",
+      "javaAfter": "2026-10-28T16:17:49.314999900Z",
+      "databaseAheadOfJavaAfterMicros": -468,
+      "bracketMicros": 1031
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.315522Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.315762Z",
+      "javaAfter": "2026-10-28T16:17:49.316552900Z",
+      "databaseAheadOfJavaAfterMicros": -790,
+      "bracketMicros": 1030
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.316552900Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.316765Z",
+      "javaAfter": "2026-10-28T16:17:49.317085900Z",
+      "databaseAheadOfJavaAfterMicros": -320,
+      "bracketMicros": 533
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.317085900Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.317746Z",
+      "javaAfter": "2026-10-28T16:17:49.318348500Z",
+      "databaseAheadOfJavaAfterMicros": -602,
+      "bracketMicros": 1262
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.318348500Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.318619Z",
+      "javaAfter": "2026-10-28T16:17:49.319465700Z",
+      "databaseAheadOfJavaAfterMicros": -846,
+      "bracketMicros": 1117
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.319465700Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.319671Z",
+      "javaAfter": "2026-10-28T16:17:49.319987400Z",
+      "databaseAheadOfJavaAfterMicros": -316,
+      "bracketMicros": 521
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.320510100Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.320550Z",
+      "javaAfter": "2026-10-28T16:17:49.321028900Z",
+      "databaseAheadOfJavaAfterMicros": -478,
+      "bracketMicros": 518
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.321028900Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.321422Z",
+      "javaAfter": "2026-10-28T16:17:49.322077300Z",
+      "databaseAheadOfJavaAfterMicros": -655,
+      "bracketMicros": 1048
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.322077300Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.322363Z",
+      "javaAfter": "2026-10-28T16:17:49.322592600Z",
+      "databaseAheadOfJavaAfterMicros": -229,
+      "bracketMicros": 515
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.323108Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.323430Z",
+      "javaAfter": "2026-10-28T16:17:49.324153800Z",
+      "databaseAheadOfJavaAfterMicros": -723,
+      "bracketMicros": 1045
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.324153800Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.324408Z",
+      "javaAfter": "2026-10-28T16:17:49.324685200Z",
+      "databaseAheadOfJavaAfterMicros": -277,
+      "bracketMicros": 531
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.325202900Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.325431Z",
+      "javaAfter": "2026-10-28T16:17:49.326441600Z",
+      "databaseAheadOfJavaAfterMicros": -1010,
+      "bracketMicros": 1238
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.326441600Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.326906Z",
+      "javaAfter": "2026-10-28T16:17:49.327494700Z",
+      "databaseAheadOfJavaAfterMicros": -588,
+      "bracketMicros": 1053
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.327494700Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.327871Z",
+      "javaAfter": "2026-10-28T16:17:49.328544200Z",
+      "databaseAheadOfJavaAfterMicros": -673,
+      "bracketMicros": 1049
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.328544200Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.329013Z",
+      "javaAfter": "2026-10-28T16:17:49.329592Z",
+      "databaseAheadOfJavaAfterMicros": -579,
+      "bracketMicros": 1047
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.330114500Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.330531Z",
+      "javaAfter": "2026-10-28T16:17:49.331156200Z",
+      "databaseAheadOfJavaAfterMicros": -625,
+      "bracketMicros": 1041
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.331156200Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.331302Z",
+      "javaAfter": "2026-10-28T16:17:49.331677900Z",
+      "databaseAheadOfJavaAfterMicros": -375,
+      "bracketMicros": 521
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.331677900Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.332219Z",
+      "javaAfter": "2026-10-28T16:17:49.332726700Z",
+      "databaseAheadOfJavaAfterMicros": -507,
+      "bracketMicros": 1048
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.332726700Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.333286Z",
+      "javaAfter": "2026-10-28T16:17:49.333788Z",
+      "databaseAheadOfJavaAfterMicros": -502,
+      "bracketMicros": 1061
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.333788Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.334253Z",
+      "javaAfter": "2026-10-28T16:17:49.334897600Z",
+      "databaseAheadOfJavaAfterMicros": -644,
+      "bracketMicros": 1109
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.334897600Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.335126Z",
+      "javaAfter": "2026-10-28T16:17:49.335425300Z",
+      "databaseAheadOfJavaAfterMicros": -299,
+      "bracketMicros": 527
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.335937300Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.336163Z",
+      "javaAfter": "2026-10-28T16:17:49.336464100Z",
+      "databaseAheadOfJavaAfterMicros": -301,
+      "bracketMicros": 526
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.336982900Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.337077Z",
+      "javaAfter": "2026-10-28T16:17:49.337499200Z",
+      "databaseAheadOfJavaAfterMicros": -422,
+      "bracketMicros": 516
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.337499200Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.338164Z",
+      "javaAfter": "2026-10-28T16:17:49.339174200Z",
+      "databaseAheadOfJavaAfterMicros": -1010,
+      "bracketMicros": 1675
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.339174200Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.339593Z",
+      "javaAfter": "2026-10-28T16:17:49.340212100Z",
+      "databaseAheadOfJavaAfterMicros": -619,
+      "bracketMicros": 1037
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.340212100Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.340647Z",
+      "javaAfter": "2026-10-28T16:17:49.341243800Z",
+      "databaseAheadOfJavaAfterMicros": -596,
+      "bracketMicros": 1031
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.341243800Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.341395Z",
+      "javaAfter": "2026-10-28T16:17:49.341757300Z",
+      "databaseAheadOfJavaAfterMicros": -362,
+      "bracketMicros": 513
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.342270800Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.342313Z",
+      "javaAfter": "2026-10-28T16:17:49.342790100Z",
+      "databaseAheadOfJavaAfterMicros": -477,
+      "bracketMicros": 519
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.342790100Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.343180Z",
+      "javaAfter": "2026-10-28T16:17:49.343827400Z",
+      "databaseAheadOfJavaAfterMicros": -647,
+      "bracketMicros": 1037
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.343827400Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.344292Z",
+      "javaAfter": "2026-10-28T16:17:49.344856600Z",
+      "databaseAheadOfJavaAfterMicros": -564,
+      "bracketMicros": 1029
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.344856600Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.345386Z",
+      "javaAfter": "2026-10-28T16:17:49.345907700Z",
+      "databaseAheadOfJavaAfterMicros": -521,
+      "bracketMicros": 1051
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.346444Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.346570Z",
+      "javaAfter": "2026-10-28T16:17:49.346976900Z",
+      "databaseAheadOfJavaAfterMicros": -406,
+      "bracketMicros": 532
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.347504800Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.347497Z",
+      "javaAfter": "2026-10-28T16:17:49.348016600Z",
+      "databaseAheadOfJavaAfterMicros": -519,
+      "bracketMicros": 511
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.348530500Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.348795Z",
+      "javaAfter": "2026-10-28T16:17:49.349097Z",
+      "databaseAheadOfJavaAfterMicros": -302,
+      "bracketMicros": 566
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.349630100Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.349737Z",
+      "javaAfter": "2026-10-28T16:17:49.350151700Z",
+      "databaseAheadOfJavaAfterMicros": -414,
+      "bracketMicros": 521
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.350151700Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.350565Z",
+      "javaAfter": "2026-10-28T16:17:49.351156Z",
+      "databaseAheadOfJavaAfterMicros": -591,
+      "bracketMicros": 1004
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.351156Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.351282Z",
+      "javaAfter": "2026-10-28T16:17:49.351658400Z",
+      "databaseAheadOfJavaAfterMicros": -376,
+      "bracketMicros": 502
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.351658400Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.352023Z",
+      "javaAfter": "2026-10-28T16:17:49.352702700Z",
+      "databaseAheadOfJavaAfterMicros": -679,
+      "bracketMicros": 1044
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.352702700Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.353213Z",
+      "javaAfter": "2026-10-28T16:17:49.353737900Z",
+      "databaseAheadOfJavaAfterMicros": -524,
+      "bracketMicros": 1035
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.354252600Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.354306Z",
+      "javaAfter": "2026-10-28T16:17:49.354764800Z",
+      "databaseAheadOfJavaAfterMicros": -458,
+      "bracketMicros": 512
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.354764800Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.355089Z",
+      "javaAfter": "2026-10-28T16:17:49.355783300Z",
+      "databaseAheadOfJavaAfterMicros": -694,
+      "bracketMicros": 1018
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.355783300Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.355913Z",
+      "javaAfter": "2026-10-28T16:17:49.356813300Z",
+      "databaseAheadOfJavaAfterMicros": -900,
+      "bracketMicros": 1030
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.356813300Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.357035Z",
+      "javaAfter": "2026-10-28T16:17:49.357339Z",
+      "databaseAheadOfJavaAfterMicros": -304,
+      "bracketMicros": 525
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.357339Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.357784Z",
+      "javaAfter": "2026-10-28T16:17:49.358103100Z",
+      "databaseAheadOfJavaAfterMicros": -319,
+      "bracketMicros": 764
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.358103100Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.358444Z",
+      "javaAfter": "2026-10-28T16:17:49.359128500Z",
+      "databaseAheadOfJavaAfterMicros": -684,
+      "bracketMicros": 1025
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.359128500Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.359139Z",
+      "javaAfter": "2026-10-28T16:17:49.359643800Z",
+      "databaseAheadOfJavaAfterMicros": -504,
+      "bracketMicros": 515
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.359643800Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.359869Z",
+      "javaAfter": "2026-10-28T16:17:49.360158300Z",
+      "databaseAheadOfJavaAfterMicros": -289,
+      "bracketMicros": 514
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.360158300Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.360622Z",
+      "javaAfter": "2026-10-28T16:17:49.361211900Z",
+      "databaseAheadOfJavaAfterMicros": -589,
+      "bracketMicros": 1053
+    },
+    {
+      "javaBefore": "2026-10-28T16:17:49.361211900Z",
+      "databaseCurrentTimestamp": "2026-10-28T16:17:49.361286Z",
+      "javaAfter": "2026-10-28T16:17:49.361725300Z",
+      "databaseAheadOfJavaAfterMicros": -439,
+      "bracketMicros": 513
+    }
+  ],
+  "transaction": {
+    "currentTimestampFirst": "2026-10-28T16:17:49.363750Z",
+    "currentTimestampSecond": "2026-10-28T16:17:49.363750Z",
+    "transactionTimeStable": true,
+    "statementAdvancedMicros": 15635,
+    "clockAdvancedMicros": 15636
+  },
+  "observations": {
+    "samplesWithinJavaBracket": 49,
+    "samplesBeforeJavaBracket": 1,
+    "samplesAfterJavaBracket": 0,
+    "limitation": "These current measurements do not demonstrate database-ahead skew or identify a historical host/VM clock adjustment"
+  },
+  "originalReceiptSha256": "8e6984918f2fbd01e34e7ba459868b777e7d560ddc3641a8bf692f2048bf7061",
+  "originalMeasurementsSha256": "acb0cc0cc09151a3978dd9b4798334ee86ed0a822d366396c11c3f6edeee3cde"
+}
